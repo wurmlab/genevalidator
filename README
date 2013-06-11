@@ -16,9 +16,10 @@ export PATH
 1. prediction.rb
 
 - parses the command line arguments
-class BLAST - calls a command line blast program (executable's path may be in PATH) according to 
+class BLAST - calls a command line BLAST program (executable's path may be in PATH) according to 
 the type of predicted sequence
-			- nr database is accessed remotely (no need to download ncbi databases on your computer)
+			- BLAST is called with the default parameters used in the online version of BLAST
+			- nr database is accessed remotely (no need to download ncbi databases on your computer)			
 
 Note:
 * to skip the blast-ing part, provide an xml blast output file as argument to this ruby script and add '-skip_blast' argument
@@ -28,6 +29,7 @@ Note:
 class Cluster - used to store information about the lengths belonging to each cluster
 method clustering - takes a vector of lengths and makes hiararchical clustering
 				  - outputs the most dense cluster
+				  - to see how clusters are merged at each iteration, call the method with debug parameter set on true
 Note: 
 * clustering is called by prediction.rb
 * to test clustering only uncomment the rows at the end of the file				  
@@ -58,6 +60,10 @@ ruby prediction.rb -t protein data/prot1_predicted.fasta
 * Skip BLAST
 ruby prediction.rb -t mrna -skip_blast data/output_seq2.xml
 ruby prediction.rb -t protein -skip_blast data/output_prot1_predicted.xml
+
+Run BLAST from command line:
+blastn -query data/seq2.fasta -db nr -remote -evalue 1e-5 -outfmt 5 -gapopen 5 -gapextend 2 -out data/output_seq2.xml
+blastp -query data/prot1_predicted.fasta -db nr -remote -evalue 1e-5 -outfmt 5 -gapopen 11 -gapextend 1 -out data/output_prot1_predicted.xml
 
 [1] http://hymenopteragenome.org/nasonia/nasonia_genome_consortium/data/Nvit_OGSv1.2_rna.fa.gz
 [2] http://www.antgenomes.org/downloads/SI2.2.3.fa.zip
