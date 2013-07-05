@@ -27,6 +27,9 @@ class Sequence
   attr_accessor :alignment_start_offset
   attr_accessor :hit_from
   attr_accessor :hit_to
+  attr_accessor :match_query_from
+  attr_accessor :match_query_to
+  attr_accessor :query_reading_frame
 
   def initialize
   end

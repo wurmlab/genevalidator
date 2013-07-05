@@ -2,183 +2,262 @@
 
 require './clustering'
 require './sequences'
+require './blastQuery'
 require 'bio-blastxmlparser'
 require 'net/http'
 require 'open-uri'
 require 'uri'
-require 'gnuplot.rb'
-require 'rinruby.rb'
+require 'io/console'
+
+class ClasspathError < Exception
+end
 
 class Blast
 
-  # blast command: blastn or blastp
-  attr_reader :command
-  # result of executing command
-  attr_reader :result
-  #blast output
-  attr_reader :xml_output
   #query sequence type
   attr_reader :type
   #query sequence fasta file
   attr_reader :fasta_file
-  #predicted sequence
-  #attr_reader :predicted_seq
-  #array list with the reference sequences
-  #attr_reader :ref_seq_list
-  #array of clusters for clusterization by sequence length
-  #attr_reader :clusters
-  #attr_reader :most_dense_cluster_idx
   #Enumerator that iterates through the hits from the blast xml output
-  attr_writer :blast_xml_iterator
+  attr_reader :blast_xml_iterator
+  #current number of the querry processed
+  attr_reader :idx
+  #number of the sequence from the file to start with
+  attr_reader :start_idx
 
   ################################
-  def initialize(fasta_file, type)
+  def initialize(fasta_file, type, start_idx=0)
     @type = type
     @fasta_file = fasta_file
+    @idx = 0
+    @start_idx = start_idx
     R.echo "enable = nil, stderr = nil" #redirect the cosole messages of R
-    R.eval "x11()"  # othetwise I get SIGPIPE
+    #R.eval "x11()"  # othetwise I get SIGPIPE
+
+    puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
+    printf "%5s | %20s | %50s | %20s | %20s\n","Query", "Query Name", "Length Validation", "Reading Frame Validation", "Gene Merge Validation"
+
   end
 
   #################################################
   #calls blast according to the type of the sequence
   def blast
-    #call blast with the default parameters
-    if type == 'protein'
-      advanced_blast("blastp", @fasta_file, 11, 1)
-    else
-      advanced_blast("blastx", @fasta_file, 11, 1)
+
+    fasta_content = IO.binread(@fasta_file);
+    positions = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
+    positions.push(fasta_content.length)
+    fasta_content = nil # free memory of variable fasta_content
+
+    #file seek for each query
+    positions[0..positions.length-2].each_with_index do |pos, i|
+      
+      if (i+1) >= @start_idx
+        query = IO.binread(@fasta_file, positions[i+1] - positions[i], positions[i]);
+        #puts query
+
+        #call blast with the default parameters
+        if type == 'protein'
+          output = call_blast_from_stdin("blastp", query, 11, 1)
+        else
+          output = call_blast_from_stdin("blastx", query, 11, 1)
+        end
+
+        #save output in a file
+        xml_file = "#{@fasta_file}_#{i+1}.xml"
+        File.open(xml_file , "w") do |f| f.write(output) end
+
+        #parse output
+        parse_xml_output(output)   
+      else
+        @idx = @idx + 1
+      end
     end
   end
 
   ####################################
-  #calls blast with specific parameters
+  #call blast from standard input with specific parameters
   #return blast's xml output as a string
-  def advanced_blast(command, filename, gapopen, gapextend)
-    
-    raise TypeError unless command.is_a? String and filename.is_a? String
+  def call_blast_from_stdin(command, query, gapopen, gapextend)
+    begin
+      raise TypeError unless command.is_a? String and query.is_a? String
 
-    evalue = "1e-5"
+      evalue = "1e-5"
 
-    #blast output format:
-    #0 = pairwise,
-    #1 = query-anchored showing identities,
-    #2 = query-anchored no identities,
-    #3 = flat query-anchored, show identities,
-    #4 = flat query-anchored, no identities,
-    #5 = XML Blast output,
-    #6 = tabular,
-    #7 = tabular with comment lines,
-    #8 = Text ASN.1,
-    #9 = Binary ASN.1,
-    #10 = Comma-separated values,
-    #11 = BLAST archive format
+      #output format = 5 (XML Blast output)
+      blast_cmd = "#{command} -db nr -remote -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend}"
+      cmd = "echo \"#{query}\" | #{blast_cmd}"
+      #puts "Executing \"#{blast_cmd}\"... This may take a while..."
+      output = %x[#{cmd} 2>/dev/null]
 
-    cmd = "#{command} -query #{filename} -db nr -remote -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend} "
-    puts "Executing \"#{cmd}\"..."
-    puts "This may take a while..."
-    output = %x[#{cmd} 2>/dev/null]
+      if output == ""
+        raise ClasspathError.new
+      end
 
-    if output == ""
+      return output
+
+    rescue TypeError
+      $stderr.print "Type error. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
+      exit
+    rescue ClasspathError
+      $stderr.print "BLAST error. Possible cause: Did you add BLAST path to CLASSPATH?\n" 
+      exit 
+    end
+  end
+
+
+  ####################################
+  #call blast from file with specific parameters
+  #return blast's xml output as a string
+  def call_blast_from_file(command, filename, gapopen, gapextend)
+    begin  
+      raise TypeError unless command.is_a? String and filename.is_a? String
+
+      evalue = "1e-5"
+
+      #output = 5 (XML Blast output)
+      cmd = "#{command} -query #{filename} -db nr -remote -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend} "
+      puts "Executing \"#{cmd}\"..."
+      puts "This may take a while..."
+      output = %x[#{cmd} 2>/dev/null]
+
+      if output == ""
+        raise ClasspathError.new      
+      end
+
+      return output
+
+    rescue TypeError
+      $stderr.print "Type error. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
+      exit
+    rescue ClasspathError
       $stderr.print "BLAST error. Did you add BLAST path to CLASSPATH?\n"
       exit
     end
-
-    @xml_output = output
-    output
   end
 
   ##########################################################################
   #parse the xml blast output given as string parameter (optional parameter)
   #initializes the class blast xml iterator
-  def parse_output(output = nil)
+  def parse_xml_output(output)
 
-    if output == nil
-      output = @xml_output
-    end
+    iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
 
-    xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    @blast_xml_iterator = xml
+    begin
+      @idx = @idx + 1      
+      if @idx < @start_idx  
+        iter = iterator.next 
+      else     
+        sequences = parse_next_query(iterator) #returns [hits, predicted_seq]
+        if sequences == nil          
+          @idx = @idx -1
+          break
+        end
+
+        hits = sequences[0]
+        prediction = sequences[1]
+
+        query = BlastQuery.new(hits, prediction,"#{@fasta_file}_#{@idx}", @idx)
+        rez_lv = query.length_validation
+        rez_rfv = query.reading_frame_validation
+        rez_merge = query.gene_merge_validation
+        printf "%5d |\'%-20s\'| %50s | %20s | %20s|\n",
+              @idx,
+              prediction.definition[0, [prediction.definition.length-1,20].min],
+              rez_lv, rez_rfv, rez_merge
+      end
+
+      rescue QueryError
+        $stderr.print "Type error. Possible cause: blast did not find any relevant output for this query.\n"
+      rescue StopIteration
+        #@idx = @idx - 1
+        return
+    end while 1
 
   end
 
   #####################################################
   #parse the next query from the blast xml output query
-  #return an array of sequences
-  def parse_next_query
-  begin
-    raise TypeError unless @blast_xml_iterator.is_a? Enumerator
+  #output1: an array of Sequence hits
+  #output2: Sequence object for the predicted sequence
+  def parse_next_query(iterator)
+    begin
+      raise TypeError unless iterator.is_a? Enumerator
 
-    hits = Array.new
-    predicted_seq = Sequence.new
+      hits = Array.new
+      predicted_seq = Sequence.new
+      iter = iterator.next
 
-    iter = @blast_xml_iterator.next
+      #puts "#################################################"
+      #puts "Parsing query #{iter.field('Iteration_iter-num')}"
+      predicted_seq.xml_length = iter.field("Iteration_query-len").to_i
+      predicted_seq.definition = iter.field("Iteration_query-def")
 
-    puts "#################################################"
-    puts "Parsing query #{iter.field('Iteration_iter-num')}"
-    predicted_seq.xml_length = iter.field("Iteration_query-len").to_i
+      iter.each do | hit |
+ 
+        hsp = hit.hsps.first
+        hsp.field("Hsp_bit-score")
+        seq = Sequence.new
 
-    iter.each do | hit |
-
-      hsp = hit.hsps.first
-      hsp.field("Hsp_bit-score")
-      seq = Sequence.new
-
-      seq.object_type = "ref"
-      seq.seq_type = @type
-      seq.database = iter.field("BlastOutput_db")
-      seq.id = hit.hit_id
+        seq.object_type = "ref"
+        seq.seq_type = @type
+        seq.database = iter.field("BlastOutput_db")
+        seq.id = hit.hit_id
   
-      seq.definition = hit.hit_def
+        seq.definition = hit.hit_def
       
-      species_regex = hit.hit_def.scan(/\[([^\]\[]+)\]$/)
-      if species_regex[0] == nil
-      	seq.species = "Unknown" 
-      else
-	seq.species = species_regex[0][0]
-      end
+        species_regex = hit.hit_def.scan(/\[([^\]\[]+)\]$/)
+        if species_regex[0] == nil
+          seq.species = "Unknown" 
+        else
+    	  seq.species = species_regex[0][0]
+        end
 	    
-      seq.accession_no = hit.accession
-      seq.e_value = hsp.evalue
+        seq.accession_no = hit.accession
+        seq.e_value = hsp.evalue
       
-      seq.xml_length = hit.len.to_i
-      seq.hit_from = hsp.hit_from.to_i
-      seq.hit_to = hsp.hit_to.to_i
+        seq.xml_length = hit.len.to_i
+        seq.hit_from = hsp.hit_from.to_i
+        seq.hit_to = hsp.hit_to.to_i
 
-      #get gene by accession number
-      if @type == "protein"
-        seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "protein")
-      else
-        seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "nucleotide")
-      end
-      seq.fasta_length = 0#seq.raw_sequence.length
+        seq.match_query_from = hsp.query_from.to_i
+        seq.match_query_to = hsp.query_to.to_i
 
-      align = Alignment.new
-      align.query_seq = hsp.qseq
-      align.hit_seq = hsp.hseq
-      align.bit_score = hsp.bit_score
-      align.score = hsp.score
+        seq.query_reading_frame = hsp.query_frame.to_i
 
-      regex = align.hit_seq.gsub(/[+ -]/, '+' => '.', ' ' => '.', '-' => '')
-      #puts "----\n#{regex}\n----"
+        #get gene by accession number
+        if @type == "protein"
+          seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "protein")
+        else
+          seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "nucleotide")
+        end
+        seq.fasta_length = 0#seq.raw_sequence.length
 
-      #seq.alignment_start_offset = seq.raw_sequence.index(/#{regex}/)
-      seq.alignment = align
+        align = Alignment.new
+        align.query_seq = hsp.qseq
+        align.hit_seq = hsp.hseq
+        align.bit_score = hsp.bit_score
+        align.score = hsp.score
 
-      hits.push(seq)
-      #seq.print
-      #puts "getting sequence #{seq.accession_no}..."
-    end     
+        regex = align.hit_seq.gsub(/[+ -]/, '+' => '.', ' ' => '.', '-' => '')
+        #puts "----\n#{regex}\n----"
+
+        #seq.alignment_start_offset = seq.raw_sequence.index(/#{regex}/)
+        seq.alignment = align
+
+        hits.push(seq)
+        #seq.print
+        #puts "getting sequence #{seq.accession_no}..."
+      end     
     
-    #@ref_seq_list = hits	
-    return [hits, predicted_seq]
+      #@ref_seq_list = hits	
+      return [hits, predicted_seq]
 
-  rescue TypeError 
-    $stderr.print "Type error. Possible cause: you didn't call 'parse_output' method first!\n" 
-    exit
-  rescue StopIteration
-    nil
-  end
-
+    rescue TypeError 
+      $stderr.print "Type error. Possible cause: you didn't call 'parse_output' method first!\n" 
+      exit
+    rescue StopIteration
+      nil
+    end
   end
 
   ###################################################
@@ -210,107 +289,6 @@ class Blast
 
   end
 
-  ##################################################
-  #clusterization by length from a list of sequences
-  #input 1: lst = array of Sequence objects
-  #input 2: predicted_seq = Sequence objetc
-  #input 3: debug = true to display debug information, false by default (optional argument)
-  #output 1: array of Cluster objects
-  #output 2: the index of the most dense cluster
-  def clusterization_by_length(lst, predicted_seq, debug = false)
-  begin
-    if lst == nil
-      lst = @ref_seq_list
-    end
-
-    raise TypeError unless lst[0].is_a? Sequence and predicted_seq.is_a? Sequence
-
-    contents = lst.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
-
-    clusters = hierarchical_clustering(contents, debug)
-    max_density = 0;
-    max_density_cluster_idx = 0;
-    clusters.each_with_index do |item, i|
-      if item.density > max_density
-        max_density = item.density
-        max_density_cluster_idx = i;
-      end
-    end
-
-    @clusters = clusters;      
-
-    puts "Predicted sequence length: #{predicted_seq.xml_length}"
-    puts "Maximum sequence length: #{contents.max}"
-    puts "Number of sequences: #{contents.length}"
-    limits = clusters[max_density_cluster_idx].get_limits
-    puts "Most dense custer interval [#{limits[0]},#{limits[1]}]"
-    #clusters[max_density_cluster].print
-
-    return [clusters, max_density_cluster_idx]
-
-  rescue TypeError
-    $stderr.print "Type error. Possible cause: one of the arguments of 'clusterization_by_length' method has not the proper type.\n"
-    exit
-  
-  end
-  end
-
-
-  #############################################################################
-  #plots a histogram of the length distribution given a list of Cluster objects
-  #input 1: array of Cluster objects
-  #input 2: length of the predicted sequence (number)
-  #input 3: index from the clusters array of the most_dense_cluster_idx
-  #input 4: name of the histogram file (optional argument, if missing the histogram will be displayed in a new window)
-  def plot_histo_clusters(clusters, predicted_length, most_dense_cluster_idx, output)
-  begin
-    raise TypeError unless clusters[0].is_a? Cluster and predicted_length.is_a? Fixnum
-
-    lengths = clusters.map{ |c| c.lengths.sort{|a,b| a[0]<=>b[0]}.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten
-    lengths.push(predicted_length)
-
-    max_freq = clusters.map{ |x| x.lengths.map{|y| y[1]}.max}.max
-
-    #make the plot in a new process
-      R.eval "colors = c('orange', 'blue', 'yellow', 'green', 'gray')"
-
-      unless output == nil
-        puts "---- #{output}"
-        #R.eval "dev.copy(png,'#{output}.png')"
-        R.eval "jpeg('#{output}.jpg')"  
-      end
-
-      clusters.each_with_index do |cluster, i|
-        cluster_lengths = cluster.lengths.sort{|a,b| a[0]<=>b[0]}.map{ |x| a = Array.new(x[1],x[0])}.flatten
-
-        if i == most_dense_cluster_idx
-          color = "'red'"
-        else
-          color = "colors[#{i%5+1}]"
-	end
-
-        R.eval "hist(c#{cluster_lengths.to_s.gsub('[','(').gsub(']',')')}, 
-                breaks = seq(#{lengths.min-10}, #{lengths.max+10}, 0.1), 
-                xlim=c(#{lengths.min-10},#{lengths.max+10}), 
-                ylim=c(0,#{max_freq}), 
-                col=#{color}, 
-                border=#{color},
-                main='Histogram for length distribution', xlab='length\nblack = predicted sequence, red = most dense cluster')"
-        R.eval "par(new=T)"
-      end
-      
-      R.eval "abline(v=#{predicted_length})" 
-
-      unless output == nil
-        R.eval "dev.off()"
-      end
-
-  rescue TypeError
-    $stderr.print "Type error. Possible cause: one of the arguments of 'plot_histo_clusters' method has not the proper type.\n"
-    exit
-
-  end
-  end
 end
 
 ##########
