@@ -26,11 +26,9 @@ class Cluster
 
   # the method returns the density of the cluster: how many values it contains
   def density
-    d = 0;
-    lengths.each do |elem|
-      d = d + elem[1]
+    lengths.inject do |sum, elem|
+      sum + elem[1]
     end
-    return d
   end
 
   # the methods returns the euclidian distance between the current cluster and another one 
@@ -45,14 +43,14 @@ class Cluster
         d = d + (elem1[0] - elem2[0]).abs
         #d = d + (elem1[0]* elem1[1] - elem2[0]* elem2[1]).abs
         #d = d + elem1[1] * elem2[1]*(elem1[0] - elem2[0]).abs
-        cluster_norm = cluster_norm + elem1[1]
-        this_cluster_norm = this_cluster_norm + elem2[1]
+        #cluster_norm = cluster_norm + elem1[1] #Commented becase cluster_norm is present in a commented  row
+        this_cluster_norm = this_cluster_norm + elem2[1] #Commented becase this_cluster_norm is present in a commented  row
       end
     end
     #group average distance
     d = d/(cluster.lengths.length * lengths.length)
     #d = d/(cluster_norm * this_cluster_norm)
-    return d
+    return d #last instruction in ruby is the returning value.
   end
 
   #the methods returns the standard deviation of a set of values
@@ -63,12 +61,11 @@ class Cluster
     end
 
     cluster_mean = mean()
-    std_deviation = 0
-    lengths.each do |len|
-      std_deviation = std_deviation + (cluster_mean - len) * (cluster_mean - len)
-    end
+    std_deviation = lengths.inject do |stdv, len|
+      stdv + (cluster_mean - len) ** 2
+    end.to_f
 
-    std_deviation = Math.sqrt(std_deviation.to_f / (lengths.length - 1))
+    std_deviation = Math.sqrt(std_deviation / (lengths.length - 1))
   end
 
   #the methods returns the deviation of a value from the values in all clusters
@@ -90,7 +87,7 @@ class Cluster
   #innput2: a reference Sequence object
   def wilcox_test(clusters, queryLength)
 
-    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
+    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.tr('[]','')
 
     R.eval("library(preprocessCore)")
     R.eval("x = matrix(c(#{raw_hits}), ncol=1)")
@@ -114,7 +111,7 @@ class Cluster
 
     #normalize the data so that to fit a bell curve
     #raw_hits = lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten.to_s.gsub('[','').gsub(']','')
-    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
+    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.tr('[]','')
 
     if raw_hits.length == 1
 
@@ -155,12 +152,9 @@ class Cluster
     min = 100000
     max = 0
     lengths.each do |elem|
-      if min > elem[0]
-        min = elem[0]
-      end
-      if max < elem[0]
-        max = elem[0]
-      end
+      min = elem[0] if min > elem[0]
+        
+      max = elem[0] if max < elem[0]
     end
     return [min,max]
   end
