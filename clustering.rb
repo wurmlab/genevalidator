@@ -207,8 +207,7 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
     if debug
       puts "len #{elem[0]} appears #{elem[1]} times"
     end
-    hash = Hash.new
-    hash[elem[0]] = elem[1]
+    hash = {elem[0] => elem[1]}
     cluster = Cluster.new(hash)
     clusters.push(cluster)
   end
@@ -257,7 +256,7 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
       end	
     end	
 
-    #stop condition
+    #stop condition 1
     #the distance between the closest clusters exceeds the threshold
     if no_clusters == 0 and (clusters[cluster].mean - clusters[cluster+1].mean).abs > threshold_distance
         #puts "Clusterization stoped because clusters #{cluster} and #{cluster+1} that should be merged are too far one from the other."
@@ -279,7 +278,7 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
       end
     end
 
-    #stop condition
+    #stop condition 2
     #the density of the biggest clusters exceeds the threshold
     if no_clusters == 0 and clusters[cluster].density > threshold_density
         #puts "Clusterization stoped because cluster's #{cluster} no of elements exceeded half of the total no of elements."
