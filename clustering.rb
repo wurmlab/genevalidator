@@ -194,7 +194,7 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
     hash = {vce[0]=>1}
     cluster = Cluster.new(hash)
     clusters.push(cluster)
-    return clusters
+    clusters
   end
 
 
