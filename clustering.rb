@@ -184,19 +184,15 @@ end
 # input4 (optional): display debug information
 # output: a vector of Cluster objects
 def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = false)
-
-  #puts no_clusters
-
   clusters = []
   vec = vec.sort
 
   if vec.length == 1
-    hash = {vce[0]=>1}
+    hash = {vec[0]=>1}
     cluster = Cluster.new(hash)
     clusters.push(cluster)
     clusters
   end
-
 
   # Thresholds
   threshold_distance = (0.25 * (vec.max-vec.min))
