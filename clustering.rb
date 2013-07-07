@@ -281,11 +281,8 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
 
     #stop condition
     #the density of the biggest clusters exceeds the threshold
-    #puts "-- #{clusters[cluster].density} #{threshold_density}"
-    #puts "#{no_clusters}"
     if no_clusters == 0 and clusters[cluster].density > threshold_density
         #puts "Clusterization stoped because cluster's #{cluster} no of elements exceeded half of the total no of elements."
-        #clusters
         break
     end
   end
