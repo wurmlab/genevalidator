@@ -12,12 +12,12 @@ class Cluster
 
   # the metohod returns the weighted mean value of the cluster
   def mean
-    mean_len = 0;
-    weight = 0;
+    mean_len = 0
+    weight = 0
 
     lengths.each do |length, n|
-      mean_len = mean_len + length * n
-      weight      = weight + n
+      mean_len += length * n
+      weight += n
     end		
 
     mean_len /= weight
@@ -26,11 +26,12 @@ class Cluster
 
   # the method returns the density of the cluster: how many values it contains
   def density
-    d = 0;
+    d = 0
     lengths.each do |elem|
       d += elem[1]
     end
     d
+
   end
 
   # the methods returns the euclidian distance between the current cluster and another one 
@@ -39,8 +40,7 @@ class Cluster
   # method = 0: do not into condseideration duplicate values
   # method = 1: average linkage clustering 
   def distance(cluster, method = 0)
-
-    d = 0;
+    d = 0
     norm = 0
 
     cluster.lengths.each do |elem1|
@@ -48,7 +48,6 @@ class Cluster
         if method == 1
           d += elem1[1] * elem2[1] * (elem1[0] - elem2[0]).abs
           norm += elem1[1] * elem2[1]
-#          puts "#{elem1[1]} #{elem2[1]} #{(elem1[0] - elem2[0]).abs} #{d} #{norm}"
         else
           d += (elem1[0] - elem2[0]).abs
           norm = cluster.lengths.length * lengths.length             
@@ -74,6 +73,7 @@ class Cluster
     end
 
     ss
+
   end
 
   #the methods returns the standard deviation of a set of values
@@ -90,13 +90,13 @@ class Cluster
     end
 
     std_deviation = Math.sqrt(std_deviation.to_f / (lengths.length - 1))
+
   end
 
   #the methods returns the deviation of a value from the values in all clusters
   #input1: a list of Cluster objects
   #innput2: a reference Sequence object
   def deviation(clusters, queryLength)
-
     hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten
     raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
     R.eval("sd = sd(c(#{raw_hits}))")
@@ -111,7 +111,6 @@ class Cluster
   #input1: a list of Cluster objects
   #innput2: a reference Sequence object
   def wilcox_test(clusters, queryLength)
-
     raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
 
     R.eval("library(preprocessCore)")
@@ -133,7 +132,6 @@ class Cluster
   #input1: a list of Cluster objects
   #innput2: a reference Sequence object
   def t_test(clusters, queryLength)
-
     #normalize the data so that to fit a bell curve
     #raw_hits = lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten.to_s.gsub('[','').gsub(']','')
     raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
@@ -160,6 +158,7 @@ class Cluster
     cluster.lengths.each do |elem|
       lengths[elem[0]] = elem[1]
     end
+
   end
 
   # this method prints the current cluster
@@ -169,6 +168,7 @@ class Cluster
       puts "#{elem[0]}, #{elem[1]}"
     end
     puts "--------------------------"
+
   end
 
   #this methos returns the interval limits of the current cluster
@@ -295,6 +295,7 @@ def hierarchical_clustering (vec, no_clusters = 0, distance_method = 0, debug = 
   end
 
   clusters
+
 end
 
 # Main body
