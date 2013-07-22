@@ -1,7 +1,5 @@
-gene_prediction
+GSoC 2013 project: Identify problems with predicted genes
 ===============
-
-GSoC project: Identify problems with predicted genes
 
 Details about the project's progress during the **Community Bonding period** can be found [here](https://github.com/monicadragan/gene_prediction/wiki/Community-Bonding).<br>
 Details about the project's progress during the **Coding period** can be found [here](https://github.com/monicadragan/gene_prediction/wiki/Project-Diary).<br>
