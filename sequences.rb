@@ -19,31 +19,41 @@ class Sequence
   attr_accessor :definition
   attr_accessor :species
   attr_accessor :accession_no
-  attr_accessor :e_value
-  attr_accessor :fasta_length
+  attr_accessor :fasta_length # not used, not neccesary
   attr_accessor :xml_length
   attr_accessor :raw_sequence
-  attr_accessor :alignment
-  attr_accessor :alignment_start_offset
-  attr_accessor :hit_from
-  attr_accessor :hit_to
-  attr_accessor :match_query_from
-  attr_accessor :match_query_to
-  attr_accessor :query_reading_frame
-
-  def initialize
-  end
+  attr_accessor :hsp_list # array of Hsp objects 
 
   def print
     puts "#{@object_type} sequence: #{@definition} "
     puts "Lengths xml #{@xml_length} fasta #{@fasta_length} hit #{@alignment.hit_seq.length}"
     puts "Accession = #{@accession_no}"
     puts "Species = #{@species}"
-    puts "hit from: #{@alignment_start_offset} #{@hit_from} #{@hit_to}"
     puts "Raw_sequence = #{@raw_sequence.insert(@hit_from-1,'#').insert(@hit_to+1,'#')}"
     puts "Hit seq =      #{alignment.hit_seq}"
     puts "Query seq =    #{alignment.query_seq}"
     puts "----------------------"
   end
+
+end
+
+class Hsp
+
+  attr_accessor :hit_from #references from the unaligned hit sequence
+  attr_accessor :hit_to
+  attr_accessor :match_query_from # references from the unaligned query sequence
+  attr_accessor :match_query_to
+  attr_accessor :query_reading_frame
+  attr_accessor :hit_alignment
+  attr_accessor :query_alignment
+  attr_accessor :middles # conserved residues are with letters, positive (mis)matches with +, mismatches and gaps are with space
+
+  attr_accessor :bit_score
+  attr_accessor :hsp_score
+  attr_accessor :hsp_evalue
+  attr_accessor :identity # number of conserved residues
+  attr_accessor :positive # positive score for the (mis)match
+  attr_accessor :gaps
+  attr_accessor :align_len
 
 end

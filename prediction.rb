@@ -1,5 +1,5 @@
 require 'optparse'
-require './clustering'
+require './clusterization'
 require './blast'
 require './sequences'
 
@@ -7,7 +7,7 @@ require './sequences'
 
 options = {}
 opt_parser = OptionParser.new do |opt|
-  opt.banner = "Usage: TYPE [SKIP_BLAST] [START] FILE"
+  opt.banner = "Usage: TYPE [SKIP_BLAST] [START] [OUTFMT] FILE"
   opt.separator  ""
   opt.separator  "File: filename of the FASTA file containing the predicted sequences"
   opt.separator  ""
@@ -30,7 +30,19 @@ opt_parser = OptionParser.new do |opt|
     end
   end
 
-  opt.on("-x", "--skip_blast","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
+  opt.on("-o","--outfmt [OUTFMT]", "output format ") do |outfmt|
+    if outfmt == "html"
+      options[:outfmt] = :html    
+    else 
+      if outfmt == "yaml"
+        options[:outfmt] = :yaml
+      else
+        options[:outfmt] = :console
+      end
+    end    
+  end
+
+  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
     options[:skip_blast] = skip
   end
 
@@ -48,8 +60,12 @@ begin
     exit
   end 
 
+  unless options[:skip_blast]
+    options[:skip_blast] = nil
+  end
+
   unless ARGV.length == 1
-    $stderr.puts "Error: you must specify a single input file." + "\n"
+    $stderr.puts "Error: you must specify a single fasta input file instead of #{ARGV.length}." + "\n"
     exit
   end 
 
@@ -62,15 +78,23 @@ end
 # Main body
 
 if options[:start]
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:start])
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:outfmt], options[:skip_blast], options[:start])
 else
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase)
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:outfmt], options[:skip_blast])
 end
 
+b.blast
+=begin
 unless options[:skip_blast]
   b.blast
 else
-  # Skip the blast-ing part and provide a xml blast output file as argument to this ruby script
-  file = File.open(ARGV[0], "rb").read
-  b.parse_xml_output(file)
+  begin
+    # Skip the blast-ing part and provide a xml blast output file as argument to this ruby script
+    file = File.open(ARGV[0], "rb").read
+    b.parse_xml_output(file)
+  rescue SystemCallError
+    $stderr.print "Load error. Possible cause: input file is not valid\n"
+    exit
+  end
 end
+=end
