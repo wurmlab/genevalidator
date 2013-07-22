@@ -1,0 +1,139 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0">
+				<tr bgcolor = #E8E8E8>
+				        <th></th>
+					<th>No.</th>
+					<th width=100>Description</th>
+					<th>No_Hits</th>
+					<th>Valid_Length(Cluster)</th>
+					<th>Valid_Length(Rank)</th>
+					<th>Valid_Reading_Frame</th>
+					<th>Gene_Merge(slope)</th>
+					<th>Duplication</th>
+                                        <th width = 200 style="white-space:nowrap"> ORFs</th>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td>GB10002-PA</td>
+	      <td>221</td>
+	      <td bgcolor=#FFFFFF>1344 [961, 1750] YES</td>
+	      <td bgcolor=#FFFFFF>0.49(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:439; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.38)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle1 style='display:none'>
+
+              <img src=duplications.fasta_1_len_clusters.jpg height=400>
+	      <img src=duplications.fasta_1_match.jpg height=400>
+              <img src=duplications.fasta_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td>GB10002-PA-dup</td>
+	      <td>202</td>
+	      <td bgcolor=#E8E8E8>1584 [961, 1750] YES</td>
+	      <td bgcolor=#E8E8E8>0.33(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:486; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.33)</td>
+	      <td bgcolor=red>YES(pval=0.002)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle2 style='display:none'>
+
+              <img src=duplications.fasta_2_len_clusters.jpg height=400>
+	      <img src=duplications.fasta_2_match.jpg height=400>
+              <img src=duplications.fasta_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle3')>Show/Hide Plots</button></td> 
+	      <td>3</td>
+	      <td>FBpp0077824 pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121 transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>1153 [1098, 1281] YES</td>
+	      <td bgcolor=#FFFFFF>0.28(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:507; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.23)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle3 style='display:none'>
+
+              <img src=duplications.fasta_3_len_clusters.jpg height=400>
+	      <img src=duplications.fasta_3_match.jpg height=400>
+              <img src=duplications.fasta_3_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle4')>Show/Hide Plots</button></td> 
+	      <td>4</td>
+	      <td>FBpp0077824-dup pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121 transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding</td>
+	      <td>100</td>
+	      <td bgcolor=red>1513 [1029, 1128] NO</td>
+	      <td bgcolor=red>0.01(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:335; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.32)</td>
+	      <td bgcolor=red>YES(pval=0.0059)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle4 style='display:none'>
+
+              <img src=duplications.fasta_4_len_clusters.jpg height=400>
+	      <img src=duplications.fasta_4_match.jpg height=400>
+              <img src=duplications.fasta_4_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle5')>Show/Hide Plots</button></td> 
+	      <td>5</td>
+	      <td>GB10029-PA</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>2588 [2373, 3041] YES</td>
+	      <td bgcolor=#FFFFFF>0.38(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:644; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.13)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle5 style='display:none'>
+
+              <img src=duplications.fasta_5_len_clusters.jpg height=400>
+	      <img src=duplications.fasta_5_match.jpg height=400>
+              <img src=duplications.fasta_5_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

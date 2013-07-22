@@ -1,0 +1,21 @@
+---
+GB10034-PA: !ruby/object:Output
+  prediction_len: 554
+  prediction_def: GB10034-PA (amel_OGSv1.0_pep.fa_34)
+  nr_hits: 246
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 390
+  - 800
+  length_rank_score: 0.44
+  length_rank_msg: OK
+  reading_frame_validation: VALID
+  reading_frame_info: ! '0 283; '
+  merged_genes_score: 0.39809145508207466
+  duplication: 'NO'
+  duplication_info: 1
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.xml
+  idx: 1
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.xml_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.xml_1_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.xml_1_match_2d.jpg

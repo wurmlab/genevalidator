@@ -1,0 +1,113 @@
+---
+GB10002-PA: !ruby/object:Output
+  prediction_len: 1344
+  prediction_def: GB10002-PA
+  nr_hits: 221
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 961
+  - 1750
+  length_rank_score: 0.49
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 439
+  merged_genes_score: -0.38061133294054394
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/duplications_proteins/duplications.fasta
+  idx: 1
+  image_histo_len: gene_merge_validation/duplications_proteins/duplications.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplications_proteins/duplications.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/duplications_proteins/duplications.fasta_1_match_2d.jpg
+GB10002-PA-dup: !ruby/object:Output
+  prediction_len: 1584
+  prediction_def: GB10002-PA-dup
+  nr_hits: 202
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 961
+  - 1750
+  length_rank_score: 0.33
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 486
+  merged_genes_score: -0.32800904978233314
+  duplication: 'YES'
+  duplication_info: 0.001953125
+  orf: {}
+  filename: gene_merge_validation/duplications_proteins/duplications.fasta
+  idx: 2
+  image_histo_len: gene_merge_validation/duplications_proteins/duplications.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplications_proteins/duplications.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/duplications_proteins/duplications.fasta_2_match_2d.jpg
+FBpp0077824: !ruby/object:Output
+  prediction_len: 1153
+  prediction_def: FBpp0077824 pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121
+    transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 1098
+  - 1281
+  length_rank_score: 0.28
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 507
+  merged_genes_score: 0.23022106831112288
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/duplications_proteins/duplications.fasta
+  idx: 3
+  image_histo_len: gene_merge_validation/duplications_proteins/duplications.fasta_3_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplications_proteins/duplications.fasta_3_match.jpg
+  image_histo_merge: gene_merge_validation/duplications_proteins/duplications.fasta_3_match_2d.jpg
+FBpp0077824-dup: !ruby/object:Output
+  prediction_len: 1513
+  prediction_def: FBpp0077824-dup pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121
+    transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding
+  nr_hits: 100
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 1029
+  - 1128
+  length_rank_score: 0.01
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 335
+  merged_genes_score: -0.32185748806018805
+  duplication: 'YES'
+  duplication_info: 0.00585709908528413
+  orf: {}
+  filename: gene_merge_validation/duplications_proteins/duplications.fasta
+  idx: 4
+  image_histo_len: gene_merge_validation/duplications_proteins/duplications.fasta_4_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplications_proteins/duplications.fasta_4_match.jpg
+  image_histo_merge: gene_merge_validation/duplications_proteins/duplications.fasta_4_match_2d.jpg
+GB10029-PA: !ruby/object:Output
+  prediction_len: 2588
+  prediction_def: GB10029-PA
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 2373
+  - 3041
+  length_rank_score: 0.38
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 644
+  merged_genes_score: -0.13029936745638337
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/duplications_proteins/duplications.fasta
+  idx: 5
+  image_histo_len: gene_merge_validation/duplications_proteins/duplications.fasta_5_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplications_proteins/duplications.fasta_5_match.jpg
+  image_histo_merge: gene_merge_validation/duplications_proteins/duplications.fasta_5_match_2d.jpg

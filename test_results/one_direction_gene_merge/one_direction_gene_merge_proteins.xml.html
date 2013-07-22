@@ -1,0 +1,72 @@
+<html>
+                  <head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0" height="65" width="642">
+                        <tbody>
+				<tr bgcolor = #E8E8E8>
+				        <td></td>
+					<td>No.</td>
+					<td>Description</td>
+					<td>No_Hits</td>
+					<td>Valid_Length(Cluster)</td>
+					<td>Valid_Length(Rank)</td>
+					<td>Valid_Reading_Frame</td>
+					<td>Gene_Merge(0=bimodal)</td>
+					<td>Duplication</td>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td width=100>GB10034-PA (amel_OGSv1.0_pep.fa_34)</td>
+	      <td>246</td>
+	      <td bgcolor=#FFFFFF>554 [390, 800] YES</td>
+	      <td bgcolor=#FFFFFF>0.44</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.4)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle1 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.xml_1_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.xml_1_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.xml_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td width=100>GB10040-PA (amel_OGSv1.0_pep.fa_40)</td>
+	      <td>500</td>
+	      <td bgcolor=red>1070 [496, 1012] NO</td>
+	      <td bgcolor=red>0.19</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.02)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=9>
+              <div id=toggle2 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.xml_2_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.xml_2_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.xml_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

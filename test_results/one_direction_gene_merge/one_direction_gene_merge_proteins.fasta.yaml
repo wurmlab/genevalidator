@@ -1,0 +1,509 @@
+---
+GB10034-PA: !ruby/object:Output
+  prediction_len: 554
+  prediction_def: GB10034-PA (amel_OGSv1.0_pep.fa_34)
+  nr_hits: 246
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 390
+  - 800
+  length_rank_score: 0.44
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 283
+  merged_genes_score: 0.39809145508207466
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 1
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_1_match_2d.jpg
+GB10040-PA: !ruby/object:Output
+  prediction_len: 1070
+  prediction_def: GB10040-PA (amel_OGSv1.0_pep.fa_40)
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 496
+  - 1012
+  length_rank_score: 0.19
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 924
+  merged_genes_score: 0.018805771308315872
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 2
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_2_match_2d.jpg
+GB10056-PA: !ruby/object:Output
+  prediction_len: 339
+  prediction_def: GB10056-PA
+  nr_hits: 436
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 106
+  - 387
+  length_rank_score: 0.28
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 436
+  merged_genes_score: 0.02402573198571423
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 3
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_3_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_3_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_3_match_2d.jpg
+GB10058-PA: !ruby/object:Output
+  prediction_len: 1052
+  prediction_def: GB10058-PA
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 1099
+  - 1329
+  length_rank_score: 0.37
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 906
+  merged_genes_score: -0.030356927208188764
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 4
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_4_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_4_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_4_match_2d.jpg
+GB10063-PA: !ruby/object:Output
+  prediction_len: 615
+  prediction_def: GB10063-PA
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 510
+  - 724
+  length_rank_score: 0.37
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 835
+  merged_genes_score: -0.009315292384440996
+  duplication: 'NO'
+  duplication_info: 0.18144920772142034
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 5
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_5_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_5_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_5_match_2d.jpg
+GB10071-PA: !ruby/object:Output
+  prediction_len: 494
+  prediction_def: GB10071-PA
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 335
+  - 485
+  length_rank_score: 0.04
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 702
+  merged_genes_score: 0.7067157139454677
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 6
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_6_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_6_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_6_match_2d.jpg
+GB10091-PA: !ruby/object:Output
+  prediction_len: 708
+  prediction_def: GB10091-PA
+  nr_hits: 404
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 68
+  - 867
+  length_rank_score: 0.48
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 419
+  merged_genes_score: 0.05898727303742147
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 7
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_7_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_7_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_7_match_2d.jpg
+GB10098-PA: !ruby/object:Output
+  prediction_len: 826
+  prediction_def: GB10098-PA
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 681
+  - 978
+  length_rank_score: 0.4
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 507
+  merged_genes_score: 0.07674941316777961
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 8
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_8_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_8_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_8_match_2d.jpg
+GB10113-PA: !ruby/object:Output
+  prediction_len: 659
+  prediction_def: GB10113-PA
+  nr_hits: 422
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 51
+  - 595
+  length_rank_score: 0.16
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 536
+  merged_genes_score: 0.45463117345689597
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 9
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_9_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_9_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_9_match_2d.jpg
+SI2.2.0_02565: !ruby/object:Output
+  prediction_len: 1761
+  prediction_def: SI2.2.0_02565 locus=Si_gnF.scaffold10535[2342913..2350141].pep_2
+    quality=99.83 (SI2.2.3_proteins.fa_35)
+  nr_hits: 430
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 113
+  - 900
+  length_rank_score: 0.28
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 535
+  merged_genes_score: 0.31771525321301497
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 10
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_10_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_10_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_10_match_2d.jpg
+SI2.2.0_07054: !ruby/object:Output
+  prediction_len: 640
+  prediction_def: SI2.2.0_07054 locus=Si_gnF.scaffold08475[8186..10205].pep_2 quality=100.00
+  nr_hits: 84
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 107
+  - 492
+  length_rank_score: 0.15
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 86
+  merged_genes_score: 0.7886553672954674
+  duplication: 'NO'
+  duplication_info: 1.0
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 11
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_11_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_11_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_11_match_2d.jpg
+SI2.2.0_02651: !ruby/object:Output
+  prediction_len: 660
+  prediction_def: SI2.2.0_02651 locus=Si_gnF.scaffold01722[932834..938174].pep_2 quality=100.00
+    tag=gw_corrected
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 375
+  - 1500
+  length_rank_score: 0.13
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 680
+  merged_genes_score: 0.2884364087988948
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 12
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_12_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_12_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_12_match_2d.jpg
+PB26730-RA: !ruby/object:Output
+  prediction_len: 347
+  prediction_def: PB26730-RA protein AED:1 QI:0|0|0|0|0|0|10|0|347
+  nr_hits: 131
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 330
+  - 446
+  length_rank_score: 0.37
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 156
+  merged_genes_score: 0.47996079291114246
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 13
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_13_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_13_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_13_match_2d.jpg
+Or13a-like-1: !ruby/object:Output
+  prediction_len: 774
+  prediction_def: Or13a-like-1 protein AED:1 QI:0|0|0|0|0|0|23|0|774
+  nr_hits: 140
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 292
+  - 553
+  length_rank_score: 0.04
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 223
+  merged_genes_score: 0.705672448665915
+  duplication: 'NO'
+  duplication_info: 0.014266186701446927
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 14
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_14_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_14_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_14_match_2d.jpg
+PB18762-RA: !ruby/object:Output
+  prediction_len: 207
+  prediction_def: PB18762-RA protein AED:1 QI:0|0|0|0|0|0|2|0|207
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 218
+  - 298
+  length_rank_score: 0.07
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 649
+  merged_genes_score: 0.6797835373122187
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 15
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_15_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_15_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_15_match_2d.jpg
+Pbar_fem-RF: !ruby/object:Output
+  prediction_len: 452
+  prediction_def: Pbar_fem-RF protein AED:1 QI:325|0|0|0|0|0|10|42|452
+  nr_hits: 396
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 162
+  - 196
+  length_rank_score: 0.03
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 396
+  merged_genes_score: 0.19781594925363766
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 16
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_16_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_16_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_16_match_2d.jpg
+PB18775-RA: !ruby/object:Output
+  prediction_len: 1160
+  prediction_def: PB18775-RA protein AED:1 QI:0|0|0|0|0|0|17|0|1160
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 625
+  - 826
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 687
+  merged_genes_score: 0.2080308795514418
+  duplication: 'NO'
+  duplication_info: 0.02249427122244966
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 17
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_17_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_17_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_17_match_2d.jpg
+PB11933-RA: !ruby/object:Output
+  prediction_len: 845
+  prediction_def: PB11933-RA protein AED:1 QI:0|0|0|0|0|0|8|0|845
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 439
+  - 1615
+  length_rank_score: 0.45
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 815
+  merged_genes_score: 0.4801343803155899
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 18
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_18_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_18_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_18_match_2d.jpg
+PB13750-RA: !ruby/object:Output
+  prediction_len: 974
+  prediction_def: PB13750-RA protein AED:1 QI:198|0|0|0|0|0|12|764|974
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 845
+  - 1005
+  length_rank_score: 0.37
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 961
+  merged_genes_score: 0.010976885858946715
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 19
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_19_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_19_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_19_match_2d.jpg
+PB13758-RA: !ruby/object:Output
+  prediction_len: 751
+  prediction_def: PB13758-RA protein AED:1 QI:0|0|0|0|0|0|14|0|751
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 156
+  - 1134
+  length_rank_score: 0.42
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 1083
+  merged_genes_score: 0.19876970486057394
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 20
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_20_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_20_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_20_match_2d.jpg
+PB20127-RA: !ruby/object:Output
+  prediction_len: 679
+  prediction_def: PB20127-RA protein AED:1 QI:0|0|0|0|0|0|8|0|679
+  nr_hits: 444
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 474
+  - 721
+  length_rank_score: 0.11
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 655
+  merged_genes_score: 0.15538607832370052
+  duplication: 'NO'
+  duplication_info: 1.0
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 21
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_21_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_21_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_21_match_2d.jpg
+PB18752-RA: !ruby/object:Output
+  prediction_len: 794
+  prediction_def: PB18752-RA protein AED:1 QI:0|0|0|0|0|0|13|0|794
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 564
+  - 679
+  length_rank_score: 0.02
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 500
+  merged_genes_score: -0.2025032448138307
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 22
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_22_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_22_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_22_match_2d.jpg
+PB18768-RA: !ruby/object:Output
+  prediction_len: 132
+  prediction_def: PB18768-RA protein AED:1 QI:187|0|0|0|0|0|2|127|132
+  nr_hits: 289
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 104
+  - 175
+  length_rank_score: 0.34
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 289
+  merged_genes_score: -0.11228363491024058
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+  idx: 23
+  image_histo_len: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_23_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_23_match.jpg
+  image_histo_merge: gene_merge_validation/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta_23_match_2d.jpg

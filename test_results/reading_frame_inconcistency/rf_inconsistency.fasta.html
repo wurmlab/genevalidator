@@ -1,0 +1,73 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0">
+				<tr bgcolor = #E8E8E8>
+				        <th></th>
+					<th>No.</th>
+					<th width=100>Description</th>
+					<th>No_Hits</th>
+					<th>Valid_Length(Cluster)</th>
+					<th>Valid_Length(Rank)</th>
+					<th>Valid_Reading_Frame</th>
+					<th>Gene_Merge(slope)</th>
+					<th>Duplication</th>
+                                        <th width = 200 style="white-space:nowrap"> ORFs</th>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td>Brasy-EspV1T00022</td>
+	      <td>106</td>
+	      <td bgcolor=red>1625 [407, 663] NO</td>
+	      <td bgcolor=red>0.0(TOO_LONG)</td>
+	      <td bgcolor=red>INVALID(3:66; 1:97; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.05)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=red>+1:[[1, 123], [159, 360], [360, 504], [504, 843], [843, 1005], [1005, 1119], [1275, 1410], [1410, 1521], [1605, 1938], [1938, 2043], [2043, 2349], [2592, 2754], [2829, 2958], [3099, 3336], [3336, 3438], [3564, 4065], [4389, 4566], [4668, 4785]]<br>+2:[[2, 175], [220, 364], [535, 1336], [1336, 1546], [1546, 1885], [2644, 2773], [3001, 3160], [3355, 3589], [4090, 4243], [4312, 4414], [4453, 4606], [4606, 4732], [4732, 4876]]<br>+3:[[50, 3497], [3548, 3698], [3776, 4022], [4022, 4148], [4421, 4757]]<br>-1:[[150, 579], [579, 687], [756, 873], [1251, 1383], [1383, 1488], [1677, 1863], [1911, 2148], [2625, 2742], [2898, 3183], [3282, 3660], [3660, 3861], [3861, 4170], [4170, 4407], [4407, 4876]]<br>-2:[[73, 310], [310, 436], [556, 664], [835, 1075], [1174, 1483], [1510, 1642], [1708, 1831], [1831, 1975], [2062, 2245], [2281, 2404], [2428, 2533], [2533, 2734], [2842, 3055], [3055, 3622], [3670, 3892], [3898, 4024], [4024, 4210], [4438, 4588], [4594, 4876]]<br>-3:[[314, 575], [680, 1256], [1370, 1655], [1790, 2000], [2096, 2198], [2546, 2708], [2708, 2825], [2825, 2963], [2963, 3305], [3305, 3833], [3833, 4145], [4244, 4721], [4721, 4876]]<br></td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle1 style='display:none'>
+
+              <img src=rf_inconsistency.fasta_1_len_clusters.jpg height=400>
+	      <img src=rf_inconsistency.fasta_1_match.jpg height=400>
+              <img src=rf_inconsistency.fasta_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td>Brasy-EspV1T00061</td>
+	      <td>500</td>
+	      <td bgcolor=red>466 [376, 377] NO</td>
+	      <td bgcolor=red>0.0(TOO_LONG)</td>
+	      <td bgcolor=red>INVALID(1:500; 2:1000; 3:1; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.02)</td>
+	      <td bgcolor=red>YES(pval=0.0056)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=red>+1:[[1, 693], [822, 951], [1002, 1224], [1242, 1398]]<br>+2:[[2, 442], [493, 772], [772, 1141]]<br>+3:[[3, 122], [224, 470], [626, 761], [812, 932], [1109, 1319]]<br>-1:[[63, 165], [336, 492], [624, 1164]]<br>-2:[[160, 331], [331, 442], [805, 1039], [1201, 1375]]<br>-3:[[101, 293], [410, 848], [1016, 1121], [1121, 1398]]<br></td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle2 style='display:none'>
+
+              <img src=rf_inconsistency.fasta_2_len_clusters.jpg height=400>
+	      <img src=rf_inconsistency.fasta_2_match.jpg height=400>
+              <img src=rf_inconsistency.fasta_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

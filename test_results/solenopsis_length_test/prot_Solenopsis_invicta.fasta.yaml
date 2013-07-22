@@ -1,0 +1,232 @@
+---
+SI2.2.0_06267: !ruby/object:Output
+  prediction_len: 199
+  prediction_def: SI2.2.0_06267 locus=Si_gnF.scaffold02592[1282609..1284114].pep_2
+    Solenopsis invicta quality=100.00
+  nr_hits: 78
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 1556
+  - 1814
+  length_rank_score: 0.0
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 78
+  merged_genes_score: 0.0005853812038696374
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 1
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_1_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_1_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_1_match_2d.jpg
+SI2.2.0_13722: !ruby/object:Output
+  prediction_len: 186
+  prediction_def: SI2.2.0_13722 locus=Si_gnF.scaffold06207[1925625..1928536].pep_1
+    Solenopsis invicta quality=100.00
+  nr_hits: 15
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 130
+  - 161
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 15
+  merged_genes_score: 0.032472121878435706
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 2
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_2_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_2_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_2_match_2d.jpg
+SI2.2.0_02651: !ruby/object:Output
+  prediction_len: 660
+  prediction_def: SI2.2.0_02651 locus=Si_gnF.scaffold01722[932834..938174].pep_2 Solenopsis
+    invicta quality=100.00 tag=gw_corrected
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 375
+  - 1500
+  length_rank_score: 0.13
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 678
+  merged_genes_score: 0.26088515053957023
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 3
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_3_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_3_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_3_match_2d.jpg
+SI2.2.0_02806: !ruby/object:Output
+  prediction_len: 1808
+  prediction_def: SI2.2.0_02806 locus=Si_gnF.scaffold10535[2353440..2360510].pep_2
+    Solenopsis invicta quality=99.23
+  nr_hits: 358
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 113
+  - 501
+  length_rank_score: 0.18
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 456
+  merged_genes_score: 0.24370217891527848
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 4
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_4_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_4_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_4_match_2d.jpg
+SI2.2.0_06704: !ruby/object:Output
+  prediction_len: 90
+  prediction_def: SI2.2.0_06704 locus=Si_gnF.scaffold07337[1292..1661].pep_2 Solenopsis
+    invicta quality=100.00
+  nr_hits: 34
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 497
+  - 726
+  length_rank_score: 0.06
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 34
+  merged_genes_score: 0.1760084103358604
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 5
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_5_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_5_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_5_match_2d.jpg
+SI2.2.0_02565: !ruby/object:Output
+  prediction_len: 1761
+  prediction_def: SI2.2.0_02565 locus=Si_gnF.scaffold10535[2342913..2350141].pep_2
+    Solenopsis invicta quality=99.83
+  nr_hits: 433
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 113
+  - 1307
+  length_rank_score: 0.28
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 538
+  merged_genes_score: 0.3194629974656608
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 6
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_6_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_6_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_6_match_2d.jpg
+SI2.2.0_08867: !ruby/object:Output
+  prediction_len: 759
+  prediction_def: SI2.2.0_08867 locus=Si_gnF.scaffold04785[379014..382580].pep_1 Solenopsis
+    invicta quality=100.00 tag=gw_corrected
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 161
+  - 829
+  length_rank_score: 0.37
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 550
+  merged_genes_score: 0.19664578697833182
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 7
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_7_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_7_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_7_match_2d.jpg
+SI2.2.0_80754: !ruby/object:Output
+  prediction_len: 850
+  prediction_def: SI2.2.0_80754 locus=Si_gnF.scaffold00759[239873..255409].pep_2 flag=new_id
+    Solenopsis invicta quality=28.95 merge_with=SI2.2.0_04333 tag=gw_corrected
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 850
+  - 885
+  length_rank_score: 0.27
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 503
+  merged_genes_score: -0.03902881440853263
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 8
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_8_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_8_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_8_match_2d.jpg
+SI2.2.0_80039: !ruby/object:Output
+  prediction_len: 125
+  prediction_def: SI2.2.0_80039 locus=Si_gnF.scaffold05277[1187..2156].pep_2 flag=new_id
+    Solenopsis invicta quality=43.33 merge_with=SI2.2.0_80211 merge_with=SI2.2.0_80306
+    merge_with=SI2.2.0_07731
+  nr_hits: 38
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 119
+  - 566
+  length_rank_score: 0.03
+  length_rank_msg: TOO_SHORT
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 38
+  merged_genes_score: -0.02058339413890951
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 9
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_9_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_9_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_9_match_2d.jpg
+SI2.2.0_80300: !ruby/object:Output
+  prediction_len: 1065
+  prediction_def: SI2.2.0_80300 locus=Si_gnF.scaffold01122[2700425..2705014].pep_1
+    flag=new_id Solenopsis invicta quality=76.92 merge_with=SI2.2.0_04351 tag=gw_corrected
+  nr_hits: 127
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 510
+  - 825
+  length_rank_score: 0.09
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    0: 150
+  merged_genes_score: -0.1793725908259137
+  duplication: 'NO'
+  duplication_info: 1
+  orf: {}
+  filename: solenopsis_length_test/prot_Solenopsis_invicta.fasta
+  idx: 10
+  image_histo_len: solenopsis_length_test/prot_Solenopsis_invicta.fasta_10_len_clusters.jpg
+  image_plot_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_10_match.jpg
+  image_histo_merge: solenopsis_length_test/prot_Solenopsis_invicta.fasta_10_match_2d.jpg

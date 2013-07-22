@@ -1,0 +1,237 @@
+---
+gi|514746961|ref|XM_005019748.1|: !ruby/object:Output
+  prediction_len: 108
+  prediction_def: ! 'gi|514746961|ref|XM_005019748.1| PREDICTED: Anas platyrhynchos
+    insulin (INS), mRNA'
+  nr_hits: 500
+  lv_cluster: 'YES'
+  length_cluster_limits:
+  - 23
+  - 135
+  length_rank_score: 0.46
+  length_rank_msg: 'YES'
+  reading_frame_validation: VALID
+  reading_frame_info:
+    1: 501
+  merged_genes_score: -0.1111837043309157
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 324
+    '+2':
+    - - 2
+      - 187
+    - - 190
+      - 324
+    '+3':
+    - - 3
+      - 110
+    '-1':
+    - - 1
+      - 141
+    - - 141
+      - 324
+    '-2':
+    - - 28
+      - 178
+    - - 208
+      - 324
+    '-3':
+    - - 74
+      - 263
+  filename: gene_merge_validation/duplication_mrna/duplications_mrna.fasta
+  idx: 1
+  image_histo_len: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_1_match_2d.jpg
+gi|514746961|ref|XM_005019748.1|dup: !ruby/object:Output
+  prediction_len: 163
+  prediction_def: ! 'gi|514746961|ref|XM_005019748.1|dup PREDICTED: Anas platyrhynchos
+    insulin (INS), mRNA'
+  nr_hits: 355
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 23
+  - 77
+  length_rank_score: 0.05
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 347
+    1: 305
+  merged_genes_score: 0.08006363021677927
+  duplication: 'YES'
+  duplication_info: 0.001953125
+  orf:
+    '+1':
+    - - 1
+      - 276
+    '+2':
+    - - 2
+      - 187
+    - - 190
+      - 490
+    '+3':
+    - - 3
+      - 110
+    - - 236
+      - 353
+    - - 356
+      - 490
+    '-1':
+    - - 1
+      - 141
+    - - 141
+      - 429
+    '-2':
+    - - 28
+      - 178
+    - - 307
+      - 490
+    '-3':
+    - - 74
+      - 344
+    - - 374
+      - 490
+  filename: gene_merge_validation/duplication_mrna/duplications_mrna.fasta
+  idx: 2
+  image_histo_len: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_2_match_2d.jpg
+gi|251823817|ref|NM_010785.2|: !ruby/object:Output
+  prediction_len: 1023
+  prediction_def: gi|251823817|ref|NM_010785.2| Mus musculus transformed mouse 3T3
+    cell double minute 1 (Mdm1), transcript variant 1, mRNA
+  nr_hits: 138
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 665
+  - 749
+  length_rank_score: 0.01
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    3: 141
+  merged_genes_score: -0.13277234937273963
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 123
+    - - 183
+      - 492
+    - - 492
+      - 624
+    - - 729
+      - 894
+    - - 1242
+      - 1392
+    - - 1428
+      - 1593
+    - - 1917
+      - 2181
+    - - 2181
+      - 2334
+    - - 2355
+      - 2502
+    '+2':
+    - - 70
+      - 187
+    - - 343
+      - 451
+    - - 868
+      - 979
+    - - 979
+      - 1081
+    - - 1171
+      - 1315
+    - - 1315
+      - 1501
+    - - 1501
+      - 1735
+    - - 1978
+      - 2098
+    - - 2131
+      - 2281
+    - - 2827
+      - 2935
+    - - 2935
+      - 3071
+    '+3':
+    - - 3
+      - 2225
+    - - 2246
+      - 2384
+    - - 2525
+      - 2672
+    - - 2672
+      - 2777
+    - - 2945
+      - 3071
+    '-1':
+    - - 204
+      - 306
+    - - 531
+      - 720
+    - - 894
+      - 1236
+    - - 1404
+      - 1683
+    - - 1683
+      - 1788
+    - - 1788
+      - 1914
+    - - 1914
+      - 2028
+    - - 2181
+      - 2517
+    - - 2586
+      - 2718
+    - - 2847
+      - 2952
+    - - 2952
+      - 3071
+    '-2':
+    - - 235
+      - 361
+    - - 361
+      - 463
+    - - 1063
+      - 1861
+    - - 1954
+      - 2272
+    - - 2272
+      - 2548
+    - - 2602
+      - 2725
+    - - 2854
+      - 3071
+    '-3':
+    - - 3
+      - 119
+    - - 623
+      - 725
+    - - 836
+      - 1106
+    - - 1106
+      - 1211
+    - - 1382
+      - 1598
+    - - 1904
+      - 2189
+    - - 2303
+      - 2468
+    - - 2489
+      - 2690
+    - - 2798
+      - 2900
+    - - 2900
+      - 3005
+  filename: gene_merge_validation/duplication_mrna/duplications_mrna.fasta
+  idx: 3
+  image_histo_len: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_3_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_3_match.jpg
+  image_histo_merge: gene_merge_validation/duplication_mrna/duplications_mrna.fasta_3_match_2d.jpg

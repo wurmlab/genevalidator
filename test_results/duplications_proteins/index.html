@@ -1,0 +1,219 @@
+<html>
+                  <head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0" height="65" width="642">
+                        <tbody>
+				<tr bgcolor = #E8E8E8>
+				        <td></td>
+					<td>No.</td>
+					<td>Description</td>
+					<td>No_Hits</td>
+					<td>Valid_Length(Cluster)</td>
+					<td>Valid_Length(Rank)</td>
+					<td>Valid_Reading_Frame</td>
+					<td>Gene_Merge(0=bimodal)</td>
+					<td>Duplication</td>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td width=100>GB10002-PA</td>
+	      <td>221</td>
+	      <td bgcolor=#FFFFFF>1344 [961, 1750] YES</td>
+	      <td bgcolor=#FFFFFF>0.49</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.38)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle1 style='display:none'>
+
+              <img src=duplications.xml_1_len_clusters.jpg height=400>
+	      <img src=duplications.xml_1_match.jpg height=400>
+              <img src=duplications.xml_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td width=100>GB10002-PA-dup</td>
+	      <td>202</td>
+	      <td bgcolor=#FFFFFF>1584 [961, 1750] YES</td>
+	      <td bgcolor=#FFFFFF>0.33</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.33)</td>
+	      <td bgcolor=#FFFFFF>YES(pval=0.001953125)</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=9>
+              <div id=toggle2 style='display:none'>
+
+              <img src=duplications.xml_2_len_clusters.jpg height=400>
+	      <img src=duplications.xml_2_match.jpg height=400>
+              <img src=duplications.xml_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle3')>Show/Hide Plots</button></td> 
+	      <td>3</td>
+	      <td width=100>FBpp0077824 pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121 transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>1153 [1098, 1281] YES</td>
+	      <td bgcolor=#FFFFFF>0.28</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.23)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle3 style='display:none'>
+
+              <img src=duplications.xml_3_len_clusters.jpg height=400>
+	      <img src=duplications.xml_3_match.jpg height=400>
+              <img src=duplications.xml_3_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle4')>Show/Hide Plots</button></td> 
+	      <td>4</td>
+	      <td width=100>FBpp0077824-dup pep:known chromosome:BDGP5:2L:9839:21376:-1 gene:FBgn0002121 transcript:FBtr0078166 gene_biotype:protein_coding transcript_biotype:protein_coding</td>
+	      <td>100</td>
+	      <td bgcolor=red>1513 [1029, 1128] NO</td>
+	      <td bgcolor=red>0.01</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.32)</td>
+	      <td bgcolor=#FFFFFF>YES(pval=0.00585709908528413)</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=9>
+              <div id=toggle4 style='display:none'>
+
+              <img src=duplications.xml_4_len_clusters.jpg height=400>
+	      <img src=duplications.xml_4_match.jpg height=400>
+              <img src=duplications.xml_4_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle5')>Show/Hide Plots</button></td> 
+	      <td>5</td>
+	      <td width=100>GB10029-PA</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>2588 [2373, 3041] YES</td>
+	      <td bgcolor=#FFFFFF>0.38</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.13)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle5 style='display:none'>
+
+              <img src=duplications.xml_5_len_clusters.jpg height=400>
+	      <img src=duplications.xml_5_match.jpg height=400>
+              <img src=duplications.xml_5_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle6')>Show/Hide Plots</button></td> 
+	      <td>6</td>
+	      <td width=100>GB10029-PA-dup</td>
+	      <td>500</td>
+	      <td bgcolor=red>3188 [2373, 3041] NO</td>
+	      <td bgcolor=red>0.15</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.08)</td>
+	      <td bgcolor=#FFFFFF>YES(pval=0.001953125)</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=9>
+              <div id=toggle6 style='display:none'>
+
+              <img src=duplications.xml_6_len_clusters.jpg height=400>
+	      <img src=duplications.xml_6_match.jpg height=400>
+              <img src=duplications.xml_6_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle7')>Show/Hide Plots</button></td> 
+	      <td>7</td>
+	      <td width=100>GB16093-PA</td>
+	      <td>500</td>
+	      <td bgcolor=red>234 [243, 379] NO</td>
+	      <td bgcolor=#FFFFFF>0.26</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.02)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle7 style='display:none'>
+
+              <img src=duplications.xml_7_len_clusters.jpg height=400>
+	      <img src=duplications.xml_7_match.jpg height=400>
+              <img src=duplications.xml_7_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle8')>Show/Hide Plots</button></td> 
+	      <td>8</td>
+	      <td width=100>GB16093-PA-dup</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>354 [243, 379] YES</td>
+	      <td bgcolor=#FFFFFF>0.24</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.02)</td>
+	      <td bgcolor=#FFFFFF>YES(pval=0.001953125)</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=9>
+              <div id=toggle8 style='display:none'>
+
+              <img src=duplications.xml_8_len_clusters.jpg height=400>
+	      <img src=duplications.xml_8_match.jpg height=400>
+              <img src=duplications.xml_8_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle9')>Show/Hide Plots</button></td> 
+	      <td>9</td>
+	      <td width=100>PBARB:ns20tz PB16966 EOG4KPRW2 PB16966-PA</td>
+	      <td>437</td>
+	      <td bgcolor=red>3356 [113, 944] NO</td>
+	      <td bgcolor=red>0.0</td>
+	      <td bgcolor=#FFFFFF>VALID</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.27)</td>
+	      <td bgcolor=#FFFFFF>YES(pval=0.001953125)</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=9>
+              <div id=toggle9 style='display:none'>
+
+              <img src=duplications.xml_9_len_clusters.jpg height=400>
+	      <img src=duplications.xml_9_match.jpg height=400>
+              <img src=duplications.xml_9_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>
