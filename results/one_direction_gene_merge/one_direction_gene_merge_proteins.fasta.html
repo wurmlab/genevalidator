@@ -1,0 +1,535 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0">
+				<tr bgcolor = #E8E8E8>
+				        <th></th>
+					<th>No.</th>
+					<th width=100>Description</th>
+					<th>No_Hits</th>
+					<th>Valid_Length(Cluster)</th>
+					<th>Valid_Length(Rank)</th>
+					<th>Valid_Reading_Frame</th>
+					<th>Gene_Merge(slope)</th>
+					<th>Duplication</th>
+                                        <th width = 200 style="white-space:nowrap"> ORFs</th>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td>GB10034-PA (amel_OGSv1.0_pep.fa_34)</td>
+	      <td>246</td>
+	      <td bgcolor=#FFFFFF>554 [390, 800] YES</td>
+	      <td bgcolor=#FFFFFF>0.44(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:283; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.4)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle1 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_1_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_1_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td>GB10040-PA (amel_OGSv1.0_pep.fa_40)</td>
+	      <td>500</td>
+	      <td bgcolor=red>1070 [496, 1012] NO</td>
+	      <td bgcolor=red>0.19(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:924; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.02)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle2 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_2_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_2_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle3')>Show/Hide Plots</button></td> 
+	      <td>3</td>
+	      <td>GB10056-PA</td>
+	      <td>436</td>
+	      <td bgcolor=#FFFFFF>339 [106, 387] YES</td>
+	      <td bgcolor=#FFFFFF>0.28(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:436; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.02)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle3 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_3_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_3_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_3_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle4')>Show/Hide Plots</button></td> 
+	      <td>4</td>
+	      <td>GB10058-PA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1052 [1099, 1329] NO</td>
+	      <td bgcolor=#E8E8E8>0.37(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:906; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.03)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle4 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_4_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_4_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_4_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle5')>Show/Hide Plots</button></td> 
+	      <td>5</td>
+	      <td>GB10063-PA</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>615 [510, 724] YES</td>
+	      <td bgcolor=#FFFFFF>0.37(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:835; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.01)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=0.1814)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle5 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_5_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_5_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_5_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle6')>Show/Hide Plots</button></td> 
+	      <td>6</td>
+	      <td>GB10071-PA</td>
+	      <td>500</td>
+	      <td bgcolor=red>494 [335, 485] NO</td>
+	      <td bgcolor=red>0.04(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:702; )</td>
+	      <td bgcolor=red>YES(slope=0.71)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle6 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_6_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_6_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_6_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle7')>Show/Hide Plots</button></td> 
+	      <td>7</td>
+	      <td>GB10091-PA</td>
+	      <td>404</td>
+	      <td bgcolor=#FFFFFF>708 [68, 867] YES</td>
+	      <td bgcolor=#FFFFFF>0.48(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:419; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.06)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle7 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_7_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_7_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_7_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle8')>Show/Hide Plots</button></td> 
+	      <td>8</td>
+	      <td>GB10098-PA</td>
+	      <td>500</td>
+	      <td bgcolor=#E8E8E8>826 [681, 978] YES</td>
+	      <td bgcolor=#E8E8E8>0.4(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:507; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.08)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle8 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_8_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_8_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_8_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle9')>Show/Hide Plots</button></td> 
+	      <td>9</td>
+	      <td>GB10113-PA</td>
+	      <td>422</td>
+	      <td bgcolor=red>659 [51, 595] NO</td>
+	      <td bgcolor=red>0.16(TOO_LONG)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:536; )</td>
+	      <td bgcolor=red>YES(slope=0.45)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle9 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_9_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_9_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_9_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle10')>Show/Hide Plots</button></td> 
+	      <td>10</td>
+	      <td>SI2.2.0_02565 locus=Si_gnF.scaffold10535[2342913..2350141].pep_2 quality=99.83 (SI2.2.3_proteins.fa_35)</td>
+	      <td>430</td>
+	      <td bgcolor=red>1761 [113, 900] NO</td>
+	      <td bgcolor=#E8E8E8>0.28(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:535; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.32)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle10 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_10_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_10_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_10_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle11')>Show/Hide Plots</button></td> 
+	      <td>11</td>
+	      <td>SI2.2.0_07054 locus=Si_gnF.scaffold08475[8186..10205].pep_2 quality=100.00</td>
+	      <td>84</td>
+	      <td bgcolor=red>640 [107, 492] NO</td>
+	      <td bgcolor=red>0.15(TOO_LONG)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:86; )</td>
+	      <td bgcolor=red>YES(slope=0.79)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle11 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_11_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_11_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_11_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle12')>Show/Hide Plots</button></td> 
+	      <td>12</td>
+	      <td>SI2.2.0_02651 locus=Si_gnF.scaffold01722[932834..938174].pep_2 quality=100.00 tag=gw_corrected</td>
+	      <td>500</td>
+	      <td bgcolor=#E8E8E8>660 [375, 1500] YES</td>
+	      <td bgcolor=red>0.13(TOO_SHORT)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:680; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.29)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle12 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_12_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_12_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_12_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle13')>Show/Hide Plots</button></td> 
+	      <td>13</td>
+	      <td>PB26730-RA protein AED:1 QI:0|0|0|0|0|0|10|0|347</td>
+	      <td>131</td>
+	      <td bgcolor=#FFFFFF>347 [330, 446] YES</td>
+	      <td bgcolor=#FFFFFF>0.37(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:156; )</td>
+	      <td bgcolor=red>YES(slope=0.48)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle13 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_13_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_13_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_13_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle14')>Show/Hide Plots</button></td> 
+	      <td>14</td>
+	      <td>Or13a-like-1 protein AED:1 QI:0|0|0|0|0|0|23|0|774</td>
+	      <td>140</td>
+	      <td bgcolor=red>774 [292, 553] NO</td>
+	      <td bgcolor=red>0.04(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:223; )</td>
+	      <td bgcolor=red>YES(slope=0.71)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=0.0143)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle14 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_14_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_14_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_14_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle15')>Show/Hide Plots</button></td> 
+	      <td>15</td>
+	      <td>PB18762-RA protein AED:1 QI:0|0|0|0|0|0|2|0|207</td>
+	      <td>500</td>
+	      <td bgcolor=red>207 [218, 298] NO</td>
+	      <td bgcolor=red>0.07(TOO_SHORT)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:649; )</td>
+	      <td bgcolor=red>YES(slope=0.68)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle15 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_15_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_15_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_15_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle16')>Show/Hide Plots</button></td> 
+	      <td>16</td>
+	      <td>Pbar_fem-RF protein AED:1 QI:325|0|0|0|0|0|10|42|452</td>
+	      <td>396</td>
+	      <td bgcolor=red>452 [162, 196] NO</td>
+	      <td bgcolor=red>0.03(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:396; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.2)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle16 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_16_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_16_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_16_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle17')>Show/Hide Plots</button></td> 
+	      <td>17</td>
+	      <td>PB18775-RA protein AED:1 QI:0|0|0|0|0|0|17|0|1160</td>
+	      <td>500</td>
+	      <td bgcolor=red>1160 [625, 826] NO</td>
+	      <td bgcolor=red>0.0(TOO_LONG)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:687; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.21)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=0.0225)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle17 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_17_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_17_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_17_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle18')>Show/Hide Plots</button></td> 
+	      <td>18</td>
+	      <td>PB11933-RA protein AED:1 QI:0|0|0|0|0|0|8|0|845</td>
+	      <td>500</td>
+	      <td bgcolor=#E8E8E8>845 [439, 1615] YES</td>
+	      <td bgcolor=#E8E8E8>0.45(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:815; )</td>
+	      <td bgcolor=red>YES(slope=0.48)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle18 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_18_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_18_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_18_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle19')>Show/Hide Plots</button></td> 
+	      <td>19</td>
+	      <td>PB13750-RA protein AED:1 QI:198|0|0|0|0|0|12|764|974</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>974 [845, 1005] YES</td>
+	      <td bgcolor=#FFFFFF>0.37(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:961; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.01)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle19 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_19_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_19_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_19_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle20')>Show/Hide Plots</button></td> 
+	      <td>20</td>
+	      <td>PB13758-RA protein AED:1 QI:0|0|0|0|0|0|14|0|751</td>
+	      <td>500</td>
+	      <td bgcolor=#E8E8E8>751 [156, 1134] YES</td>
+	      <td bgcolor=#E8E8E8>0.42(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:1083; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.2)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle20 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_20_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_20_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_20_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle21')>Show/Hide Plots</button></td> 
+	      <td>21</td>
+	      <td>PB20127-RA protein AED:1 QI:0|0|0|0|0|0|8|0|679</td>
+	      <td>444</td>
+	      <td bgcolor=#FFFFFF>679 [474, 721] YES</td>
+	      <td bgcolor=red>0.11(TOO_LONG)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:655; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.16)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle21 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_21_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_21_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_21_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle22')>Show/Hide Plots</button></td> 
+	      <td>22</td>
+	      <td>PB18752-RA protein AED:1 QI:0|0|0|0|0|0|13|0|794</td>
+	      <td>500</td>
+	      <td bgcolor=red>794 [564, 679] NO</td>
+	      <td bgcolor=red>0.02(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:500; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.2)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle22 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_22_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_22_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_22_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle23')>Show/Hide Plots</button></td> 
+	      <td>23</td>
+	      <td>PB18768-RA protein AED:1 QI:187|0|0|0|0|0|2|127|132</td>
+	      <td>289</td>
+	      <td bgcolor=#FFFFFF>132 [104, 175] YES</td>
+	      <td bgcolor=#FFFFFF>0.34(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:289; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.11)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle23 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_23_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_23_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_23_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

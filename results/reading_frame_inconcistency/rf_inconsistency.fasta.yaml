@@ -1,0 +1,270 @@
+---
+Brasy-EspV1T00022: !ruby/object:Output
+  prediction_len: 1625
+  prediction_def: Brasy-EspV1T00022
+  nr_hits: 106
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 407
+  - 663
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    3: 66
+    1: 97
+  merged_genes_score: 0.047747752304040124
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 123
+    - - 159
+      - 360
+    - - 360
+      - 504
+    - - 504
+      - 843
+    - - 843
+      - 1005
+    - - 1005
+      - 1119
+    - - 1275
+      - 1410
+    - - 1410
+      - 1521
+    - - 1605
+      - 1938
+    - - 1938
+      - 2043
+    - - 2043
+      - 2349
+    - - 2592
+      - 2754
+    - - 2829
+      - 2958
+    - - 3099
+      - 3336
+    - - 3336
+      - 3438
+    - - 3564
+      - 4065
+    - - 4389
+      - 4566
+    - - 4668
+      - 4785
+    '+2':
+    - - 2
+      - 175
+    - - 220
+      - 364
+    - - 535
+      - 1336
+    - - 1336
+      - 1546
+    - - 1546
+      - 1885
+    - - 2644
+      - 2773
+    - - 3001
+      - 3160
+    - - 3355
+      - 3589
+    - - 4090
+      - 4243
+    - - 4312
+      - 4414
+    - - 4453
+      - 4606
+    - - 4606
+      - 4732
+    - - 4732
+      - 4876
+    '+3':
+    - - 50
+      - 3497
+    - - 3548
+      - 3698
+    - - 3776
+      - 4022
+    - - 4022
+      - 4148
+    - - 4421
+      - 4757
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1251
+      - 1383
+    - - 1383
+      - 1488
+    - - 1677
+      - 1863
+    - - 1911
+      - 2148
+    - - 2625
+      - 2742
+    - - 2898
+      - 3183
+    - - 3282
+      - 3660
+    - - 3660
+      - 3861
+    - - 3861
+      - 4170
+    - - 4170
+      - 4407
+    - - 4407
+      - 4876
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1483
+    - - 1510
+      - 1642
+    - - 1708
+      - 1831
+    - - 1831
+      - 1975
+    - - 2062
+      - 2245
+    - - 2281
+      - 2404
+    - - 2428
+      - 2533
+    - - 2533
+      - 2734
+    - - 2842
+      - 3055
+    - - 3055
+      - 3622
+    - - 3670
+      - 3892
+    - - 3898
+      - 4024
+    - - 4024
+      - 4210
+    - - 4438
+      - 4588
+    - - 4594
+      - 4876
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1370
+      - 1655
+    - - 1790
+      - 2000
+    - - 2096
+      - 2198
+    - - 2546
+      - 2708
+    - - 2708
+      - 2825
+    - - 2825
+      - 2963
+    - - 2963
+      - 3305
+    - - 3305
+      - 3833
+    - - 3833
+      - 4145
+    - - 4244
+      - 4721
+    - - 4721
+      - 4876
+  filename: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta
+  idx: 1
+  image_histo_len: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_1_match_2d.jpg
+Brasy-EspV1T00061: !ruby/object:Output
+  prediction_len: 466
+  prediction_def: Brasy-EspV1T00061
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 376
+  - 377
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    1: 500
+    2: 1000
+    3: 1
+  merged_genes_score: 0.01618562133618739
+  duplication: 'YES'
+  duplication_info: 0.005571888809893588
+  orf:
+    '+1':
+    - - 1
+      - 693
+    - - 822
+      - 951
+    - - 1002
+      - 1224
+    - - 1242
+      - 1398
+    '+2':
+    - - 2
+      - 442
+    - - 493
+      - 772
+    - - 772
+      - 1141
+    '+3':
+    - - 3
+      - 122
+    - - 224
+      - 470
+    - - 626
+      - 761
+    - - 812
+      - 932
+    - - 1109
+      - 1319
+    '-1':
+    - - 63
+      - 165
+    - - 336
+      - 492
+    - - 624
+      - 1164
+    '-2':
+    - - 160
+      - 331
+    - - 331
+      - 442
+    - - 805
+      - 1039
+    - - 1201
+      - 1375
+    '-3':
+    - - 101
+      - 293
+    - - 410
+      - 848
+    - - 1016
+      - 1121
+    - - 1121
+      - 1398
+  filename: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta
+  idx: 2
+  image_histo_len: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/reading_frame_inconcistency/rf_inconsistency.fasta_2_match_2d.jpg

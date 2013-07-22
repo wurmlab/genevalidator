@@ -1,0 +1,1238 @@
+---
+Brasy-EspV1T00025: !ruby/object:Output
+  prediction_len: 880
+  prediction_def: Brasy-EspV1T00025
+  nr_hits: 158
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 338
+  - 685
+  length_rank_score: 0.17
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: VALID
+  reading_frame_info:
+    1: 126
+    -1: 32
+  merged_genes_score: 1.5634940463948064
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 162
+      - 273
+    - - 450
+      - 786
+    - - 819
+      - 1830
+    - - 2154
+      - 2331
+    - - 2433
+      - 2550
+    '+2':
+    - - 2
+      - 148
+    - - 196
+      - 322
+    - - 322
+      - 532
+    - - 622
+      - 727
+    - - 769
+      - 976
+    - - 997
+      - 1234
+    - - 1234
+      - 1336
+    - - 1855
+      - 2008
+    - - 2077
+      - 2179
+    - - 2218
+      - 2371
+    - - 2371
+      - 2497
+    - - 2497
+      - 2641
+    '+3':
+    - - 176
+      - 284
+    - - 362
+      - 539
+    - - 605
+      - 1058
+    - - 1253
+      - 1463
+    - - 1541
+      - 1787
+    - - 1787
+      - 1913
+    - - 2186
+      - 2522
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1377
+      - 1509
+    - - 1575
+      - 1698
+    - - 1782
+      - 2355
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1522
+    - - 1657
+      - 1804
+    - - 1897
+      - 1999
+    - - 2131
+      - 2350
+    - - 2437
+      - 2563
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1544
+      - 1778
+    - - 1778
+      - 1976
+    - - 2333
+      - 2486
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 1
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_1_match_2d.jpg
+Brasy-EspV1T00034: !ruby/object:Output
+  prediction_len: 1620
+  prediction_def: Brasy-EspV1T00034
+  nr_hits: 349
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 648
+  - 1213
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 468
+    1: 1
+    -3: 1
+  merged_genes_score: 0.5411547195747071
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 108
+    - - 150
+      - 561
+    - - 747
+      - 933
+    - - 933
+      - 1101
+    - - 1113
+      - 1242
+    - - 1335
+      - 1476
+    - - 1686
+      - 1848
+    - - 2691
+      - 2808
+    - - 2877
+      - 3123
+    - - 3150
+      - 3279
+    - - 3474
+      - 3684
+    - - 3762
+      - 4008
+    - - 4008
+      - 4134
+    - - 4407
+      - 4743
+    '+2':
+    - - 2
+      - 166
+    - - 166
+      - 457
+    - - 481
+      - 649
+    - - 649
+      - 769
+    - - 769
+      - 3163
+    - - 3181
+      - 4051
+    - - 4375
+      - 4552
+    - - 4654
+      - 4771
+    '+3':
+    - - 170
+      - 290
+    - - 290
+      - 425
+    - - 719
+      - 881
+    - - 1070
+      - 1196
+    - - 1553
+      - 1739
+    - - 1895
+      - 2018
+    - - 2957
+      - 3197
+    - - 3218
+      - 3455
+    - - 3455
+      - 3557
+    - - 4076
+      - 4229
+    - - 4298
+      - 4400
+    - - 4439
+      - 4592
+    - - 4592
+      - 4718
+    - - 4718
+      - 4862
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1377
+      - 1509
+    - - 1575
+      - 2001
+    - - 2259
+      - 2460
+    - - 2718
+      - 2850
+    - - 3330
+      - 3498
+    - - 4374
+      - 4509
+    - - 4509
+      - 4668
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1522
+    - - 1657
+      - 1915
+    - - 2134
+      - 2239
+    - - 2398
+      - 2548
+    - - 2566
+      - 2812
+    - - 2842
+      - 3007
+    - - 3136
+      - 3421
+    - - 3901
+      - 4093
+    - - 4225
+      - 4330
+    - - 4423
+      - 4696
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1544
+      - 1928
+    - - 1928
+      - 2117
+    - - 2117
+      - 2336
+    - - 2336
+      - 2747
+    - - 2825
+      - 3059
+    - - 3059
+      - 3182
+    - - 3182
+      - 3290
+    - - 3512
+      - 3740
+    - - 3740
+      - 3929
+    - - 3929
+      - 4037
+    - - 4217
+      - 4346
+    - - 4346
+      - 4478
+    - - 4478
+      - 4700
+    - - 4700
+      - 4850
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 2
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_2_match_2d.jpg
+Brasy-EspV1T00036: !ruby/object:Output
+  prediction_len: 1620
+  prediction_def: Brasy-EspV1T00036
+  nr_hits: 349
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 648
+  - 1213
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 468
+    1: 1
+    -3: 1
+  merged_genes_score: 0.5408103227503804
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 108
+    - - 150
+      - 561
+    - - 747
+      - 933
+    - - 933
+      - 1101
+    - - 1113
+      - 1242
+    - - 1335
+      - 1476
+    - - 1491
+      - 1596
+    - - 1686
+      - 1848
+    - - 2691
+      - 2808
+    - - 2877
+      - 3123
+    - - 3150
+      - 3279
+    - - 3474
+      - 3684
+    - - 3762
+      - 4008
+    - - 4008
+      - 4134
+    - - 4407
+      - 4743
+    '+2':
+    - - 2
+      - 166
+    - - 166
+      - 457
+    - - 481
+      - 649
+    - - 649
+      - 769
+    - - 769
+      - 3163
+    - - 3181
+      - 4051
+    - - 4375
+      - 4552
+    - - 4654
+      - 4771
+    '+3':
+    - - 170
+      - 290
+    - - 290
+      - 425
+    - - 719
+      - 881
+    - - 1070
+      - 1196
+    - - 1439
+      - 1553
+    - - 1553
+      - 1739
+    - - 1895
+      - 2018
+    - - 2957
+      - 3197
+    - - 3218
+      - 3455
+    - - 3455
+      - 3557
+    - - 4076
+      - 4229
+    - - 4298
+      - 4400
+    - - 4439
+      - 4592
+    - - 4592
+      - 4718
+    - - 4718
+      - 4862
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1377
+      - 1509
+    - - 1575
+      - 2001
+    - - 2259
+      - 2460
+    - - 2718
+      - 2850
+    - - 4374
+      - 4509
+    - - 4509
+      - 4668
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1522
+    - - 1657
+      - 1915
+    - - 2134
+      - 2239
+    - - 2398
+      - 2548
+    - - 2566
+      - 2812
+    - - 2842
+      - 3007
+    - - 3136
+      - 3427
+    - - 3901
+      - 4093
+    - - 4225
+      - 4330
+    - - 4423
+      - 4696
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1544
+      - 1928
+    - - 1928
+      - 2117
+    - - 2117
+      - 2336
+    - - 2336
+      - 2747
+    - - 2825
+      - 3059
+    - - 3059
+      - 3182
+    - - 3182
+      - 3290
+    - - 3398
+      - 3740
+    - - 3740
+      - 3929
+    - - 3929
+      - 4037
+    - - 4217
+      - 4346
+    - - 4346
+      - 4478
+    - - 4478
+      - 4700
+    - - 4700
+      - 4850
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 3
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_3_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_3_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_3_match_2d.jpg
+Brasy-EspV1T00039: !ruby/object:Output
+  prediction_len: 1618
+  prediction_def: Brasy-EspV1T00039
+  nr_hits: 348
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 698
+  - 1213
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 467
+    1: 1
+    -3: 1
+  merged_genes_score: 0.5419385054198467
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 108
+    - - 150
+      - 561
+    - - 747
+      - 933
+    - - 933
+      - 1101
+    - - 1113
+      - 1242
+    - - 1335
+      - 1476
+    - - 1491
+      - 1596
+    - - 1686
+      - 1848
+    - - 2685
+      - 2802
+    - - 2871
+      - 3117
+    - - 3144
+      - 3273
+    - - 3468
+      - 3678
+    - - 3756
+      - 4002
+    - - 4002
+      - 4128
+    - - 4401
+      - 4737
+    '+2':
+    - - 2
+      - 166
+    - - 166
+      - 457
+    - - 481
+      - 649
+    - - 649
+      - 769
+    - - 769
+      - 3157
+    - - 3175
+      - 4045
+    - - 4369
+      - 4546
+    - - 4648
+      - 4765
+    '+3':
+    - - 170
+      - 290
+    - - 290
+      - 425
+    - - 719
+      - 881
+    - - 1070
+      - 1196
+    - - 1439
+      - 1553
+    - - 1553
+      - 1739
+    - - 1895
+      - 2018
+    - - 2951
+      - 3191
+    - - 3212
+      - 3449
+    - - 3449
+      - 3551
+    - - 4070
+      - 4223
+    - - 4292
+      - 4394
+    - - 4433
+      - 4586
+    - - 4586
+      - 4712
+    - - 4712
+      - 4856
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1377
+      - 1509
+    - - 1575
+      - 2001
+    - - 2259
+      - 2364
+    - - 2712
+      - 2844
+    - - 4368
+      - 4503
+    - - 4503
+      - 4662
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1522
+    - - 1657
+      - 1915
+    - - 2134
+      - 2239
+    - - 2398
+      - 2542
+    - - 2560
+      - 2806
+    - - 2836
+      - 3001
+    - - 3130
+      - 3421
+    - - 3895
+      - 4087
+    - - 4219
+      - 4324
+    - - 4417
+      - 4690
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1544
+      - 1928
+    - - 1928
+      - 2117
+    - - 2117
+      - 2336
+    - - 2336
+      - 2741
+    - - 2819
+      - 3053
+    - - 3053
+      - 3176
+    - - 3176
+      - 3284
+    - - 3392
+      - 3734
+    - - 3734
+      - 3923
+    - - 3923
+      - 4031
+    - - 4211
+      - 4340
+    - - 4340
+      - 4472
+    - - 4472
+      - 4694
+    - - 4694
+      - 4844
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 4
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_4_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_4_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_4_match_2d.jpg
+Brasy-EspV1T00041: !ruby/object:Output
+  prediction_len: 1620
+  prediction_def: Brasy-EspV1T00041
+  nr_hits: 349
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 648
+  - 1213
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 468
+    1: 1
+    -3: 1
+  merged_genes_score: 0.540835748594677
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 1
+      - 108
+    - - 150
+      - 561
+    - - 747
+      - 933
+    - - 933
+      - 1101
+    - - 1110
+      - 1335
+    - - 1335
+      - 1476
+    - - 1491
+      - 1596
+    - - 1686
+      - 1848
+    - - 2691
+      - 2808
+    - - 2877
+      - 3123
+    - - 3150
+      - 3279
+    - - 3474
+      - 3684
+    - - 3762
+      - 4008
+    - - 4008
+      - 4134
+    - - 4407
+      - 4743
+    '+2':
+    - - 2
+      - 166
+    - - 166
+      - 457
+    - - 481
+      - 649
+    - - 649
+      - 769
+    - - 769
+      - 3163
+    - - 3181
+      - 4051
+    - - 4375
+      - 4552
+    - - 4654
+      - 4771
+    '+3':
+    - - 170
+      - 290
+    - - 290
+      - 425
+    - - 719
+      - 881
+    - - 1070
+      - 1196
+    - - 1439
+      - 1553
+    - - 1553
+      - 1739
+    - - 1895
+      - 2018
+    - - 2957
+      - 3197
+    - - 3218
+      - 3455
+    - - 3455
+      - 3557
+    - - 4076
+      - 4229
+    - - 4298
+      - 4400
+    - - 4439
+      - 4592
+    - - 4592
+      - 4718
+    - - 4718
+      - 4862
+    '-1':
+    - - 150
+      - 579
+    - - 579
+      - 687
+    - - 756
+      - 873
+    - - 1377
+      - 1509
+    - - 1575
+      - 2001
+    - - 2259
+      - 2460
+    - - 2718
+      - 2850
+    - - 3507
+      - 3633
+    - - 4374
+      - 4509
+    - - 4509
+      - 4668
+    '-2':
+    - - 73
+      - 310
+    - - 310
+      - 436
+    - - 556
+      - 664
+    - - 835
+      - 1075
+    - - 1174
+      - 1522
+    - - 1657
+      - 1915
+    - - 2134
+      - 2239
+    - - 2398
+      - 2548
+    - - 2566
+      - 2812
+    - - 2842
+      - 3007
+    - - 3136
+      - 3427
+    - - 3901
+      - 4093
+    - - 4225
+      - 4330
+    - - 4423
+      - 4696
+    '-3':
+    - - 314
+      - 575
+    - - 680
+      - 1256
+    - - 1544
+      - 1928
+    - - 1928
+      - 2117
+    - - 2117
+      - 2336
+    - - 2336
+      - 2747
+    - - 2825
+      - 3059
+    - - 3059
+      - 3182
+    - - 3182
+      - 3290
+    - - 3398
+      - 3740
+    - - 3740
+      - 3929
+    - - 3929
+      - 4037
+    - - 4217
+      - 4346
+    - - 4346
+      - 4478
+    - - 4478
+      - 4700
+    - - 4700
+      - 4850
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 5
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_5_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_5_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_5_match_2d.jpg
+Brasy-EspV1T00062: !ruby/object:Output
+  prediction_len: 1954
+  prediction_def: Brasy-EspV1T00062
+  nr_hits: 315
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 146
+  - 575
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    3: 287
+    -1: 32
+    -3: 1
+  merged_genes_score: 0.9510473563200318
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 51
+      - 174
+    - - 258
+      - 591
+    - - 591
+      - 993
+    - - 1242
+      - 1383
+    - - 1698
+      - 1854
+    - - 2163
+      - 2310
+    - - 2772
+      - 2904
+    - - 3192
+      - 3306
+    - - 3306
+      - 3567
+    - - 3567
+      - 3693
+    - - 4104
+      - 4209
+    - - 4233
+      - 4674
+    - - 4674
+      - 4788
+    - - 4788
+      - 5863
+    '+2':
+    - - 2
+      - 112
+    - - 112
+      - 427
+    - - 2341
+      - 2515
+    - - 2752
+      - 2854
+    - - 2854
+      - 3010
+    - - 3292
+      - 3409
+    - - 4036
+      - 4168
+    - - 4225
+      - 5491
+    - - 5491
+      - 5863
+    '+3':
+    - - 179
+      - 494
+    - - 662
+      - 2129
+    - - 2150
+      - 2267
+    - - 2306
+      - 2441
+    - - 2525
+      - 2627
+    - - 2627
+      - 2747
+    - - 2747
+      - 2957
+    - - 2960
+      - 3167
+    - - 3398
+      - 3503
+    - - 3503
+      - 3614
+    - - 3743
+      - 3851
+    - - 4007
+      - 4121
+    - - 4130
+      - 4238
+    - - 4301
+      - 4643
+    - - 4643
+      - 5863
+    '-1':
+    - - 402
+      - 804
+    - - 852
+      - 984
+    - - 1146
+      - 1263
+    - - 1263
+      - 1860
+    - - 1860
+      - 1977
+    - - 2490
+      - 2646
+    - - 2646
+      - 2871
+    - - 2922
+      - 3033
+    - - 3204
+      - 3312
+    - - 3588
+      - 3780
+    - - 3861
+      - 4233
+    - - 4362
+      - 4590
+    - - 4608
+      - 4752
+    - - 4761
+      - 5064
+    - - 5064
+      - 5613
+    '-2':
+    - - 31
+      - 484
+    - - 730
+      - 907
+    - - 907
+      - 1012
+    - - 1012
+      - 1642
+    - - 1729
+      - 1831
+    - - 1984
+      - 2092
+    - - 2107
+      - 2239
+    - - 2458
+      - 2590
+    - - 2893
+      - 3064
+    - - 3325
+      - 3436
+    - - 3847
+      - 4066
+    - - 4444
+      - 4561
+    - - 4579
+      - 4723
+    - - 4723
+      - 4825
+    - - 4912
+      - 5032
+    - - 5047
+      - 5221
+    - - 5245
+      - 5749
+    - - 5755
+      - 5863
+    '-3':
+    - - 3
+      - 488
+    - - 488
+      - 1043
+    - - 1193
+      - 1568
+    - - 1568
+      - 1820
+    - - 2174
+      - 2300
+    - - 2300
+      - 2408
+    - - 2561
+      - 2675
+    - - 2810
+      - 2963
+    - - 3395
+      - 3545
+    - - 3572
+      - 3674
+    - - 3983
+      - 4139
+    - - 4316
+      - 4484
+    - - 4550
+      - 4661
+    - - 4766
+      - 4874
+    - - 4874
+      - 5159
+    - - 5159
+      - 5339
+    - - 5390
+      - 5825
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 6
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_6_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_6_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_6_match_2d.jpg
+Brasy-EspV1T00119: !ruby/object:Output
+  prediction_len: 336
+  prediction_def: Brasy-EspV1T00119
+  nr_hits: 75
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 99
+  - 112
+  length_rank_score: 0.27
+  length_rank_msg: 'YES'
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    2: 58
+    -3: 17
+    -2: 6
+  merged_genes_score: 1.2790274116393299
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 81
+      - 183
+    - - 183
+      - 597
+    - - 849
+      - 981
+    '+2':
+    - - 2
+      - 355
+    - - 382
+      - 784
+    '+3':
+    - - 3
+      - 332
+    - - 332
+      - 434
+    - - 461
+      - 593
+    - - 593
+      - 794
+    '-1':
+    - - 228
+      - 333
+    - - 378
+      - 717
+    - - 717
+      - 1008
+    '-2':
+    - - 751
+      - 1008
+    '-3':
+    - - 26
+      - 137
+    - - 137
+      - 323
+    - - 419
+      - 578
+    - - 599
+      - 815
+    - - 848
+      - 1008
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 7
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_7_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_7_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_7_match_2d.jpg
+Brasy-EspV1T00500: !ruby/object:Output
+  prediction_len: 794
+  prediction_def: Brasy-EspV1T00500
+  nr_hits: 500
+  lv_cluster: 'NO'
+  length_cluster_limits:
+  - 188
+  - 194
+  length_rank_score: 0.0
+  length_rank_msg: TOO_LONG
+  reading_frame_validation: INVALID
+  reading_frame_info:
+    3: 429
+    -2: 71
+    -3: 139
+  merged_genes_score: 0.6345524932611205
+  duplication: 'NO'
+  duplication_info: 1
+  orf:
+    '+1':
+    - - 390
+      - 636
+    - - 792
+      - 1071
+    - - 1131
+      - 1476
+    - - 1632
+      - 1776
+    - - 2019
+      - 2124
+    - - 2145
+      - 2328
+    '+2':
+    - - 241
+      - 493
+    - - 574
+      - 865
+    - - 901
+      - 1057
+    - - 1078
+      - 1204
+    - - 1204
+      - 1321
+    - - 1672
+      - 1849
+    '+3':
+    - - 161
+      - 347
+    - - 347
+      - 506
+    - - 617
+      - 1295
+    - - 1295
+      - 1973
+    - - 2114
+      - 2240
+    - - 2240
+      - 2342
+    '-1':
+    - - 291
+      - 405
+    - - 405
+      - 555
+    - - 696
+      - 813
+    - - 813
+      - 957
+    - - 1035
+      - 1164
+    - - 1341
+      - 1443
+    - - 1572
+      - 1692
+    - - 1746
+      - 1848
+    - - 1944
+      - 2175
+    '-2':
+    - - 103
+      - 262
+    - - 394
+      - 517
+    - - 517
+      - 1528
+    - - 1630
+      - 1732
+    - - 1852
+      - 1996
+    - - 2095
+      - 2203
+    '-3':
+    - - 359
+      - 665
+    - - 746
+      - 857
+    - - 980
+      - 1091
+    - - 1175
+      - 1361
+    - - 1361
+      - 1514
+    - - 1514
+      - 1757
+    - - 1787
+      - 2135
+    - - 2171
+      - 2279
+  filename: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta
+  idx: 8
+  image_histo_len: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_8_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_8_match.jpg
+  image_histo_merge: gene_merge_validation/opposite_gene_merge/opposite_gene_merge_cds.fasta_8_match_2d.jpg

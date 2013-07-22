@@ -1,0 +1,249 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0">
+				<tr bgcolor = #E8E8E8>
+				        <th></th>
+					<th>No.</th>
+					<th width=100>Description</th>
+					<th>No_Hits</th>
+					<th>Valid_Length(Cluster)</th>
+					<th>Valid_Length(Rank)</th>
+					<th>Valid_Reading_Frame</th>
+					<th>Gene_Merge(slope)</th>
+					<th>Duplication</th>
+                                        <th width = 200 style="white-space:nowrap"> ORFs</th>
+				</tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td>SI2.2.0_06267 locus=Si_gnF.scaffold02592[1282609..1284114].pep_2 Solenopsis invicta quality=100.00</td>
+	      <td>78</td>
+	      <td bgcolor=red>199 [1556, 1814] NO</td>
+	      <td bgcolor=red>0.0(TOO_SHORT)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:78; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.0)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle1 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_1_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_1_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+	      <td>2</td>
+	      <td>SI2.2.0_13722 locus=Si_gnF.scaffold06207[1925625..1928536].pep_1 Solenopsis invicta quality=100.00</td>
+	      <td>15</td>
+	      <td bgcolor=red>186 [130, 161] NO</td>
+	      <td bgcolor=red>0.0(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:15; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.03)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle2 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_2_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_2_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_2_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle3')>Show/Hide Plots</button></td> 
+	      <td>3</td>
+	      <td>SI2.2.0_02651 locus=Si_gnF.scaffold01722[932834..938174].pep_2 Solenopsis invicta quality=100.00 tag=gw_corrected</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>660 [375, 1500] YES</td>
+	      <td bgcolor=red>0.13(TOO_SHORT)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:678; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.26)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle3 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_3_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_3_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_3_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle4')>Show/Hide Plots</button></td> 
+	      <td>4</td>
+	      <td>SI2.2.0_02806 locus=Si_gnF.scaffold10535[2353440..2360510].pep_2 Solenopsis invicta quality=99.23</td>
+	      <td>358</td>
+	      <td bgcolor=red>1808 [113, 501] NO</td>
+	      <td bgcolor=red>0.18(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:456; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.24)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle4 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_4_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_4_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_4_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle5')>Show/Hide Plots</button></td> 
+	      <td>5</td>
+	      <td>SI2.2.0_06704 locus=Si_gnF.scaffold07337[1292..1661].pep_2 Solenopsis invicta quality=100.00</td>
+	      <td>34</td>
+	      <td bgcolor=red>90 [497, 726] NO</td>
+	      <td bgcolor=red>0.06(TOO_SHORT)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:34; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.18)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle5 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_5_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_5_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_5_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle6')>Show/Hide Plots</button></td> 
+	      <td>6</td>
+	      <td>SI2.2.0_02565 locus=Si_gnF.scaffold10535[2342913..2350141].pep_2 Solenopsis invicta quality=99.83</td>
+	      <td>433</td>
+	      <td bgcolor=red>1761 [113, 1307] NO</td>
+	      <td bgcolor=#E8E8E8>0.28(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:538; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=0.32)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle6 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_6_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_6_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_6_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle7')>Show/Hide Plots</button></td> 
+	      <td>7</td>
+	      <td>SI2.2.0_08867 locus=Si_gnF.scaffold04785[379014..382580].pep_1 Solenopsis invicta quality=100.00 tag=gw_corrected</td>
+	      <td>500</td>
+	      <td bgcolor=#FFFFFF>759 [161, 829] YES</td>
+	      <td bgcolor=#FFFFFF>0.37(YES)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:550; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=0.2)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle7 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_7_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_7_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_7_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle8')>Show/Hide Plots</button></td> 
+	      <td>8</td>
+	      <td>SI2.2.0_80754 locus=Si_gnF.scaffold00759[239873..255409].pep_2 flag=new_id Solenopsis invicta quality=28.95 merge_with=SI2.2.0_04333 tag=gw_corrected</td>
+	      <td>500</td>
+	      <td bgcolor=#E8E8E8>850 [850, 885] YES</td>
+	      <td bgcolor=#E8E8E8>0.27(YES)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:503; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.04)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle8 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_8_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_8_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_8_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle9')>Show/Hide Plots</button></td> 
+	      <td>9</td>
+	      <td>SI2.2.0_80039 locus=Si_gnF.scaffold05277[1187..2156].pep_2 flag=new_id Solenopsis invicta quality=43.33 merge_with=SI2.2.0_80211 merge_with=SI2.2.0_80306 merge_with=SI2.2.0_07731</td>
+	      <td>38</td>
+	      <td bgcolor=#FFFFFF>125 [119, 566] YES</td>
+	      <td bgcolor=red>0.03(TOO_SHORT)</td>
+	      <td bgcolor=#FFFFFF>VALID(0:38; )</td>
+	      <td bgcolor=#FFFFFF>NO(slope=-0.02)</td>
+	      <td bgcolor=#FFFFFF>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#FFFFFF>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle9 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_9_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_9_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_9_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr><tr bgcolor=#E8E8E8> 
+	      <td><button type=button name=answer onclick=showDiv('toggle10')>Show/Hide Plots</button></td> 
+	      <td>10</td>
+	      <td>SI2.2.0_80300 locus=Si_gnF.scaffold01122[2700425..2705014].pep_1 flag=new_id Solenopsis invicta quality=76.92 merge_with=SI2.2.0_04351 tag=gw_corrected</td>
+	      <td>127</td>
+	      <td bgcolor=red>1065 [510, 825] NO</td>
+	      <td bgcolor=red>0.09(TOO_LONG)</td>
+	      <td bgcolor=#E8E8E8>VALID(0:150; )</td>
+	      <td bgcolor=#E8E8E8>NO(slope=-0.18)</td>
+	      <td bgcolor=#E8E8E8>NO(pval=1.0)</td>
+              <td width = 200 style="white-space:nowrap" bgcolor=#E8E8E8>No evidence</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=10>
+              <div id=toggle10 style='display:none'>
+
+              <img src=prot_Solenopsis_invicta.fasta_10_len_clusters.jpg height=400>
+	      <img src=prot_Solenopsis_invicta.fasta_10_match.jpg height=400>
+              <img src=prot_Solenopsis_invicta.fasta_10_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

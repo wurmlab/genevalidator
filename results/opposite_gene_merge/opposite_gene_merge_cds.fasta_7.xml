@@ -1,0 +1,2256 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastx</BlastOutput_program>
+  <BlastOutput_version>BLASTX 2.2.28+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+  <BlastOutput_query-def>Brasy-EspV1T00119</BlastOutput_query-def>
+  <BlastOutput_query-len>1008</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>1e-05</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_1</Iteration_query-ID>
+  <Iteration_query-def>Brasy-EspV1T00119</Iteration_query-def>
+  <Iteration_query-len>1008</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|357111060|ref|XP_003557333.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC100839851 [Brachypodium distachyon]</Hit_def>
+  <Hit_accession>XP_003557333</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>136.346</Hsp_bit-score>
+      <Hsp_score>342</Hsp_score>
+      <Hsp_evalue>6.19477e-36</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>781</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>108</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>101</Hsp_identity>
+      <Hsp_positive>104</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>108</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAATRXXXXXXXXXXDD</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVLLLVVLIITSQFEWKQQIEDAADADPATARRRQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTATIAATKVSEVEAEENIDD</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLVLLLVVLIITSQFEWKQQIEDAADADPA+ARRRQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHT TIAAT+VSEVE E  +DD</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|514726194|ref|XP_004955919.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101774654 [Setaria italica]</Hit_def>
+  <Hit_accession>XP_004955919</Hit_accession>
+  <Hit_len>111</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>122.479</Hsp_bit-score>
+      <Hsp_score>306</Hsp_score>
+      <Hsp_evalue>1.05769e-30</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>781</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>108</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>90</Hsp_identity>
+      <Hsp_positive>99</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>108</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAATRXXXXXXXXXXDD</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVLLLLVLIITSQFEWKQQIGDAANADPAAARRRQQLLAREDAVKEKIILSQEKNIQQLNQLIESLQRQLLHCRGSNNTVHTTTIPATGVGEVEEHETIDD</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLVLLL+VLIITSQFEWKQQI DAA+ADPA+ARRRQQ+LA+EDAVKEKI+LSQEKNIQQLN+LIESLQRQLLHCRGSN+TVHT TI AT V EVE    +DD</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|242048036|ref|XP_002461764.1|</Hit_id>
+  <Hit_def>hypothetical protein SORBIDRAFT_02g007690 [Sorghum bicolor] &gt;gi|241925141|gb|EER98285.1| hypothetical protein SORBIDRAFT_02g007690 [Sorghum bicolor]</Hit_def>
+  <Hit_accession>XP_002461764</Hit_accession>
+  <Hit_len>117</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>112.464</Hsp_bit-score>
+      <Hsp_score>280</Hsp_score>
+      <Hsp_evalue>6.70625e-27</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>730</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>91</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>76</Hsp_identity>
+      <Hsp_positive>87</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>91</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPT</Hsp_qseq>
+      <Hsp_hseq>MNTRPLVLVFLLLVLVITSQFEWKQQIGEAADANPAAARRRQQLLAREDAVKEKIILSQEKNIQQLNQLIESLQRQLLHCRGSNNTVHAVT</Hsp_hseq>
+      <Hsp_midline>MNTRP+VLV LL+VL+ITSQFEWKQQI +AADA+PA+ARRRQQ+LA+EDAVKEKI+LSQEKNIQQLN+LIESLQRQLLHCRGSN+TVH  T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|195657947|gb|ACG48441.1|</Hit_id>
+  <Hit_def>hypothetical protein [Zea mays]</Hit_def>
+  <Hit_accession>ACG48441</Hit_accession>
+  <Hit_len>112</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>101.293</Hsp_bit-score>
+      <Hsp_score>251</Hsp_score>
+      <Hsp_evalue>5.89894e-23</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>712</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>85</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>73</Hsp_identity>
+      <Hsp_positive>82</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>85</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNS</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVFLLLVLVITSQFEWKQQIGEAADADPAAARRRQQLHAREDAVKEKIILSQEKNIQQLNQLIESLQRQLLHCRGSNN</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLV LL+VL+ITSQFEWKQQI +AADADPA+ARRRQQ+ A+EDAVKEKI+LSQEKNIQQLN+LIESLQRQLLHCRGSN+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|212275213|ref|NP_001130990.1|</Hit_id>
+  <Hit_def>hypothetical protein precursor [Zea mays] &gt;gi|194690646|gb|ACF79407.1| unknown [Zea mays] &gt;gi|414884160|tpg|DAA60174.1| TPA: hypothetical protein ZEAMMB73_169467 [Zea mays]</Hit_def>
+  <Hit_accession>NP_001130990</Hit_accession>
+  <Hit_len>112</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>101.293</Hsp_bit-score>
+      <Hsp_score>251</Hsp_score>
+      <Hsp_evalue>5.89894e-23</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>712</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>85</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>73</Hsp_identity>
+      <Hsp_positive>82</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>85</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNS</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVFLLLVLVITSQFEWKQQIGEAADADPAAARRRQQLHAREDAVKEKIILSQEKNIQQLNQLIESLQRQLLHCRGSNN</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLV LL+VL+ITSQFEWKQQI +AADADPA+ARRRQQ+ A+EDAVKEKI+LSQEKNIQQLN+LIESLQRQLLHCRGSN+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|125557852|gb|EAZ03388.1|</Hit_id>
+  <Hit_def>hypothetical protein OsI_25533 [Oryza sativa Indica Group]</Hit_def>
+  <Hit_accession>EAZ03388</Hit_accession>
+  <Hit_len>107</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>99.7525</Hsp_bit-score>
+      <Hsp_score>247</Hsp_score>
+      <Hsp_evalue>1.50803e-22</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>712</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>73</Hsp_identity>
+      <Hsp_positive>77</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>85</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNS</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVFLLLVLVITSQFEWKQQI-GDAAADPADARRRHQGLAKEDAVKEKIILSQEKNIQQLNELIESLQRQLLHCRGSNN</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLV LL+VL+ITSQFEWKQQI   A ADPA ARRR Q LAKEDAVKEKI+LSQEKNIQQLNELIESLQRQLLHCRGSN+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|115471397|ref|NP_001059297.1|</Hit_id>
+  <Hit_def>Os07g0250300 [Oryza sativa Japonica Group] &gt;gi|23495917|dbj|BAC20124.1| unknown protein [Oryza sativa Japonica Group] &gt;gi|23617142|dbj|BAC20822.1| unknown protein [Oryza sativa Japonica Group] &gt;gi|113610833|dbj|BAF21211.1| Os07g0250300 [Oryza sativa Japonica Group] &gt;gi|125599712|gb|EAZ39288.1| hypothetical protein OsJ_23720 [Oryza sativa Japonica Group] &gt;gi|215704403|dbj|BAG93837.1| unnamed protein product [Oryza sativa Japonica Group] &gt;gi|215706332|dbj|BAG93188.1| unnamed protein product [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>NP_001059297</Hit_accession>
+  <Hit_len>107</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>99.3673</Hsp_bit-score>
+      <Hsp_score>246</Hsp_score>
+      <Hsp_evalue>2.80659e-22</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>712</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>72</Hsp_identity>
+      <Hsp_positive>76</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>85</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNS</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVFLLLVLVITSQFEWKQQI-GDAAADPADARRRHQGLAKEDAVKEKIIFSQEKNIQQLNELIESLQRQLLHCRGSNN</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLV LL+VL+ITSQFEWKQQI   A ADPA ARRR Q LAKEDAVKEKI+ SQEKNIQQLNELIESLQRQLLHCRGSN+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|474414320|gb|EMS67063.1|</Hit_id>
+  <Hit_def>hypothetical protein TRIUR3_01602 [Triticum urartu]</Hit_def>
+  <Hit_accession>EMS67063</Hit_accession>
+  <Hit_len>152</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>95.1301</Hsp_bit-score>
+      <Hsp_score>235</Hsp_score>
+      <Hsp_evalue>2.56533e-20</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>43</Hsp_hit-from>
+      <Hsp_hit-to>130</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>62</Hsp_identity>
+      <Hsp_positive>75</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>88</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>MNSRPIVLVFLLLVLIISSQFEWKQQIGEAEASPEATRRRQQPQVVREDAVKEKIILAQEKNIQQLTELIQSLQVQLLHCRGSNSTAH</Hsp_hseq>
+      <Hsp_midline>MN+RP+VLV LL+VLII+SQFEWKQQI +A  +  A+ RR+Q  + +EDAVKEKI+L+QEKNIQQL ELI+SLQ QLLHCRGSNST H</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|475623680|gb|EMT32325.1|</Hit_id>
+  <Hit_def>hypothetical protein F775_24192 [Aegilops tauschii]</Hit_def>
+  <Hit_accession>EMT32325</Hit_accession>
+  <Hit_len>211</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>95.1301</Hsp_bit-score>
+      <Hsp_score>235</Hsp_score>
+      <Hsp_evalue>7.5188e-20</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>102</Hsp_hit-from>
+      <Hsp_hit-to>189</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>62</Hsp_identity>
+      <Hsp_positive>75</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>88</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>MNSRPIVLVFLLLVLIISSQFEWKQQIGEAEASPEATRRRQQPQVVREDAVKEKIILAQEKNIQQLTELIQSLQVQLLHCRGSNSTAH</Hsp_hseq>
+      <Hsp_midline>MN+RP+VLV LL+VLII+SQFEWKQQI +A  +  A+ RR+Q  + +EDAVKEKI+L+QEKNIQQL ELI+SLQ QLLHCRGSNST H</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gi|357122417|ref|XP_003562912.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC100841103 [Brachypodium distachyon]</Hit_def>
+  <Hit_accession>XP_003562912</Hit_accession>
+  <Hit_len>112</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>91.2781</Hsp_bit-score>
+      <Hsp_score>225</Hsp_score>
+      <Hsp_evalue>2.0558e-19</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>718</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>88</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>63</Hsp_identity>
+      <Hsp_positive>74</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>88</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLA-KEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTV</Hsp_qseq>
+      <Hsp_hseq>MNSRPVVLIFLLLVLIVTSQFEWKQQIGEAEATPAAATRRRQQALVVREDAIKEKIILAQEKNIQQLTELIQSLQVQLLHCRGSNSTT</Hsp_hseq>
+      <Hsp_midline>MN+RPVVL+ LL+VLI+TSQFEWKQQI +A     A+ RRRQQ L  +EDA+KEKI+L+QEKNIQQL ELI+SLQ QLLHCRGSNST </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>11</Hit_num>
+  <Hit_id>gi|514812690|ref|XP_004981137.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101786953 [Setaria italica]</Hit_def>
+  <Hit_accession>XP_004981137</Hit_accession>
+  <Hit_len>107</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>83.9593</Hsp_bit-score>
+      <Hsp_score>206</Hsp_score>
+      <Hsp_evalue>8.33746e-17</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>94</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>68</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MNSRPIVLIFLLLVLIITSQFEWKQQI-GEAEANPTTNRRRQQALEREDAVKEKIILAQEKNIQQLNELIQSLQLQLLHCRGSNSTAHITSSQST</Hsp_hseq>
+      <Hsp_midline>MN+RP+VL+ LL+VLIITSQFEWKQQI   A+A+P + RRRQQ L +EDAVKEKI+L+QEKNIQQLNELI+SLQ QLLHCRGSNST H  +  +T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>12</Hit_num>
+  <Hit_id>gi|242032341|ref|XP_002463565.1|</Hit_id>
+  <Hit_def>hypothetical protein SORBIDRAFT_01g002100 [Sorghum bicolor] &gt;gi|241917419|gb|EER90563.1| hypothetical protein SORBIDRAFT_01g002100 [Sorghum bicolor]</Hit_def>
+  <Hit_accession>XP_002463565</Hit_accession>
+  <Hit_len>101</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>82.8037</Hsp_bit-score>
+      <Hsp_score>203</Hsp_score>
+      <Hsp_evalue>1.81569e-16</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>94</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>67</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MNSRPIVLIFLLLVLIITSQFEWKQQI-GEAEANPTATRRRQQALEREDAVKEKVILAQEKNIQQLNELIQSLQLQLLHCRGSNSTARTTSSQST</Hsp_hseq>
+      <Hsp_midline>MN+RP+VL+ LL+VLIITSQFEWKQQI   A+A+P + RRRQQ L +EDAVKEK++L+QEKNIQQLNELI+SLQ QLLHCRGSNST  T +  +T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>13</Hit_num>
+  <Hit_id>gi|460411366|ref|XP_004251083.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101268061 isoform 1 [Solanum lycopersicum] &gt;gi|460411368|ref|XP_004251084.1| PREDICTED: uncharacterized protein LOC101268061 isoform 2 [Solanum lycopersicum]</Hit_def>
+  <Hit_accession>XP_004251083</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>78.9518</Hsp_bit-score>
+      <Hsp_score>193</Hsp_score>
+      <Hsp_evalue>5.29373e-15</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>88</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>51</Hsp_identity>
+      <Hsp_positive>71</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>88</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>MMSRPMLLVFLLIVLIITSQFEWKQQLVSDVEPSPSISQKQQQISKREEAVKEKIILSQEKNIQRLNELVRNLREQLLQCRSSNETIS</Hsp_hseq>
+      <Hsp_midline>M +RP++LV LL+VLIITSQFEWKQQ+    +  P+ ++++QQ+  +E+AVKEKI+LSQEKNIQ+LNEL+ +L+ QLL CR SN T+ </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>14</Hit_num>
+  <Hit_id>gi|226504818|ref|NP_001143504.1|</Hit_id>
+  <Hit_def>uncharacterized protein LOC100276186 precursor [Zea mays] &gt;gi|195621650|gb|ACG32655.1| hypothetical protein [Zea mays] &gt;gi|223943555|gb|ACN25861.1| unknown [Zea mays] &gt;gi|413932497|gb|AFW67048.1| hypothetical protein ZEAMMB73_962497 [Zea mays] &gt;gi|413932498|gb|AFW67049.1| hypothetical protein ZEAMMB73_962497 [Zea mays]</Hit_def>
+  <Hit_accession>NP_001143504</Hit_accession>
+  <Hit_len>103</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>78.5666</Hsp_bit-score>
+      <Hsp_score>192</Hsp_score>
+      <Hsp_evalue>5.99046e-15</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>730</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>90</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>63</Hsp_identity>
+      <Hsp_positive>77</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>91</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPT</Hsp_qseq>
+      <Hsp_hseq>MNFRPIVLIFLLLVLIVTSQFEWKQHI-GEAEANPTATRRRQQALGREDAVKEKVILAQEKNIQQLNELIQSLQLQLLHCRGSNSSAQTAS</Hsp_hseq>
+      <Hsp_midline>MN RP+VL+ LL+VLI+TSQFEWKQ I   A+A+P + RRRQQ L +EDAVKEK++L+QEKNIQQLNELI+SLQ QLLHCRGSNS+  T +</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>15</Hit_num>
+  <Hit_id>gi|115456449|ref|NP_001051825.1|</Hit_id>
+  <Hit_def>Os03g0836500 [Oryza sativa Japonica Group] &gt;gi|108711968|gb|ABF99763.1| expressed protein [Oryza sativa Japonica Group] &gt;gi|108711969|gb|ABF99764.1| expressed protein [Oryza sativa Japonica Group] &gt;gi|108711970|gb|ABF99765.1| expressed protein [Oryza sativa Japonica Group] &gt;gi|113550296|dbj|BAF13739.1| Os03g0836500 [Oryza sativa Japonica Group] &gt;gi|215767845|dbj|BAH00074.1| unnamed protein product [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>NP_001051825</Hit_accession>
+  <Hit_len>107</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>77.7962</Hsp_bit-score>
+      <Hsp_score>190</Hsp_score>
+      <Hsp_evalue>1.23507e-14</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>781</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>107</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>73</Hsp_identity>
+      <Hsp_positive>87</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>108</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAATRXXXXXXXXXXDD</Hsp_qseq>
+      <Hsp_hseq>MNLRPVVLIFLLLVLIITSQFEWKQQV-GEAEANPAATRRRQQVILREDAVKEKIILAQEKNIQQLNGLIQSLQLQLLHCRLSNSTAHTTSNKSTNNSAVEGHKMIDD</Hsp_hseq>
+      <Hsp_midline>MN RPVVL+ LL+VLIITSQFEWKQQ+   A+A+PA+ RRRQQV+ +EDAVKEKI+L+QEKNIQQLN LI+SLQ QLLHCR SNST HT +  +T  S VE    +DD</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>16</Hit_num>
+  <Hit_id>gi|508786094|gb|EOY33350.1|</Hit_id>
+  <Hit_def>Peptidyl-prolyl cis-trans isomerase G [Theobroma cacao]</Hit_def>
+  <Hit_accession>EOY33350</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>77.0258</Hsp_bit-score>
+      <Hsp_score>188</Hsp_score>
+      <Hsp_evalue>2.63926e-14</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>87</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>49</Hsp_identity>
+      <Hsp_positive>72</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLLILIITSQFEWRQQLVVDIDTNPSVTQKQQQISRREEAVKEKIILSQEKNIQRLNEVVRSLQQQLLQCKGNNKTTN</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEW+QQ+    D +P+  +++QQ+  +E+AVKEKI+LSQEKNIQ+LNE++ SLQ+QLL C+G+N T +</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>17</Hit_num>
+  <Hit_id>gi|508716515|gb|EOY08412.1|</Hit_id>
+  <Hit_def>Peptidyl-prolyl cis-trans isomerase G, putative [Theobroma cacao]</Hit_def>
+  <Hit_accession>EOY08412</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>74.7146</Hsp_bit-score>
+      <Hsp_score>182</Hsp_score>
+      <Hsp_evalue>2.13689e-13</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>94</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>43</Hsp_identity>
+      <Hsp_positive>64</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>SRPWLLVFLVFLIVFTSQFEWKQQFGEEIEPTPTVSLKDQYVSKRQESVKEKIILSQERNIQKLNELVRSLREQLLLCRAENEVINGSAFALT</Hsp_hseq>
+      <Hsp_midline>+RP +LV L+ +++ TSQFEWKQQ  +  +  P  + + Q V  ++++VKEKI+LSQE+NIQ+LNEL+ SL+ QLL CR  N  ++    A T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>18</Hit_num>
+  <Hit_id>gi|449526798|ref|XP_004170400.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized LOC101203389 [Cucumis sativus]</Hit_def>
+  <Hit_accession>XP_004170400</Hit_accession>
+  <Hit_len>518</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>78.5666</Hsp_bit-score>
+      <Hsp_score>192</Hsp_score>
+      <Hsp_evalue>4.8733e-13</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>739</Hsp_query-to>
+      <Hsp_hit-from>427</Hsp_hit-from>
+      <Hsp_hit-to>505</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>43</Hsp_identity>
+      <Hsp_positive>60</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>79</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAA</Hsp_qseq>
+      <Hsp_hseq>IITSQFEWRQQLVPEVDSTVNSQKQQQQISTREEAVKEKILLSQERNIQRLNEVVRSLRQQLQQCRGRNITNGTALLSA</Hsp_hseq>
+      <Hsp_midline>IITSQFEW+QQ+    D+   S +++QQ+  +E+AVKEKILLSQE+NIQ+LNE++ SL++QL  CRG N T  T  ++A</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>19</Hit_num>
+  <Hit_id>gi|449445005|ref|XP_004140264.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101203389 [Cucumis sativus]</Hit_def>
+  <Hit_accession>XP_004140264</Hit_accession>
+  <Hit_len>506</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>78.5666</Hsp_bit-score>
+      <Hsp_score>192</Hsp_score>
+      <Hsp_evalue>5.12064e-13</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>739</Hsp_query-to>
+      <Hsp_hit-from>415</Hsp_hit-from>
+      <Hsp_hit-to>493</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>43</Hsp_identity>
+      <Hsp_positive>60</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>79</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAA</Hsp_qseq>
+      <Hsp_hseq>IITSQFEWRQQLVPEVDSTVNSQKQQQQISTREEAVKEKILLSQERNIQRLNEVVRSLRQQLQQCRGRNITNGTALLSA</Hsp_hseq>
+      <Hsp_midline>IITSQFEW+QQ+    D+   S +++QQ+  +E+AVKEKILLSQE+NIQ+LNE++ SL++QL  CRG N T  T  ++A</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>20</Hit_num>
+  <Hit_id>gi|514713046|ref|XP_004952660.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101786880 isoform X2 [Setaria italica]</Hit_def>
+  <Hit_accession>XP_004952660</Hit_accession>
+  <Hit_len>106</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.707</Hsp_bit-score>
+      <Hsp_score>169</Hsp_score>
+      <Hsp_evalue>1.24574e-11</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>92</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>71</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MVSRPVVLVFLLVILIVTSQFEWKQQL---VNELESTTRNHQHISSREELVKDKIILSQEKMIQKLNDFIQNLQQQLVQCRENNKTIHSSGTSLT</Hsp_hseq>
+      <Hsp_midline>M +RPVVLV LLV+LI+TSQFEWKQQ+    +   ++ R  Q + ++E+ VK+KI+LSQEK IQ+LN+ I++LQ+QL+ CR +N T+H+   + T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>21</Hit_num>
+  <Hit_id>gi|413932496|gb|AFW67047.1|</Hit_id>
+  <Hit_def>hypothetical protein ZEAMMB73_962497, partial [Zea mays]</Hit_def>
+  <Hit_accession>AFW67047</Hit_accession>
+  <Hit_len>86</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.9366</Hsp_bit-score>
+      <Hsp_score>167</Hsp_score>
+      <Hsp_evalue>1.40321e-11</Hsp_evalue>
+      <Hsp_query-from>518</Hsp_query-from>
+      <Hsp_query-to>730</Hsp_query-to>
+      <Hsp_hit-from>4</Hsp_hit-from>
+      <Hsp_hit-to>73</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>49</Hsp_identity>
+      <Hsp_positive>59</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>71</Hsp_align-len>
+      <Hsp_qseq>FEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPT</Hsp_qseq>
+      <Hsp_hseq>FEWKQHI-GEAEANPTATRRRQQALGREDAVKEKVILAQEKNIQQLNELIQSLQLQLLHCRGSNSSAQTAS</Hsp_hseq>
+      <Hsp_midline>FEWKQ I   A+A+P + RRRQQ L +EDAVKEK++L+QEKNIQQLNELI+SLQ QLLHCRGSNS+  T +</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>22</Hit_num>
+  <Hit_id>gi|297812349|ref|XP_002874058.1|</Hit_id>
+  <Hit_def>hypothetical protein ARALYDRAFT_489079 [Arabidopsis lyrata subsp. lyrata] &gt;gi|297319895|gb|EFH50317.1| hypothetical protein ARALYDRAFT_489079 [Arabidopsis lyrata subsp. lyrata]</Hit_def>
+  <Hit_accession>XP_002874058</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.5514</Hsp_bit-score>
+      <Hsp_score>166</Hsp_score>
+      <Hsp_evalue>3.19451e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>46</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>84</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>SRPIMLVFLLVILIVTSQFEWRQPL-LELDAAPSLSQKHQQIAKREEAVKEKIILSQERHIQRLNDLVRSLQMQLQRCKGENET</Hsp_hseq>
+      <Hsp_midline>+RP++LV LLV+LI+TSQFEW+Q +    DA P+ +++ QQ+  +E+AVKEKI+LSQE++IQ+LN+L+ SLQ QL  C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>23</Hit_num>
+  <Hit_id>gi|514713042|ref|XP_004952659.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101786880 isoform X1 [Setaria italica]</Hit_def>
+  <Hit_accession>XP_004952659</Hit_accession>
+  <Hit_len>152</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.707</Hsp_bit-score>
+      <Hsp_score>169</Hsp_score>
+      <Hsp_evalue>3.37653e-11</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>47</Hsp_hit-from>
+      <Hsp_hit-to>138</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>71</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MVSRPVVLVFLLVILIVTSQFEWKQQL---VNELESTTRNHQHISSREELVKDKIILSQEKMIQKLNDFIQNLQQQLVQCRENNKTIHSSGTSLT</Hsp_hseq>
+      <Hsp_midline>M +RPVVLV LLV+LI+TSQFEWKQQ+    +   ++ R  Q + ++E+ VK+KI+LSQEK IQ+LN+ I++LQ+QL+ CR +N T+H+   + T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>24</Hit_num>
+  <Hit_id>gi|15242200|ref|NP_197620.1|</Hit_id>
+  <Hit_def>uncharacterized protein [Arabidopsis thaliana] &gt;gi|9757808|dbj|BAB08326.1| unnamed protein product [Arabidopsis thaliana] &gt;gi|17065494|gb|AAL32901.1| Unknown protein [Arabidopsis thaliana] &gt;gi|21595092|gb|AAM66072.1| unknown [Arabidopsis thaliana] &gt;gi|30102802|gb|AAP21319.1| At5g22280 [Arabidopsis thaliana] &gt;gi|332005621|gb|AED93004.1| uncharacterized protein AT5G22280 [Arabidopsis thaliana]</Hit_def>
+  <Hit_accession>NP_197620</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.5514</Hsp_bit-score>
+      <Hsp_score>166</Hsp_score>
+      <Hsp_evalue>3.49892e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>46</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>84</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>SRPIMLVFLLVILIVTSQFEWRQPL-LELDAAPSLSQKHQQIAKREEAVKEKIILSQERHIQRLNDLVRSLQMQLQRCKGENET</Hsp_hseq>
+      <Hsp_midline>+RP++LV LLV+LI+TSQFEW+Q +    DA P+ +++ QQ+  +E+AVKEKI+LSQE++IQ+LN+L+ SLQ QL  C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>25</Hit_num>
+  <Hit_id>gi|255578611|ref|XP_002530167.1|</Hit_id>
+  <Hit_def>conserved hypothetical protein [Ricinus communis] &gt;gi|223530328|gb|EEF32222.1| conserved hypothetical protein [Ricinus communis]</Hit_def>
+  <Hit_accession>XP_002530167</Hit_accession>
+  <Hit_len>111</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.5514</Hsp_bit-score>
+      <Hsp_score>166</Hsp_score>
+      <Hsp_evalue>3.52465e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>709</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>44</Hsp_identity>
+      <Hsp_positive>60</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>83</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAK-EDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSN</Hsp_qseq>
+      <Hsp_hseq>SRPWVLVFMVMLIVFTSQFEWKQQFGTEIEATPTTISRTDQFHSRREETVKEKIILSQEKNIQKLNELVRSLQEQLIQCRSEN</Hsp_hseq>
+      <Hsp_midline>+RP VLV ++++++ TSQFEWKQQ     +A P +  R  Q  ++ E+ VKEKI+LSQEKNIQ+LNEL+ SLQ QL+ CR  N</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>26</Hit_num>
+  <Hit_id>gi|224140055|ref|XP_002323402.1|</Hit_id>
+  <Hit_def>predicted protein [Populus trichocarpa] &gt;gi|222868032|gb|EEF05163.1| predicted protein [Populus trichocarpa]</Hit_def>
+  <Hit_accession>XP_002323402</Hit_accession>
+  <Hit_len>102</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.1662</Hsp_bit-score>
+      <Hsp_score>165</Hsp_score>
+      <Hsp_evalue>3.88605e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>96</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>47</Hsp_identity>
+      <Hsp_positive>64</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQI--EXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>ARPWVLVSLLLLIVFTSQLEWKQQFGNEIEASPNISQRDQQQHSSNREEVVKEKIILSQEKNIQKLNELVQSLREQLQHCRSENYIVNSTAIPLT</Hsp_hseq>
+      <Hsp_midline> RP VLV LL++++ TSQ EWKQQ   E  A  + +   ++Q    +E+ VKEKI+LSQEKNIQ+LNEL++SL+ QL HCR  N  V++  I  T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>27</Hit_num>
+  <Hit_id>gi|388495542|gb|AFK35837.1|</Hit_id>
+  <Hit_def>unknown [Lotus japonicus]</Hit_def>
+  <Hit_accession>AFK35837</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.5514</Hsp_bit-score>
+      <Hsp_score>166</Hsp_score>
+      <Hsp_evalue>3.95019e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>94</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>47</Hsp_identity>
+      <Hsp_positive>69</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLIILIITSQFEWKQPLVADVDSNPNVSQKQRQISKPEETVKEKIILVQEKNIRRLNELVRHLQEQLQQCRGSNGTTNGTSSSLT</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQ +    D++P  +++++Q+   E+ VKEKI+L QEKNI++LNEL+  LQ QL  CRGSN T +  + + T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>28</Hit_num>
+  <Hit_id>gi|462398322|gb|EMJ03990.1|</Hit_id>
+  <Hit_def>hypothetical protein PRUPE_ppa013737mg [Prunus persica]</Hit_def>
+  <Hit_accession>EMJ03990</Hit_accession>
+  <Hit_len>106</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.1662</Hsp_bit-score>
+      <Hsp_score>165</Hsp_score>
+      <Hsp_evalue>5.14544e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>92</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>46</Hsp_identity>
+      <Hsp_positive>66</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>SRPWVLVCLLLLIVFTSQFEWKQY--GNDEPSPSTSKKHQYISEREEAVKEKIILSQEKNIQKLSELVRSLREQLLQCRGENEIVNGTAAPLT</Hsp_hseq>
+      <Hsp_midline>+RP VLV LL++++ TSQFEWKQ      +  P+++++ Q +  +E+AVKEKI+LSQEKNIQ+L+EL+ SL+ QLL CRG N  V+      T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>29</Hit_num>
+  <Hit_id>gi|351722859|ref|NP_001234955.1|</Hit_id>
+  <Hit_def>uncharacterized protein LOC100527616 precursor [Glycine max] &gt;gi|255632782|gb|ACU16744.1| unknown [Glycine max]</Hit_def>
+  <Hit_accession>NP_001234955</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.781</Hsp_bit-score>
+      <Hsp_score>164</Hsp_score>
+      <Hsp_evalue>6.47815e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>87</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>46</Hsp_identity>
+      <Hsp_positive>65</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLIILIITSQFEWKQQLVADVDSNPNLPQKQHQISKAEETVKEKIILVQEKNIRRLNELVRHLQEQLQQCRGRNGTIN</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQQ+    D++P   +++ Q+   E+ VKEKI+L QEKNI++LNEL+  LQ QL  CRG N T++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>30</Hit_num>
+  <Hit_id>gi|118489274|gb|ABK96442.1|</Hit_id>
+  <Hit_def>unknown [Populus trichocarpa x Populus deltoides]</Hit_def>
+  <Hit_accession>ABK96442</Hit_accession>
+  <Hit_len>103</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.3958</Hsp_bit-score>
+      <Hsp_score>163</Hsp_score>
+      <Hsp_evalue>7.41773e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>97</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQI--EXXXXXXXXXXXXXQQVLA-KEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>ARPWVLVSLLLLIVFTSQLEWKQQFGNEIEASPNISQRDQQQQLSSNREEVVKEKIILSQEKNIQKLNELVQSLREQLQHCRSENYIVNSTAIPLT</Hsp_hseq>
+      <Hsp_midline> RP VLV LL++++ TSQ EWKQQ   E  A  + +   ++QQ+ + +E+ VKEKI+LSQEKNIQ+LNEL++SL+ QL HCR  N  V++  I  T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>31</Hit_num>
+  <Hit_id>gi|470135418|ref|XP_004303514.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101314584 isoform 2 [Fragaria vesca subsp. vesca]</Hit_def>
+  <Hit_accession>XP_004303514</Hit_accession>
+  <Hit_len>105</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.3958</Hsp_bit-score>
+      <Hsp_score>163</Hsp_score>
+      <Hsp_evalue>7.86836e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>93</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>45</Hsp_identity>
+      <Hsp_positive>65</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>SRPWVLVCLLLLIVFTSQLEWKQQY-GNDEPSPTPSKKQQYISEREEAVKEKIILSQEKNIQKLNDLVRSLREQLLQCRGESEVVNGTATPLT</Hsp_hseq>
+      <Hsp_midline>+RP VLV LL++++ TSQ EWKQQ     +  P  ++++Q +  +E+AVKEKI+LSQEKNIQ+LN+L+ SL+ QLL CRG +  V+      T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>32</Hit_num>
+  <Hit_id>gi|470135416|ref|XP_004303513.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101314584 isoform 1 [Fragaria vesca subsp. vesca]</Hit_def>
+  <Hit_accession>XP_004303513</Hit_accession>
+  <Hit_len>107</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.3958</Hsp_bit-score>
+      <Hsp_score>163</Hsp_score>
+      <Hsp_evalue>9.80216e-11</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>93</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>45</Hsp_identity>
+      <Hsp_positive>65</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>SRPWVLVCLLLLIVFTSQLEWKQQY-GNDEPSPTPSKKQQYISEREEAVKEKIILSQEKNIQKLNDLVRSLREQLLQCRGESEVVNGTATPLT</Hsp_hseq>
+      <Hsp_midline>+RP VLV LL++++ TSQ EWKQQ     +  P  ++++Q +  +E+AVKEKI+LSQEKNIQ+LN+L+ SL+ QLL CRG +  V+      T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>33</Hit_num>
+  <Hit_id>gi|470110874|ref|XP_004291685.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101312894 isoform 1 [Fragaria vesca subsp. vesca] &gt;gi|470110876|ref|XP_004291686.1| PREDICTED: uncharacterized protein LOC101312894 isoform 2 [Fragaria vesca subsp. vesca]</Hit_def>
+  <Hit_accession>XP_004291685</Hit_accession>
+  <Hit_len>109</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.3958</Hsp_bit-score>
+      <Hsp_score>163</Hsp_score>
+      <Hsp_evalue>1.00793e-10</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>86</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>65</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>MMSRPVLLVFLLVVLIITSQFEWKQQLVPDLDATPSISQKPSESSKREEAVKEKIILLQEKNIKRLNEVVSSLREQLQRCKSKNET</Hsp_hseq>
+      <Hsp_midline>M +RPV+LV LLVVLIITSQFEWKQQ+    DA P+ +++  +   +E+AVKEKI+L QEKNI++LNE++ SL+ QL  C+  N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>34</Hit_num>
+  <Hit_id>gi|225464858|ref|XP_002272163.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC100243239 [Vitis vinifera] &gt;gi|296084865|emb|CBI28274.3| unnamed protein product [Vitis vinifera]</Hit_def>
+  <Hit_accession>XP_002272163</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.0106</Hsp_bit-score>
+      <Hsp_score>162</Hsp_score>
+      <Hsp_evalue>1.09373e-10</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>724</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>88</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>49</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>87</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHT</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLLILIITSQFEWKQQLVIDLDPSSSISQKQQQISQREEAVKEKIILSQEKNIQGLNEVIRSLQEQLKQCRNSKGTRNS</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQQ+    D   + ++++QQ+  +E+AVKEKI+LSQEKNIQ LNE+I SLQ QL  CR S  T ++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>35</Hit_num>
+  <Hit_id>gi|462401810|gb|EMJ07367.1|</Hit_id>
+  <Hit_def>hypothetical protein PRUPE_ppa013668mg [Prunus persica]</Hit_def>
+  <Hit_accession>EMJ07367</Hit_accession>
+  <Hit_len>109</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.6254</Hsp_bit-score>
+      <Hsp_score>161</Hsp_score>
+      <Hsp_evalue>1.805e-10</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>745</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>97</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>51</Hsp_identity>
+      <Hsp_positive>72</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>97</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRG-SNSTVHTPTIAATR</Hsp_qseq>
+      <Hsp_hseq>MMSRPVLLVFLLIVLIITSQFEWRQPLVVDLDATPSISQKQNQISNREEAVKEKIILLQEKNIQRLNELVRSLREQLVQCRSKTQTTNHTVSFLTER</Hsp_hseq>
+      <Hsp_midline>M +RPV+LV LL+VLIITSQFEW+Q +    DA P+ ++++ Q+  +E+AVKEKI+L QEKNIQ+LNEL+ SL+ QL+ CR  + +T HT +    R</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>36</Hit_num>
+  <Hit_id>gi|482557645|gb|EOA21837.1|</Hit_id>
+  <Hit_def>hypothetical protein CARUB_v10002304mg [Capsella rubella]</Hit_def>
+  <Hit_accession>EOA21837</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.2402</Hsp_bit-score>
+      <Hsp_score>160</Hsp_score>
+      <Hsp_evalue>2.72639e-10</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>45</Hsp_identity>
+      <Hsp_positive>66</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>84</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>SRPIMLVFLLVILIVTSQFEWRQPL-LELDAAPSLSQKHQQIAKREEAVKEKIILSQERHIQRLNDLVRILQMQLQRCKGENET</Hsp_hseq>
+      <Hsp_midline>+RP++LV LLV+LI+TSQFEW+Q +    DA P+ +++ QQ+  +E+AVKEKI+LSQE++IQ+LN+L+  LQ QL  C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>37</Hit_num>
+  <Hit_id>gi|351721294|ref|NP_001235413.1|</Hit_id>
+  <Hit_def>uncharacterized protein LOC100500255 precursor [Glycine max] &gt;gi|255629851|gb|ACU15276.1| unknown [Glycine max]</Hit_def>
+  <Hit_accession>NP_001235413</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.2402</Hsp_bit-score>
+      <Hsp_score>160</Hsp_score>
+      <Hsp_evalue>2.78154e-10</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>721</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>87</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>45</Hsp_identity>
+      <Hsp_positive>66</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVH</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLIILIITSQFEWKQQLVADVDSNPSVSQKQHQISKAGETVKEKIILVQEKNIRRLNELVRHLQEQLQQCRGRNGTIN</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQQ+    D++P+ ++++ Q+    + VKEKI+L QEKNI++LNEL+  LQ QL  CRG N T++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>38</Hit_num>
+  <Hit_id>gi|293334121|ref|NP_001168827.1|</Hit_id>
+  <Hit_def>hypothetical protein [Zea mays] &gt;gi|223973223|gb|ACN30799.1| unknown [Zea mays] &gt;gi|413937146|gb|AFW71697.1| hypothetical protein ZEAMMB73_635475 [Zea mays]</Hit_def>
+  <Hit_accession>NP_001168827</Hit_accession>
+  <Hit_len>130</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>65.4698</Hsp_bit-score>
+      <Hsp_score>158</Hsp_score>
+      <Hsp_evalue>5.76537e-10</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>25</Hsp_hit-from>
+      <Hsp_hit-to>116</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>47</Hsp_identity>
+      <Hsp_positive>70</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MVSKPVVLVFLLVVLIITSQFEWKQQL---VNELESTARNQKHVSSREELVKDQIIFTQEKMIQRLNNFVRNLQQQLVQCRGNNRTVNRSGTSLT</Hsp_hseq>
+      <Hsp_midline>M ++PVVLV LLVVLIITSQFEWKQQ+    +   ++AR ++ V ++E+ VK++I+ +QEK IQ+LN  + +LQ+QL+ CRG+N TV+    + T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>39</Hit_num>
+  <Hit_id>gi|357127933|ref|XP_003565631.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC100824278 [Brachypodium distachyon]</Hit_def>
+  <Hit_accession>XP_003565631</Hit_accession>
+  <Hit_len>727</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.6254</Hsp_bit-score>
+      <Hsp_score>161</Hsp_score>
+      <Hsp_evalue>6.89467e-10</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>685</Hsp_hit-from>
+      <Hsp_hit-to>716</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEALGRGGEFLTLVWALLLHAGV</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEA+GRGGEFLTLVWALLLHAGV</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>24.2534</Hsp_bit-score>
+      <Hsp_score>51</Hsp_score>
+      <Hsp_evalue>6.89467e-10</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>673</Hsp_hit-from>
+      <Hsp_hit-to>689</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>11</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>17</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGER</Hsp_qseq>
+      <Hsp_hseq>LADFWSEMVVFVAPSEN</Hsp_hseq>
+      <Hsp_midline>L DFWSEMV+  A  E </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>40</Hit_num>
+  <Hit_id>gi|502084634|ref|XP_004487726.1|</Hit_id>
+  <Hit_def>PREDICTED: NAC domain-containing protein 89-like [Cicer arietinum]</Hit_def>
+  <Hit_accession>XP_004487726</Hit_accession>
+  <Hit_len>476</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.5514</Hsp_bit-score>
+      <Hsp_score>166</Hsp_score>
+      <Hsp_evalue>9.18708e-10</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>724</Hsp_query-to>
+      <Hsp_hit-from>370</Hsp_hit-from>
+      <Hsp_hit-to>456</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>45</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>87</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHT</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLIILIITSQFEWKQQLVADVELNPAVSQKQHHISTAEETVKEKIILVQEKNIRRLNELVRHLQEQLQQCKGSNGTINS</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQQ+    + +PA ++++  +   E+ VKEKI+L QEKNI++LNEL+  LQ QL  C+GSN T+++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>41</Hit_num>
+  <Hit_id>gi|224131804|ref|XP_002328112.1|</Hit_id>
+  <Hit_def>predicted protein [Populus trichocarpa] &gt;gi|118488902|gb|ABK96260.1| unknown [Populus trichocarpa x Populus deltoides] &gt;gi|222837627|gb|EEE75992.1| predicted protein [Populus trichocarpa]</Hit_def>
+  <Hit_accession>XP_002328112</Hit_accession>
+  <Hit_len>109</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>64.6994</Hsp_bit-score>
+      <Hsp_score>156</Hsp_score>
+      <Hsp_evalue>9.2895e-10</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>95</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>47</Hsp_identity>
+      <Hsp_positive>67</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>95</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>MMSRPMLLVFLLLILIITSQFEWRQPLVNDIDTKPAVNPKQLQISKWEEGVKEKIILSQEKNIHRLNELVRSLKQQLLQCKCTNEPRTGPSGTLT</Hsp_hseq>
+      <Hsp_midline>M +RP++LV LL++LIITSQFEW+Q + +  D  PA   ++ Q+   E+ VKEKI+LSQEKNI +LNEL+ SL++QLL C+ +N     P+   T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>42</Hit_num>
+  <Hit_id>gi|502145853|ref|XP_004506208.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101501835 isoform X1 [Cicer arietinum] &gt;gi|502145855|ref|XP_004506209.1| PREDICTED: uncharacterized protein LOC101501835 isoform X2 [Cicer arietinum]</Hit_def>
+  <Hit_accession>XP_004506208</Hit_accession>
+  <Hit_len>99</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.929</Hsp_bit-score>
+      <Hsp_score>154</Hsp_score>
+      <Hsp_evalue>1.55463e-09</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>86</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>43</Hsp_identity>
+      <Hsp_positive>63</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>MTPRPLLLVFLLLMLVITSQFEWKQQLVVDVDSSSSISQKQQRISKAIETVKEKIILVQEKNIRRLNEAVRNLQEQLQQCRSSNGT</Hsp_hseq>
+      <Hsp_midline>M  RP++LV LL++L+ITSQFEWKQQ+    D+  + ++++Q++    + VKEKI+L QEKNI++LNE + +LQ QL  CR SN T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>43</Hit_num>
+  <Hit_id>gi|388496394|gb|AFK36263.1|</Hit_id>
+  <Hit_def>unknown [Medicago truncatula]</Hit_def>
+  <Hit_accession>AFK36263</Hit_accession>
+  <Hit_len>93</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.1586</Hsp_bit-score>
+      <Hsp_score>152</Hsp_score>
+      <Hsp_evalue>2.26485e-09</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>16</Hsp_hit-from>
+      <Hsp_hit-to>86</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>35</Hsp_identity>
+      <Hsp_positive>50</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>71</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>VITSQFEWKQQLMVDVDSTSTISQKQQRFSKGVEIVKEKIILVQEKNIRRLNEVVRHLQQQLQQCRSSNDT</Hsp_hseq>
+      <Hsp_midline>+ITSQFEWKQQ+    D+    ++++Q+     + VKEKI+L QEKNI++LNE++  LQ+QL  CR SN T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>44</Hit_num>
+  <Hit_id>gi|357453161|ref|XP_003596857.1|</Hit_id>
+  <Hit_def>NAC domain protein [Medicago truncatula] &gt;gi|355485905|gb|AES67108.1| NAC domain protein [Medicago truncatula]</Hit_def>
+  <Hit_accession>XP_003596857</Hit_accession>
+  <Hit_len>589</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.0106</Hsp_bit-score>
+      <Hsp_score>162</Hsp_score>
+      <Hsp_evalue>4.15392e-09</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>724</Hsp_query-to>
+      <Hsp_hit-from>483</Hsp_hit-from>
+      <Hsp_hit-to>569</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>42</Hsp_identity>
+      <Hsp_positive>66</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>87</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHT</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLIILIITSQFEWKQPLVSDVESNSSVTQKQHRISNAEETVKEKIILVQEKNIRRLNELVRHLQEQLQQCKGSNGTINS</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL++LIITSQFEWKQ +    +++ +  +++ ++   E+ VKEKI+L QEKNI++LNEL+  LQ QL  C+GSN T+++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>45</Hit_num>
+  <Hit_id>gi|125570219|gb|EAZ11734.1|</Hit_id>
+  <Hit_def>hypothetical protein OsJ_01598 [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>EAZ11734</Hit_accession>
+  <Hit_len>411</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.5438</Hsp_bit-score>
+      <Hsp_score>153</Hsp_score>
+      <Hsp_evalue>4.2159e-09</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>368</Hsp_hit-from>
+      <Hsp_hit-to>399</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMARGGEFVTLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAM RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>24.6386</Hsp_bit-score>
+      <Hsp_score>52</Hsp_score>
+      <Hsp_evalue>4.2159e-09</Hsp_evalue>
+      <Hsp_query-from>84</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>356</Hsp_hit-from>
+      <Hsp_hit-to>371</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>11</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>16</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGE</Hsp_qseq>
+      <Hsp_hseq>LADFWSEMMLYVAPSE</Hsp_hseq>
+      <Hsp_midline>L DFWSEM+L  A  E</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>46</Hit_num>
+  <Hit_id>gi|125525743|gb|EAY73857.1|</Hit_id>
+  <Hit_def>hypothetical protein OsI_01735 [Oryza sativa Indica Group]</Hit_def>
+  <Hit_accession>EAY73857</Hit_accession>
+  <Hit_len>678</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.5438</Hsp_bit-score>
+      <Hsp_score>153</Hsp_score>
+      <Hsp_evalue>4.24814e-09</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>635</Hsp_hit-from>
+      <Hsp_hit-to>666</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>27</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENIKGHVEAMARGGEFVTLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSEN+KGHVEAM RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>24.6386</Hsp_bit-score>
+      <Hsp_score>52</Hsp_score>
+      <Hsp_evalue>4.24814e-09</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>623</Hsp_hit-from>
+      <Hsp_hit-to>639</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>11</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>17</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGER</Hsp_qseq>
+      <Hsp_hseq>LADFWSEMMLYVAPSEN</Hsp_hseq>
+      <Hsp_midline>L DFWSEM+L  A  E </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>47</Hit_num>
+  <Hit_id>gi|125525738|gb|EAY73852.1|</Hit_id>
+  <Hit_def>hypothetical protein OsI_01730 [Oryza sativa Indica Group]</Hit_def>
+  <Hit_accession>EAY73852</Hit_accession>
+  <Hit_len>702</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.6254</Hsp_bit-score>
+      <Hsp_score>161</Hsp_score>
+      <Hsp_evalue>5.36489e-09</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>655</Hsp_hit-from>
+      <Hsp_hit-to>686</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>30</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMGRGGEFVTLVWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAMGRGGEF+TLVWALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>48</Hit_num>
+  <Hit_id>gi|222618349|gb|EEE54481.1|</Hit_id>
+  <Hit_def>hypothetical protein OsJ_01592 [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>EEE54481</Hit_accession>
+  <Hit_len>707</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.6254</Hsp_bit-score>
+      <Hsp_score>161</Hsp_score>
+      <Hsp_evalue>5.38069e-09</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>660</Hsp_hit-from>
+      <Hsp_hit-to>691</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>30</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMGRGGEFVTLVWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAMGRGGEF+TLVWALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>49</Hit_num>
+  <Hit_id>gi|53791893|dbj|BAD54015.1|</Hit_id>
+  <Hit_def>hypothetical protein [Oryza sativa Japonica Group] &gt;gi|53792542|dbj|BAD53506.1| hypothetical protein [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>BAD54015</Hit_accession>
+  <Hit_len>780</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>66.6254</Hsp_bit-score>
+      <Hsp_score>161</Hsp_score>
+      <Hsp_evalue>5.84745e-09</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>655</Hsp_hit-from>
+      <Hsp_hit-to>686</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>30</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMGRGGEFVTLVWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAMGRGGEF+TLVWALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>50</Hit_num>
+  <Hit_id>gi|482560794|gb|EOA24985.1|</Hit_id>
+  <Hit_def>hypothetical protein CARUB_v10018282mg [Capsella rubella]</Hit_def>
+  <Hit_accession>EOA24985</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>62.003</Hsp_bit-score>
+      <Hsp_score>149</Hsp_score>
+      <Hsp_evalue>8.70335e-09</Hsp_evalue>
+      <Hsp_query-from>509</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>17</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>34</Hsp_identity>
+      <Hsp_positive>51</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>69</Hsp_align-len>
+      <Hsp_qseq>TSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>TSQFEWRQPL-VELDTATNLSQKQQQISDREEAVKEKIIISQERHIQRLNELVRTLQLQLQRCKGENET</Hsp_hseq>
+      <Hsp_midline>TSQFEW+Q +    D     ++++QQ+  +E+AVKEKI++SQE++IQ+LNEL+ +LQ QL  C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>51</Hit_num>
+  <Hit_id>gi|224091921|ref|XP_002309401.1|</Hit_id>
+  <Hit_def>predicted protein [Populus trichocarpa] &gt;gi|222855377|gb|EEE92924.1| predicted protein [Populus trichocarpa]</Hit_def>
+  <Hit_accession>XP_002309401</Hit_accession>
+  <Hit_len>111</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>61.6178</Hsp_bit-score>
+      <Hsp_score>148</Hsp_score>
+      <Hsp_evalue>1.16899e-08</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>742</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>97</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>47</Hsp_identity>
+      <Hsp_positive>63</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQI--EXXXXXXXXXXXXXQQVLAK-EDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHTPTIAAT</Hsp_qseq>
+      <Hsp_hseq>ARPWVLVFLLLFIVLTSQIEWKQQFGNEIEASPNISQKDHQQQHSSKRQDVVKEKIILSQEKNIQKLNELVQSLQEQLQRCRSENYVLNSTATPLT</Hsp_hseq>
+      <Hsp_midline> RP VLV LL+ +++TSQ EWKQQ   E  A  + +    +QQ  +K +D VKEKI+LSQEKNIQ+LNEL++SLQ QL  CR  N  +++     T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>52</Hit_num>
+  <Hit_id>gi|186524818|ref|NP_001119260.1|</Hit_id>
+  <Hit_def>uncharacterized protein [Arabidopsis thaliana] &gt;gi|332005622|gb|AED93005.1| uncharacterized protein AT5G22280 [Arabidopsis thaliana]</Hit_def>
+  <Hit_accession>NP_001119260</Hit_accession>
+  <Hit_len>100</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>61.2326</Hsp_bit-score>
+      <Hsp_score>147</Hsp_score>
+      <Hsp_evalue>1.52697e-08</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>7</Hsp_hit-from>
+      <Hsp_hit-to>76</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>35</Hsp_identity>
+      <Hsp_positive>52</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>71</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>VINRSFEWRQPL-LELDAAPSLSQKHQQIAKREEAVKEKIILSQERHIQRLNDLVRSLQMQLQRCKGENET</Hsp_hseq>
+      <Hsp_midline>+I   FEW+Q +    DA P+ +++ QQ+  +E+AVKEKI+LSQE++IQ+LN+L+ SLQ QL  C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>53</Hit_num>
+  <Hit_id>gi|15229930|ref|NP_190014.1|</Hit_id>
+  <Hit_def>uncharacterized protein [Arabidopsis thaliana] &gt;gi|7649379|emb|CAB88996.1| putative protein [Arabidopsis thaliana] &gt;gi|24417360|gb|AAN60290.1| unknown [Arabidopsis thaliana] &gt;gi|26451431|dbj|BAC42815.1| unknown protein [Arabidopsis thaliana] &gt;gi|28973397|gb|AAO64023.1| unknown protein [Arabidopsis thaliana] &gt;gi|332644363|gb|AEE77884.1| uncharacterized protein AT3G44280 [Arabidopsis thaliana]</Hit_def>
+  <Hit_accession>NP_190014</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>60.8474</Hsp_bit-score>
+      <Hsp_score>146</Hsp_score>
+      <Hsp_evalue>1.94554e-08</Hsp_evalue>
+      <Hsp_query-from>509</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>17</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>37</Hsp_identity>
+      <Hsp_positive>54</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>69</Hsp_align-len>
+      <Hsp_qseq>TSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>TSQFEWRQPL-VELDTATSSSQKQQQISDREEAVKEKIIISQERHIQRLNELVRSLQLQLLQCKGENET</Hsp_hseq>
+      <Hsp_midline>TSQFEW+Q +    D   +S++++QQ+  +E+AVKEKI++SQE++IQ+LNEL+ SLQ QLL C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>54</Hit_num>
+  <Hit_id>gi|297818894|ref|XP_002877330.1|</Hit_id>
+  <Hit_def>hypothetical protein ARALYDRAFT_484844 [Arabidopsis lyrata subsp. lyrata] &gt;gi|297323168|gb|EFH53589.1| hypothetical protein ARALYDRAFT_484844 [Arabidopsis lyrata subsp. lyrata]</Hit_def>
+  <Hit_accession>XP_002877330</Hit_accession>
+  <Hit_len>108</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>60.8474</Hsp_bit-score>
+      <Hsp_score>146</Hsp_score>
+      <Hsp_evalue>2.18796e-08</Hsp_evalue>
+      <Hsp_query-from>509</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>17</Hsp_hit-from>
+      <Hsp_hit-to>84</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>37</Hsp_identity>
+      <Hsp_positive>54</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>69</Hsp_align-len>
+      <Hsp_qseq>TSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>TSQFEWRQPL-VELDTATSSSQKQQQISDREEAVKEKIIISQERHIQRLNELVRSLQLQLLQCKGENET</Hsp_hseq>
+      <Hsp_midline>TSQFEW+Q +    D   +S++++QQ+  +E+AVKEKI++SQE++IQ+LNEL+ SLQ QLL C+G N T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>55</Hit_num>
+  <Hit_id>gi|449437442|ref|XP_004136501.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101204593 [Cucumis sativus] &gt;gi|449515871|ref|XP_004164971.1| PREDICTED: uncharacterized LOC101204593 [Cucumis sativus]</Hit_def>
+  <Hit_accession>XP_004136501</Hit_accession>
+  <Hit_len>145</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>61.2326</Hsp_bit-score>
+      <Hsp_score>147</Hsp_score>
+      <Hsp_evalue>2.95779e-08</Hsp_evalue>
+      <Hsp_query-from>596</Hsp_query-from>
+      <Hsp_query-to>724</Hsp_query-to>
+      <Hsp_hit-from>83</Hsp_hit-from>
+      <Hsp_hit-to>125</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>39</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>43</Hsp_align-len>
+      <Hsp_qseq>KEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTVHT</Hsp_qseq>
+      <Hsp_hseq>REEAVKEKIILSQEKNIQRLNELVQSLRRQLLQCKGEHEAVNS</Hsp_hseq>
+      <Hsp_midline>+E+AVKEKI+LSQEKNIQ+LNEL++SL+RQLL C+G +  V++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>56</Hit_num>
+  <Hit_id>gi|475550782|gb|EMT11514.1|</Hit_id>
+  <Hit_def>hypothetical protein F775_04799 [Aegilops tauschii]</Hit_def>
+  <Hit_accession>EMT11514</Hit_accession>
+  <Hit_len>609</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>64.3142</Hsp_bit-score>
+      <Hsp_score>155</Hsp_score>
+      <Hsp_evalue>2.98458e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>565</Hsp_hit-from>
+      <Hsp_hit-to>596</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>29</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSKNVKGHVEAMGRGGEFVTLVWALLMHAGV</Hsp_hseq>
+      <Hsp_midline>APS+NVKGHVEAMGRGGEF+TLVWALL+HAGV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>57</Hit_num>
+  <Hit_id>gi|514777243|ref|XP_004968690.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101768013 [Setaria italica]</Hit_def>
+  <Hit_accession>XP_004968690</Hit_accession>
+  <Hit_len>734</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>64.3142</Hsp_bit-score>
+      <Hsp_score>155</Hsp_score>
+      <Hsp_evalue>3.48001e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>687</Hsp_hit-from>
+      <Hsp_hit-to>718</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>29</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVQAMARGGEFITLVWALLLHAGV</Hsp_hseq>
+      <Hsp_midline>APSENVKGHV+AM RGGEF+TLVWALLLHAGV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>58</Hit_num>
+  <Hit_id>gi|222618353|gb|EEE54485.1|</Hit_id>
+  <Hit_def>hypothetical protein OsJ_01597 [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>EEE54485</Hit_accession>
+  <Hit_len>653</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.929</Hsp_bit-score>
+      <Hsp_score>154</Hsp_score>
+      <Hsp_evalue>3.72718e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>610</Hsp_hit-from>
+      <Hsp_hit-to>641</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMARGGEFVTLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAM RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>59</Hit_num>
+  <Hit_id>gi|242057273|ref|XP_002457782.1|</Hit_id>
+  <Hit_def>hypothetical protein SORBIDRAFT_03g013520 [Sorghum bicolor] &gt;gi|241929757|gb|EES02902.1| hypothetical protein SORBIDRAFT_03g013520 [Sorghum bicolor]</Hit_def>
+  <Hit_accession>XP_002457782</Hit_accession>
+  <Hit_len>600</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>58.5362</Hsp_bit-score>
+      <Hsp_score>140</Hsp_score>
+      <Hsp_evalue>4.47587e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>557</Hsp_hit-from>
+      <Hsp_hit-to>588</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>27</Hsp_identity>
+      <Hsp_positive>29</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>ASSENVMGHVQAMARGGEFITLVWALLLHAGV</Hsp_hseq>
+      <Hsp_midline>A SENV GHV+AM RGGEF+TLVWALLLHAGV</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>26.1794</Hsp_bit-score>
+      <Hsp_score>56</Hsp_score>
+      <Hsp_evalue>4.47587e-08</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>545</Hsp_hit-from>
+      <Hsp_hit-to>561</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>11</Hsp_identity>
+      <Hsp_positive>11</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>17</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGER</Hsp_qseq>
+      <Hsp_hseq>LADFWSEMVLFVASSEN</Hsp_hseq>
+      <Hsp_midline>L DFWSEMVL  A  E </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>60</Hit_num>
+  <Hit_id>gi|53791407|dbj|BAD53921.1|</Hit_id>
+  <Hit_def>unknown protein [Oryza sativa Japonica Group] &gt;gi|53792151|dbj|BAD52784.1| unknown protein [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>BAD53921</Hit_accession>
+  <Hit_len>634</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.5438</Hsp_bit-score>
+      <Hsp_score>153</Hsp_score>
+      <Hsp_evalue>4.56367e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>591</Hsp_hit-from>
+      <Hsp_hit-to>622</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMARGGEFVTLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAM RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>61</Hit_num>
+  <Hit_id>gi|297719905|ref|NP_001172314.1|</Hit_id>
+  <Hit_def>Os01g0336300 [Oryza sativa Japonica Group] &gt;gi|255673190|dbj|BAH91044.1| Os01g0336300 [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>NP_001172314</Hit_accession>
+  <Hit_len>724</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>63.5438</Hsp_bit-score>
+      <Hsp_score>153</Hsp_score>
+      <Hsp_evalue>4.96054e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>681</Hsp_hit-from>
+      <Hsp_hit-to>712</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>31</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENVKGHVEAMARGGEFVTLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSENVKGHVEAM RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>62</Hit_num>
+  <Hit_id>gi|414884159|tpg|DAA60173.1|</Hit_id>
+  <Hit_def>TPA: hypothetical protein ZEAMMB73_169467 [Zea mays]</Hit_def>
+  <Hit_accession>DAA60173</Hit_accession>
+  <Hit_len>76</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>58.9214</Hsp_bit-score>
+      <Hsp_score>141</Hsp_score>
+      <Hsp_evalue>5.31329e-08</Hsp_evalue>
+      <Hsp_query-from>605</Hsp_query-from>
+      <Hsp_query-to>712</Hsp_query-to>
+      <Hsp_hit-from>14</Hsp_hit-from>
+      <Hsp_hit-to>49</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>29</Hsp_identity>
+      <Hsp_positive>33</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>36</Hsp_align-len>
+      <Hsp_qseq>AVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNS</Hsp_qseq>
+      <Hsp_hseq>ACHLQIILSQEKNIQQLNQLIESLQRQLLHCRGSNN</Hsp_hseq>
+      <Hsp_midline>A   +I+LSQEKNIQQLN+LIESLQRQLLHCRGSN+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>63</Hit_num>
+  <Hit_id>gi|242057269|ref|XP_002457780.1|</Hit_id>
+  <Hit_def>hypothetical protein SORBIDRAFT_03g013500 [Sorghum bicolor] &gt;gi|241929755|gb|EES02900.1| hypothetical protein SORBIDRAFT_03g013500 [Sorghum bicolor]</Hit_def>
+  <Hit_accession>XP_002457780</Hit_accession>
+  <Hit_len>728</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>62.7734</Hsp_bit-score>
+      <Hsp_score>151</Hsp_score>
+      <Hsp_evalue>8.83017e-08</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>685</Hsp_hit-from>
+      <Hsp_hit-to>716</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>29</Hsp_identity>
+      <Hsp_positive>30</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSEKVKGHVEAMARGGEFITLVWALLLHAGV</Hsp_hseq>
+      <Hsp_midline>APSE VKGHVEAM RGGEF+TLVWALLLHAGV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>64</Hit_num>
+  <Hit_id>gi|297806649|ref|XP_002871208.1|</Hit_id>
+  <Hit_def>hypothetical protein ARALYDRAFT_325246 [Arabidopsis lyrata subsp. lyrata] &gt;gi|297317045|gb|EFH47467.1| hypothetical protein ARALYDRAFT_325246 [Arabidopsis lyrata subsp. lyrata]</Hit_def>
+  <Hit_accession>XP_002871208</Hit_accession>
+  <Hit_len>105</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>57.3806</Hsp_bit-score>
+      <Hsp_score>137</Hsp_score>
+      <Hsp_evalue>2.91168e-07</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>709</Hsp_query-to>
+      <Hsp_hit-from>15</Hsp_hit-from>
+      <Hsp_hit-to>86</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>32</Hsp_identity>
+      <Hsp_positive>46</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>72</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXXXXXXXXQQ---VLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSN</Hsp_qseq>
+      <Hsp_hseq>VLTSQFEWNEQVESEAETSRPLVLSDKDQPHIPQGKDSVQEKKILSQEKKIQKLNELVRDLRRQLLQCRNEN</Hsp_hseq>
+      <Hsp_midline>++TSQFEW +Q+E  A+         +    +   +D+V+EK +LSQEK IQ+LNEL+  L+RQLL CR  N</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>65</Hit_num>
+  <Hit_id>gi|482557658|gb|EOA21850.1|</Hit_id>
+  <Hit_def>hypothetical protein CARUB_v10002317mg [Capsella rubella]</Hit_def>
+  <Hit_accession>EOA21850</Hit_accession>
+  <Hit_len>103</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>55.4546</Hsp_bit-score>
+      <Hsp_score>132</Hsp_score>
+      <Hsp_evalue>1.28457e-06</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>709</Hsp_query-to>
+      <Hsp_hit-from>15</Hsp_hit-from>
+      <Hsp_hit-to>85</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>46</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>71</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXX--XXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSN</Hsp_qseq>
+      <Hsp_hseq>VLTSQFEWNEQVESETETSRPLILSDKEQHIPQGKESVHEKKILSQEKKIQKLNELVGDLRRQLLQCRNEN</Hsp_hseq>
+      <Hsp_midline>++TSQFEW +Q+E   +       + + Q +   +++V EK +LSQEK IQ+LNEL+  L+RQLL CR  N</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>66</Hit_num>
+  <Hit_id>gi|53791894|dbj|BAD54016.1|</Hit_id>
+  <Hit_def>hypothetical protein [Oryza sativa Japonica Group] &gt;gi|53792543|dbj|BAD53507.1| hypothetical protein [Oryza sativa Japonica Group] &gt;gi|222618350|gb|EEE54482.1| hypothetical protein OsJ_01593 [Oryza sativa Japonica Group]</Hit_def>
+  <Hit_accession>BAD54016</Hit_accession>
+  <Hit_len>280</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>58.151</Hsp_bit-score>
+      <Hsp_score>139</Hsp_score>
+      <Hsp_evalue>1.29353e-06</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>239</Hsp_hit-from>
+      <Hsp_hit-to>270</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>24</Hsp_identity>
+      <Hsp_positive>30</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSDNVRGHAEALARGGEFITLLWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APS+NV+GH EA+ RGGEF+TL+WALLLHAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>67</Hit_num>
+  <Hit_id>gi|414876974|tpg|DAA54105.1|</Hit_id>
+  <Hit_def>TPA: putative DUF594 domain containing family protein [Zea mays]</Hit_def>
+  <Hit_accession>DAA54105</Hit_accession>
+  <Hit_len>731</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>55.0694</Hsp_bit-score>
+      <Hsp_score>131</Hsp_score>
+      <Hsp_evalue>1.33345e-06</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>687</Hsp_hit-from>
+      <Hsp_hit-to>718</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>24</Hsp_identity>
+      <Hsp_positive>29</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENGKGHVQAMAGGGEFITIIWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSEN KGHV+AM  GGEF+T++WALLLHAG+</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>24.6386</Hsp_bit-score>
+      <Hsp_score>52</Hsp_score>
+      <Hsp_evalue>1.33345e-06</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>675</Hsp_hit-from>
+      <Hsp_hit-to>691</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>11</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>17</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGER</Hsp_qseq>
+      <Hsp_hseq>LADFWSDMVLFVAPSEN</Hsp_hseq>
+      <Hsp_midline>L DFWS+MVL  A  E </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>68</Hit_num>
+  <Hit_id>gi|482557659|gb|EOA21851.1|</Hit_id>
+  <Hit_def>hypothetical protein CARUB_v10002317mg [Capsella rubella]</Hit_def>
+  <Hit_accession>EOA21851</Hit_accession>
+  <Hit_len>104</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>55.4546</Hsp_bit-score>
+      <Hsp_score>132</Hsp_score>
+      <Hsp_evalue>1.42039e-06</Hsp_evalue>
+      <Hsp_query-from>503</Hsp_query-from>
+      <Hsp_query-to>709</Hsp_query-to>
+      <Hsp_hit-from>15</Hsp_hit-from>
+      <Hsp_hit-to>85</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>46</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>71</Hsp_align-len>
+      <Hsp_qseq>IITSQFEWKQQIEXXXXXXX--XXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSN</Hsp_qseq>
+      <Hsp_hseq>VLTSQFEWNEQVESETETSRPLILSDKEQHIPQGKESVHEKKILSQEKKIQKLNELVGDLRRQLLQCRNEN</Hsp_hseq>
+      <Hsp_midline>++TSQFEW +Q+E   +       + + Q +   +++V EK +LSQEK IQ+LNEL+  L+RQLL CR  N</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>69</Hit_num>
+  <Hit_id>gi|474391747|gb|EMS65387.1|</Hit_id>
+  <Hit_def>hypothetical protein TRIUR3_26302 [Triticum urartu]</Hit_def>
+  <Hit_accession>EMS65387</Hit_accession>
+  <Hit_len>62</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>54.299</Hsp_bit-score>
+      <Hsp_score>129</Hsp_score>
+      <Hsp_evalue>1.94681e-06</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>619</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>54</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>50</Hsp_identity>
+      <Hsp_positive>52</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>54</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEK</Hsp_qseq>
+      <Hsp_hseq>MNTRPVVLVCLLIVLIITSQFEWKQQIEDAADADPVTARRRQQVLAKEDAVKEK</Hsp_hseq>
+      <Hsp_midline>MNTRPVVLV LL+VLIITSQFEWKQQIEDAADADP +ARRRQQVLAKEDAVKEK</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>70</Hit_num>
+  <Hit_id>gi|255565741|ref|XP_002523860.1|</Hit_id>
+  <Hit_def>conserved hypothetical protein [Ricinus communis] &gt;gi|223536948|gb|EEF38586.1| conserved hypothetical protein [Ricinus communis]</Hit_def>
+  <Hit_accession>XP_002523860</Hit_accession>
+  <Hit_len>123</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>55.0694</Hsp_bit-score>
+      <Hsp_score>131</Hsp_score>
+      <Hsp_evalue>2.77074e-06</Hsp_evalue>
+      <Hsp_query-from>464</Hsp_query-from>
+      <Hsp_query-to>667</Hsp_query-to>
+      <Hsp_hit-from>2</Hsp_hit-from>
+      <Hsp_hit-to>69</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>39</Hsp_identity>
+      <Hsp_positive>54</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>68</Hsp_align-len>
+      <Hsp_qseq>TRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELI</Hsp_qseq>
+      <Hsp_hseq>SRPMLLVFLLLVLIITSQFEWRQQLVNDIDTAPAVAAKHQLLSKREEVVKEKVILSQEKNIYRLNELV</Hsp_hseq>
+      <Hsp_midline>+RP++LV LL+VLIITSQFEW+QQ+ +  D  PA A + Q +  +E+ VKEK++LSQEKNI +LNEL+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>71</Hit_num>
+  <Hit_id>gi|414877359|tpg|DAA54490.1|</Hit_id>
+  <Hit_def>TPA: putative DUF594 domain containing family protein [Zea mays]</Hit_def>
+  <Hit_accession>DAA54490</Hit_accession>
+  <Hit_len>1174</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>53.5286</Hsp_bit-score>
+      <Hsp_score>127</Hsp_score>
+      <Hsp_evalue>4.94985e-06</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>1130</Hsp_hit-from>
+      <Hsp_hit-to>1161</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>23</Hsp_identity>
+      <Hsp_positive>28</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSENGNGHVQAMAGGGEFITIIWALLLHAGI</Hsp_hseq>
+      <Hsp_midline>APSEN  GHV+AM  GGEF+T++WALLLHAG+</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>23.8682</Hsp_bit-score>
+      <Hsp_score>50</Hsp_score>
+      <Hsp_evalue>4.94985e-06</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>131</Hsp_query-to>
+      <Hsp_hit-from>1118</Hsp_hit-from>
+      <Hsp_hit-to>1134</Hsp_hit-to>
+      <Hsp_query-frame>-2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>10</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>17</Hsp_align-len>
+      <Hsp_qseq>LGDFWSEMVLRRAVGER</Hsp_qseq>
+      <Hsp_hseq>LADFWSNMVLFVAPSEN</Hsp_hseq>
+      <Hsp_midline>L DFWS MVL  A  E </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>72</Hit_num>
+  <Hit_id>gi|502145857|ref|XP_004506210.1|</Hit_id>
+  <Hit_def>PREDICTED: uncharacterized protein LOC101501835 isoform X3 [Cicer arietinum]</Hit_def>
+  <Hit_accession>XP_004506210</Hit_accession>
+  <Hit_len>91</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>53.5286</Hsp_bit-score>
+      <Hsp_score>127</Hsp_score>
+      <Hsp_evalue>4.99152e-06</Hsp_evalue>
+      <Hsp_query-from>518</Hsp_query-from>
+      <Hsp_query-to>715</Hsp_query-to>
+      <Hsp_hit-from>13</Hsp_hit-from>
+      <Hsp_hit-to>78</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>46</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>66</Hsp_align-len>
+      <Hsp_qseq>FEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNST</Hsp_qseq>
+      <Hsp_hseq>FEWKQQLVVDVDSSSSISQKQQRISKAIETVKEKIILVQEKNIRRLNEAVRNLQEQLQQCRSSNGT</Hsp_hseq>
+      <Hsp_midline>FEWKQQ+    D+  + ++++Q++    + VKEKI+L QEKNI++LNE + +LQ QL  CR SN T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>73</Hit_num>
+  <Hit_id>gi|195607704|gb|ACG25682.1|</Hit_id>
+  <Hit_def>hypothetical protein [Zea mays]</Hit_def>
+  <Hit_accession>ACG25682</Hit_accession>
+  <Hit_len>106</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>53.5286</Hsp_bit-score>
+      <Hsp_score>127</Hsp_score>
+      <Hsp_evalue>7.0611e-06</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>730</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>89</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>71</Hsp_positive>
+      <Hsp_gaps>4</Hsp_gaps>
+      <Hsp_align-len>92</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTV-HTPT</Hsp_qseq>
+      <Hsp_hseq>MVSKPVVLVFLLVVLIITSQFEWKQQL---VNELESTARNQKHVSSREELVKDQIIFTQEKMIQRLNNFVQNLQQQLVQCRGNNRTVNHSGT</Hsp_hseq>
+      <Hsp_midline>M ++PVVLV LLVVLIITSQFEWKQQ+    +   ++AR ++ V ++E+ VK++I+ +QEK IQ+LN  +++LQ+QL+ CRG+N TV H+ T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>74</Hit_num>
+  <Hit_id>gi|226529648|ref|NP_001142647.1|</Hit_id>
+  <Hit_def>uncharacterized protein LOC100274930 [Zea mays] &gt;gi|195607818|gb|ACG25739.1| hypothetical protein [Zea mays]</Hit_def>
+  <Hit_accession>NP_001142647</Hit_accession>
+  <Hit_len>130</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>53.5286</Hsp_bit-score>
+      <Hsp_score>127</Hsp_score>
+      <Hsp_evalue>8.55809e-06</Hsp_evalue>
+      <Hsp_query-from>458</Hsp_query-from>
+      <Hsp_query-to>730</Hsp_query-to>
+      <Hsp_hit-from>25</Hsp_hit-from>
+      <Hsp_hit-to>113</Hsp_hit-to>
+      <Hsp_query-frame>2</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>48</Hsp_identity>
+      <Hsp_positive>71</Hsp_positive>
+      <Hsp_gaps>4</Hsp_gaps>
+      <Hsp_align-len>92</Hsp_align-len>
+      <Hsp_qseq>MNTRPXXXXXXXXXXIITSQFEWKQQIEXXXXXXXXXXXXXQQVLAKEDAVKEKILLSQEKNIQQLNELIESLQRQLLHCRGSNSTV-HTPT</Hsp_qseq>
+      <Hsp_hseq>MVSKPVVLVFLLVVLIITSQFEWKQQL---VNELESTARNQKHVSSREELVKDQIIFTQEKMIQRLNNFVQNLQQQLVQCRGNNRTVNHSGT</Hsp_hseq>
+      <Hsp_midline>M ++PVVLV LLVVLIITSQFEWKQQ+    +   ++AR ++ V ++E+ VK++I+ +QEK IQ+LN  +++LQ+QL+ CRG+N TV H+ T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>75</Hit_num>
+  <Hit_id>gi|242047324|ref|XP_002461408.1|</Hit_id>
+  <Hit_def>hypothetical protein SORBIDRAFT_02g002160 [Sorghum bicolor] &gt;gi|241924785|gb|EER97929.1| hypothetical protein SORBIDRAFT_02g002160 [Sorghum bicolor]</Hit_def>
+  <Hit_accession>XP_002461408</Hit_accession>
+  <Hit_len>736</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>56.6102</Hsp_bit-score>
+      <Hsp_score>135</Hsp_score>
+      <Hsp_evalue>8.89773e-06</Hsp_evalue>
+      <Hsp_query-from>2</Hsp_query-from>
+      <Hsp_query-to>97</Hsp_query-to>
+      <Hsp_hit-from>687</Hsp_hit-from>
+      <Hsp_hit-to>718</Hsp_hit-to>
+      <Hsp_query-frame>-3</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>22</Hsp_identity>
+      <Hsp_positive>28</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>APSENVKGHVEAMGRGGEFLTLVWALLLHAGV</Hsp_qseq>
+      <Hsp_hseq>APSDNLKGHSEAIARGGELITLLWALLFHAGI</Hsp_hseq>
+      <Hsp_midline>APS+N+KGH EA+ RGGE +TL+WALL HAG+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>25803655</Statistics_db-num>
+      <Statistics_db-len>8915072589</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>1195407751648</Statistics_eff-space>
+      <Statistics_kappa>0.041</Statistics_kappa>
+      <Statistics_lambda>0.267</Statistics_lambda>
+      <Statistics_entropy>0.14</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>
+

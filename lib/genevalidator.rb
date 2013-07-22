@@ -1,0 +1,5 @@
+require 'optparse'
+require 'genevalidator/clusterization'
+require 'genevalidator/blast'
+require 'genevalidator/sequences'
+require 'genevalidator/prediction'
