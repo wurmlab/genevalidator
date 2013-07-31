@@ -2,9 +2,10 @@
 
 require 'genevalidator/clusterization'
 require 'genevalidator/sequences'
-require 'genevalidator/blastQuery'
+require 'genevalidator/validation'
 require 'genevalidator/output'
 require 'bio-blastxmlparser'
+require 'rinruby'
 require 'net/http'
 require 'open-uri'
 require 'uri'
@@ -23,8 +24,6 @@ class Blast
   attr_reader :type
   #query sequence fasta file
   attr_reader :fasta_file
-  #Enumerator that iterates through the hits from the blast xml output
-  attr_reader :blast_xml_iterator
   #current number of the querry processed
   attr_reader :idx
   #number of the sequence from the file to start with
@@ -34,8 +33,11 @@ class Blast
   #array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
 
-  def initialize(fasta_file, type, outfmt, xml_file, start_idx=0)
+  def initialize(fasta_file, type, outfmt, xml_file, start_idx = 1)
     begin
+
+      puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
+
       if type == "protein"
         @type = :protein
       else 
@@ -50,59 +52,23 @@ class Blast
 
       fasta_content = IO.binread(@fasta_file);
 
-      #type validation
+      # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
       if @type != type_of_sequences(fasta_content)
         raise SequenceTypeError.new
       end
 
+      # create a list of index of the queries in the FASTA
       @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
       @query_offset_lst.push(fasta_content.length)
       fasta_content = nil # free memory for variable fasta_content
 
+      #redirect the cosole messages of R
+      R.echo "enable = nil, stderr = nil"
 
-      R.echo "enable = nil, stderr = nil" #redirect the cosole messages of R
-      #R.eval "x11()"  # othetwise I get SIGPIPE
+      printf "No | Description | No_Hits | Valid_Length(Cluster) | Valid_Length(Rank) | Valid_Reading_Frame | Gene_Merge(slope) | Duplication | No_ORFs\n"
 
-      puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
-      printf "No | Description | No_Hits | Valid_Length(Cluster) | Valid_Length(Rank) | Valid_Reading_Frame | Gene_Merge(slope) | Duplication | No. ORFs\n"
-
-      if @outfmt == :html
-         header = "<html><head>
-                     <title>Gene Validation Result</title>
-                     <script language=\"javascript\"> 
-
-                     function showDiv(toggle){
-                       var button = document.getElementById(toggle)
-                       if(button.style.display == \"block\"){
-                          button.style.display = \"none\";
-                       }
-                       else{
-                          button.style.display = \"block\";
-                       }
-                     }
-                  </script>             
-                  </head>
-                  <body>
-                      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">
-				<tr bgcolor = #E8E8E8>
-				        <th></th>
-					<th>No.</th>
-					<th width=100>Description</th>
-					<th>No_Hits</th>
-					<th>Valid_Length(Cluster)</th>
-					<th>Valid_Length(Rank)</th>
-					<th>Valid_Reading_Frame</th>
-					<th>Gene_Merge(slope)</th>
-					<th>Duplication</th>
-                                        <th width = 200 style=\"white-space:nowrap\"> ORFs</th>
-				</tr>"
-
-         File.open("#{@fasta_file}.html", "w+") do |f|
-           f.write(header)
-         end
-       end
     rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
       exit
     end
   end
@@ -143,7 +109,7 @@ class Blast
       end
 
     rescue SystemCallError => error
-      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not valid\n"
+      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not valid\n"      
       exit
     end
   end
@@ -216,10 +182,10 @@ class Blast
       return output
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"      
       exit
     rescue ClasspathError =>error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Did you add BLAST path to CLASSPATH?\n"
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Did you add BLAST path to CLASSPATH?\n"      
       exit
     end
   end
@@ -250,37 +216,13 @@ class Blast
        
         ### add exception
         query = IO.binread(@fasta_file, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-        #puts query.scan(/[^\n]*\n([ATGCatgc\n]*)/)[0][0].gsub('\n','')
         prediction.raw_sequence = query.scan(/[^\n]*\n([ATGCatgc\n]*)/)[0][0].gsub("\n","")      
         #file seek for each query
         
         # do validations
-        query_output = Output.new(@fasta_file, @idx)
-        query = BlastQuery.new(hits, prediction,"#{@fasta_file}_#{@idx}", @idx)
-        
-        query_output.prediction_len = prediction.xml_length
-        query_output.prediction_def = prediction.definition
-        query_output.nr_hits = hits.length
 
-        query_output.length_cluster_limits = query.length_validation
-
-        rez_lr = query.length_rank #returns [score, msg]
-        query_output.length_rank_score = rez_lr[0]
-        query_output.length_rank_msg = rez_lr[1]
-
-        rez_rf = query.reading_frame_validation        
-        query_output.reading_frame_validation = rez_rf[0]
-        query_output.reading_frame_info = rez_rf[1]
-
-        query_output.merged_genes_score = query.gene_merge_validation
-
-        rez_duplication = query.check_duplication
-        query_output.duplication = rez_duplication[0]
-        query_output.duplication_info = rez_duplication[1]
-        if @type == :nucleotide
-          query_output.orf = query.orf_find
-        end
-       
+        v = Validation.new(hits, prediction, @type, @fasta_file, @idx, @start_idx)
+        query_output = v.validate_all
         query_output.print_output_console
 
         if @outfmt == :html
@@ -292,28 +234,10 @@ class Blast
         #end
       end
 
-      rescue QueryError => error
-=begin
-        if @type == :nucleotide
-          query_output.orf = BlastQuery.orf_find
-        end
-        query_output.print_output_console
-
-        if @outfmt == :html
-          query_output.generate_html
-        end
-
-        #if @outfmt == :yaml
-          query_output.print_output_file_yaml
-        #end
-=end
-        $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast did not find any relevant output for this query.\n"
       rescue NoMethodError => error
-        $stderr.print "NoMethod error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. \
-Possible cause: input file is not in blast xml format.\n"
+        $stderr.print "NoMethod error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not in blast xml format.\n"        
         exit
       rescue StopIteration
-        #@idx = @idx - 1
         return
     end while 1
 
@@ -415,7 +339,7 @@ Possible cause: input file is not in blast xml format.\n"
       return [hits, predicted_seq]
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call 'parse_output' method first!\n" 
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call 'parse_output' method first!\n"       
       exit
     rescue StopIteration
       nil
@@ -518,16 +442,5 @@ Possible cause: input file is not in blast xml format.\n"
   end
 
 end
-
-##########
-#Main body
-#Test certain methods of Blast class
-
-=begin
-b = Blast.new("ana","protein")
-puts b.get_sequence_by_accession_no("EF100000","nucleotide")
-file = File.open("/home/monique/GSoC2013/data/output_prot1_predicted.xml", "rb").read
-b.parse_output(file)
-=end
 
 

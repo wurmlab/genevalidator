@@ -1,0 +1,288 @@
+---
+## Solenopsis xml  
+SI2.2.0_06267:
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_13722:
+  valid_length: no
+  valid_rf: yes
+  duplication: no
+  orf: 0
+SI2.2.0_02651: 
+  valid_length: yes
+  valid_rf: yes 
+  gene_merge: no 
+  duplication: no  
+  orf: 0
+SI2.2.0_02806: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_06704: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_02565: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_08867: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_80754: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_80039: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_80300: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: yes
+  duplication: no
+  orf: 0
+  
+## one_direction_gene_merge_proteins
+GB10034-PA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10040-PA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10056-PA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10058-PA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10063-PA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10071-PA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10091-PA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10098-PA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10113-PA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_02565:
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+SI2.2.0_07054: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: yes
+  duplication: no
+  orf: 0
+SI2.2.0_02651: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB26730-RA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: yes
+  duplication: no
+  orf: 0
+Or13a-like-1: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: yes
+  duplication: no
+  orf: 0
+PB18762-RA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+Pbar_fem-RF: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB18775-RA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB11933-RA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB13750-RA:
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB13758-RA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: yes
+  duplication: no
+  orf: 0
+PB20127-RA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB18752-RA: 
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+PB18768-RA: 
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+  
+#duplications proteins
+GB10002-PA:
+  valid_length:yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10002-PA-dup:
+  valid_length:yes
+  valid_rf: yes
+  gene_merge: no
+  duplication:yes
+  orf: 0
+FBpp0077824:  
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+FBpp0077824-dup: 
+  valid_length:no
+  valid_rf: yes
+  gene_merge: no
+  duplication:yes
+  orf: 0
+GB10029-PA  
+  valid_length: yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB10029-PA-dup  
+  valid_length:no
+  valid_rf: yes
+  gene_merge: no 
+  duplication: yes
+  orf: 0
+GB16093-PA  
+  valid_length:yes
+  valid_rf: yes
+  gene_merge: no
+  duplication: no
+  orf: 0
+GB16093-PA-dup:  
+  valid_length:yes
+  valid_rf: yes
+  gene_merge: no
+  duplication:yes 
+  orf: 0
+PBARB:ns20tz:  
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: yes
+  orf: 0
+  
+#inconsistent reading frame
+GB16093-PA-dup:  
+  valid_length:yes
+  valid_rf: yes
+  gene_merge: no
+  duplication:yes 
+  orf: 0
+PBARB:ns20tz:  
+  valid_length: no
+  valid_rf: yes
+  gene_merge: no
+  duplication: yes
+  orf: 0
+  
+Brasy-EspV1T00022:
+  valid_length: no
+  valid_rf: no
+  gene_merge: no
+  duplication: yes
+  orf: 0
+  
+Brasy-EspV1T00061:
+  valid_length: no
+  valid_rf: no
+  gene_merge: no
+  duplication: yes
+  orf: 0
+                
+
+
