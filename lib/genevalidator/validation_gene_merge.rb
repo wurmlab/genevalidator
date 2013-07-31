@@ -1,4 +1,4 @@
-require 'genevalidator/validation_output'
+require './validation_output'
 
 class GeneMergeValidationOutput < ValidationOutput
 
@@ -19,7 +19,7 @@ class GeneMergeValidationOutput < ValidationOutput
   def validation
 
     # color gene merge validation
-    if @slope > threshold_down and @merged_genes_score < threshold_up
+    if @slope > threshold_down and @slope < threshold_up
       :yes
     else
       :no
