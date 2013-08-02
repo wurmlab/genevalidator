@@ -1,0 +1,51 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0">
+                                <tr bgcolor = #E8E8E8>
+                                        <th></th>
+                                        <th>No.</th>
+                                        <th width=100>Description</th>
+                                        <th>No_Hits</th>
+                                        <th>Valid_Length(Cluster)</th>
+                                        <th>Valid_Length(Rank)</th>
+                                        <th>Valid_Reading_Frame</th>
+                                        <th>Gene_Merge(slope)</th>
+                                        <th>Duplication</th>
+                                        <th width = 200 style="white-space:nowrap"> ORFs</th>
+                                </tr><tr bgcolor=#FFFFFF> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+	      <td>1</td>
+	      <td>GB10034-PA (amel_OGSv1.0_pep.fa_34)</td>
+	      <td>246</td>
+	      <td bgcolor=white>554 [390, 800] yes</td>
+	      <td bgcolor=white>0.44 (YES)</td>
+	      <td bgcolor=white>yes (0:283;)</td>
+	      <td bgcolor=white>no (slope=0.4)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red width = 200 style="white-space:nowrap">-</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=10>
+              <div id=toggle1 style='display:none'>
+
+              <img src=one_direction_gene_merge_proteins.fasta_1_len_clusters.jpg height=400>
+	      <img src=one_direction_gene_merge_proteins.fasta_1_match.jpg height=400>
+              <img src=one_direction_gene_merge_proteins.fasta_1_match_2d.jpg height=400>
+              </div>					
+	      </td>
+	      </tr>

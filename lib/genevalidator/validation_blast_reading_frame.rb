@@ -1,5 +1,7 @@
 require 'genevalidator/validation_output'
 
+##
+# Class that stores the validation output information
 class BlastRFValidationOutput < ValidationOutput
 
   attr_reader :frames_histo
@@ -57,7 +59,10 @@ class BlastReadingFrameValidation
   attr_reader :prediction
 
   ##
-  #
+  # Initilizes the object
+  # Params:
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +prediction+: a +Sequence+ object representing the blast query
   def initialize(hits, prediction)
     begin
       raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
@@ -71,15 +76,12 @@ class BlastReadingFrameValidation
   # Params:
   # +lst+: vector of +Sequence+ objects
   # Output:
-  # output1: yes/no answer
-  # output2: additional information (what reading frames were used)
+  # +BlastRFValidationOutput+ object
   def validation_test(lst = @hits)
 
     rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
     frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
 
-    answ = BlastRFValidationOutput.new(frames_histo)
-
+    BlastRFValidationOutput.new(frames_histo)
   end
-
 end

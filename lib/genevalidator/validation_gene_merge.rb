@@ -1,5 +1,7 @@
-require './validation_output'
+require 'genevalidator/validation_output'
 
+##
+# Class that stores the validation output information
 class GeneMergeValidationOutput < ValidationOutput
 
   attr_reader :slope
@@ -40,18 +42,25 @@ end
 # 
 class GeneMergeValidation
 
+  attr_reader :plots
   attr_reader :hits
   attr_reader :prediction
   attr_reader :filename
 
   ##
-  #
-  def initialize(hits, prediction, filename)
+  # Initilizes the object
+  # Params:
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +prediction+: a +Sequence+ object representing the blast query
+  # +filename+: name of the input file, used when generatig the plot files
+  # +plots+: boolean variable, indicated whether plots should be generated or not
+  def initialize(hits, prediction, filename, plots)
     begin
       raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
       @hits = hits
       @prediction = prediction
       @filename = filename
+      @plots = plots
     end
   end
 
@@ -59,12 +68,16 @@ class GeneMergeValidation
   ##
   # Validation test for gene merge
   # Output:
-  # the slope of the line obtained by linear regression
+  # +GeneMergeValidationOutput+ object
   def validation_test
 
-    plot_matched_regions(@filename)
-    slope = plot_2d_start_from(@filename)
-    GeneMergeValidationOutput.new(slope)
+    lm_slope = slope
+ 
+    if plots
+      plot_matched_regions(@filename)
+      plot_2d_start_from(@filename, lm_slope)
+    end
+    GeneMergeValidationOutput.new(lm_slope)
 
   end
 
@@ -136,8 +149,9 @@ class GeneMergeValidation
   # Plots 2D graph with the start/end of the matched region offsets in the prediction
   # Param
   # +output+: location where the plot will be saved in jped file format
+  # +slope+: slope of the linear regression line
   # +hits+: array of Sequence objects
-  def plot_2d_start_from(output, hits = @hits)    
+  def plot_2d_start_from(output, slope, hits = @hits)    
 
     pairs = @hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
@@ -176,15 +190,31 @@ class GeneMergeValidation
                    pch=10)"        
       R.eval "par(new=T)"           
     #end
+ 
+    unless slope.nan?
+      R.eval "x = c#{xx.to_s.gsub("[","(").gsub("]",")")}"
+      R.eval "y = c#{yy.to_s.gsub("[","(").gsub("]",")")}"
+      R.eval "abline(lm(y~x, singular.ok=FALSE))"
+    end
+    R.eval "dev.off()"
+  end
+
+  ##  
+  # Plots 2D graph with the start/end of the matched region offsets in the prediction
+  # Param
+  # +hits+: array of Sequence objects
+  def slope(hits = @hits)
+
+    pairs = @hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+
+    xx = pairs.map{|pair| pair.x}
+    yy = pairs.map{|pair| pair.y}
 
     R.eval "x = c#{xx.to_s.gsub("[","(").gsub("]",")")}"
     R.eval "y = c#{yy.to_s.gsub("[","(").gsub("]",")")}"
-    R.eval "abline(lm(y~x, singular.ok=FALSE))"
     R.eval "slope = lm(y~x)$coefficients[2]"
     slope = R.pull "slope"
 
-    R.eval "dev.off()"
-    return slope
   end
 
 end

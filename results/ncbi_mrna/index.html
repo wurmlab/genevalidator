@@ -1,0 +1,262 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0" width = 1650>
+                                <tr bgcolor = #E8E8E8>
+                                        <th></th>
+                                        <th></th>
+                                        <th>No.</th>
+                                        <th width=100 title="FASTA Header of the query">Description</th>
+                                        <th title="Number of hits found by BLAST.">No. Hits</th>
+                                        <th title="Check whether the prediction length fits the most of the BLAST hit lengths, by 1D hierarchical clusterization.">Valid Length(Cluster)</th>
+                                        <th title="Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths.">Valid Length(Rank)</th>
+                                        <th title="Check whether the reading frame shifts.">Valid Reading Frame</th>
+                                        <th title="Check whether there BLAST hits make evidence about a merge of two genes that cover the predicted gene.">Gene Merge(slope)</th>
+                                        <th title="Check whether there is a duplicated subsequence in the predicted gene.">Duplication</th>
+                                        <th title="Check whether there is a single main Open Reading Frame in the predicted gene." style="white-space:nowrap"> ORF Test</th>
+                                        <th title="Overall evaluation based on all validation tests" > Overall Evaluation</th>
+                                </tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>1</td>
+	      <td>gi|218931181|ref|NM_001142918.1| Mus musculus transcription factor 7 like 2, T cell specific, HMG box (Tcf7l2), transcript variant 1, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1387 [267, 543] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (2:510;3:133;)</td>
+	      <td bgcolor=white>no (slope=0.13)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.33)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle1 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_1_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_1_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_1_match_2d.jpg height=400><img src=ncbi_mrna.fasta_1_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>2</td>
+	      <td>gi|527261226|ref|XM_005148804.1| PREDICTED: Melopsittacus undulatus alpha- and gamma-adaptin binding protein (AAGAB), mRNA</td>
+	      <td>110</td>
+	      <td bgcolor=red>391 [299, 323] no</td>
+	      <td bgcolor=red>0.02 (TOO_LONG)</td>
+	      <td bgcolor=white>yes (3:112;)</td>
+	      <td bgcolor=white>no (slope=0.04)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.53)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle2 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_2_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_2_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_2_match_2d.jpg height=400><img src=ncbi_mrna.fasta_2_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle3')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>3</td>
+	      <td>gi|478509670|ref|XM_004429055.1| PREDICTED: Ceratotherium simum simum activin A receptor, type IB, transcript variant 1 (ACVR1B), mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>774 [474, 546] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=white>yes (1:522;)</td>
+	      <td bgcolor=white>no (slope=0.02)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.65)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle3 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_3_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_3_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_3_match_2d.jpg height=400><img src=ncbi_mrna.fasta_3_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle4')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>4</td>
+	      <td>gi|73747882|ref|NM_001110.2| Homo sapiens ADAM metallopeptidase domain 10 (ADAM10), mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1309 [640, 968] no</td>
+	      <td bgcolor=red>0.03 (TOO_LONG)</td>
+	      <td bgcolor=red>no (1:542;2:3;)</td>
+	      <td bgcolor=white>no (slope=-0.16)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.57)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle4 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_4_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_4_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_4_match_2d.jpg height=400><img src=ncbi_mrna.fasta_4_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle5')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>5</td>
+	      <td>gi|45270915|gb|AY558513.1| Saccharomyces cerevisiae clone FLH003194.01X YGR272C gene, complete cds</td>
+	      <td>151</td>
+	      <td bgcolor=red>153 [179, 286] no</td>
+	      <td bgcolor=red>0.02 (TOO_SHORT)</td>
+	      <td bgcolor=white>yes (1:151;)</td>
+	      <td bgcolor=white>no (slope=-0.07)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=white style="white-space:nowrap">yes (%=1.0)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle5 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_5_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_5_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_5_match_2d.jpg height=400><img src=ncbi_mrna.fasta_5_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle6')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>6</td>
+	      <td>gi|7163843|gb|AF195006.1|AF195006 AF195006 Eremothecium gossypii DNA Eremothecium gossypii genomic clone pAG1537up, genomic survey sequence</td>
+	      <td>2</td>
+	      <td bgcolor=red>238 [309, 309] no</td>
+	      <td bgcolor=red>0.0 (TOO_SHORT)</td>
+	      <td bgcolor=white>yes (1:2;)</td>
+	      <td bgcolor=white>no (slope=NaN)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.61)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle6 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_6_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_6_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_6_match_2d.jpg height=400><img src=ncbi_mrna.fasta_6_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle7')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>7</td>
+	      <td>gi|226371763|ref|NM_001146274.1| Homo sapiens transcription factor 7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 1, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1340 [263, 543] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=white>yes (1:518;)</td>
+	      <td bgcolor=white>no (slope=0.03)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.45)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle7 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_7_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_7_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_7_match_2d.jpg height=400><img src=ncbi_mrna.fasta_7_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle8')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>8</td>
+	      <td>gi|226371744|ref|NM_030756.4| Homo sapiens transcription factor 7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 2, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1334 [267, 503] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=white>yes (1:511;)</td>
+	      <td bgcolor=white>no (slope=0.09)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.45)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle8 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_8_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_8_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_8_match_2d.jpg height=400><img src=ncbi_mrna.fasta_8_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle9')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>9</td>
+	      <td>gi|226371619|ref|NM_001146283.1| Homo sapiens transcription factor 7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 3, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1340 [295, 543] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (1:594;3:116;)</td>
+	      <td bgcolor=white>no (slope=0.0)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.37)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle9 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_9_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_9_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_9_match_2d.jpg height=400><img src=ncbi_mrna.fasta_9_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle10')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>10</td>
+	      <td>gi|226371622|ref|NM_001146284.1| Homo sapiens transcription factor 7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 4, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1306 [317, 543] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (1:510;3:117;)</td>
+	      <td bgcolor=white>no (slope=0.06)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.35)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle10 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_10_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_10_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_10_match_2d.jpg height=400><img src=ncbi_mrna.fasta_10_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle11')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>11</td>
+	      <td>gi|309384262|ref|NM_001198531.1| Homo sapiens transcription factor 7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 13, mRNA</td>
+	      <td>500</td>
+	      <td bgcolor=red>1316 [323, 543] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (1:515;3:114;)</td>
+	      <td bgcolor=white>no (slope=-0.0)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.35)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle11 style='display:none'>
+
+              <img src=ncbi_mrna.fasta_11_len_clusters.jpg height=400>
+	      <img src=ncbi_mrna.fasta_11_match.jpg height=400>
+              <img src=ncbi_mrna.fasta_11_match_2d.jpg height=400><img src=ncbi_mrna.fasta_11_orfs.jpg height=400></div></td></tr>

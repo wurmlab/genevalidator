@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastx</BlastOutput_program>
+  <BlastOutput_version>BLASTX 2.2.28+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+  <BlastOutput_query-def>gi|7163843|gb|AF195006.1|AF195006 AF195006 Eremothecium gossypii DNA Eremothecium gossypii genomic clone pAG1537up, genomic survey sequence</BlastOutput_query-def>
+  <BlastOutput_query-len>716</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>1e-05</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_1</Iteration_query-ID>
+  <Iteration_query-def>gi|7163843|gb|AF195006.1|AF195006 AF195006 Eremothecium gossypii DNA Eremothecium gossypii genomic clone pAG1537up, genomic survey sequence</Iteration_query-def>
+  <Iteration_query-len>716</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|45201220|ref|NP_986790.1|</Hit_id>
+  <Hit_def>AGR124Cp [Ashbya gossypii ATCC 10895] &gt;gi|44986074|gb|AAS54614.1| AGR124Cp [Ashbya gossypii ATCC 10895]</Hit_def>
+  <Hit_accession>NP_986790</Hit_accession>
+  <Hit_len>309</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>251.136</Hsp_bit-score>
+      <Hsp_score>640</Hsp_score>
+      <Hsp_evalue>5.05005e-79</Hsp_evalue>
+      <Hsp_query-from>283</Hsp_query-from>
+      <Hsp_query-to>714</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>144</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>143</Hsp_identity>
+      <Hsp_positive>143</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>144</Hsp_align-len>
+      <Hsp_qseq>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPACKLCLRGRVDCCVRGCNCGDSALQARDGWCGAQTCSVCXXXXXXXXXXXXXXHMIDSVSISAWWSASRWPGCTCACPGPAGSLAVPVGLACRAGAV</Hsp_qseq>
+      <Hsp_hseq>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPACKLCLRGRVDCCVRGCNCGDSALQARDGWCGAQTCSVCLRQLFRGLRRRRCRHMIDSVSISAWWSASRWPGCTCACPGPAGSLAVPVGRACRAGAV</Hsp_hseq>
+      <Hsp_midline>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPACKLCLRGRVDCCVRGCNCGDSALQARDGWCGAQTCSVCLRQLFRGLRRRRCRHMIDSVSISAWWSASRWPGCTCACPGPAGSLAVPVG ACRAGAV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|374110039|gb|AEY98944.1|</Hit_id>
+  <Hit_def>FAGR124Cp [Ashbya gossypii FDAG1]</Hit_def>
+  <Hit_accession>AEY98944</Hit_accession>
+  <Hit_len>309</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>245.743</Hsp_bit-score>
+      <Hsp_score>626</Hsp_score>
+      <Hsp_evalue>8.55948e-77</Hsp_evalue>
+      <Hsp_query-from>283</Hsp_query-from>
+      <Hsp_query-to>714</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>144</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>139</Hsp_identity>
+      <Hsp_positive>140</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>144</Hsp_align-len>
+      <Hsp_qseq>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPACKLCLRGRVDCCVRGCNCGDSALQARDGWCGAQTCSVCXXXXXXXXXXXXXXHMIDSVSISAWWSASRWPGCTCACPGPAGSLAVPVGLACRAGAV</Hsp_qseq>
+      <Hsp_hseq>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPACRLCLRGRVDCCVRGCNYGDSALQARDGWCGAQTCSVCLRQLFHGLRRRRCRHMIDSVSICAWWSASRWPGCTCACPGPAGSLAVPVGRACRAGAV</Hsp_hseq>
+      <Hsp_midline>MQLGRSHDGGGLTRVVFGLPGCAWPHDGLLEELNLLPWCKGVCDSAPAC+LCLRGRVDCCVRGCN GDSALQARDGWCGAQTCSVCLRQLF GLRRRRCRHMIDSVSI AWWSASRWPGCTCACPGPAGSLAVPVG ACRAGAV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>25803655</Statistics_db-num>
+      <Statistics_db-len>8915072589</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>631713196940</Statistics_eff-space>
+      <Statistics_kappa>0.041</Statistics_kappa>
+      <Statistics_lambda>0.267</Statistics_lambda>
+      <Statistics_entropy>0.14</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>
+

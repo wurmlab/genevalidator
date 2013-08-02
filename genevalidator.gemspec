@@ -17,6 +17,7 @@ DESC
 
   s.add_dependency('bio-blastxmlparser')
   s.add_dependency('rinruby')
+  s.add_dependency('bio')
 
 #  s.files       = ["lib/genevalidator.rb"]
   s.files       = ["lib/genevalidator.rb"] + Dir['lib/**/*']

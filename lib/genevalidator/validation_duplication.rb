@@ -1,5 +1,7 @@
 require 'genevalidator/validation_output'
 
+##
+# Class that stores the validation output information
 class DuplciationValidationOutput < ValidationOutput
 
   attr_reader :pvalue
@@ -32,16 +34,21 @@ class DuplciationValidationOutput < ValidationOutput
     end
   end
 
-
 end
 
+##
+# This class contains the methods necessary for
+# finding duplicated subsequences in the predicted gene
 class DuplicationValidation
 
   attr_reader :hits
   attr_reader :prediction
 
   ##
-  #
+  # Initilizes the object
+  # Params:
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +prediction+: a +Sequence+ object representing the blast query
   def initialize(hits, prediction)
     begin
       raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
@@ -52,7 +59,8 @@ class DuplicationValidation
 
   ##
   # Check duplication in the first n hits
-  # Returns yes/no answer
+  # Output:
+  # +DuplciationValidationOutput+ object
   def validation_test(n=10)
 
     # get the first n hits
@@ -64,8 +72,6 @@ class DuplicationValidation
       start_match_interval =  hit.hsp_list.each.map{|x| x.hit_from}.min - 1
       end_match_interval = hit.hsp_list.map{|x| x.hit_to}.max - 1
    
-      #puts "#{hit.xml_length} #{start_match_interval} #{end_match_interval}" 
-
       coverage = Array.new(hit.xml_length,0)
       hit.hsp_list.each do |hsp|
         aux = []
@@ -78,7 +84,6 @@ class DuplicationValidation
             if residue_hit == residue_query             
               idx = i + (hsp.hit_from-1) - hsp.hit_alignment[0..i].scan(/-/).length 
               aux.push(idx)
-              #puts "#{idx} #{i} #{hsp.hit_alignment[0..i].scan(/-/).length}"
               # indexing in blast starts from 1
               coverage[idx] += 1
             end
@@ -88,7 +93,7 @@ class DuplicationValidation
       overlap = coverage.reject{|x| x==0}
       averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
     end
-
+    
     # if all hsps match only one time
     if averages.reject{|x| x==1} == []
       return DuplciationValidationOutput.new(1)

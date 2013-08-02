@@ -1,0 +1,753 @@
+---
+gi|218931181|ref|NM_001142918.1|: !ruby/object:Output
+  prediction_len: 1387
+  prediction_def: gi|218931181|ref|NM_001142918.1| Mus musculus transcription factor
+    7 like 2, T cell specific, HMG box (Tcf7l2), transcript variant 1, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 1
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_1_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_1_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_1_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_1_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 267
+    - 543
+    prediction_len: 1387
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      2: 510
+      3: 133
+    msg: 2:510;3:133;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.13114106566405165
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 1236
+        - 1338
+      - - 1575
+        - 1728
+      - - 2199
+        - 2337
+      '+2':
+      - - 532
+        - 1912
+      '+3':
+      - - 659
+        - 854
+      - - 941
+        - 1136
+      - - 2129
+        - 2354
+      - - 3200
+        - 3329
+      '-1':
+      - - 3152
+        - 3380
+      '-2':
+      - - 3166
+        - 3316
+      - - 1951
+        - 2242
+      - - 1240
+        - 1366
+      - - 1120
+        - 1228
+      - - 685
+        - 1051
+      - - 394
+        - 496
+      '-3':
+      - - 1977
+        - 2502
+      - - 1470
+        - 1602
+      - - 918
+        - 1074
+    ratio: 0.3314917127071823
+    threshold: 0.8
+gi|527261226|ref|XM_005148804.1|: !ruby/object:Output
+  prediction_len: 391
+  prediction_def: ! 'gi|527261226|ref|XM_005148804.1| PREDICTED: Melopsittacus undulatus
+    alpha- and gamma-adaptin binding protein (AAGAB), mRNA'
+  nr_hits: 110
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 2
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_2_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_2_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_2_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_2_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 299
+    - 323
+    prediction_len: 391
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.02
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      3: 112
+    msg: 3:112;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.0372705241315952
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 279
+        - 399
+      - - 759
+        - 963
+      '+2': []
+      '+3':
+      - - 248
+        - 866
+      '-1':
+      - - 597
+        - 912
+      '-2': []
+      '-3':
+      - - 976
+        - 1084
+      - - 757
+        - 922
+      - - 301
+        - 655
+      - - 94
+        - 250
+    ratio: 0.5268542199488491
+    threshold: 0.8
+gi|478509670|ref|XM_004429055.1|: !ruby/object:Output
+  prediction_len: 774
+  prediction_def: ! 'gi|478509670|ref|XM_004429055.1| PREDICTED: Ceratotherium simum
+    simum activin A receptor, type IB, transcript variant 1 (ACVR1B), mRNA'
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 3
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_3_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_3_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_3_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_3_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 474
+    - 546
+    prediction_len: 774
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 522
+    msg: 1:522;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.017574575595084165
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 0
+        - 1518
+      - - 1680
+        - 1788
+      - - 1926
+        - 2256
+      '+2':
+      - - 145
+        - 256
+      - - 772
+        - 898
+      - - 1036
+        - 1177
+      - - 1588
+        - 1693
+      - - 1747
+        - 1888
+      - - 2035
+        - 2185
+      '+3': []
+      '-1':
+      - - 1672
+        - 2014
+      '-2':
+      - - 1884
+        - 2073
+      - - 1596
+        - 1704
+      - - 624
+        - 999
+      - - 117
+        - 456
+      '-3':
+      - - 1643
+        - 1928
+      - - 548
+        - 782
+      - - 332
+        - 446
+    ratio: 0.6534653465346535
+    threshold: 0.8
+gi|73747882|ref|NM_001110.2|: !ruby/object:Output
+  prediction_len: 1309
+  prediction_def: gi|73747882|ref|NM_001110.2| Homo sapiens ADAM metallopeptidase
+    domain 10 (ADAM10), mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 4
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_4_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_4_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_4_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_4_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 640
+    - 968
+    prediction_len: 1309
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.03
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 542
+      2: 3
+    msg: 1:542;2:3;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: -0.15856670350644916
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 444
+        - 2691
+      '+2':
+      - - 733
+        - 991
+      - - 1369
+        - 1519
+      - - 1546
+        - 1765
+      - - 2020
+        - 2176
+      - - 3124
+        - 3229
+      - - 3319
+        - 3475
+      '+3':
+      - - 1889
+        - 2009
+      - - 3206
+        - 3320
+      '-1':
+      - - 3786
+        - 3918
+      - - 1515
+        - 1623
+      - - 1089
+        - 1371
+      - - 714
+        - 972
+      '-2':
+      - - 3023
+        - 3152
+      - - 1961
+        - 2315
+      '-3':
+      - - 2152
+        - 2257
+      - - 1816
+        - 1993
+    ratio: 0.5721925133689839
+    threshold: 0.8
+gi|45270915|gb|AY558513.1|: !ruby/object:Output
+  prediction_len: 153
+  prediction_def: gi|45270915|gb|AY558513.1| Saccharomyces cerevisiae clone FLH003194.01X
+    YGR272C gene, complete cds
+  nr_hits: 151
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 5
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_5_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_5_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_5_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_5_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 179
+    - 286
+    prediction_len: 153
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.02
+    msg: TOO_SHORT
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 151
+    msg: 1:151;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: -0.06764665644116763
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 0
+        - 459
+      '+2': []
+      '+3': []
+      '-1': []
+      '-2': []
+      '-3': []
+    ratio: 1.0
+    threshold: 0.8
+gi|7163843|gb|AF195006.1|AF195006: !ruby/object:Output
+  prediction_len: 238
+  prediction_def: gi|7163843|gb|AF195006.1|AF195006 AF195006 Eremothecium gossypii
+    DNA Eremothecium gossypii genomic clone pAG1537up, genomic survey sequence
+  nr_hits: 2
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 6
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_6_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_6_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_6_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_6_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 309
+    - 309
+    prediction_len: 238
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_SHORT
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 2
+    msg: 1:2;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: .nan
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 282
+        - 716
+      '+2': []
+      '+3':
+      - - 140
+        - 305
+      - - 611
+        - 716
+      '-1':
+      - - 0
+        - 284
+      '-2': []
+      '-3':
+      - - 252
+        - 585
+    ratio: 0.6061452513966481
+    threshold: 0.8
+gi|226371763|ref|NM_001146274.1|: !ruby/object:Output
+  prediction_len: 1340
+  prediction_def: gi|226371763|ref|NM_001146274.1| Homo sapiens transcription factor
+    7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 1, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 7
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_7_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_7_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_7_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_7_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 263
+    - 543
+    prediction_len: 1340
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 518
+    msg: 1:518;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.03358498569984156
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 507
+        - 2316
+      - - 3027
+        - 3165
+      '+2':
+      - - 655
+        - 829
+      - - 985
+        - 1180
+      - - 1672
+        - 1978
+      - - 3361
+        - 3490
+      '+3':
+      - - 1280
+        - 1487
+      - - 3575
+        - 3692
+      '-1':
+      - - 3626
+        - 3755
+      - - 1919
+        - 2099
+      - - 1514
+        - 1646
+      - - 953
+        - 1055
+      '-2':
+      - - 1945
+        - 2218
+      '-3':
+      - - 3084
+        - 3237
+      - - 1506
+        - 1737
+      - - 1284
+        - 1413
+      - - 660
+        - 915
+    ratio: 0.4497762307309796
+    threshold: 0.8
+gi|226371744|ref|NM_030756.4|: !ruby/object:Output
+  prediction_len: 1334
+  prediction_def: gi|226371744|ref|NM_030756.4| Homo sapiens transcription factor
+    7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 2, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 8
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_8_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_8_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_8_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_8_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 267
+    - 503
+    prediction_len: 1334
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 511
+    msg: 1:511;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.086984618811437
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 507
+        - 2298
+      - - 3009
+        - 3147
+      '+2':
+      - - 655
+        - 829
+      - - 916
+        - 1111
+      - - 1603
+        - 1777
+      - - 3343
+        - 3472
+      '+3':
+      - - 1211
+        - 1418
+      - - 3557
+        - 3674
+      '-1':
+      - - 3608
+        - 3737
+      - - 1901
+        - 2081
+      - - 1445
+        - 1577
+      '-2':
+      - - 1927
+        - 2200
+      '-3':
+      - - 3066
+        - 3219
+      - - 1437
+        - 1668
+      - - 1215
+        - 1344
+    ratio: 0.4473026973026973
+    threshold: 0.8
+gi|226371619|ref|NM_001146283.1|: !ruby/object:Output
+  prediction_len: 1340
+  prediction_def: gi|226371619|ref|NM_001146283.1| Homo sapiens transcription factor
+    7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 3, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 9
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_9_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_9_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_9_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_9_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 295
+    - 543
+    prediction_len: 1340
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 594
+      3: 116
+    msg: 1:594;3:116;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.00011180455347743615
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 507
+        - 1977
+      - - 3360
+        - 3489
+      '+2':
+      - - 655
+        - 829
+      - - 916
+        - 1084
+      - - 1744
+        - 1933
+      - - 3574
+        - 3691
+      '+3':
+      - - 1352
+        - 1559
+      - - 2096
+        - 2315
+      - - 3026
+        - 3164
+      '-1':
+      - - 3625
+        - 3754
+      - - 1918
+        - 2098
+      '-2':
+      - - 1944
+        - 2217
+      - - 1578
+        - 1809
+      - - 1356
+        - 1485
+      '-3':
+      - - 3083
+        - 3236
+      - - 1586
+        - 1718
+    ratio: 0.36558070131808007
+    threshold: 0.8
+gi|226371622|ref|NM_001146284.1|: !ruby/object:Output
+  prediction_len: 1306
+  prediction_def: gi|226371622|ref|NM_001146284.1| Homo sapiens transcription factor
+    7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 4, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 10
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_10_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_10_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_10_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_10_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 317
+    - 543
+    prediction_len: 1306
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 510
+      3: 117
+    msg: 1:510;3:117;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: 0.06247304777975651
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 507
+        - 1875
+      - - 3258
+        - 3387
+      '+2':
+      - - 655
+        - 829
+      - - 916
+        - 1111
+      - - 1591
+        - 1765
+      - - 3472
+        - 3589
+      '+3':
+      - - 1211
+        - 1406
+      - - 1754
+        - 2213
+      - - 2924
+        - 3062
+      '-1':
+      - - 3523
+        - 3652
+      - - 1816
+        - 1996
+      '-2':
+      - - 1842
+        - 2115
+      - - 1425
+        - 1656
+      - - 1206
+        - 1332
+      '-3':
+      - - 2981
+        - 3134
+      - - 1433
+        - 1565
+    ratio: 0.34906863995917325
+    threshold: 0.8
+gi|309384262|ref|NM_001198531.1|: !ruby/object:Output
+  prediction_len: 1316
+  prediction_def: gi|309384262|ref|NM_001198531.1| Homo sapiens transcription factor
+    7-like 2 (T-cell specific, HMG-box) (TCF7L2), transcript variant 13, mRNA
+  nr_hits: 500
+  filename: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta
+  idx: 11
+  start_idx: 1
+  image_histo_len: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_11_len_clusters.jpg
+  image_plot_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_11_match.jpg
+  image_histo_merge: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_11_match_2d.jpg
+  image_orfs: gene_merge_validation/ncbi_mrna/ncbi_mrna.fasta_11_orfs.jpg
+  length_validation_cluster: !ruby/object:LengthClusterValidationOutput
+    limits:
+    - 323
+    - 543
+    prediction_len: 1316
+  length_validation_rank: !ruby/object:LengthRankValidationOutput
+    percentage: 0.0
+    msg: TOO_LONG
+  reading_frame_validation: !ruby/object:BlastRFValidationOutput
+    frames_histo:
+      1: 515
+      3: 114
+    msg: 1:515;3:114;
+  gene_merge_validation: !ruby/object:GeneMergeValidationOutput
+    slope: -0.003063877347258428
+    threshold_down: 0.4
+    threshold_up: 1.2
+  duplication: !ruby/object:DuplciationValidationOutput
+    pvalue: 1
+    threshold: 0.05
+  orf: !ruby/object:ORFValidationOutput
+    orfs:
+      '+1':
+      - - 507
+        - 1905
+      - - 3288
+        - 3417
+      '+2':
+      - - 655
+        - 829
+      - - 985
+        - 1180
+      - - 1672
+        - 1861
+      - - 3502
+        - 3619
+      '+3':
+      - - 1280
+        - 1487
+      - - 2024
+        - 2243
+      - - 2954
+        - 3092
+      '-1':
+      - - 3553
+        - 3682
+      - - 1846
+        - 2026
+      '-2':
+      - - 1872
+        - 2145
+      - - 1506
+        - 1737
+      - - 1284
+        - 1413
+      - - 660
+        - 915
+      '-3':
+      - - 3011
+        - 3164
+      - - 1514
+        - 1646
+      - - 953
+        - 1055
+    ratio: 0.3540136743479362
+    threshold: 0.8

@@ -1,5 +1,7 @@
 require 'genevalidator/validation_output'
 
+##
+# Class that stores the validation output information
 class LengthClusterValidationOutput < ValidationOutput
 
   attr_reader :prediction_len
@@ -31,9 +33,9 @@ end
 ##
 # This class contains the methods necessary for 
 # length validation by hit length clusterization
-
 class LengthClusterValidation
 
+  attr_reader :plots
   attr_reader :filename
   attr_reader :hits
   attr_reader :prediction
@@ -46,43 +48,47 @@ class LengthClusterValidation
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
   # +filename+: name of the input file, used when generatig the plot files
-  # +idx+: the number of the query in the blast output
-  def initialize(hits, prediction, filename)
+  # +plots+: boolean variable, indicated whether plots should be generated or not
+  def initialize(hits, prediction, filename, plots)
     begin
       raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence and filename.is_a? String
       @hits = hits
       @prediction = prediction
       @filename = filename
+      @plots = plots
     end
   end
 
   ## 
   # Validates the length of the predicted gene by comparing the length of the prediction to the most dense cluster
   # The most dense cluster is obtained by hierarchical clusterization
+  # Plots are generated if required (see +plot+ variable)
   # Output:
-  # array of 2 elements containing the limits of the most dense cluster i.e [limit_left; limit_right]
+  # +LengthClusterValidationOutput+ object
   def validation_test
 
       ret = clusterization_by_length  #returns [clusters, max_density_cluster_idx]
 
       @clusters = ret[0]
       @max_density_cluster = ret[1]
-      predicted_len = @prediction.xml_length
-
-      plot_histo_clusters(@filename)
-      plot_length(@filename)
       limits = @clusters[@max_density_cluster].get_limits
-      
-      answ = LengthClusterValidationOutput.new(predicted_len, limits)
+      prediction_len = @prediction.xml_length
+
+      if plots
+        plot_histo_clusters(@filename)
+        #plot_length(@filename)
+      end
+
+      LengthClusterValidationOutput.new(prediction_len, limits)
        
   end
 
   ##
   # Clusterization by length from a list of sequences
   # Params:
+  # +debug+ (optional):: true to display debug information, false by default (optional argument)
   # +lst+:: array of +Sequence+ objects
   # +predicted_seq+:: +Sequence+ objetc
-  # +debug+ (optional):: true to display debug information, false by default (optional argument)
   # Output
   # output 1:: array of Cluster objects
   # output 2:: the index of the most dense cluster
@@ -147,8 +153,6 @@ class LengthClusterValidation
   # +clusters+: array of Cluster objects
   # +predicted_length+: length of the rpedicted sequence
   # +most_dense_cluster_idx+index from the clusters array of the most_dense_cluster_idx
-
-##!!!!!! nu poti face asta fara sa fi facut clusterzition inainte
   def plot_histo_clusters(output, clusters = @clusters, predicted_length = @prediction.xml_length, 
                           most_dense_cluster_idx = @max_dense_cluster)
     begin
