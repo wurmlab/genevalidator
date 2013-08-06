@@ -1,16 +1,8 @@
 #!/usr/bin/env ruby
 
-class Pair
+Pair = Struct.new(:x, :y) do
 
   include Comparable  
-
-  attr_accessor :x
-  attr_accessor :y
-
-  def initialize(x, y)
-    @x = x
-    @y = y
-  end
 
   ##
   # Overload '-' operator
@@ -22,38 +14,38 @@ class Pair
   end
 
   def print
-    puts "Cluster: #{@x} #{@y}"
+    puts "Cluster: #{x} #{y}"
   end
 
   ##
   # Overload '+' operator
   # This will mutate the current object
   def +(p)
-    @x += p.x
-    @y += p.y
+    self.x += p.x
+    self.y += p.y
   end
 
   ##
   # Overload '*' operator
   # This will mutate the current object
   def *(val)  
-    @x *= val
-    @y *= val
+    self.x *= val
+    self.y *= val
   end
 
   ##
   # Overload '/' operator
   # This will mutate the current object
   def /(val)
-    @x /= (val + 0.0)
-    @y /= (val + 0.0)
+    self.x /= (val + 0.0)
+    self.y /= (val + 0.0)
   end
 
   ##
   # Overload quality operator
   # Return true if the pairs are equal, falsei otherwise
   def ==(p)
-    if p.x == @x and p.y == @y
+    if p.x == x and p.y == y
       true
     else
       false
@@ -65,7 +57,7 @@ class Pair
   end
 
   def hash
-    [@x, @y].hash
+    [self.x, self.y].hash
   end
 
 end
@@ -80,8 +72,6 @@ class PairCluster
   end
 
   def print
-    #puts objects.first.x
-    #puts objects.first.y
     objects.each do |elem|
       puts "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
     end
@@ -98,7 +88,7 @@ class PairCluster
       object * n
       mean + object
       weight += n
-    end
+    end    
     mean / weight
     return mean
 

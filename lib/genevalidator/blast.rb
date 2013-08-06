@@ -4,6 +4,7 @@ require 'genevalidator/clusterization'
 require 'genevalidator/sequences'
 require 'genevalidator/output'
 require 'genevalidator/validation'
+require 'genevalidator/exceptions'
 require 'bio-blastxmlparser'
 require 'rinruby'
 require 'net/http'
@@ -12,28 +13,26 @@ require 'uri'
 require 'io/console'
 require 'yaml'
 
-class ClasspathError < Exception
-end
-
-class SequenceTypeError < Exception
-end
-
 class Blast
 
-  #query sequence type: can be :nucleotide or :protein
   attr_reader :type
-  #query sequence fasta file
   attr_reader :fasta_file
-  #current number of the querry processed
+  # current number of the querry processed
   attr_reader :idx
-  #number of the sequence from the file to start with
   attr_reader :start_idx
-  #output format
   attr_reader :outfmt
   #array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
 
-  def initialize(fasta_file, type, outfmt, xml_file, start_idx = 1)
+  ##
+  # Initilizes the object
+  # Params:
+  # +fasta_file+: query sequence fasta file with query sequences
+  # +type+: query sequence type; can be :nucleotide or :protein
+  # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
+  # +outfmt+: output format
+  # +start_idx+: number of the sequence from the file to start with
+  def initialize(fasta_file, type, xml_file = nil, outfmt = nil, start_idx = 1)
     begin
 
       puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
@@ -50,6 +49,7 @@ class Blast
       @start_idx = start_idx
       @outfmt = outfmt
 
+      raise FileNotFoundException.new unless File.exists?(@fasta_file)
       fasta_content = IO.binread(@fasta_file);
 
       # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
@@ -65,11 +65,12 @@ class Blast
       # redirect the cosole messages of R
       R.echo "enable = nil, stderr = nil, warn = nil"
 
-      printf "No | Description | No_Hits | Valid_Length(Cluster) | Valid_Length(Rank) | Valid_Reading_Frame | Gene_Merge(slope) | Duplication | ORF_Test\n"
-
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
       exit
+    rescue FileNotFoundException => error
+      $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
+      exit 
     end
   end
 
@@ -277,7 +278,6 @@ class Blast
         seq = Sequence.new
 
         seq.xml_length = hit.len.to_i        
-        seq.object_type = "ref"
         seq.seq_type = @type
         seq.database = iter.field("BlastOutput_db")
         seq.id = hit.hit_id
@@ -297,7 +297,6 @@ class Blast
         else
           seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "nucleotide")
         end
-        seq.fasta_length = 0#seq.raw_sequence.length
 
         # get all high-scoring segment pairs (hsp)
         hsps = []
@@ -342,7 +341,7 @@ class Blast
       return [hits, predicted_seq]
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call 'parse_output' method first!\n"       
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call parse method first!\n"       
       exit
     rescue StopIteration
       nil
@@ -359,7 +358,7 @@ class Blast
   def get_sequence_by_accession_no(accno,db)
 
     uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}&retmax=1&usehistory=y&term=#{accno}/"
-    puts uri
+    #puts uri
     result = Net::HTTP.get(URI.parse(uri))
 
     result2 = result
@@ -379,7 +378,7 @@ class Blast
   end
  
   ##
-  # Copied from sequenceserver/sequencehelpers.rb
+  # Method copied from sequenceserver/sequencehelpers.rb
   # Params:
   # sequence_string: String of which we mfind the composition
   # Output:
@@ -393,6 +392,7 @@ class Blast
   end
 
   ##
+  # Method copied from sequenceserver/sequencehelpers.rb
   # Strips all non-letter characters. guestimates sequence based on that.
   # If less than 10 useable characters... returns nil
   # If more than 90% ACGTU returns :nucleotide. else returns :protein
@@ -420,6 +420,7 @@ class Blast
   end
 
   ##
+  # Method copied from sequenceserver/sequencehelpers.rb
   # Splits input at putative fasta definition lines (like ">adsfadsf"), guesses sequence type for each sequence.
   # If not enough sequence to determine, returns nil.
   # If 2 kinds of sequence mixed together, raises ArgumentError

@@ -14,6 +14,8 @@ class Output
   attr_accessor :duplication
   attr_accessor :orf
 
+  attr_accessor :validations
+
   attr_accessor :filename
   attr_accessor :image_histo_len
   attr_accessor :image_plot_merge
@@ -40,6 +42,10 @@ class Output
   end
   
   def print_output_console
+
+    if @idx == @start_idx
+      printf "No | Description | No_Hits | Valid_Length(Cluster) | Valid_Length(Rank) | Valid_Reading_Frame | Gene_Merge(slope) | Duplication | ORF_Test\n"
+    end
 
     short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
 
@@ -101,6 +107,9 @@ class Output
     if @idx == @start_idx
       header = "<html><head>
                      <title>Gene Validation Result</title>
+<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script> 
+<script type=\"text/javascript\" src=\"js/jquery.tablesorter/jquery.tablesorter.js\"></script> 
+<script type=\"text/javascript\" src=\"js/jquery.tablesorter.mod.js\"></script>
                      <script language=\"javascript\"> 
 
                      function showDiv(toggle){
@@ -112,12 +121,18 @@ class Output
                           button.style.display = \"block\";
                        }
                      }
+
+                     $(document).ready(function() { 
+                          $(\"#myTable\").tablesorter( {sortList: [[3,0]]} ); 
+                     }); 
+
                   </script>             
                   </head>
                   <body>
-                      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" width = 1650>
+                      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" width = 1650 id=\"myTable\" class=\"tablesorter\">
+                                <thead>
                                 <tr bgcolor = #E8E8E8>
-                                        <th></th>
+                                        <th><b>Click to sort!</b></th>
                                         <th></th>
                                         <th>No.</th>
                                         <th width=100 title=\"FASTA Header of the query\">Description</th>
@@ -129,7 +144,7 @@ class Output
                                         <th title=\"Check whether there is a duplicated subsequence in the predicted gene.\">Duplication</th>
                                         <th title=\"Check whether there is a single main Open Reading Frame in the predicted gene.\" style=\"white-space:nowrap\"> ORF Test</th>
                                         <th title=\"Overall evaluation based on all validation tests\" > Overall Evaluation</th>
-                                </tr>"                  
+                                </tr></thead>"                  
       
       File.open("#{@filename}.html", "w+") do |f|
         f.write(header)
@@ -139,7 +154,8 @@ class Output
 
     toggle = "toggle#{@idx}"
 
-    output = "<tr bgcolor=#{'white'}> 
+    output = "
+              <tr bgcolor=#{'white'}> 
 	      <td><button type=button name=answer onclick=showDiv('#{toggle}')>Show/Hide Plots</button></td> 
               <td bgcolor=#{bg_icon}>#{icon}</td>
               <td>#{@idx}</td>
@@ -154,7 +170,7 @@ class Output
               <td style=\"white-space:nowrap\">...</td>
 	      </tr>
 
-	      <tr bgcolor=#{color}>
+	      <tr bgcolor=#{color} class=\"expand-child\">
 	      <td  colspan=12>
               <div id=#{toggle} style='display:none'>
 

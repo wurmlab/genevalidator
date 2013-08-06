@@ -2,7 +2,7 @@ require 'genevalidator/validation_output'
 
 ##
 # Class that stores the validation output information
-class BlastRFValidationOutput < ValidationOutput
+class BlastRFValidationOutput < ValidationReport
 
   attr_reader :frames_histo
   attr_reader :msg
@@ -77,7 +77,7 @@ class BlastReadingFrameValidation
   # +lst+: vector of +Sequence+ objects
   # Output:
   # +BlastRFValidationOutput+ object
-  def validation_test(lst = @hits)
+  def run(lst = @hits)
 
     rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
     frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]

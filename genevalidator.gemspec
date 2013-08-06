@@ -18,13 +18,10 @@ DESC
   s.add_dependency('bio-blastxmlparser')
   s.add_dependency('rinruby')
   s.add_dependency('bio')
+  s.add_dependency('mini_shoulda')
 
 #  s.files       = ["lib/genevalidator.rb"]
   s.files       = ["lib/genevalidator.rb"] + Dir['lib/**/*']
-  # gem
-#  s.files         = Dir['lib/*'] + Dir['data/**/*'] + Dir['results/**/*'] + Dir['tests/*']
-#  s.files         = s.files + ['README.txt']
-#  s.files         = s.files + ['genevalidator.gemspec']
   s.executables   = ['genevalidator']
 #  s.require_paths = ['lib']
 
@@ -34,7 +31,7 @@ DESC
 ------------------------------------------------------------------------
   Thank you for validating your gene predictions with GeneValidator!
 
-  To launch SequenceServer execute 'genevalidator' from command line.
+  To launch GeneValidator execute 'genevalidator' from command line.
 
     $ genevalidatior -t TYPE [-s START] [--outfmt html|yaml] [--skip_blast xml_file_path] fasta_file_path
 

@@ -2,7 +2,7 @@ require 'genevalidator/validation_output'
 
 ##
 # Class that stores the validation output information
-class LengthClusterValidationOutput < ValidationOutput
+class LengthClusterValidationOutput < ValidationReport
 
   attr_reader :prediction_len
   attr_reader :limits
@@ -26,9 +26,7 @@ class LengthClusterValidationOutput < ValidationOutput
       end
     end    
   end
-
 end
-
 
 ##
 # This class contains the methods necessary for 
@@ -65,7 +63,7 @@ class LengthClusterValidation
   # Plots are generated if required (see +plot+ variable)
   # Output:
   # +LengthClusterValidationOutput+ object
-  def validation_test
+  def run
 
       ret = clusterization_by_length  #returns [clusters, max_density_cluster_idx]
 

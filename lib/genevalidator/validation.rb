@@ -4,9 +4,7 @@ require 'genevalidator/validation_blast_reading_frame'
 require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
-
-class QueryError < Exception
-end
+require 'genevalidator/exceptions'
 
 ##
 # This is a facade class for gene validation
@@ -56,22 +54,36 @@ class Validation
       query_output.nr_hits = hits.length
       plot_filename = "#{@filename}_#{@idx}"
 
-      query_output.length_validation_cluster = ValidationOutput.new("Not enough evidence")
-      query_output.length_validation_rank = ValidationOutput.new("Not enough evidence")
-      query_output.reading_frame_validation = ValidationOutput.new("Not enough evidence")
-      query_output.gene_merge_validation = ValidationOutput.new("Not enough evidence")
-      query_output.duplication  = ValidationOutput.new("Not enough evidence")
-      query_output.orf = ValidationOutput.new("-")
+      query_output.length_validation_cluster = ValidationReport.new("Not enough evidence")
+      query_output.length_validation_rank = ValidationReport.new("Not enough evidence")
+      query_output.reading_frame_validation = ValidationReport.new("Not enough evidence")
+      query_output.gene_merge_validation = ValidationReport.new("Not enough evidence")
+      query_output.duplication  = ValidationReport.new("Not enough evidence")
+      query_output.orf = ValidationReport.new("-")
+=begin
+      validations = []
 
-      query_output.length_validation_cluster = LengthClusterValidation.new(hits, prediction, plot_filename, plots).validation_test
-      query_output.length_validation_rank = LengthRankValidation.new(hits, prediction).validation_test
-      query_output.reading_frame_validation = BlastReadingFrameValidation.new(hits, prediction).validation_test
-      query_output.gene_merge_validation = GeneMergeValidation.new(hits, prediction, plot_filename, plots).validation_test
-      query_output.duplication  = DuplicationValidation.new(hits, prediction).validation_test
+      validations.push LengthClusterValidation.new(hits, prediction, plot_filename, plots)
+      validations.push LengthRankValidation.new(hits, prediction)
+      validations.push BlastReadingFrameValidation.new(hits, prediction)
+      validations.push GeneMergeValidation.new(hits, prediction, plot_filename, plots)
+      validations.push DuplicationValidation.new(hits, prediction)
+      if @type == :nucleotide
+#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).run
+         validations.push OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"])
+      end  
+      query_output.validations = validations.map{|v| v.run}
+=end
+
+      query_output.length_validation_cluster = LengthClusterValidation.new(hits, prediction, plot_filename, plots).run
+      query_output.length_validation_rank = LengthRankValidation.new(hits, prediction).run
+      query_output.reading_frame_validation = BlastReadingFrameValidation.new(hits, prediction).run
+      query_output.gene_merge_validation = GeneMergeValidation.new(hits, prediction, plot_filename, plots).run
+      query_output.duplication  = DuplicationValidation.new(hits, prediction).run
 
       if @type == :nucleotide
-#        query_output.orf = OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).validation_test
-         query_output.orf = OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"]).validation_test
+#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).run
+         validations.push OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"])
       end
 
       query_output

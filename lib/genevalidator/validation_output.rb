@@ -1,4 +1,4 @@
-class ValidationOutput
+class ValidationReport
 
   attr_reader :message
 

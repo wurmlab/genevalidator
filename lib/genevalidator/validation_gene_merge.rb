@@ -2,7 +2,7 @@ require 'genevalidator/validation_output'
 
 ##
 # Class that stores the validation output information
-class GeneMergeValidationOutput < ValidationOutput
+class GeneMergeValidationOutput < ValidationReport
 
   attr_reader :slope
   attr_reader :threshold_down
@@ -69,7 +69,7 @@ class GeneMergeValidation
   # Validation test for gene merge
   # Output:
   # +GeneMergeValidationOutput+ object
-  def validation_test
+  def run
 
     lm_slope = slope
  

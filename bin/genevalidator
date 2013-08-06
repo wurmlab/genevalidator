@@ -78,25 +78,11 @@ end
 # Main body
 
 if options[:start]
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:outfmt], options[:skip_blast], options[:start])
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:skip_blast], options[:outfmt], options[:start])
 else
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:outfmt], options[:skip_blast])
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:skip_blast], options[:outfmt])
 end
 
 b.blast
 
 
-=begin
-unless options[:skip_blast]
-  b.blast
-else
-  begin
-    # Skip the blast-ing part and provide a xml blast output file as argument to this ruby script
-    file = File.open(ARGV[0], "rb").read
-    b.parse_xml_output(file)
-  rescue SystemCallError
-    $stderr.print "Load error. Possible cause: input file is not valid\n"
-    exit
-  end
-end
-=end

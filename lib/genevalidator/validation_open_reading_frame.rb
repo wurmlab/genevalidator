@@ -3,7 +3,7 @@ require 'bio'
 
 ##
 # Class that stores the validation output information
-class ORFValidationOutput < ValidationOutput
+class ORFValidationOutput < ValidationReport
 
   attr_reader :orfs
   attr_reader :ratio
@@ -13,6 +13,7 @@ class ORFValidationOutput < ValidationOutput
     @orfs = orfs
     @ratio = ratio
     @threshold = threshold
+
   end
 
   def print
@@ -68,7 +69,7 @@ class OpenReadingFrameValidation
   # Check whether there is a main reading frame
   # Output:
   # +ORFValidationOutput+ object
-  def validation_test
+  def run
     orfs = get_orfs
     if plots 
       plot_orfs(orfs)

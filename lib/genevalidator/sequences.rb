@@ -1,25 +1,11 @@
-
-class Alignment
-
-  attr_accessor :hit_seq
-  attr_accessor :query_seq
-  attr_accessor :bit_score
-  attr_accessor :score
-
-  def initialize
-  end
-end
-
 class Sequence
 
-  attr_accessor :object_type #predicted | reference
   attr_accessor :seq_type #protein | mRNA
   attr_accessor :database
   attr_accessor :id
   attr_accessor :definition
   attr_accessor :species
   attr_accessor :accession_no
-  attr_accessor :fasta_length # not used, not neccesary
   attr_accessor :xml_length
   attr_accessor :raw_sequence
   attr_accessor :hsp_list # array of Hsp objects 

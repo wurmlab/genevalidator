@@ -2,7 +2,7 @@ require 'genevalidator/validation_output'
 
 ##
 # Class that stores the validation output information
-class DuplciationValidationOutput < ValidationOutput
+class DuplciationValidationOutput < ValidationReport
 
   attr_reader :pvalue
   attr_reader :threshold
@@ -61,7 +61,7 @@ class DuplicationValidation
   # Check duplication in the first n hits
   # Output:
   # +DuplciationValidationOutput+ object
-  def validation_test(n=10)
+  def run(n=10)
 
     # get the first n hits
     less_hits = @hits[0..[n-1,@hits.length].min]

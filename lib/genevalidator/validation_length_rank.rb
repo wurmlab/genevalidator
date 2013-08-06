@@ -2,9 +2,9 @@ require 'genevalidator/validation_output'
 
 ##
 # Class that stores the validation output information
-class LengthRankValidationOutput < ValidationOutput
+class LengthRankValidationOutput < ValidationReport
 
-  attr_reader :prercentage
+  attr_reader :percentage
   attr_reader :msg
 
   def initialize (percentage, msg)       
@@ -59,7 +59,7 @@ class LengthRankValidation
   # +prediction+ (optional): a +Sequence+ object
   # Output:
   # +LengthRankValidationOutput+ object
-  def validation_test(hits = @hits, prediction = @prediction)
+  def run(hits = @hits, prediction = @prediction)
     begin
       raise TypeError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
 
