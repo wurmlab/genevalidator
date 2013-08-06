@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: LengthRankValidation
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (L)</a> &raquo;
+    
+    
+    <span class="title">LengthRankValidation</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: LengthRankValidation
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">LengthRankValidation</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/genevalidator/validation_length_rank.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>This class contains the methods necessary for  length validation by ranking
+the hit lengths</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hits-instance_method" title="#hits (instance method)">- (Object) <strong>hits</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute hits.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#prediction-instance_method" title="#prediction (instance method)">- (Object) <strong>prediction</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute prediction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#threshold-instance_method" title="#threshold (instance method)">- (Object) <strong>threshold</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute threshold.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (LengthRankValidation) <strong>initialize</strong>(hits, prediction, threshold = 0.2) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits) <tt>prediction</tt>: a
+<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
+name of the input file, used when generatig the plot files
+<tt>threashold</tt>: threashold below which the prediction length rank is
+considered to be inadequate.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#run-instance_method" title="#run (instance method)">- (Object) <strong>run</strong>(hits = @hits, prediction = @prediction) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Calculates a precentage based on the rank of the predicion among the hit
+lengths Params: <tt>hits</tt> (optional): a vector of <tt>Sequence</tt>
+objects <tt>prediction</tt> (optional): a <tt>Sequence</tt> object Output:
+<tt>LengthRankValidationOutput</tt> object.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="LengthRankValidation (class)">LengthRankValidation</a></span></tt>) <strong>initialize</strong>(hits, prediction, threshold = 0.2) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits) <tt>prediction</tt>: a
+<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
+name of the input file, used when generatig the plot files
+<tt>threashold</tt>: threashold below which the prediction length rank is
+considered to be inadequate</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48
+49
+50
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_rank.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_threshold'>threshold</span> <span class='op'>=</span> <span class='float'>0.2</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>QueryError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_hits'>hits</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> 
+    <span class='ivar'>@hits</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span>
+    <span class='ivar'>@prediction</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span>
+    <span class='ivar'>@threshold</span> <span class='op'>=</span> <span class='id identifier rubyid_threshold'>threshold</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="hits-instance_method">
+  
+    - (<tt>Object</tt>) <strong>hits</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute hits</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_rank.rb', line 35</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hits'>hits</span>
+  <span class='ivar'>@hits</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="prediction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>prediction</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute prediction</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_rank.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prediction'>prediction</span>
+  <span class='ivar'>@prediction</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="threshold-instance_method">
+  
+    - (<tt>Object</tt>) <strong>threshold</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute threshold</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+37
+38
+39</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_rank.rb', line 37</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_threshold'>threshold</span>
+  <span class='ivar'>@threshold</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="run-instance_method">
+  
+    - (<tt>Object</tt>) <strong>run</strong>(hits = @hits, prediction = @prediction) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Calculates a precentage based on the rank of the predicion among the hit
+lengths Params: <tt>hits</tt> (optional): a vector of <tt>Sequence</tt>
+objects <tt>prediction</tt> (optional): a <tt>Sequence</tt> object Output:
+<tt>LengthRankValidationOutput</tt> object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_rank.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_run'>run</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_hits'>hits</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span>
+
+    <span class='id identifier rubyid_lengths'>lengths</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='rbrace'>}</span>
+    <span class='id identifier rubyid_len'>len</span> <span class='op'>=</span> <span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+    <span class='id identifier rubyid_median'>median</span> <span class='op'>=</span> <span class='id identifier rubyid_len'>len</span> <span class='op'>%</span> <span class='int'>2</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='id identifier rubyid_lengths'>lengths</span><span class='lbracket'>[</span><span class='id identifier rubyid_len'>len</span><span class='op'>/</span><span class='int'>2</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lparen'>(</span><span class='id identifier rubyid_lengths'>lengths</span><span class='lbracket'>[</span><span class='id identifier rubyid_len'>len</span><span class='op'>/</span><span class='int'>2</span> <span class='op'>-</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_lengths'>lengths</span><span class='lbracket'>[</span><span class='id identifier rubyid_len'>len</span><span class='op'>/</span><span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>/</span> <span class='int'>2</span>
+
+    <span class='id identifier rubyid_predicted_len'>predicted_len</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_predicted_len'>predicted_len</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_median'>median</span>
+      <span class='id identifier rubyid_rank'>rank</span> <span class='op'>=</span> <span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_find_all'>find_all</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_predicted_len'>predicted_len</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+      <span class='id identifier rubyid_percentage'>percentage</span> <span class='op'>=</span> <span class='id identifier rubyid_rank'>rank</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_len'>len</span> <span class='op'>+</span> <span class='float'>0.0</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TOO_SHORT</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_rank'>rank</span> <span class='op'>=</span> <span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_find_all'>find_all</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_predicted_len'>predicted_len</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+      <span class='id identifier rubyid_percentage'>percentage</span> <span class='op'>=</span> <span class='id identifier rubyid_rank'>rank</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_len'>len</span> <span class='op'>+</span> <span class='float'>0.0</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TOO_LONG</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_percentage'>percentage</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_threshold'>threshold</span>
+      <span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>YES</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='const'>LengthRankValidationOutput</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_percentage'>percentage</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='int'>2</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_msg'>msg</span><span class='rparen'>)</span>
+
+  <span class='kw'>rescue</span> <span class='const'>TypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. Possible cause: one of the arguments of 'length_rank' method has not the proper type.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit'>exit</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Wed Aug  7 01:58:45 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

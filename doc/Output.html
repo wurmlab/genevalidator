@@ -1,0 +1,1882 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Output
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (O)</a> &raquo;
+    
+    
+    <span class="title">Output</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Output
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Output</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/genevalidator/output.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#duplication-instance_method" title="#duplication (instance method)">- (Object) <strong>duplication</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute duplication.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#filename-instance_method" title="#filename (instance method)">- (Object) <strong>filename</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute filename.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gene_merge_validation-instance_method" title="#gene_merge_validation (instance method)">- (Object) <strong>gene_merge_validation</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute gene_merge_validation.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idx-instance_method" title="#idx (instance method)">- (Object) <strong>idx</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute idx.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image_histo_len-instance_method" title="#image_histo_len (instance method)">- (Object) <strong>image_histo_len</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute image_histo_len.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image_histo_merge-instance_method" title="#image_histo_merge (instance method)">- (Object) <strong>image_histo_merge</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute image_histo_merge.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image_orfs-instance_method" title="#image_orfs (instance method)">- (Object) <strong>image_orfs</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute image_orfs.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image_plot_merge-instance_method" title="#image_plot_merge (instance method)">- (Object) <strong>image_plot_merge</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute image_plot_merge.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#length_validation_cluster-instance_method" title="#length_validation_cluster (instance method)">- (Object) <strong>length_validation_cluster</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute length_validation_cluster.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#length_validation_rank-instance_method" title="#length_validation_rank (instance method)">- (Object) <strong>length_validation_rank</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute length_validation_rank.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#nr_hits-instance_method" title="#nr_hits (instance method)">- (Object) <strong>nr_hits</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute nr_hits.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#orf-instance_method" title="#orf (instance method)">- (Object) <strong>orf</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute orf.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#prediction_def-instance_method" title="#prediction_def (instance method)">- (Object) <strong>prediction_def</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute prediction_def.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#prediction_len-instance_method" title="#prediction_len (instance method)">- (Object) <strong>prediction_len</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute prediction_len.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reading_frame_validation-instance_method" title="#reading_frame_validation (instance method)">- (Object) <strong>reading_frame_validation</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute reading_frame_validation.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#start_idx-instance_method" title="#start_idx (instance method)">- (Object) <strong>start_idx</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute start_idx.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validations-instance_method" title="#validations (instance method)">- (Object) <strong>validations</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute validations.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#generate_html-instance_method" title="#generate_html (instance method)">- (Object) <strong>generate_html</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Output) <strong>initialize</strong>(filename, idx, start_idx) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Output.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#print_output_console-instance_method" title="#print_output_console (instance method)">- (Object) <strong>print_output_console</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#print_output_file_yaml-instance_method" title="#print_output_file_yaml (instance method)">- (Object) <strong>print_output_file_yaml</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Output (class)">Output</a></span></tt>) <strong>initialize</strong>(filename, idx, start_idx) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Output</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='comma'>,</span> <span class='id identifier rubyid_start_idx'>start_idx</span><span class='rparen'>)</span>
+
+  <span class='ivar'>@prediction_len</span> <span class='op'>=</span> <span class='int'>0</span>
+  <span class='ivar'>@prediction_def</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no_definition</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@nr_hits</span> <span class='op'>=</span> <span class='int'>0</span>
+
+  <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span>
+  <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='id identifier rubyid_idx'>idx</span>
+  <span class='ivar'>@start_idx</span> <span class='op'>=</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
+
+  <span class='ivar'>@image_histo_len</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_filename'>filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_content'>_len_clusters.jpg</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@image_plot_merge</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_filename'>filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_content'>_match.jpg</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@image_histo_merge</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_filename'>filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_content'>_match_2d.jpg</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@image_orfs</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_filename'>filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_content'>_orfs.jpg</span><span class='tstring_end'>&quot;</span></span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="duplication=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="duplication-instance_method">
+  
+    - (<tt>Object</tt>) <strong>duplication</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute duplication</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_duplication'>duplication</span>
+  <span class='ivar'>@duplication</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="filename=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="filename-instance_method">
+  
+    - (<tt>Object</tt>) <strong>filename</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute filename</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
+  <span class='ivar'>@filename</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="gene_merge_validation=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="gene_merge_validation-instance_method">
+  
+    - (<tt>Object</tt>) <strong>gene_merge_validation</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute gene_merge_validation</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_gene_merge_validation'>gene_merge_validation</span>
+  <span class='ivar'>@gene_merge_validation</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="idx=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="idx-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idx</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute idx</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 24</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_idx'>idx</span>
+  <span class='ivar'>@idx</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="image_histo_len=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="image_histo_len-instance_method">
+  
+    - (<tt>Object</tt>) <strong>image_histo_len</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute image_histo_len</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_image_histo_len'>image_histo_len</span>
+  <span class='ivar'>@image_histo_len</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="image_histo_merge=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="image_histo_merge-instance_method">
+  
+    - (<tt>Object</tt>) <strong>image_histo_merge</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute image_histo_merge</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_image_histo_merge'>image_histo_merge</span>
+  <span class='ivar'>@image_histo_merge</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="image_orfs=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="image_orfs-instance_method">
+  
+    - (<tt>Object</tt>) <strong>image_orfs</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute image_orfs</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_image_orfs'>image_orfs</span>
+  <span class='ivar'>@image_orfs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="image_plot_merge=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="image_plot_merge-instance_method">
+  
+    - (<tt>Object</tt>) <strong>image_plot_merge</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute image_plot_merge</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 21</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_image_plot_merge'>image_plot_merge</span>
+  <span class='ivar'>@image_plot_merge</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="length_validation_cluster=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="length_validation_cluster-instance_method">
+  
+    - (<tt>Object</tt>) <strong>length_validation_cluster</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute length_validation_cluster</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_length_validation_cluster'>length_validation_cluster</span>
+  <span class='ivar'>@length_validation_cluster</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="length_validation_rank=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="length_validation_rank-instance_method">
+  
+    - (<tt>Object</tt>) <strong>length_validation_rank</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute length_validation_rank</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_length_validation_rank'>length_validation_rank</span>
+  <span class='ivar'>@length_validation_rank</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="nr_hits=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="nr_hits-instance_method">
+  
+    - (<tt>Object</tt>) <strong>nr_hits</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute nr_hits</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 8</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_nr_hits'>nr_hits</span>
+  <span class='ivar'>@nr_hits</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="orf=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="orf-instance_method">
+  
+    - (<tt>Object</tt>) <strong>orf</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute orf</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_orf'>orf</span>
+  <span class='ivar'>@orf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="prediction_def=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="prediction_def-instance_method">
+  
+    - (<tt>Object</tt>) <strong>prediction_def</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute prediction_def</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prediction_def'>prediction_def</span>
+  <span class='ivar'>@prediction_def</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="prediction_len=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="prediction_len-instance_method">
+  
+    - (<tt>Object</tt>) <strong>prediction_len</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute prediction_len</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prediction_len'>prediction_len</span>
+  <span class='ivar'>@prediction_len</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="reading_frame_validation=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="reading_frame_validation-instance_method">
+  
+    - (<tt>Object</tt>) <strong>reading_frame_validation</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute reading_frame_validation</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_reading_frame_validation'>reading_frame_validation</span>
+  <span class='ivar'>@reading_frame_validation</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="start_idx=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="start_idx-instance_method">
+  
+    - (<tt>Object</tt>) <strong>start_idx</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute start_idx</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
+  <span class='ivar'>@start_idx</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="validations=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="validations-instance_method">
+  
+    - (<tt>Object</tt>) <strong>validations</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute validations</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validations'>validations</span>
+  <span class='ivar'>@validations</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="generate_html-instance_method">
+  
+    - (<tt>Object</tt>) <strong>generate_html</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 80</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_generate_html'>generate_html</span>
+
+  <span class='id identifier rubyid_gray'>gray</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#E8E8E8</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_white'>white</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#FFFFFF</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>%</span><span class='int'>2</span> <span class='op'>==</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='id identifier rubyid_gray'>gray</span>
+  <span class='kw'>else</span> 
+    <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='id identifier rubyid_white'>white</span> 
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@length_validation_cluster</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span>
+     <span class='ivar'>@length_validation_rank</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span>
+     <span class='ivar'>@reading_frame_validation</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span>
+     <span class='ivar'>@gene_merge_validation</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span>
+     <span class='ivar'>@duplication</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span>
+     <span class='ivar'>@orf</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_icon'>icon</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;b&gt;&amp;#33;&lt;/b&gt;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_bg_icon'>bg_icon</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_icon'>icon</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&amp;#10003;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_bg_icon'>bg_icon</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>white</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+ 
+
+  <span class='comment'># if it's the first time I write in the html file
+</span>  <span class='kw'>if</span> <span class='ivar'>@idx</span> <span class='op'>==</span> <span class='ivar'>@start_idx</span>
+    <span class='id identifier rubyid_header'>header</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;html&gt;&lt;head&gt;
+                   &lt;title&gt;Gene Validation Result&lt;/title&gt;
+&lt;script type=\&quot;text/javascript\&quot; src=\&quot;js/jquery-1.10.2.min.js\&quot;&gt;&lt;/script&gt; 
+&lt;script type=\&quot;text/javascript\&quot; src=\&quot;js/jquery.tablesorter/jquery.tablesorter.js\&quot;&gt;&lt;/script&gt; 
+&lt;script type=\&quot;text/javascript\&quot; src=\&quot;js/jquery.tablesorter.mod.js\&quot;&gt;&lt;/script&gt;
+                   &lt;script language=\&quot;javascript\&quot;&gt; 
+
+                   function showDiv(toggle){
+                     var button = document.getElementById(toggle)
+                     if(button.style.display == \&quot;block\&quot;){
+                        button.style.display = \&quot;none\&quot;;
+                     }
+                     else{
+                        button.style.display = \&quot;block\&quot;;
+                     }
+                   }
+
+                   $(document).ready(function() { 
+                        $(\&quot;#myTable\&quot;).tablesorter( {sortList: [[4,0], [6,0]]} ); 
+                   }); 
+
+                   function reOrder() {
+                        $(\&quot;#myTable\&quot;).sortable({
+                             helper: function(e, ui) {
+                                  ui.children().each(function() {
+                                         $(this).width($(this).width());
+                                  });
+                                  return ui;
+                             },
+                             items: \&quot;tbody\&quot;
+                         }).disableSelection();
+                   }
+
+                &lt;/script&gt;             
+                &lt;/head&gt;
+                &lt;body&gt;
+                    &lt;table border=\&quot;1\&quot; cellpadding=\&quot;5\&quot; cellspacing=\&quot;0\&quot; width = 1650 id=\&quot;myTable\&quot; class=\&quot;tablesorter\&quot;&gt;
+                              &lt;thead&gt;
+                              &lt;tr bgcolor = #E8E8E8&gt;
+                                      &lt;th&gt;&lt;b&gt;Click to sort!&lt;/b&gt;&lt;/th&gt;
+                                      &lt;th&gt;&lt;/th&gt;
+                                      &lt;th&gt;No.&lt;/th&gt;
+                                      &lt;th width=100 title=\&quot;FASTA Header of the query\&quot;&gt;Description&lt;/th&gt;
+                                      &lt;th title=\&quot;Number of hits found by BLAST.\&quot;&gt;No. Hits&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether the prediction length fits the most of the BLAST hit lengths, by 1D hierarchical clusterization.\&quot;&gt;Valid Length(Cluster)&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths.\&quot;&gt;Valid Length(Rank)&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether the reading frame shifts.\&quot;&gt;Valid Reading Frame&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether there BLAST hits make evidence about a merge of two genes that cover the predicted gene.\&quot;&gt;Gene Merge(slope)&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether there is a duplicated subsequence in the predicted gene.\&quot;&gt;Duplication&lt;/th&gt;
+                                      &lt;th title=\&quot;Check whether there is a single main Open Reading Frame in the predicted gene.\&quot; style=\&quot;white-space:nowrap\&quot;&gt; ORF Test&lt;/th&gt;
+                                      &lt;th title=\&quot;Overall evaluation based on all validation tests\&quot; &gt; Overall Evaluation&lt;/th&gt;
+                              &lt;/tr&gt;&lt;/thead&gt;</span><span class='tstring_end'>&quot;</span></span>                  
+    
+    <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>.html</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w+</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+      <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_header'>header</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_toggle'>toggle</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>toggle</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>
+            &lt;tr bgcolor=</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>white</span><span class='tstring_end'>'</span></span><span class='rbrace'>}</span><span class='tstring_content'>&gt; 
+     &lt;td&gt;&lt;button type=button name=answer onclick=showDiv('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_toggle'>toggle</span><span class='rbrace'>}</span><span class='tstring_content'>')&gt;Show/Hide Plots&lt;/button&gt;&lt;/td&gt; 
+            &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_bg_icon'>bg_icon</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_icon'>icon</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+            &lt;td&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@prediction_def</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@nr_hits</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@length_validation_cluster</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@length_validation_cluster</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@length_validation_rank</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@length_validation_rank</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@reading_frame_validation</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@reading_frame_validation</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@gene_merge_validation</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@gene_merge_validation</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+     &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@duplication</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@duplication</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+            &lt;td bgcolor=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@orf</span><span class='period'>.</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'> style=\&quot;white-space:nowrap\&quot;&gt;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@orf</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;
+            &lt;td style=\&quot;white-space:nowrap\&quot;&gt;...&lt;/td&gt;
+     &lt;/tr&gt;
+
+     &lt;tr bgcolor=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'> class=\&quot;expand-child\&quot;&gt;
+     &lt;td  colspan=12&gt;
+            &lt;div id=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_toggle'>toggle</span><span class='rbrace'>}</span><span class='tstring_content'> style='display:none'&gt;
+
+            &lt;img src=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_image_histo_len'>image_histo_len</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> height=400&gt;
+     &lt;img src=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_image_plot_merge'>image_plot_merge</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> height=400&gt;
+            &lt;img src=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_image_histo_merge'>image_histo_merge</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> height=400&gt;</span><span class='tstring_end'>&quot;</span></span>
+            <span class='kw'>if</span> <span class='ivar'>@orf</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span>
+              <span class='id identifier rubyid_output'>output</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;img src=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_image_orfs'>image_orfs</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> height=400&gt;</span><span class='tstring_end'>&quot;</span></span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_output'>output</span><span class='op'>+=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>.html</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>  
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="print_output_console-instance_method">
+  
+    - (<tt>Object</tt>) <strong>print_output_console</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 44</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_print_output_console'>print_output_console</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@idx</span> <span class='op'>==</span> <span class='ivar'>@start_idx</span>
+    <span class='id identifier rubyid_printf'>printf</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No | Description | No_Hits | Valid_Length(Cluster) | Valid_Length(Rank) | Valid_Reading_Frame | Gene_Merge(slope) | Duplication | ORF_Test\n</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_short_def'>short_def</span> <span class='op'>=</span> <span class='ivar'>@prediction_def</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^ ]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_printf'>printf</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%3s|%25s|%7s|%15s|%15s|%10s|%15s|%10s|%5s\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>              
+            <span class='ivar'>@idx</span><span class='comma'>,</span>
+            <span class='id identifier rubyid_short_def'>short_def</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='lbracket'>[</span><span class='int'>25</span><span class='comma'>,</span><span class='id identifier rubyid_short_def'>short_def</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='rbracket'>]</span><span class='comma'>,</span>
+            <span class='ivar'>@nr_hits</span><span class='comma'>,</span>
+            <span class='ivar'>@length_validation_cluster</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='comma'>,</span> 
+            <span class='ivar'>@length_validation_rank</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='comma'>,</span>
+            <span class='ivar'>@reading_frame_validation</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='comma'>,</span>
+            <span class='ivar'>@gene_merge_validation</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='comma'>,</span>
+            <span class='ivar'>@duplication</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span><span class='comma'>,</span>
+            <span class='ivar'>@orf</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="print_output_file_yaml-instance_method">
+  
+    - (<tt>Object</tt>) <strong>print_output_file_yaml</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/output.rb', line 65</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_print_output_file_yaml'>print_output_file_yaml</span>
+  <span class='id identifier rubyid_file_yaml'>file_yaml</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>.yaml</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>if</span> <span class='ivar'>@idx</span> <span class='op'>!=</span> <span class='ivar'>@start_idx</span>
+    <span class='id identifier rubyid_hsh'>hsh</span> <span class='op'>=</span> <span class='const'>YAML</span><span class='period'>.</span><span class='id identifier rubyid_load_file'>load_file</span><span class='lparen'>(</span><span class='id identifier rubyid_file_yaml'>file_yaml</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_hsh'>hsh</span><span class='lbracket'>[</span><span class='ivar'>@prediction_def</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^ ]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>self</span>
+    <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_file_yaml'>file_yaml</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+      <span class='const'>YAML</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='id identifier rubyid_hsh'>hsh</span><span class='comma'>,</span> <span class='id identifier rubyid_f'>f</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span> 
+    <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_file_yaml'>file_yaml</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+      <span class='const'>YAML</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='ivar'>@prediction_def</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^ ]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>=&gt;</span> <span class='kw'>self</span><span class='rbrace'>}</span><span class='comma'>,</span><span class='id identifier rubyid_f'>f</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Wed Aug  7 01:58:44 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

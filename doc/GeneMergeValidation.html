@@ -1,0 +1,1083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: GeneMergeValidation
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (G)</a> &raquo;
+    
+    
+    <span class="title">GeneMergeValidation</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: GeneMergeValidation
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">GeneMergeValidation</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/genevalidator/validation_gene_merge.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#filename-instance_method" title="#filename (instance method)">- (Object) <strong>filename</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute filename.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hits-instance_method" title="#hits (instance method)">- (Object) <strong>hits</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute hits.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#plots-instance_method" title="#plots (instance method)">- (Object) <strong>plots</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute plots.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#prediction-instance_method" title="#prediction (instance method)">- (Object) <strong>prediction</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute prediction.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (GeneMergeValidation) <strong>initialize</strong>(hits, prediction, filename, plots) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits) <tt>prediction</tt>: a
+<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
+name of the input file, used when generatig the plot files <tt>plots</tt>:
+boolean variable, indicated whether plots should be generated or not.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#plot_2d_start_from-instance_method" title="#plot_2d_start_from (instance method)">- (Object) <strong>plot_2d_start_from</strong>(output, slope, hits = @hits) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Plots 2D graph with the start/end of the matched region offsets in the
+prediction Param <tt>output</tt>: location where the plot will be saved in
+jped file format <tt>slope</tt>: slope of the linear regression line
+<tt>hits</tt>: array of Sequence objects.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#plot_matched_regions-instance_method" title="#plot_matched_regions (instance method)">- (Object) <strong>plot_matched_regions</strong>(output, lst = @hits, predicted_seq = @prediction) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Plots lines corresponding to each hit highlights the matched region of the
+prediction for each hit Param <tt>output</tt>: location where the plot will
+be saved in jped file format <tt>lst</tt>: array of Sequence objects
+<tt>predicted_seq</tt>: Sequence objects.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#plot_merge_clusters-instance_method" title="#plot_merge_clusters (instance method)">- (Object) <strong>plot_merge_clusters</strong>(output, clusters = @clustersi, middles) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Plots the histogram of the distribution of the middles of the hits Params:
+<tt>output</tt>: filename where to save the graph <tt>clusters</tt>: array
+of Cluster objects <tt>middles</tt>: array with values with potential
+multimodal distribution.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#run-instance_method" title="#run (instance method)">- (Object) <strong>run</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Validation test for gene merge Output: <tt>GeneMergeValidationOutput</tt>
+object.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#slope-instance_method" title="#slope (instance method)">- (Object) <strong>slope</strong>(hits = @hits) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Plots 2D graph with the start/end of the matched region offsets in the
+prediction Param <tt>hits</tt>: array of Sequence objects.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="GeneMergeValidation (class)">GeneMergeValidation</a></span></tt>) <strong>initialize</strong>(hits, prediction, filename, plots) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits) <tt>prediction</tt>: a
+<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
+name of the input file, used when generatig the plot files <tt>plots</tt>:
+boolean variable, indicated whether plots should be generated or not</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59
+60
+61
+62
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>QueryError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_hits'>hits</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span>
+    <span class='ivar'>@hits</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span>
+    <span class='ivar'>@prediction</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span>
+    <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span>
+    <span class='ivar'>@plots</span> <span class='op'>=</span> <span class='id identifier rubyid_plots'>plots</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="filename-instance_method">
+  
+    - (<tt>Object</tt>) <strong>filename</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute filename</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
+  <span class='ivar'>@filename</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="hits-instance_method">
+  
+    - (<tt>Object</tt>) <strong>hits</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute hits</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hits'>hits</span>
+  <span class='ivar'>@hits</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="plots-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plots</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute plots</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plots'>plots</span>
+  <span class='ivar'>@plots</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="prediction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>prediction</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute prediction</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prediction'>prediction</span>
+  <span class='ivar'>@prediction</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="plot_2d_start_from-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plot_2d_start_from</strong>(output, slope, hits = @hits) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Plots 2D graph with the start/end of the matched region offsets in the
+prediction Param <tt>output</tt>: location where the plot will be saved in
+jped file format <tt>slope</tt>: slope of the linear regression line
+<tt>hits</tt>: array of Sequence objects</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 154</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plot_2d_start_from'>plot_2d_start_from</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_slope'>slope</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='rparen'>)</span>    
+
+  <span class='id identifier rubyid_pairs'>pairs</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='const'>Pair</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='comma'>,</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_xx'>xx</span> <span class='op'>=</span> <span class='id identifier rubyid_pairs'>pairs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_yy'>yy</span> <span class='op'>=</span> <span class='id identifier rubyid_pairs'>pairs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='period'>.</span><span class='id identifier rubyid_y'>y</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_min_start'>min_start</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
+  <span class='id identifier rubyid_max_start'>max_start</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
+
+  <span class='id identifier rubyid_min_end'>min_end</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
+  <span class='id identifier rubyid_max_end'>max_end</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
+
+  <span class='comment'>#calculate the likelyhood to have a binomial distribution
+</span>  <span class='comment'>#split into two clusters
+</span>
+  <span class='comment'>#hc = HierarchicalClusterization.new(pairs)
+</span>  <span class='comment'>#clusters = hc.hierarchical_clusterization_2d(2, 1)
+</span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>jpeg('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_output'>output</span><span class='rbrace'>}</span><span class='tstring_content'>_match_2d.jpg')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors = c('red', 'blue')</span><span class='tstring_end'>&quot;</span></span><span class='semicolon'>;</span>
+
+  <span class='comment'>#clusters.each_with_index do |cluster, i|
+</span>  <span class='comment'>#  x_values = cluster.objects.map{|pair| pair[0].x}
+</span>  <span class='comment'>#  y_values = cluster.objects.map{|pair| pair[0].y}
+</span>
+  <span class='id identifier rubyid_x_values'>x_values</span> <span class='op'>=</span> <span class='id identifier rubyid_xx'>xx</span>
+  <span class='id identifier rubyid_y_values'>y_values</span> <span class='op'>=</span> <span class='id identifier rubyid_yy'>yy</span>
+
+    <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>'red'</span><span class='tstring_end'>&quot;</span></span><span class='comment'>#&quot;colors[#{i%2+1}]&quot;
+</span>    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>plot(c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_x_values'>x_values</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>,
+                 c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_y_values'>y_values</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>,
+                 xlim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_max_start'>max_start</span><span class='op'>+</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>), 
+                 ylim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_max_end'>max_end</span><span class='op'>+</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>), 
+                 col=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>, 
+                 main='Start vs end match 2D plot', xlab='from', ylab='to', 
+                 pch=10)</span><span class='tstring_end'>&quot;</span></span>        
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>par(new=T)</span><span class='tstring_end'>&quot;</span></span>           
+  <span class='comment'>#end
+</span> 
+  <span class='kw'>unless</span> <span class='id identifier rubyid_slope'>slope</span><span class='period'>.</span><span class='id identifier rubyid_nan?'>nan?</span>
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>x = c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_xx'>xx</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y = c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yy'>yy</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>abline(lm(y~x, singular.ok=FALSE))</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>dev.off()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="plot_matched_regions-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plot_matched_regions</strong>(output, lst = @hits, predicted_seq = @prediction) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Plots lines corresponding to each hit highlights the matched region of the
+prediction for each hit Param <tt>output</tt>: location where the plot will
+be saved in jped file format <tt>lst</tt>: array of Sequence objects
+<tt>predicted_seq</tt>: Sequence objects</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 120</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plot_matched_regions'>plot_matched_regions</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='comma'>,</span> <span class='id identifier rubyid_predicted_seq'>predicted_seq</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_max_len'>max_len</span> <span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
+
+  <span class='id identifier rubyid_max_plots'>max_plots</span> <span class='op'>=</span> <span class='int'>120</span>
+  <span class='id identifier rubyid_skip'>skip</span><span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>/</span><span class='id identifier rubyid_max_plots'>max_plots</span>
+  <span class='id identifier rubyid_len'>len</span> <span class='op'>=</span> <span class='id identifier rubyid_predicted_seq'>predicted_seq</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span>
+
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>jpeg('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_output'>output</span><span class='rbrace'>}</span><span class='tstring_content'>_match.jpg')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>plot(1:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>-</span><span class='int'>1</span><span class='rbrace'>}</span><span class='tstring_content'>, xlim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_len'>len</span><span class='rbrace'>}</span><span class='tstring_content'>), xlab='Prediction length (black) vs part of the prediction that matches hit x (red/yellow)',ylab='Hit Number', col='white')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors = c('yellow', 'red')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors2 = c('black', 'gray')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_height'>height</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span><span class='semicolon'>;</span>
+  <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_seq'>seq</span><span class='comma'>,</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    <span class='comment'>#if skip == 0 or i%skip == 0
+</span>    <span class='comment'>#if i &lt; max_plots
+</span>      <span class='id identifier rubyid_height'>height</span> <span class='op'>+=</span> <span class='int'>1</span>
+      <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='op'>%</span><span class='int'>2</span><span class='op'>+</span><span class='int'>1</span><span class='rbrace'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_color2'>color2</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors2[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='op'>%</span><span class='int'>2</span><span class='op'>+</span><span class='int'>1</span><span class='rbrace'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
+      <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lines(c(1,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_len'>len</span><span class='rbrace'>}</span><span class='tstring_content'>), c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>), lwd=7)</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_seq'>seq</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span>
+        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lines(c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='rbrace'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='rbrace'>}</span><span class='tstring_content'>), c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>), lwd=6, col=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>         
+      <span class='kw'>end</span>
+    <span class='comment'>#end
+</span>  <span class='kw'>end</span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>dev.off()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="plot_merge_clusters-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plot_merge_clusters</strong>(output, clusters = @clustersi, middles) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Plots the histogram of the distribution of the middles of the hits Params:
+<tt>output</tt>: filename where to save the graph <tt>clusters</tt>: array
+of Cluster objects <tt>middles</tt>: array with values with potential
+multimodal distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plot_merge_clusters'>plot_merge_clusters</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='ivar'>@clustersi</span><span class='comma'>,</span> <span class='id identifier rubyid_middles'>middles</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_max_freq'>max_freq</span> <span class='op'>=</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='id identifier rubyid_y'>y</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
+
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors = c('red', 'blue', 'yellow', 'green', 'gray', 'orange')</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>jpeg('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_output'>output</span><span class='rbrace'>}</span><span class='tstring_content'>_match_distr.jpg')</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cluster'>cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    <span class='id identifier rubyid_cluster_values'>cluster_values</span> <span class='op'>=</span> <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
+    <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='op'>%</span><span class='int'>5</span><span class='op'>+</span><span class='int'>1</span><span class='rbrace'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
+
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>hist(c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_cluster_values'>cluster_values</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>[</span><span class='tstring_end'>'</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>(</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>]</span><span class='tstring_end'>'</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>)</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>,
+                   breaks = 30,
+                   xlim=c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_middles'>middles</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='op'>-</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_middles'>middles</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='op'>+</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>),
+                   ylim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_max_freq'>max_freq</span><span class='rbrace'>}</span><span class='tstring_content'>),
+                   col=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>,
+                   border=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>,
+                   main='Predction match distribution (middle of the matches)', xlab='position idx', ylab='Frequency')</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>par(new=T)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>dev.off()</span><span class='tstring_end'>&quot;</span></span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="run-instance_method">
+  
+    - (<tt>Object</tt>) <strong>run</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Validation test for gene merge Output: <tt>GeneMergeValidationOutput</tt>
+object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_run'>run</span>
+
+  <span class='id identifier rubyid_lm_slope'>lm_slope</span> <span class='op'>=</span> <span class='id identifier rubyid_slope'>slope</span>
+ 
+  <span class='kw'>if</span> <span class='id identifier rubyid_plots'>plots</span>
+    <span class='id identifier rubyid_plot_matched_regions'>plot_matched_regions</span><span class='lparen'>(</span><span class='ivar'>@filename</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_plot_2d_start_from'>plot_2d_start_from</span><span class='lparen'>(</span><span class='ivar'>@filename</span><span class='comma'>,</span> <span class='id identifier rubyid_lm_slope'>lm_slope</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='const'>GeneMergeValidationOutput</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_lm_slope'>lm_slope</span><span class='rparen'>)</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="slope-instance_method">
+  
+    - (<tt>Object</tt>) <strong>slope</strong>(hits = @hits) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Plots 2D graph with the start/end of the matched region offsets in the
+prediction Param <tt>hits</tt>: array of Sequence objects</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_gene_merge.rb', line 206</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_slope'>slope</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_pairs'>pairs</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='const'>Pair</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='comma'>,</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_xx'>xx</span> <span class='op'>=</span> <span class='id identifier rubyid_pairs'>pairs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_yy'>yy</span> <span class='op'>=</span> <span class='id identifier rubyid_pairs'>pairs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='period'>.</span><span class='id identifier rubyid_y'>y</span><span class='rbrace'>}</span>
+
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>x = c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_xx'>xx</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y = c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yy'>yy</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>slope = lm(y~x)$coefficients[2]</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_slope'>slope</span> <span class='op'>=</span> <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_pull'>pull</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>slope</span><span class='tstring_end'>&quot;</span></span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Wed Aug  7 01:58:45 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
