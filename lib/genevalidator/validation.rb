@@ -73,11 +73,22 @@ class Validation
       end
 
       validations.map{|v| v.run}
+
+      # check the class type of the validation reports
+      validations.map do |v|
+        raise ReportClassError unless v.validation_report.is_a? ValidationReport
+      end
+
       query_output.validations = validations
       return query_output
-    rescue ValidationClassError => error
-        $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validations is not ValidationTest"
+
+    rescue ValudationClassError => error
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validations is not ValidationTest"
       exit
+    rescue ReportClassError => error
+        $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport"
+      exit
+
     end
   end
 end
