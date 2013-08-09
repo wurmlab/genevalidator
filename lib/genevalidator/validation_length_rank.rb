@@ -1,4 +1,5 @@
 require 'genevalidator/validation_output'
+require 'genevalidator/validation_test'
 
 ##
 # Class that stores the validation output information
@@ -7,7 +8,7 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize (percentage, msg)       
+  def initialize (msg, percentage)       
     @percentage = percentage
     @msg = msg
   end
@@ -17,23 +18,19 @@ class LengthRankValidationOutput < ValidationReport
   end
 
   def validation
-    if msg == "YES"
+    if msg == "OK"
       :yes
     else
       :no
     end
   end
-
 end
-
 
 ##
 # This class contains the methods necessary for 
 # length validation by ranking the hit lengths
-class LengthRankValidation
+class LengthRankValidation < ValidationTest
 
-  attr_reader :hits
-  attr_reader :prediction
   attr_reader :threshold
 
   ##
@@ -41,15 +38,13 @@ class LengthRankValidation
   # Params:
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +filename+: name of the input file, used when generatig the plot files
   # +threashold+: threashold below which the prediction length rank is considered to be inadequate 
-  def initialize(hits, prediction, threshold = 0.2)
-    begin
-      raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence 
-      @hits = hits
-      @prediction = prediction
-      @threshold = threshold
-    end
+  def initialize(type, prediction, hits, threshold = 0.2)
+    super
+    @threshold = threshold
+    @short_header = "Valid_Length(Rank)"
+    @header = "Valid Length(Rank)"
+    @description = "Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths."
   end
 
   ##
@@ -61,7 +56,7 @@ class LengthRankValidation
   # +LengthRankValidationOutput+ object
   def run(hits = @hits, prediction = @prediction)
     begin
-      raise TypeError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
       lengths = hits.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
       len = lengths.length
@@ -69,25 +64,30 @@ class LengthRankValidation
 
       predicted_len = prediction.xml_length
 
-      if predicted_len < median
-        rank = lengths.find_all{|x| x < predicted_len}.length
-        percentage = rank / (len + 0.0)
-        msg = "TOO_SHORT"
+      if hits.length == 1
+        msg = "OK"
+        percentage = 1
       else
-        rank = lengths.find_all{|x| x > predicted_len}.length
-        percentage = rank / (len + 0.0)
-        msg = "TOO_LONG"
+        if predicted_len < median
+          rank = lengths.find_all{|x| x < predicted_len}.length
+          percentage = rank / (len + 0.0)
+          msg = "TOO_SHORT"
+        else
+          rank = lengths.find_all{|x| x > predicted_len}.length
+          percentage = rank / (len + 0.0)
+          msg = "TOO_LONG"
+        end
       end
 
       if percentage >= threshold
-        msg = "YES"
+        msg = "OK"
       end
 
-      LengthRankValidationOutput.new(percentage.round(2), msg)
+      @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
 
-    rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'length_rank' method has not the proper type.\n"
-      exit
+    # Exception is raised when blast founds no hits
+    rescue Exception => error
+      ValidationReport.new("Not enough evidence", "Valid_Length(Rank)")
     end
   end
 

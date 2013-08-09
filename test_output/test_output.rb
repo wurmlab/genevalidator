@@ -5,6 +5,14 @@ require 'minitest/autorun'
 require "yaml"
 require 'genevalidator/blast'
 
+##
+# Use: rake output FILE="data/solenopsis_length_test/prot_Solenopsis_invicta" TYPE="protein"
+# Use: rake output (one default file is used)
+##
+# This test makes statistics by counting the number of
+# positive / false positive/  false negative results
+# by I compare the validation outputs (in yaml format) with
+# a list of outputs labelled by hand (test_reference.yaml)
 class ValidateOutput < Test::Unit::TestCase
 
   describe "Validate Output" do  
@@ -26,7 +34,6 @@ class ValidateOutput < Test::Unit::TestCase
     filename = ARGV[0]
     type = ARGV[1]
     filename_fasta = "#{filename}.fasta"
-    puts filename_fasta
     filename_xml = "#{filename}.xml"
 
     b = Blast.new(filename_fasta, type, filename_xml)
@@ -68,44 +75,42 @@ class ValidateOutput < Test::Unit::TestCase
     main_orf [:false_negatives] = 0
     main_orf [:positives] = 0
 
-    yml = YAML.load_file(filename_yml)
-            
+    yml = YAML.load_file(filename_yml)            
     yml.each_pair do |key, value|
       # search the key in the reference file
       yml_ref.each do |elem|
         elem.each_pair do |ref_key, ref_value|          
           if ref_key == key
-
-            update_statistics(ref_value['valid_length'], value.length_validation_cluster.validation, length_clusterization)
-            update_statistics(ref_value['valid_length'], value.length_validation_rank.validation, length_rank)
-            update_statistics(ref_value['valid_rf'], value.reading_frame_validation.validation, reading_frame)
-            update_statistics(ref_value['gene_merge'], value.gene_merge_validation.validation, gene_merge)
-            update_statistics(ref_value['duplication'], value.duplication.validation, duplications)
-            update_statistics(ref_value['main_orf'], value.orf.validation, main_orf)            
+            update_statistics(ref_value['valid_length'], value.validations[0].validation, length_clusterization)
+            update_statistics(ref_value['valid_length'], value.validations[1].validation, length_rank)
+            update_statistics(ref_value['valid_rf'], value.validations[2].validation, reading_frame)
+            update_statistics(ref_value['gene_merge'], value.validations[3].validation, gene_merge)
+            update_statistics(ref_value['duplication'], value.validations[4].validation, duplications)
+            #update_statistics(ref_value['main_orf'], value.validations[5], main_orf)            
 
             it "should validate length by clusterization for #{key}" do
-              assert_equal ref_value['valid_length'], value.length_validation_cluster.validation.to_s
+              assert_equal ref_value['valid_length'], value.validations[0].validation.to_s
             end
 
             it "should validate length by rank for #{key}" do
-              assert_equal ref_value['valid_length'], value.length_validation_rank.validation.to_s
+              assert_equal ref_value['valid_length'], value.validations[1].validation.to_s
             end
 
             it "should validate reading frame from blast output for #{key}" do
-              assert_equal ref_value['valid_rf'], value.reading_frame_validation.validation.to_s
+              assert_equal ref_value['valid_rf'], value.validations[2].validation.to_s
             end
 
             it "should validate gene merge for #{key}" do
-              assert_equal ref_value['gene_merge'], value.gene_merge_validation.validation.to_s
+              assert_equal ref_value['gene_merge'], value.validations[3].validation.to_s
             end
 
             it "should validate sub-sequence duplication for #{key}" do
-              assert_equal ref_value['duplication'], value.duplication.validation.to_s
+              assert_equal ref_value['duplication'], value.validations[4].validation.to_s
             end
 
-            it "should validate mai ORF for #{key}" do
-              assert_equal ref_value['orf'], value.orf.validation.to_s
-            end
+            #it "should validate mai ORF for #{key}" do
+            #  assert_equal ref_value['orf'], value.validations[5].validation.to_s
+            #end
             break
           end
         end

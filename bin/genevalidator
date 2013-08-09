@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'optparse'
 require 'genevalidator/clusterization'
 require 'genevalidator/blast'

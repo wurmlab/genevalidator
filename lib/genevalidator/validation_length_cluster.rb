@@ -1,4 +1,5 @@
 require 'genevalidator/validation_output'
+require 'genevalidator/validation_test'
 
 ##
 # Class that stores the validation output information
@@ -31,30 +32,28 @@ end
 ##
 # This class contains the methods necessary for 
 # length validation by hit length clusterization
-class LengthClusterValidation
+class LengthClusterValidation < ValidationTest
 
-  attr_reader :plots
   attr_reader :filename
-  attr_reader :hits
-  attr_reader :prediction
+  attr_reader :plot
   attr_reader :clusters
   attr_reader :max_density_cluster
 
   ##
   # Initilizes the object
   # Params:
-  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +filename+: name of the input file, used when generatig the plot files
-  # +plots+: boolean variable, indicated whether plots should be generated or not
-  def initialize(hits, prediction, filename, plots)
-    begin
-      raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence and filename.is_a? String
-      @hits = hits
-      @prediction = prediction
-      @filename = filename
-      @plots = plots
-    end
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +plot_filename+: name of the input file, used when generatig the plot files
+  # +plot+: boolean variable, indicated whether plots should be generated or not
+  def initialize(type, prediction, hits, filename, plot = true)
+    super
+    @filename = filename
+    @plot = plot
+    @short_header = "Valid_Length(Cluster)"
+    @header = "Valid Length(Cluster)"
+    @description = "Check whether the prediction length fits the most of the BLAST hit lengths, by 1D hierarchical clusterization."
   end
 
   ## 
@@ -64,6 +63,8 @@ class LengthClusterValidation
   # Output:
   # +LengthClusterValidationOutput+ object
   def run
+    begin
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
       ret = clusterization_by_length  #returns [clusters, max_density_cluster_idx]
 
@@ -72,12 +73,17 @@ class LengthClusterValidation
       limits = @clusters[@max_density_cluster].get_limits
       prediction_len = @prediction.xml_length
 
-      if plots
+      if plot
         plot_histo_clusters(@filename)
         #plot_length(@filename)
       end
 
-      LengthClusterValidationOutput.new(prediction_len, limits)
+      @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
+
+    # Exception is raised when blast founds no hits
+    rescue Exception => error
+      ValidationReport.new("Not enough evidence")
+    end
        
   end
 

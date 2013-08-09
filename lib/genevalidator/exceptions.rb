@@ -16,3 +16,6 @@ end
 class QueryError < Exception
 end
 
+# Exception raised when a validation class is not instance of ValidationTest
+class ValidationClassError < Exception
+end

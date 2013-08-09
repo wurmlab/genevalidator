@@ -13,7 +13,6 @@ class ORFValidationOutput < ValidationReport
     @orfs = orfs
     @ratio = ratio
     @threshold = threshold
-
   end
 
   def print
@@ -22,7 +21,7 @@ class ORFValidationOutput < ValidationReport
     @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
 
     #"#{no_orfs}"
-    "#{validation.to_s} (%=#{@ratio.round(2)})"
+    "#{validation.to_s} (%=#{@ratio.round(2)*100})"
   end
 
   def validation
@@ -38,49 +37,59 @@ end
 # This class contains the methods necessary for
 # checking whether there is a main Open Reading Frame
 # in the predicted sequence
-class OpenReadingFrameValidation
+class OpenReadingFrameValidation < ValidationTest
 
-  attr_reader :plots
-  attr_reader :prediction
   attr_reader :filename
+  attr_reader :plot
   attr_reader :start_codons
   attr_reader :stop_codons
 
   ##
   # Initilizes the object
   # Params:
+  # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +filename+: name of the input file, used when generatig the plot files
-  # +plots+: boolean variable, indicated whether plots should be generated or not
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +plot_filename+: name of the input file, used when generatig the plot files
+  # +plot+: boolean variable, indicated whether plots should be generated or not
   # +start_codons+: +Array+ of codons
   # +stop_codons+: +Array+ of codons
-  def initialize(prediction, filename, plots, start_codons = [], stop_codons = ["TAG", "TAA", "TGA"])
-    begin
-      raise QueryError unless prediction.is_a? Sequence and start_codons.is_a? Array and stop_codons.is_a? Array
-      @prediction = prediction
-      @filename = filename
-      @plots = plots
-      @start_codons = start_codons
-      @stop_codons = stop_codons
-    end
+  def initialize (type, prediction, hits, filename, plot = true, start_codons = [], stop_codons = [])
+    super
+    @filename = filename
+    @plot = plot
+    @start_codons = start_codons
+    @stop_codons = stop_codons
+    @short_header = "ORF_Test"
+    @header = "Main ORF Test"
+    @description = "Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries."
+    @validation_report = ValidationReport.new("-","white")
   end
+
 
   ##
   # Check whether there is a main reading frame
   # Output:
   # +ORFValidationOutput+ object
-  def run
-    orfs = get_orfs
-    if plots 
-      plot_orfs(orfs)
+  def run    
+    begin
+      raise Exception unless type == :nucleotide and prediction.is_a? Sequence and hits[0].is_a? Sequence
+      orfs = get_orfs
+      if plot
+        plot_orfs(orfs)
+      end
+
+      # case 1: check if longest ORF / prediction > 0.8 (ok)
+      prediction_len = prediction.raw_sequence.length 
+      longest_orf = orfs.map{|elem| elem[1].map{|orf| orf[1]-orf[0]}}.flatten.max
+      ratio =  longest_orf/(prediction_len + 0.0)
+
+      @validation_report = ORFValidationOutput.new(orfs, ratio)
+
+    # Exception is raised when blast founds no hits
+    rescue Exception => error
+      ValidationReport.new("-","white")
     end
-
-    # case 1: check if longest ORF / prediction > 0.8 (ok)
-    prediction_len = prediction.raw_sequence.length 
-    longest_orf = orfs.map{|elem| elem[1].map{|orf| orf[1]-orf[0]}}.flatten.max
-    ratio =  longest_orf/(prediction_len + 0.0)
-
-    ORFValidationOutput.new(orfs, ratio)
   end
 
   ##

@@ -14,10 +14,9 @@ class ValidateOutput < Test::Unit::TestCase
     filename = "test/test_validations"
     filename_fasta = "#{filename}.fasta"
     filename_xml = "#{filename}.xml"   
-
+    type = :nucleotide
     b = Blast.new(filename_fasta, "mrna", filename_xml)
     output = File.open(filename_xml, "rb").read
-
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
 
   describe "Test validations 1" do  
@@ -28,32 +27,31 @@ class ValidateOutput < Test::Unit::TestCase
     prediction = sequences[1]
     short_def = prediction.definition.scan(/([^ ]+)/)[0][0]
 
-    should "validate length by clusterization for #{short_def}" do
-      lcv = LengthClusterValidation.new(hits, prediction, "", false).run
+    it "should validate length by clusterization for #{short_def}" do
+      lcv = LengthClusterValidation.new(type, prediction, hits, "", false).run
       assert_equal lcv.limits, [23,135]
       assert_equal lcv.prediction_len, 108
     end
 
     it "should validate length by rank #{short_def}" do
-      lrv = LengthRankValidation.new(hits, prediction).run
+      lrv = LengthRankValidation.new(type, prediction, hits).run
       assert_equal lrv.percentage.round(4), 0.46
     end
 
     it "should validate reading frame #{short_def}" do
-      rfv = BlastReadingFrameValidation.new(hits, prediction).run
+      rfv = BlastReadingFrameValidation.new(type, prediction, hits).run
       assert_equal rfv.frames_histo, {1=>501}
     end
 
     it "should validate gene merge #{short_def}" do
-      gmv = GeneMergeValidation.new(hits, prediction, "", false).run
+      gmv = GeneMergeValidation.new(type, prediction, hits, "", false).run
       assert_equal gmv.slope.round(4), -0.1112
     end
 
     it "should validate duplication #{short_def}" do
-      dv  = DuplicationValidation.new(hits, prediction).run
+      dv  = DuplicationValidation.new(type, prediction, hits).run
       assert_equal dv.pvalue.round(4), 1
     end
-
   end
 
   describe "Test validations 2" do
@@ -64,30 +62,29 @@ class ValidateOutput < Test::Unit::TestCase
     short_def = prediction.definition.scan(/([^ ]+)/)[0][0]
 
     it "should validate length by clusterization #{short_def}" do
-      lcv = LengthClusterValidation.new(hits, prediction, "", false).run
+      lcv = LengthClusterValidation.new(type, prediction, hits, "", false).run
       assert_equal lcv.limits, [665, 749]
       assert_equal lcv.prediction_len, 1327
     end
 
     it "should validate length by rank #{short_def}" do
-      lrv = LengthRankValidation.new(hits, prediction).run
+      lrv = LengthRankValidation.new(type, prediction, hits).run
       assert_equal lrv.percentage.round(4), 0.0
     end
 
     it "should validate reading frame #{short_def}" do
-      rfv = BlastReadingFrameValidation.new(hits, prediction).run
+      rfv = BlastReadingFrameValidation.new(type, prediction, hits).run
       assert_equal rfv.frames_histo, {1=>133, 3=>137}
     end
 
     it "should validate gene merge #{short_def}" do
-      gmv = GeneMergeValidation.new(hits, prediction, "", false).run
+      gmv = GeneMergeValidation.new(type, prediction, hits, "", false).run
       assert_equal gmv.slope.round(4), -0.0553
     end
 
     it "should validate duplication #{short_def}" do
-      dv  = DuplicationValidation.new(hits, prediction).run
+      dv  = DuplicationValidation.new(type, prediction, hits).run
       assert_equal dv.pvalue.round(4), 0.0055
     end
-
   end
 end

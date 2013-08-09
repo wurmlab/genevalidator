@@ -4,6 +4,7 @@ require 'genevalidator/validation_blast_reading_frame'
 require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
+require 'genevalidator/validation_alignment'
 require 'genevalidator/exceptions'
 
 ##
@@ -12,6 +13,7 @@ require 'genevalidator/exceptions'
 class Validation
 
   attr_reader :filename
+  attr_reader :html_path
   attr_reader :idx
   attr_reader :start_idx
 
@@ -22,17 +24,18 @@ class Validation
   ##
   # Initilizes the object
   # Params:
-  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +filename+: name of the input file, used when generatig the plot files
   # +idx+: index of the query currently processed (used to generate unique plot images)
   # +start_idx+: index of the first processed query (may differ from idx if the first queries are skiped)
-  def initialize(hits, prediction, type, filename, idx, start_idx)
+  def initialize(prediction, hits, type, filename, html_path, idx, start_idx)
 
-    @hits = hits
     @prediction = prediction
+    @hits = hits
     @filename = filename
+    @html_path = html_path
     @idx = idx
     @start_idx = start_idx
     @type = type
@@ -46,56 +49,35 @@ class Validation
   # Output:
   # +Output+ object
   def validate_all(plots = false)
-    begin      
-      query_output = Output.new(@filename, @idx, @start_idx)
+    begin
+
+      query_output = Output.new(@filename, @html_path, @idx, @start_idx)
       query_output.prediction_len = prediction.xml_length
       query_output.prediction_def = prediction.definition
-
       query_output.nr_hits = hits.length
-      plot_filename = "#{@filename}_#{@idx}"
-
-      query_output.length_validation_cluster = ValidationReport.new("Not enough evidence")
-      query_output.length_validation_rank = ValidationReport.new("Not enough evidence")
-      query_output.reading_frame_validation = ValidationReport.new("Not enough evidence")
-      query_output.gene_merge_validation = ValidationReport.new("Not enough evidence")
-      query_output.duplication  = ValidationReport.new("Not enough evidence")
-      query_output.orf = ValidationReport.new("-")
-=begin
+      
+      plot_path = "#{html_path}/#{filename}_#{@idx}"
+ 
       validations = []
+      validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path, plots)
+      validations.push LengthRankValidation.new(@type, prediction, hits)
+      validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
+      validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path, plots)
+      validations.push DuplicationValidation.new(@type, prediction, hits)
+      validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, plots, ["ATG"])
+      validations.push AlignmentValidation.new(@type, prediction, hits)
 
-      validations.push LengthClusterValidation.new(hits, prediction, plot_filename, plots)
-      validations.push LengthRankValidation.new(hits, prediction)
-      validations.push BlastReadingFrameValidation.new(hits, prediction)
-      validations.push GeneMergeValidation.new(hits, prediction, plot_filename, plots)
-      validations.push DuplicationValidation.new(hits, prediction)
-      if @type == :nucleotide
-#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).run
-         validations.push OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"])
-      end  
-      query_output.validations = validations.map{|v| v.run}
-=end
-
-      query_output.length_validation_cluster = LengthClusterValidation.new(hits, prediction, plot_filename, plots).run
-      query_output.length_validation_rank = LengthRankValidation.new(hits, prediction).run
-      query_output.reading_frame_validation = BlastReadingFrameValidation.new(hits, prediction).run
-      query_output.gene_merge_validation = GeneMergeValidation.new(hits, prediction, plot_filename, plots).run
-      query_output.duplication  = DuplicationValidation.new(hits, prediction).run
-
-      if @type == :nucleotide
-#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).run
-         validations.push OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"])
+      # check the class type of the elements in the list
+      validations.map do |v|
+        raise ValidationClassError unless v.is_a? ValidationTest 
       end
 
-      query_output
-
-    # Exception is raised when blast founds no hits
-    rescue QueryError => error
-      if @type == :nucleotide
-#        query_output.orf = OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, ["TAG", "TAA", "TGA"]).validation_test
-         query_output.orf = OpenReadingFrameValidation.new(prediction, plot_filename, plots, ["ATG"]).validation_test
-      end
-      query_output
+      validations.map{|v| v.run}
+      query_output.validations = validations
+      return query_output
+    rescue ValidationClassError => error
+        $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validations is not ValidationTest"
+      exit
     end
   end
-
 end

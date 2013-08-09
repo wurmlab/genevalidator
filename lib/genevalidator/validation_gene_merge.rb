@@ -39,10 +39,12 @@ class GeneMergeValidationOutput < ValidationReport
 end
 
 ##
-# 
-class GeneMergeValidation
+# This class contains the methods necessary for
+# checking whether there is evidence that the
+# prediction is a merge of multiple genes
+class GeneMergeValidation < ValidationTest
 
-  attr_reader :plots
+  attr_reader :plot
   attr_reader :hits
   attr_reader :prediction
   attr_reader :filename
@@ -50,35 +52,40 @@ class GeneMergeValidation
   ##
   # Initilizes the object
   # Params:
-  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +filename+: name of the input file, used when generatig the plot files
-  # +plots+: boolean variable, indicated whether plots should be generated or not
-  def initialize(hits, prediction, filename, plots)
-    begin
-      raise QueryError unless hits[0].is_a? Sequence and prediction.is_a? Sequence
-      @hits = hits
-      @prediction = prediction
-      @filename = filename
-      @plots = plots
-    end
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +plot_filename+: name of the input file, used when generatig the plot files
+  # +plot+: boolean variable, indicated whether plots should be generated or not
+  def initialize(type, prediction, hits, filename, plot = true)
+    super
+    @filename = filename
+    @plot = plot
+    @short_header = "Gene_Merge(slope)"
+    @header = "Gene Merge(slope)"
+    @description = "Check whether BLAST hits make evidence about a merge of two genes that cover the predicted gene."
   end
-
 
   ##
   # Validation test for gene merge
   # Output:
   # +GeneMergeValidationOutput+ object
   def run
+    begin
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-    lm_slope = slope
- 
-    if plots
-      plot_matched_regions(@filename)
-      plot_2d_start_from(@filename, lm_slope)
+      lm_slope = slope
+   
+      if plot
+        plot_matched_regions(@filename)
+        plot_2d_start_from(@filename, lm_slope)
+      end
+      @validation_report = GeneMergeValidationOutput.new(lm_slope)
+
+    # Exception is raised when blast founds no hits
+    rescue Exception => error
+      ValidationReport.new("Not enough evidence")
     end
-    GeneMergeValidationOutput.new(lm_slope)
-
   end
 
   ##

@@ -1,6 +1,11 @@
 require 'rake/testtask'
 
-task :default => [:test]
+task :default => [:build]
+
+desc "Installs the ruby gem"
+task :build do
+  exec("gem build genevalidator.gemspec && gem install ./GeneValidator-0.1.gem")
+end
 
 desc "Unit tests for the majority of class methods"
 task :test do
@@ -16,4 +21,8 @@ task :output do
   exec("ruby test_output/test_output.rb #{fname} #{type}")
 end
 
+desc "Generates documentation"
+task :doc do
+  exec("yardoc 'lib/**/*.rb'")
+end
 

@@ -16,7 +16,9 @@ require 'yaml'
 class Blast
 
   attr_reader :type
-  attr_reader :fasta_file
+  attr_reader :fasta_filepath
+  attr_reader :html_path
+  attr_reader :filename
   # current number of the querry processed
   attr_reader :idx
   attr_reader :start_idx
@@ -27,12 +29,12 @@ class Blast
   ##
   # Initilizes the object
   # Params:
-  # +fasta_file+: query sequence fasta file with query sequences
+  # +fasta_filepath+: query sequence fasta file with query sequences
   # +type+: query sequence type; can be :nucleotide or :protein
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
   # +outfmt+: output format
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_file, type, xml_file = nil, outfmt = nil, start_idx = 1)
+  def initialize(fasta_filepath, type, xml_file = nil, outfmt = nil, start_idx = 1)
     begin
 
       puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
@@ -43,14 +45,14 @@ class Blast
         @type = :nucleotide
       end
 
-      @fasta_file = fasta_file
+      @fasta_filepath = fasta_filepath
       @xml_file = xml_file
       @idx = 0
       @start_idx = start_idx
       @outfmt = outfmt
 
-      raise FileNotFoundException.new unless File.exists?(@fasta_file)
-      fasta_content = IO.binread(@fasta_file);
+      raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
+      fasta_content = IO.binread(@fasta_filepath);
 
       # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
       if @type != type_of_sequences(fasta_content)
@@ -65,6 +67,24 @@ class Blast
       # redirect the cosole messages of R
       R.echo "enable = nil, stderr = nil, warn = nil"
 
+      # build path of html folder output
+      @html_path = @fasta_filepath.scan(/(.*)\/[^\/]+$/)[0][0]
+      if html_path == nil
+        @html_path = "html"
+      else
+        @html_path += "/html"
+      end
+
+      @filename = @fasta_filepath.scan(/\/([^\/]+)$/)[0][0]
+
+
+      # create 'html' directory
+      FileUtils.rm_rf(@html_path)
+      Dir.mkdir(@html_path)
+
+      # copy js folder to the html folder
+      FileUtils.cp_r("js", @html_path)
+
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
       exit
@@ -78,14 +98,13 @@ class Blast
   # Calls blast according to the type of the sequence
   def blast
     begin
-
       if @xml_file == nil
  
         #file seek for each query
         @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
       
           if (i+1) >= @start_idx
-            query = IO.binread(@fasta_file, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
+            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
 
             #call blast with the default parameters
             if type == :protein
@@ -95,7 +114,7 @@ class Blast
             end
 
             #save output in a file
-            xml_file = "#{@fasta_file}_#{i+1}.xml"
+            xml_file = "#{@fasta_filepath}_#{i+1}.xml"
             File.open(xml_file , "w") do |f| f.write(output) end
 
             #parse output
@@ -216,21 +235,19 @@ class Blast
         i = @idx-1
        
         ### add exception
-        query = IO.binread(@fasta_file, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
+        query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
         prediction.raw_sequence = query.scan(/[^\n]*\n([ATGCatgc\n]*)/)[0][0].gsub("\n","")      
         #file seek for each query
         
         # do validations
-
-        v = Validation.new(hits, prediction, @type, @fasta_file, @idx, @start_idx)
-
+        v = Validation.new(prediction, hits, @type, @filename, @html_path, @idx, @start_idx)
         if @outfmt == :html
           query_output = v.validate_all(true)
           query_output.generate_html
         else
           query_output = v.validate_all
         end
-      
+
         query_output.print_output_console
 
         #if @outfmt == :yaml
@@ -239,6 +256,7 @@ class Blast
       end
 
       rescue NoMethodError => error
+        puts error.backtrace
         $stderr.print "NoMethod error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not in blast xml format.\n"        
         exit
       rescue StopIteration
