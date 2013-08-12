@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'erb'
 require 'yaml'
 
 class Output
@@ -99,66 +100,20 @@ class Output
       bg_icon = "red"
     end
 
+    index_file = "#{@html_path}/index.html"
+
     # if it's the first time I write in the html file
     if @idx == @start_idx
-      header = "<html><head>
-                     <title>Gene Validation Result</title>
-                     <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script> 
-                     <script type=\"text/javascript\" src=\"js/jquery.tablesorter/jquery.tablesorter.js\"></script> 
-                     <script type=\"text/javascript\" src=\"js/jquery.tablesorter.mod.js\"></script>
-                     <script type=\"text/javascript\" src=\"js/script.js\"></script>
-                  </head>
-                  <body>
-                      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" width = 1650 id=\"myTable\" class=\"tablesorter\">
-                                <thead>
-                                <tr bgcolor = #E8E8E8>
-                                        <th><b>Click to sort!</b></th>
-                                        <th></th>
-                                        <th>No.</th>
-                                        <th width=100 title=\"FASTA Header of the query\">Description</th>
-                                        <th title=\"Number of hits found by BLAST.\">No. Hits</th>"
-                 validations.map do |v|
-                   header<<"<th title=\"#{v.description}\">#{v.header}</th>\n"
-                 end
-                  
-                 header += "       <th title=\"Overall evaluation based on all validation tests.\" > Overall Evaluation</th>
-                                </tr></thead>"                  
-
-      index_file = "#{@html_path}/index.html"        
-      File.open(index_file, "w+") do |f|
-        f.write(header)
-      end  
-
+  
+      template_file = File.open("aux/template_header.htm.erb", 'r').read
+      erb = ERB.new(template_file)
+      File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
     end
 
     toggle = "toggle#{@idx}"
+    template_file = File.open("aux/template_query.htm.erb", 'r').read
+    erb = ERB.new(template_file)
+    File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
 
-    output = "<tr bgcolor=#{'white'}> 
-	      <td><button type=button name=answer onclick=showDiv('#{toggle}')>Show/Hide Plots</button></td> 
-              <td bgcolor=#{bg_icon}>#{icon}</td>
-              <td>#{@idx}</td>
-	      <td>#{@prediction_def}</td>
-	      <td>#{@nr_hits}</td>"
-    validations.each do |item|
-      output << "<td bgcolor=#{item.validation_report.color} style=\"white-space:nowrap\">#{item.validation_report.print}</td>\n"
-    end
-    output += "<td style=\"white-space:nowrap\">...</td>
-       	       </tr>
-
-	       <tr bgcolor=#{color} class=\"expand-child\">"
-    output += "<td  colspan=#{validations.length + 6}>"
-
-    output += "<div id=#{toggle} style='display:none'>"
-    validations.each do |item|
-      item.plot_files.each do |plot_file|
-        puts plot_file.scan(/\/([^\/]+)$/)[0][0]
-        output << "<img src=#{plot_file.scan(/\/([^\/]+)$/)[0][0]} alt=\"No plot\" height=400>"
-      end
-    end
-    output += "</div></td></tr>"
-
-    File.open("#{html_path}/index.html", "a") do |f|
-      f.write(output)
-    end  
   end
 end

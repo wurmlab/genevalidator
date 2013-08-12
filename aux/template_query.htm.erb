@@ -1,0 +1,21 @@
+<tr> 
+	<td><button type=button name=answer onclick=showDiv('<%= toggle %>')>Show/Hide Plots</button></td> 
+	<td bgcolor=<%=bg_icon%>><%= icon %></td>
+	<td><%= @idx %></td>
+	<td><%= @prediction_def %></td>
+	<td><%= @nr_hits %></td>
+	<% @validations.each do |item| %>
+	<td bgcolor= <%=item.validation_report.color%> style="white-space:nowrap"> <%= item.validation_report.print %> </td>
+	<% end %>
+	<td style="white-space:nowrap">...</td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=<%=validations.length + 6%>}>
+	<div id=<%=toggle%> style='display:none'>"
+    <% @validations.each do |item| 
+       item.plot_files.each do |plot_file| %>
+       <img src=<%=plot_file.scan(/\/([^\/]+)$/)[0][0]%> alt="No plot" height=400>
+    <% end end %>
+</div></td></tr>
+

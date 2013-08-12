@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Gene Validation Result</title>
+        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
+        <script type="text/javascript" src="js/jquery.tablesorter/jquery.tablesorter.js"></script> 
+        <script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+        <link href="css/style.css" rel="stylesheet">
+	</head>
+	<body>
+    	<table id="myTable" class="table table-collapsed table-bordered table-condensed tablesorter">
+        <thead>
+        	<tr bgcolor = #E8E8E8>
+        		<th><b>Click to sort!</b></th>
+            	<th></th>
+            	<th>No.</th>
+                <th width=100 title="FASTA Header of the query">Description</th>
+                <th title="Number of hits found by BLAST.">No. Hits</th>
+                <% @validations.each do |item| %>                        	            
+                <th title=<%=item.description%>><%= item.header %></th>
+                <% end %>
+				<th title="Overall evaluation based on all validation tests." > Overall Evaluation</th>
+    		</tr>
+    	</thead>
+        <tbody>
