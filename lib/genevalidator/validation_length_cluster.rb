@@ -74,8 +74,9 @@ class LengthClusterValidation < ValidationTest
       prediction_len = @prediction.xml_length
 
       if plot
-        plot_histo_clusters(@filename)
-        #plot_length(@filename)
+        plot_histo_clusters("#{@filename}_len_clusters.jpg")
+        plot_files.push("#{@filename}_len_clusters.jpg")
+        #plot_length("#{@filename}_len.jpg")
       end
 
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
@@ -128,14 +129,14 @@ class LengthClusterValidation < ValidationTest
   # +output+: filename where to save the graph
   # +lst+: array of Sequence objects
   # +predicted_seq+: Sequence object
-  def plot_length(output, lst = @hits, predicted_seq = @prediction)
+  def plot_length(output = "#{filename}_len.jpg", lst = @hits, predicted_seq = @prediction)
     max_len = lst.map{|x| x.xml_length.to_i}.max
     lst = lst.sort{|a,b| a.xml_length<=>b.xml_length}
 
     max_plots = 120
     skip= lst.length/max_plots
 
-    R.eval "jpeg('#{output}_len.jpg')"
+    R.eval "jpeg('#{output}')"
     R.eval "plot(1:#{[lst.length-1,max_plots].min}, xlim=c(0,#{max_len}), xlab='Hit Length (black) vs part of the hit that matches the query (red)',ylab='Hit Number', col='white')"
     height = -1;
     lst.each_with_index do |seq,i|
@@ -157,7 +158,7 @@ class LengthClusterValidation < ValidationTest
   # +clusters+: array of Cluster objects
   # +predicted_length+: length of the rpedicted sequence
   # +most_dense_cluster_idx+index from the clusters array of the most_dense_cluster_idx
-  def plot_histo_clusters(output, clusters = @clusters, predicted_length = @prediction.xml_length, 
+  def plot_histo_clusters(output = "#{filename}_len_clusters.jpg", clusters = @clusters, predicted_length = @prediction.xml_length, 
                           most_dense_cluster_idx = @max_dense_cluster)
     begin
       raise TypeError unless clusters[0].is_a? Cluster and predicted_length.is_a? Fixnum
@@ -172,7 +173,7 @@ class LengthClusterValidation < ValidationTest
         unless output == nil
           #puts "---- #{output}"
           #R.eval "dev.copy(png,'#{output}.png')"
-          R.eval "jpeg('#{output}_len_clusters.jpg')"
+          R.eval "jpeg('#{output}')"
         end
 
         clusters.each_with_index do |cluster, i|

@@ -77,8 +77,10 @@ class GeneMergeValidation < ValidationTest
       lm_slope = slope
    
       if plot
-        plot_matched_regions(@filename)
-        plot_2d_start_from(@filename, lm_slope)
+        plot_matched_regions("#{@filename}_match.jpg")
+        @plot_files.push("#{@filename}_match.jpg")
+        plot_2d_start_from(lm_slope, "#{@filename}_match_2d.jpg")
+        @plot_files.push("#{@filename}_match_2d.jpg")
       end
       @validation_report = GeneMergeValidationOutput.new(lm_slope)
 
@@ -94,11 +96,11 @@ class GeneMergeValidation < ValidationTest
   # +output+: filename where to save the graph
   # +clusters+: array of Cluster objects
   # +middles+: array with values with potential multimodal distribution
-  def plot_merge_clusters(output, clusters = @clustersi, middles)
+  def plot_merge_clusters(output = "#{filename}_match_distr.jpg", clusters = @clusters, middles)
     max_freq = clusters.map{ |x| x.lengths.map{|y| y[1]}.max}.max
 
     R.eval "colors = c('red', 'blue', 'yellow', 'green', 'gray', 'orange')"
-    R.eval "jpeg('#{output}_match_distr.jpg')"
+    R.eval "jpeg('#{output}')"
 
     clusters.each_with_index do |cluster, i|
       cluster_values = cluster.lengths.sort{|a,b| a[0]<=>b[0]}.map{ |x| a = Array.new(x[1],x[0])}.flatten
@@ -124,7 +126,7 @@ class GeneMergeValidation < ValidationTest
   # +output+: location where the plot will be saved in jped file format
   # +lst+: array of Sequence objects
   # +predicted_seq+: Sequence objects
-  def plot_matched_regions(output, lst = @hits, predicted_seq = @prediction)
+  def plot_matched_regions(output = "#{filename}_match.jpg", lst = @hits, predicted_seq = @prediction)
 
     max_len = lst.map{|x| x.xml_length.to_i}.max
 
@@ -132,7 +134,7 @@ class GeneMergeValidation < ValidationTest
     skip= lst.length/max_plots
     len = predicted_seq.xml_length
 
-    R.eval "jpeg('#{output}_match.jpg')"
+    R.eval "jpeg('#{output}')"
     R.eval "plot(1:#{lst.length-1}, xlim=c(0,#{len}), xlab='Prediction length (black) vs part of the prediction that matches hit x (red/yellow)',ylab='Hit Number', col='white')"
     R.eval "colors = c('yellow', 'red')"
     R.eval "colors2 = c('black', 'gray')"
@@ -158,7 +160,7 @@ class GeneMergeValidation < ValidationTest
   # +output+: location where the plot will be saved in jped file format
   # +slope+: slope of the linear regression line
   # +hits+: array of Sequence objects
-  def plot_2d_start_from(output, slope, hits = @hits)    
+  def plot_2d_start_from(slope, output = "#{filename}_match_2d.jpg", hits = @hits)    
 
     pairs = @hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
@@ -176,8 +178,7 @@ class GeneMergeValidation < ValidationTest
 
     #hc = HierarchicalClusterization.new(pairs)
     #clusters = hc.hierarchical_clusterization_2d(2, 1)
-
-    R.eval "jpeg('#{output}_match_2d.jpg')"
+    R.eval "jpeg('#{output}')"
     R.eval "colors = c('red', 'blue')";
 
     #clusters.each_with_index do |cluster, i|

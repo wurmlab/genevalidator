@@ -16,6 +16,7 @@ class Output
 
   # list of +ValidationReport+ objects
   attr_accessor :validations
+  attr_accessor :plot_files
 
   attr_accessor :filename
   attr_accessor :html_path
@@ -36,11 +37,6 @@ class Output
     @html_path = html_path
     @idx = idx
     @start_idx = start_idx
-
-    @image_histo_len = "#{filename}_#{@idx}_len_clusters.jpg"
-    @image_plot_merge = "#{filename}_#{@idx}_match.jpg"
-    @image_histo_merge = "#{filename}_#{@idx}_match_2d.jpg"
-    @image_orfs = "#{filename}_#{@idx}_orfs.jpg"
 
   end
   
@@ -151,12 +147,15 @@ class Output
 
 	       <tr bgcolor=#{color} class=\"expand-child\">"
     output += "<td  colspan=#{validations.length + 6}>"
-    output += "<div id=#{toggle} style='display:none'>
-               <img src=#{image_histo_len} alt=\"No plot\" height=400>
-	       <img src=#{image_plot_merge} alt=\"No plot\" height=400>
-               <img src=#{image_histo_merge} alt=\"No plot\" height=400>
-               <img src=#{image_orfs} alt=\"No plot\" height=400>
-               </div></td></tr>"
+
+    output += "<div id=#{toggle} style='display:none'>"
+    validations.each do |item|
+      item.plot_files.each do |plot_file|
+        puts plot_file.scan(/\/([^\/]+)$/)[0][0]
+        output << "<img src=#{plot_file.scan(/\/([^\/]+)$/)[0][0]} alt=\"No plot\" height=400>"
+      end
+    end
+    output += "</div></td></tr>"
 
     File.open("#{html_path}/index.html", "a") do |f|
       f.write(output)

@@ -20,7 +20,6 @@ class ORFValidationOutput < ValidationReport
     orf_list = ""
     @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
 
-    #"#{no_orfs}"
     "#{validation.to_s} (%=#{@ratio.round(2)*100})"
   end
 
@@ -76,7 +75,8 @@ class OpenReadingFrameValidation < ValidationTest
       raise Exception unless type == :nucleotide and prediction.is_a? Sequence and hits[0].is_a? Sequence
       orfs = get_orfs
       if plot
-        plot_orfs(orfs)
+        plot_orfs(orfs, "#{@filename}_orfs.jpg")
+        @plot_files.push("#{@filename}_orfs.jpg")
       end
 
       # case 1: check if longest ORF / prediction > 0.8 (ok)
@@ -279,13 +279,13 @@ class OpenReadingFrameValidation < ValidationTest
   # +orfs+: +Hash+ containing the reading frame (the key) and a list of intervals (the values)
   # +output+: location where the plot will be saved in jped file format
   # +predicted_seq+: Sequence objects
-  def plot_orfs(orfs, output = @filename, predicted_seq = @prediction)
+  def plot_orfs(orfs, output = "#{@filename}_orfs.jpg", predicted_seq = @prediction)
     raise QueryError unless orfs.is_a? Hash
 
       seq_reverse = Bio::Sequence::NA.new(predicted_seq.raw_sequence).reverse_complement
       len = predicted_seq.raw_sequence.length
 
-      R.eval "jpeg('#{output}_orfs.jpg')"
+      R.eval "jpeg('#{output}')"
       R.eval "plot(-3:3, xlim=c(0,#{len}), xlab='Open Reading Frame with START codon', ylab='Reading Frame', col='white')"
 
       orfs.each_with_index do |elem, i|
