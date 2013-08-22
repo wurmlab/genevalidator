@@ -5,6 +5,7 @@ class ValidationReport
 
   attr_reader :message
   attr_reader :bg_color
+  attr_reader :plot_files
 
   ##
   # Initilizes the object
@@ -14,6 +15,7 @@ class ValidationReport
   def initialize(message = "Not enough evidence",  bg_color = nil)
     @message = message
     @bg_color = bg_color  
+    @plot_files = []
   end
 
   def print
@@ -24,14 +26,16 @@ class ValidationReport
     :no
   end 
   
+  ##
+  # May return "success" or "error"
   def color
     if bg_color != nil
       return bg_color
     end   
     if validation == :yes
-      return "white"   
+      return "success"
     else
-      return "red"
+      return "danger"
     end
   end
 end

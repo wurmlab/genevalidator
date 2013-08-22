@@ -7,9 +7,11 @@
 	<td><%= @nr_hits %></td>
 	<% @validations.each do |item| %>	    
    	    <% if item.plot_files.length > 0 %>
-	   	    <td class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" 
-			 onclick=showDiv('<%= toggle %>')>	  	
-				<%= item.validation_report.print %> 		 
+	   	    <td>
+	   	    	<button class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" 
+	  				onclick=showDiv('<%= toggle %>')>	  		  			 
+					<%= item.validation_report.print %> 	
+				</button>				 
   	    <% else %>
   		    <td class = <%=item.validation_report.color%>>			    
    				<%= item.validation_report.print %>    	        

@@ -65,7 +65,7 @@ class Validation
       validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path, plots)
       validations.push DuplicationValidation.new(@type, prediction, hits)
       validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, plots, ["ATG"])
-      validations.push AlignmentValidation.new(@type, prediction, hits)
+      validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, plots)
 
       # check the class type of the elements in the list
       validations.map do |v|

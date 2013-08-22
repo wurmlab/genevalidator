@@ -2,24 +2,82 @@
 	<head>
 		<title>Gene Validation Result</title>
         <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
-        <script type="text/javascript" src="js/jquery.tablesorter/jquery.tablesorter.js"></script> 
-        <script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script>
-        <script type="text/javascript" src="js/script.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script>        
+  		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
+	    <script type="text/javascript" src="js/table-fixed-header.js"></script>          		
+        <script type="text/javascript" src="js/script.js"></script>   
+
         <link href="css/style.css" rel="stylesheet">
+        <link href="css/bootstrap.css" rel="stylesheet">
 	</head>
 	<body>
-    	<table id="myTable" class="table table-collapsed table-bordered table-condensed table-hover tablesorter">
+	<div class="container-fluid">	
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
         <thead>
+    		<tr>        		
+    			<td  colspan=<%=validations.length + 6%> class="background_image">
+    				<h1>Gene Validator</h1>
+    				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
+    				<br/></td></tr>
+    		<tr>
+    			<td  colspan=<%=validations.length + 6%>>
+    				<h4> Validation results for <i><%= @filename %>:</i></h4></td></tr>
+    			</td>
+    		</tr>           
         	<tr bgcolor = #E8E8E8>
-        		<th><b>Click to sort!</b></th>
-            	<th></th>
-            	<th>No.</th>
-                <th width=100 title="FASTA Header of the query">Description</th>
-                <th title="Number of hits found by BLAST.">No. Hits</th>
+            	<th>No.</th>        	
+          		<th> 
+          			Overall Score
+                   	<a href="#" class="my_popover" rel="popover" 
+	   	            	data-content="Overall evaluation score based on all validation tests." 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>
+          		</th>
+                <th>
+                	Identifier
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Query identifier." 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>            	
+                <th>
+                	Description
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Description of the query (from the FASTA input file)." 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>
+                <th>
+                	No. Hits
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Number of hits found by BLAST." 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                	
+                </th>
                 <% @validations.each do |item| %>                        	            
-                <th title=<%=item.description%>><%= item.header %></th>
+                	<th>
+                		<%= item.header %>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="<%=item.description%>" 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
                 <% end %>
-				<th title="Overall evaluation based on all validation tests." > Overall Evaluation</th>
+				<th> 
+					Overall Evaluation
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Overall evaluation based on all validation tests." 
+	                	data-placement="bottom">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>					
+				</th>				
     		</tr>
     	</thead>
         <tbody>
+

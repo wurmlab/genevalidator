@@ -19,8 +19,8 @@ $(function (){
 
 $(".btn-block").css('height', $(".btn-block").parent('td').height());
 
-$(".my-btn-success").css('height', 50);
-document.getElementById('ana').style.height = 50+'px';
+
+$(".my-btn-success").style.height = 50+'px';
 
 $(document).ready(function(){
 	$('.table-fixed-header').fixedHeader();

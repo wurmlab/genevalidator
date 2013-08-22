@@ -13,7 +13,7 @@ class DuplciationValidationOutput < ValidationReport
   end
 
   def print
-    "#{validation.to_s} (pval=#{@pvalue.round(2)})"
+    "pval=#{@pvalue.round(2)}"
   end
 
   def validation
@@ -26,9 +26,9 @@ class DuplciationValidationOutput < ValidationReport
 
   def color
     if validation == :no
-      "white"
+      "success"
     else
-      "red"
+      "danger"
     end
   end
 end

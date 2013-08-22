@@ -15,7 +15,7 @@ class GeneMergeValidationOutput < ValidationReport
   end
 
   def print
-    "#{validation.to_s} (slope=#{@slope.round(2)})"
+    "slope=#{@slope.round(2)}"
   end
 
   def validation
@@ -30,9 +30,9 @@ class GeneMergeValidationOutput < ValidationReport
 
   def color
     if validation == :no
-      "white"
+      "success"
     else
-      "red"
+      "danger"
     end
   end
 
@@ -83,6 +83,7 @@ class GeneMergeValidation < ValidationTest
         @plot_files.push("#{@filename}_match_2d.jpg")
       end
       @validation_report = GeneMergeValidationOutput.new(lm_slope)
+      @validation_report.plot_files = plot_files
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
@@ -135,7 +136,7 @@ class GeneMergeValidation < ValidationTest
     len = predicted_seq.xml_length
 
     R.eval "jpeg('#{output}')"
-    R.eval "plot(1:#{lst.length-1}, xlim=c(0,#{len}), xlab='Prediction length (black) vs part of the prediction that matches hit x (red/yellow)',ylab='Hit Number', col='white')"
+    R.eval "plot(1:#{lst.length-1}, xlim=c(0,#{len}), xlab='Prediction length (black) vs part of the prediction that matches hit x (red/yellow)',ylab='Hit Number', col='white', main='Hit matches in the prediction')"
     R.eval "colors = c('yellow', 'red')"
     R.eval "colors2 = c('black', 'gray')"
     height = -1;

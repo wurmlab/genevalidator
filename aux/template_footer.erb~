@@ -12,13 +12,13 @@
         <link href="css/bootstrap.css" rel="stylesheet">
 	</head>
 	<body>
-	<div class="container-fluuid">	
-    	<table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
-        <thead>
+	<div class="container-fluid">	
+    	<table id="sortable_table" class="table table-collapsed table-fixed-header table-hover table-bordered table-condensed tablesorter">
+        <thead  class="header">
     		<tr>        		
     			<td  colspan=<%=validations.length + 6%> class="background_image">
     				<h1>Gene Validator</h1>
-    				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
+    				<h3>identifies problems with gene predictions, based on the similarities to genes in public databases</h3>
     				<br/></td></tr>
     		<tr>
     			<td  colspan=<%=validations.length + 6%>>

@@ -21,10 +21,6 @@ class Output
 
   attr_accessor :filename
   attr_accessor :html_path
-  attr_accessor :image_histo_len
-  attr_accessor :image_plot_merge
-  attr_accessor :image_histo_merge
-  attr_accessor :image_orfs
   attr_accessor :idx
   attr_accessor :start_idx
 
@@ -92,12 +88,16 @@ class Output
       color = white 
     end
 
-    if validations.map{|v| v.validation_report.color}.uniq.length == 1 and validations[0].validation_report.color == "white"
+    successes = validations.map{|v| v.validation_report.color}.count("success")
+    fails = validations.map{|v| v.validation_report.color}.count("danger")
+    overall_score = (successes*100/(successes + fails + 0.0)).round(2)
+
+    if fails == 0
       icon = "&#10003;"
-      bg_icon = "white"
+      bg_icon = "success"
     else
       icon = "<b>&#33;</b>"
-      bg_icon = "red"
+      bg_icon = "danger"
     end
 
     index_file = "#{@html_path}/index.html"
@@ -115,5 +115,11 @@ class Output
     erb = ERB.new(template_file)
     File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
 
+  end
+
+  def add_html_footer
+      template_file = File.open("aux/template_footer.htm.erb", 'r').read
+      erb = ERB.new(template_file)
+      File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }
   end
 end

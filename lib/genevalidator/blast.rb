@@ -83,7 +83,9 @@ class Blast
       Dir.mkdir(@html_path)
 
       # copy js folder to the html folder
-      FileUtils.cp_r("js", @html_path)
+      FileUtils.cp_r("aux/css", @html_path)
+      FileUtils.cp_r("aux/js", @html_path)
+      FileUtils.cp_r("aux/img", @html_path)
 
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
@@ -236,7 +238,7 @@ class Blast
        
         ### add exception
         query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-        prediction.raw_sequence = query.scan(/[^\n]*\n([ATGCatgc\n]*)/)[0][0].gsub("\n","")      
+        prediction.raw_sequence = query.scan(/[^\n]*\n([A-Za-z\n]*)/)[0][0].gsub("\n","")              
         #file seek for each query
         
         # do validations
@@ -309,13 +311,6 @@ class Blast
           seq.species = species_regex[0][0]
         end
 
-        #get gene by accession number
-        if @type == :protein
-          seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "protein")
-        else
-          seq.raw_sequence = ""#get_sequence_by_accession_no(seq.accession_no, "nucleotide")
-        end
-
         # get all high-scoring segment pairs (hsp)
         hsps = []
         hit.hsps.each do |hsp|
@@ -366,35 +361,6 @@ class Blast
     end
   end
 
-  ##
-  # Gets gene by accession number from a givem database
-  # Params:
-  # +accno+: accession number as String
-  # +db+: database as String
-  # Output:
-  # String with the nucleotide sequence corresponding to the accno
-  def get_sequence_by_accession_no(accno,db)
-
-    uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}&retmax=1&usehistory=y&term=#{accno}/"
-    #puts uri
-    result = Net::HTTP.get(URI.parse(uri))
-
-    result2 = result
-    queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-    webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
-
-    uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{db}&query_key=#{queryKey}&WebEnv=#{webEnv}"
-
-    result = Net::HTTP.get(URI.parse(uri))
-
-    #parse FASTA output
-    rec=result
-    nl = rec.index("\n")
-    header = rec[0..nl-1]
-    seq = rec[nl+1..-1]
-    seq.gsub!(/\n/,'')
-  end
- 
   ##
   # Method copied from sequenceserver/sequencehelpers.rb
   # Params:

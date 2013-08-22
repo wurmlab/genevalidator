@@ -8,6 +8,7 @@ class Sequence
   attr_accessor :accession_no
   attr_accessor :xml_length
   attr_accessor :raw_sequence
+  attr_accessor :aligned_sequence
   attr_accessor :hsp_list # array of Hsp objects 
 
   def print
@@ -19,6 +20,35 @@ class Sequence
     puts "Hit seq =      #{alignment.hit_seq}"
     puts "Query seq =    #{alignment.query_seq}"
     puts "----------------------"
+  end
+
+  ##
+  # Gets gene by accession number from a givem database
+  # Params:
+  # +accno+: accession number as String
+  # +db+: database as String
+  # Output:
+  # String with the nucleotide sequence corresponding to the accno
+  def get_sequence_by_accession_no(accno,db)
+
+    uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}&retmax=1&usehistory=y&term=#{accno}/"
+    #puts uri
+    result = Net::HTTP.get(URI.parse(uri))
+
+    result2 = result
+    queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+    webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+
+    uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{db}&query_key=#{queryKey}&WebEnv=#{webEnv}"
+
+    result = Net::HTTP.get(URI.parse(uri))
+
+    #parse FASTA output
+    rec=result
+    nl = rec.index("\n")
+    header = rec[0..nl-1]
+    seq = rec[nl+1..-1]
+    @raw_sequence = seq.gsub!(/\n/,'')
   end
 
 end

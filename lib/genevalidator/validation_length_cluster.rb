@@ -14,7 +14,7 @@ class LengthClusterValidationOutput < ValidationReport
   end
 
   def print
-    "#{@prediction_len} #{@limits.to_s} #{validation}"
+    "#{@prediction_len} #{@limits.to_s}"
   end
 
   def validation
@@ -76,10 +76,12 @@ class LengthClusterValidation < ValidationTest
       if plot
         plot_histo_clusters("#{@filename}_len_clusters.jpg")
         plot_files.push("#{@filename}_len_clusters.jpg")
-        #plot_length("#{@filename}_len.jpg")
+        plot_length("#{@filename}_len.jpg")
+        plot_files.push("#{@filename}_len.jpg")
       end
 
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
+      @validation_report.plot_files = plot_files
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
@@ -137,7 +139,7 @@ class LengthClusterValidation < ValidationTest
     skip= lst.length/max_plots
 
     R.eval "jpeg('#{output}')"
-    R.eval "plot(1:#{[lst.length-1,max_plots].min}, xlim=c(0,#{max_len}), xlab='Hit Length (black) vs part of the hit that matches the query (red)',ylab='Hit Number', col='white')"
+    R.eval "plot(1:#{[lst.length-1,max_plots].min}, xlim=c(0,#{max_len}), xlab='Hit Length (black) vs part of the hit that matches the query (red)',ylab='Hit Number', col='white', main='Hits vs query')"
     height = -1;
     lst.each_with_index do |seq,i|
       if skip == 0 or i%skip == 0
