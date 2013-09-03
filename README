@@ -1,0 +1,81 @@
+
+**************************************************
+**************** Requirements ********************
+**************************************************
+1. BLAST configuration
+1.1 download and install ncbi-blast-2.2.xx-x64-xx.tar.gz
+1.2 add BLAST to PATH:
+PATH=$PATH:/blast/install/path/
+export PATH
+
+2. R >= 2.14.2 required
+in R: 
+install.packages("preprocessCore")
+install.packages("diptest")
+
+3. MAFFT multiple sequence alignment tool
+http://mafft.cbrc.jp/alignment/software/ 
+
+4 Ruby
+4.1 Ruby >= 1.9.3 required
+
+**************************************************
+********************* Use ************************
+**************************************************
+1. Get the source code
+$ git clone -b rubygem git@github.com:monicadragan/gene_prediction.git
+
+2. Be sudo and build the gem
+$ sudo rake
+
+3. Run GeneValidation
+$ genevalidatior -t TYPE [-s START] [--out_fmt html|yaml] [--skip_blast xml_file_path] fasta_file_path
+
+Example:
+$ genevalidator -t protein -x data/one_direction_gene_merge/one_direction_gene_merge_proteins.xml data/one_direction_gene_merge/one_direction_gene_merge_proteins.fasta
+
+Outputs:
+- validation results in yaml frmat (the name of the input file with yaml extension) 
+- html folder containing json data files (for plot generation) and auxiliat files
+This will provide validation results in yaml and html format, at the same path with your input file. In html format you can visualize the plots and histograms for certain statistics used in the validation steps.
+- observation: for the moment check the html output with Firefox browser.
+
+Other things:
+
+4. Run unit tests
+$ rake test
+
+5. Generate documentation
+$ rake doc
+
+
+**************************************************
+************ Add validations (3 steps) ***********
+**************************************************
+
+Steps 1 and 2: Each validation is defined by 2 extended classes:
+(1)- extend ValidatioReport - stores the output of the validation test and some methods used for data representation (validation, print, color)
+(2)- extend ValidationTest ('run' method must be overloaded, run must return ValidationReport class type,  some fields have to be updated: the validation name used in the header, description, plot_files)
+Step 3:  Add the validation to the validations list, which is further processed for yaml/html/console visualization
+
+Code:
+
+validations = []
+validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path, plots)
+ ...
+validations.push YourValidationClass(@type, prediction, hits, other_arguments)
+
+# check the class type of the elements in the list
+# this will raise an error if YourValidationClass does not extend ValidationTest validations.map do |v|
+  raise ValidationClassError unless v.is_a? ValidationTest
+end
+
+# run validations
+validations.map{|v| v.run}
+
+# check the class type of the validation reports
+# this will raise an error if the run method of YourValidationClass does not return ValidationReport
+validations.map do |v|
+  raise ValidationClassError unless v.validation_report.is_a? ValidationReport
+end
+

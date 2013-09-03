@@ -14,6 +14,7 @@ class Validation
 
   attr_reader :filename
   attr_reader :html_path
+  attr_reader :yaml_path
   attr_reader :idx
   attr_reader :start_idx
 
@@ -30,12 +31,13 @@ class Validation
   # +filename+: name of the input file, used when generatig the plot files
   # +idx+: index of the query currently processed (used to generate unique plot images)
   # +start_idx+: index of the first processed query (may differ from idx if the first queries are skiped)
-  def initialize(prediction, hits, type, filename, html_path, idx, start_idx)
+  def initialize(prediction, hits, type, filename, html_path, yaml_path, idx, start_idx)
 
     @prediction = prediction
     @hits = hits
     @filename = filename
     @html_path = html_path
+    @yaml_path = yaml_path
     @idx = idx
     @start_idx = start_idx
     @type = type
@@ -45,13 +47,12 @@ class Validation
   ##
   # Runs all validations 
   # Params:
-  # +plots+: boolean variable, indicated whether plots should be generated or not
   # Output:
   # +Output+ object
-  def validate_all(plots = false)
+  def validate_all
     begin
 
-      query_output = Output.new(@filename, @html_path, @idx, @start_idx)
+      query_output = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
       query_output.prediction_len = prediction.xml_length
       query_output.prediction_def = prediction.definition
       query_output.nr_hits = hits.length
@@ -59,13 +60,13 @@ class Validation
       plot_path = "#{html_path}/#{filename}_#{@idx}"
  
       validations = []
-      validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path, plots)
+      validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
       validations.push LengthRankValidation.new(@type, prediction, hits)
       validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
-      validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path, plots)
+      validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
       validations.push DuplicationValidation.new(@type, prediction, hits)
-      validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, plots, ["ATG"])
-      validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, plots)
+      validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, ["ATG"])
+      validations.push AlignmentValidation.new(@type, prediction, hits, plot_path)
 
       # check the class type of the elements in the list
       validations.map do |v|
@@ -82,7 +83,7 @@ class Validation
       query_output.validations = validations
       return query_output
 
-    rescue ValudationClassError => error
+    rescue ValidationClassError => error
       $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validations is not ValidationTest"
       exit
     rescue ReportClassError => error

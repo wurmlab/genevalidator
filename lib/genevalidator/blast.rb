@@ -18,11 +18,11 @@ class Blast
   attr_reader :type
   attr_reader :fasta_filepath
   attr_reader :html_path
+  attr_reader :yaml_path
   attr_reader :filename
   # current number of the querry processed
   attr_reader :idx
   attr_reader :start_idx
-  attr_reader :outfmt
   #array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
 
@@ -32,9 +32,8 @@ class Blast
   # +fasta_filepath+: query sequence fasta file with query sequences
   # +type+: query sequence type; can be :nucleotide or :protein
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
-  # +outfmt+: output format
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_filepath, type, xml_file = nil, outfmt = nil, start_idx = 1)
+  def initialize(fasta_filepath, type, xml_file = nil, start_idx = 1)
     begin
 
       puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
@@ -49,7 +48,6 @@ class Blast
       @xml_file = xml_file
       @idx = 0
       @start_idx = start_idx
-      @outfmt = outfmt
 
       raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
       fasta_content = IO.binread(@fasta_filepath);
@@ -68,12 +66,13 @@ class Blast
       R.echo "enable = nil, stderr = nil, warn = nil"
 
       # build path of html folder output
-      @html_path = @fasta_filepath.scan(/(.*)\/[^\/]+$/)[0][0]
-      if html_path == nil
+      path = @fasta_filepath.scan(/(.*)\/[^\/]+$/)[0][0]
+      if path == nil
         @html_path = "html"
       else
-        @html_path += "/html"
+        @html_path ="#{path}/html"
       end
+      @yaml_path = @html_path
 
       @filename = @fasta_filepath.scan(/\/([^\/]+)$/)[0][0]
 
@@ -82,10 +81,11 @@ class Blast
       FileUtils.rm_rf(@html_path)
       Dir.mkdir(@html_path)
 
-      # copy js folder to the html folder
+      # copy auxiliar folders to the html folder
       FileUtils.cp_r("aux/css", @html_path)
       FileUtils.cp_r("aux/js", @html_path)
       FileUtils.cp_r("aux/img", @html_path)
+      FileUtils.cp_r("aux/font", @html_path)
 
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
@@ -145,14 +145,14 @@ class Blast
   # +gapextend+: gapextend blast parameter
   # Output:
   # String with the blast xml output
-  def call_blast_from_stdin(command, query, gapopen, gapextend)
+  def call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote")
     begin
       raise TypeError unless command.is_a? String and query.is_a? String
 
       evalue = "1e-5"
 
       #output format = 5 (XML Blast output)
-      blast_cmd = "#{command} -db nr -remote -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend}"
+      blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend}"
       cmd = "echo \"#{query}\" | #{blast_cmd}"
       #puts "Executing \"#{blast_cmd}\"... This may take a while..."
       output = %x[#{cmd} 2>/dev/null]
@@ -182,14 +182,14 @@ class Blast
   # +gapextend+: gapextend blast parameter
   # Output:
   # String with the blast xml output
-  def call_blast_from_file(command, filename, gapopen, gapextend)
+  def call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
     begin  
       raise TypeError unless command.is_a? String and filename.is_a? String
 
       evalue = "1e-5"
 
       #output = 5 (XML Blast output)
-      cmd = "#{command} -query #{filename} -db nr -remote -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend} "
+      cmd = "#{command} -query #{filename} -db #{db} -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend} "
       puts "Executing \"#{cmd}\"..."
       puts "This may take a while..."
       output = %x[#{cmd}          if xml_file == nil
@@ -242,19 +242,13 @@ class Blast
         #file seek for each query
         
         # do validations
-        v = Validation.new(prediction, hits, @type, @filename, @html_path, @idx, @start_idx)
-        if @outfmt == :html
-          query_output = v.validate_all(true)
-          query_output.generate_html
-        else
-          query_output = v.validate_all
-        end
+        v = Validation.new(prediction, hits, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
+        query_output = v.validate_all
+        query_output.generate_html
 
         query_output.print_output_console
+        query_output.print_output_file_yaml
 
-        #if @outfmt == :yaml
-          query_output.print_output_file_yaml
-        #end
       end
 
       rescue NoMethodError => error

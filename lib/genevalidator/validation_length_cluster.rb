@@ -1,3 +1,4 @@
+require 'json'
 require 'genevalidator/validation_output'
 require 'genevalidator/validation_test'
 
@@ -7,10 +8,13 @@ class LengthClusterValidationOutput < ValidationReport
 
   attr_reader :prediction_len
   attr_reader :limits
+  attr_reader :plot_files
 
-  def initialize (prediction_len, limits)
+  def initialize (prediction_len, limits, expected = :yes)
     @limits = limits
     @prediction_len = prediction_len
+    @expected = expected
+    @result = validation
   end
 
   def print
@@ -18,7 +22,6 @@ class LengthClusterValidationOutput < ValidationReport
   end
 
   def validation
-
     if @limits != nil
       if @prediction_len >= @limits[0] and @prediction_len <= @limits[1]
         :yes
@@ -35,9 +38,9 @@ end
 class LengthClusterValidation < ValidationTest
 
   attr_reader :filename
-  attr_reader :plot
   attr_reader :clusters
   attr_reader :max_density_cluster
+  attr_reader :plot_files
 
   ##
   # Initilizes the object
@@ -46,14 +49,12 @@ class LengthClusterValidation < ValidationTest
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +plot_filename+: name of the input file, used when generatig the plot files
-  # +plot+: boolean variable, indicated whether plots should be generated or not
-  def initialize(type, prediction, hits, filename, plot = true)
+  def initialize(type, prediction, hits, filename)
     super
     @filename = filename
-    @plot = plot
-    @short_header = "Valid_Length(Cluster)"
-    @header = "Valid Length(Cluster)"
-    @description = "Check whether the prediction length fits the most of the BLAST hit lengths, by 1D hierarchical clusterization."
+    @short_header = "LengthCluster"
+    @header = "Length Cluster"
+    @description = "Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]"
   end
 
   ## 
@@ -73,18 +74,36 @@ class LengthClusterValidation < ValidationTest
       limits = @clusters[@max_density_cluster].get_limits
       prediction_len = @prediction.xml_length
 
-      if plot
-        plot_histo_clusters("#{@filename}_len_clusters.jpg")
-        plot_files.push("#{@filename}_len_clusters.jpg")
-        plot_length("#{@filename}_len.jpg")
-        plot_files.push("#{@filename}_len.jpg")
-      end
+      f = File.open("#{@filename}_len_clusters.json" , "w")
+      f.write(@clusters.each_with_index.map{|cluster, i| cluster.lengths.collect{|k,v| {"key"=>k, "value"=>v, "main"=>(i==@max_density_cluster)}}}.to_json)
+      f.close
+      plot_files.push(Plot.new("#{@filename}_len_clusters.json".scan(/\/([^\/]+)$/)[0][0], 
+                               :bars, 
+                               "Length distribution histogram", 
+                               "black=prediction, red = most dense cluster", 
+                               "length", 
+                               "frequency",
+                               @prediction.xml_length))
+
+      f = File.open("#{@filename}_len.json" , "w")
+      lst = @hits.sort{|a,b| a.xml_length<=>b.xml_length}
+      f.write((lst.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.xml_length, "color"=>"black"}} +
+               lst.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
+      f.close
+      @plot_files.push(Plot.new("#{@filename}_len.json".scan(/\/([^\/]+)$/)[0][0],
+                                :lines,
+                                "Hits vs prediction",
+                                "hit length in black, part of the hit that matches the prediction in red",
+                                "length",
+                                "idx"))
 
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
-      @validation_report.plot_files = plot_files
+      @validation_report.plot_files = @plot_files
+      return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
+#      puts error.backtrace
       ValidationReport.new("Not enough evidence")
     end
        

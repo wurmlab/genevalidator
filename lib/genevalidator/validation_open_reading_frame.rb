@@ -9,10 +9,12 @@ class ORFValidationOutput < ValidationReport
   attr_reader :ratio
   attr_reader :threshold
 
-  def initialize (orfs, ratio, threshold = 0.8)
+  def initialize (orfs, ratio, threshold = 0.8, expected = :yes)
     @orfs = orfs
     @ratio = ratio
     @threshold = threshold
+    @expected = expected
+    @result = validation
   end
 
   def print
@@ -39,7 +41,6 @@ end
 class OpenReadingFrameValidation < ValidationTest
 
   attr_reader :filename
-  attr_reader :plot
   attr_reader :start_codons
   attr_reader :stop_codons
 
@@ -50,19 +51,17 @@ class OpenReadingFrameValidation < ValidationTest
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +plot_filename+: name of the input file, used when generatig the plot files
-  # +plot+: boolean variable, indicated whether plots should be generated or not
   # +start_codons+: +Array+ of codons
   # +stop_codons+: +Array+ of codons
-  def initialize (type, prediction, hits, filename, plot = true, start_codons = [], stop_codons = [])
+  def initialize (type, prediction, hits, filename, start_codons = [], stop_codons = [])
     super
     @filename = filename
-    @plot = plot
     @start_codons = start_codons
     @stop_codons = stop_codons
-    @short_header = "ORF_Test"
-    @header = "Main ORF Test"
-    @description = "Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries."
-    @validation_report = ValidationReport.new("-","white")
+    @short_header = "ORF"
+    @header = "Main ORF"
+    @description = "Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries. Meaning of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80% passe the validation test."
+    @validation_report = ValidationReport.new("", :yes)
   end
 
 
@@ -74,21 +73,33 @@ class OpenReadingFrameValidation < ValidationTest
     begin
       raise Exception unless type == :nucleotide and prediction.is_a? Sequence and hits[0].is_a? Sequence
       orfs = get_orfs
-      if plot
-        plot_orfs(orfs, "#{@filename}_orfs.jpg")
-        @plot_files.push("#{@filename}_orfs.jpg")
-      end
 
       # case 1: check if longest ORF / prediction > 0.8 (ok)
       prediction_len = prediction.raw_sequence.length 
       longest_orf = orfs.map{|elem| elem[1].map{|orf| orf[1]-orf[0]}}.flatten.max
       ratio =  longest_orf/(prediction_len + 0.0)
 
+      len = @prediction.raw_sequence.length
+
+      f = File.open("#{@filename}_orfs.json" , "w")
+      lst = @hits.sort{|a,b| a.xml_length<=>b.xml_length}
+      f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
+               orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
+      f.close
+      @plot_files.push(Plot.new("#{@filename}_orfs.json".scan(/\/([^\/]+)$/)[0][0],
+                                :lines,
+                                "Open reading frame with START codon",
+                                "",
+                                "length",
+                                "Reading Frame"))
+
+
       @validation_report = ORFValidationOutput.new(orfs, ratio)
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
-      ValidationReport.new("-","white")
+#      puts error.backtrace
+      return ValidationReport.new("", :yes)
     end
   end
 
@@ -118,12 +129,12 @@ class OpenReadingFrameValidation < ValidationTest
     end        
 
     result = {}
-    result["+1"] = []
-    result["+2"] = []
-    result["+3"] = []
-    result["-1"] = []
-    result["-2"] = []
-    result["-3"] = []
+    result[1] = []
+    result[2] = []
+    result[3] = []
+    result[-1] = []
+    result[-2] = []
+    result[-3] = []
 
     #direct strand
     #reading frame 1, direct strand
@@ -133,7 +144,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3.length-1).each do |i|
       if start_codons.length == 0
         if m3[i] - m3[i-1] > orf_length
-           result["+1"].push([m3[i-1], m3[i]])
+           result[1].push([m3[i-1], m3[i]])
         end
       else
         start_codons.each do |scd|
@@ -143,7 +154,7 @@ class OpenReadingFrameValidation < ValidationTest
             start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
 #          end      
           if start_offset != nil and m3[i] - start_offset > orf_length
-            result["+1"].push([start_offset, m3[i]])
+            result[1].push([start_offset, m3[i]])
           end
         end
       end
@@ -155,7 +166,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3_1.length-1).each do |i|
       if start_codons.length == 0
         if m3_1[i] - m3_1[i-1] > orf_length
-           result["+2"].push([m3_1[i-1], m3_1[i]])
+           result[2].push([m3_1[i-1], m3_1[i]])
         end
       else
         start_codons.each do |scd|
@@ -165,7 +176,7 @@ class OpenReadingFrameValidation < ValidationTest
             start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
 #          end       
           if start_offset != nil and m3_1[i] - start_offset > orf_length
-            result["+2"].push([start_offset, m3_1[i]])
+            result[2].push([start_offset, m3_1[i]])
           end
         end
       end
@@ -177,7 +188,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3_2.length-1).each do |i|
       if start_codons.length == 0
         if m3_2[i] - m3_2[i-1] > orf_length
-           result["+3"].push([m3_2[i-1], m3_2[i]])
+           result[3].push([m3_2[i-1], m3_2[i]])
         end
       else
         start_codons.each do |scd|
@@ -188,7 +199,7 @@ class OpenReadingFrameValidation < ValidationTest
 #          end
           #puts "#{m3_2[i-1]} #{m3_2[i]} #{start_offset} #{seq[m3_2[i-1]..m3_2[i] - orf_length]}"
           if start_offset != nil and m3_2[i] - start_offset > orf_length
-             result["+3"].push([start_offset, m3_2[i]])
+             result[3].push([start_offset, m3_2[i]])
           end
         end
       end
@@ -211,7 +222,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3.length-1).each do |i|
       if start_codons.length == 0
         if m3[i] - m3[i-1] > orf_length
-          result["-1"].push([len - m3[i], len - m3[i-1]])
+          result[-1].push([len - m3[i], len - m3[i-1]])
         end
       else
         start_codons.each do |scd|
@@ -221,7 +232,7 @@ class OpenReadingFrameValidation < ValidationTest
             start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
 #          end      
           if start_offset != nil and m3[i] - start_offset > orf_length
-            result["-1"].push([len - m3[i], len - start_offset])
+            result[-1].push([len - m3[i], len - start_offset])
           end
         end
       end
@@ -232,7 +243,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3_1.length-1).each do |i|
       if start_codons.length == 0
         if m3_1[i] - m3_1[i-1] > orf_length
-          result["-2"].push([len - m3_1[i], len - m3_1[i-1]])
+          result[-2].push([len - m3_1[i], len - m3_1[i-1]])
         end
       else
         start_codons.each do |scd|
@@ -242,7 +253,7 @@ class OpenReadingFrameValidation < ValidationTest
             start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
 #          end       
           if start_offset != nil and m3_1[i] - start_offset > orf_length
-            result["-2"].push([len - m3_1[i], len - start_offset])
+            result[-2].push([len - m3_1[i], len - start_offset])
           end
         end
       end
@@ -253,7 +264,7 @@ class OpenReadingFrameValidation < ValidationTest
     (1..m3_2.length-1).each do |i|
       if start_codons.length == 0
         if m3_2[i] - m3_2[i-1] > orf_length
-          result["-3"].push([len - m3_2[i], len - m3_2[i-1]])
+          result[-3].push([len - m3_2[i], len - m3_2[i-1]])
         end
       else
         start_codons.each do |scd|
@@ -263,7 +274,7 @@ class OpenReadingFrameValidation < ValidationTest
             start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
 #          end
           if start_offset != nil and m3_2[i] - start_offset > orf_length
-             result["-3"].push([len - m3_2[i], len - start_offset])
+             result[-3].push([len - m3_2[i], len - start_offset])
           end
         end
       end

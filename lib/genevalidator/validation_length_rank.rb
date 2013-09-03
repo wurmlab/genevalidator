@@ -8,17 +8,23 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize (msg, percentage)       
+  def initialize (msg, percentage, expected = :yes)       
     @percentage = percentage
     @msg = msg
+    @result = validation
+    @expected = expected
   end
 
   def print
-    "#{@percentage} (#{msg})"
+    if msg != ""
+      return "#{@percentage} (#{msg})"
+    else 
+      return @percentage.to_s
+    end
   end
 
   def validation
-    if msg == "OK"
+    if msg == ""
       :yes
     else
       :no
@@ -42,9 +48,9 @@ class LengthRankValidation < ValidationTest
   def initialize(type, prediction, hits, threshold = 0.2)
     super
     @threshold = threshold
-    @short_header = "Valid_Length(Rank)"
-    @header = "Valid Length(Rank)"
-    @description = "Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths."
+    @short_header = "LengthRank"
+    @header = "Length Rank"
+    @description = "Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
   end
 
   ##
@@ -65,7 +71,7 @@ class LengthRankValidation < ValidationTest
       predicted_len = prediction.xml_length
 
       if hits.length == 1
-        msg = "OK"
+        msg = ""
         percentage = 1
       else
         if predicted_len < median
@@ -80,14 +86,14 @@ class LengthRankValidation < ValidationTest
       end
 
       if percentage >= threshold
-        msg = "OK"
+        msg = ""
       end
 
       @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
-      ValidationReport.new("Not enough evidence", "Valid_Length(Rank)")
+      ValidationReport.new("Not enough evidence")
     end
   end
 

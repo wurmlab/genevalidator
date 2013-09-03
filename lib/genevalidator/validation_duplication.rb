@@ -7,9 +7,11 @@ class DuplciationValidationOutput < ValidationReport
   attr_reader :pvalue
   attr_reader :threshold
 
-  def initialize (pvalue, threshold = 0.05)
+  def initialize (pvalue, threshold = 0.05, expected = :no)
     @pvalue = pvalue
     @threshold = threshold
+    @result = validation
+    @expected = expected
   end
 
   def print
@@ -42,7 +44,7 @@ class DuplicationValidation < ValidationTest
     super
     @short_header = "Duplication"
     @header = "Duplication"
-    @description = "Check whether there is a duplicated subsequence in the predicted gene."
+    @description = "Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test."
   end
 
   ##

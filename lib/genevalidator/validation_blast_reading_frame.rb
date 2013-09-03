@@ -7,16 +7,18 @@ class BlastRFValidationOutput < ValidationReport
   attr_reader :frames_histo
   attr_reader :msg
 
-  def initialize (frames_histo)
+  def initialize (frames_histo, expected = :yes)
     @frames_histo = frames_histo
     @msg = ""
     frames_histo.each do |x, y|
-      @msg << "#{x}:#{y};"      
+      @msg << "#{x}:#{y}; "      
     end
+    @expected = expected
+    @result = validation
   end
 
   def print
-    "#{validation.to_s} (#{@msg})"
+    @msg
   end
 
   def validation
@@ -50,9 +52,9 @@ class BlastReadingFrameValidation < ValidationTest
 
   def initialize(type, prediction, hits = nil)
     super
-    @short_header = "Valid_RF"
-    @header = "Valid Reading Frame"
-    @description = "Check whether there are reading frame shifts along the query sequence."
+    @short_header = "RF"
+    @header = "Reading Frame"
+    @description = "Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence. Meaning of the output displayed: (reading frame: no hsps)"
   end
 
   ## 

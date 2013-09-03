@@ -1,4 +1,5 @@
 require 'genevalidator/validation_output'
+require 'json'
 
 ##
 # Class that stores the validation output information
@@ -8,10 +9,12 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_down
   attr_reader :threshold_up
 
-  def initialize (slope, threshold_down = 0.4, threshold_up = 1.2)
+  def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
     @slope = slope
     @threshold_down = threshold_down
     @threshold_up = threshold_up
+    @result = validation
+    @expected = expected
   end
 
   def print
@@ -44,10 +47,10 @@ end
 # prediction is a merge of multiple genes
 class GeneMergeValidation < ValidationTest
 
-  attr_reader :plot
   attr_reader :hits
   attr_reader :prediction
   attr_reader :filename
+  attr_reader :plot_files
 
   ##
   # Initilizes the object
@@ -56,14 +59,12 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +plot_filename+: name of the input file, used when generatig the plot files
-  # +plot+: boolean variable, indicated whether plots should be generated or not
-  def initialize(type, prediction, hits, filename, plot = true)
+  def initialize(type, prediction, hits, filename)
     super
     @filename = filename
-    @plot = plot
     @short_header = "Gene_Merge(slope)"
-    @header = "Gene Merge(slope)"
-    @description = "Check whether BLAST hits make evidence about a merge of two genes that cover the predicted gene."
+    @header = "Gene Merge"
+    @description = "Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene. Meaning of the output displayed: slope of the linear regression of the relationship between the start and stop offsets of the hsps (see the plot). Valid slopes are around 45 degrees."
   end
 
   ##
@@ -74,19 +75,40 @@ class GeneMergeValidation < ValidationTest
     begin
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      lm_slope = slope
-   
-      if plot
-        plot_matched_regions("#{@filename}_match.jpg")
-        @plot_files.push("#{@filename}_match.jpg")
-        plot_2d_start_from(lm_slope, "#{@filename}_match_2d.jpg")
-        @plot_files.push("#{@filename}_match_2d.jpg")
-      end
+      lm_slope = slope[1]
+      y_intercept = slope[0]
+
+      f = File.open("#{@filename}_match_2d.json" , "w")
+      f.write(@hits.map{|hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min, 
+                               "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max}}.to_json)
+      f.close
+      @plot_files.push(Plot.new("#{@filename}_match_2d.json".scan(/\/([^\/]+)$/)[0][0], 
+                                :scatter, 
+                                "Start vs end hsp match", 
+                                "", 
+                                "from", 
+                                "to",
+                                 y_intercept,
+                                 lm_slope))
+
+      colors = ["yellow", "red"]
+      f = File.open("#{@filename}_match.json" , "w")
+      f.write((@hits.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>@prediction.xml_length, "color"=>"black"}} +
+              @hits.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
+      f.close
+      @plot_files.push(Plot.new("#{@filename}_match.json".scan(/\/([^\/]+)$/)[0][0], 
+                                :lines,  
+                                "Prediction vs hit match", 
+                                "prediction in black, part of the prediction that matches the hit in red/yellow", 
+                                "length", 
+                                "idx"))
+
       @validation_report = GeneMergeValidationOutput.new(lm_slope)
-      @validation_report.plot_files = plot_files
+      @validation_report.plot_files = @plot_files
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
+#      puts error.backtrace
       ValidationReport.new("Not enough evidence")
     end
   end
@@ -212,18 +234,40 @@ class GeneMergeValidation < ValidationTest
   # Plots 2D graph with the start/end of the matched region offsets in the prediction
   # Param
   # +hits+: array of Sequence objects
+  # Code inspired from: http://engineering.sharethrough.com/blog/2012/09/12/simple-linear-regression-using-ruby/
+  # Output:
+  # The ecuation of the regression line: [y slope]
   def slope(hits = @hits)
-
+    
     pairs = @hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
     xx = pairs.map{|pair| pair.x}
     yy = pairs.map{|pair| pair.y}
 
+=begin
     R.eval "x = c#{xx.to_s.gsub("[","(").gsub("]",")")}"
     R.eval "y = c#{yy.to_s.gsub("[","(").gsub("]",")")}"
     R.eval "slope = lm(y~x)$coefficients[2]"
     slope = R.pull "slope"
+=end 
+   
+    # calculate the slope
+    x_mean = xx.reduce(0) { |sum, x| x + sum } / (xx.length + 0.0)
+    y_mean = yy.reduce(0) { |sum, x| x + sum } / (yy.length + 0.0)
+ 
+    numerator = (0...xx.length).reduce(0) do |sum, i|
+      sum + ((xx[i] - x_mean) * (yy[i] - y_mean))
+    end
+ 
+    denominator = xx.reduce(0) do |sum, x|
+      sum + ((x - x_mean) ** 2)
+    end
+ 
+    slope = numerator / (denominator + 0.0)
+    y_intercept = y_mean - (slope * x_mean)
 
+    return [y_intercept, slope]
+    
   end
 
 end

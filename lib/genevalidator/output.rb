@@ -8,23 +8,16 @@ class Output
   attr_accessor :prediction_def
   attr_accessor :nr_hits
 
-  attr_accessor :length_validation_cluster
-  attr_accessor :length_validation_rank
-  attr_accessor :reading_frame_validation
-  attr_accessor :gene_merge_validation
-  attr_accessor :duplication
-  attr_accessor :orf
-
   # list of +ValidationReport+ objects
   attr_accessor :validations
-  attr_accessor :plot_files
 
   attr_accessor :filename
   attr_accessor :html_path
+  attr_accessor :yaml_path
   attr_accessor :idx
   attr_accessor :start_idx
 
-  def initialize(filename, html_path, idx, start_idx)
+  def initialize(filename, html_path, yaml_path, idx = 0, start_idx = 0)
 
     @prediction_len = 0
     @prediction_def = "no_definition"
@@ -32,6 +25,7 @@ class Output
 
     @filename = filename
     @html_path = html_path
+    @yaml_path = yaml_path
     @idx = idx
     @start_idx = start_idx
 
@@ -63,30 +57,22 @@ class Output
   end
 
   def print_output_file_yaml
-    file_yaml = "#{@filename}.yaml"
+    file_yaml = "#{@yaml_path}/#{@filename}.yaml"
+    report = validations.map{|v| v.validation_report}
     unless @idx == @start_idx
       hsh = YAML.load_file(file_yaml)
-      hsh[@prediction_def.scan(/([^ ]+)/)[0][0]] = self
+      hsh[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
       File.open(file_yaml, "w") do |f|
         YAML.dump(hsh, f)
       end
     else 
       File.open(file_yaml, "w") do |f|
-        YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => self},f)
+        YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => report},f)
       end
     end
   end
 
   def generate_html
-
-    gray = "#E8E8E8"
-    white = "#FFFFFF"
-
-    if idx%2 == 0
-      color = gray
-    else 
-      color = white 
-    end
 
     successes = validations.map{|v| v.validation_report.color}.count("success")
     fails = validations.map{|v| v.validation_report.color}.count("danger")

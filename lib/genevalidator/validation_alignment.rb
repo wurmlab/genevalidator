@@ -8,10 +8,12 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :extra_seq
   attr_reader :threahsold
 
-  def initialize (gaps = 0, extra_seq = 0, threshold = 0.2)
+  def initialize (gaps = 0, extra_seq = 0, threshold = 0.2, expected = :yes)
     @gaps = gaps
     @extra_seq = extra_seq
     @threshold = threshold
+    @result = validation
+    @expected = expected
   end
 
   def print
@@ -34,16 +36,14 @@ end
 class AlignmentValidation < ValidationTest
 
   attr_reader :filename
-  attr_reader :plot
   attr_reader :multiple_alignment
 
-  def initialize(type, prediction, hits, filename, plot = true)
+  def initialize(type, prediction, hits, filename)
     super
     @filename = filename
-    @plot = plot
-    @short_header = "MA_Test"
-    @header = "Multiple Alignment Test"
-    @description = "Finds gaps/extra regions based on the multiple alignment of the best hits."
+    @short_header = "MA"
+    @header = "Multiple Alignment"
+    @description = "Finds gaps/extra regions in the prediction based on the multiple alignment of the best hits. Meaning of the output displayed: gaps= gap coverage insertions= extra sequence coverage. Validation fails if one of these values is higher than 20%"
     @multiple_alignment = []
   end
 
@@ -72,17 +72,38 @@ class AlignmentValidation < ValidationTest
       # multiple align sequences from  less_hits with the prediction
       multiple_align_mafft(prediction, less_hits)
       sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
-
       # remove isolated residues from the predicted sequence
       #puts sm
       #puts ""
       sm = remove_isolated_residues(sm)
       #puts sm
 
-      if plot
-        plot_multiple_alignment("#{@filename}_ma.jpg", @multiple_alignment, sm)
-        @plot_files.push("#{@filename}_ma.jpg")
-      end
+      # get indeces of consensus in the multiple alignment
+      consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
+      consensus_idxs = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
+
+      ma = @multiple_alignment
+
+      len = ma[0].length
+      f = File.open("#{@filename}_ma.json" , "w")
+      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} + 
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
+      #plot prediction
+      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"salmon"}] +
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"black"}} +
+      #plot statistical model
+      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"orange"}] +
+      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow"}} +      
+      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}).to_json) 
+
+      f.close
+      @plot_files.push(Plot.new("#{@filename}_ma.json".scan(/\/([^\/]+)$/)[0][0],
+                                :lines,
+                                "Multiple alignment and Statistical model of blast hits",
+                                "gaps(white);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)",
+                                "length",
+                                "idx"))
 
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
   
@@ -94,7 +115,7 @@ class AlignmentValidation < ValidationTest
       # Exception is raised when blast founds no hits
       rescue Exception => error
         puts error.backtrace
-#        ValidationReport.new("Not enough evidence")
+        ValidationReport.new("Not enough evidence")
     end
   end
 

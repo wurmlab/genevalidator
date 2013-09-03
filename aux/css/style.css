@@ -25,7 +25,8 @@ table.tablesorter thead tr .headerSortDown {
   background-repeat: no-repeat;  
   background-image: url(../img/yes-icon.png);
   background-position: left center; 
-  background-color: #dff0d8;      
+  background-color: #dff0d8;  
+  white-space:nowrap;    
 }
 
 .table tbody td.danger{
@@ -36,7 +37,8 @@ table.tablesorter thead tr .headerSortDown {
   background-repeat: no-repeat;  
   background-image: url(../img/no-icon.png);
   background-position: left center;   
-  background-color: #FF6666;  
+  background-color: #f2dede; /*#FF6666; */ 
+  white-space:nowrap;
 }
 
 .table td {
@@ -46,7 +48,20 @@ table.tablesorter thead tr .headerSortDown {
 .table th {
   vertical-align: middle !important;
   white-space: nowrap !important;
-  padding-right:20px !important;		
+  padding-right:20px !important;
+}
+/*
+thead {
+  background-color: #ffffff;
+  position:fixed;    
+}
+
+tbody{
+  padding-top:150px;
+}*/
+
+.container{
+  overflow-x: scroll !important;
 }
 
 .background_image {
@@ -65,6 +80,10 @@ table.tablesorter thead tr .headerSortDown {
 	cursor: pointer !important;    
     border: outset;
     border-color:#C00000;
+}
+
+.header{
+  background-color: #E8E8E8 !important;
 }
 
 td.my-btn-success:hover {
@@ -92,6 +111,54 @@ table .header-fixed {
 }
 thead {
   background-color: #ffffff;
+}
+
+[id^="toggle"] {
+  text-align:center;
+} 
+
+.popover {
+  text-align: justify !important;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.icon-bar-chart:before {
+  content: "\f080";
+}
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../font/fontawesome-webfont.eot?v=3.2.1');
+  src: url('../font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../font/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* FONT AWESOME CORE
+ * -------------------------- */
+[class="icon-bar-chart"],
+[class=" icon-bar-chart"] {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+}
+[class="icon-bar-chart"]:before,
+[class=" icon-bar-chart"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
 }
 
 
