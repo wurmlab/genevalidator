@@ -26,7 +26,11 @@ The goal of GeneValidator is to identify problems with gene predictions and prov
 * Codon coverage ~ under development
 
 ### Requirements
-Ruby (>= 1.9.3), R (>= 2.14.2), RubyGems (>= 1.3.6), and NCBI BLAST+ (>= 2.2.25+), and MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
+* Ruby (>= 1.9.3)
+* R (>= 2.14.2)
+* RubyGems (>= 1.3.6)
+* NCBI BLAST+ (>= 2.2.25+)
+* MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
 Linux and MacOS are officially supported!
 
 ### Installation
@@ -40,7 +44,7 @@ Linux and MacOS are officially supported!
 `$ genevalidator type [validations] [skip_blast] [start] FILE` 
 
 Example that runs all validations on a set of ant gene predictions:<br>
-`$ genevalidator -t protein -x data/solenopsis_length_test/prot_Solenopsis_invicta.xml data/solenopsis_length_test/prot_Solenopsis_invicta.fasta`
+`$ genevalidator -t protein -x data/prot_Solenopsis_invicta.xml data/prot_Solenopsis_invicta.fasta`
 
 To learn more:<br>
 `$ genevalidator -h`
@@ -54,10 +58,10 @@ By running GeneValidator on your dataset you get numbers and plots. Some relevan
 
 ### Other things
 
-4. Run unit tests
+4. Run unit tests<br>
 `$ rake test`
 
-5. Generate documentation
+5. Generate documentation<br>
 `$ rake doc`
 
 
