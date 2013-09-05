@@ -1,4 +1,4 @@
-get GeneValidator to identify problems with predicted genes
+Identify problems with predicted genes
 ===============
 
 This is a GSoC 2013 project.<br>
