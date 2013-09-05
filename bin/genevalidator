@@ -8,13 +8,12 @@ require 'genevalidator/sequences'
 
 options = {}
 opt_parser = OptionParser.new do |opt|
-  opt.banner = "Usage: TYPE [SKIP_BLAST] [START] [OUTFMT] FILE"
   opt.separator  ""
-  opt.separator  "File: filename of the FASTA file containing the predicted sequences"
+  opt.banner = "USE:"
+  opt.separator  "\t $ genevalidator type [validations] [skip_blast] [start] FILE"
   opt.separator  ""
-  opt.separator  "Options"
-
-  opt.on("-t","--type TYPE","type of the predicted sequences: protein/mRNA") do |type|
+  opt.separator  "ARGUMENTS:"
+  opt.on("-t","--type <type>","type of the predicted sequences: protein/mRNA") do |type|
     if type.to_s.downcase == 'protein' or type.to_s.downcase == 'mrna'
       options[:type] = type
     else 
@@ -22,34 +21,49 @@ opt_parser = OptionParser.new do |opt|
       exit
     end
   end
+  opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
+
+  opt.separator  ""
+  opt.separator  "OPTIONAL ARGUMENTS:"
+  opt.separator  ""
+  options[:vlist] = ["all"]
+  opt.on( '-v', '--validations <String>', Array, "list of validations to be applied" ) do |lst|
+    options[:vlist] = lst
+  end
+
+  opt.separator  "\tUse from the fallowing validation options, separated by coma:"
+  opt.separator  "\t\tall = run all validations (default)"
+  opt.separator  "\t\tlenc = length validation by clusterization"
+  opt.separator  "\t\tlenr = length validation by ranking"
+  opt.separator  "\t\tframe = reading frame validation"
+  opt.separator  "\t\tmerge = check gene merge"
+  opt.separator  "\t\tdup = check duplications"
+  opt.separator  "\t\torf = main ORF validation (applicable for nucleotides)"
+  opt.separator  "\t\talign = validation based on multiple alignment"
+  opt.separator  "\t\tcodons = codon coverage ~ under development"
+  
+  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
+    options[:skip_blast] = skip
+  end
+  opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6) outputs"
+
+  opt.on("-c", "--tabular <String>","~ under development ~ custom format used in BLAST -outfmt argument") do |lst|
+    options[:tabular] = lst
+  end
+  opt.separator  "\tSee blast -h for more details"
 
   opt.on("-s","--start [START]", Integer, "starts the validation with a certain sequence in the input file ") do |start|
     if start.is_a? Fixnum
-      options[:start] = start     
-    else 
+      options[:start] = start
+    else
       $stderr.print "Error: start must be a natural number." + "\n"
     end
-  end
-
-  opt.on("-o","--outfmt [OUTFMT]", "output format ") do |outfmt|
-    if outfmt == "html"
-      options[:outfmt] = :html    
-    else 
-      if outfmt == "yaml"
-        options[:outfmt] = :yaml
-      else
-        options[:outfmt] = :console
-      end
-    end    
-  end
-
-  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
-    options[:skip_blast] = skip
   end
 
 
   opt.on("-h","--help","help") do
     puts opt_parser
+    exit
   end
 end
 
@@ -79,9 +93,9 @@ end
 # Main body
 
 if options[:start]
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:skip_blast], options[:outfmt], options[:start])
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:vlist], options[:skip_blast], options[:start])
 else
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:skip_blast], options[:outfmt])
+  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:vlist], options[:skip_blast])
 end
 
 b.blast
