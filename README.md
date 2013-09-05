@@ -45,12 +45,14 @@ $ genevalidator -t protein -x data/solenopsis_length_test/prot_Solenopsis_invict
 To learn more:<br>
 $ genevalidator -h
 
-Outputs:
-* validation results in yaml format (the name of the input file with yaml extension) 
+### Outputs
+By running GeneValidator on your dataset you get numbers and plots. Some relevant files will be generated at the same path with the input file. The results are available in 3 formats:
+* console table output 
+* validation results in YAML format (the YAML file has the same name with the input file + YAML extension) 
 * html output with plot visualization (the useful files will be generated in the 'html' directory, at the same path with the input file)<br>
-! Note: for the moment check the html output with Firefox browser only.
+! Note: for the moment check the html output with Firefox browser only !
 
-Other things:
+### Other things
 
 4. Run unit tests
 $ rake test
