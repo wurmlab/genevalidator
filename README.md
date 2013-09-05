@@ -1,4 +1,4 @@
-Identify problems with predicted genes
+get GeneValidator to identify problems with predicted genes
 ===============
 
 This is a GSoC 2013 project.<br>
@@ -13,7 +13,7 @@ _Please note that some of the functionalities of the tool are still under develo
 * Mentors: [Anurag Priyam](https://plus.google.com/114122400102590087616/about)([email](mailto:anurag08priyam@gmail.com)) and [Yannick Wurm](http://yannick.poulet.org/)([email](mailto:y.wurm@qmul.ac.uk))
 
 ### Abstract
-The goal of this tool is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases.The results of the prediction validation will make evidence about how the sequencing curation may be done and can be useful in improving / trying new approaches for gene prediction tools. The main target users of this tool are the Biologists who want to validate the data obtained in their own laboratories.
+The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases.The results of the prediction validation will make evidence about how the sequencing curation may be done and can be useful in improving / trying new approaches for gene prediction tools. The main target users of this tool are the Biologists who want to validate the data obtained in their own laboratories.
 
 ### Actual Validations
 * Length validation by clusterization
