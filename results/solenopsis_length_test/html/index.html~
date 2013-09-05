@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Gene Validation Result</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+       		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
+        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script> 
+		<script type="text/javascript" src="js/jquery.raty.min.js"></script>       
+  		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
+	    	<script type="text/javascript" src="js/table-fixed-header.js"></script>          		
+        	<script type="text/javascript" src="js/d3.v3.min.js"></script>  	    
+	        <script type="text/javascript" src="js/script.js"></script> 
+        	<script type="text/javascript" src="js/plots.js"></script>         
+
+        	<link href="css/style.css" rel="stylesheet">
+	        <link href="css/bootstrap-glyphicons.css" rel="stylesheet">        
+        	<link href="css/bootstrap.css" rel="stylesheet">
+	</head>
+	<body>
+	<div class="container">
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
+        <thead>
+    		<tr>        		
+    			<td  colspan=14 class="background_image">
+    				<h1>Gene Validator</h1>
+    				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
+    				<br/></td></tr>
+    		<tr>
+    			<td  colspan=14>
+    				<h4> Validation results for <i>prot_Solenopsis_invicta.fasta:</i></h4>
+       			<div align = "right">
+    			<button class="btn btn-info btn-large" id=all_plots onclick="show_all_plots(this)">			 			 
+    				<i class="icon-bar-chart"></i> &nbsp;&nbsp;&nbsp;<b>Show all plots</b>
+    			</button></div><br></td>
+    		</tr>      		        
+        	<tr id="header">
+            	<th>No.</th>        	
+          	<th>Score</th>
+		<th>Ranking</th>
+                <th>
+                	Identifier
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Query identifier as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>            	
+                <th>
+                	Description
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Description of the query as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>
+                <th>
+                	No. Hits
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Number of hits found by BLAST." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                	
+                </th>
+                                        	            
+                	<th>
+                		Length Cluster
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Length Rank
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Reading Frame
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence. Meaning of the output displayed: (reading frame: no hsps)" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Gene Merge
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene. Meaning of the output displayed: slope of the linear regression of the relationship between the start and stop offsets of the hsps (see the plot). Valid slopes are around 45 degrees." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Duplication
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Main ORF
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries. Meaning of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80% passe the validation test." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Missing/Extra sequences
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Meaning of the output displayed: the percentages of the missing/extra sequences with respect to the multiple alignment. Validation fails if one of these values is higher than 20%" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                
+                <td></td>				
+    		</tr>
+    	</thead>   	
+    	
+        <tbody>
+
+<tr> 
+	<td>1</td>
+	<td class="danger"> 50% </td>		
+	<td><div name="ranking" score=50></div></td>
+	<td>SI2.2.0_06267</td>
+	<td> locus=Si_gnF.scaffold02592[1282609..1284114].pep_2 Solenopsis invicta quality=100.00</td>		
+	<td>78</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '199', '');
+             	  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		199 [1556, 1814] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.0 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:78; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '198.64626304372396', '0.0005853812038695763');
+             	  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.0 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		81% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle1');
+	    
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '199', '');
+             	  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '198.64626304372396', '0.0005853812038695763');
+             	  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle1', 'prot_Solenopsis_invicta.fasta_1_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle1 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>2</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>SI2.2.0_13722</td>
+	<td> locus=Si_gnF.scaffold06207[1925625..1928536].pep_1 Solenopsis invicta quality=100.00</td>		
+	<td>15</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '186', '');
+             	  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		186 [130, 161] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.0 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:15; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '177.44408669703157', '0.032472121878435685');
+             	  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		2% missing, 19% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle2');
+	    
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '186', '');
+             	  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '177.44408669703157', '0.032472121878435685');
+             	  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle2', 'prot_Solenopsis_invicta.fasta_2_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle2 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>3</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>SI2.2.0_02651</td>
+	<td> locus=Si_gnF.scaffold01722[932834..938174].pep_2 Solenopsis invicta quality=100.00 tag=gw_corrected</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '660', '');
+             	  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		660 [375, 1500] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.13 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:678; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '276.436614234645', '0.26088515053957256');
+             	  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.26 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		2% missing, 3% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle3');
+	    
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '660', '');
+             	  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '276.436614234645', '0.26088515053957256');
+             	  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle3', 'prot_Solenopsis_invicta.fasta_3_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle3 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>4</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>SI2.2.0_02806</td>
+	<td> locus=Si_gnF.scaffold10535[2353440..2360510].pep_2 Solenopsis invicta quality=99.23</td>		
+	<td>358</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1808', '');
+             	  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		1808 [113, 501] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.18 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:456; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '1198.380373988192', '0.24370217891527843');
+             	  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.24 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		2% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle4');
+	    
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1808', '');
+             	  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '1198.380373988192', '0.24370217891527843');
+             	  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle4', 'prot_Solenopsis_invicta.fasta_4_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle4 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>5</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>SI2.2.0_06704</td>
+	<td> locus=Si_gnF.scaffold07337[1292..1661].pep_2 Solenopsis invicta quality=100.00</td>		
+	<td>34</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '90', '');
+             	  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		90 [497, 726] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.06 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:34; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '79.46561168594035', '0.17600841033586018');
+             	  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.18 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		19% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle5');
+	    
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '90', '');
+             	  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '79.46561168594035', '0.17600841033586018');
+             	  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle5', 'prot_Solenopsis_invicta.fasta_5_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle5 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>6</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>SI2.2.0_02565</td>
+	<td> locus=Si_gnF.scaffold10535[2342913..2350141].pep_2 Solenopsis invicta quality=99.83</td>		
+	<td>433</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1761', '');
+             	  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		1761 [113, 1307] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.28</td>
+		    
+   	    
+  		    <td class = success>0:538; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '1086.7001712690285', '0.3194629974656612');
+             	  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.32 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		4% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle6');
+	    
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1761', '');
+             	  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '1086.7001712690285', '0.3194629974656612');
+             	  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle6', 'prot_Solenopsis_invicta.fasta_6_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle6 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>7</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td>SI2.2.0_08867</td>
+	<td> locus=Si_gnF.scaffold04785[379014..382580].pep_1 Solenopsis invicta quality=100.00 tag=gw_corrected</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '759', '');
+             	  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		759 [161, 829] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.37</td>
+		    
+   	    
+  		    <td class = success>0:550; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '367.0216461556054', '0.19664578697833035');
+             	  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.2 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		9% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle7');
+	    
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '759', '');
+             	  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '367.0216461556054', '0.19664578697833035');
+             	  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle7', 'prot_Solenopsis_invicta.fasta_7_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle7 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>8</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>SI2.2.0_80754</td>
+	<td> locus=Si_gnF.scaffold00759[239873..255409].pep_2 flag=new_id Solenopsis invicta quality=28.95 merge_with=SI2.2.0_04333 tag=gw_corrected</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '850', '');
+             	  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		850 [850, 885] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.27</td>
+		    
+   	    
+  		    <td class = success>0:503; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '811.293646436032', '-0.03902881440853194');
+             	  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.04 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle8');
+	    
+		  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '850', '');
+             	  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '811.293646436032', '-0.03902881440853194');
+             	  			
+  		addPlot('toggle8', 'prot_Solenopsis_invicta.fasta_8_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle8 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>9</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>SI2.2.0_80039</td>
+	<td> locus=Si_gnF.scaffold05277[1187..2156].pep_2 flag=new_id Solenopsis invicta quality=43.33 merge_with=SI2.2.0_80211 merge_with=SI2.2.0_80306 merge_with=SI2.2.0_07731</td>		
+	<td>38</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '125', '');
+             	  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		125 [119, 566] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.03 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:38; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '124.74457416300419', '-0.020583394138908195');
+             	  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.02 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		26% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle9');
+	    
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '125', '');
+             	  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '124.74457416300419', '-0.020583394138908195');
+             	  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle9', 'prot_Solenopsis_invicta.fasta_9_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle9 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>10</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>SI2.2.0_80300</td>
+	<td> locus=Si_gnF.scaffold01122[2700425..2705014].pep_1 flag=new_id Solenopsis invicta quality=76.92 merge_with=SI2.2.0_04351 tag=gw_corrected</td>		
+	<td>127</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1065', '');
+             	  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		1065 [510, 825] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.09 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:150; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '536.591794530265', '-0.17937259082591406');
+             	  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.18 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		18% missing, 5% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle10');
+	    
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '1065', '');
+             	  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '536.591794530265', '-0.17937259082591406');
+             	  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle10', 'prot_Solenopsis_invicta.fasta_10_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle10 style='display:none'>
+</div></td></tr>
+
+

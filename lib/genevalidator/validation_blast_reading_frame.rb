@@ -55,6 +55,7 @@ class BlastReadingFrameValidation < ValidationTest
     @short_header = "RF"
     @header = "Reading Frame"
     @description = "Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence. Meaning of the output displayed: (reading frame: no hsps)"
+    @cli_name = "frame"
   end
 
   ## 
@@ -65,7 +66,7 @@ class BlastReadingFrameValidation < ValidationTest
   # +BlastRFValidationOutput+ object
   def run(lst = @hits)
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
       rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
       frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]

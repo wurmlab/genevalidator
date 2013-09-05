@@ -74,15 +74,14 @@ class Output
 
   def generate_html
 
-    successes = validations.map{|v| v.validation_report.color}.count("success")
-    fails = validations.map{|v| v.validation_report.color}.count("danger")
-    overall_score = (successes*100/(successes + fails + 0.0)).round(2)
+    successes = validations.map{|v| v.validation_report.result == v.validation_report.expected}.count(true)
+    fails = validations.map{|v| v.validation_report.validation != :unapplicable and v.validation_report.result != v.validation_report.expected}.count(true)
+    unknown = validations.length - successes - fails
+    overall_score = (successes*100/(successes + fails + 0.0)).round(0)
 
     if fails == 0
-      icon = "&#10003;"
       bg_icon = "success"
     else
-      icon = "<b>&#33;</b>"
       bg_icon = "danger"
     end
 

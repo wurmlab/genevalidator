@@ -65,6 +65,7 @@ class GeneMergeValidation < ValidationTest
     @short_header = "Gene_Merge(slope)"
     @header = "Gene Merge"
     @description = "Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene. Meaning of the output displayed: slope of the linear regression of the relationship between the start and stop offsets of the hsps (see the plot). Valid slopes are around 45 degrees."
+    @cli_name = "merge"
   end
 
   ##
@@ -73,7 +74,7 @@ class GeneMergeValidation < ValidationTest
   # +GeneMergeValidationOutput+ object
   def run
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
       lm_slope = slope[1]
       y_intercept = slope[0]

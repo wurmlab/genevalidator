@@ -17,7 +17,7 @@ class AlignmentValidationOutput < ValidationReport
   end
 
   def print
-    "gaps=#{gaps.round(2)}, insertions=#{extra_seq.round(2)}"
+    "#{(gaps*100).round(0)}% missing, #{(extra_seq*100).round(0)}% extra"
   end
 
   def validation
@@ -42,9 +42,10 @@ class AlignmentValidation < ValidationTest
     super
     @filename = filename
     @short_header = "MA"
-    @header = "Multiple Alignment"
-    @description = "Finds gaps/extra regions in the prediction based on the multiple alignment of the best hits. Meaning of the output displayed: gaps= gap coverage insertions= extra sequence coverage. Validation fails if one of these values is higher than 20%"
+    @header = "Missing/Extra sequences"
+    @description = "Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Meaning of the output displayed: the percentages of the missing/extra sequences with respect to the multiple alignment. Validation fails if one of these values is higher than 20%"
     @multiple_alignment = []
+    @cli_name = "align"
   end
 
   ##
@@ -54,7 +55,7 @@ class AlignmentValidation < ValidationTest
   # +AlignmentValidationOutput+ object
   def run(n=10)    
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= n
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
@@ -84,6 +85,22 @@ class AlignmentValidation < ValidationTest
 
       ma = @multiple_alignment
 
+=begin
+    seq = ma[ma.length-1]
+    #i = ma.length-1
+    R.eval "lines(c(0,#{seq.length}), c(1, 1), lwd=8, col = 'green')"
+
+    # get indeces of the gaps according to the multiple alignment
+    gaps = seq.split(//).each_index.select{|j| seq[j] == '-'}
+
+    (0..(gaps.length-1)/300).each do |j|
+        gaps_idxs = gaps[j*200..(j+1)*200 - 1]
+        R.eval "points(c#{gaps_idxs.to_s.gsub('[','(').gsub(']',')')},
+rep(1,#{gaps_idxs.length}),
+col = 'black',
+type='p',
+=end
+
       len = ma[0].length
       f = File.open("#{@filename}_ma.json" , "w")
       f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} + 
@@ -101,7 +118,7 @@ class AlignmentValidation < ValidationTest
       @plot_files.push(Plot.new("#{@filename}_ma.json".scan(/\/([^\/]+)$/)[0][0],
                                 :lines,
                                 "Multiple alignment and Statistical model of blast hits",
-                                "gaps(white);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)",
+                                "gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)",
                                 "length",
                                 "idx"))
 
@@ -269,98 +286,6 @@ class AlignmentValidation < ValidationTest
     seq
   end
 
-  def plot_multiple_alignment(output = "#{@filename}_ma.jpg", ma = @multiple_alignment, sm = nil)
-
-    max_len = ma.map{|seq| seq.length}.max
-
-    # get indeces of consensus in the multiple alignment
-    consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
-    consensus_idxs_all = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
-
-    R.eval "jpeg('#{output}')"
-
-    R.eval "plot(0:#{ma.length + 1}, xlim=c(0,#{max_len}), xlab='Multiple alignment of blast hits: gaps(white), consensus(yellow),\n alignment mismatches(red), prediction(green), statistical model (orange)', ylab='Hit noumber', col='white', main='Multiple Alignment and Statistical Model')"
-
-    ma[0..ma.length-2].each_with_index do |seq,j|
-
-      i = ma.length-j-1
-      R.eval "lines(c(1,#{seq.length}), c(#{i+1}, #{i+1}), lwd=8, col = 'red')"
-
-      # get indeces of the gaps according to the multiple alignment
-      gaps = seq.split(//).each_index.select{|j| seq[j] == '-'}
-
-      (0..(consensus_idxs_all.length-1)/300).each do |j|
-        consensus_idxs = consensus_idxs_all[j*200..(j+1)*200 - 1]
-        R.eval "points(c#{consensus_idxs.to_s.gsub('[','(').gsub(']',')')}, 
-                rep(#{i+1},#{consensus_idxs.length}), 
-                col = 'yellow', 
-                type='p', 
-                pch=16)"
-
-      end
-
-      (0..(gaps.length-1)/300).each do |j|
-        gaps_idxs = gaps[j*200..(j+1)*200 - 1]
-
-        R.eval "points(c#{gaps_idxs.to_s.gsub('[','(').gsub(']',')')}, 
-                rep(#{i+1},#{gaps_idxs.length}), 
-                col = 'black', 
-                type='p', 
-                pch=16)"
-      end
-
-
-    end
-
-    #plot the prediction
-    seq = ma[ma.length-1]
-    #i = ma.length-1
-    R.eval "lines(c(0,#{seq.length}), c(1, 1), lwd=8, col = 'green')"
-
-    # get indeces of the gaps according to the multiple alignment
-    gaps = seq.split(//).each_index.select{|j| seq[j] == '-'}
-
-    (0..(gaps.length-1)/300).each do |j|
-        gaps_idxs = gaps[j*200..(j+1)*200 - 1]
-        R.eval "points(c#{gaps_idxs.to_s.gsub('[','(').gsub(']',')')}, 
-                rep(1,#{gaps_idxs.length}), 
-                col = 'black', 
-                type='p', 
-                pch=16)"
-    end
-
-    # plot the statistical model
-    unless sm == nil
-      seq = sm
-      i = ma.length-1
-      R.eval "lines(c(0,#{seq.length}), c(0, 0), lwd=8, col = 'orange')"
-
-      # get indeces of the gaps according to the multiple alignment
-      gaps = seq.split(//).each_index.select{|j| seq[j] == '-'}
-
-      consensus_idxs_all = seq.split(//).each_index.select{|j| isalpha(seq[j])} 
-      (0..(consensus_idxs_all.length-1)/300).each do |j|
-        consensus_idxs = consensus_idxs_all[j*200..(j+1)*200 - 1]
-        R.eval "points(c#{consensus_idxs.to_s.gsub('[','(').gsub(']',')')}, 
-              rep(0,#{consensus_idxs.length}), 
-              col = 'yellow', 
-              type='p', 
-              pch=16)"
-      end
-
-      (0..(gaps.length-1)/300).each do |j|
-        gaps_idxs = gaps[j*200..(j+1)*200 - 1]
-        R.eval "points(c#{gaps_idxs.to_s.gsub('[','(').gsub(']',')')}, 
-                rep(0,#{gaps_idxs.length}), 
-                col = 'black', 
-                type='p', 
-                pch=16)"
-      end
-    end
-
-    R.eval "dev.off()"
-    
-  end
   ##
   # Returns true if the string contains only letters
   # and false otherwise

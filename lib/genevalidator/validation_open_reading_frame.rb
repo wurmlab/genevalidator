@@ -61,7 +61,7 @@ class OpenReadingFrameValidation < ValidationTest
     @short_header = "ORF"
     @header = "Main ORF"
     @description = "Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries. Meaning of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80% passe the validation test."
-    @validation_report = ValidationReport.new("", :yes)
+    @cli_name = "orf"
   end
 
 
@@ -71,7 +71,11 @@ class OpenReadingFrameValidation < ValidationTest
   # +ORFValidationOutput+ object
   def run    
     begin
-      raise Exception unless type == :nucleotide and prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
+      if type.to_s != "nucleotide"
+        @validation_report = ValidationReport.new("", :unapplicable)
+        return @validation_report
+      end
       orfs = get_orfs
 
       # case 1: check if longest ORF / prediction > 0.8 (ok)
@@ -98,8 +102,8 @@ class OpenReadingFrameValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue Exception => error
-#      puts error.backtrace
-      return ValidationReport.new("", :yes)
+      puts error.backtrace
+      return ValidationReport.new("Not enough evidence")
     end
   end
 

@@ -5,6 +5,7 @@ require 'genevalidator/sequences'
 require 'genevalidator/output'
 require 'genevalidator/validation'
 require 'genevalidator/exceptions'
+require 'genevalidator/tabular_parser'
 require 'bio-blastxmlparser'
 require 'rinruby'
 require 'net/http'
@@ -26,14 +27,17 @@ class Blast
   #array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
 
+  attr_reader :vlist
+
   ##
   # Initilizes the object
   # Params:
   # +fasta_filepath+: query sequence fasta file with query sequences
   # +type+: query sequence type; can be :nucleotide or :protein
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
+  # +vlist+: list of validations
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_filepath, type, xml_file = nil, start_idx = 1)
+  def initialize(fasta_filepath, type, vlist, xml_file = nil, start_idx = 1)
     begin
 
       puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
@@ -46,6 +50,7 @@ class Blast
 
       @fasta_filepath = fasta_filepath
       @xml_file = xml_file
+      @vlist = vlist
       @idx = 0
       @start_idx = start_idx
 
@@ -72,10 +77,9 @@ class Blast
       else
         @html_path ="#{path}/html"
       end
-      @yaml_path = @html_path
+      @yaml_path = path
 
       @filename = @fasta_filepath.scan(/\/([^\/]+)$/)[0][0]
-
 
       # create 'html' directory
       FileUtils.rm_rf(@html_path)
@@ -127,7 +131,18 @@ class Blast
         end
       else
         file = File.open(@xml_file, "rb").read
-        parse_xml_output(file)      
+
+        #check the format of the input file
+        # check xml format
+        begin
+          parse_xml_output(file)      
+        rescue Exception => error
+          #tabular format
+          iterator = TabularParser.new(file)
+          while iterator.has_next
+            iterator.next
+          end
+        end
       end
 
     rescue SystemCallError => error
@@ -242,7 +257,7 @@ class Blast
         #file seek for each query
         
         # do validations
-        v = Validation.new(prediction, hits, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
+        v = Validation.new(prediction, hits, vlist, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
         query_output = v.validate_all
         query_output.generate_html
 
@@ -250,11 +265,12 @@ class Blast
         query_output.print_output_file_yaml
 
       end
-
+=begin
       rescue NoMethodError => error
         puts error.backtrace
         $stderr.print "NoMethod error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not in blast xml format.\n"        
         exit
+=end
       rescue StopIteration
         return
     end while 1
@@ -293,24 +309,14 @@ class Blast
 
         seq.xml_length = hit.len.to_i        
         seq.seq_type = @type
-        seq.database = iter.field("BlastOutput_db")
         seq.id = hit.hit_id
         seq.definition = hit.hit_def
         seq.accession_no = hit.accession
-
-        species_regex = hit.hit_def.scan(/\[([^\]\[]+)\]$/)
-        if species_regex[0] == nil
-          seq.species = "Unknown"
-        else
-          seq.species = species_regex[0][0]
-        end
 
         # get all high-scoring segment pairs (hsp)
         hsps = []
         hit.hsps.each do |hsp|
           current_hsp = Hsp.new
-          current_hsp.bit_score = hsp.bit_score.to_i
-          current_hsp.hsp_score = hsp.score.to_i
           current_hsp.hsp_evalue = hsp.evalue.to_i
           
           current_hsp.hit_from = hsp.hit_from.to_i
@@ -328,21 +334,13 @@ class Blast
 
           current_hsp.hit_alignment = hsp.hseq.to_s
           current_hsp.query_alignment = hsp.qseq.to_s
-          current_hsp.middles = hsp.midline.to_s
-
-          current_hsp.identity = hsp.identity.to_i
-          current_hsp.positive = hsp.positive.to_i
-          current_hsp.gaps = hsp.gaps.to_i
           current_hsp.align_len = hsp.align_len.to_i
 
           hsps.push(current_hsp)
-          #regex = current_hsp.hseq.gsub(/[+ -]/, '+' => '.', ' ' => '.', '-' => '')
-          #seq.alignment_start_offset = seq.raw_sequence.index(/#{regex}/)
         end
 
         seq.hsp_list = hsps
         hits.push(seq)
-        #puts "getting sequence #{seq.accession_no}..."
       end     
     
       return [hits, predicted_seq]

@@ -51,6 +51,7 @@ class LengthRankValidation < ValidationTest
     @short_header = "LengthRank"
     @header = "Length Rank"
     @description = "Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
+    @cli_name = "lenr"
   end
 
   ##
@@ -62,7 +63,7 @@ class LengthRankValidation < ValidationTest
   # +LengthRankValidationOutput+ object
   def run(hits = @hits, prediction = @prediction)
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
       lengths = hits.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
       len = lengths.length

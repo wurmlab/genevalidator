@@ -1,0 +1,269 @@
+---
+gi|514746961|ref|XM_005019748.1|:
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 23
+  - 135
+  prediction_len: 108
+  expected: :yes
+  result: :yes
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.46
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 501
+  msg: ! '1:501; '
+  expected: :yes
+  result: :yes
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.11118370433091568
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 0
+      - 324
+    2:
+    - - 202
+      - 324
+    3: []
+    -1:
+    - - 0
+      - 234
+    -2:
+    - - 0
+      - 263
+    -3: []
+  ratio: 1.0
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+gi|514746961|ref|XM_005019748.1|dup:
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 23
+  - 77
+  prediction_len: 163
+  expected: :yes
+  result: :no
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.05
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 347
+    1: 305
+  msg: ! '2:347; 1:305; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.08006363021677941
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 0
+      - 490
+    2:
+    - - 202
+      - 490
+    3:
+    - - 368
+      - 490
+    -1:
+    - - 0
+      - 400
+    -2:
+    - - 0
+      - 429
+    -3: []
+  ratio: 1.0
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+gi|251823817|ref|NM_010785.2|:
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1023
+  expected: :yes
+  result: :no
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.01
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    3: 141
+  msg: ! '3:141; '
+  expected: :yes
+  result: :yes
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.13277234937274
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3071
+    2:
+    - - 262
+      - 3071
+    3:
+    - - 158
+      - 3071
+    -1:
+    - - 0
+      - 2927
+    -2:
+    - - 0
+      - 2854
+    -3:
+    - - 0
+      - 3042
+  ratio: 0.9905568218821231
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+gi|251823817|ref|NM_010785.2|dup:
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1327
+  expected: :yes
+  result: :no
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 133
+    3: 137
+  msg: ! '1:133; 3:137; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.05525373940476495
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.005540680462065574
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3981
+    2:
+    - - 262
+      - 3981
+    3:
+    - - 158
+      - 3981
+    -1:
+    - - 0
+      - 3837
+    -2:
+    - - 0
+      - 3764
+    -3:
+    - - 0
+      - 3952
+  ratio: 0.9927153981411706
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+gi|251823817|ref|NM_010785.2|dup2:
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1303
+  expected: :yes
+  result: :no
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 125
+    3: 129
+    2: 105
+  msg: ! '1:125; 3:129; 2:105; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.05647983265453941
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.005540680462065574
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3911
+    2:
+    - - 262
+      - 3911
+    3:
+    - - 158
+      - 3911
+    -1:
+    - - 0
+      - 3767
+    -2:
+    - - 0
+      - 3694
+    -3:
+    - - 0
+      - 3882
+  ratio: 0.9925850166197904
+  threshold: 0.8
+  expected: :yes
+  result: :yes

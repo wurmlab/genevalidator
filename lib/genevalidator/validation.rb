@@ -21,17 +21,19 @@ class Validation
   attr_reader :hits
   attr_reader :prediction
   attr_reader :type
+  attr_reader :vlist
 
   ##
   # Initilizes the object
   # Params:
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +vlist+: list of vlidations
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +filename+: name of the input file, used when generatig the plot files
   # +idx+: index of the query currently processed (used to generate unique plot images)
   # +start_idx+: index of the first processed query (may differ from idx if the first queries are skiped)
-  def initialize(prediction, hits, type, filename, html_path, yaml_path, idx, start_idx)
+  def initialize(prediction, hits, vlist, type, filename, html_path, yaml_path, idx, start_idx)
 
     @prediction = prediction
     @hits = hits
@@ -41,6 +43,7 @@ class Validation
     @idx = idx
     @start_idx = start_idx
     @type = type
+    @vlist = vlist
 
   end
 
@@ -58,7 +61,7 @@ class Validation
       query_output.nr_hits = hits.length
       
       plot_path = "#{html_path}/#{filename}_#{@idx}"
- 
+
       validations = []
       validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
       validations.push LengthRankValidation.new(@type, prediction, hits)
@@ -73,14 +76,22 @@ class Validation
         raise ValidationClassError unless v.is_a? ValidationTest 
       end
 
-      validations.map{|v| v.run}
-
-      # check the class type of the validation reports
-      validations.map do |v|
-        raise ReportClassError unless v.validation_report.is_a? ValidationReport
+      if vlist.map{|v| v.strip.downcase}.include? "all"
+        validations.map{|v| v.run}
+        # check the class type of the validation reports
+        validations.each do |v|
+          raise ReportClassError unless v.validation_report.is_a? ValidationReport
+        end
+        query_output.validations = validations
+      else
+        desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
+        desired_validations.each do |v| 
+            v.run
+            raise ReportClassError unless v.validation_report.is_a? ValidationReport
+        end
+        query_output.validations = desired_validations
       end
 
-      query_output.validations = validations
       return query_output
 
     rescue ValidationClassError => error

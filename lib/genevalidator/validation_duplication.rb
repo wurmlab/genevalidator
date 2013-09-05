@@ -45,6 +45,7 @@ class DuplicationValidation < ValidationTest
     @short_header = "Duplication"
     @header = "Duplication"
     @description = "Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test."
+    @cli_name = "dup"
   end
 
   ##
@@ -53,7 +54,7 @@ class DuplicationValidation < ValidationTest
   # +DuplciationValidationOutput+ object
   def run(n=10)    
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
@@ -61,6 +62,7 @@ class DuplicationValidation < ValidationTest
 
       less_hits.each do |hit|
         # indexing in blast starts from 1
+#unused !!!!!!!!!!
         start_match_interval =  hit.hsp_list.each.map{|x| x.hit_from}.min - 1
         end_match_interval = hit.hsp_list.map{|x| x.hit_to}.max - 1
    
@@ -104,6 +106,7 @@ class DuplicationValidation < ValidationTest
 
       # Exception is raised when blast founds no hits
       rescue Exception => error
+#        puts error.backtrace
         ValidationReport.new("Not enough evidence")
     end
   end

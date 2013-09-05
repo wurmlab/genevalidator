@@ -55,6 +55,7 @@ class LengthClusterValidation < ValidationTest
     @short_header = "LengthCluster"
     @header = "Length Cluster"
     @description = "Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]"
+    @cli_name = "lenc" 
   end
 
   ## 
@@ -65,7 +66,7 @@ class LengthClusterValidation < ValidationTest
   # +LengthClusterValidationOutput+ object
   def run
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
       ret = clusterization_by_length  #returns [clusters, max_density_cluster_idx]
 

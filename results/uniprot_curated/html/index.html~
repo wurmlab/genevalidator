@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Gene Validation Result</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+       		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
+        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script> 
+		<script type="text/javascript" src="js/jquery.raty.min.js"></script>       
+  		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
+	    	<script type="text/javascript" src="js/table-fixed-header.js"></script>          		
+        	<script type="text/javascript" src="js/d3.v3.min.js"></script>  	    
+	        <script type="text/javascript" src="js/script.js"></script> 
+        	<script type="text/javascript" src="js/plots.js"></script>         
+
+        	<link href="css/style.css" rel="stylesheet">
+	        <link href="css/bootstrap-glyphicons.css" rel="stylesheet">        
+        	<link href="css/bootstrap.css" rel="stylesheet">
+	</head>
+	<body>
+	<div class="container">
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
+        <thead>
+    		<tr>        		
+    			<td  colspan=14 class="background_image">
+    				<h1>Gene Validator</h1>
+    				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
+    				<br/></td></tr>
+    		<tr>
+    			<td  colspan=14>
+    				<h4> Validation results for <i>uniprot_curated.fasta:</i></h4>
+       			<div align = "right">
+    			<button class="btn btn-info btn-large" id=all_plots onclick="show_all_plots(this)">			 			 
+    				<i class="icon-bar-chart"></i> &nbsp;&nbsp;&nbsp;<b>Show all plots</b>
+    			</button></div><br></td>
+    		</tr>      		        
+        	<tr id="header">
+            	<th>No.</th>        	
+          	<th>Score</th>
+		<th>Ranking</th>
+                <th>
+                	Identifier
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Query identifier as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>            	
+                <th>
+                	Description
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Description of the query as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>
+                <th>
+                	No. Hits
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Number of hits found by BLAST." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                	
+                </th>
+                                        	            
+                	<th>
+                		Length Cluster
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Length Rank
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Reading Frame
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence. Meaning of the output displayed: (reading frame: no hsps)" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Gene Merge
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene. Meaning of the output displayed: slope of the linear regression of the relationship between the start and stop offsets of the hsps (see the plot). Valid slopes are around 45 degrees." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Duplication
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Main ORF
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries. Meaning of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80% passe the validation test." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th>
+                		Missing/Extra sequences
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Meaning of the output displayed: the percentages of the missing/extra sequences with respect to the multiple alignment. Validation fails if one of these values is higher than 20%" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                
+                <td></td>				
+    		</tr>
+    	</thead>   	
+    	
+        <tbody>
+
+<tr> 
+	<td>1</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|P84996|ALEX_HUMAN</td>
+	<td> Protein ALEX OS=Homo sapiens GN=GNAS PE=1 SV=1</td>		
+	<td>13</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '626', '');
+             	  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		626 [626, 765] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.38</td>
+		    
+   	    
+  		    <td class = success>0:19; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '520.079319266603', '0.1633027836185308');
+             	  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.16 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		39% missing, 3% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle1');
+	    
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '626', '');
+             	  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '520.079319266603', '0.1633027836185308');
+             	  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle1', 'uniprot_curated.fasta_1_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle1 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>2</td>
+	<td class="danger"> 50% </td>		
+	<td><div name="ranking" score=50></div></td>
+	<td>sp|P05167|ALEU_HORVU</td>
+	<td> Thiol protease aleurain OS=Hordeum vulgare PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '362', '');
+             	  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		362 [291, 336] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.14 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '359.7778459988286', '-0.00685568347883923');
+             	  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		7% missing, 31% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle2');
+	    
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '362', '');
+             	  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '359.7778459988286', '-0.00685568347883923');
+             	  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle2', 'uniprot_curated.fasta_2_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle2 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>3</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|O34133|ALDR_LACLA</td>
+	<td> Putative regulator AldR OS=Lactococcus lactis subsp. lactis (strain IL1403) GN=aldR PE=3 SV=2</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '126', '');
+             	  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		126 [124, 127] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.15 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '123.68466722459587', '-0.02703937805576324');
+             	  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle3');
+	    
+		  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '126', '');
+             	  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '123.68466722459587', '-0.02703937805576324');
+             	  			
+  		addPlot('toggle3', 'uniprot_curated.fasta_3_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle3 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>4</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|P16116|ALDR_BOVIN</td>
+	<td> Aldose reductase OS=Bos taurus GN=AKR1B1 PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '315', '');
+             	  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		315 [310, 321] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.16 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:502; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '312.7184044224443', '-0.012024724130742405');
+             	  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		64% missing, 6% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle4');
+	    
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '315', '');
+             	  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '312.7184044224443', '-0.012024724130742405');
+             	  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle4', 'uniprot_curated.fasta_4_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle4 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>5</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|P05063|ALDOC_MOUSE</td>
+	<td> Fructose-bisphosphate aldolase C OS=Mus musculus GN=Aldoc PE=1 SV=4</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '363', '');
+             	  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		363 [363, 364] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.18 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:502; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '360.54264855787284', '-0.007091575265698038');
+             	  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		84% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle5');
+	    
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '363', '');
+             	  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '360.54264855787284', '-0.007091575265698038');
+             	  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle5', 'uniprot_curated.fasta_5_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle5 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>6</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q4R8W8|AAAT_MACFA</td>
+	<td> Neutral amino acid transporter B(0) OS=Macaca fascicularis GN=SLC1A5 PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '542', '');
+             	  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		542 [517, 579] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.42</td>
+		    
+   	    
+  		    <td class = success>0:503; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '514.9827446927114', '0.03812027536795563');
+             	  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.04 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		15% missing, 25% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle6');
+	    
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '542', '');
+             	  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '514.9827446927114', '0.03812027536795563');
+             	  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle6', 'uniprot_curated.fasta_6_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle6 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>7</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q0P5B7|AAAD_BOVIN</td>
+	<td> Arylacetamide deacetylase OS=Bos taurus GN=AADAC PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '399', '');
+             	  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		399 [397, 409] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.29</td>
+		    
+   	    
+  		    <td class = success>0:506; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '391.4893304411773', '-0.0063902538536949665');
+             	  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		93% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle7');
+	    
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '399', '');
+             	  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '391.4893304411773', '-0.0063902538536949665');
+             	  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle7', 'uniprot_curated.fasta_7_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle7 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>8</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|P21133|AAAA_EMENI</td>
+	<td> Acyl-coenzyme A:6-aminopenicillanic-acid-acyltransferase 40 kDa form OS=Emericella nidulans (strain FGSC A4 / ATCC 38163 / CBS 112.46 / NRRL 194 / M139) GN=penDE PE=1 SV=1</td>		
+	<td>382</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '357', '');
+             	  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		357 [356, 382] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.3</td>
+		    
+   	    
+  		    <td class = success>0:382; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '313.9935186770631', '-0.15751860418050828');
+             	  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.16 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		93% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle8');
+	    
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '357', '');
+             	  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '313.9935186770631', '-0.15751860418050828');
+             	  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle8', 'uniprot_curated.fasta_8_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle8 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>9</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q9NS82|AAA1_HUMAN</td>
+	<td> Asc-type amino acid transporter 1 OS=Homo sapiens GN=SLC7A10 PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '523', '');
+             	  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		523 [505, 541] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.27</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '500.73746506774006', '0.057548628977605085');
+             	  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.06 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		77% missing, 4% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle9');
+	    
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '523', '');
+             	  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '500.73746506774006', '0.057548628977605085');
+             	  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle9', 'uniprot_curated.fasta_9_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle9 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>10</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|E3W9M3|AA7GT_DELGR</td>
+	<td> Cyanidin 3-O-glucoside 7-O-glucosyltransferase (acyl-glucose) OS=Delphinium grandiflorum GN=AA7GT PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '505', '');
+             	  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		505 [509, 539] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.26</td>
+		    
+   	    
+  		    <td class = success>0:509; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '493.755837807958', '-0.07204742919498354');
+             	  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.07 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle10');
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		15% missing, 10% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle10');
+	    
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '505', '');
+             	  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '493.755837807958', '-0.07204742919498354');
+             	  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle10', 'uniprot_curated.fasta_10_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle10 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>11</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|O02667|AA3R_RABIT</td>
+	<td> Adenosine receptor A3 OS=Oryctolagus cuniculus GN=ADORA3 PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '319', '');
+             	  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		319 [210, 475] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.42</td>
+		    
+   	    
+  		    <td class = success>0:502; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '294.8701842471395', '-0.10437342708953273');
+             	  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.1 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		15% missing, 42% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle11');
+	    
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '319', '');
+             	  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '294.8701842471395', '-0.10437342708953273');
+             	  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle11', 'uniprot_curated.fasta_11_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle11 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>12</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|A5I1A3|3MGH_CLOBH</td>
+	<td> Putative 3-methyladenine DNA glycosylase OS=Clostridium botulinum (strain Hall / ATCC 3502 / NCTC 13319 / Type A) GN=CBO1265 PE=3 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '203', '');
+             	  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		203 [171, 220] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.36</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '201.47324566424982', '-0.027947056530327367');
+             	  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		10% missing, 46% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle12');
+	    
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '203', '');
+             	  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '201.47324566424982', '-0.027947056530327367');
+             	  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle12', 'uniprot_curated.fasta_12_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle12 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>13</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|C3KTV2|3MGH_CLOB6</td>
+	<td> Putative 3-methyladenine DNA glycosylase OS=Clostridium botulinum (strain 657 / Type Ba4) GN=CLJ_B1308 PE=3 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '203', '');
+             	  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		203 [171, 220] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.36</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '201.47324566424982', '-0.027947056530327367');
+             	  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		3% missing, 66% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle13');
+	    
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '203', '');
+             	  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '201.47324566424982', '-0.027947056530327367');
+             	  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle13', 'uniprot_curated.fasta_13_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle13 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>14</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td>sp|Q9XGR4|2AB2A_ARATH</td>
+	<td> Serine/threonine protein phosphatase 2A regulatory subunit B''alpha OS=Arabidopsis thaliana GN=B''ALPHA PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '538', '');
+             	  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		538 [318, 630] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.4</td>
+		    
+   	    
+  		    <td class = success>0:501; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '519.327072086007', '-0.044252624068277645');
+             	  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.04 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		18% missing, 16% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle14');
+	    
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '538', '');
+             	  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '519.327072086007', '-0.044252624068277645');
+             	  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle14', 'uniprot_curated.fasta_14_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle14 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>15</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td>sp|P30154|2AAB_HUMAN</td>
+	<td> Serine/threonine-protein phosphatase 2A 65 kDa regulatory subunit A beta isoform OS=Homo sapiens GN=PPP2R1B PE=1 SV=3</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '601', '');
+             	  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		601 [575, 631] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.41</td>
+		    
+   	    
+  		    <td class = success>0:788; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '598.189345099565', '0.005018668510492705');
+             	  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=0.37</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		0% missing, 5% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle15');
+	    
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '601', '');
+             	  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '598.189345099565', '0.005018668510492705');
+             	  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle15', 'uniprot_curated.fasta_15_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle15 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>16</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q38950|2AAB_ARATH</td>
+	<td> Serine/threonine-protein phosphatase 2A 65 kDa regulatory subunit A beta isoform OS=Arabidopsis thaliana GN=PP2AA2 PE=1 SV=2</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '587', '');
+             	  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		587 [575, 630] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.18 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:810; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '580.3833445824735', '-0.03320727711073815');
+             	  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		0% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle16');
+	    
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '587', '');
+             	  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '580.3833445824735', '-0.03320727711073815');
+             	  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle16', 'uniprot_curated.fasta_16_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle16 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>17</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|P31383|2AAA_YEAST</td>
+	<td> Protein phosphatase PP2A regulatory subunit A OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=TPD3 PE=1 SV=3</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '635', '');
+             	  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		635 [566, 638] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.16 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:643; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '626.6180592038697', '0.03477716024153278');
+             	  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		5% missing, 0% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle17');
+	    
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '635', '');
+             	  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '626.6180592038697', '0.03477716024153278');
+             	  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle17', 'uniprot_curated.fasta_17_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle17 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>18</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td>sp|Q60996|2A5G_MOUSE</td>
+	<td> Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit gamma isoform OS=Mus musculus GN=Ppp2r5c PE=1 SV=2</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '524', '');
+             	  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		524 [403, 550] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.41</td>
+		    
+   	    
+  		    <td class = success>0:504; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '484.63256212456486', '0.1604911216699088');
+             	  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.16 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		8% missing, 10% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle18');
+	    
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '524', '');
+             	  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '484.63256212456486', '0.1604911216699088');
+             	  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle18', 'uniprot_curated.fasta_18_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle18 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>19</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q38845|2AAA_ARATH</td>
+	<td> Serine/threonine-protein phosphatase 2A 65 kDa regulatory subunit A alpha isoform OS=Arabidopsis thaliana GN=PP2AA1 PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '588', '');
+             	  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		588 [575, 610] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.27</td>
+		    
+   	    
+  		    <td class = success>0:798; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '578.8255531165914', '0.0019202226795089615');
+             	  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.0 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		66% missing, 1% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle19');
+	    
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '588', '');
+             	  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '578.8255531165914', '0.0019202226795089615');
+             	  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle19', 'uniprot_curated.fasta_19_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle19 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>20</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|A1TVP2|1A1D_ACIAC</td>
+	<td> 1-aminocyclopropane-1-carboxylate deaminase OS=Acidovorax citrulli (strain AAC00-1) GN=acdS PE=3 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '338', '');
+             	  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		338 [336, 339] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.27</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '336.55196234139333', '-0.6782217415646888');
+             	  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.68 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		41% missing, 4% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle20');
+	    
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '338', '');
+             	  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '336.55196234139333', '-0.6782217415646888');
+             	  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle20', 'uniprot_curated.fasta_20_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle20 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>21</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q43309|1A14_ARATH</td>
+	<td> 1-aminocyclopropane-1-carboxylate synthase 4 OS=Arabidopsis thaliana GN=ACS4 PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '474', '');
+             	  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		474 [452, 493] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.49</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '446.31707768392675', '-0.6824321131510123');
+             	  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.68 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		40% missing, 13% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle21');
+	    
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '474', '');
+             	  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '446.31707768392675', '-0.6824321131510123');
+             	  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle21', 'uniprot_curated.fasta_21_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle21 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>22</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|Q10DK7|1A11_ORYSJ</td>
+	<td> 1-aminocyclopropane-1-carboxylate synthase 1 OS=Oryza sativa subsp. japonica GN=ACC1 PE=2 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '487', '');
+             	  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		487 [452, 493] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.24</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '454.2665639748418', '-0.4140410355676684');
+             	  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.41 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		20% missing, 20% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle22');
+	    
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '487', '');
+             	  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '454.2665639748418', '-0.4140410355676684');
+             	  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle22', 'uniprot_curated.fasta_22_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle22 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>23</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|Q05349|12KD_FRAAN</td>
+	<td> Auxin-repressed 12.5 kDa protein OS=Fragaria ananassa PE=2 SV=1</td>		
+	<td>129</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '111', '');
+             	  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		111 [116, 136] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.27</td>
+		    
+   	    
+  		    <td class = success>0:129; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '105.22293320518702', '0.043495752007851406');
+             	  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.04 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		6% missing, 78% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle23');
+	    
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '111', '');
+             	  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '105.22293320518702', '0.043495752007851406');
+             	  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle23', 'uniprot_curated.fasta_23_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle23 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>24</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td>sp|P21215|12AH_CLOS4</td>
+	<td> 12-alpha-hydroxysteroid dehydrogenase (Fragment) OS=Clostridium sp. (strain C 48-50) PE=1 SV=1</td>		
+	<td>3</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle24 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>25</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td>sp|P80438|12KD_MYCSM</td>
+	<td> 12 kDa protein (Fragment) OS=Mycobacterium smegmatis PE=1 SV=1</td>		
+	<td>2</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle25 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>26</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|Q8GBW6|12S_PROFR</td>
+	<td> Methylmalonyl-CoA carboxyltransferase 12S subunit OS=Propionibacterium freudenreichii subsp. shermanii PE=1 SV=3</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle26');
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '611', '');
+             	  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		611 [512, 517] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.0 (TOO_LONG)</td>
+		    
+   	    
+  		    <td class = success>0:500; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle26');
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '526.4422143861805', '-0.197026486261617');
+             	  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.2 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle26');
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		11% missing, 13% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle26');
+	    
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '611', '');
+             	  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '526.4422143861805', '-0.197026486261617');
+             	  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle26', 'uniprot_curated.fasta_26_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle26 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>27</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td>sp|P83011|13KDA_SCYCA</td>
+	<td> 13.2 kDa protein (Fragment) OS=Scyliorhinus canicula PE=1 SV=1</td>		
+	<td>0</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle27 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>28</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td>sp|O55734|120L_IIV6</td>
+	<td> Uncharacterized protein 120L OS=Invertebrate iridescent virus 6 GN=IIV6-120L PE=4 SV=1</td>		
+	<td>2</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+		    
+   	    
+  		    <td class = danger>Not enough evidence</td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle28 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>29</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|P13744|11SB_CUCMA</td>
+	<td> 11S globulin subunit beta OS=Cucurbita maxima PE=1 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle29');
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '480', '');
+             	  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		480 [445, 542] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.48</td>
+		    
+   	    
+  		    <td class = success>0:569; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle29');
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '456.1120253527221', '0.031211093112395515');
+             	  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.03 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle29');
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		68% missing, 3% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle29');
+	    
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '480', '');
+             	  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '456.1120253527221', '0.031211093112395515');
+             	  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle29', 'uniprot_curated.fasta_29_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle29 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>30</td>
+	<td class="danger"> 83% </td>		
+	<td><div name="ranking" score=83></div></td>
+	<td>sp|P19084|11S3_HELAN</td>
+	<td> 11S globulin seed storage protein G3 OS=Helianthus annuus GN=HAG3 PE=3 SV=1</td>		
+	<td>500</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle30');
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '493', '');
+             	  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		493 [445, 542] 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>0.4</td>
+		    
+   	    
+  		    <td class = success>0:541; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle30');
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '468.12271276150017', '0.012590073314548934');
+             	  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle30');
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		35% missing, 16% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle30');
+	    
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '493', '');
+             	  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '468.12271276150017', '0.012590073314548934');
+             	  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle30', 'uniprot_curated.fasta_30_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle30 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>31</td>
+	<td class="danger"> 67% </td>		
+	<td><div name="ranking" score=67></div></td>
+	<td>sp|Q6GZX4|001R_FRG3G</td>
+	<td> Putative transcription factor 001R OS=Frog virus 3 (isolate Goorha) GN=FV3-001R PE=4 SV=1</td>		
+	<td>19</td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle31');
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '256', '');
+             	  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	 ">
+	  	
+		256 [251, 258] 	
+  	    </td>
+		    
+   	    
+  		    <td class = danger>0.11 (TOO_SHORT)</td>
+		    
+   	    
+  		    <td class = success>0:19; </td>
+		    
+   	    
+	   	    <td class="success my-btn-success" onclick="
+		showDiv(this, 'toggle31');
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '256.00012285928057', '-0.01044856061379944');
+             	  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	 ">
+	  	
+		slope=-0.01 	
+  	    </td>
+		    
+   	    
+  		    <td class = success>pval=1.0</td>
+		    
+   	    
+  		    <td class = danger></td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle31');
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	 ">
+	  	
+		8% missing, 60% extra 	
+  	    </td>
+	
+	<td>
+ 
+	<button class="btn btn-info" onclick="
+	    showDiv(this, 'toggle31');
+	    
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_len_clusters.json', 'bars', 'Length distribution histogram', 'black=prediction, red = most dense cluster', 'length', 'frequency', '256', '');
+             	  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_len.json', 'lines', 'Hits vs prediction', 'hit length in black, part of the hit that matches the prediction in red', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_match_2d.json', 'scatter', 'Start vs end hsp match', '', 'from', 'to', '256.00012285928057', '-0.01044856061379944');
+             	  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_match.json', 'lines', 'Prediction vs hit match', 'prediction in black, part of the prediction that matches the hit in red/yellow', 'length', 'idx', '', '');
+             	
+		  			
+  		addPlot('toggle31', 'uniprot_curated.fasta_31_ma.json', 'lines', 'Multiple alignment and Statistical model of blast hits', 'gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)', 'length', 'idx', '', '');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle31 style='display:none'>
+</div></td></tr>
+
+

@@ -1,7 +1,7 @@
 <tr> 
 	<td><%= @idx %></td>
-	<td class="<%=bg_icon%>"> <%= overall_score %> </td>		
-
+	<td class="<%=bg_icon%>"> <%= overall_score %>% </td>		
+	<td><div name="ranking" score=<%= overall_score %>></div></td>
 	<td><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
 	<td><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>		
 	<td><%= @nr_hits %></td>
@@ -17,7 +17,22 @@
   	    <% else %>
   		    <td class = <%=item.validation_report.color%>><%= item.validation_report.print %><% end %></td>
 	<% end %>
-	<td style="white-space:nowrap">...</td>
+	<td>
+ <% if @validations.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } == 0 %>	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ <% else %>
+	<button class="btn btn-info" onclick="
+	    showDiv(this, '<%= toggle %>');
+	    <% @validations.each do |item| 
+	    if item.plot_files.length > 0 %>
+		<% item.plot_files.each do |plot| %>  			
+  		addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
+             	<% end end end%>                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+<% end %>
+        </td>
 </tr>
 
 <tr class="expand-child">

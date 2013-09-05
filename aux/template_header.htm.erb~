@@ -2,10 +2,11 @@
 <html>
 	<head>
 		<title>Gene Validation Result</title>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 
        		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
-        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script>        
+        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script> 
+		<script type="text/javascript" src="js/jquery.raty.min.js"></script>       
   		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
   		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
 	    	<script type="text/javascript" src="js/table-fixed-header.js"></script>          		
@@ -18,31 +19,26 @@
         	<link href="css/bootstrap.css" rel="stylesheet">
 	</head>
 	<body>
-
-    	<table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
+	<div class="container">
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
         <thead>
     		<tr>        		
-    			<td  colspan=<%=validations.length + 6%> class="background_image">
+    			<td  colspan=<%=validations.length + 7%> class="background_image">
     				<h1>Gene Validator</h1>
     				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
     				<br/></td></tr>
     		<tr>
-    			<td  colspan=<%=validations.length + 6%>>
+    			<td  colspan=<%=validations.length + 7%>>
     				<h4> Validation results for <i><%= @filename %>:</i></h4>
-    			<button class="btn btn-info" id=all_plots onclick="show_all_plots(this)">			 			 
-    				<i class="icon-bar-chart"></i> &nbsp;&nbsp;Show all plots
-    			</button><br><br></td>
+       			<div align = "right">
+    			<button class="btn btn-info btn-large" id=all_plots onclick="show_all_plots(this)">			 			 
+    				<i class="icon-bar-chart"></i> &nbsp;&nbsp;&nbsp;<b>Show all plots</b>
+    			</button></div><br></td>
     		</tr>      		        
         	<tr id="header">
             	<th>No.</th>        	
-          		<th> 
-          			Overall Score
-                   	<a href="#" class="my_popover" rel="popover" 
-	   	            	data-content="Overall evaluation score based on all validation tests." 
-	                	data-placement="top">
-    	            		<i class="icon-question-sign"></i>
-    	           	</a>
-          		</th>
+          	<th>Score</th>
+		<th>Ranking</th>
                 <th>
                 	Identifier
 	                <a href="#" class="my_popover" rel="popover" 
@@ -77,14 +73,7 @@
     	            	</a>
                 	</th>
                 <% end %>
-				<th> 
-					Overall Evaluation
-	                <a href="#" class="my_popover" rel="popover" 
-	                	data-content="Overall evaluation notes based on all validation tests." 
-	                	data-placement="top">
-    	            		<i class="icon-question-sign"></i>
-    	           	</a>					
-				</th>				
+                <td></td>				
     		</tr>
     	</thead>   	
     	
