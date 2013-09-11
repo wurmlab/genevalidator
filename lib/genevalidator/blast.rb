@@ -37,16 +37,10 @@ class Blast
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
   # +vlist+: list of validations
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_filepath, type, vlist, xml_file = nil, start_idx = 1)
+  def initialize(fasta_filepath, vlist, xml_file = nil, start_idx = 1)
     begin
 
       puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
-
-      if type == "protein"
-        @type = :protein
-      else 
-        @type = :nucleotide
-      end
 
       @fasta_filepath = fasta_filepath
       @xml_file = xml_file
@@ -57,10 +51,11 @@ class Blast
       raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
       fasta_content = IO.binread(@fasta_filepath);
 
+      # the expected type for the sequences is the
+      # type of the first query
+       
       # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
-      if @type != type_of_sequences(fasta_content)
-        raise SequenceTypeError.new
-      end
+      @type = type_of_sequences(fasta_content)
 
       # create a list of index of the queries in the FASTA
       @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
@@ -133,16 +128,7 @@ class Blast
         file = File.open(@xml_file, "rb").read
 
         #check the format of the input file
-        # check xml format
-        begin
-          parse_xml_output(file)      
-        rescue Exception => error
-          #tabular format
-          iterator = TabularParser.new(file)
-          while iterator.has_next
-            iterator.next
-          end
-        end
+        parse_xml_output(file)      
       end
 
     rescue SystemCallError => error
@@ -233,46 +219,79 @@ class Blast
   # +output+: +String+ with the blast output in xml format
   def parse_xml_output(output)
 
-    iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+    iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue")
 
     begin
-      @idx = @idx + 1      
-      if @idx < @start_idx  
-        iter = iterator.next 
-      else     
-        sequences = parse_next_query(iterator) #returns [hits, predicted_seq]
-        if sequences == nil          
-          @idx = @idx -1
-          break
+      @idx = @idx + 1
+      begin
+        if @idx < @start_idx
+          iter = iterator_xml.next
+        else
+          hits = parse_next_query(iterator_xml) #returns [hits, predicted_seq]
+          if hits == nil
+            @idx = @idx -1
+            break
+          end
+
+          prediction = Sequence.new
+  
+          # get info about the query
+          # get the @idx-th sequence  from the fasta file
+          i = @idx-1
+          ### TODO: add exception
+          query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
+          parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+
+          prediction.definition = parse_query[0].gsub("\n","")
+  
+          prediction.raw_sequence = parse_query[1].gsub("\n","")
+          prediction.xml_length = prediction.raw_sequence.length
+          if @type == :nucleotide
+            prediction.xml_length /= 3
+          end
         end
+        rescue Exception => error
+          #check tabular format 
+          if @idx < @start_idx
+            iterator_tab.next          
+          else
 
-        hits = sequences[0]
-        prediction = sequences[1]
-        # get the @idx-th sequence  from the fasta file
-        i = @idx-1
-       
-        ### add exception
-        query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-        prediction.raw_sequence = query.scan(/[^\n]*\n([A-Za-z\n]*)/)[0][0].gsub("\n","")              
-        #file seek for each query
-        
-        # do validations
-        v = Validation.new(prediction, hits, vlist, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
-        query_output = v.validate_all
-        query_output.generate_html
+            hits = iterator_tab.next
+            if hits == nil
+               @idx = @idx -1
+               break
+            end
 
-        query_output.print_output_console
-        query_output.print_output_file_yaml
+            prediction = Sequence.new
 
+            # get info about the query
+            # get the @idx-th sequence  from the fasta file
+            i = @idx-1
+            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
+            parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+
+            prediction.definition = parse_query[0].gsub("\n","")
+
+            prediction.raw_sequence = parse_query[1].gsub("\n","")
+            prediction.xml_length = prediction.raw_sequence.length
+          end
+
+          if @type == :nucleotide
+            prediction.xml_length /= 3
+          end
+          
       end
-=begin
-      rescue NoMethodError => error
-        puts error.backtrace
-        $stderr.print "NoMethod error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not in blast xml format.\n"        
-        exit
-=end
-      rescue StopIteration
-        return
+      # do validations
+      v = Validation.new(prediction, hits, vlist, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
+      query_output = v.validate_all
+      query_output.generate_html
+
+      query_output.print_output_console
+      query_output.print_output_file_yaml
+      
+      #rescue StopIteration
+      #  return
     end while 1
 
   end
@@ -291,9 +310,6 @@ class Blast
       hits = Array.new
       predicted_seq = Sequence.new
       iter = iterator.next
-
-      #puts "#################################################"
-      #puts "Parsing query #{iter.field('Iteration_iter-num')}"
 
       # get info about the query
       predicted_seq.xml_length = iter.field("Iteration_query-len").to_i
@@ -329,7 +345,6 @@ class Blast
             current_hsp.match_query_to /= 3             
           end
 
-
           current_hsp.query_reading_frame = hsp.query_frame.to_i
 
           current_hsp.hit_alignment = hsp.hseq.to_s
@@ -343,7 +358,7 @@ class Blast
         hits.push(seq)
       end     
     
-      return [hits, predicted_seq]
+      return hits
 
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call parse method first!\n"       
@@ -417,10 +432,9 @@ class Blast
     if sequence_types.length == 1
       return sequence_types.first # there is only one (but yes its an array)
     else
-      raise ArgumentError, "Insufficient info to determine sequence type. Cleaned queries are: #{ sequences.to_s }"
+      raise SequenceTypeError
     end
   end
 
 end
-
 
