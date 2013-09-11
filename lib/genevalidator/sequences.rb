@@ -1,15 +1,19 @@
 class Sequence
 
   attr_accessor :seq_type #protein | mRNA
-  attr_accessor :database
   attr_accessor :id
   attr_accessor :definition
   attr_accessor :species
   attr_accessor :accession_no
   attr_accessor :xml_length
   attr_accessor :raw_sequence
-  attr_accessor :aligned_sequence
+  attr_accessor :reading_frame
   attr_accessor :hsp_list # array of Hsp objects 
+
+  def initialize
+    @raw_sequence = nil
+    @hsp_list = []
+  end
 
   def print
     puts "#{@object_type} sequence: #{@definition} "
@@ -51,6 +55,22 @@ class Sequence
     @raw_sequence = seq.gsub!(/\n/,'')
   end
 
+  ##
+  # Initializes the corresponding attribute of the sequence
+  # with respect to the column name of the tabular blast output
+  def init_tabular_attribute(column, value)
+    case column
+      when "sseqid"
+        @definition = value    
+      when "qseqid"
+        @definition = value
+      when "sacc"
+        @accession_no = value
+      when "slen"
+        @xml_length = value.to_i  
+    end
+  end
+
 end
 
 class Hsp
@@ -71,5 +91,29 @@ class Hsp
   attr_accessor :positive # positive score for the (mis)match
   attr_accessor :gaps
   attr_accessor :align_len
+
+  ##
+  # Initializes the corresponding attribute of the hsp
+  # with respect to the column name of the tabular blast output
+  def init_tabular_attribute(column, value)
+    case column
+      when "qstart"
+        @match_query_from = value.to_i
+      when "qend"
+        @match_query_to = value.to_i
+      when "sstart"
+        @hit_from = value.to_i
+      when "send"
+        @hit_to = value.to_i
+      when "qseq"
+        @query_alignment = value
+      when "sseq"
+        @hit_alignment = value
+      when "length"
+        @align_len = value.to_i
+      when "evalue"
+        @hsp_evalue = value.to_f 
+    end
+  end
 
 end
