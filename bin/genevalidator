@@ -10,17 +10,9 @@ options = {}
 opt_parser = OptionParser.new do |opt|
   opt.separator  ""
   opt.banner = "USE:"
-  opt.separator  "\t $ genevalidator type [validations] [skip_blast] [start] FILE"
+  opt.separator  "\t $ genevalidator [validations] [skip_blast] [start] FILE"
   opt.separator  ""
   opt.separator  "ARGUMENTS:"
-  opt.on("-t","--type <type>","type of the predicted sequences: protein/mRNA") do |type|
-    if type.to_s.downcase == 'protein' or type.to_s.downcase == 'mrna'
-      options[:type] = type
-    else 
-      $stderr.print "Error: type must be protein or mRNA." + "\n"
-      exit
-    end
-  end
   opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
 
   opt.separator  ""
@@ -70,11 +62,6 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  unless options[:type]
-    $stderr.puts "Error: you must specify --type option." + "\n"
-    exit
-  end 
-
   unless options[:skip_blast]
     options[:skip_blast] = nil
   end
@@ -93,11 +80,10 @@ end
 # Main body
 
 if options[:start]
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:vlist], options[:skip_blast], options[:start])
+  b = Blast.new(ARGV[0], options[:vlist], options[:skip_blast], options[:start])
 else
-  b = Blast.new(ARGV[0], options[:type].to_s.downcase, options[:vlist], options[:skip_blast])
+  b = Blast.new(ARGV[0], options[:vlist], options[:skip_blast])
 end
 
 b.blast
-
 
