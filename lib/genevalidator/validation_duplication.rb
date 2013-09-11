@@ -44,7 +44,11 @@ class DuplicationValidation < ValidationTest
     super
     @short_header = "Duplication"
     @header = "Duplication"
-    @description = "Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test."
+    @description = "Check whether there is a duplicated subsequence in the"<<
+    " predicted gene by counting the hsp residue coverag of the prediction,"<<
+    " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<
+    " test which test the distribution of hit average coverage against 1."<<
+    " P-values higher than 5% pass the validation test."
     @cli_name = "dup"
   end
 
@@ -54,32 +58,64 @@ class DuplicationValidation < ValidationTest
   # +DuplciationValidationOutput+ object
   def run(n=10)    
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and 
+                             hits[0].is_a? Sequence and 
+                             hits.length >= 5
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
+
+      # get raw sequences for less_hits
+      less_hits.map do |hit|
+        #get gene by accession number
+        if hit.raw_sequence == nil
+          if hit.seq_type == :protein
+            hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+          else
+            hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+          end
+        end
+      end
+
       averages = []
 
       less_hits.each do |hit|
-        # indexing in blast starts from 1
-#unused !!!!!!!!!!
-        start_match_interval =  hit.hsp_list.each.map{|x| x.hit_from}.min - 1
-        end_match_interval = hit.hsp_list.map{|x| x.hit_to}.max - 1
-   
+
         coverage = Array.new(hit.xml_length,0)
         hit.hsp_list.each do |hsp|
+          # indexing in blast starts from 1
+          hit_local = hit.raw_sequence[hsp.hit_from-1..hsp.hit_to-1]
+          query_local = prediction.raw_sequence[hsp.match_query_from-1..hsp.match_query_to-1]
+
+          # local alignment for hit and query
+          seqs = [hit_local, query_local]
+
+          options = ['--maxiterate', '1000', '--localpair', '--quiet']
+          mafft = Bio::MAFFT.new("/usr/bin/mafft", options)
+          report = mafft.query_align(seqs)
+          raw_align = report.alignment
+          align = []
+          raw_align.each { |s| align.push(s.to_s) }
+          hit_alignment = align[0]
+          query_alignment = align[1]
+=begin
+          puts hit_alignment
+          puts ""
+          puts query_alignment
+=end
           aux = []
           # for each hsp
           # iterate through the alignment and count the matching residues
           [*(0 .. hsp.align_len-1)].each do |i|
-            residue_hit = hsp.hit_alignment[i]
-            residue_query = hsp.query_alignment[i]
+            residue_hit = hit_alignment[i]
+            residue_query = query_alignment[i]
             if residue_hit != ' ' and residue_hit != '+' and residue_hit != '-'
               if residue_hit == residue_query             
-                idx = i + (hsp.hit_from-1) - hsp.hit_alignment[0..i].scan(/-/).length 
-                aux.push(idx)
                 # indexing in blast starts from 1
-                coverage[idx] += 1
+                idx = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
+                if coverage.length > idx
+                  coverage[idx] += 1
+                end
               end
             end
           end
@@ -106,7 +142,7 @@ class DuplicationValidation < ValidationTest
 
       # Exception is raised when blast founds no hits
       rescue Exception => error
-#        puts error.backtrace
+        puts error.backtrace
         ValidationReport.new("Not enough evidence")
     end
   end
