@@ -6,82 +6,75 @@ TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :
 class TabularParser
 
   attr_reader :content
-  attr_reader :iterator
-  attr_reader :cnt
+  attr_reader :content_iterator
+  attr_reader :format
+  attr_reader :type
+  attr_reader :column_names
+  attr_reader :query_id_idx
+  attr_reader :hit_id_idx
 
   ##
   #+content+ : String with the tabular BLAST output
-  def initialize content
-    @content = content
-    @iterator = content
-    @cnt = 2
+  def initialize (content, format, type)
+    @content = content.gsub(/#.*\n/,"")
+    @content_iterator = @content
+    if format == nil
+      format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
+    else 
+      @format = format.gsub(/[-\d]/,"")
+    end
+    @column_names = format.split(/[ ,]/)
+    @type = type
+    @query_id_idx = @column_names.index("qseqid")
+    @hit_id_idx = @column_names.index("sseqid")
+
   end 
 
   def has_next
-    @cnt -= 1
-    return @cnt > 0
-    
+    return @content_iterator.length > 0
   end
  
   #Returns the next query output
   def next
-    query_id = @iterator.scan(/([^\s]*)\s.*/)[0][0]
-    puts query_id
-    hits = @iterator.scan(/#{query_id.gsub("|","\|").gsub(".","\.")}(.*)\n/)
+    unless has_next
+      return nil
+    end
 
-=begin    
+    # get current query id
+    first_row = @content_iterator.scan(/([^\n]*)\n/)
+    query_id = first_row.join().split("\t")[query_id_idx]
+    hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\|").gsub(".","\.")}[^\n]*/)
 
-    hit = hit.scan(/([^\s]*)\s.*/)[0][0]
-    hsps = hit.scan(/#{identifier.gsub("|","\|").gsub(".","\.")}(.*)\n/)
+    next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1  
+    @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]
 
-         predicted_seq.xml_length = iter.field("Iteration_query-len").to_i
-      if @type == :nucleotide
-        predicted_seq.xml_length /= 3
+    hit_list = []
+    hits = hits.map{|hit| hit.split("\t")}
+
+    # for each hit 
+    hits.group_by{|hit| hit[@hit_id_idx]}.each do |idx, hit|
+      hit_seq = Sequence.new
+      column_names.each_with_index do |column, i|
+        hit_seq.init_tabular_attribute(column, hit[0][i])
       end
-      predicted_seq.definition = iter.field("Iteration_query-def")
 
-      # parse blast the xml output and get the hits
-      iter.each do | hit |
-
-        seq = Sequence.new
-
-        seq.xml_length = hit.len.to_i
-        seq.seq_type = @type
-        seq.database = iter.field("BlastOutput_db")
-        seq.id = hit.hit_id
-        seq.definition = hit.hit_def
-        seq.accession_no = hit.accession
-
-        species_regex = hit.hit_def.scan(/\[([^\]\[]+)\]$/)
-        if species_regex[0] == nil
-          seq.species = "Unknown"
-        else
-          seq.species = species_regex[0][0]
+      # take all hsps
+      hsps = hits.select{|hit| hit[@hit_id_idx] == idx}
+      # for each hsp fill the Hsp structure
+      hsps.each do |hsp_array|
+        hsp = Hsp.new
+        column_names.each_with_index do |column, i|
+          hsp.init_tabular_attribute(column, hsp_array[i])
         end
+        hit_seq.hsp_list.push(hsp)
+      end 
+      hit_seq.seq_type = @type
+      hit_list.push(hit_seq)
 
-        # get all high-scoring segment pairs (hsp)
-        hsps = []
-        hit.hsps.each do |hsp|
-          current_hsp = Hsp.new
-          current_hsp.bit_score = hsp.bit_score.to_i
-          current_hsp.hsp_score = hsp.score.to_i
-          current_hsp.hsp_evalue = hsp.evalue.to_i
+    end 
 
-          current_hsp.hit_from = hsp.hit_from.to_i
-          current_hsp.hit_to = hsp.hit_to.to_i
-          current_hsp.match_query_from = hsp.query_from.to_i
-          current_hsp.match_query_to = hsp.query_to.to_i
+    return hit_list
 
-          if @type == :nucleotide
-            current_hsp.match_query_from /= 3
-            current_hsp.match_query_to /= 3
-          end
-=end
-    #@iterator[r..r+10000].scan(/(>[^>]*).*/)[0] != nil
   end
-
-  def parse_tabular_output
-    
-  end  
 
 end

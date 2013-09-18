@@ -52,9 +52,11 @@ class BlastReadingFrameValidation < ValidationTest
 
   def initialize(type, prediction, hits = nil)
     super
-    @short_header = "RF"
+    @short_header = "Frame"
     @header = "Reading Frame"
-    @description = "Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence. Meaning of the output displayed: (reading frame: no hsps)"
+    @description = "Check whether there is a single reading frame among BLAST"<<
+    " hits. Otherwise there might be a reading frame shift in the query sequence."<<
+    " Meaning of the output displayed: (reading frame: no hsps)"
     @cli_name = "frame"
   end
 
@@ -68,8 +70,17 @@ class BlastReadingFrameValidation < ValidationTest
     begin
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
+      if type.to_s != "nucleotide"
+        @validation_report = ValidationReport.new("", :unapplicable)
+        return @validation_report
+      end
+
       rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
       frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
+
+      # get the main reading frame 
+      main_rf = frames_histo.map{|k,v| v}.max
+      @prediction.nucleotide_rf = frames_histo.select{|k,v| v==main_rf}.first.first
 
       @validation_report = BlastRFValidationOutput.new(frames_histo)
 

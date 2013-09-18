@@ -12,7 +12,7 @@ class ValidationReport
   attr_reader :result  
   attr_reader :expected
   attr_reader :validation_result
-
+  attr_reader :errors
   ##
   # Initilizes the object
   # Params:  
@@ -21,7 +21,8 @@ class ValidationReport
   def initialize(message = "Not enough evidence", validation_result = :no)
     @message = message
     @plot_files = []
-    @result = validation
+    @errors = []
+    @result = validation_result
     @expected = :yes
     @validation_result = validation_result
   end
@@ -40,10 +41,14 @@ class ValidationReport
     if bg_color != nil
       return bg_color
     end   
-    if validation == :yes
+    if validation == @expected
       return "success"
-    else
-      return "danger"
+    else  
+      if validation == :warning
+        return "warning"      
+      else
+        return "danger" 
+      end
     end
   end
 end

@@ -10,7 +10,6 @@ class ValidationTest
   attr_accessor :header
   attr_accessor :cli_name
   attr_accessor :description
-  attr_accessor :plot_files
   attr_accessor :validation_report
 
   ##
@@ -29,7 +28,6 @@ class ValidationTest
     @cli_name = "all"
     @description = "No description available."
     @validation_report = ValidationReport.new("Not enough evidence")
-    @plot_files = []
   end
 
   def run

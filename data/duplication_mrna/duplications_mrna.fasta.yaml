@@ -1,0 +1,15 @@
+---
+!binary "Z2l8NTE0NzQ2OTYxfHJlZnxYTV8wMDUwMTk3NDguMXw=":
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  plot_files: []
+  result: :no
+  expected: :yes
+  validation_result: :no
+!binary "Z2l8NTE0NzQ2OTYxfHJlZnxYTV8wMDUwMTk3NDguMXxkdXA=":
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  plot_files: []
+  result: :no
+  expected: :yes
+  validation_result: :no

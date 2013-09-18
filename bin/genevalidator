@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'optparse'
 require 'genevalidator/clusterization'
-require 'genevalidator/blast'
+require 'genevalidator/validation'
 require 'genevalidator/sequences'
 
 # Argument validation
@@ -37,12 +37,13 @@ opt_parser = OptionParser.new do |opt|
   opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
     options[:skip_blast] = skip
   end
-  opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6) outputs"
+  opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6 or 7) outputs"
 
-  opt.on("-c", "--tabular <String>","~ under development ~ custom format used in BLAST -outfmt argument") do |lst|
+  # default blast tabular columns
+  opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
     options[:tabular] = lst
   end
-  opt.separator  "\tSee blast -h for more details"
+  opt.separator  "\tUse: $ genevalidator -x tabular_file -t \"slen qstart qend\" fasta_file\n\tSee blast -h for more details"
 
   opt.on("-s","--start [START]", Integer, "starts the validation with a certain sequence in the input file ") do |start|
     if start.is_a? Fixnum
@@ -52,6 +53,9 @@ opt_parser = OptionParser.new do |opt|
     end
   end
 
+  opt.on("-m", "--mafft [MAFFT_PATH]","path of the MAFFT program installation") do |mafft|
+    options[:mafft] = mafft
+  end
 
   opt.on("-h","--help","help") do
     puts opt_parser
@@ -79,11 +83,7 @@ end
 
 # Main body
 
-if options[:start]
-  b = Blast.new(ARGV[0], options[:vlist], options[:skip_blast], options[:start])
-else
-  b = Blast.new(ARGV[0], options[:vlist], options[:skip_blast])
-end
+b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:mafft], options[:start])
+b.validation
 
-b.blast
 

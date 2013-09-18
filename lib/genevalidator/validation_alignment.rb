@@ -1,4 +1,5 @@
 require 'genevalidator/validation_output'
+require 'genevalidator/exceptions'
 
 ##
 # Class that stores the validation output information
@@ -6,22 +7,25 @@ class AlignmentValidationOutput < ValidationReport
 
   attr_reader :gaps
   attr_reader :extra_seq
+  attr_reader :consensus
   attr_reader :threahsold
 
-  def initialize (gaps = 0, extra_seq = 0, threshold = 0.2, expected = :yes)
+  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
     @gaps = gaps
     @extra_seq = extra_seq
+    @consensus = consensus
     @threshold = threshold
     @result = validation
     @expected = expected
+    @plot_files = []
   end
 
   def print
-    "#{(gaps*100).round(0)}% missing, #{(extra_seq*100).round(0)}% extra"
+    "#{(gaps*100).round(0)}% missing, #{(extra_seq*100).round(0)}% extra, #{(consensus*100).round(0)}% conserved"
   end
 
   def validation
-    if gaps < @threshold and extra_seq < @threshold
+    if gaps < @threshold and extra_seq < @threshold #and consensus < @threshold
       :yes
     else
       :no
@@ -37,13 +41,18 @@ class AlignmentValidation < ValidationTest
 
   attr_reader :filename
   attr_reader :multiple_alignment
+  attr_reader :mafft_path
 
-  def initialize(type, prediction, hits, filename)
+  def initialize(type, prediction, hits, filename, mafft_path)
     super
     @filename = filename
+    @mafft_path = mafft_path
     @short_header = "MA"
     @header = "Missing/Extra sequences"
-    @description = "Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Meaning of the output displayed: the percentages of the missing/extra sequences with respect to the multiple alignment. Validation fails if one of these values is higher than 20%"
+    @description = "Finds missing and extra sequences in the prediction, based"<<
+    " on the multiple alignment of the best hits. Meaning of the output displayed:"<<
+    " the percentages of the missing/extra sequences with respect to the multiple"<<
+    " alignment. Validation fails if one of these values is higher than 20%"
     @multiple_alignment = []
     @cli_name = "align"
   end
@@ -55,84 +64,68 @@ class AlignmentValidation < ValidationTest
   # +AlignmentValidationOutput+ object
   def run(n=10)    
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= n
+      if n > 50
+        n = 50
+      end
+
+      raise NotEnoughHitsError unless hits.length >= n
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
-
-      # get raw sequences for less_hits
-      less_hits.map do |hit| 
-        #get gene by accession number
-        if hit.seq_type == :protein
-          hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-        else
-          hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+     
+      begin
+        # get raw sequences for less_hits
+        less_hits.map do |hit| 
+          if hit.raw_sequence == nil
+            #get gene by accession number
+            if hit.seq_type == :protein
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+            else
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+            end
+          end
         end
       end
-
-      # multiple align sequences from  less_hits with the prediction
-      multiple_align_mafft(prediction, less_hits)
-      sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
-      # remove isolated residues from the predicted sequence
-      #puts sm
-      #puts ""
-      sm = remove_isolated_residues(sm)
-      #puts sm
-
-      # get indeces of consensus in the multiple alignment
-      consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
-      consensus_idxs = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
-
-      ma = @multiple_alignment
-
-=begin
-    seq = ma[ma.length-1]
-    #i = ma.length-1
-    R.eval "lines(c(0,#{seq.length}), c(1, 1), lwd=8, col = 'green')"
-
-    # get indeces of the gaps according to the multiple alignment
-    gaps = seq.split(//).each_index.select{|j| seq[j] == '-'}
-
-    (0..(gaps.length-1)/300).each do |j|
-        gaps_idxs = gaps[j*200..(j+1)*200 - 1]
-        R.eval "points(c#{gaps_idxs.to_s.gsub('[','(').gsub(']',')')},
-rep(1,#{gaps_idxs.length}),
-col = 'black',
-type='p',
-=end
-
-      len = ma[0].length
-      f = File.open("#{@filename}_ma.json" , "w")
-      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} + 
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
-      #plot prediction
-      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"salmon"}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"black"}} +
-      #plot statistical model
-      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"orange"}] +
-      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow"}} +      
-      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}).to_json) 
-
-      f.close
-      @plot_files.push(Plot.new("#{@filename}_ma.json".scan(/\/([^\/]+)$/)[0][0],
-                                :lines,
-                                "Multiple alignment and Statistical model of blast hits",
-                                "gaps(black);consensus(yellow);mismatches(red);prediction(salmon);stat.model(orange)",
-                                "length",
-                                "idx"))
-
-      prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
-  
-      gaps = gap_validation(prediction_raw, sm)
-      extra_seq = extra_sequence_validation(prediction_raw, sm)
-      
-      @validation_report = AlignmentValidationOutput.new(gaps, extra_seq)        
-
-      # Exception is raised when blast founds no hits
+      begin
+        # multiple align sequences from  less_hits with the prediction
+        multiple_align_mafft(prediction, less_hits)
       rescue Exception => error
-        puts error.backtrace
-        ValidationReport.new("Not enough evidence")
+        raise NoInternetError
+      end
+      
+      sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
+
+
+      # remove isolated residues from the predicted sequence
+      prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
+      # remove isolated residues from the statistical model
+      sm = remove_isolated_residues(sm)
+  
+      plot1 = plot_alignment(sm)
+      gaps = gap_validation(prediction_raw, sm)
+      extra_seq = extra_sequence_validation(prediction_raw, sm)      
+      consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
+      @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)        
+      @validation_report.plot_files.push(plot1)
+
+      return @validation_report
+
+    # Exception is raised when blast founds no hits
+    rescue  NotEnoughHitsError => error
+      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
+    rescue NoMafftInstallationError
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report.errors.push "[Alignment Validation] Mafft path installation exception. Please provide a correct instalation path"
+      return @validation_report
+    rescue NoInternetError
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report.errors.push "[Alignment Validation] Connection to internat fail. Unable to retrieve raw sequences"
+      return @validation_report
+    else
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      return @validation_report
     end
   end
 
@@ -140,12 +133,13 @@ type='p',
   # Builds the multiple alignment between 
   # all the hits and the prediction
   # using MAFFT tool
+  # Also creates a fasta file with the alignment
   # Params:
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequience+ objects (usually representig the blast hits)
   # Output:
   # Array of +String+s, corresponding to the multiple aligned sequences
-  def multiple_align_mafft(prediction = @prediction, hits = @hits, path = "/usr/bin/mafft")
+  def multiple_align_mafft(prediction = @prediction, hits = @hits, path = @mafft_path)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
       options = ['--maxiterate', '1000', '--localpair', '--quiet']
@@ -219,6 +213,8 @@ type='p',
     if prediction_raw.length != sm.length
       return 1
     end
+    # find residues that are in the prediction
+    # but not in the statistical model
     no_insertions = 0
     (0..sm.length-1).each do |i|
       if prediction_raw[i] != '-' and  sm[i]=='-'
@@ -227,6 +223,33 @@ type='p',
     end
     no_insertions/(sm.length+0.0)
     
+  end
+
+  ##
+  # Returns the percentage of consesnsus residues from the ma
+  # that are in the prediction 
+  # Params:
+  # +prediction+: +String+ corresponding to the prediction sequence
+  # +consensus+: +String+ corresponding to the statistical model
+  # Output:
+  # +Fixnum+ with the score
+  def consensus_validation(prediction_raw, consensus)
+    if prediction_raw.length != consensus.length
+      return 1
+    end
+    # find consnsus that are in the ma
+    # but not in the prediction
+    no_conserved_pred = 0
+    no_conserved_residues = 0
+    (0..consensus.length-1).each do |i|
+      if consensus[i] != '-'
+        no_conserved_residues += 1 
+      end
+      if consensus[i] != '-' and prediction_raw[i] == consensus[i]
+        no_conserved_pred  += 1
+      end
+    end
+    return no_conserved_pred/(no_conserved_residues + 0.0)
   end
 
   ##
@@ -291,6 +314,44 @@ type='p',
   # and false otherwise
   def isalpha(str)
     !str.match(/[^A-Za-z]/)
+  end
+
+  # Generates a json file cotaining data used for plotting
+  # lines for multiple hits alignment, prediction and statistical model
+  # Params:
+  # +output+: filneme of the json file
+  # +ma+: +String+ array with the multiple alignmened hits and prediction
+  # +prediction+: +Sequence+ object
+  # +sm+: +String+ with the statistical model
+  def plot_alignment (output = "#{@filename}_ma.json", ma = @multiple_alignment, prediction = @prediction, sm)
+
+      # get indeces of consensus in the multiple alignment
+      consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
+      consensus_idxs = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
+
+      len = ma[0].length
+
+      f = File.open(output , "w")
+      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
+      #plot prediction
+      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"green"}] +
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"black"}} +
+      #plot statistical model
+      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"red"}] +
+      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"orange"}} +
+      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}).to_json)
+      f.close
+
+      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+                                :lines,
+                                "Multiple alignment and Statistical model of blast hits",
+                                "gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
+                                "alignment length",
+                                "idx",
+                                ma.length+1)
+
   end
 
 end

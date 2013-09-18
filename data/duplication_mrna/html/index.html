@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Gene Validation Result</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+       		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
+        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script> 
+		<script type="text/javascript" src="js/jquery.raty.min.js"></script>       
+  		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
+	    	<script type="text/javascript" src="js/table-fixed-header.js"></script>          		
+        	<script type="text/javascript" src="js/d3.v3.min.js"></script>  	    
+	        <script type="text/javascript" src="js/script.js"></script> 
+        	<script type="text/javascript" src="js/plots.js"></script>         
+
+        	<link href="css/style.css" rel="stylesheet">
+	        <link href="css/bootstrap-glyphicons.css" rel="stylesheet">        
+        	<link href="css/bootstrap.css" rel="stylesheet">
+	</head>
+	<body>
+	<div class="container">
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
+        <thead>
+    		<tr>        		
+    			<td  colspan=8 class="background_image">
+    				<h1>Gene Validator</h1>
+    				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
+    				<br/></td></tr>
+    		<tr>
+    			<td  colspan=8>
+    				<h4> Validation results for <i>duplications_mrna.fasta:</i></h4>
+       			<div align = "right">
+    			<button class="btn btn-info btn-large" id=all_plots onclick="show_all_plots(this)">			 			 
+    				<i class="icon-bar-chart"></i> &nbsp;&nbsp;&nbsp;<b>Show all plots</b>
+    			</button></div><br></td>
+    		</tr>      		        
+        	<tr id="header">
+            	<th>No.</th>        	
+          	<th>Score</th>
+		<th>Ranking</th>
+                <th>
+                	Identifier
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Query identifier as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>            	
+                <th>
+                	Description
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Description of the query as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>
+                <th>
+                	No. Hits
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Number of hits found by BLAST." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                	
+                </th>
+                                        	            
+                	<th>
+                		Length Cluster
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                
+                <td></td>				
+    		</tr>
+    	</thead>   	
+    	
+        <tbody>
+
+<tr> 
+	<td>1</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" title = "ana" score=0></div></td>
+	<td>gi|514746961|ref|XM_005019748.1|</td>
+	<td> PREDICTED: Anas platyrhynchos insulin (INS), mRNA</td>		
+	<td>2</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle1');
+		 ">Not enough evidence</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=7>
+	<div id=toggle1 style='display:none'>
+</div></td></tr>
+
+
+<tr> 
+	<td>2</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" title = "ana" score=0></div></td>
+	<td>gi|514746961|ref|XM_005019748.1|dup</td>
+	<td> PREDICTED: Anas platyrhynchos insulin (INS), mRNA</td>		
+	<td>2</td>
+		    
+   	    
+	   	    <td class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle2');
+		 ">Not enough evidence</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button class="btn btn-disabled">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=7>
+	<div id=toggle2 style='display:none'>
+</div></td></tr>
+
+

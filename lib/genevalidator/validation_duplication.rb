@@ -1,4 +1,6 @@
 require 'genevalidator/validation_output'
+require 'genevalidator/exceptions'
+require 'rinruby'
 
 ##
 # Class that stores the validation output information
@@ -40,8 +42,11 @@ end
 # finding duplicated subsequences in the predicted gene
 class DuplicationValidation < ValidationTest
 
-  def initialize(type, prediction, hits = nil)
+  attr_reader :mafft_path
+ 
+  def initialize(type, prediction, hits, mafft_path)
     super
+    @mafft_path = mafft_path
     @short_header = "Duplication"
     @header = "Duplication"
     @description = "Check whether there is a duplicated subsequence in the"<<
@@ -50,6 +55,9 @@ class DuplicationValidation < ValidationTest
     " test which test the distribution of hit average coverage against 1."<<
     " P-values higher than 5% pass the validation test."
     @cli_name = "dup"
+    # redirect the cosole messages of R
+    R.echo "enable = nil, stderr = nil, warn = nil"
+
   end
 
   ##
@@ -58,64 +66,94 @@ class DuplicationValidation < ValidationTest
   # +DuplciationValidationOutput+ object
   def run(n=10)    
     begin
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence and 
-                             hits.length >= 5
+      raise NotEnoughHitsError unless hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and
+                             prediction.raw_sequence != nil and 
+                             hits[0].is_a? Sequence 
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
 
-      # get raw sequences for less_hits
-      less_hits.map do |hit|
-        #get gene by accession number
-        if hit.raw_sequence == nil
-          if hit.seq_type == :protein
-            hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-          else
-            hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+      begin
+        # get raw sequences for less_hits
+        less_hits.map do |hit|
+          #get gene by accession number
+          if hit.raw_sequence == nil
+            if hit.seq_type == :protein
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+            else
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+            end
           end
         end
+        rescue Exception => error
+          raise NoInternetError
       end
-
       averages = []
 
       less_hits.each do |hit|
 
         coverage = Array.new(hit.xml_length,0)
         hit.hsp_list.each do |hsp|
-          # indexing in blast starts from 1
-          hit_local = hit.raw_sequence[hsp.hit_from-1..hsp.hit_to-1]
-          query_local = prediction.raw_sequence[hsp.match_query_from-1..hsp.match_query_to-1]
 
-          # local alignment for hit and query
-          seqs = [hit_local, query_local]
+        # align subsequences from the hit and prediction that match (if it's the case)
+          if hsp.hit_alignment != nil and hsp.query_alignment != nil
+            hit_alignment = hsp.hit_alignment
+            query_alignment = hsp.query_alignment
+          else
+            #get gene by accession number
+            if hit.raw_sequence == nil
+              if hit.seq_type == :protein
+                hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+              else
+                hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+              end
+            end
 
-          options = ['--maxiterate', '1000', '--localpair', '--quiet']
-          mafft = Bio::MAFFT.new("/usr/bin/mafft", options)
-          report = mafft.query_align(seqs)
-          raw_align = report.alignment
-          align = []
-          raw_align.each { |s| align.push(s.to_s) }
-          hit_alignment = align[0]
-          query_alignment = align[1]
-=begin
-          puts hit_alignment
-          puts ""
-          puts query_alignment
-=end
-          aux = []
-          # for each hsp
+            # indexing in blast starts from 1
+            hit_local = hit.raw_sequence[hsp.hit_from-1..hsp.hit_to-1]
+            query_local = prediction.raw_sequence[hsp.match_query_from-1..hsp.match_query_to-1]
+
+            # in case of nucleotide prediction sequence translate into protein
+            # use translate with reading frame 1 because 
+            # to/from coordinates of the hsp already correspond to the 
+            # reading frame in which the prediction was read to match this hsp 
+            if @type == :nucleotide
+              s = Bio::Sequence::NA.new(query_local)
+              query_local = s.translate
+            end
+
+            # local alignment for hit and query
+            seqs = [hit_local, query_local]
+
+            begin
+              options = ['--maxiterate', '1000', '--localpair', '--quiet']
+              mafft = Bio::MAFFT.new(@mafft_path, options)
+              report = mafft.query_align(seqs)
+              raw_align = report.alignment
+              align = []
+              raw_align.each { |s| align.push(s.to_s) }
+              hit_alignment = align[0]
+              query_alignment = align[1]
+            rescue Exception => error                
+              raise NoMafftInstallationError
+            end
+          end 
+
+          # check multiple coverage
+
+          # for each hsp of the curent hit
           # iterate through the alignment and count the matching residues
-          [*(0 .. hsp.align_len-1)].each do |i|
+          [*(0 .. hit_alignment.length-1)].each do |i|
             residue_hit = hit_alignment[i]
             residue_query = query_alignment[i]
             if residue_hit != ' ' and residue_hit != '+' and residue_hit != '-'
               if residue_hit == residue_query             
                 # indexing in blast starts from 1
                 idx = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
-                if coverage.length > idx
+                #puts "#{coverage.length} #{idx}"
                   coverage[idx] += 1
-                end
+                #end
               end
             end
           end
@@ -130,20 +168,50 @@ class DuplicationValidation < ValidationTest
         return @validation_report
       end
 
-      R.eval("library(preprocessCore)")
+      pval = wilcox_test(averages)
 
+      #make the wilcox-test and get the p-value
+      #R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
+      #R. eval("pval = wilcox.test(coverageDistrib - 1)$p.value")
+
+      #pval = R.pull "pval"
+
+      @validation_report = DuplciationValidationOutput.new(pval)        
+
+      return @validation_report
+
+    # Exception is raised when blast founds no hits
+    rescue  NotEnoughHitsError => error
+      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
+    rescue NoMafftInstallationError
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report.errors.push "[Duplication Validation] Mafft path installation exception. Please provide a correct instalation path"                          
+      return @validation_report
+    rescue NoInternetError
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report.errors.push "[Duplication Validation] Connection to internat fail. Unable to retrieve raw sequences"
+      return @validation_report
+    else
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      return @validation_report
+    end
+  end
+
+  ##
+  # Calls R to calculate the p value for the wilcoxon-test
+  # Input
+  # +vector+ Array of values with nonparametric distribution
+  def wilcox_test (averages)
+    begin
       #make the wilcox-test and get the p-value
       R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
       R. eval("pval = wilcox.test(coverageDistrib - 1)$p.value")
 
       pval = R.pull "pval"
-
-      @validation_report = DuplciationValidationOutput.new(pval)        
-
-      # Exception is raised when blast founds no hits
-      rescue Exception => error
-        puts error.backtrace
-        ValidationReport.new("Not enough evidence")
+      return pval
+    rescue Exception => error
+      #return nil
     end
   end
 end

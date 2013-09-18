@@ -15,6 +15,7 @@ class ORFValidationOutput < ValidationReport
     @threshold = threshold
     @expected = expected
     @result = validation
+    @plot_files = []
   end
 
   def print
@@ -60,7 +61,10 @@ class OpenReadingFrameValidation < ValidationTest
     @stop_codons = stop_codons
     @short_header = "ORF"
     @header = "Main ORF"
-    @description = "Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries. Meaning of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80% passe the validation test."
+    @description = 'Check whether there is a single main Open Reading Frame'<<
+    ' in the predicted gene. Aplicable only for nucleotide queries. Meaning'<<
+    '  of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80%'<<
+    ' passe the validation test.'
     @cli_name = "orf"
   end
 
@@ -71,7 +75,9 @@ class OpenReadingFrameValidation < ValidationTest
   # +ORFValidationOutput+ object
   def run    
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and 
+                             hits[0].is_a? Sequence and 
+                             hits.length >= 5
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report

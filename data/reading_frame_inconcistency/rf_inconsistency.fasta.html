@@ -1,0 +1,73 @@
+<html><head>
+                     <title>Gene Validation Result</title>
+                     <script language="javascript"> 
+
+                     function showDiv(toggle){
+                       var button = document.getElementById(toggle)
+                       if(button.style.display == "block"){
+                          button.style.display = "none";
+                       }
+                       else{
+                          button.style.display = "block";
+                       }
+                     }
+                  </script>             
+                  </head>
+                  <body>
+                      <table border="1" cellpadding="5" cellspacing="0" width = 1650>
+                                <tr bgcolor = #E8E8E8>
+                                        <th></th>
+                                        <th></th>
+                                        <th>No.</th>
+                                        <th width=100 title="FASTA Header of the query">Description</th>
+                                        <th title="Number of hits found by BLAST.">No. Hits</th>
+                                        <th title="Check whether the prediction length fits the most of the BLAST hit lengths, by 1D hierarchical clusterization.">Valid Length(Cluster)</th>
+                                        <th title="Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths.">Valid Length(Rank)</th>
+                                        <th title="Check whether the reading frame shifts.">Valid Reading Frame</th>
+                                        <th title="Check whether there BLAST hits make evidence about a merge of two genes that cover the predicted gene.">Gene Merge(slope)</th>
+                                        <th title="Check whether there is a duplicated subsequence in the predicted gene.">Duplication</th>
+                                        <th title="Check whether there is a single main Open Reading Frame in the predicted gene." style="white-space:nowrap"> ORF Test</th>
+                                        <th title="Overall evaluation based on all validation tests" > Overall Evaluation</th>
+                                </tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle1')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>1</td>
+	      <td>Brasy-EspV1T00022</td>
+	      <td>106</td>
+	      <td bgcolor=red>1625 [407, 663] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (3:66;1:97;)</td>
+	      <td bgcolor=white>no (slope=0.05)</td>
+	      <td bgcolor=white>no (pval=1.0)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.6)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#FFFFFF>
+	      <td  colspan=12>
+              <div id=toggle1 style='display:none'>
+
+              <img src=rf_inconsistency.fasta_1_len_clusters.jpg height=400>
+	      <img src=rf_inconsistency.fasta_1_match.jpg height=400>
+              <img src=rf_inconsistency.fasta_1_match_2d.jpg height=400><img src=rf_inconsistency.fasta_1_orfs.jpg height=400></div></td></tr><tr bgcolor=white> 
+	      <td><button type=button name=answer onclick=showDiv('toggle2')>Show/Hide Plots</button></td> 
+              <td bgcolor=red><b>&#33;</b></td>
+              <td>2</td>
+	      <td>Brasy-EspV1T00061</td>
+	      <td>500</td>
+	      <td bgcolor=red>466 [376, 377] no</td>
+	      <td bgcolor=red>0.0 (TOO_LONG)</td>
+	      <td bgcolor=red>no (1:500;2:1000;3:1;)</td>
+	      <td bgcolor=white>no (slope=0.02)</td>
+	      <td bgcolor=red>yes (pval=0.01)</td>
+              <td bgcolor=red style="white-space:nowrap">no (%=0.38)</td>
+              <td style="white-space:nowrap">...</td>
+	      </tr>
+
+	      <tr bgcolor=#E8E8E8>
+	      <td  colspan=12>
+              <div id=toggle2 style='display:none'>
+
+              <img src=rf_inconsistency.fasta_2_len_clusters.jpg height=400>
+	      <img src=rf_inconsistency.fasta_2_match.jpg height=400>
+              <img src=rf_inconsistency.fasta_2_match_2d.jpg height=400><img src=rf_inconsistency.fasta_2_orfs.jpg height=400></div></td></tr>

@@ -30,6 +30,7 @@ class Output
     @start_idx = start_idx
 
   end
+
   
   def print_output_console
 
@@ -56,7 +57,9 @@ class Output
 
   end
 
+
   def print_output_file_yaml
+
     file_yaml = "#{@yaml_path}/#{@filename}.yaml"
     report = validations.map{|v| v.validation_report}
     unless @idx == @start_idx
@@ -70,14 +73,21 @@ class Output
         YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => report},f)
       end
     end
+
   end
+
 
   def generate_html
 
-    successes = validations.map{|v| v.validation_report.result == v.validation_report.expected}.count(true)
-    fails = validations.map{|v| v.validation_report.validation != :unapplicable and v.validation_report.result != v.validation_report.expected}.count(true)
+    successes = validations.map{|v| v.validation_report.result == 
+      v.validation_report.expected}.count(true)
+    fails = validations.map{|v| v.validation_report.validation != :unapplicable and
+      v.validation_report.validation != :error and 
+      v.validation_report.result != v.validation_report.expected}.count(true)
     unknown = validations.length - successes - fails
     overall_score = (successes*100/(successes + fails + 0.0)).round(0)
+
+#    validations.map{|v| puts v.validation_report.errors.to_s}
 
     if fails == 0
       bg_icon = "success"
@@ -89,22 +99,28 @@ class Output
 
     # if it's the first time I write in the html file
     if @idx == @start_idx
-  
       template_file = File.open("aux/template_header.htm.erb", 'r').read
       erb = ERB.new(template_file)
       File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
     end
 
     toggle = "toggle#{@idx}"
+
+    #@validations.map{|item| puts item.validation_report.plot_files.length}
+
     template_file = File.open("aux/template_query.htm.erb", 'r').read
     erb = ERB.new(template_file)
-    File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
 
+    File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
   end
 
+
   def add_html_footer
+
       template_file = File.open("aux/template_footer.htm.erb", 'r').read
       erb = ERB.new(template_file)
       File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }
+
   end
+
 end

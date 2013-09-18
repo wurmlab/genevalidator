@@ -23,3 +23,27 @@ end
 # Exception raised when a validation report class is not instance of ValidationReport
 class ReportClassError < Exception
 end
+
+# Exception raised when there are not enough blast hits to make a statisticl validation
+class NotEnoughHitsError < Exception
+end
+
+# Exception raised when function dependig on the internet connection raise Exception
+class NoInternetError < Exception
+end
+
+# Exception raised when the alignment initialization raises exception
+class NoMafftInstallationError < Exception
+end
+
+# Exception raised when the -v argument didn't filter any validatio test
+class NoValidationError< Exception
+end
+
+# Exception raised when the are alias duplications
+class AliasDuplicationError < Exception
+end
+
+# Exception raised when the are alias duplications
+class NoPIdentError < Exception
+end

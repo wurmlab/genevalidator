@@ -1,5 +1,6 @@
 require 'genevalidator/validation_output'
 require 'genevalidator/validation_test'
+require 'genevalidator/exceptions'
 
 ##
 # Class that stores the validation output information
@@ -63,11 +64,15 @@ class LengthRankValidation < ValidationTest
   # +LengthRankValidationOutput+ object
   def run(hits = @hits, prediction = @prediction)
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
+      raise NotEnoughHitsError unless hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and 
+                             hits[0].is_a? Sequence 
 
       lengths = hits.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
       len = lengths.length
-      median = len % 2 == 1 ? lengths[len/2] : (lengths[len/2 - 1] + lengths[len/2]).to_f / 2
+      median = len % 2 == 1 ? 
+               lengths[len/2] : 
+               (lengths[len/2 - 1] + lengths[len/2]).to_f / 2
 
       predicted_len = prediction.xml_length
 
@@ -92,10 +97,15 @@ class LengthRankValidation < ValidationTest
 
       @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
 
+      return @validation_report
+
     # Exception is raised when blast founds no hits
-    rescue Exception => error
-      ValidationReport.new("Not enough evidence")
+     rescue NotEnoughHitsError#Exception
+      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+     else
+      @validation_report = ValidationReport.new("Unexpected error")
     end
+
   end
 
 end

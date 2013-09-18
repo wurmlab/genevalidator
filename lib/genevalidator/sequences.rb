@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Sequence
 
   attr_accessor :seq_type #protein | mRNA
@@ -6,13 +8,18 @@ class Sequence
   attr_accessor :species
   attr_accessor :accession_no
   attr_accessor :xml_length
-  attr_accessor :raw_sequence
   attr_accessor :reading_frame
   attr_accessor :hsp_list # array of Hsp objects 
+ 
+  attr_accessor :raw_sequence
+  attr_accessor :protein_translation # used only for nucleotides
+  attr_accessor :nucleotide_rf #used only for nucleotides
 
   def initialize
-    @raw_sequence = nil
     @hsp_list = []
+    @raw_sequence = nil
+    @protein_translation = nil
+    @nucleotide_rf = nil
   end
 
   def print
@@ -26,6 +33,15 @@ class Sequence
     puts "----------------------"
   end
 
+  def protein_translation
+
+    if @type == :protein
+      return raw_sequence
+    else 
+      return @protein_translation
+    end
+  end
+
   ##
   # Gets gene by accession number from a givem database
   # Params:
@@ -33,7 +49,7 @@ class Sequence
   # +db+: database as String
   # Output:
   # String with the nucleotide sequence corresponding to the accno
-  def get_sequence_by_accession_no(accno,db)
+  def get_sequence_by_accession_no(accno, db)
 
     uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}&retmax=1&usehistory=y&term=#{accno}/"
     #puts uri
@@ -68,51 +84,6 @@ class Sequence
         @accession_no = value
       when "slen"
         @xml_length = value.to_i  
-    end
-  end
-
-end
-
-class Hsp
-
-  attr_accessor :hit_from #references from the unaligned hit sequence
-  attr_accessor :hit_to
-  attr_accessor :match_query_from # references from the unaligned query sequence
-  attr_accessor :match_query_to
-  attr_accessor :query_reading_frame
-  attr_accessor :hit_alignment
-  attr_accessor :query_alignment
-  attr_accessor :middles # conserved residues are with letters, positive (mis)matches with +, mismatches and gaps are with space
-
-  attr_accessor :bit_score
-  attr_accessor :hsp_score
-  attr_accessor :hsp_evalue
-  attr_accessor :identity # number of conserved residues
-  attr_accessor :positive # positive score for the (mis)match
-  attr_accessor :gaps
-  attr_accessor :align_len
-
-  ##
-  # Initializes the corresponding attribute of the hsp
-  # with respect to the column name of the tabular blast output
-  def init_tabular_attribute(column, value)
-    case column
-      when "qstart"
-        @match_query_from = value.to_i
-      when "qend"
-        @match_query_to = value.to_i
-      when "sstart"
-        @hit_from = value.to_i
-      when "send"
-        @hit_to = value.to_i
-      when "qseq"
-        @query_alignment = value
-      when "sseq"
-        @hit_alignment = value
-      when "length"
-        @align_len = value.to_i
-      when "evalue"
-        @hsp_evalue = value.to_f 
     end
   end
 

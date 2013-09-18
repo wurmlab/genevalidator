@@ -1,0 +1,955 @@
+---
+!binary "U0kyLjIuMF8wNjI2Nw==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 1556
+  - 1814
+  prediction_len: 199
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_1_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 199
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_1_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 77
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_SHORT
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.0007194865241221815
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_1_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 198.6339682161589
+    aux2: 0.0007194865241221815
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_1_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 77
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.8041182682154171
+  extra_seq: 0.0
+  consensus: 0.05282620179609086
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_1_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8xMzcyMg==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 130
+  - 161
+  prediction_len: 186
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_2_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 186
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_2_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 14
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.04207956494099671
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_2_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 176.68086413487686
+    aux2: 0.04207956494099671
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_2_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 14
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.017699115044247787
+  extra_seq: 0.20353982300884957
+  consensus: 0.11682242990654206
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_2_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8wMjY1MQ==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 375
+  - 1500
+  prediction_len: 660
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_3_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 660
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_3_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.13
+  msg: TOO_SHORT
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.26088515053957256
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_3_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 276.436614234645
+    aux2: 0.26088515053957256
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_3_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.017921146953405017
+  extra_seq: 0.03225806451612903
+  consensus: 0.2334963325183374
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_3_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8wMjgwNg==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 113
+  - 501
+  prediction_len: 1808
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_4_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1808
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_4_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 356
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.19
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.2494716992646212
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_4_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 1191.5577424846604
+    aux2: 0.2494716992646212
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_4_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 356
+    aux2: 
+- !ruby/object:ValidationReport
+  message: Unexpected error
+  plot_files: []
+  errors:
+  - ! '[Duplication Validation] Connection to internat fail. Unable to retrieve raw
+    sequences'
+  result: :error
+  expected: :yes
+  validation_result: :error
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.01986408782017773
+  extra_seq: 0.026136957658128592
+  consensus: 0.12894736842105264
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_4_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8wNjcwNA==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 497
+  - 726
+  prediction_len: 90
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_5_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 90
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_5_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 33
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.06
+  msg: TOO_SHORT
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.24168217775709627
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_5_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 78.86912517449977
+    aux2: 0.24168217775709627
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_5_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 33
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.24069923800986104
+  extra_seq: 0.0
+  consensus: 0.004930524428507396
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_5_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8wMjU2NQ==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 113
+  - 1307
+  prediction_len: 1761
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_6_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1761
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_6_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 431
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.28
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.3251065359349868
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_6_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 1080.0981572997384
+    aux2: 0.3251065359349868
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_6_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 431
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.04021164021164021
+  extra_seq: 0.028042328042328042
+  consensus: 0.15421303656597773
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_6_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF8wODg2Nw==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 161
+  - 829
+  prediction_len: 759
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_7_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 759
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_7_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.37
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.19664578697833035
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_7_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 367.0216461556054
+    aux2: 0.19664578697833035
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_7_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.08866995073891626
+  extra_seq: 0.0018472906403940886
+  consensus: 0.10974106041923551
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_7_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF84MDc1NA==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 850
+  - 885
+  prediction_len: 850
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_8_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 850
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_8_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.27
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.03902881440853194
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_8_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 811.293646436032
+    aux2: -0.03902881440853194
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_8_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.05077262693156733
+  extra_seq: 0.0033112582781456954
+  consensus: 0.26135105204872644
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_8_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF84MDAzOQ==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 119
+  - 566
+  prediction_len: 125
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_9_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 125
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_9_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 37
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.03
+  msg: TOO_SHORT
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.011049490456618459
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_9_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 124.09525083047126
+    aux2: -0.011049490456618459
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_9_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 37
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.25903279599777657
+  extra_seq: 0.0013896609227348527
+  consensus: 0.004724847137298499
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_9_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 
+!binary "U0kyLjIuMF84MDMwMA==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 510
+  - 825
+  prediction_len: 1065
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_10_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1065
+    aux2: 
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_10_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 127
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.09
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.17937259082591406
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_10_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 536.591794530265
+    aux2: -0.17937259082591406
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_10_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 127
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:AlignmentValidationOutput
+  gaps: 0.17614035087719299
+  extra_seq: 0.05263157894736842
+  consensus: 0.08755426917510854
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: prot_Solenopsis_invicta.fasta_10_ma.json
+    type: :lines
+    title: Multiple alignment and Statistical model of blast hits
+    footer: gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical
+      model,orange
+    xtitle: alignment length
+    ytitle: idx
+    aux1: 12
+    aux2: 

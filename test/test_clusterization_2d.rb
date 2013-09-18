@@ -4,7 +4,7 @@ require 'mini_shoulda'
 require 'minitest/autorun'
 require 'genevalidator/clusterization'
 
-class Test2DClusterization < Test::Unit::TestCase
+class Test2DClusterization < MiniTest::Unit::TestCase
 
   describe "2D clusterization" do
 

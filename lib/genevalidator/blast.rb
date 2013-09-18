@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby
 
-require 'genevalidator/clusterization'
 require 'genevalidator/sequences'
+require 'genevalidator/hsp'
 require 'genevalidator/output'
-require 'genevalidator/validation'
 require 'genevalidator/exceptions'
-require 'genevalidator/tabular_parser'
 require 'bio-blastxmlparser'
 require 'rinruby'
 require 'net/http'
@@ -14,128 +12,7 @@ require 'uri'
 require 'io/console'
 require 'yaml'
 
-class Blast
-
-  attr_reader :type
-  attr_reader :fasta_filepath
-  attr_reader :html_path
-  attr_reader :yaml_path
-  attr_reader :filename
-  # current number of the querry processed
-  attr_reader :idx
-  attr_reader :start_idx
-  #array of indexes for the start offsets of each query in the fasta file
-  attr_reader :query_offset_lst
-
-  attr_reader :vlist
-
-  ##
-  # Initilizes the object
-  # Params:
-  # +fasta_filepath+: query sequence fasta file with query sequences
-  # +type+: query sequence type; can be :nucleotide or :protein
-  # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
-  # +vlist+: list of validations
-  # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_filepath, vlist, xml_file = nil, start_idx = 1)
-    begin
-
-      puts "\nDepending on your input and your computational resources, this may take a while. Please wait...\n\n"
-
-      @fasta_filepath = fasta_filepath
-      @xml_file = xml_file
-      @vlist = vlist
-      @idx = 0
-      @start_idx = start_idx
-
-      raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
-      fasta_content = IO.binread(@fasta_filepath);
-
-      # the expected type for the sequences is the
-      # type of the first query
-       
-      # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
-      @type = type_of_sequences(fasta_content)
-
-      # create a list of index of the queries in the FASTA
-      @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
-      @query_offset_lst.push(fasta_content.length)
-      fasta_content = nil # free memory for variable fasta_content
-
-      # redirect the cosole messages of R
-      R.echo "enable = nil, stderr = nil, warn = nil"
-
-      # build path of html folder output
-      path = @fasta_filepath.scan(/(.*)\/[^\/]+$/)[0][0]
-      if path == nil
-        @html_path = "html"
-      else
-        @html_path ="#{path}/html"
-      end
-      @yaml_path = path
-
-      @filename = @fasta_filepath.scan(/\/([^\/]+)$/)[0][0]
-
-      # create 'html' directory
-      FileUtils.rm_rf(@html_path)
-      Dir.mkdir(@html_path)
-
-      # copy auxiliar folders to the html folder
-      FileUtils.cp_r("aux/css", @html_path)
-      FileUtils.cp_r("aux/js", @html_path)
-      FileUtils.cp_r("aux/img", @html_path)
-      FileUtils.cp_r("aux/font", @html_path)
-
-    rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
-      exit
-    rescue FileNotFoundException => error
-      $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
-      exit 
-    end
-  end
-
-  ##
-  # Calls blast according to the type of the sequence
-  def blast
-    begin
-      if @xml_file == nil
- 
-        #file seek for each query
-        @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
-      
-          if (i+1) >= @start_idx
-            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
-
-            #call blast with the default parameters
-            if type == :protein
-              output = call_blast_from_stdin("blastp", query, 11, 1)
-            else
-              output = call_blast_from_stdin("blastx", query, 11, 1)
-            end
-
-            #save output in a file
-            xml_file = "#{@fasta_filepath}_#{i+1}.xml"
-            File.open(xml_file , "w") do |f| f.write(output) end
-
-            #parse output
-            parse_xml_output(output)   
-          else
-            @idx = @idx + 1
-          end
-        end
-      else
-        file = File.open(@xml_file, "rb").read
-
-        #check the format of the input file
-        parse_xml_output(file)      
-      end
-
-    rescue SystemCallError => error
-      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not valid\n"      
-      exit
-    end
-  end
+class BlastUtils
 
   ##
   # Calls blast from standard input with specific parameters
@@ -146,7 +23,7 @@ class Blast
   # +gapextend+: gapextend blast parameter
   # Output:
   # String with the blast xml output
-  def call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote")
+  def self.call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote")
     begin
       raise TypeError unless command.is_a? String and query.is_a? String
 
@@ -168,7 +45,7 @@ class Blast
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
       exit
     rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: Did you add BLAST path to CLASSPATH?\n" 
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: BLAST installation path is not in the LOAD PATH. Please provide the -blast argument\n" 
       exit 
     end
   end
@@ -183,7 +60,7 @@ class Blast
   # +gapextend+: gapextend blast parameter
   # Output:
   # String with the blast xml output
-  def call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
+  def self.call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
     begin  
       raise TypeError unless command.is_a? String and filename.is_a? String
 
@@ -220,15 +97,16 @@ class Blast
   def parse_xml_output(output)
 
     iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue")
+    iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", @type)
 
     begin
       @idx = @idx + 1
       begin
+        # check xml format
         if @idx < @start_idx
           iter = iterator_xml.next
         else
-          hits = parse_next_query(iterator_xml) #returns [hits, predicted_seq]
+          hits = parse_next_query(iterator_xml) 
           if hits == nil
             @idx = @idx -1
             break
@@ -244,43 +122,42 @@ class Blast
           parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
           prediction.definition = parse_query[0].gsub("\n","")
-  
+          prediction.seq_type = @type 
           prediction.raw_sequence = parse_query[1].gsub("\n","")
           prediction.xml_length = prediction.raw_sequence.length
           if @type == :nucleotide
             prediction.xml_length /= 3
           end
         end
-        rescue Exception => error
-          #check tabular format 
-          if @idx < @start_idx
-            iterator_tab.next          
-          else
 
-            hits = iterator_tab.next
-            if hits == nil
-               @idx = @idx -1
-               break
-            end
+      rescue Exception => error
+        #check tabular format
+        if @idx < @start_idx
+          iterator_tab.next          
+        else
 
-            prediction = Sequence.new
-
-            # get info about the query
-            # get the @idx-th sequence  from the fasta file
-            i = @idx-1
-            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-            parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-
-            prediction.definition = parse_query[0].gsub("\n","")
-
-            prediction.raw_sequence = parse_query[1].gsub("\n","")
-            prediction.xml_length = prediction.raw_sequence.length
+          hits = iterator_tab.next
+          if hits == nil
+            @idx = @idx -1
+            break
           end
 
+          prediction = Sequence.new
+
+          # get info about the query
+          # get the @idx-th sequence  from the fasta file
+          i = @idx-1
+          query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
+          parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+
+          prediction.definition = parse_query[0].gsub("\n","")
+          prediction.seq_type = @type
+          prediction.raw_sequence = parse_query[1].gsub("\n","")
+          prediction.xml_length = prediction.raw_sequence.length
           if @type == :nucleotide
             prediction.xml_length /= 3
           end
-          
+        end
       end
       # do validations
       v = Validation.new(prediction, hits, vlist, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
@@ -303,7 +180,7 @@ class Blast
   # Outputs:
   # output1: an array of +Sequence+ ojbects for hits
   # output2: +Sequence+ object for the predicted sequence
-  def parse_next_query(iterator)
+  def self.parse_next_query_xml(iterator, type)
     begin
       raise TypeError unless iterator.is_a? Enumerator
 
@@ -311,20 +188,13 @@ class Blast
       predicted_seq = Sequence.new
       iter = iterator.next
 
-      # get info about the query
-      predicted_seq.xml_length = iter.field("Iteration_query-len").to_i
-      if @type == :nucleotide
-        predicted_seq.xml_length /= 3
-      end
-      predicted_seq.definition = iter.field("Iteration_query-def")
-
       # parse blast the xml output and get the hits
       iter.each do | hit | 
         
         seq = Sequence.new
 
         seq.xml_length = hit.len.to_i        
-        seq.seq_type = @type
+        seq.seq_type = type
         seq.id = hit.hit_id
         seq.definition = hit.hit_def
         seq.accession_no = hit.accession
@@ -340,7 +210,7 @@ class Blast
           current_hsp.match_query_from = hsp.query_from.to_i
           current_hsp.match_query_to = hsp.query_to.to_i
 
-          if @type == :nucleotide
+          if type == :nucleotide
             current_hsp.match_query_from /= 3 
             current_hsp.match_query_to /= 3             
           end
@@ -350,6 +220,8 @@ class Blast
           current_hsp.hit_alignment = hsp.hseq.to_s
           current_hsp.query_alignment = hsp.qseq.to_s
           current_hsp.align_len = hsp.align_len.to_i
+          current_hsp.identity = hsp.identity.to_i
+          current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  
 
           hsps.push(current_hsp)
         end
@@ -361,6 +233,7 @@ class Blast
       return hits
 
     rescue TypeError => error
+      puts error.backtrace
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call parse method first!\n"       
       exit
     rescue StopIteration
@@ -374,7 +247,7 @@ class Blast
   # sequence_string: String of which we mfind the composition
   # Output:
   # a Hash
-  def composition(sequence_string)
+  def self.composition(sequence_string)
     count = Hash.new(0)
     sequence_string.scan(/./) do |x|
       count[x] += 1
@@ -391,13 +264,13 @@ class Blast
   # +sequence_string+: String to validate
   # Output:
   # nil, :nucleotide or :protein
-  def guess_sequence_type(sequence_string)
+  def self.guess_sequence_type(sequence_string)
     cleaned_sequence = sequence_string.gsub(/[^A-Z]/i, '') # removing non-letter characters
     cleaned_sequence.gsub!(/[NX]/i, '') # removing ambiguous characters
 
     return nil if cleaned_sequence.length < 10 # conservative
 
-    composition = composition(cleaned_sequence)
+    composition = BlastUtils.composition(cleaned_sequence)
     composition_NAs = composition.select { |character, count|character.match(/[ACGTU]/i) } # only putative NAs
     putative_NA_counts = composition_NAs.collect { |key_value_array| key_value_array[1] } # only count, not char
     putative_NA_sum = putative_NA_counts.inject { |sum, n| sum + n } # count of all putative NA
@@ -420,12 +293,12 @@ class Blast
   # +sequence_string+: String to validate
   # Output:
   # nil, :nucleotide or :protein
-  def type_of_sequences(fasta_format_string)
+  def self.type_of_sequences(fasta_format_string)
     # the first sequence does not need to have a fasta definition line
     sequences = fasta_format_string.split(/^>.*$/).delete_if { |seq| seq.empty? }
 
     # get all sequence types
-    sequence_types = sequences.collect { |seq| guess_sequence_type(seq) }.uniq.compact
+    sequence_types = sequences.collect { |seq| BlastUtils.guess_sequence_type(seq) }.uniq.compact
 
     return nil if sequence_types.empty?
 
@@ -437,4 +310,5 @@ class Blast
   end
 
 end
+
 
