@@ -304,8 +304,8 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .attr("y1", y(yLine))				  
 		  .attr("x2", x(xMax))
 		  .attr("y2", y(yValue))				  
-		  //.attr("stroke-width", 2)
-		  //.attr("stroke", "black")
+		  .attr("stroke-width", 2)
+		  .attr("stroke", "black")
 	  }
 
 	});
@@ -328,12 +328,12 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle){
 	var xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom")
-		.ticks(10);
+		.ticks(5);
 	var yAxis = d3.svg.axis()
 		.scale(y)
 		.orient("left")
 		.tickFormat(d3.format("d"))
-		.ticks(10);
+		.ticks(5);
 
 	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
@@ -395,4 +395,5 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle){
 
 	});
 }
+
 

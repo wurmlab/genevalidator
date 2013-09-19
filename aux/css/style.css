@@ -41,6 +41,18 @@ table.tablesorter thead tr .headerSortDown {
   /* white-space:nowrap;  */
 }
 
+.table tbody td.warning{
+  color: #000000 !important;
+  vertical-align: middle !important;
+  padding-left:30px !important;	
+ 
+  background-repeat: no-repeat;  
+  background-image: url(../img/w-icon.png);
+  background-position: left center;   
+  background-color: #f2dede !important; /*#FF6666; */ 
+  /* white-space:nowrap;  */
+}
+
 .table td {
   vertical-align: middle !important;  	
 }

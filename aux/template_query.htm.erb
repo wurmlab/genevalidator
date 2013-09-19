@@ -1,32 +1,30 @@
 <tr> 
 	<td><%= @idx %></td>
 	<td class="<%=bg_icon%>"> <%= overall_score %>% </td>		
-	<td><div name="ranking" score=<%= overall_score %>></div></td>
+	<td><div name="ranking" title = "ana" score=<%= overall_score %>></div></td>
 	<td><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
 	<td><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>		
 	<td><%= @nr_hits %></td>
 	<% @validations.each do |item| %>	    
-   	    <% if item.plot_files.length > 0 %>
+   	    <% if item.validation_report.plot_files != nil %>
 	   	    <td class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" onclick="
 		showDiv(this, '<%= toggle %>');
-		<% item.plot_files.each do |plot| %>  			
+		<% item.validation_report.plot_files.each do |plot| %>  			
   		addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-             	<% end %> ">
-	  	
-		<%= item.validation_report.print %> 	
+             	<% end %> "><%= item.validation_report.print %></td> 	
   	    <% else %>
-  		    <td class = <%=item.validation_report.color%>><%= item.validation_report.print %><% end %></td>
+  		    <td class = <%=item.validation_report.color%>><%=item.validation_report.print%><%end%></td>
 	<% end %>
 	<td>
- <% if @validations.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } == 0 %>	    
+ <% if @validations.select{|item| item.validation_report.plot_files != nil}.map{|item| item.validation_report.plot_files.length}.inject(0){|r, e| r+e } == 0 %>	    
 	<button class="btn btn-disabled">			 			 
     	    <i class="icon-bar-chart"></i></button>
  <% else %>
 	<button class="btn btn-info" onclick="
 	    showDiv(this, '<%= toggle %>');
 	    <% @validations.each do |item| 
-	    if item.plot_files.length > 0 %>
-		<% item.plot_files.each do |plot| %>  			
+	    if item.validation_report.plot_files  != nil %>
+		<% item.validation_report.plot_files.each do |plot| %>  			
   		addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
              	<% end end end%>                
 	    ">			 			 
