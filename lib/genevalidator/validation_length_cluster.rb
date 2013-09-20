@@ -76,7 +76,7 @@ class LengthClusterValidation < ValidationTest
       @clusters = clusterization[0]
       @max_density_cluster = clusterization[1]
       limits = @clusters[@max_density_cluster].get_limits
-      prediction_len = @prediction.xml_length
+      prediction_len = @prediction.length_protein
 
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
       plot1 = plot_histo_clusters
@@ -111,7 +111,7 @@ class LengthClusterValidation < ValidationTest
       raise TypeError unless lst[0].is_a? Sequence and 
                              predicted_seq.is_a? Sequence
 
-      contents = lst.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
+      contents = lst.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
 
       hc = HierarchicalClusterization.new(contents)
       clusters = hc.hierarchical_clusterization
@@ -159,7 +159,7 @@ class LengthClusterValidation < ValidationTest
               "prediction, black;most dense cluster,red;other hits, blue",
               "length",
               "frequency",
-              prediction.xml_length)
+              prediction.length_protein)
   end
 
   ##
@@ -173,15 +173,15 @@ class LengthClusterValidation < ValidationTest
   def plot_len_clusters(output = "#{@filename}_len.json", hits = @hits)
 
       f = File.open(output , "w")
-      lst = @hits.sort{|a,b| a.xml_length<=>b.xml_length}
+      lst = @hits.sort{|a,b| a.length_protein<=>b.length_protein}
 
       no_lines = 100
       ratio = (hits.length/no_lines).to_i
       if ratio == 0
-        f.write((lst.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.xml_length, "color"=>"gray"}} +
+        f.write((lst.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.length_protein, "color"=>"gray"}} +
                lst.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
       else
-        f.write((lst.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.xml_length, "color"=>"gray"}} +
+        f.write((lst.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.length_protein, "color"=>"gray"}} +
                lst.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
       end
 

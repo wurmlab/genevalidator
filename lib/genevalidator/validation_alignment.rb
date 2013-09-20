@@ -79,7 +79,7 @@ class AlignmentValidation < ValidationTest
         less_hits.map do |hit| 
           if hit.raw_sequence == nil
             #get gene by accession number
-            if hit.seq_type == :protein
+            if hit.type == :protein
               hit.get_sequence_by_accession_no(hit.accession_no, "protein")
             else
               hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
@@ -110,7 +110,6 @@ class AlignmentValidation < ValidationTest
       @validation_report.plot_files.push(plot1)
 
       return @validation_report
-
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
@@ -123,7 +122,8 @@ class AlignmentValidation < ValidationTest
       @validation_report = ValidationReport.new("Unexpected error", :error)
       @validation_report.errors.push "[Alignment Validation] Connection to internat fail. Unable to retrieve raw sequences"
       return @validation_report
-    else
+    rescue Exception => error
+      puts error.backtrace
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
     end

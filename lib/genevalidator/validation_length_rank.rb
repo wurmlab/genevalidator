@@ -68,13 +68,13 @@ class LengthRankValidation < ValidationTest
       raise Exception unless prediction.is_a? Sequence and 
                              hits[0].is_a? Sequence 
 
-      lengths = hits.map{ |x| x.xml_length.to_i }.sort{|a,b| a<=>b}
+      lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
       len = lengths.length
       median = len % 2 == 1 ? 
                lengths[len/2] : 
                (lengths[len/2 - 1] + lengths[len/2]).to_f / 2
 
-      predicted_len = prediction.xml_length
+      predicted_len = prediction.length_protein
 
       if hits.length == 1
         msg = ""

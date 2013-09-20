@@ -47,3 +47,7 @@ end
 # Exception raised when the are alias duplications
 class NoPIdentError < Exception
 end
+
+# Exception raised when the tabular format does not correspond to the tabular argumet
+class InconsistentTabularFormat < Exception
+end

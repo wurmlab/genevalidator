@@ -118,11 +118,11 @@ class GeneMergeValidation < ValidationTest
       no_lines = 100
       ratio = (hits.length/no_lines).to_i
       if ratio == 0
-        f.write((hits.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>prediction.xml_length, "color"=>"gray"}} +
+        f.write((hits.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>prediction.length_protein, "color"=>"gray"}} +
               hits.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
       else
-        f.write((hits.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>prediction.xml_length, "color"=>"gray"}} +
+        f.write((hits.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>prediction.length_protein, "color"=>"gray"}} +
               hits.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
       end

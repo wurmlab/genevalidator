@@ -91,89 +91,6 @@ class BlastUtils
   end
 
   ##
-  # Parses the xml blast output 
-  # Param:
-  # +output+: +String+ with the blast output in xml format
-  def parse_xml_output(output)
-
-    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", @type)
-
-    begin
-      @idx = @idx + 1
-      begin
-        # check xml format
-        if @idx < @start_idx
-          iter = iterator_xml.next
-        else
-          hits = parse_next_query(iterator_xml) 
-          if hits == nil
-            @idx = @idx -1
-            break
-          end
-
-          prediction = Sequence.new
-  
-          # get info about the query
-          # get the @idx-th sequence  from the fasta file
-          i = @idx-1
-          ### TODO: add exception
-          query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-          parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-
-          prediction.definition = parse_query[0].gsub("\n","")
-          prediction.seq_type = @type 
-          prediction.raw_sequence = parse_query[1].gsub("\n","")
-          prediction.xml_length = prediction.raw_sequence.length
-          if @type == :nucleotide
-            prediction.xml_length /= 3
-          end
-        end
-
-      rescue Exception => error
-        #check tabular format
-        if @idx < @start_idx
-          iterator_tab.next          
-        else
-
-          hits = iterator_tab.next
-          if hits == nil
-            @idx = @idx -1
-            break
-          end
-
-          prediction = Sequence.new
-
-          # get info about the query
-          # get the @idx-th sequence  from the fasta file
-          i = @idx-1
-          query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-          parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-
-          prediction.definition = parse_query[0].gsub("\n","")
-          prediction.seq_type = @type
-          prediction.raw_sequence = parse_query[1].gsub("\n","")
-          prediction.xml_length = prediction.raw_sequence.length
-          if @type == :nucleotide
-            prediction.xml_length /= 3
-          end
-        end
-      end
-      # do validations
-      v = Validation.new(prediction, hits, vlist, @type, @filename, @html_path, @yaml_path, @idx, @start_idx)
-      query_output = v.validate_all
-      query_output.generate_html
-
-      query_output.print_output_console
-      query_output.print_output_file_yaml
-      
-      #rescue StopIteration
-      #  return
-    end while 1
-
-  end
-
-  ##
   # Parses the next query from the blast xml output query
   # Params:
   # +iterator+: blast xml iterator for hits
@@ -193,8 +110,8 @@ class BlastUtils
         
         seq = Sequence.new
 
-        seq.xml_length = hit.len.to_i        
-        seq.seq_type = type
+        seq.length_protein = hit.len.to_i        
+        seq.type = type
         seq.id = hit.hit_id
         seq.definition = hit.hit_def
         seq.accession_no = hit.accession
@@ -211,8 +128,8 @@ class BlastUtils
           current_hsp.match_query_to = hsp.query_to.to_i
 
           if type == :nucleotide
-            current_hsp.match_query_from /= 3 
-            current_hsp.match_query_to /= 3             
+            current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1 
+            current_hsp.match_query_to =  (current_hsp.match_query_to / 3) + 1             
           end
 
           current_hsp.query_reading_frame = hsp.query_frame.to_i

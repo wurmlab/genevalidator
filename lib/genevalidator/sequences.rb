@@ -2,12 +2,12 @@ require 'net/http'
 
 class Sequence
 
-  attr_accessor :seq_type #protein | mRNA
+  attr_accessor :type #protein | mRNA
   attr_accessor :id
   attr_accessor :definition
   attr_accessor :species
   attr_accessor :accession_no
-  attr_accessor :xml_length
+  attr_accessor :length_protein
   attr_accessor :reading_frame
   attr_accessor :hsp_list # array of Hsp objects 
  
@@ -22,19 +22,7 @@ class Sequence
     @nucleotide_rf = nil
   end
 
-  def print
-    puts "#{@object_type} sequence: #{@definition} "
-    puts "Lengths xml #{@xml_length} fasta #{@fasta_length} hit #{@alignment.hit_seq.length}"
-    puts "Accession = #{@accession_no}"
-    puts "Species = #{@species}"
-    puts "Raw_sequence = #{@raw_sequence.insert(@hit_from-1,'#').insert(@hit_to+1,'#')}"
-    puts "Hit seq =      #{alignment.hit_seq}"
-    puts "Query seq =    #{alignment.query_seq}"
-    puts "----------------------"
-  end
-
   def protein_translation
-
     if @type == :protein
       return raw_sequence
     else 
@@ -83,7 +71,7 @@ class Sequence
       when "sacc"
         @accession_no = value
       when "slen"
-        @xml_length = value.to_i  
+        @length_protein = value.to_i  
     end
   end
 

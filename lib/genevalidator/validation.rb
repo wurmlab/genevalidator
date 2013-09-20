@@ -104,6 +104,7 @@ class Validation
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
       exit
     rescue FileNotFoundException => error
+      puts error.backtrack
       $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
       exit 
     end
@@ -156,50 +157,47 @@ class Validation
   # Param:
   # +output+: +String+ with the blast output in xml format
   def parse_xml_output(output)
-    
-    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, tabular_format, @type)
-
     begin
-      @idx = @idx + 1
+      iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+      iterator_tab = TabularParser.new(output, tabular_format, @type)
+
       begin
-        # check xml format
-        if @idx < @start_idx
-          iter = iterator_xml.next
-        else
-          hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
-          if hits == nil
-            @idx = @idx -1
-            break
+        @idx = @idx + 1
+        begin
+          # check xml format
+          if @idx < @start_idx
+            iter = iterator_xml.next
+          else
+            hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
+            if hits == nil
+              @idx = @idx -1
+              break
+            end
+            do_validations(hits)
           end
-          do_validations(hits)
-        end
 
-      rescue Exception => error
-        if tabular_format == nil and xml_file!= nil
-          puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns\n"
-        end
-
-        #check tabular format 
-        if @idx < @start_idx
-          iterator_tab.next          
-        else
-
-          hits = iterator_tab.next
-          if hits == nil
-            @idx = @idx -1
-            break
+        rescue Exception => error
+#          puts error.backtrace
+          if @tabular_format == nil and @xml_file!= nil
+            puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns\n"
           end
-          do_validations(hits)
+          #check tabular format
+  #        puts error.backtrace 
+          if @idx < @start_idx
+            iterator_tab.next          
+          else
+
+            hits = iterator_tab.next
+            if hits == nil
+              @idx = @idx -1
+              break
+            end
+            do_validations(hits)
+          end
         end
-      end
-
-      rescue Exception => error
-        $stderr.print "Blast input error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast input is neither xml nor tabular.\nPossible cause 2: If you didn't use stadard tabular outformat please provide -tabular argument with the format of the columns\n"
-        exit
-    end while 1
-
-  end
+      end while 1
+    end
+  end  
 
   def remove_identical_hits(prediction, hits)
     # remove the identical hits
@@ -209,18 +207,17 @@ class Validation
       # check if all hsps have identity more than 99%
       low_identity = hit.hsp_list.select{|hsp| hsp.pidentity == nil  or hsp.pidentity < 99}
       # check the coverage
-      coverage = Array.new(prediction.xml_length,0)
+      coverage = Array.new(prediction.length_protein,0)
       hit.hsp_list.each do |hsp| 
-         len = hsp.match_query_to - hsp.match_query_from + 1 
+         len = hsp.match_query_to - hsp.match_query_from + 1
          coverage[hsp.match_query_from-1..hsp.match_query_to-1] = Array.new(len, 1)
       end
       if low_identity.length == 0 and coverage.uniq.length == 1
-        identical_hits.push(hit)
+        identical_hits.push(hit) 
       end
     end
 
     identical_hits.each {|hit| hits.delete(hit)}
-
     return hits
   end
   
@@ -238,23 +235,25 @@ class Validation
     parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
     prediction.definition = parse_query[0].gsub("\n","")
-    prediction.seq_type = @type
+    prediction.type = @type
     prediction.raw_sequence = parse_query[1].gsub("\n","")
-    prediction.xml_length = prediction.raw_sequence.length
-   
-    begin 
-      hits = remove_identical_hits(prediction, hits)
-      rescue Exception #NoPIdentError 
-    end 
+
+    prediction.length_protein = prediction.raw_sequence.length 
     if @type == :nucleotide
-      prediction.xml_length /= 3
+      prediction.length_protein /= 3
+    end
+
+    begin
+      hits = remove_identical_hits(prediction, hits)
+      rescue Exception => error #NoPIdentError
+      puts error.backtrace 
     end
     
     # do validations
     begin
 
       query_output = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
-      query_output.prediction_len = prediction.xml_length
+      query_output.prediction_len = prediction.length_protein
       query_output.prediction_def = prediction.definition
       query_output.nr_hits = hits.length
 

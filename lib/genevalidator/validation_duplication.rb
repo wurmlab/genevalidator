@@ -1,5 +1,6 @@
 require 'genevalidator/validation_output'
 require 'genevalidator/exceptions'
+#require 'statsample'
 require 'rinruby'
 
 ##
@@ -28,6 +29,7 @@ class DuplciationValidationOutput < ValidationReport
     end
   end
 
+
   def color
     if validation == :no
       "success"
@@ -55,8 +57,6 @@ class DuplicationValidation < ValidationTest
     " test which test the distribution of hit average coverage against 1."<<
     " P-values higher than 5% pass the validation test."
     @cli_name = "dup"
-    # redirect the cosole messages of R
-    R.echo "enable = nil, stderr = nil, warn = nil"
 
   end
 
@@ -79,7 +79,7 @@ class DuplicationValidation < ValidationTest
         less_hits.map do |hit|
           #get gene by accession number
           if hit.raw_sequence == nil
-            if hit.seq_type == :protein
+            if hit.type == :protein
               hit.get_sequence_by_accession_no(hit.accession_no, "protein")
             else
               hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
@@ -93,7 +93,7 @@ class DuplicationValidation < ValidationTest
 
       less_hits.each do |hit|
 
-        coverage = Array.new(hit.xml_length,0)
+        coverage = Array.new(hit.length_protein,0)
         hit.hsp_list.each do |hsp|
 
         # align subsequences from the hit and prediction that match (if it's the case)
@@ -168,13 +168,7 @@ class DuplicationValidation < ValidationTest
         return @validation_report
       end
 
-      pval = wilcox_test(averages)
-
-      #make the wilcox-test and get the p-value
-      #R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
-      #R. eval("pval = wilcox.test(coverageDistrib - 1)$p.value")
-
-      #pval = R.pull "pval"
+      pval = wilcox_test_R(averages)
 
       @validation_report = DuplciationValidationOutput.new(pval)        
 
@@ -192,23 +186,42 @@ class DuplicationValidation < ValidationTest
       @validation_report = ValidationReport.new("Unexpected error", :error)
       @validation_report.errors.push "[Duplication Validation] Connection to internat fail. Unable to retrieve raw sequences"
       return @validation_report
-    else
+    rescue Exception => error
+      puts error.backtrace
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
     end
   end
 
+  def wilcox_test (averages)
+     puts averages.to_s
+     wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale, Array.new(averages.length,1).to_scale)
+     return wilcox.probability_exact
+  end
+
+
   ##
   # Calls R to calculate the p value for the wilcoxon-test
   # Input
   # +vector+ Array of values with nonparametric distribution
-  def wilcox_test (averages)
+  def wilcox_test_R (averages)
     begin
+      original_stdout = $stdout
+      original_stderr = $stderr
+
+      $stdout = File.new('/dev/null', 'w')
+      $stderr = File.new('/dev/null', 'w')
+
+      R.echo "enable = nil, stderr = nil, warn = nil"
       #make the wilcox-test and get the p-value
+      R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
       R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
       R. eval("pval = wilcox.test(coverageDistrib - 1)$p.value")
 
       pval = R.pull "pval"
+      $stdout = original_stdout
+      $stderr = original_stderr
+
       return pval
     rescue Exception => error
       #return nil

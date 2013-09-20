@@ -75,9 +75,10 @@ class OpenReadingFrameValidation < ValidationTest
   # +ORFValidationOutput+ object
   def run    
     begin
+      raise NotEnoughHitsError unless hits.length >= 5
       raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence and 
-                             hits.length >= 5
+                             hits[0].is_a? Sequence 
+
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report
@@ -92,7 +93,7 @@ class OpenReadingFrameValidation < ValidationTest
       len = @prediction.raw_sequence.length
 
       f = File.open("#{@filename}_orfs.json" , "w")
-      lst = @hits.sort{|a,b| a.xml_length<=>b.xml_length}
+      lst = @hits.sort{|a,b| a.length<=>b.length}
       f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
                orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
       f.close
@@ -107,6 +108,9 @@ class OpenReadingFrameValidation < ValidationTest
       @validation_report = ORFValidationOutput.new(orfs, ratio)
 
     # Exception is raised when blast founds no hits
+    rescue  NotEnoughHitsError => error
+      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
     rescue Exception => error
       puts error.backtrace
       return ValidationReport.new("Not enough evidence")
