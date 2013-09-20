@@ -12,7 +12,7 @@ class TestBlastClass < MiniTest::Unit::TestCase
 
     it "should detect nucleotide seq type" do
 
-      filename_mrna = "test/file_mrna.txt"
+      filename_mrna = "test/test_files/file_mrna.txt"
       file_mrna = File.open(filename_mrna, "w+")
       file_mrna.puts(">seq1")    
       query_mrna = "ATGGCTAAATTACAGAGGAAGAGAAGCAAGGCTCTTGGGTCATCTCTAGAGATGTCCCAGATAATGGATG\
@@ -32,7 +32,7 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
     end
 
     it "should detect protein type" do
-      filename_prot = "test/file_prot.txt"
+      filename_prot = "test/test_files/file_prot.txt"
       file_prot = File.open(filename_prot, "w+")
       file_prot.puts(">seq2")
       query_prot = "MPSKKQYNLVHNDEYDTRIPLHSEEAFHRGIVFHAKFIGSMEVPRPTSRVEIVAAMRRIRYEFKAKGI\
@@ -55,7 +55,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should raise error when input types are mixedin the fasta" do
       mixed = false
-      filename_prot = "test/mixed_type.fasta"
+      filename_prot = "test/test_files/mixed_type.fasta"
       begin
         original_stderr = $stderr
         $stderr.reopen("/dev/null", "w")
@@ -69,7 +69,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
 
     it "should parse xml input" do
-      filename_prot = "test/output.xml"
+      filename_prot = "test/test_files/output.xml"
       b = Validation.new(filename_prot)
       output = File.open(filename_prot, "rb").read
       iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
@@ -82,7 +82,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     end
 
     it "should parse tabular -6 input" do
-      filename_prot = "test/output.tab.6"
+      filename_prot = "test/test_files/output.tab.6"
       b = Validation.new(filename_prot)
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", b.type)
@@ -100,7 +100,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr.reopen("/dev/null", "w")
 
       begin
-        filename_prot = "test/output.tab.6"
+        filename_prot = "test/test_files/output.tab.6"
         b = Validation.new(filename_prot)
         output = File.open(filename_prot, "rb").read
         iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe", b.type)
@@ -114,7 +114,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     end
 
     it "should parse tabular -7 input" do
-      filename_prot = "test/output.tab.7"
+      filename_prot = "test/test_files/output.tab.7"
       b = Validation.new(filename_prot)
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", b.type)
@@ -127,7 +127,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     end
 
     it "should remove identical matches among protein sequences" do
-      filename_prot = "test/output.tab.6"
+      filename_prot = "test/test_files/output.tab.6"
       b = Validation.new(filename_prot)
       output = File.open(filename_prot, "rb").read
 
@@ -149,7 +149,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     end
 
     it "should remove identical matches among nucleotide sequences" do
-      filename_prot = "test/ncbi_mrna.xml"
+      filename_prot = "test/test_files/ncbi_mrna.xml"
       b = Validation.new(filename_prot)
       output = File.open(filename_prot, "rb").read
 
@@ -169,7 +169,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr.reopen("/dev/null", "w")
       error = false
       begin
-        filename_prot = "test/error.txt"
+        filename_prot = "test/test_files/error.txt"
         b = Validation.new(filename_prot)
         output = File.open(filename_prot, "rb").read
         b.parse_xml_output(output)
