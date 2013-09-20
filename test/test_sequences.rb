@@ -36,8 +36,8 @@ class TestSequenceClass < MiniTest::Unit::TestCase
 
       assert_equal seq.definition, value
       assert_equal seq.accession_no, value
-      assert_equal seq.xml_length, no
-      assert seq.xml_length.is_a? Fixnum
+      assert_equal seq.length_protein, no
+      assert seq.length_protein.is_a? Fixnum
     end
 
     it "should initialize hsp tabular attributes" do
