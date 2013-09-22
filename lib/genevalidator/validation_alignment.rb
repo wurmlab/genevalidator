@@ -344,13 +344,19 @@ class AlignmentValidation < ValidationTest
       sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}).to_json)
       f.close
 
+      yAxisValues = "sm, pred"
+      (1..ma.length-1).each do |i|
+         yAxisValues << ", hit#{ma.length - i}"
+      end
+
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :lines,
                                 "Multiple alignment and Statistical model of blast hits",
                                 "gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
                                 "alignment length",
                                 "idx",
-                                ma.length+1)
+                                ma.length+1,
+                                yAxisValues)
 
   end
 

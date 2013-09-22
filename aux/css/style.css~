@@ -17,12 +17,6 @@ table.tablesorter thead tr .headerSortDown {
     padding-right:20px !important;		
 }
 
-table.tablesorter thead tr .nosort {
-	background-image: none !important;
-	cursor: default !important;
-	pointer-events: none;
-}
-
 .table tbody td.success{
   color: #000000 !important;
   vertical-align: middle !important;

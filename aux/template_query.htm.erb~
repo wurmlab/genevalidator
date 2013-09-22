@@ -1,7 +1,7 @@
 <tr> 
 	<td><%= @idx %></td>
 	<td class="<%=bg_icon%>"> <%= overall_score %>% </td>		
-	<td><div name="ranking" score=<%= overall_score %>></div></td>
+	<td><div name="ranking nosort" score=<%= overall_score %>></div></td>
 	<td><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
 	<td><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>		
 	<td><%= @nr_hits %></td>

@@ -99,7 +99,10 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
 		  plot_bars(filename, target, title, legend, xtitle, ytitle, aux1)
 		  break;
 		case "lines":
-		  plot_lines(filename, target, title, legend, xtitle, ytitle, aux1)
+                  if(aux2 != "")
+	              aux2 = aux2.split(",");
+ 
+		  plot_lines(filename, target, title, legend, xtitle, ytitle, aux1, aux2)
 		  break;
 		default:
 		  break;
@@ -136,6 +139,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 	var margin = {top: 50, right: 150, bottom: 75, left: 50},
 		width = 600 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;		
+	var legend_width = 15
 
 	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
@@ -189,9 +193,9 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 			  .call(xAxis)
 			.append("text")
 			  .attr("class", "label")
-			  .attr("x", (width-xTitle.length)/2)
+			  .attr("x", width/2)
 			  .attr("y", 35)
-			  .style("text-anchor", "start")
+			  .style("text-anchor", "middle")
 			  .text(xTitle)
 
 	 	 svg.append("g")
@@ -248,7 +252,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 		  .attr("height", 10)
 		  .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
-	var chunkSize = 15
+	var chunkSize = legend_width
  	var length = array[0].length 
         
 	for (var j = 0; j < length; j += chunkSize) {
@@ -362,11 +366,12 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 }
 
 // line plot
-function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
+function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
 
 	var margin = {top: 50, right: 170, bottom: 75, left: 50},
 		width = 600 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;		
+        var legend_width = 17   
 
 	var x = d3.scale.linear()
 		.range([0, width]);
@@ -379,11 +384,11 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
 		.scale(x)
 		.orient("bottom")
 		.ticks(5);
+
 	var yAxis = d3.svg.axis()
 		.scale(y)
 		.orient("left")
-		.tickFormat(d3.format("d"))
-		.ticks(5);
+		.ticks(5)
 
 	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
@@ -400,6 +405,8 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
 
 	d3.json(filename, function(error, data) {
 
+	  var idx = -1
+
 	  x.domain([0, d3.max(data, function(d) { return d.stop; })]);
 	  y.domain(d3.extent(data, function(d) { return d.y; })).nice();
 
@@ -409,22 +416,40 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", (width-xTitle.length)/2)
+		  .attr("x", width/2)
 		  .attr("y", 35)
-		  .style("text-anchor", "start")
+		  .style("text-anchor", "middle")
 		  .text(xTitle)
 		  
-
-	  svg.append("g")
-		  .attr("class", "y axis")
-		  .call(yAxis)
-		.append("text")
-		  .attr("class", "label")
-		  .attr("transform", "rotate(-90)")
-		  .attr("x", -(height+yTitle.length)/2)
-		  .attr("y", -40)
-		  .style("text-anchor", "start")
-		  .text(yTitle)
+          if(yValues != ""){
+		  svg.append("g")
+			  .attr("class", "y axis")
+			  .call(yAxis
+		                .ticks(yValues.length)
+				.tickFormat(function (d) {		               
+		                   idx = idx + 1;
+				   return yValues[idx];
+	    			}))
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+	  }
+	  else{
+		  svg.append("g")
+			  .attr("class", "y axis")
+			  .call(yAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+	  }
 
 	  svg.selectAll(".dot")
 		  .data(data)
@@ -435,6 +460,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
 				  .attr("y2", function(d) { return y(d.y); })				  
 				  .attr("stroke-width", height/no_lines)
 				  .attr("stroke", function(d) { return color_beautification(d.color); })
+
 
 	});
 
@@ -457,7 +483,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
 		  .attr("height", 10)
 		  .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
-	var chunkSize = 15
+	var chunkSize = legend_width
  	var length = array[0].length 
         
 	for (var j = 0; j < length; j += chunkSize) {
@@ -470,5 +496,6 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines){
             h += 1
     	}
     }
+
 }
 
