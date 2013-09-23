@@ -7,13 +7,13 @@
 	<td><%= @nr_hits %></td>
 	<% @validations.each do |item| %>	    
    	    <% if item.validation_report.plot_files != nil %>
-	   	    <td class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" onclick="
+	   	    <td  title='<%=item.header%>' class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" onclick="
 		showDiv(this, '<%= toggle %>');
 		<% item.validation_report.plot_files.each do |plot| %>  			
   		addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
              	<% end %> "><%= item.validation_report.print %></td> 	
   	    <% else %>
-  		    <td class = <%=item.validation_report.color%>><%=item.validation_report.print%><%end%></td>
+  		    <td title='<%=item.header%>' class = <%=item.validation_report.color%>><%=item.validation_report.print%><%end%></td>
 	<% end %>
 	<td>
  <% if @validations.select{|item| item.validation_report.plot_files != nil}.map{|item| item.validation_report.plot_files.length}.inject(0){|r, e| r+e } == 0 %>	    
