@@ -353,6 +353,10 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 	   if(slope!=undefined && yLine!=undefined){
 		yLine = parseFloat(yLine.replace(",", "."));
 		var yValue = yLine + slope * xMax
+		if (yValue > yMax){
+ 			xMax = (yMax-yLine)/slope
+			yValue = yMax
+		}
 		svg.append("line")
 		  .attr("x1", 0)
 		  .attr("y1", y(yLine))				  
