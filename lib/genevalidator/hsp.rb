@@ -26,12 +26,20 @@ class Hsp
   ##
   # Initializes the corresponding attribute of the hsp
   # with respect to the column name of the tabular blast output
-  def init_tabular_attribute(column, value)
+  def init_tabular_attribute(column, value, type=:protein)
     case column
       when "qstart"
-        @match_query_from = value.to_i
+        if type == :nucleotide
+          @match_query_from = (value.to_i/3)+1
+        else
+          @match_query_from = value.to_i
+        end
       when "qend"
-        @match_query_to = value.to_i
+        if type == :nucleotide
+          @match_query_to = (value.to_i/3) + 1
+        else
+          @match_query_to = value.to_i
+        end
       when "qframe"
         @query_reading_frame = value.to_i
       when "sstart"
@@ -45,7 +53,7 @@ class Hsp
       when "length"
         @align_len = value.to_i
       when "pident"
-        @pidentity = value.to_i
+        @pidentity = value.to_f
       when "evalue"
         @hsp_evalue = value.to_f
     end

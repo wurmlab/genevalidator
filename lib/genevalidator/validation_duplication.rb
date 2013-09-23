@@ -73,7 +73,7 @@ class DuplicationValidation < ValidationTest
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
-
+      useless_hits = []
       begin
         # get raw sequences for less_hits
         less_hits.map do |hit|
@@ -84,11 +84,16 @@ class DuplicationValidation < ValidationTest
             else
               hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
             end
+            if hit.raw_sequence == ""
+              useless_hits.push(hit)
+            end
           end
         end
         rescue Exception => error
           raise NoInternetError
       end
+      useless_hits.each{|hit| less_hits.delete(hit)}
+
       averages = []
 
       less_hits.each do |hit|
@@ -101,15 +106,6 @@ class DuplicationValidation < ValidationTest
             hit_alignment = hsp.hit_alignment
             query_alignment = hsp.query_alignment
           else
-            #get gene by accession number
-            if hit.raw_sequence == nil
-              if hit.seq_type == :protein
-                hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-              else
-                hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
-              end
-            end
-
             # indexing in blast starts from 1
             hit_local = hit.raw_sequence[hsp.hit_from-1..hsp.hit_to-1]
             query_local = prediction.raw_sequence[hsp.match_query_from-1..hsp.match_query_to-1]
@@ -159,7 +155,9 @@ class DuplicationValidation < ValidationTest
           end
         end
         overlap = coverage.reject{|x| x==0}
-        averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
+        if overlap != []
+          averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
+        end
       end
     
       # if all hsps match only one time

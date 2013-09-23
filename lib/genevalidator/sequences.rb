@@ -40,7 +40,6 @@ class Sequence
   def get_sequence_by_accession_no(accno, db)
 
     uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}&retmax=1&usehistory=y&term=#{accno}/"
-    #puts uri
     result = Net::HTTP.get(URI.parse(uri))
 
     result2 = result
@@ -48,7 +47,6 @@ class Sequence
     webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
 
     uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{db}&query_key=#{queryKey}&WebEnv=#{webEnv}"
-
     result = Net::HTTP.get(URI.parse(uri))
 
     #parse FASTA output
@@ -57,6 +55,10 @@ class Sequence
     header = rec[0..nl-1]
     seq = rec[nl+1..-1]
     @raw_sequence = seq.gsub!(/\n/,'')
+    unless  @raw_sequence.index(/ERROR/) == nil
+      @raw_sequence = ""
+    end
+    @raw_sequence
   end
 
   ##

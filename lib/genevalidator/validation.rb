@@ -102,9 +102,8 @@ class Validation
 
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
-      exit
+      exit 3
     rescue FileNotFoundException => error
-      puts error.backtrack
       $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
       exit 
     end
@@ -160,39 +159,46 @@ class Validation
     begin
       iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       iterator_tab = TabularParser.new(output, tabular_format, @type)
-
+      input_file_type = :xml
       begin
         @idx = @idx + 1
         begin
-          # check xml format
-          if @idx < @start_idx
-            iter = iterator_xml.next
-          else
-            hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
-            if hits == nil
-              @idx = @idx -1
-              break
+          if input_file_type == :xml
+            # check xml format
+            if @idx < @start_idx
+              iter = iterator_xml.next
+            else
+              hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
+              if hits == nil
+                @idx = @idx -1
+                break
+              end
+              do_validations(hits)
             end
-            do_validations(hits)
+          else 
+            raise Exception
           end
-
         rescue Exception => error
-#          puts error.backtrace
-          if @tabular_format == nil and @xml_file!= nil
-            puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns\n"
-          end
-          #check tabular format
-  #        puts error.backtrace 
-          if @idx < @start_idx
-            iterator_tab.next          
-          else
-
-            hits = iterator_tab.next
-            if hits == nil
-              @idx = @idx -1
-              break
+          begin 
+            input_file_type = :tabular
+#            puts error.backtrace
+            if @tabular_format == nil and @xml_file!= nil
+              puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
             end
-            do_validations(hits)
+            #check tabular format
+            if @idx < @start_idx
+              iterator_tab.jump_next          
+            else
+              hits = iterator_tab.next
+              if hits == nil
+                @idx = @idx -1
+                break
+              end
+              do_validations(hits)
+            end
+          rescue Exception => error
+            $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neighter xml nor tabular.\n"
+            exit
           end
         end
       end while 1
@@ -310,6 +316,7 @@ class Validation
       $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: At least two validations have the same CLI alias\n"
       exit!
     rescue Exception => error
+      puts error.backtrace
       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit!
     end
@@ -318,7 +325,9 @@ class Validation
     query_output.print_output_console
     query_output.print_output_file_yaml
   rescue Exception => error
+    puts error.backtrace
     $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+    exit
   end
 
   end

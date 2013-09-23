@@ -20,12 +20,12 @@ class TabularParser
     @content = content.gsub(/#.*\n/,"")
     @content_iterator = @content
     if format == nil
-      format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
+      @format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
     else 
       @format = format.gsub(/[-\d]/,"")
     end
 
-    @column_names = format.split(/[ ,]/)
+    @column_names = @format.split(/[ ,]/)
     @type = type
     @query_id_idx = @column_names.index("qseqid")
     @hit_id_idx = @column_names.index("sseqid")
@@ -33,6 +33,25 @@ class TabularParser
 
   def has_next
     return @content_iterator.length > 0
+  end
+
+  #Gets to the next query 
+  def jump_next
+    if has_next
+      # get current query id
+      # search for the endline
+      first_row = @content_iterator.scan(/([^\n]*)\n/)
+
+      unless first_row[0][0].scan(/\t/).length + 1 == @column_names.length
+        raise InconsistentTabularFormat
+      end
+
+      query_id = first_row.join().split("\t")[query_id_idx]
+      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}[^\n]*/)
+
+      next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1
+      @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]
+    end
   end
  
   #Returns the next query output
@@ -43,6 +62,7 @@ class TabularParser
       end
 
       # get current query id
+      # search for the endline
       first_row = @content_iterator.scan(/([^\n]*)\n/)
 
       unless first_row[0][0].scan(/\t/).length + 1 == @column_names.length
@@ -50,7 +70,7 @@ class TabularParser
       end
 
       query_id = first_row.join().split("\t")[query_id_idx]
-      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\|").gsub(".","\.")}[^\n]*/)
+      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}[^\n]*/)
 
       next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1  
       @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]
@@ -71,7 +91,7 @@ class TabularParser
         hsps.each do |hsp_array|
           hsp = Hsp.new
           column_names.each_with_index do |column, i|
-            hsp.init_tabular_attribute(column, hsp_array[i])
+            hsp.init_tabular_attribute(column, hsp_array[i], @type)
           end
           hit_seq.hsp_list.push(hsp)
         end 

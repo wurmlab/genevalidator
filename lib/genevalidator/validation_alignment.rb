@@ -73,7 +73,7 @@ class AlignmentValidation < ValidationTest
 
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
-     
+      useless_hits = []
       begin
         # get raw sequences for less_hits
         less_hits.map do |hit| 
@@ -84,9 +84,14 @@ class AlignmentValidation < ValidationTest
             else
               hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
             end
+            if hit.raw_sequence == ""
+              useless_hits.push(hit)
+            end         
           end
         end
       end
+      useless_hits.each{|hit| less_hits.delete(hit)}
+
       begin
         # multiple align sequences from  less_hits with the prediction
         multiple_align_mafft(prediction, less_hits)
