@@ -11,6 +11,7 @@ class ValidationTest
   attr_accessor :cli_name
   attr_accessor :description
   attr_accessor :validation_report
+  attr_accessor :running_time
 
   ##
   # Initilizes the object
@@ -25,6 +26,7 @@ class ValidationTest
     @hits = hits
     @short_header = "NewVal"
     @header = "New Validation"
+    @running_time = 0
     @cli_name = "all"
     @description = "No description available."
     @validation_report = ValidationReport.new("Not enough evidence")

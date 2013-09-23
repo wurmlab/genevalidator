@@ -71,6 +71,7 @@ class DuplicationValidation < ValidationTest
                              prediction.raw_sequence != nil and 
                              hits[0].is_a? Sequence 
 
+      start = Time.new
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
       useless_hits = []
@@ -163,13 +164,14 @@ class DuplicationValidation < ValidationTest
       # if all hsps match only one time
       if averages.reject{|x| x==1} == []
         @validation_report = DuplciationValidationOutput.new(1)
+        @running_time = Time.now - start
         return @validation_report
       end
 
       pval = wilcox_test_R(averages)
 
       @validation_report = DuplciationValidationOutput.new(pval)        
-
+      @running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
@@ -178,14 +180,15 @@ class DuplicationValidation < ValidationTest
       return @validation_report
     rescue NoMafftInstallationError
       @validation_report = ValidationReport.new("Unexpected error", :error)
-      @validation_report.errors.push "[Duplication Validation] Mafft path installation exception. Please provide a correct instalation path"                          
+      @validation_report.errors.push NoMafftInstallationError                          
       return @validation_report
     rescue NoInternetError
       @validation_report = ValidationReport.new("Unexpected error", :error)
-      @validation_report.errors.push "[Duplication Validation] Connection to internat fail. Unable to retrieve raw sequences"
+      @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
       puts error.backtrace
+      @validation_report.errors.push OtherError
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
     end

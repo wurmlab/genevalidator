@@ -84,6 +84,8 @@ class GeneMergeValidation < ValidationTest
       raise NotEnoughHitsError unless hits.length >= 5
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
+      start = Time.now
+
       lm_slope = slope[1]
       y_intercept = slope[0]
 
@@ -93,13 +95,17 @@ class GeneMergeValidation < ValidationTest
       @validation_report.plot_files.push(plot1)
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
+      @running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
     else
+      @validation_report.errors.push OtherError 
       @validation_report = ValidationReport.new("Unexpected error")
+      return @validation_report
     end
   
   end

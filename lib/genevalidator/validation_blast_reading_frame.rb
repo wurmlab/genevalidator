@@ -70,6 +70,7 @@ class BlastReadingFrameValidation < ValidationTest
     begin
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
 
+      start = Time.now
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report
@@ -83,7 +84,8 @@ class BlastReadingFrameValidation < ValidationTest
       @prediction.nucleotide_rf = frames_histo.select{|k,v| v==main_rf}.first.first
 
       @validation_report = BlastRFValidationOutput.new(frames_histo)
-
+      @running_time = Time.now - start
+      return @validation_report
     # Exception is raised when blast founds no hits
     rescue Exception => error
       ValidationReport.new("Not enough evidence")

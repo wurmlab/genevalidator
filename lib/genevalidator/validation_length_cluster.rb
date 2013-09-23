@@ -70,6 +70,7 @@ class LengthClusterValidation < ValidationTest
       raise Exception unless prediction.is_a? Sequence and 
                              hits[0].is_a? Sequence 
 
+      start = Time.now
       # get [clusters, max_density_cluster_idx]
       clusterization = clusterization_by_length 
 
@@ -83,14 +84,18 @@ class LengthClusterValidation < ValidationTest
       @validation_report.plot_files.push(plot1)
       plot2 = plot_len_clusters
       @validation_report.plot_files.push(plot2)
+      @running_time = Time.now - start
 
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
     else 
       @validation_report = ValidationReport.new("Unexpected error")
+      @validation_report.errors.push OtherError
+      return @validation_report
     end       
   end
 

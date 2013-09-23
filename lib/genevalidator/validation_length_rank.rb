@@ -68,6 +68,8 @@ class LengthRankValidation < ValidationTest
       raise Exception unless prediction.is_a? Sequence and 
                              hits[0].is_a? Sequence 
 
+      start = Time.now
+
       lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
       len = lengths.length
       median = len % 2 == 1 ? 
@@ -96,7 +98,7 @@ class LengthRankValidation < ValidationTest
       end
 
       @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
-
+      @running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
@@ -104,6 +106,7 @@ class LengthRankValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
      else
       @validation_report = ValidationReport.new("Unexpected error")
+      @validation_report.errors.push OtherError
     end
 
   end

@@ -13,6 +13,7 @@ class ValidationReport
   attr_reader :expected
   attr_reader :validation_result
   attr_reader :errors
+
   ##
   # Initilizes the object
   # Params:  

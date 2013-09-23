@@ -70,7 +70,7 @@ class AlignmentValidation < ValidationTest
 
       raise NotEnoughHitsError unless hits.length >= n
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
-
+      start = Time.new
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
       useless_hits = []
@@ -113,23 +113,26 @@ class AlignmentValidation < ValidationTest
       consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
       @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)        
       @validation_report.plot_files.push(plot1)
-
+      @running_time = Time.now - start
       return @validation_report
+
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue NoMafftInstallationError
       @validation_report = ValidationReport.new("Unexpected error", :error)
-      @validation_report.errors.push "[Alignment Validation] Mafft path installation exception. Please provide a correct instalation path"
+      @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
       @validation_report = ValidationReport.new("Unexpected error", :error)
-      @validation_report.errors.push "[Alignment Validation] Connection to internat fail. Unable to retrieve raw sequences"
+      @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
       puts error.backtrace
+      @validation_report.errors.push "Unexpected Error"
       @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report.errors.push OtherError
       return @validation_report
     end
   end

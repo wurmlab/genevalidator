@@ -12,7 +12,6 @@ require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
 require 'bio-blastxmlparser'
-#require 'rinruby'
 require 'net/http'
 require 'open-uri'
 require 'uri'
@@ -30,8 +29,10 @@ class Validation
   # current number of the querry processed
   attr_reader :idx
   attr_reader :start_idx
-  #array of indexes for the start offsets of each query in the fasta file
+  # array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
+  # list with all validation reports
+  attr_reader :all_query_outputs
 
   attr_reader :vlist
   attr_reader :tabular_format
@@ -89,6 +90,7 @@ class Validation
       @yaml_path = path
 
       @filename = File.basename(@fasta_filepath)#.scan(/\/([^\/]+)$/)[0][0]
+      @all_query_outputs = []
 
       # create 'html' directory
       FileUtils.rm_rf(@html_path)
@@ -143,6 +145,41 @@ class Validation
         file = File.open(@xml_file, "rb").read
         #check the format of the input file
         parse_xml_output(file)      
+      end
+     
+      puts ""
+      puts "Overall evaluation"
+      # how many genes are good
+=begin
+      all_query_outputs.each do |validations| 
+        successes = validations.map{|v| v.validation_report.result == v.validation_report.expected}.count(true)
+        fails = validations.map{|v| v.validation_report.validation != :unapplicable and v.validation_report.validation != :error and
+          v.validation_report.result != v.validation_report.expected}.count(true)
+        unknown = validations.length - successes - fails
+        overall_score = (successes*100/(successes + fails + 0.0)).round(0)
+      end
+      pass_tests1 = score1.count(true)
+=end
+
+      # Running time statistics
+      running_times = {}
+      all_query_outputs[0].validations.each do |v|
+        if v.running_time != 0 and v.running_time != nil and v.validation_report.validation != :unapplicable
+          running_times[v.short_header] = []
+        end
+      end
+
+      all_query_outputs.each do |output|
+        output.validations.each do |v|
+          if v.running_time != 0 and v.running_time != nil and v.validation_report.validation != :unapplicable
+            running_times[v.short_header].push v.running_time    
+          end
+        end
+      end
+
+      running_times.each do |key, array|
+        average_time = array.inject{ |sum, el| sum + el }.to_f / array.size
+        puts "Running time for #{key} Validation: #{average_time}s per validation"
       end
 
     rescue SystemCallError => error
@@ -324,6 +361,7 @@ class Validation
     query_output.generate_html
     query_output.print_output_console
     query_output.print_output_file_yaml
+    @all_query_outputs.push(query_output)
   rescue Exception => error
     puts error.backtrace
     $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"

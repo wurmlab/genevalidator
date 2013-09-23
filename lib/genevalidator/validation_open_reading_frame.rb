@@ -78,7 +78,7 @@ class OpenReadingFrameValidation < ValidationTest
       raise NotEnoughHitsError unless hits.length >= 5
       raise Exception unless prediction.is_a? Sequence and 
                              hits[0].is_a? Sequence 
-
+      start = Time.new
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report
@@ -106,14 +106,16 @@ class OpenReadingFrameValidation < ValidationTest
 
 
       @validation_report = ORFValidationOutput.new(orfs, ratio)
-
+      @running_time = Time.now - start
+      return @validation_report
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
-      return ValidationReport.new("Not enough evidence")
+      @validation_report.errors.push OtherError
+      return ValidationReport.new("Unexpected error")
     end
   end
 

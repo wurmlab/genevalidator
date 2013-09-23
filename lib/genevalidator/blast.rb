@@ -45,7 +45,8 @@ class BlastUtils
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
       exit
     rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: BLAST installation path is not in the LOAD PATH. Please provide the -blast argument\n" 
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: BLAST installation path is not in the LOAD PATH.\n" 
+
       exit 
     end
   end
