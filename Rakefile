@@ -14,13 +14,6 @@ task :test do
   end
 end
 
-desc "Computes some statistics for no of positive / false positive/negative results"
-task :output do
-  fname = ENV["FILE"] || "data/one_direction_gene_merge/one_direction_gene_merge_proteins"
-  type = ENV["TYPE"] || "protein"  
-  exec("ruby test_output/test_output.rb #{fname} #{type}")
-end
-
 desc "Generates documentation"
 task :doc do
   exec("yardoc 'lib/**/*.rb'")
