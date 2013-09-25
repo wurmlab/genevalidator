@@ -1,26 +1,26 @@
 /* table sorter */
 
-table.tablesorter thead tr .header {
-	background-image: url(../img/bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right !important;
+table.tablesorter thead th.sort.header {
+background-image: url(../img/bg.gif);
+background-repeat: no-repeat;
+background-position: center right !important;
     padding-right:20px !important;	
-	cursor: pointer;
+cursor: pointer;
 }
 
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(../img/asc.gif);
-    padding-right:20px !important;		
+table.tablesorter thead th.sort.headerSortUp {
+background-image: url(../img/asc.gif);
+    padding-right:20px !important;	
 }
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(../img/desc.gif);
-    padding-right:20px !important;		
+table.tablesorter thead th.sort.headerSortDown {
+background-image: url(../img/desc.gif);
+    padding-right:20px !important;	
 }
 
 table.tablesorter thead tr .nosort {
-	background-image: none !important;
-	cursor: default !important;
-	pointer-events: none;
+background-image: none !important;
+cursor: default !important;
+pointer-events: none;
 }
 
 .table tbody td.success{
@@ -28,23 +28,23 @@ table.tablesorter thead tr .nosort {
   vertical-align: middle !important;
   padding-left:30px !important;	
  
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-image: url(../img/yes-icon.png);
-  background-position: left center; 
-  background-color: #dff0d8 !important;  
-  /* white-space:nowrap;    */
-} 
+  background-position: left center;
+  background-color: #dff0d8 !important;
+  /* white-space:nowrap; */
+}
 
 .table tbody td.danger{
   color: #000000 !important;
   vertical-align: middle !important;
   padding-left:30px !important;	
  
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-image: url(../img/no-icon.png);
-  background-position: left center;   
-  background-color: #f2dede !important; /*#FF6666; */ 
-  /* white-space:nowrap;  */
+  background-position: left center;
+  background-color: #f2dede !important; /*#FF6666; */
+  /* white-space:nowrap; */
 }
 
 .table tbody td.warning{
@@ -52,31 +52,32 @@ table.tablesorter thead tr .nosort {
   vertical-align: middle !important;
   padding-left:30px !important;	
  
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-image: url(../img/w-icon.png);
-  background-position: left center;   
-  background-color: #f2dede !important; /*#FF6666; */ 
-  /* white-space:nowrap;  */
+  background-position: left center;
+  background-color: #f2dede !important; /*#FF6666; */
+  /* white-space:nowrap; */
 }
 
 .table td {
-  vertical-align: middle !important;  	
+  vertical-align: middle !important;
 }
 
 .table th,
 .table thead td {
+  background-color: #E8E8E8 !important;
   vertical-align: middle !important;
   white-space: nowrap !important;
   padding-right:20px !important;
 }
 /*
 thead {
-  background-color: #ffffff;
-  position:fixed;    
+background-color: #ffffff;
+position:fixed;
 }
 
 tbody{
-  padding-top:150px;
+padding-top:150px;
 }*/
 
 .container {
@@ -86,17 +87,17 @@ tbody{
 .background_image {
   background-image: url(../img/gene.png);
   background-repeat: no-repeat;
-  background-position: left; 
+  background-position: left;
 }
 
 .my-btn-success {
-	cursor: pointer !important;
+cursor: pointer !important;
     border: outset;
     border-color:#98bf21;
 }
 
 .my-btn-danger {
-	cursor: pointer !important;    
+cursor: pointer !important;
     border: outset;
     border-color:#C00000;
 }
@@ -144,7 +145,7 @@ thead {
 
 [id^="toggle"] {
   text-align:center;
-} 
+}
 
 .popover {
   text-align: justify !important;
@@ -189,7 +190,7 @@ thead {
   font-style: normal;
 }
 /* FONT AWESOME CORE
- * -------------------------- */
+* -------------------------- */
 [class="icon-bar-chart"],
 [class=" icon-bar-chart"] {
   font-family: FontAwesome;
@@ -205,6 +206,3 @@ thead {
   display: inline-block;
   speak: none;
 }
-
-
-

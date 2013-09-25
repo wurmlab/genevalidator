@@ -20,26 +20,27 @@
 	</head>
 	<body>
 	<div class="container">
-    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
-        <thead>
-    		<tr>        		
-    			<td  colspan=<%=validations.length + 7%> class="background_image">
+
+    				
+	<div  colspan=<%=validations.length + 7%> class="background_image">
     				<h1>Gene Validator</h1>
     				<h3>identifies problems with gene predictions, based on similarities to genes in public databases</h3>
-    				<br/></td></tr>
-    		<tr>
-    			<td  colspan=<%=validations.length + 7%>>
+    				<br/></div>
+    	<div> 
     				<h4> Validation results for <i><%= @filename %>:</i></h4>
        			<div align = "right">
-    			<button class="btn btn-info btn-large" id=all_plots onclick="show_all_plots(this)">			 			 
+    			<button class="btn btn-disabled" id=all_plots onclick="show_all_plots(this)">			 			 
     				<i class="icon-bar-chart"></i> &nbsp;&nbsp;&nbsp;<b>Show all plots</b>
-    			</button></div><br></td>
-    		</tr>      		        
+    			</button></div><br>
+    	</div> 
+
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
+        <thead>     		        
         	<tr id="header">
             	<th>#</th>        	
-          	<th>Score</th>
-		<th class="nosort">Ranking</th>
-                <th>
+          	<th class="sort">Score</th>
+		<th>Ranking</th>
+                <th class="sort">
                 	Identifier
 	                <a href="#" class="my_popover" rel="popover" 
 	                	data-content="Query identifier as it apears in the input fasta file." 
@@ -47,7 +48,7 @@
     	            		<i class="icon-question-sign"></i>
     	           	</a>                 	
                 </th>            	
-                <th>
+                <th class="sort">
                 	Description
 	                <a href="#" class="my_popover" rel="popover" 
 	                	data-content="Description of the query as it apears in the input fasta file." 
@@ -55,7 +56,7 @@
     	            		<i class="icon-question-sign"></i>
     	           	</a>                 	
                 </th>
-                <th>
+                <th class="sort">
                 	No. Hits
 	                <a href="#" class="my_popover" rel="popover" 
 	                	data-content="Number of hits found by BLAST." 
@@ -65,7 +66,7 @@
                 </th>
                 <% @validations.each do |item| %>                        	            
                 	<th>
-                		<%= item.header %>
+                		<b><%= item.header %></b>
 	                	<a href="#" class="my_popover" rel="popover" 
 	                	data-content="<%=item.description%>" 
 	                	data-placement="top">

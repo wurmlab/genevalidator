@@ -90,11 +90,7 @@ function showDiv(source, target){
 
 function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, aux2){
 
-        if (footer == '')
-          var legend = []
-        else
-	  var legend = footer.split(";");
-
+        var legend = footer.split(";");
 	switch(type){
 		case "scatter":
 		  plot_scatter(filename, target, title, footer, xtitle, ytitle, aux1, aux2)
@@ -481,7 +477,6 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .attr('transform', 'translate(-20,50)')    
       
     var h = 0
-
     for (var i = 0; i < footer.length; i++) {
         
 	var array = footer[i].split(","); 
@@ -491,7 +486,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 	      .attr("y", 15*h)
 		  .attr("width", 10)
 		  .attr("height", 10)
-		  .style("fill", color_beautification(array[i].replace(/\s+/g, '')))
+		  .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
 	var chunkSize = legend_width
  	var length = array[0].length 
