@@ -27,7 +27,7 @@ class Validation
   attr_reader :mafft_path
   attr_reader :filename
   # current number of the querry processed
-  attr_reader :idx
+  attr_accessor :idx
   attr_reader :start_idx
   # array of indexes for the start offsets of each query in the fasta file
   attr_reader :query_offset_lst
