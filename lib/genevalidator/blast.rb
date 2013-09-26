@@ -164,7 +164,6 @@ class BlastUtils
       return hits
 
     rescue TypeError => error
-      puts error.backtrace
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: you didn't call parse method first!\n"       
       exit!

@@ -5,6 +5,7 @@ class Sequence
   attr_accessor :type #protein | mRNA
   attr_accessor :id
   attr_accessor :definition
+  attr_accessor :identifier
   attr_accessor :species
   attr_accessor :accession_no
   attr_accessor :length_protein

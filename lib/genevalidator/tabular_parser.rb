@@ -61,9 +61,11 @@ class TabularParser
   end
  
   # Returns the next query output
+  # +identifier+: +String+, the identifier of the next expected query
+  # if the identifier is nil, it takes the next query
   # Output:
   # Array of +Sequence+ objects corresponding to hits
-  def next
+  def next(identifier = nil)
     begin
       unless has_next
         return nil
@@ -78,6 +80,10 @@ class TabularParser
       end
 
       query_id = first_row.join().split("\t")[query_id_idx]
+      if (identifier != nil and query_id != identifier)
+        return []
+      end
+ 
       hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}[^\n]*/)
 
       next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1  

@@ -183,7 +183,28 @@ class Validation
       iterator_tab = TabularParser.new(output, tabular_format, @type)
       input_file_type = :xml
       begin
+        # get info about the query
+        # get the @idx-th sequence  from the fasta file
+
+        prediction = Sequence.new    
+        if @idx+1 == @query_offset_lst.length
+          break
+        end
+        query = IO.binread(@fasta_filepath, @query_offset_lst[@idx+1] - @query_offset_lst[@idx], @query_offset_lst[@idx])
+        parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+
+        prediction.definition = parse_query[0].gsub("\n","")
+        prediction.identifier = prediction.definition.scan(/([^ ]+)/)[0][0]
+        prediction.type = @type
+        prediction.raw_sequence = parse_query[1].gsub("\n","")
+
+        prediction.length_protein = prediction.raw_sequence.length
+        if @type == :nucleotide
+          prediction.length_protein /= 3    
+        end
+
         @idx = @idx + 1
+
         begin
           if input_file_type == :xml
             # check xml format
@@ -195,7 +216,7 @@ class Validation
                 @idx = @idx -1
                 break
               end
-              do_validations(hits)
+              do_validations(prediction, hits)
             end
           else 
             raise Exception
@@ -214,12 +235,12 @@ class Validation
             if @idx < @start_idx
               iterator_tab.jump_next          
             else
-              hits = iterator_tab.next
+              hits = iterator_tab.next(prediction.identifier)
               if hits == nil
                 @idx = @idx -1
                 break
               end
-              do_validations(hits)
+              do_validations(prediction, hits)
             end
           rescue SequenceTypeError => error
             $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
@@ -271,8 +292,9 @@ class Validation
   # +hits+: Array of +Sequence+ objects
   # Output:
   # Array +Output+ object
-  def do_validations(hits)
+  def do_validations(prediction, hits)
     begin
+=begin
     prediction = Sequence.new
 
     # get info about the query
@@ -282,6 +304,7 @@ class Validation
     parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
     prediction.definition = parse_query[0].gsub("\n","")
+    prediction.identifier = prediction_definition.scan(/([^ ]+)/)[0][0] 
     prediction.type = @type
     prediction.raw_sequence = parse_query[1].gsub("\n","")
 
@@ -289,11 +312,10 @@ class Validation
     if @type == :nucleotide
       prediction.length_protein /= 3
     end
-
+=end
     begin
       hits = remove_identical_hits(prediction, hits)
       rescue Exception => error #NoPIdentError
-      puts error.backtrace 
     end
     
     # do validations
@@ -361,7 +383,6 @@ class Validation
         "Possible cause: At least two validations have the same CLI alias\n"
       exit!
     rescue Exception => error
-      puts error.backtrace
       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit!
     end
@@ -371,7 +392,6 @@ class Validation
     query_output.print_output_file_yaml
     @all_query_outputs.push(query_output)
   rescue Exception => error
-    puts error.backtrace
     $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
     exit
   end
