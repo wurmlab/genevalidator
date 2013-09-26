@@ -1,0 +1,1429 @@
+---
+!binary "Z2l8NTE0NzQ2OTYxfHJlZnxYTV8wMDUwMTk3NDguMXw=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 23
+  - 135
+  prediction_len: 108
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_1_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 108
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_1_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 499
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.46
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 500
+  msg: ! '1:500; '
+  expected: :yes
+  result: :yes
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.10894686427131703
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_1_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 98.11174117913772
+    aux2: -0.10894686427131703
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_1_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 499
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 0
+      - 324
+    2:
+    - - 202
+      - 324
+    3: []
+    -1:
+    - - 0
+      - 234
+    -2:
+    - - 0
+      - 263
+    -3: []
+  ratio: 1.0
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_1_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "Z2l8NTE0NzQ2OTYxfHJlZnxYTV8wMDUwMTk3NDguMXxkdXA=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 23
+  - 77
+  prediction_len: 163
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_2_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 163
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_2_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 355
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.05
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 347
+    1: 305
+  msg: ! '2:347; 1:305; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.08006363021677941
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_2_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 142.61444585692342
+    aux2: 0.08006363021677941
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_2_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 355
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 0
+      - 490
+    2:
+    - - 202
+      - 490
+    3:
+    - - 368
+      - 490
+    -1:
+    - - 0
+      - 400
+    -2:
+    - - 0
+      - 429
+    -3: []
+  ratio: 1.0
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_2_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "Z2l8MjUxODIzODE3fHJlZnxOTV8wMTA3ODUuMnw=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1023
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_3_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1023
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_3_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 138
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.01
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    3: 141
+  msg: ! '3:141; '
+  expected: :yes
+  result: :yes
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.13277234937274
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_3_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 679.2346471880255
+    aux2: -0.13277234937274
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_3_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 138
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3071
+    2:
+    - - 262
+      - 3071
+    3:
+    - - 158
+      - 3071
+    -1:
+    - - 0
+      - 2927
+    -2:
+    - - 0
+      - 2854
+    -3:
+    - - 0
+      - 3042
+  ratio: 0.9905568218821231
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_3_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "Z2l8MjUxODIzODE3fHJlZnxOTV8wMTA3ODUuMnxkdXA=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1327
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_4_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1327
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_4_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 139
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 133
+    3: 137
+  msg: ! '1:133; 3:137; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.05525373940476495
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_4_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 958.1940402567192
+    aux2: -0.05525373940476495
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_4_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 139
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3981
+    2:
+    - - 262
+      - 3981
+    3:
+    - - 158
+      - 3981
+    -1:
+    - - 0
+      - 3837
+    -2:
+    - - 0
+      - 3764
+    -3:
+    - - 0
+      - 3952
+  ratio: 0.9927153981411706
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_4_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "Z2l8MjUxODIzODE3fHJlZnxOTV8wMTA3ODUuMnxkdXAy":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 665
+  - 749
+  prediction_len: 1303
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_5_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1303
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_5_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 136
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 125
+    3: 129
+    2: 105
+  msg: ! '1:125; 3:129; 2:105; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.05647983265453941
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_5_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 892.0730052958786
+    aux2: -0.05647983265453941
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_5_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 136
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 339
+      - 3911
+    2:
+    - - 262
+      - 3911
+    3:
+    - - 158
+      - 3911
+    -1:
+    - - 0
+      - 3767
+    -2:
+    - - 0
+      - 3694
+    -3:
+    - - 0
+      - 3882
+  ratio: 0.9925850166197904
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_5_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwMjI=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 407
+  - 663
+  prediction_len: 1625
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_6_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1625
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_6_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 106
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    3: 66
+    1: 97
+  msg: ! '3:66; 1:97; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.04774775230403988
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_6_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 1287.0878928250347
+    aux2: 0.04774775230403988
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_6_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 106
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 471
+      - 4876
+    2:
+    - - 412
+      - 4876
+    3:
+    - - 548
+      - 4876
+    -1:
+    - - 0
+      - 4807
+    -2:
+    - - 0
+      - 4698
+    -3:
+    - - 0
+      - 4841
+  ratio: 0.9928219852337982
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_6_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwNjE=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 376
+  - 377
+  prediction_len: 466
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_7_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 466
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_7_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 500
+    2: 1000
+    3: 1
+  msg: ! '1:500; 2:1000; 3:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.016185621336187433
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_7_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 256.77396921783145
+    aux2: 0.016185621336187433
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_7_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 500
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :yes
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 438
+      - 1398
+    2:
+    - - 10
+      - 1398
+    3:
+    - - 113
+      - 1398
+    -1:
+    - - 0
+      - 1389
+    -2:
+    - - 0
+      - 833
+    -3:
+    - - 0
+      - 1393
+  ratio: 0.9964234620886981
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_7_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwMzc=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 684
+  - 901
+  prediction_len: 1325
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_8_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1325
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_8_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 243
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 445
+    1: 1
+    -2: 1
+  msg: ! '2:445; 1:1; -2:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.1520639946896159
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_8_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 957.3537385375391
+    aux2: 0.1520639946896159
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_8_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 243
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 15
+      - 3976
+    2:
+    - - 58
+      - 3976
+    3:
+    - - 38
+      - 3976
+    -1:
+    - - 0
+      - 3922
+    -2:
+    - - 0
+      - 3960
+    -3:
+    - - 0
+      - 3947
+  ratio: 0.9962273641851107
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_8_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwMzg=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 684
+  - 901
+  prediction_len: 1325
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_9_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1325
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_9_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 242
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 443
+    1: 1
+    -2: 1
+  msg: ! '2:443; 1:1; -2:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.14470096668923316
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_9_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 956.5541706952295
+    aux2: 0.14470096668923316
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_9_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 242
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 15
+      - 3976
+    2:
+    - - 58
+      - 3976
+    3:
+    - - 38
+      - 3976
+    -1:
+    - - 0
+      - 3922
+    -2:
+    - - 0
+      - 3960
+    -3:
+    - - 0
+      - 3947
+  ratio: 0.9962273641851107
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_9_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwMzk=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 698
+  - 1213
+  prediction_len: 1618
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_10_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1618
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_10_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 348
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 467
+    1: 1
+    -3: 1
+  msg: ! '2:467; 1:1; -3:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.5419385054198462
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :yes
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_10_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 698.0406220931352
+    aux2: 0.5419385054198462
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_10_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 348
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 15
+      - 4856
+    2:
+    - - 58
+      - 4856
+    3:
+    - - 38
+      - 4856
+    -1:
+    - - 0
+      - 4787
+    -2:
+    - - 0
+      - 4678
+    -3:
+    - - 0
+      - 4821
+  ratio: 0.9969110378912686
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_10_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwNDA=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 684
+  - 901
+  prediction_len: 1253
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_11_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1253
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_11_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 242
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.01
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 445
+    1: 1
+    -3: 1
+  msg: ! '2:445; 1:1; -3:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.14712082818735422
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_11_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 956.4421192647246
+    aux2: 0.14712082818735422
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_11_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 242
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 15
+      - 3761
+    2:
+    - - 58
+      - 3761
+    3:
+    - - 38
+      - 3761
+    -1:
+    - - 0
+      - 3725
+    -2:
+    - - 0
+      - 3682
+    -3:
+    - - 0
+      - 3654
+  ratio: 0.9960116990162191
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_11_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwNDE=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 648
+  - 1213
+  prediction_len: 1620
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_12_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1620
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_12_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 356
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_LONG
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    2: 476
+    1: 1
+    -3: 1
+  msg: ! '2:476; 1:1; -3:1; '
+  expected: :yes
+  result: :no
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.5438342603760593
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :yes
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_12_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 697.7607162624358
+    aux2: 0.5438342603760593
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_12_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 356
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 15
+      - 4862
+    2:
+    - - 58
+      - 4862
+    3:
+    - - 38
+      - 4862
+    -1:
+    - - 0
+      - 4793
+    -2:
+    - - 0
+      - 4684
+    -3:
+    - - 0
+      - 4827
+  ratio: 0.9969148498560263
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_12_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+!binary "QnJhc3ktRXNwVjFUMDAwNDI=":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 731
+  - 1057
+  prediction_len: 226
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_13_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 226
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_13_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 72
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.0
+  msg: TOO_SHORT
+  result: :no
+  expected: :yes
+- !ruby/object:BlastRFValidationOutput
+  frames_histo:
+    1: 72
+  msg: ! '1:72; '
+  expected: :yes
+  result: :yes
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.00026272284970022393
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_13_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 226.84911343430815
+    aux2: 0.00026272284970022393
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_13_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 72
+    aux2: 
+- !ruby/object:DuplciationValidationOutput
+  pvalue: 1
+  threshold: 0.05
+  result: :no
+  expected: :no
+- !ruby/object:ORFValidationOutput
+  orfs:
+    1:
+    - - 189
+      - 679
+    2:
+    - - 394
+      - 679
+    3:
+    - - 20
+      - 679
+    -1:
+    - - 0
+      - 556
+    -2:
+    - - 0
+      - 546
+    -3:
+    - - 0
+      - 656
+  ratio: 0.9705449189985272
+  threshold: 0.8
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations_mrna.fasta_13_orfs.json
+    type: :lines
+    title: Open reading frame with START codon
+    footer: ''
+    xtitle: length
+    ytitle: Reading Frame
+    aux1: 14
+    aux2: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
