@@ -2,9 +2,9 @@
 	<td><%= @idx %></td>
 	<td class="<%=bg_icon%>"> <%= overall_score %>% </td>		
 	<td><div name="ranking" score=<%= overall_score %>></div></td>
-	<td title="Identifier"><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
-	<td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>		
-	<td title="No. Hits"><%= @nr_hits %></td>
+	<td><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
+	<td><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>		
+	<td><%= @nr_hits %></td>
 	<% @validations.each do |item| %>	    
    	    <% if item.validation_report.plot_files != nil %>
 	   	    <td  title='<%=item.header%>' class="<%=item.validation_report.color%> my-btn-<%=item.validation_report.color%>" onclick="

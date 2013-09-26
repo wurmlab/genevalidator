@@ -68,6 +68,11 @@ class AlignmentValidation < ValidationTest
         n = 50
       end
 
+      if type.to_s != "protein"
+        @validation_report = ValidationReport.new("", :unapplicable)
+        return @validation_report
+      end
+
       raise NotEnoughHitsError unless hits.length >= n
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
       start = Time.new

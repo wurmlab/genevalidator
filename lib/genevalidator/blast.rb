@@ -107,12 +107,13 @@ class BlastUtils
       iter = iterator.next
 
       # parse blast the xml output and get the hits
+      # hits obtained are proteins! (we use only blastp and blastx)
       iter.each do | hit | 
         
         seq = Sequence.new
 
         seq.length_protein = hit.len.to_i        
-        seq.type = type
+        seq.type = :protein
         seq.id = hit.hit_id
         seq.definition = hit.hit_def
         seq.accession_no = hit.accession
@@ -136,7 +137,14 @@ class BlastUtils
           current_hsp.query_reading_frame = hsp.query_frame.to_i
 
           current_hsp.hit_alignment = hsp.hseq.to_s
+          if BlastUtils.guess_sequence_type(current_hsp.hit_alignment) != :protein
+            raise SequenceTypeError
+          end
+
           current_hsp.query_alignment = hsp.qseq.to_s
+          if BlastUtils.guess_sequence_type(current_hsp.query_alignment) != :protein
+            raise SequenceTypeError
+          end
           current_hsp.align_len = hsp.align_len.to_i
           current_hsp.identity = hsp.identity.to_i
           current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  

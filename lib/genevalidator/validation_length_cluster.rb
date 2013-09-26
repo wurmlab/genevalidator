@@ -93,7 +93,7 @@ class LengthClusterValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     else 
-      @validation_report = ValidationReport.new("Unexpected error")
+      @validation_report = ValidationReport.new("Unexpected error", :error)
       @validation_report.errors.push OtherError
       return @validation_report
     end       

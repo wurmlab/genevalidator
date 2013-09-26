@@ -75,47 +75,38 @@ class OpenReadingFrameValidation < ValidationTest
   # +ORFValidationOutput+ object
   def run    
     begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
-      start = Time.new
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report
       end
+
+      raise NotEnoughHitsError unless hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and 
+                             hits[0].is_a? Sequence 
+
+      start = Time.new
       orfs = get_orfs
 
-      # case 1: check if longest ORF / prediction > 0.8 (ok)
+      # check if longest ORF / prediction > 0.8 (ok)
       prediction_len = prediction.raw_sequence.length 
       longest_orf = orfs.map{|elem| elem[1].map{|orf| orf[1]-orf[0]}}.flatten.max
       ratio =  longest_orf/(prediction_len + 0.0)
 
-      len = @prediction.raw_sequence.length
-
-      f = File.open("#{@filename}_orfs.json" , "w")
-      lst = @hits.sort{|a,b| a.length<=>b.length}
-      f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
-               orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
-      f.close
-      @plot_files.push(Plot.new("#{@filename}_orfs.json".scan(/\/([^\/]+)$/)[0][0],
-                                :lines,
-                                "Open reading frame with START codon",
-                                "",
-                                "length",
-                                "Reading Frame"))
-
+      plot1 = plot_orfs(orfs)
 
       @validation_report = ORFValidationOutput.new(orfs, ratio)
       @running_time = Time.now - start
+
+      @validation_report.plot_files.push(plot1)
       return @validation_report
-    # Exception is raised when blast founds no hits
+
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
       @validation_report.errors.push OtherError
-      return ValidationReport.new("Unexpected error")
+      return ValidationReport.new("Unexpected error", :error)
     end
   end
 
@@ -129,7 +120,7 @@ class OpenReadingFrameValidation < ValidationTest
   # +Hash+ containing the reading frame (the key) and a list of intervals (the values) 
   def get_orfs(orf_length = 100, prediction = @prediction, start_codons = @start_codons, stop_codons = @stop_codons)
 
-    if prediction.seq_type != "nucleotide"
+    if prediction.type != "nucleotide"
       "-"
     end
 
@@ -297,7 +288,6 @@ class OpenReadingFrameValidation < ValidationTest
     end
 
     result 
-
   end  
 
   ##  
@@ -306,27 +296,23 @@ class OpenReadingFrameValidation < ValidationTest
   # +orfs+: +Hash+ containing the reading frame (the key) and a list of intervals (the values)
   # +output+: location where the plot will be saved in jped file format
   # +predicted_seq+: Sequence objects
-  def plot_orfs(orfs, output = "#{@filename}_orfs.jpg", predicted_seq = @prediction)
+  def plot_orfs(orfs, output = "#{@filename}_orfs.json", prediction = @prediction)
     raise QueryError unless orfs.is_a? Hash
 
-      seq_reverse = Bio::Sequence::NA.new(predicted_seq.raw_sequence).reverse_complement
-      len = predicted_seq.raw_sequence.length
+    len = prediction.raw_sequence.length
 
-      R.eval "jpeg('#{output}')"
-      R.eval "plot(-3:3, xlim=c(0,#{len}), xlab='Open Reading Frame with START codon', ylab='Reading Frame', col='white')"
+    f = File.open(output, "w")    
+    f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
+       orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
+    f.close
 
-      orfs.each_with_index do |elem, i|
-#        i = 5-i
-        R.eval "lines(c(1,#{len}), c(#{elem[0]}, #{elem[0]}), lwd=7)"
-        elem[1].each do |orf|
-#          puts "#{elem[0]}: #{orf[0]}-#{orf[1]}"
-          R.eval "lines(c(#{orf[0]},#{orf[1]}), c(#{elem[0]}, #{elem[0]}), lwd=6, col='red')" 
-        end
-      end
-
-    R.eval "dev.off()"
+    return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+                    :lines,
+                    "Open reading frame with START codon",
+                    "",
+                    "length",
+                    "Reading Frame",
+                    14)
 
   end
-
-
 end

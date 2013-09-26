@@ -105,7 +105,7 @@ class LengthRankValidation < ValidationTest
      rescue NotEnoughHitsError#Exception
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
      else
-      @validation_report = ValidationReport.new("Unexpected error")
+      @validation_report = ValidationReport.new("Unexpected error", :error)
       @validation_report.errors.push OtherError
     end
 

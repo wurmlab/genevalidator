@@ -95,14 +95,16 @@ class TabularParser
           end
           hit_seq.hsp_list.push(hsp)
         end 
-        hit_seq.type = @type
+        # all the hits are proteins because are obtained with blastx or blastp
+        hit_seq.type = :protein
         hit_list.push(hit_seq)
 
       end 
       return hit_list
     rescue InconsistentTabularFormat =>error
+      puts error.backtrace
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: The tabular file and the tabular header do not correspond. Please provide -tabular argument with the correct format of the columns\n"
-      exit
+      exit!
     rescue Exception => error
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit

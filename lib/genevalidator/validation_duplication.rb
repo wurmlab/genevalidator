@@ -1,7 +1,5 @@
 require 'genevalidator/validation_output'
 require 'genevalidator/exceptions'
-#require 'statsample'
-require 'rinruby'
 
 ##
 # Class that stores the validation output information
@@ -95,13 +93,15 @@ class DuplicationValidation < ValidationTest
       end
       useless_hits.each{|hit| less_hits.delete(hit)}
 
+      if less_hits.length == 0 
+        raise NoInternetError
+      end
+
       averages = []
 
       less_hits.each do |hit|
-
         coverage = Array.new(hit.length_protein,0)
         hit.hsp_list.each do |hsp|
-
         # align subsequences from the hit and prediction that match (if it's the case)
           if hsp.hit_alignment != nil and hsp.query_alignment != nil
             hit_alignment = hsp.hit_alignment
@@ -148,7 +148,6 @@ class DuplicationValidation < ValidationTest
               if residue_hit == residue_query             
                 # indexing in blast starts from 1
                 idx = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
-                #puts "#{coverage.length} #{idx}"
                   coverage[idx] += 1
                 #end
               end
@@ -167,14 +166,13 @@ class DuplicationValidation < ValidationTest
         @running_time = Time.now - start
         return @validation_report
       end
-
-      pval = wilcox_test_R(averages)
+      
+      pval = wilcox_test(averages)
 
       @validation_report = DuplciationValidationOutput.new(pval)        
       @running_time = Time.now - start
       return @validation_report
 
-    # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
@@ -187,7 +185,6 @@ class DuplicationValidation < ValidationTest
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
-      puts error.backtrace
       @validation_report.errors.push OtherError
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
@@ -195,9 +192,13 @@ class DuplicationValidation < ValidationTest
   end
 
   def wilcox_test (averages)
-     puts averages.to_s
+     require 'statsample'
      wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale, Array.new(averages.length,1).to_scale)
-     return wilcox.probability_exact
+     if averages.length < 15
+       return wilcox.probability_exact
+     else
+       return wilcox.probability_z
+     end
   end
 
 
@@ -206,6 +207,7 @@ class DuplicationValidation < ValidationTest
   # Input
   # +vector+ Array of values with nonparametric distribution
   def wilcox_test_R (averages)
+    require 'rinruby'
     begin
       original_stdout = $stdout
       original_stderr = $stderr

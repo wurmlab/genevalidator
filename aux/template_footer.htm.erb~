@@ -1,7 +1,8 @@
 </tbody>
 </table>
-<a name="evaluation">Overall evaluation</a>
+<a name="evaluation">
 <div> <%= evaluation %> </div>
+</a>
 <br><br><br>
 </div>
 </body>

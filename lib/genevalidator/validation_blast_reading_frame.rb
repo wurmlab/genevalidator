@@ -68,13 +68,15 @@ class BlastReadingFrameValidation < ValidationTest
   # +BlastRFValidationOutput+ object
   def run(lst = @hits)
     begin
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence and hits.length >= 5
-
-      start = Time.now
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
         return @validation_report
       end
+
+      raise NotEnoughHitsError unless hits.length >= 5
+      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+
+      start = Time.now
 
       rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
       frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
@@ -86,9 +88,15 @@ class BlastReadingFrameValidation < ValidationTest
       @validation_report = BlastRFValidationOutput.new(frames_histo)
       @running_time = Time.now - start
       return @validation_report
+
     # Exception is raised when blast founds no hits
+    rescue  NotEnoughHitsError => error
+      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      return @validation_report
     rescue Exception => error
-      ValidationReport.new("Not enough evidence")
+      @validation_report = ValidationReport.new("Unexpected error", :error)
+      return @validation_report
     end
   end
 end
+

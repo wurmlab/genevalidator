@@ -31,18 +31,18 @@
        			<div align = "left">
                     <a href ="#evaluation">
     			<button class="btn btn-info">			 			 
-    				<i class="icon-cog"></i> &nbsp;<b>Overall Evaluation&nbsp;</b>
+    				<i class="icon-cog"></i> &nbsp;<b>Overall Evaluation</b>
     			</button>
 		    </a>
 
  			
     			<button class="btn btn-disabled" id=all_plots">			 			 
-    				<i class="icon-bar-chart"></i> &nbsp;<b>Show all plots&nbsp;</b>
+    				<i class="icon-bar-chart"></i> &nbsp;<b>Show all plots</b>
     			</button>
 
 		    <a href ="doc/about.html">
     			<button class="btn btn-info">			 			 
-    				<i class="icon-file"></i> &nbsp;<b>About&nbsp;</b>
+    				<i class="icon-file"></i> &nbsp;<b>About</b>
     			</button>
 		    </a>
 

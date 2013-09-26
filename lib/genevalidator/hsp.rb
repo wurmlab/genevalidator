@@ -1,3 +1,6 @@
+require 'genevalidator/blast'
+require 'genevalidator/exceptions'
+
 class Hsp
 
   attr_accessor :hit_from #references from the unaligned hit sequence
@@ -48,8 +51,16 @@ class Hsp
         @hit_to = value.to_i
       when "qseq"
         @query_alignment = value
+        seq_type = BlastUtils.guess_sequence_type(value)
+        if seq_type != nil and seq_type != :protein
+          raise SequenceTypeError
+        end
       when "sseq"
         @hit_alignment = value
+        seq_type = BlastUtils.guess_sequence_type(value)
+        if seq_type != nil and seq_type != :protein
+          raise SequenceTypeError
+        end
       when "length"
         @align_len = value.to_i
       when "pident"

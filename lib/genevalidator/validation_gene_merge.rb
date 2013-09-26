@@ -102,9 +102,10 @@ class GeneMergeValidation < ValidationTest
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
-    else
+    rescue Exception => error
+      puts error.backtrace
       @validation_report.errors.push OtherError 
-      @validation_report = ValidationReport.new("Unexpected error")
+      @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
     end
   

@@ -101,10 +101,11 @@ class Validation
       FileUtils.cp_r("aux/js", @html_path)
       FileUtils.cp_r("aux/img", @html_path)
       FileUtils.cp_r("aux/font", @html_path)
+      FileUtils.cp_r("aux/doc", @html_path)
 
     rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not FASTA or the --type parameter is incorrect.\n"      
-      exit 3
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file containes mixed sequence types.\n"      
+      exit 
     rescue FileNotFoundException => error
       $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
       exit 
@@ -146,45 +147,17 @@ class Validation
         #check the format of the input file
         parse_xml_output(file)      
       end
-     
-      puts ""
-      puts "Overall evaluation"
-      # how many genes are good
-=begin
-      all_query_outputs.each do |validations| 
-        successes = validations.map{|v| v.validation_report.result == v.validation_report.expected}.count(true)
-        fails = validations.map{|v| v.validation_report.validation != :unapplicable and v.validation_report.validation != :error and
-          v.validation_report.result != v.validation_report.expected}.count(true)
-        unknown = validations.length - successes - fails
-        overall_score = (successes*100/(successes + fails + 0.0)).round(0)
-      end
-      pass_tests1 = score1.count(true)
-=end
-
-      # Running time statistics
-      running_times = {}
-      all_query_outputs[0].validations.each do |v|
-        if v.running_time != 0 and v.running_time != nil and v.validation_report.validation != :unapplicable
-          running_times[v.short_header] = []
-        end
-      end
-
-      all_query_outputs.each do |output|
-        output.validations.each do |v|
-          if v.running_time != 0 and v.running_time != nil and v.validation_report.validation != :unapplicable
-            running_times[v.short_header].push v.running_time    
-          end
-        end
-      end
-
-      running_times.each do |key, array|
-        average_time = array.inject{ |sum, el| sum + el }.to_f / array.size
-        puts "Running time for #{key} Validation: #{average_time}s per validation"
-      end
+      Output.print_footer(@all_query_outputs, @html_path)
 
     rescue SystemCallError => error
       $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not valid\n"      
       exit
+    rescue SequenceTypeError => error
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+      exit!
+    rescue Exception => error
+       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+      exit!
     end
   end
 
@@ -215,6 +188,9 @@ class Validation
           else 
             raise Exception
           end
+        rescue SequenceTypeError => error
+          $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+          exit!
         rescue Exception => error
           begin 
             input_file_type = :tabular
@@ -233,9 +209,12 @@ class Validation
               end
               do_validations(hits)
             end
+          rescue SequenceTypeError => error
+            $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+            exit!
           rescue Exception => error
-            $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neighter xml nor tabular.\n"
-            exit
+            $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
+            exit!
           end
         end
       end while 1
