@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'genevalidator/sequences'
+require 'genevalidator/blast'
+require 'genevalidator/exceptions'
+require 'genevalidator/tabular_parser'
+require 'bio-blastxmlparser'
+require 'net/http'
+require 'open-uri'
+require 'uri'
+require 'io/console'
+require 'yaml'
+
+if ARGV.length != 1
+  $stderr.print "USE: \"get_raw_sequences BLAST_OUTPUT_FILE\" (xml or tabular)" + "\n"
+end
+
+db = "../../../ncbi-blast-2.2.28+/db/nr/nr"
+begin
+  output = File.open(ARGV[0], "rb").read
+  iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+  iterator_tab = TabularParser.new(output, "", "")
+
+  begin
+    iter = iterator_xml.next
+
+    # parse blast the xml output and get the first 10 hits
+    cnt = 0
+    iter.each do | hit |
+      if cnt == 10
+        break
+      end
+      #get the raw sequence
+      blast_cmd = "blastdbcmd -entry #{hit.accession} -db #{db} -outfmt %f" 
+      output = %x[#{blst_cmd} 2>/dev/null]
+      puts output
+    end
+  rescue Exception => error
+
+=begin
+    begin
+      puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
+      hits = iterator_tab.next
+      if hits == nil
+        break
+      end
+            do_validations(hits)
+    rescue Exception => error
+      $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
+      exit!
+    end
+=end
+  end
+end while 1
+       
+

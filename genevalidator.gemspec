@@ -13,17 +13,15 @@ The tool validates the input predicted genes and provides useful information (le
 DESC
 
   # dependencies
-#  spec.required_ruby_version     = '>= 1.9.3'
+  s.required_ruby_version     = '>= 1.9.3'
 
   s.add_dependency('bio-blastxmlparser')
   s.add_dependency('rinruby')
   s.add_dependency('bio')
   s.add_dependency('mini_shoulda')
 
-#  s.files       = ["lib/genevalidator.rb"]
   s.files       = ["lib/genevalidator.rb"] + Dir['lib/**/*']
-  s.executables   = ['genevalidator']
-#  s.require_paths = ['lib']
+  s.executables   = ['genevalidator', 'get_raw_sequences']
 
   # post install information
   s.post_install_message = <<INFO
@@ -33,7 +31,7 @@ DESC
 
   To launch GeneValidator execute 'genevalidator' from command line.
 
-    $ genevalidatior -t TYPE [-s START] [--out_fmt html|yaml] [--skip_blast xml_file_path] fasta_file_path
+    $ genevalidatior [-v VALIDATIONS] [--skip_blast xml_file_path] [-s START] fasta_file_path
 
   This is a GSoC project. 
   Visit https://github.com/monicadragan/gene_prediction/wiki for more information.
