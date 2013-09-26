@@ -20,6 +20,7 @@ class BlastUtils
   # +query+: String containing the the query in fasta format
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
+  # +db+: database
   # Output:
   # String with the blast xml output
   def self.call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote")
@@ -41,10 +42,12 @@ class BlastUtils
       return output
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
       exit
     rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: BLAST installation path is not in the LOAD PATH.\n" 
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: BLAST installation path is not in the LOAD PATH.\n" 
 
       exit 
     end
@@ -58,6 +61,7 @@ class BlastUtils
   # +query+: +String+ containing the the query in fasta format
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
+  # +db+: database
   # Output:
   # String with the blast xml output
   def self.call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
@@ -82,10 +86,12 @@ class BlastUtils
       return output
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"      
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"      
       exit
     rescue ClasspathError =>error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Did you add BLAST path to CLASSPATH?\n"      
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Did you add BLAST path to CLASSPATH?\n"      
       exit
     end
   end
@@ -94,9 +100,9 @@ class BlastUtils
   # Parses the next query from the blast xml output query
   # Params:
   # +iterator+: blast xml iterator for hits
+  # +type+: the type of the sequence: :nucleotide or :protein
   # Outputs:
-  # output1: an array of +Sequence+ ojbects for hits
-  # output2: +Sequence+ object for the predicted sequence
+  # Array of +Sequence+ ojbects for hits
   def self.parse_next_query_xml(iterator, type)
     begin
       raise TypeError unless iterator.is_a? Enumerator
@@ -159,10 +165,12 @@ class BlastUtils
 
     rescue TypeError => error
       puts error.backtrace
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: you didn't call parse method first!\n"       
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: you didn't call parse method first!\n"       
       exit!
     rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
     rescue StopIteration
       nil

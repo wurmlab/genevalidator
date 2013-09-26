@@ -191,6 +191,9 @@ class DuplicationValidation < ValidationTest
     end
   end
 
+  ##
+  # wilcox test implementation from statsample ruby gem
+  # many thanks to Claudio for helping us with the implementation!
   def wilcox_test (averages)
      require 'statsample'
      wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale, Array.new(averages.length,1).to_scale)

@@ -53,13 +53,16 @@ class LengthClusterValidation < ValidationTest
     @filename = filename
     @short_header = "LengthCluster"
     @header = "Length Cluster"
-    @description = "Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]"
+    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
+      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
+      " [Main Cluster Length Interval]"
     @cli_name = "lenc" 
   end
 
 
   ## 
-  # Validates the length of the predicted gene by comparing the length of the prediction to the most dense cluster
+  # Validates the length of the predicted gene by comparing the length 
+  # of the prediction to the most dense cluster
   # The most dense cluster is obtained by hierarchical clusterization
   # Plots are generated if required (see +plot+ variable)
   # Output:
@@ -133,7 +136,9 @@ class LengthClusterValidation < ValidationTest
       return [clusters, max_density_cluster_idx]
 
     rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: one of the arguments of 'clusterization_by_length' method has not the proper type.\n"
+      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
+       " Possible cause: one of the arguments of 'clusterization_by_length'"<<
+       " method has not the proper type.\n"
       exit
     end
   end

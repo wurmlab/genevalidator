@@ -51,7 +51,8 @@ class LengthRankValidation < ValidationTest
     @threshold = threshold
     @short_header = "LengthRank"
     @header = "Length Rank"
-    @description = "Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
+    @description = "Check whether the rank of the prediction length lies among 80% of "<<
+        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
     @cli_name = "lenr"
   end
 

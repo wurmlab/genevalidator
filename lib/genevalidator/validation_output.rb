@@ -21,7 +21,6 @@ class ValidationReport
   # +bg_color+: background color of the table cell for the html output (nil by default)
   def initialize(message = "Not enough evidence", validation_result = :no)
     @message = message
-#    @plot_files = []
     @errors = []
     @result = validation_result
     @expected = :yes

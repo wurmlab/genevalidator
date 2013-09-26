@@ -15,7 +15,10 @@ class TabularParser
   attr_reader :hit_id_idx
 
   ##
-  #+content+ : String with the tabular BLAST output
+  # Initializes the object
+  # +content+ : String with the tabular BLAST output
+  # +format+: format of the tabular output (string with column sepatared by space or coma)
+  # +type+: :nucleotide or :mrna
   def initialize (content, format, type)
     @content = content.gsub(/#.*\n/,"")
     @content_iterator = @content
@@ -31,11 +34,14 @@ class TabularParser
     @hit_id_idx = @column_names.index("sseqid")
   end 
 
+  ##
+  # Returns true if there are more hits in the tabular file
   def has_next
     return @content_iterator.length > 0
   end
 
-  #Gets to the next query 
+  ##
+  # Jumps to the next query
   def jump_next
     if has_next
       # get current query id
@@ -54,7 +60,9 @@ class TabularParser
     end
   end
  
-  #Returns the next query output
+  # Returns the next query output
+  # Output:
+  # Array of +Sequence+ objects corresponding to hits
   def next
     begin
       unless has_next
@@ -103,7 +111,9 @@ class TabularParser
       return hit_list
     rescue InconsistentTabularFormat =>error
       puts error.backtrace
-      $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: The tabular file and the tabular header do not correspond. Please provide -tabular argument with the correct format of the columns\n"
+      $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: The tabular file and the tabular header do not correspond. "<<
+        "Please provide -tabular argument with the correct format of the columns\n"
       exit!
     rescue Exception => error
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"

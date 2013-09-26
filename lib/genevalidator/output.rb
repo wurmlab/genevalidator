@@ -17,6 +17,14 @@ class Output
   attr_accessor :idx
   attr_accessor :start_idx
 
+  ##
+  # Initilizes the object
+  # Params:
+  # +filename+: name of the fasta input file
+  # +html_path+: path of the html folder
+  # +yaml_path+: path where the yaml output wil be saved
+  # +idx+: idnex of the current query
+  # +start_idx+: number of the sequence from the file to start with
   def initialize(filename, html_path, yaml_path, idx = 0, start_idx = 0)
 
     @prediction_len = 0
@@ -87,8 +95,6 @@ class Output
     unknown = validations.length - successes - fails
     overall_score = (successes*100/(successes + fails + 0.0)).round(0)
 
-#    validations.map{|v| puts v.validation_report.errors.to_s}
-
     if fails == 0
       bg_icon = "success"
     else
@@ -106,20 +112,24 @@ class Output
 
     toggle = "toggle#{@idx}"
 
-    #@validations.map{|item| puts item.validation_report.plot_files.length}
-
     template_file = File.open("aux/template_query.htm.erb", 'r').read
     erb = ERB.new(template_file)
 
     File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
   end
 
+  ##
+  # Class that closes the gas in the html file and writes the overall evaluation
+  # Param:
+  # +all_query_outputs+: array with +ValidationTest+ objects
+  # +html_path+: path of the html folder
   def self.print_footer(all_query_outputs, html_path)
     overall_evaluation = overall_evaluation(all_query_outputs)
     # print to console
     evaluation = ""
     overall_evaluation.each{|e| evaluation << "\n#{e}"}
     puts evaluation
+    puts ""
     evaluation = evaluation.gsub("\n","<br>")
 
     # print to html
@@ -132,7 +142,7 @@ class Output
   ##
   # Calculates an overall evaluation of the output
   # Params:
-  # +all_query_outputs+: Array of ValidationTests
+  # +all_query_outputs+: Array of +ValidationTest+ objects
   # Output
   # Array of Strigs with the reports
   def self.overall_evaluation(all_query_outputs)
@@ -186,7 +196,7 @@ class Output
       end
 
       if no_evidence != 0
-        score_evaluation << "\n#{no_evidence} couldn't be evaluated because of not enough evidence"
+        score_evaluation << "\n#{no_evidence} of them couldn't be evaluated because of low evidence"
       end
 
       error_evaluation = ""
@@ -239,14 +249,6 @@ class Output
       overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
       overall_evaluation = overall_evaluation.select{|e| e!=""}
       return overall_evaluation
-  end
-
-  def add_html_footer
-
-      template_file = File.open("aux/template_footer.htm.erb", 'r').read
-      erb = ERB.new(template_file)
-      File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }
-
   end
 
 end

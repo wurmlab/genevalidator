@@ -10,7 +10,8 @@ class Hsp
   attr_accessor :query_reading_frame
   attr_accessor :hit_alignment
   attr_accessor :query_alignment
-  attr_accessor :middles # conserved residues are with letters, positive (mis)matches with +, mismatches and gaps are with space
+  attr_accessor :middles # conserved residues are with letters, 
+  #positive (mis)matches with +, mismatches and gaps are with space
 
   attr_accessor :bit_score
   attr_accessor :hsp_score
@@ -29,6 +30,10 @@ class Hsp
   ##
   # Initializes the corresponding attribute of the hsp
   # with respect to the column name of the tabular blast output
+  # Params:
+  # +column+: String with column name
+  # +value+: Value of the column
+  # +type+: type of the sequences: :nucleotide or :protein
   def init_tabular_attribute(column, value, type=:protein)
     case column
       when "qstart"

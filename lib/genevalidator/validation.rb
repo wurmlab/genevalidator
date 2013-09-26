@@ -40,12 +40,18 @@ class Validation
   ##
   # Initilizes the object
   # Params:
-  # +fasta_filepath+: query sequence fasta file with query sequences
-  # +type+: query sequence type; can be :nucleotide or :protein
-  # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
+  # +fasta_filepath+: fasta file with query sequences
   # +vlist+: list of validations
+  # +tabular_format+: list of column names for parsing the tablar blast output
+  # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
+  # +mafft_path+: path of the MAFFT program installation
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(fasta_filepath, vlist = ["all"], tabular_format = nil, xml_file = nil, mafft_path = nil, start_idx = 1)
+  def initialize( fasta_filepath, 
+                  vlist = ["all"], 
+                  tabular_format = nil, 
+                  xml_file = nil, 
+                  mafft_path = nil, 
+                  start_idx = 1)
     begin
 
       @fasta_filepath = fasta_filepath
@@ -65,7 +71,8 @@ class Validation
       # the expected type for the sequences is the
       # type of the first query
        
-      # type validation: the type of the sequence in the FASTA correspond to the one declared by the user
+      # autodetect the type of the sequence in the FASTA
+      # also check if the fasta file contains a single type of queries
       @type = BlastUtils.type_of_sequences(fasta_content)
 
       # create a list of index of the queries in the FASTA
@@ -80,8 +87,8 @@ class Validation
         @mafft_path = mafft_path
       end
    
-      # build path of html folder output
-      path = File.dirname(@fasta_filepath)#.scan(/(.*)\/[^\/]+$/)[0][0]
+      # build the path of html folder output
+      path = File.dirname(@fasta_filepath)
       if path == nil
         @html_path = "html"
       else
@@ -104,18 +111,21 @@ class Validation
       FileUtils.cp_r("aux/doc", @html_path)
 
     rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file containes mixed sequence types.\n"      
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+       "Possible cause: input file containes mixed sequence types.\n"      
       exit 
     rescue FileNotFoundException => error
-      $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file does not exist.\n"
+      $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
+       "Possible cause: input file does not exist.\n"
       exit 
     end
   end
 
   ##
-  # Calls blast according to the type of the sequence
+  # Parse the blast output and run validations
   def validation
-    puts "\nDepending on your input and your computational resources, this may take a while. Please wait..."
+    puts "\nDepending on your input and your computational "<<
+         "resources, this may take a while. Please wait..."
     begin
       if @xml_file == nil
  
@@ -137,7 +147,7 @@ class Validation
             File.open(xml_file , "w") do |f| f.write(output) end
 
             #parse output
-            parse_xml_output(output)   
+            parse_output(output)   
           else
             @idx = @idx + 1
           end
@@ -145,15 +155,17 @@ class Validation
       else
         file = File.open(@xml_file, "rb").read
         #check the format of the input file
-        parse_xml_output(file)      
+        parse_output(file)      
       end
       Output.print_footer(@all_query_outputs, @html_path)
 
     rescue SystemCallError => error
-      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: input file is not valid\n"      
+      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: input file is not valid\n"      
       exit
     rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
     rescue Exception => error
        $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
@@ -162,10 +174,10 @@ class Validation
   end
 
   ##
-  # Parses the xml blast output 
+  # Parses the blast output: autodetect the format: xml or tabular 
   # Param:
-  # +output+: +String+ with the blast output in xml format
-  def parse_xml_output(output)
+  # +output+: +String+ with the blast output 
+  def parse_output(output)
     begin
       iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       iterator_tab = TabularParser.new(output, tabular_format, @type)
@@ -189,12 +201,12 @@ class Validation
             raise Exception
           end
         rescue SequenceTypeError => error
-          $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+          $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+            "Possible cause: the blast output was not obtained against a protein database.\n"
           exit!
         rescue Exception => error
           begin 
             input_file_type = :tabular
-#            puts error.backtrace
             if @tabular_format == nil and @xml_file!= nil
               puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
             end
@@ -210,24 +222,33 @@ class Validation
               do_validations(hits)
             end
           rescue SequenceTypeError => error
-            $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: the blast output was not obtained against a protein database.\n"
+            $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+              "Possible cause: the blast output was not obtained against a protein database.\n"
             exit!
           rescue Exception => error
-            $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
+            $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+               "Possible cause: blast output file format is neihter xml nor tabular.\n"
             exit!
           end
         end
       end while 1
     end
   end  
-
+ 
+  ##
+  # Removes identical hits
+  # Params:
+  # +prediction+: Sequence object
+  # +hits+: Array of +Sequence+ objects
+  # Output:
+  # new array of hit +Sequence+ objects
   def remove_identical_hits(prediction, hits)
     # remove the identical hits
     # identical hit means 100%coverage and >99% identity
     identical_hits = []
     hits.each do |hit|
       # check if all hsps have identity more than 99%
-      low_identity = hit.hsp_list.select{|hsp| hsp.pidentity == nil  or hsp.pidentity < 99}
+      low_identity = hit.hsp_list.select{|hsp| hsp.pidentity == nil or hsp.pidentity < 99}
       # check the coverage
       coverage = Array.new(prediction.length_protein,0)
       hit.hsp_list.each do |hsp| 
@@ -246,6 +267,10 @@ class Validation
   ##
   # Runs all the validations and prints the outputs given the current
   # prediction query and the corresponding hits
+  # Params:
+  # +hits+: Array of +Sequence+ objects
+  # Output:
+  # Array +Output+ object
   def do_validations(hits)
     begin
     prediction = Sequence.new
@@ -320,16 +345,20 @@ class Validation
       end
 
     rescue ValidationClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validations is not ValidationTest\n"
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: type of one of the validations is not ValidationTest\n"
       exit!
     rescue NoValidationError => error
-      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: your -v arguments are not valid aliases\n"
+      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: your -v arguments are not valid aliases\n"
       exit!
     rescue ReportClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
       exit!
     rescue AliasDuplicationError => error
-      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: At least two validations have the same CLI alias\n"
+      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: At least two validations have the same CLI alias\n"
       exit!
     rescue Exception => error
       puts error.backtrace
@@ -349,6 +378,8 @@ class Validation
 
   end
 
+  ##
+  # The ruby equivalent for 'which' command in unix 
   def which(cmd)
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
     ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|

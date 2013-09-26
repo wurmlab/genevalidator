@@ -580,7 +580,6 @@ class HierarchicalClusterization
       #stop condition 2
       #the distance between the closest clusters exceeds the threshold
       if no_clusters == 0 and (clusters[cluster].mean - clusters[cluster+1].mean).abs > threshold_distance
-        #puts "Clusterization stoped because clusters #{cluster} and #{cluster+1} that should be merged are too far one from the other."
         break
       end
 
@@ -602,7 +601,6 @@ class HierarchicalClusterization
       #stop condition 3
       #the density of the biggest clusters exceeds the threshold
       if no_clusters == 0 and clusters[cluster].density > threshold_density
-        #puts "Clusterization stoped because cluster's #{cluster} no of elements exceeded half of the total no of elements."
         break
       end
     end
@@ -631,6 +629,5 @@ class HierarchicalClusterization
     end
     clusters[max_density_cluster]
   end
-
 end
 

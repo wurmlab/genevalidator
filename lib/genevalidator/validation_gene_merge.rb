@@ -62,7 +62,7 @@ class GeneMergeValidation < ValidationTest
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
-  # +plot_filename+: name of the input file, used when generatig the plot files
+  # +filename+: name of the input file, used when generatig the plot files
   def initialize(type, prediction, hits, filename)
     super
     @filename = filename
@@ -116,8 +116,8 @@ class GeneMergeValidation < ValidationTest
   # plotting the matched region of the prediction for each hit
   # Param
   # +output+: location where the plot will be saved in jped file format
-  # +lst+: array of Sequence objects
-  # +predicted_seq+: Sequence objects
+  # +hits+: array of Sequence objects
+  # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
       colors = ["yellow", "red"]
@@ -148,9 +148,9 @@ class GeneMergeValidation < ValidationTest
   # Generates a json file containing data used for
   # plotting the start/end of the matched region offsets in the prediction
   # Param
-  # +output+: location where the plot will be saved in jped file format
   # +slope+: slope of the linear regression line
   # +y_intercept+: the ecuation of the line is y= slope*x + y_intercept
+  # +output+: location where the plot will be saved in jped file format
   # +hits+: array of Sequence objects
   def plot_2d_start_from(slope, y_intercept, output = "#{filename}_match_2d.json", hits = @hits)    
     f = File.open(output , "w")
@@ -183,13 +183,6 @@ class GeneMergeValidation < ValidationTest
     xx = pairs.map{|pair| pair.x}
     yy = pairs.map{|pair| pair.y}
 
-=begin
-    R.eval "x = c#{xx.to_s.gsub("[","(").gsub("]",")")}"
-    R.eval "y = c#{yy.to_s.gsub("[","(").gsub("]",")")}"
-    R.eval "slope = lm(y~x)$coefficients[2]"
-    slope = R.pull "slope"
-=end 
-   
     # calculate the slope
     x_mean = xx.reduce(0) { |sum, x| x + sum } / (xx.length + 0.0)
     y_mean = yy.reduce(0) { |sum, x| x + sum } / (yy.length + 0.0)

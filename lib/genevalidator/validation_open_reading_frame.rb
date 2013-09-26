@@ -116,6 +116,8 @@ class OpenReadingFrameValidation < ValidationTest
   # Params:
   # +orf_length+: minimimum ORF length, default 100
   # +prediction+: +Sequence+ object
+  # +start_codons+: Array of +String+
+  # +stop_codon+: Array of +String+
   # Output:
   # +Hash+ containing the reading frame (the key) and a list of intervals (the values) 
   def get_orfs(orf_length = 100, prediction = @prediction, start_codons = @start_codons, stop_codons = @stop_codons)
@@ -177,11 +179,7 @@ class OpenReadingFrameValidation < ValidationTest
         end
       else
         start_codons.each do |scd|
-#          start_offset = 1
-#          unless i == 1         
-            #find the first occurence of the start codon in the prospective orf
-            start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
-#          end       
+          start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
           if start_offset != nil and m3_1[i] - start_offset > orf_length
             result[2].push([start_offset, m3_1[i]])
           end
@@ -199,12 +197,7 @@ class OpenReadingFrameValidation < ValidationTest
         end
       else
         start_codons.each do |scd|
-#          start_offset = 2
-#          unless i == 1
-            #find the first occurence of the start codon in the prospective orf
-            start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
-#          end
-          #puts "#{m3_2[i-1]} #{m3_2[i]} #{start_offset} #{seq[m3_2[i-1]..m3_2[i] - orf_length]}"
+          start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
           if start_offset != nil and m3_2[i] - start_offset > orf_length
              result[3].push([start_offset, m3_2[i]])
           end
@@ -233,11 +226,7 @@ class OpenReadingFrameValidation < ValidationTest
         end
       else
         start_codons.each do |scd|
-#          start_offset = 0
-#          unless i == 1
-            #find the first occurence of the start codon in the prospective orf            
-            start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
-#          end      
+          start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
           if start_offset != nil and m3[i] - start_offset > orf_length
             result[-1].push([len - m3[i], len - start_offset])
           end
@@ -254,11 +243,7 @@ class OpenReadingFrameValidation < ValidationTest
         end
       else
         start_codons.each do |scd|
-#          start_offset = 1
-#          unless i == 1         
-            #find the first occurence of the start codon in the prospective orf
-            start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
-#          end       
+          start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
           if start_offset != nil and m3_1[i] - start_offset > orf_length
             result[-2].push([len - m3_1[i], len - start_offset])
           end
@@ -275,11 +260,7 @@ class OpenReadingFrameValidation < ValidationTest
         end
       else
         start_codons.each do |scd|
-#          start_offset = 2
-#          unless i == 1
-            #find the first occurence of the start codon in the prospective orf
-            start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
-#          end
+          start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
           if start_offset != nil and m3_2[i] - start_offset > orf_length
              result[-3].push([len - m3_2[i], len - start_offset])
           end
@@ -295,7 +276,7 @@ class OpenReadingFrameValidation < ValidationTest
   # Param
   # +orfs+: +Hash+ containing the reading frame (the key) and a list of intervals (the values)
   # +output+: location where the plot will be saved in jped file format
-  # +predicted_seq+: Sequence objects
+  # +prediction+: Sequence objects
   def plot_orfs(orfs, output = "#{@filename}_orfs.json", prediction = @prediction)
     raise QueryError unless orfs.is_a? Hash
 

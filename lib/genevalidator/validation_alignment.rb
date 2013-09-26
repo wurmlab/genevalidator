@@ -50,9 +50,11 @@ class AlignmentValidation < ValidationTest
     @short_header = "MA"
     @header = "Missing/Extra sequences"
     @description = "Finds missing and extra sequences in the prediction, based"<<
-    " on the multiple alignment of the best hits. Meaning of the output displayed:"<<
+    " on the multiple alignment of the best hits. Also counts the percentahe of"<<
+    " the conserved regions that appear in the prediction. Meaning of the output:"<<
     " the percentages of the missing/extra sequences with respect to the multiple"<<
-    " alignment. Validation fails if one of these values is higher than 20%"
+    " alignment. Validation fails if one of these values is higher than 20%."<<
+    " Percentage of the conserved residues."
     @multiple_alignment = []
     @cli_name = "align"
   end
@@ -106,7 +108,6 @@ class AlignmentValidation < ValidationTest
       
       sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
 
-
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
       # remove isolated residues from the statistical model
@@ -150,6 +151,7 @@ class AlignmentValidation < ValidationTest
   # Params:
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequience+ objects (usually representig the blast hits)
+  # +path+: path of mafft installation
   # Output:
   # Array of +String+s, corresponding to the multiple aligned sequences
   def multiple_align_mafft(prediction = @prediction, hits = @hits, path = @mafft_path)
@@ -271,6 +273,7 @@ class AlignmentValidation < ValidationTest
   # based on PSSM (Position Specific Matrix)
   # Params:
   # +ma+: array of +String+s, corresponding to the multiple aligned sequences
+  # +threshold+: the percentage of the genes that will be considered in the statistical model
   # Output:
   # +String+ representing the statistical model
   def get_sm_pssm(ma = @multiple_alignment, threshold = 0.7)
@@ -294,8 +297,8 @@ class AlignmentValidation < ValidationTest
   # Remove isolated residues inside long gaps 
   # from a given sequence
   # Params:
-  # +String+: sequence of residues
-  # +Fixnum+: number of isolated residues to be removed
+  # +seq+:+String+: sequence of residues
+  # +len+:+Fixnum+: number of isolated residues to be removed
   # Output:
   # +String+: the new sequence
   def remove_isolated_residues(seq, len = 2)
