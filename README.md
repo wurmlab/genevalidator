@@ -43,8 +43,8 @@ Linux and MacOS are officially supported!
 3. Run GeneValidation<br>
 `$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FILE` 
 
-Example that runs all validations on a set of ant gene predictions:<br>
-`$ genevalidator -x data/prot_Solenopsis_invicta.xml data/prot_Solenopsis_invicta.fasta`
+Example that emphasizes all the validations:<br>
+`$ genevalidator -x data/all_validations_prot/all_validations_prot.xml data/all_validations_prot/all_validations_prot.fasta`
 
 Learn more:<br>
 `$ genevalidator -h`
