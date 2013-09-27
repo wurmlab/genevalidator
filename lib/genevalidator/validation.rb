@@ -26,6 +26,7 @@ class Validation
   attr_reader :yaml_path
   attr_reader :mafft_path
   attr_reader :filename
+  attr_reader :raw_seq_file_index
   # current number of the querry processed
   attr_accessor :idx
   attr_reader :start_idx
@@ -50,6 +51,7 @@ class Validation
                   vlist = ["all"], 
                   tabular_format = nil, 
                   xml_file = nil, 
+                  raw_seq_file = nil,
                   mafft_path = nil, 
                   start_idx = 1)
     begin
@@ -78,7 +80,7 @@ class Validation
       # create a list of index of the queries in the FASTA
       @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
       @query_offset_lst.push(fasta_content.length)
-      fasta_content = nil # free memory for variable fasta_content
+      fasta_content   = nil # free memory for variable fasta_content
       @tabular_format = tabular_format
 
       if mafft_path == nil
@@ -86,14 +88,36 @@ class Validation
       else
         @mafft_path = mafft_path
       end
+
+      begin
+        # index raw_sequence file
+        if raw_seq_file != nil
+          raise FileNotFoundException.new unless File.exists?(raw_seq_file)
+          # leave only the identifiers in the fasta description
+          content = File.open(raw_seq_file, "rb").read
+          File.open(raw_seq_file, 'w+') { |file| file.write(content.gsub(/ .*/, ""))}
+
+          #index the fasta file
+          puts content.scan(/(>.*)\n/)
+=begin
+          # create FASTA index
+          @raw_seq_file_index = "#{raw_seq_file}.idx"
+
+          Bio::FlatFileIndex::makeindex(is_bdb  = false, 
+                                      dbpath  = @raw_seq_file_index,
+                                      format  = 'fasta',
+                                      options = {},
+                                      files   = raw_seq_file)
+=end
+        end
+        rescue Exception => error
+          $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+            "Possible cause: your file with raw sequences is not FASTA. Please use get_raw_sequences executable to create a correct one.\n"       
+      end
    
       # build the path of html folder output
       path = File.dirname(@fasta_filepath)
-      if path == nil
-        @html_path = "html"
-      else
-        @html_path ="#{path}/html"
-      end
+      @html_path = "#{fasta_filepath}.html"
       @yaml_path = path
 
       @filename = File.basename(@fasta_filepath)#.scan(/\/([^\/]+)$/)[0][0]
@@ -143,8 +167,8 @@ class Validation
             end
 
             #save output in a file
-            xml_file = "#{@fasta_filepath}_#{i+1}.xml"
-            File.open(xml_file , "w") do |f| f.write(output) end
+            #xml_file = "blast/#{@fasta_filepath}_#{i+1}.xml"
+            #File.open(xml_file , "w") do |f| f.write(output) end
 
             #parse output
             parse_output(output)   
@@ -190,15 +214,15 @@ class Validation
         if @idx+1 == @query_offset_lst.length
           break
         end
-        query = IO.binread(@fasta_filepath, @query_offset_lst[@idx+1] - @query_offset_lst[@idx], @query_offset_lst[@idx])
+        query       = IO.binread(@fasta_filepath, @query_offset_lst[@idx+1] - @query_offset_lst[@idx], @query_offset_lst[@idx])
         parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
-        prediction.definition = parse_query[0].gsub("\n","")
-        prediction.identifier = prediction.definition.scan(/([^ ]+)/)[0][0]
-        prediction.type = @type
-        prediction.raw_sequence = parse_query[1].gsub("\n","")
-
+        prediction.definition     = parse_query[0].gsub("\n","")
+        prediction.identifier     = prediction.definition.gsub(/ .*/,"")
+        prediction.type           = @type
+        prediction.raw_sequence   = parse_query[1].gsub("\n","")
         prediction.length_protein = prediction.raw_sequence.length
+
         if @type == :nucleotide
           prediction.length_protein /= 3    
         end
@@ -294,25 +318,6 @@ class Validation
   # Array +Output+ object
   def do_validations(prediction, hits)
     begin
-=begin
-    prediction = Sequence.new
-
-    # get info about the query
-    # get the @idx-th sequence  from the fasta file
-    i = @idx-1
-    query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i])
-    parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-
-    prediction.definition = parse_query[0].gsub("\n","")
-    prediction.identifier = prediction_definition.scan(/([^ ]+)/)[0][0] 
-    prediction.type = @type
-    prediction.raw_sequence = parse_query[1].gsub("\n","")
-
-    prediction.length_protein = prediction.raw_sequence.length 
-    if @type == :nucleotide
-      prediction.length_protein /= 3
-    end
-=end
     begin
       hits = remove_identical_hits(prediction, hits)
       rescue Exception => error #NoPIdentError
@@ -321,10 +326,10 @@ class Validation
     # do validations
     begin
 
-      query_output = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
+      query_output                = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
       query_output.prediction_len = prediction.length_protein
       query_output.prediction_def = prediction.definition
-      query_output.nr_hits = hits.length
+      query_output.nr_hits        = hits.length
 
       plot_path = "#{html_path}/#{filename}_#{@idx}"
 
@@ -333,9 +338,9 @@ class Validation
       validations.push LengthRankValidation.new(@type, prediction, hits)
       validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
       validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-      validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path)
+      validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file_index)
       validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, ["ATG"])
-      validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path)
+      validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file_index)
 
       # check the class type of the elements in the list
       validations.map do |v|

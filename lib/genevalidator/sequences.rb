@@ -3,7 +3,6 @@ require 'net/http'
 class Sequence
 
   attr_accessor :type #protein | mRNA
-  attr_accessor :id
   attr_accessor :definition
   attr_accessor :identifier
   attr_accessor :species
@@ -32,7 +31,34 @@ class Sequence
   end
 
   ##
-  # Gets gene by accession number from a givem database
+  # Gets raw sequence by fasta identifier from a fasta index file 
+  # Params:
+  # +index_file_name+: name of the fasta index file
+  # +identifier+: String
+  # Output:
+  # String with the nucleotide sequence corresponding to the identifier
+  def get_sequence_from_index_file(index_file_name, identifier)
+    begin
+      index = Bio::FlatFileIndex::open(index_file_name)
+
+      puts identifier
+
+      results = index.search(identifier)
+      puts "Results: #{results.size}"
+      results.each do |str|
+        puts str
+      end
+      index.close
+
+      #fasta_sequence = index.get_by_id(identifier)  # returned as fasta string
+      #return fasta_sequence
+    rescue Exception => error
+      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."      
+    end
+  end
+
+  ##
+  # Gets raw sequence by accession number from a givem database
   # Params:
   # +accno+: accession number as String
   # +db+: database as String
@@ -70,9 +96,11 @@ class Sequence
   def init_tabular_attribute(column, value)
     case column
       when "sseqid"
-        @definition = value    
+        #@definition = value   
+        @identifier = value
       when "qseqid"
-        @definition = value
+        #@definition = value
+        @identifier = value
       when "sacc"
         @accession_no = value
       when "slen"

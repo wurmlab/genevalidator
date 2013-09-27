@@ -10,7 +10,7 @@ options = {}
 opt_parser = OptionParser.new do |opt|
   opt.separator  ""
   opt.banner = "USE:"
-  opt.separator  "\t $ genevalidator [validations] [skip_blast] [start] FILE"
+  opt.separator  "\t $ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FILE"
   opt.separator  ""
   opt.separator  "ARGUMENTS:"
   opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
@@ -34,7 +34,7 @@ opt_parser = OptionParser.new do |opt|
   opt.separator  "\t\talign = validation based on multiple alignment"
   opt.separator  "\t\tcodons = codon coverage ~ under development"
   
-  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml output as input to this script") do |skip|
+  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml or tabular output as input to this script") do |skip|
     options[:skip_blast] = skip
   end
   opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6 or 7) outputs"
@@ -57,6 +57,10 @@ opt_parser = OptionParser.new do |opt|
     options[:mafft] = mafft
   end
 
+  opt.on("-r", "--raw_seq [FASTA_FILE]","fasta file with raw sequences") do |raw|
+    options[:raw] = raw
+  end
+
   opt.on("-h","--help","help") do
     puts opt_parser
     exit
@@ -70,7 +74,12 @@ begin
     options[:skip_blast] = nil
   end
 
-  unless ARGV.length == 1
+  if ARGV.length == 0
+    puts opt_parser
+    exit
+  end
+
+  if ARGV.length > 1
     $stderr.puts "Error: you must specify a single fasta input file instead of #{ARGV.length}." + "\n"
     exit
   end 
@@ -83,7 +92,7 @@ end
 
 # Main body
 
-b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:mafft], options[:start])
+b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:raw], options[:mafft], options[:start])
 b.validation
 
 

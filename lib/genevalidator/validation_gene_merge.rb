@@ -10,12 +10,12 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_up
 
   def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
-    @slope = slope
+    @slope          = slope
     @threshold_down = threshold_down
-    @threshold_up = threshold_up
-    @result = validation
-    @expected = expected
-    @plot_files = []
+    @threshold_up   = threshold_up
+    @result         = validation
+    @expected       = expected
+    @plot_files     = []
   end
 
   def print
@@ -65,14 +65,14 @@ class GeneMergeValidation < ValidationTest
   # +filename+: name of the input file, used when generatig the plot files
   def initialize(type, prediction, hits, filename)
     super
-    @filename = filename
+    @filename     = filename
     @short_header = "Gene_Merge(slope)"
-    @header = "Gene Merge"
+    @header       = "Gene Merge"
     @description = "Check whether BLAST hits make evidence about a merge of two"<<
     " genes that match the predicted gene. Meaning of the output displayed:"<<
     " slope of the linear regression of the relationship between the start and"<<
     " stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees."
-    @cli_name = "merge"
+    @cli_name     = "merge"
   end
 
   ##
@@ -119,10 +119,11 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
-      colors = ["yellow", "red"]
-      f = File.open(output , "w")
+      colors   = ["yellow", "red"]
+      f        = File.open(output , "w")
       no_lines = 100
-      ratio = (hits.length/no_lines).to_i
+      ratio    = (hits.length/no_lines).to_i
+
       if ratio == 0
         f.write((hits.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>prediction.length_protein, "color"=>"gray"}} +
               hits.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 

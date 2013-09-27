@@ -31,9 +31,8 @@ class BlastUtils
 
       #output format = 5 (XML Blast output)
       blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend}"
-      cmd = "echo \"#{query}\" | #{blast_cmd}"
-      #puts "Executing \"#{blast_cmd}\"... This may take a while..."
-      output = %x[#{cmd} 2>/dev/null]
+      cmd       = "echo \"#{query}\" | #{blast_cmd}"
+      output    = %x[#{cmd} 2>/dev/null]
 
       if output == ""
         raise ClasspathError.new
@@ -79,7 +78,7 @@ class BlastUtils
             b.parse_xml_output(file)
           end 2>/dev/null]
 
-      if output == ""
+      if output.empty?
         raise ClasspathError.new      
       end
 
@@ -91,7 +90,7 @@ class BlastUtils
       exit
     rescue ClasspathError =>error
       $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Did you add BLAST path to CLASSPATH?\n"      
+        "Did you add BLAST path to LOADPATH?\n"      
       exit
     end
   end
@@ -118,25 +117,26 @@ class BlastUtils
         seq = Sequence.new
 
         seq.length_protein = hit.len.to_i        
-        seq.type = :protein
-        seq.id = hit.hit_id
-        seq.definition = hit.hit_def
+        seq.type           = :protein
+        seq.identifier     = hit.hit_id
+        seq.definition     = hit.hit_def
+        #puts seq.identifier
         seq.accession_no = hit.accession
 
         # get all high-scoring segment pairs (hsp)
         hsps = []
         hit.hsps.each do |hsp|
-          current_hsp = Hsp.new
+          current_hsp            = Hsp.new
           current_hsp.hsp_evalue = hsp.evalue.to_i
           
-          current_hsp.hit_from = hsp.hit_from.to_i
-          current_hsp.hit_to = hsp.hit_to.to_i
+          current_hsp.hit_from         = hsp.hit_from.to_i
+          current_hsp.hit_to           = hsp.hit_to.to_i
           current_hsp.match_query_from = hsp.query_from.to_i
-          current_hsp.match_query_to = hsp.query_to.to_i
+          current_hsp.match_query_to   = hsp.query_to.to_i
 
           if type == :nucleotide
             current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1 
-            current_hsp.match_query_to =  (current_hsp.match_query_to / 3) + 1             
+            current_hsp.match_query_to   =  (current_hsp.match_query_to / 3) + 1             
           end
 
           current_hsp.query_reading_frame = hsp.query_frame.to_i
@@ -151,7 +151,7 @@ class BlastUtils
             raise SequenceTypeError
           end
           current_hsp.align_len = hsp.align_len.to_i
-          current_hsp.identity = hsp.identity.to_i
+          current_hsp.identity  = hsp.identity.to_i
           current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  
 
           hsps.push(current_hsp)

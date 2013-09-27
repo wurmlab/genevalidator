@@ -11,12 +11,12 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :threahsold
 
   def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
-    @gaps = gaps
-    @extra_seq = extra_seq
-    @consensus = consensus
-    @threshold = threshold
-    @result = validation
-    @expected = expected
+    @gaps       = gaps
+    @extra_seq  = extra_seq
+    @consensus  = consensus
+    @threshold  = threshold
+    @result     = validation
+    @expected   = expected
     @plot_files = []
   end
 
@@ -42,13 +42,15 @@ class AlignmentValidation < ValidationTest
   attr_reader :filename
   attr_reader :multiple_alignment
   attr_reader :mafft_path
+  attr_reader :index_file_name
 
-  def initialize(type, prediction, hits, filename, mafft_path)
+  def initialize(type, prediction, hits, filename, mafft_path, index_file_name)
     super
-    @filename = filename
-    @mafft_path = mafft_path
-    @short_header = "MA"
-    @header = "Missing/Extra sequences"
+    @filename        = filename
+    @mafft_path      = mafft_path
+    @index_file_name = index_file_name
+    @short_header    = "MA"
+    @header          = "Missing/Extra sequences"
     @description = "Finds missing and extra sequences in the prediction, based"<<
     " on the multiple alignment of the best hits. Also counts the percentahe of"<<
     " the conserved regions that appear in the prediction. Meaning of the output:"<<
@@ -56,7 +58,7 @@ class AlignmentValidation < ValidationTest
     " alignment. Validation fails if one of these values is higher than 20%."<<
     " Percentage of the conserved residues."
     @multiple_alignment = []
-    @cli_name = "align"
+    @cli_name           = "align"
   end
 
   ##
@@ -113,10 +115,11 @@ class AlignmentValidation < ValidationTest
       # remove isolated residues from the statistical model
       sm = remove_isolated_residues(sm)
   
-      plot1 = plot_alignment(sm)
-      gaps = gap_validation(prediction_raw, sm)
+      plot1     = plot_alignment(sm)
+      gaps      = gap_validation(prediction_raw, sm)
       extra_seq = extra_sequence_validation(prediction_raw, sm)      
       consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
+
       @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)        
       @validation_report.plot_files.push(plot1)
       @running_time = Time.now - start
@@ -127,11 +130,11 @@ class AlignmentValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Mafft error", :error)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Internet error", :error)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
@@ -374,6 +377,5 @@ class AlignmentValidation < ValidationTest
                                 yAxisValues)
 
   end
-
 end
 

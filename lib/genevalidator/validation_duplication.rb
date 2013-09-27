@@ -3,16 +3,16 @@ require 'genevalidator/exceptions'
 
 ##
 # Class that stores the validation output information
-class DuplciationValidationOutput < ValidationReport
+class DuplicationValidationOutput < ValidationReport
 
   attr_reader :pvalue
   attr_reader :threshold
 
   def initialize (pvalue, threshold = 0.05, expected = :no)
-    @pvalue = pvalue
+    @pvalue    = pvalue
     @threshold = threshold
-    @result = validation
-    @expected = expected
+    @result    = validation
+    @expected  = expected
   end
 
   def print
@@ -26,7 +26,6 @@ class DuplciationValidationOutput < ValidationReport
       :no
     end
   end
-
 
   def color
     if validation == :no
@@ -43,25 +42,27 @@ end
 class DuplicationValidation < ValidationTest
 
   attr_reader :mafft_path
+  attr_reader :index_file_name
  
-  def initialize(type, prediction, hits, mafft_path)
+  def initialize(type, prediction, hits, mafft_path, index_file_name)
     super
-    @mafft_path = mafft_path
-    @short_header = "Duplication"
-    @header = "Duplication"
+    @mafft_path      = mafft_path
+    @index_file_name = index_file_name
+    @short_header    = "Duplication"
+    @header          = "Duplication"
     @description = "Check whether there is a duplicated subsequence in the"<<
     " predicted gene by counting the hsp residue coverag of the prediction,"<<
     " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<
     " test which test the distribution of hit average coverage against 1."<<
     " P-values higher than 5% pass the validation test."
-    @cli_name = "dup"
+    @cli_name        = "dup"
 
   end
 
   ##
   # Check duplication in the first n hits
   # Output:
-  # +DuplciationValidationOutput+ object
+  # +DuplicationValidationOutput+ object
   def run(n=10)    
     begin
       raise NotEnoughHitsError unless hits.length >= 5
@@ -78,6 +79,7 @@ class DuplicationValidation < ValidationTest
         less_hits.map do |hit|
           #get gene by accession number
           if hit.raw_sequence == nil
+            #hit.get_sequence_from_index_file(@index_file_name, hit.identifier)
             if hit.type == :protein
               hit.get_sequence_by_accession_no(hit.accession_no, "protein")
             else
@@ -104,7 +106,7 @@ class DuplicationValidation < ValidationTest
         hit.hsp_list.each do |hsp|
         # align subsequences from the hit and prediction that match (if it's the case)
           if hsp.hit_alignment != nil and hsp.query_alignment != nil
-            hit_alignment = hsp.hit_alignment
+            hit_alignment   = hsp.hit_alignment
             query_alignment = hsp.query_alignment
           else
             # indexing in blast starts from 1
@@ -124,13 +126,14 @@ class DuplicationValidation < ValidationTest
             seqs = [hit_local, query_local]
 
             begin
-              options = ['--maxiterate', '1000', '--localpair', '--quiet']
-              mafft = Bio::MAFFT.new(@mafft_path, options)
-              report = mafft.query_align(seqs)
+              options   = ['--maxiterate', '1000', '--localpair', '--quiet']
+              mafft     = Bio::MAFFT.new(@mafft_path, options)
+              report    = mafft.query_align(seqs)
               raw_align = report.alignment
-              align = []
+              align     = []
+
               raw_align.each { |s| align.push(s.to_s) }
-              hit_alignment = align[0]
+              hit_alignment   = align[0]
               query_alignment = align[1]
             rescue Exception => error                
               raise NoMafftInstallationError
@@ -162,14 +165,14 @@ class DuplicationValidation < ValidationTest
     
       # if all hsps match only one time
       if averages.reject{|x| x==1} == []
-        @validation_report = DuplciationValidationOutput.new(1)
+        @validation_report = DuplicationValidationOutput.new(1)
         @running_time = Time.now - start
         return @validation_report
       end
       
       pval = wilcox_test(averages)
 
-      @validation_report = DuplciationValidationOutput.new(pval)        
+      @validation_report = DuplicationValidationOutput.new(pval)        
       @running_time = Time.now - start
       return @validation_report
 
@@ -177,14 +180,15 @@ class DuplicationValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Mafft error", :error)
       @validation_report.errors.push NoMafftInstallationError                          
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Internet error", :error)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
+      puts error.backtrace
       @validation_report.errors.push OtherError
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report

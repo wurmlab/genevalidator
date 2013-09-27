@@ -53,11 +53,11 @@ class BlastReadingFrameValidation < ValidationTest
   def initialize(type, prediction, hits = nil)
     super
     @short_header = "Frame"
-    @header = "Reading Frame"
-    @description = "Check whether there is a single reading frame among BLAST"<<
+    @header       = "Reading Frame"
+    @description  = "Check whether there is a single reading frame among BLAST"<<
     " hits. Otherwise there might be a reading frame shift in the query sequence."<<
     " Meaning of the output displayed: (reading frame: no hsps)"
-    @cli_name = "frame"
+    @cli_name     = "frame"
   end
 
   ## 

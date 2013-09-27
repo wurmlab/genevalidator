@@ -214,10 +214,10 @@ class Output
         end
       end
 
-      if no_mafft >=  all_query_outputs.length 
+      if no_mafft >=  (all_query_outputs.length - no_evidence) 
         error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
       end
-      if no_internet >=  all_query_outputs.length
+      if no_internet >=  (all_query_outputs.length - no_evidence)
         error_evaluation << "\nWe couldn't make use of your internet connection"
       end
 
