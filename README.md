@@ -56,7 +56,7 @@ By running GeneValidator on your dataset you get numbers and plots. Some relevan
 * html output with plot visualization (the useful files will be generated in the 'html' directory, at the same path with the input file)<br>
 ! Note: for the moment check the html output with Firefox browser only !
 
-[Have a look at our results!](http://swarm.cs.pub.ro/~mdragan/gsoc2013/output/protein_merge/html/ )
+[Have a look at our results!](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator)
 
 ### Other things
 
