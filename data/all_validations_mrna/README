@@ -1,0 +1,7 @@
+The commands used to generate this output are:
+
+$ genevalidator -x data/all_validations_prot/all_validations_mrna.xml data/all_validations_prot/all_validations_mrna.fasta
+or
+$ genevalidator -x data/all_validations_prot/all_validations_mrna.tab data/all_validations_prot/all_validations_mrna.fasta -t "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue"
+
+
