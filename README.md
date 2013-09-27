@@ -41,12 +41,12 @@ Linux and MacOS are officially supported!
 `$ sudo rake`
 
 3. Run GeneValidation<br>
-`$ genevalidator type [validations] [skip_blast] [start] FILE` 
+`$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FILE` 
 
 Example that runs all validations on a set of ant gene predictions:<br>
-`$ genevalidator -t protein -x data/prot_Solenopsis_invicta.xml data/prot_Solenopsis_invicta.fasta`
+`$ genevalidator -x data/prot_Solenopsis_invicta.xml data/prot_Solenopsis_invicta.fasta`
 
-To learn more:<br>
+Learn more:<br>
 `$ genevalidator -h`
 
 ### Outputs
