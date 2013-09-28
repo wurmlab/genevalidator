@@ -27,7 +27,6 @@ The goal of GeneValidator is to identify problems with gene predictions and prov
 
 ### Requirements
 * Ruby (>= 1.9.3)
-* R (>= 2.14.2)
 * RubyGems (>= 1.3.6)
 * NCBI BLAST+ (>= 2.2.25+)
 * MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
