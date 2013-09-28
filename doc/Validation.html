@@ -6,7 +6,7 @@
 <title>
   Class: Validation
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -99,23 +99,70 @@
 </dl>
 <div class="clear"></div>
 
-<h2>Overview</h2><div class="docstring">
-  <div class="discussion">
-    
-<p>This is a facade class for gene validation</p>
 
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
 
 
 
   <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
   <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#all_query_outputs-instance_method" title="#all_query_outputs (instance method)">- (Object) <strong>all_query_outputs</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>list with all validation reports.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fasta_filepath-instance_method" title="#fasta_filepath (instance method)">- (Object) <strong>fasta_filepath</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute fasta_filepath.</p>
+</div></span>
+  
+</li>
+
     
       <li class="public ">
   <span class="summary_signature">
@@ -149,7 +196,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#hits-instance_method" title="#hits (instance method)">- (Object) <strong>hits</strong> </a>
+      <a href="#html_path-instance_method" title="#html_path (instance method)">- (Object) <strong>html_path</strong> </a>
     
 
     
@@ -169,7 +216,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute hits.</p>
+<p>Returns the value of attribute html_path.</p>
 </div></span>
   
 </li>
@@ -187,8 +234,6 @@
   
   
     
-      <span class="note title readonly">readonly</span>
-    
     
   
   
@@ -198,7 +243,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute idx.</p>
+<p>current number of the querry processed.</p>
 </div></span>
   
 </li>
@@ -207,7 +252,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#prediction-instance_method" title="#prediction (instance method)">- (Object) <strong>prediction</strong> </a>
+      <a href="#mafft_path-instance_method" title="#mafft_path (instance method)">- (Object) <strong>mafft_path</strong> </a>
     
 
     
@@ -227,7 +272,65 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute prediction.</p>
+<p>Returns the value of attribute mafft_path.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#query_offset_lst-instance_method" title="#query_offset_lst (instance method)">- (Object) <strong>query_offset_lst</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>array of indexes for the start offsets of each query in the fasta file.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#raw_seq_file_index-instance_method" title="#raw_seq_file_index (instance method)">- (Object) <strong>raw_seq_file_index</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute raw_seq_file_index.</p>
 </div></span>
   
 </li>
@@ -265,6 +368,35 @@
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#tabular_format-instance_method" title="#tabular_format (instance method)">- (Object) <strong>tabular_format</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute tabular_format.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#type-instance_method" title="#type (instance method)">- (Object) <strong>type</strong> </a>
     
 
@@ -291,6 +423,64 @@
 </li>
 
     
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#vlist-instance_method" title="#vlist (instance method)">- (Object) <strong>vlist</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute vlist.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#yaml_path-instance_method" title="#yaml_path (instance method)">- (Object) <strong>yaml_path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute yaml_path.</p>
+</div></span>
+  
+</li>
+
+    
   </ul>
 
 
@@ -307,7 +497,33 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Validation) <strong>initialize</strong>(hits, prediction, type, filename, idx, start_idx) </a>
+      <a href="#do_validations-instance_method" title="#do_validations (instance method)">- (Object) <strong>do_validations</strong>(prediction, hits) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Runs all the validations and prints the outputs given the current
+prediction query and the corresponding hits Params: <tt>hits</tt>: Array of
+<tt>Sequence</tt> objects Output: Array <tt>Output</tt> object.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Validation) <strong>initialize</strong>(fasta_filepath, vlist = [&quot;all&quot;], tabular_format = nil, xml_file = nil, raw_seq_file = nil, mafft_path = nil, start_idx = 1) </a>
     
 
     
@@ -324,14 +540,13 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
-objects (usually representig the blast hits) <tt>prediction</tt>: a
-<tt>Sequence</tt> object representing the blast query <tt>type</tt>: type
-of the predicted sequence (:nucleotide or :protein) <tt>filename</tt>: name
-of the input file, used when generatig the plot files <tt>idx</tt>: index
-of the query currently processed (used to generate unique plot images)
-<tt>start_idx</tt>: index of the first processed query (may differ from idx
-if the first queries are skiped).</p>
+<p>Initilizes the object Params: <tt>fasta_filepath</tt>: fasta file with
+query sequences <tt>vlist</tt>: list of validations
+<tt>tabular_format</tt>: list of column names for parsing the tablar blast
+output <tt>xml_file</tt>: name of the precalculated blast xml output (used
+in 'skip blast' case) <tt>mafft_path</tt>: path of the MAFFT program
+installation <tt>start_idx</tt>: number of the sequence from the file to
+start with.</p>
 </div></span>
   
 </li>
@@ -340,7 +555,7 @@ if the first queries are skiped).</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#validate_all-instance_method" title="#validate_all (instance method)">- (Object) <strong>validate_all</strong>(plots = false) </a>
+      <a href="#parse_output-instance_method" title="#parse_output (instance method)">- (Object) <strong>parse_output</strong>(output) </a>
     
 
     
@@ -355,8 +570,82 @@ if the first queries are skiped).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Runs all validations  Params: <tt>plots</tt>: boolean variable, indicated
-whether plots should be generated or not Output: <tt>Output</tt> object.</p>
+<p>Parses the blast output: autodetect the format: xml or tabular  Param:
+<tt>output</tt>: <tt>String</tt> with the blast output.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_identical_hits-instance_method" title="#remove_identical_hits (instance method)">- (Object) <strong>remove_identical_hits</strong>(prediction, hits) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Removes identical hits Params: <tt>prediction</tt>: Sequence object
+<tt>hits</tt>: Array of <tt>Sequence</tt> objects Output: new array of hit
+<tt>Sequence</tt> objects.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validation-instance_method" title="#validation (instance method)">- (Object) <strong>validation</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Parse the blast output and run validations.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#which-instance_method" title="#which (instance method)">- (Object) <strong>which</strong>(cmd) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The ruby equivalent for 'which' command in unix.</p>
 </div></span>
   
 </li>
@@ -371,7 +660,7 @@ whether plots should be generated or not Output: <tt>Output</tt> object.</p>
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    - (<tt><span class='object_link'><a href="" title="Validation (class)">Validation</a></span></tt>) <strong>initialize</strong>(hits, prediction, type, filename, idx, start_idx) 
+    - (<tt><span class='object_link'><a href="" title="Validation (class)">Validation</a></span></tt>) <strong>initialize</strong>(fasta_filepath, vlist = [&quot;all&quot;], tabular_format = nil, xml_file = nil, raw_seq_file = nil, mafft_path = nil, start_idx = 1) 
   
 
   
@@ -380,14 +669,13 @@ whether plots should be generated or not Output: <tt>Output</tt> object.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
-objects (usually representig the blast hits) <tt>prediction</tt>: a
-<tt>Sequence</tt> object representing the blast query <tt>type</tt>: type
-of the predicted sequence (:nucleotide or :protein) <tt>filename</tt>: name
-of the input file, used when generatig the plot files <tt>idx</tt>: index
-of the query currently processed (used to generate unique plot images)
-<tt>start_idx</tt>: index of the first processed query (may differ from idx
-if the first queries are skiped)</p>
+<p>Initilizes the object Params: <tt>fasta_filepath</tt>: fasta file with
+query sequences <tt>vlist</tt>: list of validations
+<tt>tabular_format</tt>: list of column names for parsing the tablar blast
+output <tt>xml_file</tt>: name of the precalculated blast xml output (used
+in 'skip blast' case) <tt>mafft_path</tt>: path of the MAFFT program
+installation <tt>start_idx</tt>: number of the sequence from the file to
+start with</p>
 
 
   </div>
@@ -401,334 +689,6 @@ if the first queries are skiped)</p>
       <pre class="lines">
 
 
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 31</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='comma'>,</span> <span class='id identifier rubyid_start_idx'>start_idx</span><span class='rparen'>)</span>
-
-  <span class='ivar'>@hits</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span>
-  <span class='ivar'>@prediction</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span>
-  <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span>
-  <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='id identifier rubyid_idx'>idx</span>
-  <span class='ivar'>@start_idx</span> <span class='op'>=</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
-  <span class='ivar'>@type</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span>
-
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-  
-</div>
-
-  <div id="instance_attr_details" class="attr_details">
-    <h2>Instance Attribute Details</h2>
-    
-      
-      <span id=""></span>
-      <div class="method_details first">
-  <h3 class="signature first" id="filename-instance_method">
-  
-    - (<tt>Object</tt>) <strong>filename</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute filename</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-14
-15
-16</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 14</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
-  <span class='ivar'>@filename</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="hits-instance_method">
-  
-    - (<tt>Object</tt>) <strong>hits</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute hits</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-18
-19
-20</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 18</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_hits'>hits</span>
-  <span class='ivar'>@hits</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="idx-instance_method">
-  
-    - (<tt>Object</tt>) <strong>idx</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute idx</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-15
-16
-17</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 15</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_idx'>idx</span>
-  <span class='ivar'>@idx</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="prediction-instance_method">
-  
-    - (<tt>Object</tt>) <strong>prediction</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute prediction</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-19
-20
-21</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 19</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_prediction'>prediction</span>
-  <span class='ivar'>@prediction</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="start_idx-instance_method">
-  
-    - (<tt>Object</tt>) <strong>start_idx</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute start_idx</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-16
-17
-18</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 16</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
-  <span class='ivar'>@start_idx</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="type-instance_method">
-  
-    - (<tt>Object</tt>) <strong>type</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute type</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-20
-21
-22</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 20</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
-  <span class='ivar'>@type</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
-
-
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
-
-    
-      <div class="method_details first">
-  <h3 class="signature first" id="validate_all-instance_method">
-  
-    - (<tt>Object</tt>) <strong>validate_all</strong>(plots = false) 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Runs all validations  Params: <tt>plots</tt>: boolean variable, indicated
-whether plots should be generated or not Output: <tt>Output</tt> object</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-48
-49
 50
 51
 52
@@ -778,62 +738,1395 @@ whether plots should be generated or not Output: <tt>Output</tt> object</p>
 96
 97
 98
-99</pre>
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 50</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_validate_all'>validate_all</span><span class='lparen'>(</span><span class='id identifier rubyid_plots'>plots</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
-  <span class='kw'>begin</span>      
-    <span class='id identifier rubyid_query_output'>query_output</span> <span class='op'>=</span> <span class='const'>Output</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@filename</span><span class='comma'>,</span> <span class='ivar'>@idx</span><span class='comma'>,</span> <span class='ivar'>@start_idx</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_prediction_len'>prediction_len</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_prediction_def'>prediction_def</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_definition'>definition</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span> <span class='id identifier rubyid_fasta_filepath'>fasta_filepath</span><span class='comma'>,</span> 
+                <span class='id identifier rubyid_vlist'>vlist</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>all</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> 
+                <span class='id identifier rubyid_tabular_format'>tabular_format</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> 
+                <span class='id identifier rubyid_xml_file'>xml_file</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> 
+                <span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span>
+                <span class='id identifier rubyid_mafft_path'>mafft_path</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> 
+                <span class='id identifier rubyid_start_idx'>start_idx</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
 
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_nr_hits'>nr_hits</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
-    <span class='id identifier rubyid_plot_filename'>plot_filename</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@fasta_filepath</span> <span class='op'>=</span> <span class='id identifier rubyid_fasta_filepath'>fasta_filepath</span>
+    <span class='ivar'>@xml_file</span> <span class='op'>=</span> <span class='id identifier rubyid_xml_file'>xml_file</span>
+    <span class='ivar'>@vlist</span> <span class='op'>=</span> <span class='id identifier rubyid_vlist'>vlist</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s</span><span class='regexp_end'>/</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\s\Z</span><span class='regexp_end'>/</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\s</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
+    <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='int'>0</span>
 
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_length_validation_cluster'>length_validation_cluster</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_length_validation_rank'>length_validation_rank</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_reading_frame_validation'>reading_frame_validation</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_gene_merge_validation'>gene_merge_validation</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_duplication'>duplication</span>  <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_orf'>orf</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-<span class='embdoc_beg'>=begin
-</span><span class='embdoc'>    validations = []
-</span><span class='embdoc'>
-</span><span class='embdoc'>    validations.push LengthClusterValidation.new(hits, prediction, plot_filename, plots)
-</span><span class='embdoc'>    validations.push LengthRankValidation.new(hits, prediction)
-</span><span class='embdoc'>    validations.push BlastReadingFrameValidation.new(hits, prediction)
-</span><span class='embdoc'>    validations.push GeneMergeValidation.new(hits, prediction, plot_filename, plots)
-</span><span class='embdoc'>    validations.push DuplicationValidation.new(hits, prediction)
-</span><span class='embdoc'>    if @type == :nucleotide
-</span><span class='embdoc'>#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, [&quot;TAG&quot;, &quot;TAA&quot;, &quot;TGA&quot;]).run
-</span><span class='embdoc'>       validations.push OpenReadingFrameValidation.new(prediction, plot_filename, plots, [&quot;ATG&quot;])
-</span><span class='embdoc'>    end  
-</span><span class='embdoc'>    query_output.validations = validations.map{|v| v.run}
-</span><span class='embdoc_end'>=end
-</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_length_validation_cluster'>length_validation_cluster</span> <span class='op'>=</span> <span class='const'>LengthClusterValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_filename'>plot_filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_length_validation_rank'>length_validation_rank</span> <span class='op'>=</span> <span class='const'>LengthRankValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_reading_frame_validation'>reading_frame_validation</span> <span class='op'>=</span> <span class='const'>BlastReadingFrameValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_gene_merge_validation'>gene_merge_validation</span> <span class='op'>=</span> <span class='const'>GeneMergeValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_filename'>plot_filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_duplication'>duplication</span>  <span class='op'>=</span> <span class='const'>DuplicationValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-
-    <span class='kw'>if</span> <span class='ivar'>@type</span> <span class='op'>==</span> <span class='symbol'>:nucleotide</span>
-<span class='comment'>#        OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, [&quot;TAG&quot;, &quot;TAA&quot;, &quot;TGA&quot;]).run
-</span>       <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>OpenReadingFrameValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_filename'>plot_filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ATG</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_start_idx'>start_idx</span> <span class='op'>==</span> <span class='kw'>nil</span>
+      <span class='ivar'>@start_idx</span> <span class='op'>=</span> <span class='int'>1</span>
+    <span class='kw'>else</span>
+      <span class='ivar'>@start_idx</span> <span class='op'>=</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
     <span class='kw'>end</span>
 
-    <span class='id identifier rubyid_query_output'>query_output</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>FileNotFoundException</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_fasta_content'>fasta_content</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id identifier rubyid_binread'>binread</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='rparen'>)</span><span class='semicolon'>;</span>
 
-  <span class='comment'># Exception is raised when blast founds no hits
-</span>  <span class='kw'>rescue</span> <span class='const'>QueryError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
-    <span class='kw'>if</span> <span class='ivar'>@type</span> <span class='op'>==</span> <span class='symbol'>:nucleotide</span>
-<span class='comment'>#        query_output.orf = OpenReadingFrameValidation.new(hits, prediction, plot_filename, plots, [&quot;TAG&quot;, &quot;TAA&quot;, &quot;TGA&quot;]).validation_test
-</span>       <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_orf'>orf</span> <span class='op'>=</span> <span class='const'>OpenReadingFrameValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_filename'>plot_filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ATG</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_validation_test'>validation_test</span>
+    <span class='comment'># the expected type for the sequences is the
+</span>    <span class='comment'># type of the first query
+</span>     
+    <span class='comment'># autodetect the type of the sequence in the FASTA
+</span>    <span class='comment'># also check if the fasta file contains a single type of queries
+</span>    <span class='ivar'>@type</span> <span class='op'>=</span> <span class='const'>BlastUtils</span><span class='period'>.</span><span class='id identifier rubyid_type_of_sequences'>type_of_sequences</span><span class='lparen'>(</span><span class='id identifier rubyid_fasta_content'>fasta_content</span><span class='rparen'>)</span>
+
+    <span class='comment'># create a list of index of the queries in the FASTA
+</span>    <span class='ivar'>@query_offset_lst</span> <span class='op'>=</span> <span class='id identifier rubyid_fasta_content'>fasta_content</span><span class='period'>.</span><span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:scan</span><span class='comma'>,</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(&gt;[^&gt;]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_last_match'>last_match</span><span class='period'>.</span><span class='id identifier rubyid_begin'>begin</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+    <span class='ivar'>@query_offset_lst</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_fasta_content'>fasta_content</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_fasta_content'>fasta_content</span>   <span class='op'>=</span> <span class='kw'>nil</span> <span class='comment'># free memory for variable fasta_content
+</span>    <span class='ivar'>@tabular_format</span> <span class='op'>=</span> <span class='id identifier rubyid_tabular_format'>tabular_format</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_mafft_path'>mafft_path</span> <span class='op'>==</span> <span class='kw'>nil</span>
+      <span class='ivar'>@mafft_path</span> <span class='op'>=</span> <span class='id identifier rubyid_which'>which</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mafft</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='ivar'>@mafft_path</span> <span class='op'>=</span> <span class='id identifier rubyid_mafft_path'>mafft_path</span>
     <span class='kw'>end</span>
-    <span class='id identifier rubyid_query_output'>query_output</span>
+
+    <span class='kw'>begin</span>
+      <span class='comment'># index raw_sequence file
+</span>      <span class='kw'>if</span> <span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span> <span class='op'>!=</span> <span class='kw'>nil</span>
+        <span class='id identifier rubyid_raise'>raise</span> <span class='const'>FileNotFoundException</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span><span class='rparen'>)</span>
+        <span class='comment'># leave only the identifiers in the fasta description
+</span>        <span class='id identifier rubyid_content'>content</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rb</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span>
+        <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>w+</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_file'>file</span><span class='op'>|</span> <span class='id identifier rubyid_file'>file</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'> .*</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+        <span class='comment'>#index the fasta file
+</span>        <span class='id identifier rubyid_keys'>keys</span> <span class='op'>=</span> <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>&gt;(.*)\n</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
+        <span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:scan</span><span class='comma'>,</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(&gt;[^&gt;]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_last_match'>last_match</span><span class='period'>.</span><span class='id identifier rubyid_begin'>begin</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+        <span class='comment'># make am index hash
+</span>        <span class='id identifier rubyid_index_hash'>index_hash</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+        <span class='id identifier rubyid_index_hash'>index_hash</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_index_hash'>index_hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_keys'>keys</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_values'>values</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
+        
+        <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_index_hash'>index_hash</span>
+
+        <span class='comment'># create FASTA index
+</span>        <span class='ivar'>@raw_seq_file_index</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_seq_file'>raw_seq_file</span><span class='rbrace'>}</span><span class='tstring_content'>.idx</span><span class='tstring_end'>&quot;</span></span>
+
+      <span class='kw'>end</span>
+      <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+        <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: your file with raw sequences is not FASTA. Please use get_raw_sequences executable to create a correct one.\n</span><span class='tstring_end'>&quot;</span></span>       
+    <span class='kw'>end</span>
+ 
+    <span class='comment'># build the path of html folder output
+</span>    <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='rparen'>)</span>
+    <span class='ivar'>@html_path</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fasta_filepath'>fasta_filepath</span><span class='rbrace'>}</span><span class='tstring_content'>.html</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@yaml_path</span> <span class='op'>=</span> <span class='id identifier rubyid_path'>path</span>
+
+    <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='rparen'>)</span><span class='comment'>#.scan(/\/([^\/]+)$/)[0][0]
+</span>    <span class='ivar'>@all_query_outputs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+    <span class='comment'># create 'html' directory
+</span>    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_rm_rf'>rm_rf</span><span class='lparen'>(</span><span class='ivar'>@html_path</span><span class='rparen'>)</span>
+    <span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_mkdir'>mkdir</span><span class='lparen'>(</span><span class='ivar'>@html_path</span><span class='rparen'>)</span>
+
+    <span class='comment'># copy auxiliar folders to the html folder
+</span>    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_cp_r'>cp_r</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aux/css</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_cp_r'>cp_r</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aux/js</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_cp_r'>cp_r</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aux/img</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_cp_r'>cp_r</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aux/font</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_cp_r'>cp_r</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aux/doc</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+
+  <span class='kw'>rescue</span> <span class='const'>SequenceTypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequence Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: input file containes mixed sequence types.\n</span><span class='tstring_end'>&quot;</span></span>      
+    <span class='id identifier rubyid_exit'>exit</span> 
+  <span class='kw'>rescue</span> <span class='const'>FileNotFoundException</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>File not found error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: input file does not exist.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit'>exit</span> 
   <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="all_query_outputs-instance_method">
+  
+    - (<tt>Object</tt>) <strong>all_query_outputs</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>list with all validation reports</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_all_query_outputs'>all_query_outputs</span>
+  <span class='ivar'>@all_query_outputs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="fasta_filepath-instance_method">
+  
+    - (<tt>Object</tt>) <strong>fasta_filepath</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute fasta_filepath</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 24</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_fasta_filepath'>fasta_filepath</span>
+  <span class='ivar'>@fasta_filepath</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="filename-instance_method">
+  
+    - (<tt>Object</tt>) <strong>filename</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute filename</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
+  <span class='ivar'>@filename</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="html_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>html_path</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute html_path</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_html_path'>html_path</span>
+  <span class='ivar'>@html_path</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="idx=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="idx-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idx</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>current number of the querry processed</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_idx'>idx</span>
+  <span class='ivar'>@idx</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="mafft_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>mafft_path</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute mafft_path</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_mafft_path'>mafft_path</span>
+  <span class='ivar'>@mafft_path</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="query_offset_lst-instance_method">
+  
+    - (<tt>Object</tt>) <strong>query_offset_lst</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>array of indexes for the start offsets of each query in the fasta file</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_query_offset_lst'>query_offset_lst</span>
+  <span class='ivar'>@query_offset_lst</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="raw_seq_file_index-instance_method">
+  
+    - (<tt>Object</tt>) <strong>raw_seq_file_index</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute raw_seq_file_index</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29
+30
+31</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 29</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_raw_seq_file_index'>raw_seq_file_index</span>
+  <span class='ivar'>@raw_seq_file_index</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="start_idx-instance_method">
+  
+    - (<tt>Object</tt>) <strong>start_idx</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute start_idx</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 32</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_start_idx'>start_idx</span>
+  <span class='ivar'>@start_idx</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="tabular_format-instance_method">
+  
+    - (<tt>Object</tt>) <strong>tabular_format</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute tabular_format</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_tabular_format'>tabular_format</span>
+  <span class='ivar'>@tabular_format</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="type-instance_method">
+  
+    - (<tt>Object</tt>) <strong>type</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute type</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@type</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="vlist-instance_method">
+  
+    - (<tt>Object</tt>) <strong>vlist</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute vlist</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_vlist'>vlist</span>
+  <span class='ivar'>@vlist</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="yaml_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>yaml_path</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute yaml_path</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_yaml_path'>yaml_path</span>
+  <span class='ivar'>@yaml_path</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="do_validations-instance_method">
+  
+    - (<tt>Object</tt>) <strong>do_validations</strong>(prediction, hits) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Runs all the validations and prints the outputs given the current
+prediction query and the corresponding hits Params: <tt>hits</tt>: Array of
+<tt>Sequence</tt> objects Output: Array <tt>Output</tt> object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 320</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_do_validations'>do_validations</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='id identifier rubyid_remove_identical_hits'>remove_identical_hits</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+    <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span> <span class='comment'>#NoPIdentError
+</span>  <span class='kw'>end</span>
+  
+  <span class='comment'># do validations
+</span>  <span class='kw'>begin</span>
+
+    <span class='id identifier rubyid_query_output'>query_output</span>                <span class='op'>=</span> <span class='const'>Output</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@filename</span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='comma'>,</span> <span class='ivar'>@yaml_path</span><span class='comma'>,</span> <span class='ivar'>@idx</span><span class='comma'>,</span> <span class='ivar'>@start_idx</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_prediction_len'>prediction_len</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span>
+    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_prediction_def'>prediction_def</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_definition'>definition</span>
+    <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_nr_hits'>nr_hits</span>        <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+
+    <span class='id identifier rubyid_plot_path'>plot_path</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_html_path'>html_path</span><span class='rbrace'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_filename'>filename</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='ivar'>@idx</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+
+    <span class='id identifier rubyid_validations'>validations</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>LengthClusterValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_path'>plot_path</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>LengthRankValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>BlastReadingFrameValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>GeneMergeValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_path'>plot_path</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>DuplicationValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='ivar'>@mafft_path</span><span class='comma'>,</span> <span class='ivar'>@raw_seq_file_index</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>OpenReadingFrameValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_path'>plot_path</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ATG</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>AlignmentValidation</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_plot_path'>plot_path</span><span class='comma'>,</span> <span class='ivar'>@mafft_path</span><span class='comma'>,</span> <span class='ivar'>@raw_seq_file_index</span><span class='rparen'>)</span>
+
+    <span class='comment'># check the class type of the elements in the list
+</span>    <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ValidationClassError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>ValidationTest</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># check alias duplication
+</span>    <span class='kw'>unless</span> <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_cli_name'>cli_name</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_cli_name'>cli_name</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AliasDuplicationError</span> 
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_vlist'>vlist</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>all</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span><span class='rbrace'>}</span>
+      <span class='comment'># check the class type of the validation reports
+</span>      <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+        <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ReportClassError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_validation_report'>validation_report</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>ValidationReport</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_validations'>validations</span> <span class='op'>=</span> <span class='id identifier rubyid_validations'>validations</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_desired_validations'>desired_validations</span> <span class='op'>=</span> <span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_vlist'>vlist</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_vv'>vv</span><span class='op'>|</span> <span class='id identifier rubyid_vv'>vv</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_cli_name'>cli_name</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span> <span class='rbrace'>}</span>
+      <span class='id identifier rubyid_desired_validations'>desired_validations</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+          <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
+          <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ReportClassError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_validation_report'>validation_report</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>ValidationReport</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_validations'>validations</span> <span class='op'>=</span> <span class='id identifier rubyid_desired_validations'>desired_validations</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_validations'>validations</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>0</span>
+        <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NoValidationError</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>rescue</span> <span class='const'>ValidationClassError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Class Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: type of one of the validations is not ValidationTest\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>rescue</span> <span class='const'>NoValidationError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Validation error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: your -v arguments are not valid aliases\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>rescue</span> <span class='const'>ReportClassError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Class Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>rescue</span> <span class='const'>AliasDuplicationError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Alias Duplication error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: At least two validations have the same CLI alias\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>end</span>
+ 
+  <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_generate_html'>generate_html</span>
+  <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_print_output_console'>print_output_console</span>
+  <span class='id identifier rubyid_query_output'>query_output</span><span class='period'>.</span><span class='id identifier rubyid_print_output_file_yaml'>print_output_file_yaml</span>
+  <span class='ivar'>@all_query_outputs</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_query_output'>query_output</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+  <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>.\n</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_exit'>exit</span>
+<span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_output-instance_method">
+  
+    - (<tt>Object</tt>) <strong>parse_output</strong>(output) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Parses the blast output: autodetect the format: xml or tabular  Param:
+<tt>output</tt>: <tt>String</tt> with the blast output</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 205</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_parse_output'>parse_output</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_iterator_xml'>iterator_xml</span> <span class='op'>=</span> <span class='const'>Bio</span><span class='op'>::</span><span class='const'>BlastXMLParser</span><span class='op'>::</span><span class='const'>NokogiriBlastXml</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_enum'>to_enum</span>
+    <span class='id identifier rubyid_iterator_tab'>iterator_tab</span> <span class='op'>=</span> <span class='const'>TabularParser</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_tabular_format'>tabular_format</span><span class='comma'>,</span> <span class='ivar'>@type</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_input_file_type'>input_file_type</span> <span class='op'>=</span> <span class='symbol'>:xml</span>
+    <span class='kw'>begin</span>
+      <span class='comment'># get info about the query
+</span>      <span class='comment'># get the @idx-th sequence  from the fasta file
+</span>
+      <span class='id identifier rubyid_prediction'>prediction</span> <span class='op'>=</span> <span class='const'>Sequence</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>    
+      <span class='kw'>if</span> <span class='ivar'>@idx</span><span class='op'>+</span><span class='int'>1</span> <span class='op'>==</span> <span class='ivar'>@query_offset_lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+        <span class='kw'>break</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_query'>query</span>       <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id identifier rubyid_binread'>binread</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='comma'>,</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='ivar'>@idx</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='ivar'>@idx</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='ivar'>@idx</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_parse_query'>parse_query</span> <span class='op'>=</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>&gt;([^\n]*)\n([A-Za-z\n]*)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+
+      <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_definition'>definition</span>     <span class='op'>=</span> <span class='id identifier rubyid_parse_query'>parse_query</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span>     <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_definition'>definition</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'> .*</span><span class='regexp_end'>/</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>           <span class='op'>=</span> <span class='ivar'>@type</span>
+      <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_raw_sequence'>raw_sequence</span>   <span class='op'>=</span> <span class='id identifier rubyid_parse_query'>parse_query</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_raw_sequence'>raw_sequence</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+
+      <span class='kw'>if</span> <span class='ivar'>@type</span> <span class='op'>==</span> <span class='symbol'>:nucleotide</span>
+        <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span> <span class='op'>/=</span> <span class='int'>3</span>    
+      <span class='kw'>end</span>
+
+      <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='ivar'>@idx</span> <span class='op'>+</span> <span class='int'>1</span>
+
+      <span class='kw'>begin</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_input_file_type'>input_file_type</span> <span class='op'>==</span> <span class='symbol'>:xml</span>
+          <span class='comment'># check xml format
+</span>          <span class='kw'>if</span> <span class='ivar'>@idx</span> <span class='op'>&lt;</span> <span class='ivar'>@start_idx</span>
+            <span class='id identifier rubyid_iter'>iter</span> <span class='op'>=</span> <span class='id identifier rubyid_iterator_xml'>iterator_xml</span><span class='period'>.</span><span class='id identifier rubyid_next'>next</span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='const'>BlastUtils</span><span class='period'>.</span><span class='id identifier rubyid_parse_next_query_xml'>parse_next_query_xml</span><span class='lparen'>(</span><span class='id identifier rubyid_iterator_xml'>iterator_xml</span><span class='comma'>,</span> <span class='ivar'>@type</span><span class='rparen'>)</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_hits'>hits</span> <span class='op'>==</span> <span class='kw'>nil</span>
+              <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='ivar'>@idx</span> <span class='op'>-</span><span class='int'>1</span>
+              <span class='kw'>break</span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_do_validations'>do_validations</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
+        <span class='kw'>else</span> 
+          <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Exception</span>
+        <span class='kw'>end</span>
+      <span class='kw'>rescue</span> <span class='const'>SequenceTypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+        <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequence Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: the blast output was not obtained against a protein database.\n</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_exit!'>exit!</span>
+      <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+        <span class='kw'>begin</span> 
+          <span class='id identifier rubyid_input_file_type'>input_file_type</span> <span class='op'>=</span> <span class='symbol'>:tabular</span>
+          <span class='kw'>if</span> <span class='ivar'>@tabular_format</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='kw'>and</span> <span class='ivar'>@xml_file</span><span class='op'>!=</span> <span class='kw'>nil</span>
+            <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n</span><span class='tstring_end'>&quot;</span></span>
+          <span class='kw'>end</span>
+          <span class='comment'>#check tabular format
+</span>          <span class='kw'>if</span> <span class='ivar'>@idx</span> <span class='op'>&lt;</span> <span class='ivar'>@start_idx</span>
+            <span class='id identifier rubyid_iterator_tab'>iterator_tab</span><span class='period'>.</span><span class='id identifier rubyid_jump_next'>jump_next</span>          
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='id identifier rubyid_iterator_tab'>iterator_tab</span><span class='period'>.</span><span class='id identifier rubyid_next'>next</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_hits'>hits</span> <span class='op'>==</span> <span class='kw'>nil</span>
+              <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='ivar'>@idx</span> <span class='op'>-</span><span class='int'>1</span>
+              <span class='kw'>break</span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_do_validations'>do_validations</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
+        <span class='kw'>rescue</span> <span class='const'>SequenceTypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+          <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequence Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: the blast output was not obtained against a protein database.\n</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_exit!'>exit!</span>
+        <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+          <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Blast file error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: blast output file format is neihter xml nor tabular.\n</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_exit!'>exit!</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span> <span class='kw'>while</span> <span class='int'>1</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="remove_identical_hits-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_identical_hits</strong>(prediction, hits) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Removes identical hits Params: <tt>prediction</tt>: Sequence object
+<tt>hits</tt>: Array of <tt>Sequence</tt> objects Output: new array of hit
+<tt>Sequence</tt> objects</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 291</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_remove_identical_hits'>remove_identical_hits</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='rparen'>)</span>
+  <span class='comment'># remove the identical hits
+</span>  <span class='comment'># identical hit means 100%coverage and &gt;99% identity
+</span>  <span class='id identifier rubyid_identical_hits'>identical_hits</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span>
+    <span class='comment'># check if all hsps have identity more than 99%
+</span>    <span class='id identifier rubyid_low_identity'>low_identity</span> <span class='op'>=</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_pidentity'>pidentity</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='kw'>or</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_pidentity'>pidentity</span> <span class='op'>&lt;</span> <span class='int'>99</span><span class='rbrace'>}</span>
+    <span class='comment'># check the coverage
+</span>    <span class='id identifier rubyid_coverage'>coverage</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> 
+       <span class='id identifier rubyid_len'>len</span> <span class='op'>=</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span> <span class='op'>-</span> <span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span> <span class='op'>+</span> <span class='int'>1</span>
+       <span class='id identifier rubyid_coverage'>coverage</span><span class='lbracket'>[</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_from'>match_query_from</span><span class='op'>-</span><span class='int'>1</span><span class='op'>..</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_match_query_to'>match_query_to</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_len'>len</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_low_identity'>low_identity</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>0</span> <span class='kw'>and</span> <span class='id identifier rubyid_coverage'>coverage</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
+      <span class='id identifier rubyid_identical_hits'>identical_hits</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_hit'>hit</span><span class='rparen'>)</span> 
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_identical_hits'>identical_hits</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='op'>|</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_hit'>hit</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_hits'>hits</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validation-instance_method">
+  
+    - (<tt>Object</tt>) <strong>validation</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Parse the blast output and run validations</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 151</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validation'>validation</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\nDepending on your input and your computational </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>resources, this may take a while. Please wait...</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>begin</span>
+    <span class='kw'>if</span> <span class='ivar'>@xml_file</span> <span class='op'>==</span> <span class='kw'>nil</span>
+ 
+      <span class='comment'>#file seek for each query
+</span>      <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='ivar'>@query_offset_lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>-</span><span class='int'>2</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_pos'>pos</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    
+        <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rparen'>)</span> <span class='op'>&gt;=</span> <span class='ivar'>@start_idx</span>
+          <span class='id identifier rubyid_query'>query</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id identifier rubyid_binread'>binread</span><span class='lparen'>(</span><span class='ivar'>@fasta_filepath</span><span class='comma'>,</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='ivar'>@query_offset_lst</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='semicolon'>;</span>
+
+          <span class='comment'>#call blast with the default parameters
+</span>          <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:protein</span>
+            <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='const'>BlastUtils</span><span class='period'>.</span><span class='id identifier rubyid_call_blast_from_stdin'>call_blast_from_stdin</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>blastp</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_query'>query</span><span class='comma'>,</span> <span class='int'>11</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='const'>BlastUtils</span><span class='period'>.</span><span class='id identifier rubyid_call_blast_from_stdin'>call_blast_from_stdin</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>blastx</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_query'>query</span><span class='comma'>,</span> <span class='int'>11</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
+
+          <span class='comment'>#save output in a file
+</span>          <span class='comment'>#xml_file = &quot;blast/#{@fasta_filepath}_#{i+1}.xml&quot;
+</span>          <span class='comment'>#File.open(xml_file , &quot;w&quot;) do |f| f.write(output) end
+</span>
+          <span class='comment'>#parse output
+</span>          <span class='id identifier rubyid_parse_output'>parse_output</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span>   
+        <span class='kw'>else</span>
+          <span class='ivar'>@idx</span> <span class='op'>=</span> <span class='ivar'>@idx</span> <span class='op'>+</span> <span class='int'>1</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_file'>file</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='ivar'>@xml_file</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rb</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span>
+      <span class='comment'>#check the format of the input file
+</span>      <span class='id identifier rubyid_parse_output'>parse_output</span><span class='lparen'>(</span><span class='id identifier rubyid_file'>file</span><span class='rparen'>)</span>      
+    <span class='kw'>end</span>
+    <span class='const'>Output</span><span class='period'>.</span><span class='id identifier rubyid_print_footer'>print_footer</span><span class='lparen'>(</span><span class='ivar'>@all_query_outputs</span><span class='comma'>,</span> <span class='ivar'>@html_path</span><span class='rparen'>)</span>
+
+  <span class='kw'>rescue</span> <span class='const'>SystemCallError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Load error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: input file is not valid\n</span><span class='tstring_end'>&quot;</span></span>      
+    <span class='id identifier rubyid_exit'>exit</span>
+  <span class='kw'>rescue</span> <span class='const'>SequenceTypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequence Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. </span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Possible cause: the blast output was not obtained against a protein database.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+     <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit!'>exit!</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="which-instance_method">
+  
+    - (<tt>Object</tt>) <strong>which</strong>(cmd) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The ruby equivalent for 'which' command in unix</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation.rb', line 409</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_which'>which</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_exts'>exts</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>PATHEXT</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>PATHEXT</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>;</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>
+  <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>PATH</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='const'>File</span><span class='op'>::</span><span class='const'>PATH_SEPARATOR</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_path'>path</span><span class='op'>|</span>
+    <span class='id identifier rubyid_exts'>exts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ext'>ext</span><span class='op'>|</span>
+      <span class='id identifier rubyid_exe'>exe</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ext'>ext</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>return</span> <span class='id identifier rubyid_exe'>exe</span> <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_executable?'>executable?</span> <span class='id identifier rubyid_exe'>exe</span>
+    <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -845,9 +2138,9 @@ whether plots should be generated or not Output: <tt>Output</tt> object</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Aug  7 01:58:44 2013 by
+  Generated on Sat Sep 28 07:01:32 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-1.9.3).
+  0.8.7.2 (ruby-1.9.3).
 </div>
 
   </body>

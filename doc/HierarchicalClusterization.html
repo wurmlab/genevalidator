@@ -6,7 +6,7 @@
 <title>
   Class: HierarchicalClusterization
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -562,9 +562,7 @@ vector of <tt>Cluster</tt> objects</p>
 607
 608
 609
-610
-611
-612</pre>
+610</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/genevalidator/clusterization.rb', line 503</span>
@@ -649,8 +647,7 @@ vector of <tt>Cluster</tt> objects</p>
     <span class='comment'>#stop condition 2
 </span>    <span class='comment'>#the distance between the closest clusters exceeds the threshold
 </span>    <span class='kw'>if</span> <span class='id identifier rubyid_no_clusters'>no_clusters</span> <span class='op'>==</span> <span class='int'>0</span> <span class='kw'>and</span> <span class='lparen'>(</span><span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='id identifier rubyid_cluster'>cluster</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_mean'>mean</span> <span class='op'>-</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='id identifier rubyid_cluster'>cluster</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_mean'>mean</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_threshold_distance'>threshold_distance</span>
-      <span class='comment'>#puts &quot;Clusterization stoped because clusters #{cluster} and #{cluster+1} that should be merged are too far one from the other.&quot;
-</span>      <span class='kw'>break</span>
+      <span class='kw'>break</span>
     <span class='kw'>end</span>
 
     <span class='comment'>#merge clusters 'cluster' and 'cluster'+1
@@ -671,8 +668,7 @@ vector of <tt>Cluster</tt> objects</p>
     <span class='comment'>#stop condition 3
 </span>    <span class='comment'>#the density of the biggest clusters exceeds the threshold
 </span>    <span class='kw'>if</span> <span class='id identifier rubyid_no_clusters'>no_clusters</span> <span class='op'>==</span> <span class='int'>0</span> <span class='kw'>and</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='id identifier rubyid_cluster'>cluster</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_density'>density</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_threshold_density'>threshold_density</span>
-      <span class='comment'>#puts &quot;Clusterization stoped because cluster's #{cluster} no of elements exceeded half of the total no of elements.&quot;
-</span>      <span class='kw'>break</span>
+      <span class='kw'>break</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 
@@ -943,6 +939,8 @@ of <tt>Clususter</tt> objects</p>
       <pre class="lines">
 
 
+616
+617
 618
 619
 620
@@ -956,12 +954,10 @@ of <tt>Clususter</tt> objects</p>
 628
 629
 630
-631
-632
-633</pre>
+631</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/clusterization.rb', line 618</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/clusterization.rb', line 616</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_most_dense_cluster'>most_dense_cluster</span><span class='lparen'>(</span><span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='ivar'>@clusters</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_max_density'>max_density</span> <span class='op'>=</span> <span class='int'>0</span><span class='semicolon'>;</span>
@@ -989,9 +985,9 @@ of <tt>Clususter</tt> objects</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Aug  7 01:58:45 2013 by
+  Generated on Sat Sep 28 07:01:33 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-1.9.3).
+  0.8.7.2 (ruby-1.9.3).
 </div>
 
   </body>

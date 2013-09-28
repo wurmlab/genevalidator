@@ -6,7 +6,7 @@
 <title>
   Class: LengthClusterValidation
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -73,10 +73,12 @@
   
     <dt class="r1">Inherits:</dt>
     <dd class="r1">
-      <span class="inheritName">Object</span>
+      <span class="inheritName"><span class='object_link'><a href="ValidationTest.html" title="ValidationTest (class)">ValidationTest</a></span></span>
       
         <ul class="fullTree">
           <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="ValidationTest.html" title="ValidationTest (class)">ValidationTest</a></span></li>
           
             <li class="next">LengthClusterValidation</li>
           
@@ -179,35 +181,6 @@ length clusterization</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#hits-instance_method" title="#hits (instance method)">- (Object) <strong>hits</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute hits.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
       <a href="#max_density_cluster-instance_method" title="#max_density_cluster (instance method)">- (Object) <strong>max_density_cluster</strong> </a>
     
 
@@ -234,67 +207,14 @@ length clusterization</p>
 </li>
 
     
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#plots-instance_method" title="#plots (instance method)">- (Object) <strong>plots</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute plots.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#prediction-instance_method" title="#prediction (instance method)">- (Object) <strong>prediction</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute prediction.</p>
-</div></span>
-  
-</li>
-
-    
   </ul>
 
 
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="ValidationTest.html" title="ValidationTest (class)">ValidationTest</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="ValidationTest.html#cli_name-instance_method" title="ValidationTest#cli_name (method)">#cli_name</a></span>, <span class='object_link'><a href="ValidationTest.html#description-instance_method" title="ValidationTest#description (method)">#description</a></span>, <span class='object_link'><a href="ValidationTest.html#header-instance_method" title="ValidationTest#header (method)">#header</a></span>, <span class='object_link'><a href="ValidationTest.html#hits-instance_method" title="ValidationTest#hits (method)">#hits</a></span>, <span class='object_link'><a href="ValidationTest.html#prediction-instance_method" title="ValidationTest#prediction (method)">#prediction</a></span>, <span class='object_link'><a href="ValidationTest.html#running_time-instance_method" title="ValidationTest#running_time (method)">#running_time</a></span>, <span class='object_link'><a href="ValidationTest.html#short_header-instance_method" title="ValidationTest#short_header (method)">#short_header</a></span>, <span class='object_link'><a href="ValidationTest.html#type-instance_method" title="ValidationTest#type (method)">#type</a></span>, <span class='object_link'><a href="ValidationTest.html#validation_report-instance_method" title="ValidationTest#validation_report (method)">#validation_report</a></span></p>
 
 
   
@@ -342,7 +262,7 @@ length clusterization</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (LengthClusterValidation) <strong>initialize</strong>(hits, prediction, filename, plots) </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (LengthClusterValidation) <strong>initialize</strong>(type, prediction, hits, filename) </a>
     
 
     
@@ -359,11 +279,10 @@ length clusterization</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
-objects (usually representig the blast hits) <tt>prediction</tt>: a
-<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
-name of the input file, used when generatig the plot files <tt>plots</tt>:
-boolean variable, indicated whether plots should be generated or not.</p>
+<p>Initilizes the object Params: <tt>type</tt>: type of the predicted sequence
+(:nucleotide or :protein) <tt>prediction</tt>: a <tt>Sequence</tt> object
+representing the blast query <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits).</p>
 </div></span>
   
 </li>
@@ -372,7 +291,7 @@ boolean variable, indicated whether plots should be generated or not.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#plot_histo_clusters-instance_method" title="#plot_histo_clusters (instance method)">- (Object) <strong>plot_histo_clusters</strong>(output, clusters = @clusters, predicted_length = @prediction.xml_length, most_dense_cluster_idx = @max_dense_cluster) </a>
+      <a href="#plot_histo_clusters-instance_method" title="#plot_histo_clusters (instance method)">- (Object) <strong>plot_histo_clusters</strong>(output = &quot;#{@filename}_len_clusters.json&quot;, clusters = @clusters, max_density_cluster = @max_density_cluster, prediction = @prediction) </a>
     
 
     
@@ -387,11 +306,12 @@ boolean variable, indicated whether plots should be generated or not.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Plots a histogram of the length distribution given a list of Cluster
-objects Params: <tt>output</tt>: filename where to save the graph
-<tt>clusters</tt>: array of Cluster objects <tt>predicted_length</tt>:
-length of the rpedicted sequence <tt>most_dense_cluster_idx</tt>index from the
-clusters array of the most_dense_cluster_idx.</p>
+<p>Generates a json file containing data used for plotting the histogram of
+the length distribution given a lust of Cluster objects <tt>output</tt>:
+filename where to save the graph <tt>clusters</tt>: array of
+<tt>Cluster</tt> objects <tt>max_density_cluster</tt>: index of the most
+dense cluster <tt>prediction</tt>: <tt>Sequence</tt> object Output:
+<tt>Plot</tt> object.</p>
 </div></span>
   
 </li>
@@ -400,7 +320,7 @@ clusters array of the most_dense_cluster_idx.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#plot_length-instance_method" title="#plot_length (instance method)">- (Object) <strong>plot_length</strong>(output, lst = @hits, predicted_seq = @prediction) </a>
+      <a href="#plot_len_clusters-instance_method" title="#plot_len_clusters (instance method)">- (Object) <strong>plot_len_clusters</strong>(output = &quot;#{@filename}_len.json&quot;, hits = @hits) </a>
     
 
     
@@ -415,9 +335,10 @@ clusters array of the most_dense_cluster_idx.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Plots lines corresponding to each length Highlights the start and end hit
-offsets <tt>output</tt>: filename where to save the graph <tt>lst</tt>:
-array of Sequence objects <tt>predicted_seq</tt>: Sequence object.</p>
+<p>Generates a json file cotaining data used for plotting lines corresponding
+to the start and end hit offsets Params: <tt>output</tt>: filename where to
+save the graph <tt>hits</tt>: array of Sequence objects Output:
+<tt>Plot</tt> object.</p>
 </div></span>
   
 </li>
@@ -441,7 +362,7 @@ array of Sequence objects <tt>predicted_seq</tt>: Sequence object.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Validates the length of the predicted gene by comparing the length of the
+<p>Validates the length of the predicted gene by comparing the length  of the
 prediction to the most dense cluster The most dense cluster is obtained by
 hierarchical clusterization Plots are generated if required (see
 <tt>plot</tt> variable) Output: <tt>LengthClusterValidationOutput</tt>
@@ -451,43 +372,22 @@ object.</p>
 </li>
 
       
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#sequence_silhouette-instance_method" title="#sequence_silhouette (instance method)">- (Object) <strong>sequence_silhouette</strong>(seq = @prediction, idx = @max_density_cluster, clusters = @clusters) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Calculates the silhouette score of the sequence Params: <tt>seq</tt>:
-Sequence object <tt>idx</tt>: index of the cluster with the maximul
-internisty <tt>clusters</tt>:array of <tt>Cluster</tt> objects Output the
-silhouette of the sequence.</p>
-</div></span>
-  
-</li>
-
-      
     </ul>
   
 
-<div id="constructor_details" class="method_details_list">
+
+  
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    - (<tt><span class='object_link'><a href="" title="LengthClusterValidation (class)">LengthClusterValidation</a></span></tt>) <strong>initialize</strong>(hits, prediction, filename, plots) 
+    - (<tt><span class='object_link'><a href="" title="LengthClusterValidation (class)">LengthClusterValidation</a></span></tt>) <strong>initialize</strong>(type, prediction, hits, filename) 
   
 
   
@@ -496,11 +396,10 @@ silhouette of the sequence.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Initilizes the object Params: <tt>hits</tt>: a vector of <tt>Sequence</tt>
-objects (usually representig the blast hits) <tt>prediction</tt>: a
-<tt>Sequence</tt> object representing the blast query <tt>filename</tt>:
-name of the input file, used when generatig the plot files <tt>plots</tt>:
-boolean variable, indicated whether plots should be generated or not</p>
+<p>Initilizes the object Params: <tt>type</tt>: type of the predicted sequence
+(:nucleotide or :protein) <tt>prediction</tt>: a <tt>Sequence</tt> object
+representing the blast query <tt>hits</tt>: a vector of <tt>Sequence</tt>
+objects (usually representig the blast hits)</p>
 
 
   </div>
@@ -514,7 +413,6 @@ boolean variable, indicated whether plots should be generated or not</p>
       <pre class="lines">
 
 
-50
 51
 52
 53
@@ -522,19 +420,22 @@ boolean variable, indicated whether plots should be generated or not</p>
 55
 56
 57
-58</pre>
+58
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 50</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 51</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='id identifier rubyid_plots'>plots</span><span class='rparen'>)</span>
-  <span class='kw'>begin</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>QueryError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_hits'>hits</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>String</span>
-    <span class='ivar'>@hits</span> <span class='op'>=</span> <span class='id identifier rubyid_hits'>hits</span>
-    <span class='ivar'>@prediction</span> <span class='op'>=</span> <span class='id identifier rubyid_prediction'>prediction</span>
-    <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span>
-    <span class='ivar'>@plots</span> <span class='op'>=</span> <span class='id identifier rubyid_plots'>plots</span>
-  <span class='kw'>end</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span><span class='comma'>,</span> <span class='id identifier rubyid_filename'>filename</span><span class='rparen'>)</span>
+  <span class='kw'>super</span>
+  <span class='ivar'>@filename</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span>
+  <span class='ivar'>@short_header</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>LengthCluster</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@header</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Length Cluster</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@description</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Check whether the prediction length fits most of the BLAST hit lengths,</span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len</span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> [Main Cluster Length Interval]</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@cli_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lenc</span><span class='tstring_end'>&quot;</span></span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -574,12 +475,12 @@ boolean variable, indicated whether plots should be generated or not</p>
       <pre class="lines">
 
 
-40
-41
-42</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clusters'>clusters</span>
   <span class='ivar'>@clusters</span>
@@ -617,58 +518,15 @@ boolean variable, indicated whether plots should be generated or not</p>
       <pre class="lines">
 
 
-37
-38
-39</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
   <span class='ivar'>@filename</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="hits-instance_method">
-  
-    - (<tt>Object</tt>) <strong>hits</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute hits</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-38
-39
-40</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 38</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_hits'>hits</span>
-  <span class='ivar'>@hits</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -703,101 +561,15 @@ boolean variable, indicated whether plots should be generated or not</p>
       <pre class="lines">
 
 
-41
-42
-43</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 41</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_max_density_cluster'>max_density_cluster</span>
   <span class='ivar'>@max_density_cluster</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="plots-instance_method">
-  
-    - (<tt>Object</tt>) <strong>plots</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute plots</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-36
-37
-38</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 36</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_plots'>plots</span>
-  <span class='ivar'>@plots</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="prediction-instance_method">
-  
-    - (<tt>Object</tt>) <strong>prediction</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute prediction</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-39
-40
-41</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 39</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_prediction'>prediction</span>
-  <span class='ivar'>@prediction</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -856,220 +628,16 @@ boolean variable, indicated whether plots should be generated or not</p>
       <pre class="lines">
 
 
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
 115
 116
-117</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 93</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_clusterization_by_length'>clusterization_by_length</span><span class='lparen'>(</span><span class='id identifier rubyid_debug'>debug</span> <span class='op'>=</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='comma'>,</span> <span class='id identifier rubyid_predicted_seq'>predicted_seq</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
-  <span class='kw'>begin</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_lst'>lst</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> <span class='id identifier rubyid_predicted_seq'>predicted_seq</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span>
-
-    <span class='id identifier rubyid_contents'>contents</span> <span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='rbrace'>}</span>
-
-    <span class='id identifier rubyid_hc'>hc</span> <span class='op'>=</span> <span class='const'>HierarchicalClusterization</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_contents'>contents</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='id identifier rubyid_hc'>hc</span><span class='period'>.</span><span class='id identifier rubyid_hierarchical_clusterization'>hierarchical_clusterization</span>
-
-    <span class='id identifier rubyid_max_density'>max_density</span> <span class='op'>=</span> <span class='int'>0</span><span class='semicolon'>;</span>
-    <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span> <span class='op'>=</span> <span class='int'>0</span><span class='semicolon'>;</span>
-    <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_item'>item</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_density'>density</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_max_density'>max_density</span>
-        <span class='id identifier rubyid_max_density'>max_density</span> <span class='op'>=</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_density'>density</span>
-        <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span><span class='semicolon'>;</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-
-    <span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_clusters'>clusters</span><span class='comma'>,</span> <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span><span class='rbracket'>]</span>
-
-  <span class='kw'>rescue</span> <span class='const'>TypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
-    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>. Possible cause: one of the arguments of 'clusterization_by_length' method has not the proper type.\n</span><span class='tstring_end'>&quot;</span></span>
-    <span class='id identifier rubyid_exit'>exit</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="plot_histo_clusters-instance_method">
-  
-    - (<tt>Object</tt>) <strong>plot_histo_clusters</strong>(output, clusters = @clusters, predicted_length = @prediction.xml_length, most_dense_cluster_idx = @max_dense_cluster) 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Plots a histogram of the length distribution given a list of Cluster
-objects Params: <tt>output</tt>: filename where to save the graph
-<tt>clusters</tt>: array of Cluster objects <tt>predicted_length</tt>:
-length of the rpedicted sequence <tt>most_dense_cluster_idx</tt>index from the
-clusters array of the most_dense_cluster_idx</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 154</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_plot_histo_clusters'>plot_histo_clusters</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='ivar'>@clusters</span><span class='comma'>,</span> <span class='id identifier rubyid_predicted_length'>predicted_length</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='comma'>,</span> 
-                        <span class='id identifier rubyid_most_dense_cluster_idx'>most_dense_cluster_idx</span> <span class='op'>=</span> <span class='ivar'>@max_dense_cluster</span><span class='rparen'>)</span>
-  <span class='kw'>begin</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Cluster</span> <span class='kw'>and</span> <span class='id identifier rubyid_predicted_length'>predicted_length</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Fixnum</span>
-
-    <span class='id identifier rubyid_lengths'>lengths</span> <span class='op'>=</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
-    <span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_predicted_length'>predicted_length</span><span class='rparen'>)</span>
-
-    <span class='id identifier rubyid_max_freq'>max_freq</span> <span class='op'>=</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='id identifier rubyid_y'>y</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
-    <span class='comment'>#make the plot in a new process
-</span>      <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors = c('orange', 'blue', 'yellow', 'green', 'gray')</span><span class='tstring_end'>&quot;</span></span>
-
-      <span class='kw'>unless</span> <span class='id identifier rubyid_output'>output</span> <span class='op'>==</span> <span class='kw'>nil</span>
-        <span class='comment'>#puts &quot;---- #{output}&quot;
-</span>        <span class='comment'>#R.eval &quot;dev.copy(png,'#{output}.png')&quot;
-</span>        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>jpeg('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_output'>output</span><span class='rbrace'>}</span><span class='tstring_content'>_len_clusters.jpg')</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>end</span>
-
-      <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cluster'>cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-        <span class='id identifier rubyid_cluster_lengths'>cluster_lengths</span> <span class='op'>=</span> <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span><span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
-
-        <span class='kw'>if</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>==</span> <span class='ivar'>@max_density_cluster</span>
-          <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>'red'</span><span class='tstring_end'>&quot;</span></span>
-        <span class='kw'>else</span>
-          <span class='id identifier rubyid_color'>color</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>colors[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='op'>%</span><span class='int'>5</span><span class='op'>+</span><span class='int'>1</span><span class='rbrace'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
-        <span class='kw'>end</span>
-
-        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>hist(c</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_cluster_lengths'>cluster_lengths</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>[</span><span class='tstring_end'>'</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>(</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>]</span><span class='tstring_end'>'</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>)</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>,
-                   breaks = seq(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='op'>-</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='op'>+</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>, 0.1),
-                   xlim=c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='op'>-</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='op'>+</span><span class='int'>10</span><span class='rbrace'>}</span><span class='tstring_content'>),
-                   ylim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_max_freq'>max_freq</span><span class='rbrace'>}</span><span class='tstring_content'>),
-                   col=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>,
-                   border=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_color'>color</span><span class='rbrace'>}</span><span class='tstring_content'>,
-                   main='Histogram for length distribution', xlab='length\nblack = predicted sequence, red = most dense cluster')</span><span class='tstring_end'>&quot;</span></span>
-        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>par(new=T)</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>end</span>
-
-      <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>abline(v=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_predicted_length'>predicted_length</span><span class='rbrace'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
-
-      <span class='kw'>unless</span> <span class='id identifier rubyid_output'>output</span> <span class='op'>==</span> <span class='kw'>nil</span>
-        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>dev.off()</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>end</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="plot_length-instance_method">
-  
-    - (<tt>Object</tt>) <strong>plot_length</strong>(output, lst = @hits, predicted_seq = @prediction) 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Plots lines corresponding to each length Highlights the start and end hit
-offsets <tt>output</tt>: filename where to save the graph <tt>lst</tt>:
-array of Sequence objects <tt>predicted_seq</tt>: Sequence object</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
+117
+118
+119
+120
+121
+122
+123
+124
 125
 126
 127
@@ -1089,32 +657,204 @@ array of Sequence objects <tt>predicted_seq</tt>: Sequence object</p>
 141
 142
 143
-144
-145</pre>
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 125</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 115</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_plot_length'>plot_length</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='comma'>,</span> <span class='id identifier rubyid_predicted_seq'>predicted_seq</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_max_len'>max_len</span> <span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
-  <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='rbrace'>}</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_clusterization_by_length'>clusterization_by_length</span><span class='lparen'>(</span><span class='id identifier rubyid_debug'>debug</span> <span class='op'>=</span> <span class='kw'>false</span><span class='comma'>,</span> 
+                             <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='comma'>,</span> 
+                             <span class='id identifier rubyid_predicted_seq'>predicted_seq</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_lst'>lst</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> 
+                           <span class='id identifier rubyid_predicted_seq'>predicted_seq</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span>
 
-  <span class='id identifier rubyid_max_plots'>max_plots</span> <span class='op'>=</span> <span class='int'>120</span>
-  <span class='id identifier rubyid_skip'>skip</span><span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>/</span><span class='id identifier rubyid_max_plots'>max_plots</span>
+    <span class='id identifier rubyid_contents'>contents</span> <span class='op'>=</span> <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='rbrace'>}</span>
 
-  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>jpeg('</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_output'>output</span><span class='rbrace'>}</span><span class='tstring_content'>_len.jpg')</span><span class='tstring_end'>&quot;</span></span>
-  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>plot(1:</span><span class='embexpr_beg'>#{</span><span class='lbracket'>[</span><span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span><span class='id identifier rubyid_max_plots'>max_plots</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='rbrace'>}</span><span class='tstring_content'>, xlim=c(0,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_max_len'>max_len</span><span class='rbrace'>}</span><span class='tstring_content'>), xlab='Hit Length (black) vs part of the hit that matches the query (red)',ylab='Hit Number', col='white')</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_height'>height</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span><span class='semicolon'>;</span>
-  <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_seq'>seq</span><span class='comma'>,</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_skip'>skip</span> <span class='op'>==</span> <span class='int'>0</span> <span class='kw'>or</span> <span class='id identifier rubyid_i'>i</span><span class='op'>%</span><span class='id identifier rubyid_skip'>skip</span> <span class='op'>==</span> <span class='int'>0</span>
-      <span class='id identifier rubyid_height'>height</span> <span class='op'>+=</span> <span class='int'>1</span>
-      <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lines(c(1,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_seq'>seq</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span><span class='rbrace'>}</span><span class='tstring_content'>), c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>), lwd=10)</span><span class='tstring_end'>&quot;</span></span>
-      <span class='id identifier rubyid_seq'>seq</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span>
-        <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lines(c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_from'>hit_from</span><span class='rbrace'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_to'>hit_to</span><span class='rbrace'>}</span><span class='tstring_content'>), c(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='rbrace'>}</span><span class='tstring_content'>), lwd=6, col='red')</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_hc'>hc</span> <span class='op'>=</span> <span class='const'>HierarchicalClusterization</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_contents'>contents</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='id identifier rubyid_hc'>hc</span><span class='period'>.</span><span class='id identifier rubyid_hierarchical_clusterization'>hierarchical_clusterization</span>
+
+    <span class='id identifier rubyid_max_density'>max_density</span> <span class='op'>=</span> <span class='int'>0</span><span class='semicolon'>;</span>
+    <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span> <span class='op'>=</span> <span class='int'>0</span><span class='semicolon'>;</span>
+    <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_item'>item</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_density'>density</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_max_density'>max_density</span>
+        <span class='id identifier rubyid_max_density'>max_density</span> <span class='op'>=</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_density'>density</span>
+        <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span><span class='semicolon'>;</span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
+
+    <span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_clusters'>clusters</span><span class='comma'>,</span> <span class='id identifier rubyid_max_density_cluster_idx'>max_density_cluster_idx</span><span class='rbracket'>]</span>
+
+  <span class='kw'>rescue</span> <span class='const'>TypeError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Type error at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+:\d+):.*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> Possible cause: one of the arguments of 'clusterization_by_length'</span><span class='tstring_end'>&quot;</span></span><span class='op'>&lt;&lt;</span>
+     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> method has not the proper type.\n</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_exit'>exit</span>
   <span class='kw'>end</span>
-  <span class='const'>R</span><span class='period'>.</span><span class='id identifier rubyid_eval'>eval</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>dev.off()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="plot_histo_clusters-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plot_histo_clusters</strong>(output = &quot;#{@filename}_len_clusters.json&quot;, clusters = @clusters, max_density_cluster = @max_density_cluster, prediction = @prediction) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generates a json file containing data used for plotting the histogram of
+the length distribution given a lust of Cluster objects <tt>output</tt>:
+filename where to save the graph <tt>clusters</tt>: array of
+<tt>Cluster</tt> objects <tt>max_density_cluster</tt>: index of the most
+dense cluster <tt>prediction</tt>: <tt>Sequence</tt> object Output:
+<tt>Plot</tt> object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 155</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plot_histo_clusters'>plot_histo_clusters</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>_len_clusters.json</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> 
+                      <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='ivar'>@clusters</span><span class='comma'>,</span> 
+                      <span class='id identifier rubyid_max_density_cluster'>max_density_cluster</span> <span class='op'>=</span> <span class='ivar'>@max_density_cluster</span><span class='comma'>,</span>
+                      <span class='id identifier rubyid_prediction'>prediction</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_f'>f</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_cluster'>cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> 
+      <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> 
+        <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>key</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>value</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_v'>v</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>main</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='op'>==</span><span class='id identifier rubyid_max_density_cluster'>max_density_cluster</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+      <span class='rbrace'>}</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+    <span class='const'>Plot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+            <span class='symbol'>:bars</span><span class='comma'>,</span>
+            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Length distribution histogram</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prediction, black;most dense cluster,red;other hits, blue</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>length</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>frequency</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+            <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="plot_len_clusters-instance_method">
+  
+    - (<tt>Object</tt>) <strong>plot_len_clusters</strong>(output = &quot;#{@filename}_len.json&quot;, hits = @hits) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generates a json file cotaining data used for plotting lines corresponding
+to the start and end hit offsets Params: <tt>output</tt>: filename where to
+save the graph <tt>hits</tt>: array of Sequence objects Output:
+<tt>Plot</tt> object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 183</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_plot_len_clusters'>plot_len_clusters</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@filename</span><span class='rbrace'>}</span><span class='tstring_content'>_len.json</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_hits'>hits</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_f'>f</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span> <span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_lst'>lst</span> <span class='op'>=</span> <span class='ivar'>@hits</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='op'>&lt;=&gt;</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='rbrace'>}</span>
+
+    <span class='id identifier rubyid_no_lines'>no_lines</span> <span class='op'>=</span> <span class='int'>100</span>
+    <span class='id identifier rubyid_ratio'>ratio</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>/</span><span class='id identifier rubyid_no_lines'>no_lines</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_ratio'>ratio</span> <span class='op'>==</span> <span class='int'>0</span>
+      <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_i'>i</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>start</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='int'>0</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stop</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>color</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>gray</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='rbrace'>}</span> <span class='op'>+</span>
+             <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_i'>i</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>start</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_from'>hit_from</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stop</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_to'>hit_to</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>color</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='rbrace'>}</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='op'>%</span><span class='id identifier rubyid_ratio'>ratio</span><span class='op'>==</span><span class='int'>0</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_i'>i</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>start</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='int'>0</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stop</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>color</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>gray</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='rbrace'>}</span> <span class='op'>+</span>
+             <span class='id identifier rubyid_lst'>lst</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='op'>%</span><span class='id identifier rubyid_ratio'>ratio</span><span class='op'>==</span><span class='int'>0</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hit'>hit</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_hit'>hit</span><span class='period'>.</span><span class='id identifier rubyid_hsp_list'>hsp_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_hsp'>hsp</span><span class='op'>|</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>y</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_i'>i</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>start</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_from'>hit_from</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stop</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='id identifier rubyid_hsp'>hsp</span><span class='period'>.</span><span class='id identifier rubyid_hit_to'>hit_to</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>color</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>red</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='rbrace'>}</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+    <span class='const'>Plot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\/([^\/]+)$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span>
+             <span class='symbol'>:lines</span><span class='comma'>,</span>
+             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hits vs prediction</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>hit length, gray;high-scoring segment pairs (hsp), red</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>length</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+             <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>idx</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+             <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1133,7 +873,7 @@ array of Sequence objects <tt>predicted_seq</tt>: Sequence object</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Validates the length of the predicted gene by comparing the length of the
+<p>Validates the length of the predicted gene by comparing the length  of the
 prediction to the most dense cluster The most dense cluster is obtained by
 hierarchical clusterization Plots are generated if required (see
 <tt>plot</tt> variable) Output: <tt>LengthClusterValidationOutput</tt>
@@ -1151,10 +891,6 @@ object</p>
       <pre class="lines">
 
 
-66
-67
-68
-69
 70
 71
 72
@@ -1167,129 +903,65 @@ object</p>
 79
 80
 81
-82</pre>
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_run'>run</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotEnoughHitsError</span> <span class='kw'>unless</span> <span class='id identifier rubyid_hits'>hits</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;=</span> <span class='int'>5</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Exception</span> <span class='kw'>unless</span> <span class='id identifier rubyid_prediction'>prediction</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> <span class='kw'>and</span> 
+                           <span class='id identifier rubyid_hits'>hits</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Sequence</span> 
 
-    <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='id identifier rubyid_clusterization_by_length'>clusterization_by_length</span>  <span class='comment'>#returns [clusters, max_density_cluster_idx]
-</span>
-    <span class='ivar'>@clusters</span> <span class='op'>=</span> <span class='id identifier rubyid_ret'>ret</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
-    <span class='ivar'>@max_density_cluster</span> <span class='op'>=</span> <span class='id identifier rubyid_ret'>ret</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_start'>start</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
+    <span class='comment'># get [clusters, max_density_cluster_idx]
+</span>    <span class='id identifier rubyid_clusterization'>clusterization</span> <span class='op'>=</span> <span class='id identifier rubyid_clusterization_by_length'>clusterization_by_length</span> 
+
+    <span class='ivar'>@clusters</span> <span class='op'>=</span> <span class='id identifier rubyid_clusterization'>clusterization</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+    <span class='ivar'>@max_density_cluster</span> <span class='op'>=</span> <span class='id identifier rubyid_clusterization'>clusterization</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_limits'>limits</span> <span class='op'>=</span> <span class='ivar'>@clusters</span><span class='lbracket'>[</span><span class='ivar'>@max_density_cluster</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_get_limits'>get_limits</span>
-    <span class='id identifier rubyid_prediction_len'>prediction_len</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span>
+    <span class='id identifier rubyid_prediction_len'>prediction_len</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='period'>.</span><span class='id identifier rubyid_length_protein'>length_protein</span>
 
-    <span class='kw'>if</span> <span class='id identifier rubyid_plots'>plots</span>
-      <span class='id identifier rubyid_plot_histo_clusters'>plot_histo_clusters</span><span class='lparen'>(</span><span class='ivar'>@filename</span><span class='rparen'>)</span>
-      <span class='comment'>#plot_length(@filename)
-</span>    <span class='kw'>end</span>
+    <span class='ivar'>@validation_report</span> <span class='op'>=</span> <span class='const'>LengthClusterValidationOutput</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction_len'>prediction_len</span><span class='comma'>,</span> <span class='id identifier rubyid_limits'>limits</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_plot1'>plot1</span> <span class='op'>=</span> <span class='id identifier rubyid_plot_histo_clusters'>plot_histo_clusters</span>
+    <span class='ivar'>@validation_report</span><span class='period'>.</span><span class='id identifier rubyid_plot_files'>plot_files</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_plot1'>plot1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_plot2'>plot2</span> <span class='op'>=</span> <span class='id identifier rubyid_plot_len_clusters'>plot_len_clusters</span>
+    <span class='ivar'>@validation_report</span><span class='period'>.</span><span class='id identifier rubyid_plot_files'>plot_files</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_plot2'>plot2</span><span class='rparen'>)</span>
+    <span class='ivar'>@running_time</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span> <span class='op'>-</span> <span class='id identifier rubyid_start'>start</span>
 
-    <span class='const'>LengthClusterValidationOutput</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_prediction_len'>prediction_len</span><span class='comma'>,</span> <span class='id identifier rubyid_limits'>limits</span><span class='rparen'>)</span>
-     
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="sequence_silhouette-instance_method">
-  
-    - (<tt>Object</tt>) <strong>sequence_silhouette</strong>(seq = @prediction, idx = @max_density_cluster, clusters = @clusters) 
-  
+    <span class='kw'>return</span> <span class='ivar'>@validation_report</span>
 
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Calculates the silhouette score of the sequence Params: <tt>seq</tt>:
-Sequence object <tt>idx</tt>: index of the cluster with the maximul
-internisty <tt>clusters</tt>:array of <tt>Cluster</tt> objects Output the
-silhouette of the sequence</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-207
-208
-209
-210
-211
-212
-213
-214
-215
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/genevalidator/validation_length_cluster.rb', line 207</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_sequence_silhouette'>sequence_silhouette</span> <span class='lparen'>(</span><span class='id identifier rubyid_seq'>seq</span> <span class='op'>=</span> <span class='ivar'>@prediction</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>=</span> <span class='ivar'>@max_density_cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_clusters'>clusters</span> <span class='op'>=</span> <span class='ivar'>@clusters</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_seq_len'>seq_len</span> <span class='op'>=</span> <span class='id identifier rubyid_seq'>seq</span><span class='period'>.</span><span class='id identifier rubyid_xml_length'>xml_length</span>
-
-  <span class='comment'>#the average dissimilarity of the sequence with other elements in idx cluster
-</span>  <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='int'>0</span>
-  <span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_len'>len</span><span class='comma'>,</span> <span class='id identifier rubyid_frecv'>frecv</span><span class='op'>|</span>
-    <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_len'>len</span> <span class='op'>-</span> <span class='id identifier rubyid_seq_len'>seq_len</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>/</span> <span class='id identifier rubyid_clusters'>clusters</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
-
-  <span class='id identifier rubyid_b_vector'>b_vector</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-
-  <span class='id identifier rubyid_clusters'>clusters</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cluster'>cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-    <span class='comment'>#the average dissimilarity of the sequence with the members of cluster i
-</span>    <span class='kw'>if</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>!=</span> <span class='id identifier rubyid_idx'>idx</span>
-      <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='int'>0</span>
-      <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_len'>len</span><span class='comma'>,</span> <span class='id identifier rubyid_frecv'>frecv</span><span class='op'>|</span>
-        <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='id identifier rubyid_b'>b</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_len'>len</span> <span class='op'>-</span> <span class='id identifier rubyid_seq_len'>seq_len</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>/</span> <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_lengths'>lengths</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
-      <span class='kw'>unless</span> <span class='id identifier rubyid_b'>b</span> <span class='op'>==</span> <span class='int'>0</span>
-        <span class='id identifier rubyid_b_vector'>b_vector</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='id identifier rubyid_b_vector'>b_vector</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_b'>b</span> <span class='op'>==</span> <span class='kw'>nil</span>
-    <span class='id identifier rubyid_b'>b</span><span class='op'>=</span><span class='int'>0</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_silhouette'>silhouette</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_b'>b</span> <span class='op'>-</span> <span class='id identifier rubyid_a'>a</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>/</span> <span class='lbracket'>[</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span><span class='id identifier rubyid_b'>b</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_silhouette'>silhouette</span>
+  <span class='comment'># Exception is raised when blast founds no hits
+</span>  <span class='kw'>rescue</span>  <span class='const'>NotEnoughHitsError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_error'>error</span>
+    <span class='ivar'>@validation_report</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not enough evidence</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:warning</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@validation_report</span>
+  <span class='kw'>else</span> 
+    <span class='ivar'>@validation_report</span> <span class='op'>=</span> <span class='const'>ValidationReport</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected error</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:error</span><span class='rparen'>)</span>
+    <span class='ivar'>@validation_report</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='const'>OtherError</span>
+    <span class='kw'>return</span> <span class='ivar'>@validation_report</span>
+  <span class='kw'>end</span>       
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1301,9 +973,9 @@ silhouette of the sequence</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Aug  7 01:58:46 2013 by
+  Generated on Sat Sep 28 07:01:33 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-1.9.3).
+  0.8.7.2 (ruby-1.9.3).
 </div>
 
   </body>
