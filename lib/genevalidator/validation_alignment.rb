@@ -42,12 +42,14 @@ class AlignmentValidation < ValidationTest
   attr_reader :filename
   attr_reader :multiple_alignment
   attr_reader :mafft_path
+  attr_reader :raw_seq_file
   attr_reader :index_file_name
 
-  def initialize(type, prediction, hits, filename, mafft_path, index_file_name)
+  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name)
     super
     @filename        = filename
     @mafft_path      = mafft_path
+    @raw_seq_file    = raw_seq_file
     @index_file_name = index_file_name
     @short_header    = "MA"
     @header          = "Missing/Extra sequences"

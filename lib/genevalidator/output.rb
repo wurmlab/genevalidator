@@ -43,7 +43,7 @@ class Output
   def print_output_console
 
     if @idx == @start_idx
-      header =sprintf("%3s|%20s|%5s", "No", "Description", "No_Hits")
+      header =sprintf("%3s|%20s|%5s", "No", "Identifier", "No_Hits")
       validations.map do |v| 
         header<<"|#{v.short_header}"
       end
@@ -51,7 +51,7 @@ class Output
     end
 
     short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-    short_def = short_def[0..[20,short_def.length].min]
+    #short_def = short_def[0..[20,short_def.length].min]
     validation_outputs = validations.map{|v| v.validation_report.print}
 
     output = sprintf("%3s|%20s|%5s|", @idx, short_def, @nr_hits)
@@ -86,7 +86,7 @@ class Output
 
 
   def generate_html
-
+ 
     successes = validations.map{|v| v.validation_report.result == 
       v.validation_report.expected}.count(true)
     fails = validations.map{|v| v.validation_report.validation != :unapplicable and
@@ -116,6 +116,7 @@ class Output
     erb = ERB.new(template_file)
 
     File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
+ 
   end
 
   ##

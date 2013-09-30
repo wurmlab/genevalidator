@@ -84,7 +84,7 @@ class TabularParser
         return []
       end
  
-      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}[^\n]*/)
+      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}\t[^\n]*/)
 
       next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1  
       @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]

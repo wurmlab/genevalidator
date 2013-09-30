@@ -38,13 +38,15 @@ class Hsp
     case column
       when "qstart"
         if type == :nucleotide
-          @match_query_from = (value.to_i/3)+1
+#          @match_query_from = (value.to_i/3)+1
+          @match_query_from = value.to_i
         else
           @match_query_from = value.to_i
         end
       when "qend"
         if type == :nucleotide
-          @match_query_to = (value.to_i/3) + 1
+#          @match_query_to = (value.to_i/3) + 1
+          @match_query_to = value.to_i
         else
           @match_query_to = value.to_i
         end

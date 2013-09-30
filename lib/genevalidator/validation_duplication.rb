@@ -42,11 +42,13 @@ end
 class DuplicationValidation < ValidationTest
 
   attr_reader :mafft_path
+  attr_reader :raw_seq_file
   attr_reader :index_file_name
  
-  def initialize(type, prediction, hits, mafft_path, index_file_name)
+  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name)
     super
     @mafft_path      = mafft_path
+    @raw_seq_file    = raw_seq_file
     @index_file_name = index_file_name
     @short_header    = "Duplication"
     @header          = "Duplication"
@@ -79,19 +81,24 @@ class DuplicationValidation < ValidationTest
         less_hits.map do |hit|
           #get gene by accession number
           if hit.raw_sequence == nil
-            #hit.get_sequence_from_index_file(@index_file_name, hit.identifier)
-            if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-            else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+
+            hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+
+            if hit.raw_sequence == nil or hit.raw_sequence.empty?
+              if hit.type == :protein
+                hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+              else
+                hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+              end
             end
-            if hit.raw_sequence == ""
+
+            if hit.raw_sequence.empty?
               useless_hits.push(hit)
             end
           end
         end
-        rescue Exception => error
-          raise NoInternetError
+      rescue Exception => error
+        raise NoInternetError
       end
       useless_hits.each{|hit| less_hits.delete(hit)}
 
@@ -140,6 +147,7 @@ class DuplicationValidation < ValidationTest
             end
           end 
 
+          
           # check multiple coverage
 
           # for each hsp of the curent hit
@@ -162,7 +170,7 @@ class DuplicationValidation < ValidationTest
           averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
         end
       end
-    
+
       # if all hsps match only one time
       if averages.reject{|x| x==1} == []
         @validation_report = DuplicationValidationOutput.new(1)

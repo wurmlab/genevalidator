@@ -1,4 +1,5 @@
 require 'net/http'
+require 'io/console'
 
 class Sequence
 
@@ -33,27 +34,23 @@ class Sequence
   ##
   # Gets raw sequence by fasta identifier from a fasta index file 
   # Params:
+  # +index_file_name+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +identifier+: String
   # Output:
   # String with the nucleotide sequence corresponding to the identifier
-  def get_sequence_from_index_file(index_file_name, identifier)
+  def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier)
     begin
-      index = Bio::FlatFileIndex::open(index_file_name)
 
-      puts identifier
+      hash = YAML.load_file(index_file_name)
+      idx = hash[identifier]
 
-      results = index.search(identifier)
-      puts "Results: #{results.size}"
-      results.each do |str|
-        puts str
-      end
-      index.close
+      query         = IO.binread(raw_seq_file, idx[1] - idx[0], idx[0])
+      parse_query   = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+      @raw_sequence = parse_query[1].gsub("\n","")
 
-      #fasta_sequence = index.get_by_id(identifier)  # returned as fasta string
-      #return fasta_sequence
     rescue Exception => error
-      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."      
+#      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."      
     end
   end
 
