@@ -3,9 +3,9 @@ Gem::Specification.new do |s|
   s.name        = 'GeneValidator'
   s.date        = '2013-07-22'
   s.version     = '0.1'
-  s.authors     = ['Monica Dragan', 'Yannick Wurm', 'Anurag Priyam']
+  s.authors     = ['Monica Dragan', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'monica.dragan@cti.pub.ro'
-  s.homepage    = 'https://github.com/monicadragan/gene_prediction/'
+  s.homepage    = 'https://github.com/monicadragan/GeneValidator'
 
   s.summary     = 'Identifying problems with gene predictions.'
   s.description = <<DESC
@@ -31,10 +31,10 @@ DESC
 
   To launch GeneValidator execute 'genevalidator' from command line.
 
-    $ genevalidatior [-v VALIDATIONS] [--skip_blast xml_file_path] [-s START] fasta_file_path
+    $ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE
 
   This is a GSoC project. 
-  Visit https://github.com/monicadragan/gene_prediction/wiki for more information.
+  Visit https://github.com/monicadragan/GeneValidator/wiki for more information.
 ------------------------------------------------------------------------
 
 INFO
