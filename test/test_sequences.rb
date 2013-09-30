@@ -34,7 +34,7 @@ class TestSequenceClass < MiniTest::Unit::TestCase
       seq.init_tabular_attribute("slen", no)
       seq.init_tabular_attribute("qseqid", value)
 
-      assert_equal seq.definition, value
+      assert_equal seq.identifier, value
       assert_equal seq.accession_no, value
       assert_equal seq.length_protein, no
       assert seq.length_protein.is_a? Fixnum
@@ -50,7 +50,22 @@ class TestSequenceClass < MiniTest::Unit::TestCase
       seq.init_tabular_attribute("send",value)
       seq.init_tabular_attribute("length",value)
 
-      string="abababa"
+      protein = true
+      filename_prot = "test/test_files/mixed_type.fasta"
+      begin
+        original_stderr = $stderr
+        $stderr.reopen("/dev/null", "w")
+
+        string2 = "ATGCTGATCGACTATGCAAT"
+        seq.init_tabular_attribute("qseq",string2)
+        seq.init_tabular_attribute("sseq",string2)
+      rescue SequenceTypeError => e
+        protein = false
+      end
+      $stderr = original_stderr
+      assert_equal protein, false
+
+      string = "IEDLRHSLIEDLRHS"
       seq.init_tabular_attribute("qseq",string)
       seq.init_tabular_attribute("sseq",string)
 
