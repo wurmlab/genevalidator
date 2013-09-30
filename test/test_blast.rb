@@ -194,7 +194,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
     end
-
+=begin
     it "should return error when using a nonexisting input file" do
       original_stderr = $stderr
       $stderr.reopen("/dev/null", "w")
@@ -211,7 +211,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal error, true
 
     end 
-
+=end
     it "should return error when using a nonexisting fasta file" do
       original_stderr = $stderr
       $stderr.reopen("/dev/null", "w")
