@@ -211,7 +211,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal error, true
 
     end 
-=end
+
     it "should return error when using a nonexisting fasta file" do
       original_stderr = $stderr
       $stderr.reopen("/dev/null", "w")
@@ -228,5 +228,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr = original_stderr
       assert_equal error, true
     end
+=end
   end
 end
