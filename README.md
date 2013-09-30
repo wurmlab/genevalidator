@@ -18,11 +18,11 @@ The goal of GeneValidator is to identify problems with gene predictions and prov
 ### Current Validations
 * Length validation by clusterization
 * Length validation by ranking
-* Reading frame validation
 * Check gene merge
 * Check duplications
+* Reading frame validation (for nucleotides)
 * Main ORF validation (for nucleotides)
-* Validation based on multiple alignment ~ under development
+* Validation based on multiple alignment (for proteins) 
 * Codon coverage ~ under development
 
 ### Requirements
@@ -34,13 +34,13 @@ Linux and MacOS are officially supported!
 
 ### Installation
 1. Get the source code<br>
-`$ git clone git@github.com:monicadragan/gene_prediction.git`
+`$ git clone git@github.com:monicadragan/GeneValidator.git`
 
 2. Be sudo and build the gem<br>
 `$ sudo rake`
 
 3. Run GeneValidation<br>
-`$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FILE` 
+`$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE` 
 
 Example that emphasizes all the validations:<br>
 `$ genevalidator -x data/all_validations_prot/all_validations_prot.xml data/all_validations_prot/all_validations_prot.fasta`
