@@ -17,11 +17,14 @@ opt_parser = OptionParser.new do |opt|
   opt.banner = "USE:"
   opt.separator  "\t $ get_raw_sequences BLAST_OUTPUT_FILE -o OUTPUT_FILE [-t TABULAR_FORMAT] [-d DATABASES] [-n NR]"
 
+  opt.separator  ""
+
   # default blast tabular columns
-  opt.on("-d", "--db [DATABASES]","list of databases where to look up the sequences") do |lst|
-    options[:tabular] = lst
+  opt.on("-d", "--db [DATABASES]","database where to look up the sequences") do |db|
+    options[:db] = db
   end
 
+  options[:tabular] = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
   # default blast tabular columns
   opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
     options[:tabular] = lst
@@ -51,23 +54,27 @@ opt_parser.parse!(ARGV)
 
 if ARGV.length != 1
   puts opt_parser
+  exit!
 end
 
 if options[:db] == nil
   $stderr.print "Error: db argument is mandatory\n."
   puts opt_parser
+  exit!
 end
 
-db = "../../../ncbi-blast-2.2.28+/db/nr/nr"
 output_file = options[:out]
-n = options[:nr]
+db = options[:db]
+
+# some of the hits may be identical hits and 
+# therefore considered in the analisys
+n = options[:nr] + 5 
 
 File.open(output_file, 'w') {|f| f.write("") }
 
 begin
   output = File.open(ARGV[0], "rb").read
   iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-  iterator_tab = TabularParser.new(output, "", "")
   begin
     iter = iterator_xml.next
     
@@ -87,29 +94,65 @@ begin
         $stderr.print "Identifier not found in your database. Or... did you add BLAST path to the LOADPATH?\n"        
       end
 
-      #puts blast_cmd
-      #puts hit.accession
       cnt += 1
     end
-=begin
-    begin
-      puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
-      hits = iterator_tab.next
-      if hits == nil
-        break
-      end
-            do_validations(hits)
-    rescue Exception => error
-      $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
-      exit!
-    end
-=end
-  
-  rescue StopIteration
-    exit
-#  rescue Exception
-#    puts "nither tabular not xml"
   end while 1
-end
-       
+rescue StopIteration => error
+  exit!
+rescue Exception => error
+  begin
+    format = options[:tabular]
+    column_names = format.split(/[ ,]/)
+    query_id_idx = column_names.index("qseqid")
+    hit_id_idx   = column_names.index("sseqid")
+    accno_idx    = column_names.index("sacc")
+
+    while output.length > 0 do
+      first_row = output.scan(/([^\n]*)\n/)
+
+      unless first_row[0][0].scan(/\t/).length + 1 == column_names.length
+        raise InconsistentTabularFormat
+      end
+
+      query_id = first_row.join().split("\t")[query_id_idx]
+
+      hits = output.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}\t[^\n]*/)
+
+      next_query = output.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1
+      output =  output[next_query..output.length-1]
+
+      hits = hits.map{|hit| hit.split("\t")}
+      cnt = 0
+      # for each hit 
+      hits.group_by{|hit| hit[hit_id_idx]}.each do |idx, hit|
+        if cnt == n
+          break
+        end
+
+        accession = hit[0][accno_idx]            
+
+        #get the raw sequence
+        blast_cmd = "blastdbcmd -entry #{accession} -db #{db} -outfmt %f"
+        output_blast = %x[#{blast_cmd} 2>/dev/null]
+
+        if output_blast != "" and output.match(/error/) == nil and output_blast.match(/ERROR/) == nil
+          File.open(output_file, 'a') {|f| f.write(output_blast) }
+        else
+          $stderr.print "Identifier not found in your database. Or... did you add BLAST path to the LOADPATH?\n"
+        end
+
+        cnt += 1
+      end
+    end
+
+  rescue InconsistentTabularFormat =>error
+    $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+      "Possible cause: The tabular file and the tabular header do not correspond. "<<
+      "Please provide -tabular argument with the correct format of the columns\n"
+    exit!
+  rescue Exception => error
+    $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
+    exit!
+  end
+end       
 
