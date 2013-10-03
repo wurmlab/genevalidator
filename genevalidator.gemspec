@@ -19,6 +19,7 @@ DESC
   s.add_dependency('rinruby')
   s.add_dependency('bio')
   s.add_dependency('mini_shoulda')
+  s.add_dependency('rack', "~> 1.5.2")
 
   s.files       = ["lib/genevalidator.rb"] + Dir['lib/**/*']
   s.executables   = ['genevalidator', 'get_raw_sequences']
