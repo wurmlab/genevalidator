@@ -165,7 +165,7 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
               :bars,
-              "Length distribution histogram",
+              "[Length Validation] Length distribution histogram",
               "prediction, black;most dense cluster,red;other hits, blue",
               "length",
               "frequency",
@@ -198,7 +198,7 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                :lines,
-               "Hits vs prediction",
+               "[Length Validation] Hits vs prediction",
                "hit length, gray;high-scoring segment pairs (hsp), red",
                "length",
                "idx",

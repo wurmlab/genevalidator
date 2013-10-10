@@ -134,7 +134,7 @@ class GeneMergeValidation < ValidationTest
       f.close
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
                        :lines,  
-                       "Prediction vs hit match", 
+                       "[Gene Merge] Prediction vs hit match", 
                        "prediction, gray; prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange", 
                        "length", 
                        "idx",
@@ -157,7 +157,7 @@ class GeneMergeValidation < ValidationTest
     f.close
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :scatter,
-                                "Start vs end hsp match",
+                                "[Gene Merge] Start vs end hsp match",
                                 "",
                                 "from",
                                 "to",

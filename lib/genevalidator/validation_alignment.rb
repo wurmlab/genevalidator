@@ -384,7 +384,7 @@ class AlignmentValidation < ValidationTest
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :lines,
-                                "Multiple alignment and Statistical model of blast hits",
+                                "[Missing/Extra sequences] Multiple align & Statistical model of hits",
                                 "gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
                                 "alignment length",
                                 "idx",
