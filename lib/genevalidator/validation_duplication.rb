@@ -85,20 +85,21 @@ class DuplicationValidation < ValidationTest
           hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
   
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
-            begin
-              if hit.type == :protein
-                hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-              else
-                hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
-              end
-            rescue Exception => error
-              raise NoInternetError
-            end        
+            if hit.type == :protein
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+            else
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+            end
           end
 
-          if hit.raw_sequence.empty?
+          if hit.raw_sequence == nil
             useless_hits.push(hit)
+          else
+            if hit.raw_sequence.empty?
+              useless_hits.push(hit)
+            end
           end
+
         end
       end
 
@@ -193,7 +194,7 @@ class DuplicationValidation < ValidationTest
       @validation_report = ValidationReport.new("Mafft error", :error)
       @validation_report.errors.push NoMafftInstallationError                          
       return @validation_report
-    rescue NoInternetError
+    rescue NoInternetError 
       @validation_report = ValidationReport.new("Internet error", :error)
       @validation_report.errors.push NoInternetError
       return @validation_report
