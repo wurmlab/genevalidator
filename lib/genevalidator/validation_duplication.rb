@@ -76,30 +76,32 @@ class DuplicationValidation < ValidationTest
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
       useless_hits = []
-      begin
-        # get raw sequences for less_hits
-        less_hits.map do |hit|
-          #get gene by accession number
-          if hit.raw_sequence == nil
 
-            hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+      # get raw sequences for less_hits
+      less_hits.map do |hit|
+        #get gene by accession number
+        if hit.raw_sequence == nil
 
-            if hit.raw_sequence == nil or hit.raw_sequence.empty?
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+  
+          if hit.raw_sequence == nil or hit.raw_sequence.empty?
+            begin
               if hit.type == :protein
                 hit.get_sequence_by_accession_no(hit.accession_no, "protein")
               else
                 hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
               end
-            end
+            rescue Exception => error
+              raise NoInternetError
+            end        
+          end
 
-            if hit.raw_sequence.empty?
-              useless_hits.push(hit)
-            end
+          if hit.raw_sequence.empty?
+            useless_hits.push(hit)
           end
         end
-      rescue Exception => error
-        raise NoInternetError
       end
+
       useless_hits.each{|hit| less_hits.delete(hit)}
 
       if less_hits.length == 0 

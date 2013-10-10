@@ -85,29 +85,43 @@ class AlignmentValidation < ValidationTest
       # get the first n hits
       less_hits = @hits[0..[n-1,@hits.length].min]
       useless_hits = []
-      begin
-        # get raw sequences for less_hits
-        less_hits.map do |hit| 
-          if hit.raw_sequence == nil
-            #get gene by accession number
-            if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
-            else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+
+      # get raw sequences for less_hits
+      less_hits.map do |hit|
+        #get gene by accession number
+        if hit.raw_sequence == nil
+          
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+
+          if hit.raw_sequence == nil or hit.raw_sequence.empty?
+            begin
+              if hit.type == :protein
+                hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+              else
+                hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+              end
+            rescue Exception => error
+              raise NoInternetError
             end
-            if hit.raw_sequence == ""
-              useless_hits.push(hit)
-            end         
+          end
+
+          if hit.raw_sequence.empty?
+            useless_hits.push(hit)
           end
         end
       end
+      
       useless_hits.each{|hit| less_hits.delete(hit)}
+
+      if less_hits.length == 0
+        raise NoInternetError
+      end
 
       begin
         # multiple align sequences from  less_hits with the prediction
         multiple_align_mafft(prediction, less_hits)
       rescue Exception => error
-        raise NoInternetError
+        raise NoMafftInstallationError
       end
       
       sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
@@ -306,9 +320,7 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +String+: the new sequence
   def remove_isolated_residues(seq, len = 2)
-    #puts seq
     gap_starts = seq.to_enum(:scan,/(-\w{1,#{len}}-)/i).map{|m| $`.size + 1}
-    #puts gap_starts.to_s
     # remove isolated residues 
     gap_starts.each do |i|
       (i..i+len-1).each do |j|
