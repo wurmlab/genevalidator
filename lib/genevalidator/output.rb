@@ -17,6 +17,8 @@ class Output
   attr_accessor :idx
   attr_accessor :start_idx
 
+  attr_accessor :overall_score
+
   ##
   # Initilizes the object
   # Params:
@@ -43,7 +45,7 @@ class Output
   def print_output_console
 
     if @idx == @start_idx
-      header =sprintf("%3s|%20s|%5s", "No", "Identifier", "No_Hits")
+      header =sprintf("%3s|%s|%20s|%5s", "No", "Score", "Identifier", "No_Hits")
       validations.map do |v| 
         header<<"|#{v.short_header}"
       end
@@ -54,7 +56,15 @@ class Output
     #short_def = short_def[0..[20,short_def.length].min]
     validation_outputs = validations.map{|v| v.validation_report.print}
 
-    output = sprintf("%3s|%20s|%5s|", @idx, short_def, @nr_hits)
+    successes = validations.map{|v| v.validation_report.result ==
+      v.validation_report.expected}.count(true)
+    fails = validations.map{|v| v.validation_report.validation != :unapplicable and
+      v.validation_report.validation != :error and
+      v.validation_report.result != v.validation_report.expected}.count(true)
+    unknown = validations.length - successes - fails
+    overall_score = (successes*100/(successes + fails + 0.0)).round(0)  
+
+    output = sprintf("%3s|%d|%20s|%5s|", @idx, overall_score, short_def, @nr_hits)
     validation_outputs.each do |item|
       item_padd = sprintf("%17s", item);
       output << item
