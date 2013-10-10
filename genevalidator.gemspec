@@ -13,11 +13,12 @@ The tool validates the input predicted genes and provides useful information (le
 DESC
 
   # dependencies
-  s.required_ruby_version     = '>= 1.9.3'
+#  s.required_ruby_version     = '> 1.9.3'
 
   s.add_dependency('bio-blastxmlparser')
   s.add_dependency('rinruby')
   s.add_dependency('bio')
+  s.add_dependency('statsample')
   s.add_dependency('mini_shoulda')
   s.add_dependency('rack', "~> 1.5.2")
 
