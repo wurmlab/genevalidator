@@ -1,9 +1,12 @@
 Identify problems with predicted genes
 ===============
 
-This is a GSoC 2013 project.<br>
-Details about the project's progress during the **Coding period** can be found [here](https://github.com/monicadragan/gene_prediction/wiki/Project-Diary).<br>
-We also have a [blog](http://gene-prediction.blogspot.ro/).<br><br>
+<h3>Resources:</h3>
+
+* [Documentation](http://gene-prediction.blogspot.ch/p/documentation.html)
+* [Blog](http://gene-prediction.blogspot.ro/)
+* [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
+<br>
 <h3><div align = center><font color="blue">
 GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the aplha version of GeneValidator.<br> We continue the development.<br> So, stay tunned!
 
