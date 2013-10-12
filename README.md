@@ -15,7 +15,7 @@ GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the a
 
 ### Resources
 
-* [Documentation](http://gene-prediction.blogspot.ch/p/documentation.html)
+* [Full Documentation](http://gene-prediction.blogspot.ch/p/documentation.html)
 * [Blog](http://gene-prediction.blogspot.ro/)
 * [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
 <br>
