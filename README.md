@@ -1,12 +1,6 @@
 Identify problems with predicted genes
 ===============
 
-<h3>Resources:</h3>
-
-* [Documentation](http://gene-prediction.blogspot.ch/p/documentation.html)
-* [Blog](http://gene-prediction.blogspot.ro/)
-* [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
-<br>
 <h3><div align = center><font color="blue">
 GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the aplha version of GeneValidator.<br> We continue the development.<br> So, stay tunned!
 
@@ -18,6 +12,13 @@ GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the a
 
 * GSoC student: [Monica Dragan](http://swarm.cs.pub.ro/~mdragan/gsoc2013/Monica_Dragan_CV.pdf) ([email](mailto:monica.dragan@cti.pub.ro))
 * Mentors: [Anurag Priyam](https://plus.google.com/114122400102590087616/about)([email](mailto:anurag08priyam@gmail.com)) and [Yannick Wurm](http://yannick.poulet.org/)([email](mailto:y.wurm@qmul.ac.uk))
+
+### Resources
+
+* [Documentation](http://gene-prediction.blogspot.ch/p/documentation.html)
+* [Blog](http://gene-prediction.blogspot.ro/)
+* [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
+<br>
 
 ### Abstract
 The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases.The results of the prediction validation will make evidence about how the sequencing curation may be done and can be useful in improving / trying new approaches for gene prediction tools. The main target users of this tool are the Biologists who want to validate the data obtained in their own laboratories.
