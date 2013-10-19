@@ -38,6 +38,17 @@ end
 # length validation by hit length clusterization
 class LengthClusterValidation < ValidationTest
 
+  header       "Length Cluster"
+  short_header "LengthCluster"
+
+  description <<EOD
+Check whether the prediction length fits most of the BLAST hit lengths, by 1D
+hierarchical clusterization. Meaning of the output displayed: Prediction_len"
+[Main Cluster Length Interval]
+EOD
+
+  cli_name "lenc"
+
   attr_reader :filename
   attr_reader :clusters
   attr_reader :max_density_cluster
@@ -51,12 +62,6 @@ class LengthClusterValidation < ValidationTest
   def initialize(type, prediction, hits, filename)
     super
     @filename = filename
-    @short_header = "LengthCluster"
-    @header = "Length Cluster"
-    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
-      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
-      " [Main Cluster Length Interval]"
-    @cli_name = "lenc" 
   end
 
 
