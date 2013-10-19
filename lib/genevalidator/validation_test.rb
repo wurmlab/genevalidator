@@ -68,6 +68,9 @@ class ValidationTest
   end
 
   def run
-   raise 'run method should be implemented by all classes that extend ValidationTest'
+    start = Time.now
+    yield
+    @running_time = Time.now - start
+    #raise 'run method should be implemented by all classes that extend ValidationTest'
   end  
 end
