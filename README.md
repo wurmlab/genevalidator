@@ -2,7 +2,7 @@ Identify problems with predicted genes
 ===============
 <br>
 <h3><div align = center><font color="blue">
-GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the aplha version of GeneValidator.<br> We continue the development.<br> So, stay tunned!
+GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the alpha version of GeneValidator.<br> We continue the development.<br> So, stay tunned!
 
 
 </font></div></h3>
