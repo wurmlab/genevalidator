@@ -1,7 +1,12 @@
+
+The command for precalculating the raw sequences is (replace path_to_blast_database with your local path):
+
+$ get_raw_sequences -d /path/to/your/blast/db/nr/nr -o data/all_validations_mrna/all_validations_mrna.xml.raw_seq data/all_validations_mrna/all_validations_mrna.xml
+
 The commands used to generate this output are:
 
-$ genevalidator -x data/all_validations_mrna/all_validations_mrna.xml data/all_validations_mrna/all_validations_mrna.fasta
+$ genevalidator -x data/all_validations_mrna/all_validations_mrna.xml data/all_validations_mrna/all_validations_mrna.fasta -r data/all_validations_mrna/all_validations_mrna.xml.raw_seq
 or
-$ genevalidator -x data/all_validations_mrna/all_validations_mrna.tab data/all_validations_mrna/all_validations_mrna.fasta -t "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue"
+$ genevalidator -x data/all_validations_mrna/all_validations_mrna.tab data/all_validations_mrna/all_validations_mrna.fasta -t "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue" -r data/all_validations_mrna/all_validations_mrna.xml.raw_seq
 
 
