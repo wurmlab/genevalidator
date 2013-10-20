@@ -37,7 +37,7 @@ DESC
     $ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE
 
   This is a GSoC project. 
-  Visit https://github.com/monicadragan/GeneValidator/wiki for more information.
+  Visit https://github.com/monicadragan/GeneValidator for more information.
 ------------------------------------------------------------------------
 
 INFO

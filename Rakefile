@@ -14,6 +14,14 @@ task :test do
   end
 end
 
+desc "GeneValidationValidator"
+task :test_output do
+  Rake::TestTask.new do |t|
+    t.libs << "test/big_test"
+    t.test_files = FileList['test/big_test/*.rb']
+  end
+end
+
 desc "Generates documentation"
 task :doc do
   exec("yardoc 'lib/**/*.rb'")

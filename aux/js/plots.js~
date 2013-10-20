@@ -491,7 +491,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 	      .attr("y", 15*h)
 		  .attr("width", 10)
 		  .attr("height", 10)
-		  .style("fill", color_beautification(array[i].replace(/\s+/g, '')))
+		  .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
 	var chunkSize = legend_width
  	var length = array[0].length 

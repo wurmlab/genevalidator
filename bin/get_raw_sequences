@@ -15,12 +15,12 @@ options = {}
 opt_parser = OptionParser.new do |opt|
   opt.separator  ""
   opt.banner = "USE:"
-  opt.separator  "\t $ get_raw_sequences BLAST_OUTPUT_FILE -o OUTPUT_FILE [-t TABULAR_FORMAT] [-d DATABASES] [-n NR]"
+  opt.separator  "\t $ get_raw_sequences BLAST_OUTPUT_FILE -o OUTPUT_FILE -d DATABASES [-n NR] [-t TABULAR_FORMAT]"
 
   opt.separator  ""
 
   # default blast tabular columns
-  opt.on("-d", "--db [DATABASES]","database where to look up the sequences") do |db|
+  opt.on("-d", "--db DATABASES","database where to look up the sequences") do |db|
     options[:db] = db
   end
 
@@ -29,7 +29,7 @@ opt_parser = OptionParser.new do |opt|
   opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
     options[:tabular] = lst
   end
-  
+	  
   options[:nr] = 10
   opt.on("-n","--nr [NR]", Integer, "number of queries per query that must be retrieved from the database") do |nr|
     if start.is_a? Fixnum
@@ -74,24 +74,60 @@ File.open(output_file, 'w') {|f| f.write("") }
 
 begin
   output = File.open(ARGV[0], "rb").read
+
+  puts "Downloading raw sequences..."
+
   iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
   begin
     iter = iterator_xml.next
-    
     # parse blast the xml output and get the first 10 hits
     cnt = 0
     iter.each do | hit |
       if cnt == n
-        break
+	break
       end
       #get the raw sequence
-      blast_cmd = "blastdbcmd -entry #{hit.accession} -db #{db} -outfmt %f" 
-      output = %x[#{blast_cmd} 2>/dev/null]
+      blast_cmd = "blastdbcmd -entry #{hit.accession} -db #{db} -outfmt %f"
+      output = %x[#{blast_cmd} 2>&1]
 
-      if output != "" and output.match(/error/) == nil and output.match(/ERROR/) == nil
-        File.open(output_file, 'a') {|f| f.write(output) }        
-      else
-        $stderr.print "Identifier not found in your database. Or... did you add BLAST path to the LOADPATH?\n"        
+      if output.downcase.match(/blastdbcmd/) != nil
+        $stderr.print "Did you add BLAST path to the LOADPATH?\n"
+      else 
+        if output.downcase.match(/database error/) != nil
+          $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
+        else
+          if output.downcase.match(/error/) != nil
+            $stderr.print "Sequence #{hit.accession} not found in your database. Trying to download it from the internet... "
+
+            # try to get the sequence from the Internet
+            begin
+              uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=protein"<<
+                 "&retmax=1&usehistory=y&term=#{hit.accession}/"
+
+              result = Net::HTTP.get(URI.parse(uri))
+  
+              result2 = result
+              queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+              webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+
+              uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
+                 "retmode=text&retstart=0&retmax=1&db=protein&query_key=#{queryKey}&WebEnv=#{webEnv}"
+              result = Net::HTTP.get(URI.parse(uri))
+              output = result[0..result.length-2]
+
+              unless  output.downcase.index(/error/) == nil
+                raise Exception
+              end
+              $stderr.print "success\n"
+            rescue Exception => error
+              $stderr.print "fail\n"
+            end
+          end
+        
+          if output != ""  
+            File.open(output_file, 'a') {|f| f.write(output) }        
+          end
+        end
       end
 
       cnt += 1
@@ -133,12 +169,46 @@ rescue Exception => error
 
         #get the raw sequence
         blast_cmd = "blastdbcmd -entry #{accession} -db #{db} -outfmt %f"
-        output_blast = %x[#{blast_cmd} 2>/dev/null]
+        output_blast = %x[#{blast_cmd}  2>&1]
 
-        if output_blast != "" and output.match(/error/) == nil and output_blast.match(/ERROR/) == nil
-          File.open(output_file, 'a') {|f| f.write(output_blast) }
+        if output_blast.downcase.match(/blastdbcmd/) != nil
+          $stderr.print "Did you add BLAST path to the LOADPATH?\n"
         else
-          $stderr.print "Identifier not found in your database. Or... did you add BLAST path to the LOADPATH?\n"
+          if output_blast.downcase.match(/database error/) != nil
+            $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
+          else
+            if output_blast.downcase.match(/error/) != nil
+              $stderr.print "Sequence #{accession} not found in your database. Trying to download it from the internet... "
+
+              # try to get the sequence from the Internet
+              begin
+                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=protein"<<
+                   "&retmax=1&usehistory=y&term=#{accession}/"
+ 
+                result = Net::HTTP.get(URI.parse(uri))
+ 
+                result2 = result
+                queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+                webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+
+                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
+                   "retmode=text&retstart=0&retmax=1&db=protein&query_key=#{queryKey}&WebEnv=#{webEnv}"
+                result = Net::HTTP.get(URI.parse(uri))
+                output_blast = result[0..result.length-2]
+
+                unless  output_blast.downcase.index(/error/) == nil
+                  raise Exception
+                end
+                $stderr.print "success\n"
+              rescue Exception => error
+                $stderr.print "fail\n"
+              end
+            end
+
+            if output_blast != ""
+              File.open(output_file, 'a') {|f| f.write(output_blast) }
+            end
+          end
         end
 
         cnt += 1

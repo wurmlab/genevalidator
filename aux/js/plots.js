@@ -274,6 +274,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
 
 // scatter plot
+// ecuation of the line: slope * x + yLine
 function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, slope){
 
 	var margin = {top: 50, right: 30, bottom: 75, left: 50},
@@ -321,6 +322,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 
           var xMax = d3.max(data, function(d) { return d.x; })
           var yMax = d3.max(data, function(d) { return d.y; })
+          var yMin = d3.min(data, function(d) { return d.y; })
 	  x.domain(d3.extent(data, function(d) { return d.x; })).nice();
 	  y.domain(d3.extent(data, function(d) { return d.y; })).nice();
 
@@ -356,12 +358,19 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .style("fill", function(d) { return color_beautification("red"); });
 
 	   if(slope!=undefined && yLine!=undefined){
+
 		yLine = parseFloat(yLine.replace(",", "."));
 		var yValue = yLine + slope * xMax
 		if (yValue > yMax){
  			xMax = (yMax-yLine)/slope
 			yValue = yMax
 		}
+
+		if (yValue < yMin){
+ 			xMax = (yMin-yLine)/slope
+			yValue = yMin
+		}
+
 		svg.append("line")
 		  .attr("x1", 0)
 		  .attr("y1", y(yLine))				  

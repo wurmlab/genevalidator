@@ -1,4 +1,5 @@
 require 'json'
+require 'genevalidator/clusterization'
 require 'genevalidator/validation_output'
 require 'genevalidator/validation_test'
 require 'genevalidator/exceptions'

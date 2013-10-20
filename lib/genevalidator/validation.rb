@@ -38,6 +38,7 @@ class Validation
 
   attr_reader :vlist
   attr_reader :tabular_format
+  attr_reader :overall_evaluation
 
   ##
   # Initilizes the object
@@ -48,15 +49,18 @@ class Validation
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
   # +mafft_path+: path of the MAFFT program installation
   # +start_idx+: number of the sequence from the file to start with
+  # +overall_evaluation+: boolean variable for printing / not printing overall evaluation
   def initialize( fasta_filepath, 
                   vlist = ["all"], 
                   tabular_format = nil, 
                   xml_file = nil, 
                   raw_seq_file = nil,
                   mafft_path = nil, 
-                  start_idx = 1)
+                  start_idx = 1,
+                  overall_evaluation = true)
 
     @fasta_filepath = fasta_filepath
+
     @xml_file = xml_file
     @vlist = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
     @idx = 0
@@ -90,6 +94,10 @@ class Validation
     end
 
     begin
+
+      # fasta file is not a file
+      raise FileNotFoundException.new unless File.file?(@fasta_filepath)
+
       # index raw_sequence file
       if raw_seq_file != nil
         raise FileNotFoundException.new unless File.exists?(raw_seq_file)
@@ -120,6 +128,8 @@ class Validation
         File.open(@raw_seq_file_index, "w") do |f|
           YAML.dump(index_hash, f)
         end          
+
+        @overall_evaluation = overall_evaluation
 
       end
       rescue Exception => error
@@ -187,8 +197,9 @@ class Validation
       #check the format of the input file
       parse_output(file)      
     end
-    Output.print_footer(@all_query_outputs, @html_path)
-
+    if @overall_evaluation 
+      Output.print_footer(@all_query_outputs, @html_path)
+    end
   rescue SystemCallError => error
     $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
       "Possible cause: input file is not valid\n"      
@@ -246,7 +257,6 @@ class Validation
             end
 
             query_output = do_validations(prediction, hits)
-
             query_output.generate_html
             query_output.print_output_console
             query_output.print_output_file_yaml
@@ -278,8 +288,8 @@ class Validation
             query_output = do_validations(prediction, hits)
             query_output.generate_html
             query_output.print_output_console
-              query_output.print_output_file_yaml
-              @all_query_outputs.push(query_output)
+            query_output.print_output_file_yaml
+            @all_query_outputs.push(query_output)
 
           end
         rescue SequenceTypeError => error

@@ -50,7 +50,7 @@ class Sequence
       @raw_sequence = parse_query[1].gsub("\n","")
 
     rescue Exception => error
-#      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."      
+#      $stderr.print "Unable to retrieve raw sequence for the following id: #{identifier}\n"
     end
   end
 
