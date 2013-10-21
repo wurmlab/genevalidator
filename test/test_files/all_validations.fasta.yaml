@@ -1,0 +1,177 @@
+---
+!binary "R0IxMDAzNC1QQQ==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 376
+  - 800
+  prediction_len: 554
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_1_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 554
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_1_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 200
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.43
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: 0.23577518141996143
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_1_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 442.56225151919864
+    aux2: 0.23577518141996143
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_1_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 200
+    aux2: 
+- !ruby/object:ValidationReport
+  message: Unexpected error
+  plot_files: []
+  errors:
+  - &12756360 !ruby/class 'NoInternetError'
+  result: :error
+  expected: :yes
+  validation_result: :error
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:ValidationReport
+  message: Unexpected error
+  plot_files: []
+  errors:
+  - &12755640 !ruby/class 'OtherError'
+  result: :error
+  expected: :yes
+  validation_result: :error
+!binary "R0IxMDA0MC1QQQ==":
+- !ruby/object:LengthClusterValidationOutput
+  limits:
+  - 724
+  - 1301
+  prediction_len: 1070
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_2_len_clusters.json
+    type: :bars
+    title: Length distribution histogram
+    footer: prediction, black;most dense cluster,red;other hits, blue
+    xtitle: length
+    ytitle: frequency
+    aux1: 1070
+    aux2: 
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_2_len.json
+    type: :lines
+    title: Hits vs prediction
+    footer: hit length, gray;high-scoring segment pairs (hsp), red
+    xtitle: length
+    ytitle: idx
+    aux1: 200
+    aux2: 
+- !ruby/object:LengthRankValidationOutput
+  percentage: 0.44
+  msg: ''
+  result: :yes
+  expected: :yes
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:GeneMergeValidationOutput
+  slope: -0.07100936890204988
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_2_match_2d.json
+    type: :scatter
+    title: Start vs end hsp match
+    footer: ''
+    xtitle: from
+    ytitle: to
+    aux1: 931.2788581399158
+    aux2: -0.07100936890204988
+  - !ruby/struct:Plot
+    filename: all_validations.fasta_2_match.json
+    type: :lines
+    title: Prediction vs hit match
+    footer: prediction, gray; prediction high-scoring alignmet seq, red; prediction
+      high-scoring alignmet seq, yellow
+    xtitle: length
+    ytitle: idx
+    aux1: 200
+    aux2: 
+- !ruby/object:ValidationReport
+  message: Unexpected error
+  plot_files: []
+  errors:
+  - *12756360
+  result: :error
+  expected: :yes
+  validation_result: :error
+- !ruby/object:ValidationReport
+  message: ''
+  plot_files: []
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+- !ruby/object:ValidationReport
+  message: Unexpected error
+  plot_files: []
+  errors:
+  - *12755640
+  result: :error
+  expected: :yes
+  validation_result: :error
