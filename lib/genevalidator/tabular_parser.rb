@@ -116,7 +116,6 @@ class TabularParser
       end 
       return hit_list
     rescue InconsistentTabularFormat =>error
-      puts error.backtrace
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: The tabular file and the tabular header do not correspond. "<<
         "Please provide -tabular argument with the correct format of the columns\n"
