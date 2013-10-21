@@ -39,6 +39,17 @@ end
 # length validation by hit length clusterization
 class LengthClusterValidation < ValidationTest
 
+  header       "Length Cluster"
+  short_header "LengthCluster"
+
+  description <<EOD
+Check whether the prediction length fits most of the BLAST hit lengths, by 1D
+hierarchical clusterization. Meaning of the output displayed: Prediction_len"
+[Main Cluster Length Interval]
+EOD
+
+  cli_name "lenc"
+
   attr_reader :filename
   attr_reader :clusters
   attr_reader :max_density_cluster
@@ -52,12 +63,6 @@ class LengthClusterValidation < ValidationTest
   def initialize(type, prediction, hits, filename)
     super
     @filename = filename
-    @short_header = "LengthCluster"
-    @header = "Length Cluster"
-    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
-      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
-      " [Main Cluster Length Interval]"
-    @cli_name = "lenc" 
   end
 
 
@@ -69,38 +74,40 @@ class LengthClusterValidation < ValidationTest
   # Output:
   # +LengthClusterValidationOutput+ object
   def run
-    begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
+    super do
+      begin
+        raise NotEnoughHitsError unless hits.length >= 5
+        raise Exception unless prediction.is_a? Sequence and 
+                              hits[0].is_a? Sequence 
 
-      start = Time.now
-      # get [clusters, max_density_cluster_idx]
-      clusterization = clusterization_by_length 
+        start = Time.now
+        # get [clusters, max_density_cluster_idx]
+        clusterization = clusterization_by_length 
 
-      @clusters = clusterization[0]
-      @max_density_cluster = clusterization[1]
-      limits = @clusters[@max_density_cluster].get_limits
-      prediction_len = @prediction.length_protein
+        @clusters = clusterization[0]
+        @max_density_cluster = clusterization[1]
+        limits = @clusters[@max_density_cluster].get_limits
+        prediction_len = @prediction.length_protein
 
-      @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
-      plot1 = plot_histo_clusters
-      @validation_report.plot_files.push(plot1)
-      plot2 = plot_len_clusters
-      @validation_report.plot_files.push(plot2)
-      @running_time = Time.now - start
+        @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
+        plot1 = plot_histo_clusters
+        @validation_report.plot_files.push(plot1)
+        plot2 = plot_len_clusters
+        @validation_report.plot_files.push(plot2)
+        @running_time = Time.now - start
 
-      return @validation_report
+        return @validation_report
 
-    # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
-      return @validation_report
-    else 
-      @validation_report = ValidationReport.new("Unexpected error", :error)
-      @validation_report.errors.push OtherError
-      return @validation_report
-    end       
+      # Exception is raised when blast founds no hits
+      rescue  NotEnoughHitsError => error
+        @validation_report = ValidationReport.new("Not enough evidence", :warning)
+        return @validation_report
+      else 
+        @validation_report = ValidationReport.new("Unexpected error", :error)
+        @validation_report.errors.push OtherError
+        return @validation_report
+      end       
+    end
   end
 
 
