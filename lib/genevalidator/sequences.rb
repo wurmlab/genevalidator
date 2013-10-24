@@ -63,6 +63,9 @@ class Sequence
   # String with the nucleotide sequence corresponding to the accno
   def get_sequence_by_accession_no(accno, db)
     begin
+
+      puts "Tries to connect to the internet for #{accno}"
+
       uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}"<<
          "&retmax=1&usehistory=y&term=#{accno}/"
       result = Net::HTTP.get(URI.parse(uri))

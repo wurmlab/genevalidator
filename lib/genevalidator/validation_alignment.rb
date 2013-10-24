@@ -366,15 +366,15 @@ class AlignmentValidation < ValidationTest
 
       f = File.open(output , "w")
       f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}}.flatten +
       ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
       #plot prediction
       [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"green"}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"black"}} +
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white"}} +
       #plot statistical model
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"red"}] +
       sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"orange"}} +
-      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"black"}}).to_json)
+      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}).to_json)
       f.close
 
       yAxisValues = "sm, pred"
@@ -385,7 +385,7 @@ class AlignmentValidation < ValidationTest
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :lines,
                                 "[Missing/Extra sequences] Multiple align & Statistical model of hits",
-                                "gaps, black;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
+                                "gaps, white;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
                                 "alignment length",
                                 "idx",
                                 ma.length+1,

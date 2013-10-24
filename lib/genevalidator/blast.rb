@@ -151,7 +151,7 @@ class BlastUtils
             raise SequenceTypeError
           end
           current_hsp.align_len = hsp.align_len.to_i
-          current_hsp.identity  = hsp.identity.to_i
+          current_hsp.identity  = hsp.identity.to_i          
           current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  
 
           hsps.push(current_hsp)

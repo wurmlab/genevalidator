@@ -102,9 +102,10 @@ class Validation
       if raw_seq_file != nil
         raise FileNotFoundException.new unless File.exists?(raw_seq_file)
         @raw_seq_file = raw_seq_file
+
         # leave only the identifiers in the fasta description
-        content = File.open(raw_seq_file, "rb").read
-        File.open(raw_seq_file, 'w+') { |file| file.write(content.gsub(/ .*/, ""))}
+        content = File.open(raw_seq_file, "rb").read.gsub(/ .*/, "")
+        File.open(raw_seq_file, 'w+') { |file| file.write(content)}
 
         #index the fasta file
         keys = content.scan(/>(.*)\n/).flatten
@@ -319,12 +320,14 @@ class Validation
     hits.each do |hit|
       # check if all hsps have identity more than 99%
       low_identity = hit.hsp_list.select{|hsp| hsp.pidentity == nil or hsp.pidentity < 99}
+
       # check the coverage
       coverage = Array.new(prediction.length_protein,0)
       hit.hsp_list.each do |hsp| 
          len = hsp.match_query_to - hsp.match_query_from + 1
          coverage[hsp.match_query_from-1..hsp.match_query_to-1] = Array.new(len, 1)
       end
+
       if low_identity.length == 0 and coverage.uniq.length == 1
         identical_hits.push(hit) 
       end
