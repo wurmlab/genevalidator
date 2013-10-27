@@ -7,6 +7,7 @@
 	var evaluation_div = document.getElementById('report_1');
 
 	var content_less = "<br><%= less %> <br> <a style='cursor: pointer;' onClick='evaluation_div.innerHTML=content'> Dysplay the rest of the report >> </a>";
+	alert('<%= evaluation %>')
 	var content = "<%= evaluation %> <br> <a style='cursor: pointer;' onClick='evaluation_div.innerHTML=content_less'> << Dysplay less </a>";	
 
   	evaluation_div.innerHTML = content_less;

@@ -38,9 +38,6 @@
 	</div>
 
   <style>
-	  .<%=toggle%>_ul {
-	    margin: 0 auto; 
-	  }
 	  .item {
 	    float: left; 
 	  }

@@ -35,6 +35,10 @@ pointer-events: none;
   /* white-space:nowrap; */
 }
 
+.success:hover {
+    background-color:#FC6 !important;
+}
+
 .table tbody td.danger{
   color: #000000 !important;
   vertical-align: middle !important;

@@ -136,14 +136,18 @@ class Output
   # +html_path+: path of the html folder
   def self.print_footer(all_query_outputs, html_path)
     overall_evaluation = overall_evaluation(all_query_outputs)
+
+    less = overall_evaluation[0]
+    less = less.gsub("\n","<br>").gsub("'",%q(\\\'))
+
     # print to console
     evaluation = ""
     overall_evaluation.each{|e| evaluation << "\n#{e}"}
     puts evaluation
     puts ""
-    evaluation = evaluation.gsub("\n","<br>")
 
     # print to html
+    evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
     index_file = "#{html_path}/index.html"
     template_file = File.open("aux/template_footer.htm.erb", 'r').read
     erb = ERB.new(template_file)
