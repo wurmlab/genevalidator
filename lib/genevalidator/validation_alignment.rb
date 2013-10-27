@@ -74,11 +74,6 @@ class AlignmentValidation < ValidationTest
         n = 50
       end
 
-      if type.to_s != "protein"
-        @validation_report = ValidationReport.new("", :unapplicable)
-        return @validation_report
-      end
-
       raise NotEnoughHitsError unless hits.length >= n
       raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
       start = Time.new
@@ -118,6 +113,19 @@ class AlignmentValidation < ValidationTest
         raise NoInternetError
       end
 
+      # in case of nucleotide prediction sequence translate into protein
+      # translate with the reading frame of all hits considered for the alignment 
+
+      reading_frames = less_hits.map{|hit| hit.reading_frame}.uniq
+      if reading_frames.length != 1
+        raise ReadingFrameError
+      end
+
+      if @type == :nucleotide
+        s = Bio::Sequence::NA.new(prediction.raw_sequence)
+        prediction.protein_translation = s.translate(reading_frames[0])
+      end
+
       begin
         # multiple align sequences from  less_hits with the prediction
         multiple_align_mafft(prediction, less_hits)
@@ -154,7 +162,11 @@ class AlignmentValidation < ValidationTest
       @validation_report = ValidationReport.new("Internet error", :error)
       @validation_report.errors.push NoInternetError
       return @validation_report
+    rescue  ReadingFrameError => error
+      @validation_report = ValidationReport.new("Multiple reading frames", :error)
+      return @validation_report
     rescue Exception => error
+      puts error.backtrace
       @validation_report.errors.push "Unexpected Error"
       @validation_report = ValidationReport.new("Unexpected error", :error)
       @validation_report.errors.push OtherError
@@ -179,7 +191,7 @@ class AlignmentValidation < ValidationTest
       options = ['--maxiterate', '1000', '--localpair', '--quiet']
       mafft = Bio::MAFFT.new(path, options)
       sequences = hits.map{|hit| hit.raw_sequence}
-      sequences.push(prediction.raw_sequence)
+      sequences.push(prediction.protein_translation)
 
       report = mafft.query_align(sequences)
       # Accesses the actual alignment.
@@ -368,16 +380,17 @@ class AlignmentValidation < ValidationTest
       f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} +
       ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}}.flatten +
       ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
-      #plot prediction
-      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"green"}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white"}} +
       #plot statistical model
-      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"red"}] +
-      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"orange"}} +
-      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}).to_json)
+      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"red"}] +
+      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>1, "start"=>con, "stop"=>con+1, "color"=>"orange"}} +
+      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white"}} +
+      #plot prediction
+      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"green"}] +
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}).to_json)
+
       f.close
 
-      yAxisValues = "sm, pred"
+      yAxisValues = "pred, sm"
       (1..ma.length-1).each do |i|
          yAxisValues << ", hit#{ma.length - i}"
       end

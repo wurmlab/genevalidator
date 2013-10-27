@@ -54,3 +54,7 @@ end
 
 class OtherError < Exception
 end
+
+class  ReadingFrameError < Exception
+end
+
