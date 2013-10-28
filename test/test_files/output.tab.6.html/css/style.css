@@ -85,9 +85,14 @@ padding-top:150px;
 }
 
 .background_image {
+  height: 100px;
   background-image: url(../img/gene.png);
   background-repeat: no-repeat;
   background-position: left;
+  background-size: 27% 100%;
+  padding-left: 9.5%;
+  padding-top: 50px;
+
 }
 
 .my-btn-success {

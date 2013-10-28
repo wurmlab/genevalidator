@@ -96,13 +96,33 @@ class Output
 
 
   def generate_html
- 
+
     successes = validations.map{|v| v.validation_report.result == 
       v.validation_report.expected}.count(true)
+
     fails = validations.map{|v| v.validation_report.validation != :unapplicable and
       v.validation_report.validation != :error and 
       v.validation_report.result != v.validation_report.expected}.count(true)
-    unknown = validations.length - successes - fails
+
+    lcv = validations.select{|v| v.class == LengthClusterValidation}
+    lrv = validations.select{|v| v.class == LengthRankValidation}
+    if lcv.length == 1 and lrv.length == 1
+      score_lcv = (lcv[0].validation_report.result == lcv[0].validation_report.expected)
+      score_lrv = (lrv[0].validation_report.result == lrv[0].validation_report.expected)
+      # if both are true this should be counted as a single success
+      if score_lcv == true and score_lrv == true
+        successes = successes - 1
+      else 
+      # if both are false this will be a fail
+        if score_lcv == false and score_lrv == false
+          fails = fails - 1
+        else
+          successes = successes - 0.5
+          fails = fails - 0.5
+        end
+      end
+    end
+
     overall_score = (successes*100/(successes + fails + 0.0)).round(0)
 
     if fails == 0

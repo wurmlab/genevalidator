@@ -103,7 +103,7 @@ class GeneMergeValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning)
       return @validation_report
     rescue Exception => error
-      @validation_report.errors.push OtherError 
+      @validation_report.errors.push "Unexpected Error" 
       @validation_report = ValidationReport.new("Unexpected error", :error)
       return @validation_report
     end
@@ -121,24 +121,20 @@ class GeneMergeValidation < ValidationTest
 
       colors   = ["orange", "red"]
       f        = File.open(output , "w")
-      no_lines = 100
-      ratio    = (hits.length/no_lines).to_i
+      no_lines = 80
 
-      if ratio == 0
-        f.write((hits.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
+      hits_less = hits[0..[no_lines, hits.length-1].min]
+
+      f.write((hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
-      else
-        f.write((hits.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
-              {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
-      end
       f.close
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
                        :lines,  
-                       "[Gene Merge] Prediction vs hit match", 
-                       "prediction, gray; prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange", 
+                       "[Gene Merge] Matched regions in the prediction", 
+                       "prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange", 
                        "length", 
                        "idx",
-                       hits.length)
+                       hits_less.length)
 
   end
 
@@ -157,10 +153,10 @@ class GeneMergeValidation < ValidationTest
     f.close
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :scatter,
-                                "[Gene Merge] Start vs end hsp match",
+                                "[Gene Merge] Starts/ends of the high-scoring segments in prediction",
                                 "",
-                                "from",
-                                "to",
+                                "start offset (most left hsp)",
+                                "end offset (most right hsp)",
                                  y_intercept,
                                  slope)
 

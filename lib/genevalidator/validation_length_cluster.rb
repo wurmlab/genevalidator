@@ -166,8 +166,8 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
               :bars,
-              "[Length Validation] Length distribution histogram",
-              "prediction, black;most dense cluster,red;other hits, blue",
+              "[Length Validation] Distribution of the lengths of the hits",
+              "query, black;most dense cluster,red;other hits, blue",
               "length",
               "frequency",
               prediction.length_protein)
@@ -187,22 +187,19 @@ class LengthClusterValidation < ValidationTest
       lst = @hits.sort{|a,b| a.length_protein<=>b.length_protein}
 
       no_lines = 100
-      ratio = (hits.length/no_lines).to_i
-      if ratio == 0
-        f.write((lst.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.length_protein, "color"=>"gray"}} +
-               lst.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
-      else
-        f.write((lst.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.length_protein, "color"=>"gray"}} +
-               lst.select.each_with_index {|hit, i| i%ratio==0}.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
-      end
+
+      lst_less = lst[0..[no_lines, lst.length-1].min]
+
+      f.write((lst_less.each_with_index.map{|hit, i| {"y"=>i, "start"=>0, "stop"=>hit.length_protein, "color"=>"gray"}} +
+               lst_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| {"y"=>i, "start"=>hsp.hit_from, "stop"=>hsp.hit_to, "color"=>"red"}}}.flatten).to_json)
 
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                :lines,
-               "[Length Validation] Hits vs prediction",
+               "[Length Validation] Matched regions in hits",
                "hit length, gray;high-scoring segment pairs (hsp), red",
                "length",
                "idx",
-               hits.length)
+               lst_less.length)
   end
 end

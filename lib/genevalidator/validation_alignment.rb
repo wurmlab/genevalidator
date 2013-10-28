@@ -133,14 +133,22 @@ class AlignmentValidation < ValidationTest
         raise NoMafftInstallationError
       end
       
-      sm  = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
+      out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
+      sm = out[0]
+      freq = out[1]
+      # Prints sm to file.
+      f = File.open("#{@filename}_ma.fasta" , "a")
+      f.write(">statistical model\n")
+      f.write(sm)
+      f.write("\n")
+      f.close
 
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
       # remove isolated residues from the statistical model
       sm = remove_isolated_residues(sm)
   
-      plot1     = plot_alignment(sm)
+      plot1     = plot_alignment(freq)
       gaps      = gap_validation(prediction_raw, sm)
       extra_seq = extra_sequence_validation(prediction_raw, sm)      
       consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
@@ -307,21 +315,31 @@ class AlignmentValidation < ValidationTest
   # +threshold+: the percentage of the genes that will be considered in the statistical model
   # Output:
   # +String+ representing the statistical model
+  # +Array+ with the maximum frequeny of the majoritary residue for each position
   def get_sm_pssm(ma = @multiple_alignment, threshold = 0.7)
     sm = ""
+    freq = []
     (0..ma[0].length-1).each do |i|
       freqs = Hash.new(0)
       ma.map{|seq| seq[i]}.each{|res| freqs[res] += 1}
       # get the residue with the highest frequency
       max_freq = freqs.map{|res, n| n}.max
+
+      residue = (freqs.map{|res, n| n == max_freq ? res : []}.flatten)[0]
+
+      if residue == '-'
+        freq.push(0)
+      else
+        freq.push(max_freq/(ma.length+0.0))
+      end
+
       if max_freq/(ma.length+0.0) >= threshold
-        residue = (freqs.map{|res, n| n == max_freq ? res : []}.flatten)[0]
         sm << residue
       else
         sm << "?"
       end
     end
-    sm
+    [sm, freq]
   end
 
   ##
@@ -368,7 +386,7 @@ class AlignmentValidation < ValidationTest
   # +ma+: +String+ array with the multiple alignmened hits and prediction
   # +prediction+: +Sequence+ object
   # +sm+: +String+ with the statistical model
-  def plot_alignment (output = "#{@filename}_ma.json", ma = @multiple_alignment, prediction = @prediction, sm)
+  def plot_alignment (freq, output = "#{@filename}_ma.json", ma = @multiple_alignment, prediction = @prediction)
 
       # get indeces of consensus in the multiple alignment
       consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
@@ -377,16 +395,17 @@ class AlignmentValidation < ValidationTest
       len = ma[0].length
 
       f = File.open(output , "w")
-      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red"}} +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow"}}}.flatten +
+      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
       #plot statistical model
-      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"red"}] +
-      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>1, "start"=>con, "stop"=>con+1, "color"=>"orange"}} +
-      sm.split(//).each_index.select{|j| sm[j] == '-'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white"}} +
+      freq.each_with_index.map{|f, j| {"y"=>1, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
+#      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}] +
+#      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>1, "start"=>con, "stop"=>con+1, "color"=>"orange", "height"=>-1}} +
+#      sm.split(//).each_index.select{|j| sm[j] == '?'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}} +
       #plot prediction
-      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"green"}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white"}}).to_json)
+      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"green", "height"=>-1}] +
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}).to_json)
 
       f.close
 
@@ -396,9 +415,9 @@ class AlignmentValidation < ValidationTest
       end
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
-                                :lines,
+                                :align,
                                 "[Missing/Extra sequences] Multiple align & Statistical model of hits",
-                                "gaps, white;consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
+                                "consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
                                 "alignment length",
                                 "idx",
                                 ma.length+1,
