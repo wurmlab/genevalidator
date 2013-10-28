@@ -30,7 +30,7 @@ The goal of GeneValidator is to identify problems with gene predictions and prov
 * Check duplications
 * Reading frame validation (for nucleotides)
 * Main ORF validation (for nucleotides)
-* Validation based on multiple alignment (for proteins) 
+* Validation based on multiple alignment
 * Codon coverage ~ under development
 
 ### Requirements
