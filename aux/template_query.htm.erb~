@@ -25,7 +25,7 @@
   		addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
              	<% end end end%>                
 	    ">			 			 
-    	    <i class="icon-bar-chart"></i>&nbsp;</button>
+    	    <i class="icon-bar-chart"></i></button>
 <% end %>
         </td>
 </tr>
@@ -36,24 +36,6 @@
 
 	<div id=<%=toggle%>_ul>
 	</div>
-
-  <style>
-	  .item {
-	    float: left; 
-	  }
-  </style>
-
-
-  <script type="text/javascript">  
-
-	$(function(){
-	  $('#<%=toggle%>_ul').masonry({
-	    itemSelector : '.item',
-	    isAnimated: true,
-	    isFitWidth: true
-	  });
-	});
-  </script>
 
 </div></td></tr>
 

@@ -35,10 +35,6 @@ pointer-events: none;
   /* white-space:nowrap; */
 }
 
-.success:hover {
-    background-color:#FC6 !important;
-}
-
 .table tbody td.danger{
   color: #000000 !important;
   vertical-align: middle !important;
@@ -93,12 +89,11 @@ padding-top:150px;
   background-image: url(../img/gene.png);
   background-repeat: no-repeat;
   background-position: left;
-  background-size: 27% 100%;
-  padding-left: 9.5%;
+  background-size: 468px 112px;
+  padding-left: 160px;
   padding-top: 50px;
 
 }
-
 .my-btn-success {
 cursor: pointer !important;
     border: outset;

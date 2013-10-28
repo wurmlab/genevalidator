@@ -72,7 +72,7 @@ function showDiv(source, target){
      button.style.display = "none";
    }
    else{
-     d3.select("#".concat(target)).selectAll("svg").remove();    
+     d3.select("#".concat(target).concat("_ul")).selectAll("div").remove();    
      button.style.display = "block";
      var pressedButtons = document.querySelectorAll('td')
      for (var i = 0; i < pressedButtons.length; i++) {
@@ -149,7 +149,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 		height = 500 - margin.top - margin.bottom;		
 	var legend_width = 15
 
-	var svg = d3.select("#".concat(target)).append("svg")
+	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -305,7 +305,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		.tickFormat(d3.format("d"))
 		.ticks(8);
 
-	var svg = d3.select("#".concat(target)).append("svg")
+	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -416,7 +416,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		.orient("left")
 		.ticks(5)
 
-	var svg = d3.select("#".concat(target)).append("svg")
+	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -550,7 +550,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		.orient("left")
 		.ticks(5)
 
-	var svg = d3.select("#".concat(target)).append("svg")
+	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")

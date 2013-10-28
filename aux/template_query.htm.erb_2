@@ -34,6 +34,30 @@
 	<td  colspan=<%=validations.length + 6%>>
 	<div id=<%=toggle%> style='display:none; text-align: center'>
 
+	<div id=<%=toggle%>_ul>
+	</div>
+
+  <style>
+	  .<%=toggle%>_ul {
+	    margin: 0 auto; 
+	  }
+	  .item {
+	    float: left; 
+	  }
+  </style>
+
+
+  <script type="text/javascript">  
+
+	$(function(){
+	  $('#<%=toggle%>_ul').masonry({
+	    itemSelector : '.item',
+	    isAnimated: true,
+	    isFitWidth: true
+	  });
+	});
+  </script>
+
 </div></td></tr>
 
 
