@@ -81,7 +81,7 @@
     	           	</a>                	
                 </th>
                 <% @validations.each do |item| %>                        	            
-                	<td>
+                	<th class="nosort">
                 		<b><%= item.header %></b>
 	                	<a href="#" class="my_popover" rel="popover" 
 	                	data-content="<%=item.description%>" 
