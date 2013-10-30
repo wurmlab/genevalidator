@@ -28,6 +28,7 @@ class Validation
   attr_reader :filename
   attr_reader :raw_seq_file
   attr_reader :raw_seq_file_index
+  attr_reader :raw_seq_file_load
   # current number of the querry processed
   attr_accessor :idx
   attr_reader :start_idx
@@ -83,6 +84,7 @@ class Validation
 
     # create a list of index of the queries in the FASTA
     @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
+    raise FileNotFoundException.new unless @query_offset_lst != []
     @query_offset_lst.push(fasta_content.length)
     fasta_content   = nil # free memory for variable fasta_content
     @tabular_format = tabular_format
@@ -125,6 +127,7 @@ class Validation
 
         # create FASTA index
         @raw_seq_file_index = "#{raw_seq_file}.idx"
+        @raw_seq_file_load = index_hash
 
         File.open(@raw_seq_file_index, "w") do |f|
           YAML.dump(index_hash, f)
@@ -170,48 +173,50 @@ class Validation
   ##
   # Parse the blast output and run validations
   def validation
-    puts "\nDepending on your input and your computational "<<
-         "resources, this may take a while. Please wait..."
-    if @xml_file == nil
- 
-      #file seek for each query
-      @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
-      
-        if (i+1) >= @start_idx
-          query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
+      puts "\nDepending on your input and your computational "<<
+           "resources, this may take a while. Please wait..."
 
-          #call blast with the default parameters
-          if type == :protein
-            output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1)
+      if @xml_file == nil
+
+        #file seek for each query
+        @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|      
+          if (i+1) >= @start_idx
+            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
+
+            #call blast with the default parameters
+            if type == :protein
+              output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1)
+            else
+              output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1)
+            end
+
+            #parse output
+            parse_output(output)   
           else
-            output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1)
+            @idx = @idx + 1
           end
-
-          #parse output
-          parse_output(output)   
-        else
-          @idx = @idx + 1
         end
+      else
+
+        file = File.open(@xml_file, "rb").read
+        #check the format of the input file
+        parse_output(file)      
       end
-    else
-      file = File.open(@xml_file, "rb").read
-      #check the format of the input file
-      parse_output(file)      
-    end
-    if @overall_evaluation 
-      Output.print_footer(@all_query_outputs, @html_path)
-    end
-  rescue SystemCallError => error
-    $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-      "Possible cause: input file is not valid\n"      
-    exit
-  rescue SequenceTypeError => error
-    $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-      "Possible cause: the blast output was not obtained against a protein database.\n"
-    exit!
-  rescue Exception => error
-     $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-     exit!
+
+      if @overall_evaluation 
+        Output.print_footer(@all_query_outputs, @html_path)
+      end
+    rescue SystemCallError => error
+      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: input file is not valid\n"      
+      exit
+    rescue SequenceTypeError => error
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: the blast output was not obtained against a protein database.\n"
+      exit!
+    rescue Exception => error
+       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+       exit!
   end
 
   ##
@@ -219,9 +224,11 @@ class Validation
   # Param:
   # +output+: +String+ with the blast output 
   def parse_output(output)
-    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, tabular_format, @type)
-    input_file_type = :xml
+
+      iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+      iterator_tab = TabularParser.new(output, tabular_format, @type)
+      input_file_type = :xml
+
     begin
       # get info about the query
       # get the @idx-th sequence  from the fasta file
@@ -230,6 +237,7 @@ class Validation
       if @idx+1 == @query_offset_lst.length
         break
       end
+
       query       = IO.binread(@fasta_filepath, @query_offset_lst[@idx+1] - @query_offset_lst[@idx], @query_offset_lst[@idx])
       parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
@@ -365,9 +373,9 @@ class Validation
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, ["ATG"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
     
     # check the class type of the elements in the list
     validations.map do |v|

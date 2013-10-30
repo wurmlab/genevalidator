@@ -201,9 +201,9 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 			  .call(xAxis)
 			.append("text")
 			  .attr("class", "label")
-			  .attr("x", width/2)
+			  .attr("x", (width-xTitle.length)/2-50)
 			  .attr("y", 35)
-			  .style("text-anchor", "middle")
+			  .style("text-anchor", "start")
 			  .text(xTitle)
 
 	 	 svg.append("g")
@@ -212,7 +212,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -224,7 +224,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.data(data)
 				.enter().append("rect")
 				  .attr("x", function(d) { return x(d.key); })
-				  .attr("width", 2)
+				  .attr("width", 6)
 				  .attr("y", function(d) { return y(d.value); })
 				  .attr("height", function(d) { return height - y(d.value); })
 				  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
@@ -235,6 +235,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.attr("x", x(bar))
 				.attr("width", 4)
 				.attr("y", y(yMax + yMax/10))
+				.style("opacity",0.6)
 				.attr("height", height - y(yMax + yMax/8))
 				.attr("fill", color_beautification("black"));
 
@@ -339,7 +340,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", (width-xTitle.length)/2)
+		  .attr("x", (width-xTitle.length)/2-50)
 		  .attr("y", 35)
 		  .style("text-anchor", "start")
 		  .text(xTitle)
@@ -350,7 +351,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		.append("text")
 		  .attr("class", "label")
 		  .attr("transform", "rotate(-90)")
-		  .attr("x", -(height+yTitle.length)/2)
+		  .attr("x", -(height+yTitle.length)/2-50)
 		  .attr("y", -40)
 		  .style("text-anchor", "start")
 		  .text(yTitle)
@@ -442,9 +443,9 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", width/2)
+		  .attr("x", (width-xTitle.length)/2-50)
 		  .attr("y", 35)
-		  .style("text-anchor", "middle")
+		  .style("text-anchor", "start")
 		  .text(xTitle)
 		  
           if(yValues != ""){
@@ -459,7 +460,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -528,7 +529,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 // maximum 80 lines
 function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
 
-	var margin = {top: 50, right: 170, bottom: 75, left: 50},
+	var margin = {top: 75, right: 50, bottom: 75, left: 150},
 		width = 600 - margin.left - margin.right,
 		height = 300 - margin.top - margin.bottom;		
         var legend_width = 17   
@@ -576,9 +577,9 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", width/2)
+		  .attr("x", (width-xTitle.length)/2-50)
 		  .attr("y", 35)
-		  .style("text-anchor", "middle")
+		  .style("text-anchor", "start")
 		  .text(xTitle)
 		  
           if(yValues != ""){
@@ -593,7 +594,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -605,7 +606,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -622,38 +623,29 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 				  .attr("stroke", function(d) { return color_beautification(d.color); })
 	});
 
-	// add legend   
-	var legend = svg.append("g")
-	  .attr("class", "legend")
-	  .attr("height", 100)
-	  .attr("width", 100)
-          .attr('transform', 'translate(-20,50)')    
-      
-    var h = 0
+    var offset = 0
+    var total_len = 0
+    for (var i = 0; i < footer.length; i++) {
+	var array = footer[i].split(","); 
+	total_len = total_len + array[0].length*8 + 15;
+    }
 
     for (var i = 0; i < footer.length; i++) {
-        
-	var array = footer[i].split(","); 
-	legend
-	      .append("rect")
-		  .attr("x", width + margin.left)
-	      .attr("y", 15*h)
-		  .attr("width", 10)
-		  .attr("height", 10)
-		  .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
-	var chunkSize = legend_width
- 	var length = array[0].length 
+	var array = footer[i].split(","); 
+	svg.append("rect")
+	      .attr("x", (width-total_len)/2 + offset)             
+	      .attr("y", -30)
+	      .attr("width", 10)
+	      .attr("height", 10)
+	      .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
         
-	for (var j = 0; j < length; j += chunkSize) {
-           var substr = array[0].substring(j, Math.min(length, j + chunkSize));
-	   legend
-	      .append("text")
-		  .attr("x", width + margin.left + 15)
-	      .attr("y", 15*h + 9)
-		  .text(substr);
-            h += 1
-    	}
+	svg.append("text")
+	      .attr("x", (width-total_len)/2 + offset + 15)             
+	      .attr("y", -20)
+	      .text(array[0]);
+        offset = offset + array[0].length*8 + 15
+
     }
 
 }

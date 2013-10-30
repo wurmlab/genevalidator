@@ -39,10 +39,13 @@ class Sequence
   # +identifier+: String
   # Output:
   # String with the nucleotide sequence corresponding to the identifier
-  def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier)
+  def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier, hash = nil)
     begin
 
-      hash = YAML.load_file(index_file_name)
+      if hash == nil
+        hash = YAML.load_file(index_file_name)
+      end
+
       idx = hash[identifier]
 
       query         = IO.binread(raw_seq_file, idx[1] - idx[0], idx[0])

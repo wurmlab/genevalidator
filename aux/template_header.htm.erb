@@ -33,7 +33,7 @@
 			<div style="float:left;">
     				<br><h1>Gene Validator <small>beta &nbsp;&nbsp;&nbsp;</small></h1>
 			</div><div style="float:left;">
-    				<br><h4><i> identify problematic gene predictions, <br>based on similarities to genes from public databases</i></h4>
+    				<br><h4><i> identify problematic gene predictions <br>based on similarities to trusted genes</i></h4>
 
 
     				<br/></div>			
@@ -81,7 +81,7 @@
     	           	</a>                	
                 </th>
                 <% @validations.each do |item| %>                        	            
-                	<td>
+                	<th class="nosort">
                 		<b><%= item.header %></b>
 	                	<a href="#" class="my_popover" rel="popover" 
 	                	data-content="<%=item.description%>" 

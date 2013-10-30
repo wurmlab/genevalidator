@@ -168,8 +168,8 @@ class LengthClusterValidation < ValidationTest
               :bars,
               "[Length Validation] Distribution of the lengths of the hits",
               "query, black;most dense cluster,red;other hits, blue",
-              "length",
-              "frequency",
+              "sequence length",
+              "number of sequences",
               prediction.length_protein)
   end
 
@@ -197,9 +197,9 @@ class LengthClusterValidation < ValidationTest
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                :lines,
                "[Length Validation] Matched regions in hits",
-               "hit length, gray;high-scoring segment pairs (hsp), red",
-               "length",
-               "idx",
+               "hit, gray;high-scoring segment pairs (hsp), red",
+               "offset in the hit",
+               "number of the hit",
                lst_less.length)
   end
 end

@@ -25,7 +25,7 @@ class AlignmentValidationOutput < ValidationReport
   end
 
   def validation
-    if gaps < @threshold and extra_seq < @threshold #and consensus < @threshold
+    if gaps < @threshold and extra_seq < @threshold and (1-consensus) < @threshold
       :yes
     else
       :no
@@ -44,13 +44,16 @@ class AlignmentValidation < ValidationTest
   attr_reader :mafft_path
   attr_reader :raw_seq_file
   attr_reader :index_file_name
+  attr_reader :raw_seq_file_load
 
-  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name)
+  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
     super
     @filename        = filename
     @mafft_path      = mafft_path
     @raw_seq_file    = raw_seq_file
     @index_file_name = index_file_name
+    @raw_seq_file_load = raw_seq_file_load
+
     @short_header    = "MA"
     @header          = "Missing/Extra sequences"
     @description = "Finds missing and extra sequences in the prediction, based"<<
@@ -86,7 +89,7 @@ class AlignmentValidation < ValidationTest
         #get gene by accession number
         if hit.raw_sequence == nil
           
-          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
@@ -128,6 +131,7 @@ class AlignmentValidation < ValidationTest
 
       begin
         # multiple align sequences from  less_hits with the prediction
+        # the prediction is the last sequence in the vector
         multiple_align_mafft(prediction, less_hits)
       rescue Exception => error
         raise NoMafftInstallationError
@@ -147,6 +151,9 @@ class AlignmentValidation < ValidationTest
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
       # remove isolated residues from the statistical model
       sm = remove_isolated_residues(sm)
+
+      a1 = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
+      a2 = get_consensus(@multiple_alignment)
   
       plot1     = plot_alignment(freq)
       gaps      = gap_validation(prediction_raw, sm)
@@ -193,6 +200,7 @@ class AlignmentValidation < ValidationTest
   # +path+: path of mafft installation
   # Output:
   # Array of +String+s, corresponding to the multiple aligned sequences
+  # the prediction is the last sequence in the vector
   def multiple_align_mafft(prediction = @prediction, hits = @hits, path = @mafft_path)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
@@ -288,22 +296,22 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +Fixnum+ with the score
   def consensus_validation(prediction_raw, consensus)
+
     if prediction_raw.length != consensus.length
       return 1
     end
-    # find consnsus that are in the ma
-    # but not in the prediction
-    no_conserved_pred = 0
-    no_conserved_residues = 0
-    (0..consensus.length-1).each do |i|
-      if consensus[i] != '-'
-        no_conserved_residues += 1 
-      end
-      if consensus[i] != '-' and prediction_raw[i] == consensus[i]
-        no_conserved_pred  += 1
-      end
+    # no of conserved residues among the hits
+    no_conserved_residues = consensus.length - consensus.scan(/[\?-]/).length    
+
+    if no_conserved_residues == 0
+      return 1
     end
+
+    # no of conserved residues from the hita that appear in the prediction
+    no_conserved_pred = consensus.split(//).each_index.select{|j| consensus[j] != '-' and consensus[j]!='?' and consensus[j] == prediction_raw[j]}.length
+
     return no_conserved_pred/(no_conserved_residues + 0.0)
+
   end
 
   ##
@@ -382,44 +390,47 @@ class AlignmentValidation < ValidationTest
   # Generates a json file cotaining data used for plotting
   # lines for multiple hits alignment, prediction and statistical model
   # Params:
+  # +freq+: +String+ residue frequency from the statistical model
   # +output+: filneme of the json file
   # +ma+: +String+ array with the multiple alignmened hits and prediction
-  # +prediction+: +Sequence+ object
-  # +sm+: +String+ with the statistical model
-  def plot_alignment (freq, output = "#{@filename}_ma.json", ma = @multiple_alignment, prediction = @prediction)
+  def plot_alignment (freq, output = "#{@filename}_ma.json", ma = @multiple_alignment)
 
       # get indeces of consensus in the multiple alignment
       consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
       consensus_idxs = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
+      consensus_all = get_consensus(@multiple_alignment)
+      consensus_all_idxs = consensus_all.split(//).each_index.select{|j| isalpha(consensus_all[j])}
 
       len = ma[0].length
 
       f = File.open(output , "w")
-      f.write((ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
-      #plot statistical model
-      freq.each_with_index.map{|f, j| {"y"=>1, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
-#      [{"y"=>1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}] +
-#      sm.split(//).each_index.select{|j| isalpha(sm[j])}.map{|con|{"y"=>1, "start"=>con, "stop"=>con+1, "color"=>"orange", "height"=>-1}} +
-#      sm.split(//).each_index.select{|j| sm[j] == '?'}.map{|gap|{"y"=>1, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}} +
-      #plot prediction
+      f.write((      
+      # plot statistical model
+      freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
+      # hits
+      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j-1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j-1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
+      # plot prediction
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"green", "height"=>-1}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}).to_json)
+      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}+
+      consensus_all_idxs.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}).to_json)
 
       f.close
 
-      yAxisValues = "pred, sm"
+      yAxisValues = "prediction"
       (1..ma.length-1).each do |i|
          yAxisValues << ", hit#{ma.length - i}"
       end
 
+      yAxisValues << ", statistical model"
+
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :align,
-                                "[Missing/Extra sequences] Multiple align & Statistical model of hits",
-                                "consensus, yellow;mismatches, red;prediction, green;statistical model,orange",
-                                "alignment length",
-                                "idx",
+                                "[Missing/Extra sequences] Multiple Align. & Statistical model of hits",
+                                "conserved region, yellow", #mismatches, red;prediction, blue;statistical model,orange",
+                                "offset in the alignment",
+                                "",
                                 ma.length+1,
                                 yAxisValues)
 

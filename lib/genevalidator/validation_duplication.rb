@@ -44,12 +44,15 @@ class DuplicationValidation < ValidationTest
   attr_reader :mafft_path
   attr_reader :raw_seq_file
   attr_reader :index_file_name
+  attr_reader :raw_seq_file_load
  
-  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name)
+  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
     super
     @mafft_path      = mafft_path
     @raw_seq_file    = raw_seq_file
     @index_file_name = index_file_name
+    @raw_seq_file_load = raw_seq_file_load
+
     @short_header    = "Duplication"
     @header          = "Duplication"
     @description = "Check whether there is a duplicated subsequence in the"<<
@@ -82,7 +85,7 @@ class DuplicationValidation < ValidationTest
         #get gene by accession number
         if hit.raw_sequence == nil
 
-          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier)
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
   
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein

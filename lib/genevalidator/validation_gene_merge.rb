@@ -119,9 +119,9 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
-      colors   = ["orange", "red"]
+      colors   = ["orange", "blue"]
       f        = File.open(output , "w")
-      no_lines = 80
+      no_lines = 120
 
       hits_less = hits[0..[no_lines, hits.length-1].min]
 
@@ -132,8 +132,8 @@ class GeneMergeValidation < ValidationTest
                        :lines,  
                        "[Gene Merge] Matched regions in the prediction", 
                        "prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange", 
-                       "length", 
-                       "idx",
+                       "offset in the prediction", 
+                       "number of the hit",
                        hits_less.length)
 
   end
@@ -153,7 +153,7 @@ class GeneMergeValidation < ValidationTest
     f.close
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :scatter,
-                                "[Gene Merge] Starts/ends of the high-scoring segments in prediction",
+                                "[Gene Merge] Start/end of the high-scoring segments in prediction",
                                 "",
                                 "start offset (most left hsp)",
                                 "end offset (most right hsp)",

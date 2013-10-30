@@ -290,7 +290,7 @@ class OpenReadingFrameValidation < ValidationTest
                     :lines,
                     "Open reading frame with START codon",
                     "",
-                    "length",
+                    "offset in the prediction",
                     "Reading Frame",
                     14)
 
