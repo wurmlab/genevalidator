@@ -61,7 +61,7 @@ class Validation
                   overall_evaluation = true)
 
     @fasta_filepath = fasta_filepath
-
+   
     @xml_file = xml_file
     @vlist = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
     @idx = 0
@@ -73,6 +73,8 @@ class Validation
     end
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
+    raise FileNotFoundException.new unless File.file?(@fasta_filepath)
+
     fasta_content = IO.binread(@fasta_filepath);
 
     # the expected type for the sequences is the
@@ -154,11 +156,11 @@ class Validation
      Dir.mkdir(@html_path)
 
     # copy auxiliar folders to the html folder
-    FileUtils.cp_r("aux/css", @html_path)
-    FileUtils.cp_r("aux/js", @html_path)
-    FileUtils.cp_r("aux/img", @html_path)
-    FileUtils.cp_r("aux/font", @html_path)
-    FileUtils.cp_r("aux/doc", @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/css"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/js"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/img"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/font"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/doc"), @html_path)
 
   rescue SequenceTypeError => error
     $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<

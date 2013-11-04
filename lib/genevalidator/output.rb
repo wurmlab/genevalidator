@@ -58,11 +58,31 @@ class Output
 
     successes = validations.map{|v| v.validation_report.result ==
       v.validation_report.expected}.count(true)
+
     fails = validations.map{|v| v.validation_report.validation != :unapplicable and
       v.validation_report.validation != :error and
       v.validation_report.result != v.validation_report.expected}.count(true)
-    unknown = validations.length - successes - fails
-    overall_score = (successes*100/(successes + fails + 0.0)).round(0)  
+
+    lcv = validations.select{|v| v.class == LengthClusterValidation}
+    lrv = validations.select{|v| v.class == LengthRankValidation}
+    if lcv.length == 1 and lrv.length == 1
+      score_lcv = (lcv[0].validation_report.result == lcv[0].validation_report.expected)
+      score_lrv = (lrv[0].validation_report.result == lrv[0].validation_report.expected)
+      # if both are true this should be counted as a single success
+      if score_lcv == true and score_lrv == true
+        successes = successes - 1
+      else
+      # if both are false this will be a fail
+        if score_lcv == false and score_lrv == false
+          fails = fails - 1
+        else
+          successes = successes - 0.5
+          fails = fails - 0.5
+        end
+      end
+    end
+
+    overall_score = (successes*100/(successes + fails + 0.0)).round(0)
 
     output = sprintf("%3s|%d|%20s|%5s|", @idx, overall_score, short_def, @nr_hits)
     validation_outputs.each do |item|
@@ -135,14 +155,14 @@ class Output
 
     # if it's the first time I write in the html file
     if @idx == @start_idx
-      template_file = File.open("aux/template_header.htm.erb", 'r').read
+      template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.htm.erb"), 'r').read
       erb = ERB.new(template_file)
       File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
     end
 
     toggle = "toggle#{@idx}"
 
-    template_file = File.open("aux/template_query.htm.erb", 'r').read
+    template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.htm.erb"), 'r').read
     erb = ERB.new(template_file)
 
     File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
@@ -169,7 +189,7 @@ class Output
     # print to html
     evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
     index_file = "#{html_path}/index.html"
-    template_file = File.open("aux/template_footer.htm.erb", 'r').read
+    template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.htm.erb"), 'r').read
     erb = ERB.new(template_file)
     File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
   end

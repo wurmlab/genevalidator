@@ -23,7 +23,7 @@ DESC
   s.add_dependency('mini_shoulda')
   s.add_dependency('rack', "~> 1.5.2")
 
-  s.files       = ["lib/genevalidator.rb"] + Dir['lib/**/*']
+  s.files       = Dir["test/**/*"] + Dir["aux/**/*"] + Dir['lib/**/*']
   s.executables   = ['genevalidator', 'get_raw_sequences']
 
   # post install information
