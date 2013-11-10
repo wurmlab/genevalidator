@@ -211,7 +211,7 @@ class DuplicationValidation < ValidationTest
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
-      puts error.backtrace
+      #puts error.backtrace
       @validation_report.errors.push OtherError
       @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report

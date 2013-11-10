@@ -262,7 +262,6 @@ class Validation
           # check xml format
           if @idx < @start_idx
             iter = iterator_xml.next
-            puts "skip #{@idx}"
           else
             hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
             if hits == nil
@@ -296,7 +295,6 @@ class Validation
           end
           #check tabular format
           if @idx < @start_idx
-            puts "skip #{@idx}"
             iterator_tab.jump_next          
           else
             hits = iterator_tab.next(prediction.identifier)
