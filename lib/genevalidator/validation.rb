@@ -234,14 +234,6 @@ class Validation
 
     begin
 
-=begin
-counts = Hash.new{ 0 }
-ObjectSpace.each_object do |o|
-  counts[o.class] += 1
-end
-puts counts.to_s
-=end
-
       # get info about the query
       # get the @idx-th sequence  from the fasta file
 
@@ -270,6 +262,7 @@ puts counts.to_s
           # check xml format
           if @idx < @start_idx
             iter = iterator_xml.next
+            puts "skip #{@idx}"
           else
             hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
             if hits == nil
@@ -282,6 +275,8 @@ puts counts.to_s
             query_output.generate_html
             query_output.print_output_console
             query_output.print_output_file_yaml
+
+            hits = nil # free memory
 
             @all_query_outputs.push(query_output)
             
@@ -301,6 +296,7 @@ puts counts.to_s
           end
           #check tabular format
           if @idx < @start_idx
+            puts "skip #{@idx}"
             iterator_tab.jump_next          
           else
             hits = iterator_tab.next(prediction.identifier)
@@ -404,13 +400,16 @@ puts counts.to_s
     end
 
     if vlist.map{|v| v.strip.downcase}.include? "all"
+
       validations.map{|v| v.run}
       # check the class type of the validation reports
       validations.each do |v|
         raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
       query_output.validations = validations.map{|v| v.validation_report}
+
     else
+
       desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
       desired_validations.each do |v|
         v.run
@@ -421,6 +420,7 @@ puts counts.to_s
       if query_output.validations.length == 0
         raise NoValidationError
       end
+
     end
 
     return query_output
