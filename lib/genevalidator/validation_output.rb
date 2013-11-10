@@ -13,18 +13,25 @@ class ValidationReport
   attr_reader :expected
   attr_reader :validation_result
   attr_reader :errors
+  attr_accessor :short_header
+  attr_accessor :header
+  attr_accessor :description
+  attr_accessor :running_time
 
   ##
   # Initilizes the object
   # Params:  
   # +message+: result of the validation (to be displayed in the output)
   # +bg_color+: background color of the table cell for the html output (nil by default)
-  def initialize(message = "Not enough evidence", validation_result = :no)
+  def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="")
     @message = message
     @errors = []
     @result = validation_result
     @expected = :yes
     @validation_result = validation_result
+    @short_header = short_header
+    @header = header
+    @description = description
   end
 
   def print

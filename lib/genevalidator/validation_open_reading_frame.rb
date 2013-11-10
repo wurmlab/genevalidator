@@ -10,6 +10,14 @@ class ORFValidationOutput < ValidationReport
   attr_reader :threshold
 
   def initialize (orfs, ratio, threshold = 0.8, expected = :yes)
+
+    @short_header = "ORF"
+    @header = "Main ORF"
+    @description = 'Check whether there is a single main Open Reading Frame'<<
+    ' in the predicted gene. Aplicable only for nucleotide queries. Meaning'<<
+    '  of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80%'<<
+    ' passe the validation test.'
+
     @orfs = orfs
     @ratio = ratio
     @threshold = threshold
@@ -95,17 +103,17 @@ class OpenReadingFrameValidation < ValidationTest
       plot1 = plot_orfs(orfs)
 
       @validation_report = ORFValidationOutput.new(orfs, ratio)
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
 
       @validation_report.plot_files.push(plot1)
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      return ValidationReport.new("Unexpected error", :error)
+      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
     end
   end
 

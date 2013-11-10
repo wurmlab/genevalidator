@@ -6,7 +6,6 @@ TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :
 # This class parses the tabular output of BLAST (outfmt 6) 
 class TabularParser
 
-  attr_reader :content
   attr_reader :content_iterator
   attr_reader :format
   attr_reader :type
@@ -20,8 +19,7 @@ class TabularParser
   # +format+: format of the tabular output (string with column sepatared by space or coma)
   # +type+: :nucleotide or :mrna
   def initialize (content, format, type)
-    @content = content.gsub(/#.*\n/,"")
-    @content_iterator = @content
+    @content_iterator = content.gsub(/#.*\n/,"")
     if format == nil
       @format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
     else 

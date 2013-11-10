@@ -9,6 +9,15 @@ class DuplicationValidationOutput < ValidationReport
   attr_reader :threshold
 
   def initialize (pvalue, threshold = 0.05, expected = :no)
+
+    @short_header    = "Duplication"
+    @header          = "Duplication"
+    @description = "Check whether there is a duplicated subsequence in the"<<
+    " predicted gene by counting the hsp residue coverag of the prediction,"<<
+    " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<
+    " test which test the distribution of hit average coverage against 1."<<
+    " P-values higher than 5% pass the validation test."
+
     @pvalue    = pvalue
     @threshold = threshold
     @result    = validation
@@ -180,7 +189,7 @@ class DuplicationValidation < ValidationTest
       # if all hsps match only one time
       if averages.reject{|x| x==1} == []
         @validation_report = DuplicationValidationOutput.new(1)
-        @running_time = Time.now - start
+        @validation_report.running_time = Time.now - start
         return @validation_report
       end
       
@@ -191,20 +200,20 @@ class DuplicationValidation < ValidationTest
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error)
+      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description)
       @validation_report.errors.push NoMafftInstallationError                          
       return @validation_report
     rescue NoInternetError 
-      @validation_report = ValidationReport.new("Internet error", :error)
+      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
       puts error.backtrace
       @validation_report.errors.push OtherError
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report
     end
   end

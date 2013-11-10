@@ -10,6 +10,12 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :msg
 
   def initialize (msg, percentage, expected = :yes)       
+
+    @short_header = "LengthRank"
+    @header = "Length Rank"
+    @description = "Check whether the rank of the prediction length lies among 80% of "<<
+        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
+
     @percentage = percentage
     @msg = msg
     @result = validation
@@ -99,14 +105,14 @@ class LengthRankValidation < ValidationTest
       end
 
       @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
      rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
      else
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       @validation_report.errors.push OtherError
     end
 

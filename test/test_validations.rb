@@ -4,6 +4,7 @@ require 'mini_shoulda'
 require 'minitest/autorun'
 require "yaml"
 require 'genevalidator/blast'
+require 'genevalidator/validation'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
 require 'genevalidator/validation_blast_reading_frame'
@@ -13,6 +14,7 @@ require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
 
 class ValidateOutput < MiniTest::Unit::TestCase
+
 
     filename = "test/test_files/test_validations"
     filename_fasta = "#{filename}.fasta"
@@ -32,7 +34,7 @@ class ValidateOutput < MiniTest::Unit::TestCase
     prediction.length_protein = 108
 
     validations = b.do_validations(prediction, hits).validations
-    
+
   describe "Test validations 1" do  
     it "should check the number of hits" do
       assert_equal hits.length, 499
@@ -40,29 +42,30 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
 
     it "should validate length by clusterization" do
-       lcv = validations.select{|v| v.class == LengthClusterValidation}[0]
-       assert_equal lcv.validation_report.limits, [23,135]
-       assert_equal lcv.validation_report.prediction_len, 108
+       lcv = validations.select{|v| v.class == LengthClusterValidationOutput}[0]
+       assert_equal lcv.limits, [23,135]
+       assert_equal lcv.prediction_len, 108
     end
 
     it "should validate length by rank" do
-      lrv = validations.select{|v| v.class == LengthRankValidation}[0]
-      assert_equal lrv.validation_report.percentage.round(4), 0.46
+      lrv = validations.select{|v| v.class == LengthRankValidationOutput}[0]
+      assert_equal lrv.percentage.round(4), 0.46
     end
 
     it "should validate reading frame" do
-      rfv = validations.select{|v| v.class == BlastReadingFrameValidation}[0]
-      assert_equal rfv.validation_report.frames_histo, {1=>500}
+      rfv = validations.select{|v| v.class == BlastRFValidationOutput}[0]
+      assert_equal rfv.frames_histo, {1=>500}
     end
 
     it "should validate gene merge" do
-      gmv = validations.select{|v| v.class == GeneMergeValidation}[0]
-      assert_equal gmv.validation_report.slope.round(4), -0.1089
+      gmv = validations.select{|v| v.class == GeneMergeValidationOutput}[0]
+      assert_equal gmv.slope.round(4), -0.1089
     end
 
     it "should validate duplication" do
-      dv  = validations.select{|v| v.class == DuplicationValidation}[0]
-      assert_equal dv.validation_report.pvalue.round(4), 1
+      dv  = validations.select{|v| v.class == DuplicationValidationOutput}[0]
+      assert_equal dv.pvalue.round(4), 1
     end
   end
+
 end

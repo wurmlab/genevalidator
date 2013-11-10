@@ -40,7 +40,6 @@ class Output
     @start_idx = start_idx
 
   end
-
   
   def print_output_console
 
@@ -49,25 +48,25 @@ class Output
       validations.map do |v| 
         header<<"|#{v.short_header}"
       end
-      puts header
+      puts header      
     end
 
     short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
     #short_def = short_def[0..[20,short_def.length].min]
-    validation_outputs = validations.map{|v| v.validation_report.print}
+    validation_outputs = validations.map{|v| v.print}
 
-    successes = validations.map{|v| v.validation_report.result ==
-      v.validation_report.expected}.count(true)
+    successes = validations.map{|v| v.result ==
+      v.expected}.count(true)
 
-    fails = validations.map{|v| v.validation_report.validation != :unapplicable and
-      v.validation_report.validation != :error and
-      v.validation_report.result != v.validation_report.expected}.count(true)
+    fails = validations.map{|v| v.validation != :unapplicable and
+      v.validation != :error and
+      v.result != v.expected}.count(true)
 
-    lcv = validations.select{|v| v.class == LengthClusterValidation}
-    lrv = validations.select{|v| v.class == LengthRankValidation}
+    lcv = validations.select{|v| v.class == LengthClusterValidationOutput}
+    lrv = validations.select{|v| v.class == LengthRankValidationOutput}
     if lcv.length == 1 and lrv.length == 1
-      score_lcv = (lcv[0].validation_report.result == lcv[0].validation_report.expected)
-      score_lrv = (lrv[0].validation_report.result == lrv[0].validation_report.expected)
+      score_lcv = (lcv[0].result == lcv[0].expected)
+      score_lrv = (lrv[0].result == lrv[0].expected)
       # if both are true this should be counted as a single success
       if score_lcv == true and score_lrv == true
         successes = successes - 1
@@ -99,7 +98,7 @@ class Output
   def print_output_file_yaml
 
     file_yaml = "#{@yaml_path}/#{@filename}.yaml"
-    report = validations.map{|v| v.validation_report}
+    report = validations
     unless @idx == @start_idx
       hsh = YAML.load_file(file_yaml)
       hsh[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
@@ -117,18 +116,18 @@ class Output
 
   def generate_html
 
-    successes = validations.map{|v| v.validation_report.result == 
-      v.validation_report.expected}.count(true)
+    successes = validations.map{|v| v.result == 
+      v.expected}.count(true)
 
-    fails = validations.map{|v| v.validation_report.validation != :unapplicable and
-      v.validation_report.validation != :error and 
-      v.validation_report.result != v.validation_report.expected}.count(true)
+    fails = validations.map{|v| v.validation != :unapplicable and
+      v.validation != :error and 
+      v.result != v.expected}.count(true)
 
     lcv = validations.select{|v| v.class == LengthClusterValidation}
     lrv = validations.select{|v| v.class == LengthRankValidation}
     if lcv.length == 1 and lrv.length == 1
-      score_lcv = (lcv[0].validation_report.result == lcv[0].validation_report.expected)
-      score_lrv = (lrv[0].validation_report.result == lrv[0].validation_report.expected)
+      score_lcv = (lcv[0].result == lcv[0].expected)
+      score_lrv = (lrv[0].result == lrv[0].expected)
       # if both are true this should be counted as a single success
       if score_lcv == true and score_lrv == true
         successes = successes - 1
@@ -155,6 +154,7 @@ class Output
 
     # if it's the first time I write in the html file
     if @idx == @start_idx
+
       template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.htm.erb"), 'r').read
       erb = ERB.new(template_file)
       File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
@@ -206,7 +206,7 @@ class Output
       
       # count the cases of "not enough evidence"
       no_evidence = all_query_outputs.count{|report|
-        report.validations.count{|v| v.validation_report.result == :unapplicable or v.validation_report.result == :warning} == report.validations.length
+        report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
       }  
 
       # print at the console
@@ -216,21 +216,21 @@ class Output
 
       # how many genes are good
       all_query_outputs.each do |report| 
-        successes = report.validations.map{|v| v.validation_report.result == v.validation_report.expected}.count(true)
-        fails = report.validations.map{|v| v.validation_report.validation != :unapplicable and v.validation_report.validation != :error and
-          v.validation_report.result != v.validation_report.expected}.count(true)
+        successes = report.validations.map{|v| v.result == v.expected}.count(true)
+        fails = report.validations.map{|v| v.validation != :unapplicable and v.validation != :error and
+          v.result != v.expected}.count(true)
         overall_score = (successes*100/(successes + fails + 0.0)).round(0)
         scores.push overall_score
 
         report.validations.each do |v| 
-          if v.validation_report.errors != nil
-            no_mafft += v.validation_report.errors.select{|e| e == NoMafftInstallationError}.length
+          if v.errors != nil
+            no_mafft += v.errors.select{|e| e == NoMafftInstallationError}.length
           end
         end
 
         report.validations.each do |v| 
-          if v.validation_report.errors != nil
-            no_internet += v.validation_report.errors.select{|e| e == NoInternetError}.length
+          if v.errors != nil
+            no_internet += v.errors.select{|e| e == NoInternetError}.length
           end
         end
       end
@@ -260,7 +260,7 @@ class Output
       validations.each_with_index do |v,i|
         no_errors = 0
         all_query_outputs.each do |report|
-          if report.validations[i].validation_report.validation == :error
+          if report.validations[i].validation == :error
             no_errors += 1
           end
         end
@@ -286,9 +286,9 @@ class Output
         output.validations.each do |v|
           if v.running_time != 0 and 
              v.running_time != nil and 
-             v.validation_report.validation != :unapplicable and
-             v.validation_report.validation != :error
-            running_times[v.short_header].push v.running_time
+             v.validation != :unapplicable and
+             v.validation != :error
+             running_times[v.short_header].push v.running_time
           end
         end
       end

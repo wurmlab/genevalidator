@@ -89,6 +89,7 @@ class Validation
     raise FileNotFoundException.new unless @query_offset_lst != []
     @query_offset_lst.push(fasta_content.length)
     fasta_content   = nil # free memory for variable fasta_content
+    GC.start
     @tabular_format = tabular_format
 
     if mafft_path == nil
@@ -232,6 +233,15 @@ class Validation
       input_file_type = :xml
 
     begin
+
+=begin
+counts = Hash.new{ 0 }
+ObjectSpace.each_object do |o|
+  counts[o.class] += 1
+end
+puts counts.to_s
+=end
+
       # get info about the query
       # get the @idx-th sequence  from the fasta file
 
@@ -267,12 +277,14 @@ class Validation
               break
             end
 
+            # get validation report
             query_output = do_validations(prediction, hits)
             query_output.generate_html
             query_output.print_output_console
             query_output.print_output_file_yaml
-            @all_query_outputs.push(query_output)
 
+            @all_query_outputs.push(query_output)
+            
           end
         else 
           raise Exception
@@ -313,6 +325,8 @@ class Validation
           exit!
         end
       end
+      
+      GC.start
     end while 1
   end  
  
@@ -362,7 +376,6 @@ class Validation
     end
     
     # do validations
-
     query_output                = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
     query_output.prediction_len = prediction.length_protein
     query_output.prediction_def = prediction.definition
@@ -380,12 +393,13 @@ class Validation
     validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
     
     # check the class type of the elements in the list
-    validations.map do |v|
+    validations.each do |v|
       raise ValidationClassError unless v.is_a? ValidationTest
     end
 
     # check alias duplication
-    unless validations.map{|v| v.cli_name}.length == validations.map{|v| v.cli_name}.uniq.length
+    aliases = validations.map(&:cli_name)
+    unless aliases.length == aliases.uniq.length
       raise AliasDuplicationError 
     end
 
@@ -395,14 +409,14 @@ class Validation
       validations.each do |v|
         raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
-      query_output.validations = validations
+      query_output.validations = validations.map{|v| v.validation_report}
     else
       desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
       desired_validations.each do |v|
         v.run
         raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
-      query_output.validations = desired_validations
+      query_output.validations = desired_validations.map{|v| v.validation_report}
  
       if query_output.validations.length == 0
         raise NoValidationError

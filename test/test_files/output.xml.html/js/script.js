@@ -23,7 +23,7 @@ $(document).ready(function() { $('#sortable_table tr th').each(function(i) {
      });  
 });
 
-// fill starts
+//fill stars
 $(document).ready(function() {
       $.fn.raty.defaults.path = 'css/img';
       var cells = document.getElementsByName('ranking');

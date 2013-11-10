@@ -11,6 +11,16 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :threahsold
 
   def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
+
+    @short_header    = "MA"
+    @header          = "Missing/Extra sequences"
+    @description = "Finds missing and extra sequences in the prediction, based"<<
+    " on the multiple alignment of the best hits. Also counts the percentahe of"<<
+    " the conserved regions that appear in the prediction. Meaning of the output:"<<
+    " the percentages of the missing/extra sequences with respect to the multiple"<<
+    " alignment. Validation fails if one of these values is higher than 20%."<<
+    " Percentage of the conserved residues."
+
     @gaps       = gaps
     @extra_seq  = extra_seq
     @consensus  = consensus
@@ -140,12 +150,15 @@ class AlignmentValidation < ValidationTest
       out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
       sm = out[0]
       freq = out[1]
+
+=begin
       # Prints sm to file.
       f = File.open("#{@filename}_ma.fasta" , "a")
       f.write(">statistical model\n")
       f.write(sm)
       f.write("\n")
       f.close
+=end
 
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
@@ -162,28 +175,28 @@ class AlignmentValidation < ValidationTest
 
       @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)        
       @validation_report.plot_files.push(plot1)
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error)
+      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Internet error", :error)
+      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue  ReadingFrameError => error
-      @validation_report = ValidationReport.new("Multiple reading frames", :error)
+      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
       @validation_report.errors.push "Unexpected Error"
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       @validation_report.errors.push OtherError
       return @validation_report
     end

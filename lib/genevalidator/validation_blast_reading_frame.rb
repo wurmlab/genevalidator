@@ -8,6 +8,13 @@ class BlastRFValidationOutput < ValidationReport
   attr_reader :msg
 
   def initialize (frames_histo, expected = :yes)
+
+    @short_header = "Frame"
+    @header       = "Reading Frame"
+    @description  = "Check whether there is a single reading frame among BLAST"<<
+    " hits. Otherwise there might be a reading frame shift in the query sequence."<<
+    " Meaning of the output displayed: (reading frame: no hsps)"
+
     @frames_histo = frames_histo
     @msg = ""
     frames_histo.each do |x, y|
@@ -86,15 +93,15 @@ class BlastReadingFrameValidation < ValidationTest
       @prediction.nucleotide_rf = frames_histo.select{|k,v| v==main_rf}.first.first
 
       @validation_report = BlastRFValidationOutput.new(frames_histo)
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report
     end
   end

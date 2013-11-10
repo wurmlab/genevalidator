@@ -12,6 +12,13 @@ class LengthClusterValidationOutput < ValidationReport
   attr_reader :limits
 
   def initialize (prediction_len, limits, expected = :yes)
+
+    @short_header = "LengthCluster"
+    @header = "Length Cluster"
+    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
+      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
+      " [Main Cluster Length Interval]"
+
     @limits = limits
     @prediction_len = prediction_len
     @expected = expected
@@ -88,16 +95,16 @@ class LengthClusterValidation < ValidationTest
       @validation_report.plot_files.push(plot1)
       plot2 = plot_len_clusters
       @validation_report.plot_files.push(plot2)
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
 
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     else 
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       @validation_report.errors.push OtherError
       return @validation_report
     end       

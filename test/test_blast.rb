@@ -69,7 +69,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should parse xml input" do
       filename_prot = "test/test_files/output.xml"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
       iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       hits = BlastUtils.parse_next_query_xml(iterator, :protein)
@@ -82,7 +81,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should parse tabular -6 input with default tabular format" do
       filename_prot = "test/test_files/ncbi_mrna.tab.20"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, nil, :protein)
       hits = iterator_tab.next
@@ -100,7 +98,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should parse tabular -6 input with tabular format as argument" do
       filename_prot = "test/test_files/output.tab.6"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
       hits = iterator_tab.next
@@ -113,7 +110,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should parse tabular -6 input with mixed columns" do
       filename_prot = "test/test_files/output.tab.6.mixed"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, "qend sstart send pident length qframe evalue qseqid sseqid sacc slen qstart", :protein)
       hits = iterator_tab.next
@@ -126,7 +122,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should parse tabular -7 input" do
       filename_prot = "test/test_files/output.tab.7"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", :protein)
       hits = iterator_tab.next
@@ -139,9 +134,9 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should remove identical matches among protein sequences" do
       filename_prot = "test/test_files/output.tab.6"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
-
+      filename_fasta = "test/test_files/test_validations.fasta"
+      b = Validation.new(filename_fasta) # just use a valida filename to create the object
       prediction = Sequence.new
       prediction.length_protein = 1808
 
@@ -161,8 +156,10 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should remove identical matches among nucleotide sequences with tabular input" do
       filename_prot = "test/test_files/ncbi_mrna.tab.20"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
+
+      filename_fasta = "test/test_files/test_validations.fasta"
+      b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -179,8 +176,10 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
     it "should remove identical matches among nucleotide sequences with xml input" do
       filename_prot = "test/test_files/ncbi_mrna.xml.20"
-      b = Validation.new(filename_prot) # just use a valid filename
       output = File.open(filename_prot, "rb").read
+
+      filename_fasta = "test/test_files/test_validations.fasta"
+      b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -210,6 +209,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr = original_stderr
       assert_equal error, true
 
-    end 
+    end
   end
 end

@@ -72,7 +72,7 @@ function showDiv(source, target){
      button.style.display = "none";
    }
    else{
-     d3.select("#".concat(target).concat("_ul")).selectAll("div").remove();    
+     d3.select("#".concat(target)).selectAll("svg").remove();    
      button.style.display = "block";
      var pressedButtons = document.querySelectorAll('td')
      for (var i = 0; i < pressedButtons.length; i++) {
@@ -105,8 +105,12 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
 		case "lines":
                   if(aux2 != "")
 	              aux2 = aux2.split(",");
- 
 		  plot_lines(filename, target, title, legend, xtitle, ytitle, aux1, aux2)
+		  break;
+		case "align":
+                  if(aux2 != "")
+	              aux2 = aux2.split(",");
+		  plot_align(filename, target, title, legend, xtitle, ytitle, aux1, aux2)
 		  break;
 		default:
 		  break;
@@ -145,7 +149,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 		height = 500 - margin.top - margin.bottom;		
 	var legend_width = 15
 
-	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
+	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -178,7 +182,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 		var xMax = Math.max(xMax, bar); 
 		var x = d3.scale.linear()
                      .domain([xMin-padding, xMax+padding])
-                     .range([0, width]);
+                     .range([13, width]);
 
 		var xAxis = d3.svg.axis()
 		        .scale(x)
@@ -197,9 +201,9 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 			  .call(xAxis)
 			.append("text")
 			  .attr("class", "label")
-			  .attr("x", width/2)
+			  .attr("x", (width-xTitle.length)/2-50)
 			  .attr("y", 35)
-			  .style("text-anchor", "middle")
+			  .style("text-anchor", "start")
 			  .text(xTitle)
 
 	 	 svg.append("g")
@@ -208,7 +212,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -220,7 +224,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.data(data)
 				.enter().append("rect")
 				  .attr("x", function(d) { return x(d.key); })
-				  .attr("width", 2)
+				  .attr("width", 6)
 				  .attr("y", function(d) { return y(d.value); })
 				  .attr("height", function(d) { return height - y(d.value); })
 				  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
@@ -231,6 +235,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.attr("x", x(bar))
 				.attr("width", 4)
 				.attr("y", y(yMax + yMax/10))
+				.style("opacity",0.6)
 				.attr("height", height - y(yMax + yMax/8))
 				.attr("fill", color_beautification("black"));
 
@@ -301,7 +306,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		.tickFormat(d3.format("d"))
 		.ticks(8);
 
-	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
+	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -335,7 +340,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", (width-xTitle.length)/2)
+		  .attr("x", (width-xTitle.length)/2-50)
 		  .attr("y", 35)
 		  .style("text-anchor", "start")
 		  .text(xTitle)
@@ -346,7 +351,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		.append("text")
 		  .attr("class", "label")
 		  .attr("transform", "rotate(-90)")
-		  .attr("x", -(height+yTitle.length)/2)
+		  .attr("x", -(height+yTitle.length)/2-50)
 		  .attr("y", -40)
 		  .style("text-anchor", "start")
 		  .text(yTitle)
@@ -392,7 +397,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
 	var margin = {top: 50, right: 170, bottom: 75, left: 50},
 		width = 600 - margin.left - margin.right,
-		height = 300 - margin.top - margin.bottom;		
+		height = 500 - margin.top - margin.bottom;		
         var legend_width = 17   
 
 	var x = d3.scale.linear()
@@ -412,7 +417,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		.orient("left")
 		.ticks(5)
 
-	var svg = d3.select("#".concat(target).concat("_ul")).append("div").attr("class", "item").append("svg")
+	var svg = d3.select("#".concat(target)).append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -434,13 +439,13 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
 	  svg.append("g")
 		  .attr("class", "x axis")
-		  .attr("transform", "translate(0," + (height+30) + ")")
+		  .attr("transform", "translate(0," + (height + height/no_lines) + ")")
 		  .call(xAxis)
 		.append("text")
 		  .attr("class", "label")
-		  .attr("x", width/2)
+		  .attr("x", (width-xTitle.length)/2-50)
 		  .attr("y", 35)
-		  .style("text-anchor", "middle")
+		  .style("text-anchor", "start")
 		  .text(xTitle)
 		  
           if(yValues != ""){
@@ -455,7 +460,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 			.append("text")
 			  .attr("class", "label")
 			  .attr("transform", "rotate(-90)")
-			  .attr("x", -(height+yTitle.length)/2)
+			  .attr("x", -(height+yTitle.length)/2-50)
 			  .attr("y", -40)
 			  .style("text-anchor", "start")
 			  .text(yTitle)
@@ -480,10 +485,8 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 				  .attr("y1", function(d) { return y(d.y); })				  
 				  .attr("x2", function(d) { return x(d.stop); })
 				  .attr("y2", function(d) { return y(d.y); })				  
-				  .attr("stroke-width", 16)
+				  .attr("stroke-width", height/no_lines)
 				  .attr("stroke", function(d) { return color_beautification(d.color); })
-
-
 	});
 
 	// add legend   
@@ -518,6 +521,131 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		  .text(substr);
             h += 1
     	}
+    }
+
+}
+
+// line plot
+// maximum 80 lines
+function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
+
+	var margin = {top: 75, right: 50, bottom: 75, left: 150},
+		width = 600 - margin.left - margin.right,
+		height = 300 - margin.top - margin.bottom;		
+        var legend_width = 17   
+
+	var x = d3.scale.linear()
+		.range([0, width]);
+	var y = d3.scale.linear()
+		.range([height, 0]);
+
+	var color = d3.scale.category10();
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		.ticks(5);
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left")
+		.ticks(5)
+
+	var svg = d3.select("#".concat(target)).append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  	.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+	svg.append("text")
+		.attr("x", (width / 2))             
+		.attr("y", -35)
+		.attr("text-anchor", "middle")  
+		.style("font-size", "16px") 
+		.text(title);	
+
+	d3.json(filename, function(error, data) {
+
+	  var idx = -1
+
+	  x.domain([0, d3.max(data, function(d) { return d.stop; })]);
+	  y.domain(d3.extent(data, function(d) { return d.y; })).nice();
+
+	  svg.append("g")
+		  .attr("class", "x axis")
+		  .attr("transform", "translate(0," + (height+height/no_lines) + ")")
+		  .call(xAxis)
+		.append("text")
+		  .attr("class", "label")
+		  .attr("x", (width-xTitle.length)/2-50)
+		  .attr("y", 35)
+		  .style("text-anchor", "start")
+		  .text(xTitle)
+		  
+          if(yValues != ""){
+		  svg.append("g")
+			  .attr("class", "y axis")
+			  .call(yAxis
+		                .ticks(yValues.length)
+				.tickFormat(function (d) {		               
+		                   idx = idx + 1;
+				   return yValues[idx];
+	    			}))
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2-50)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+	  }
+	  else{
+		  svg.append("g")
+			  .attr("class", "y axis")
+			  .call(yAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2-50)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+	  }
+
+	  svg.selectAll(".dot")
+		  .data(data)
+		.enter().append("line")
+				  .attr("x1", function(d) { return x(d.start); })
+				  .attr("y1", function(d) { return y(d.y); })				  
+				  .attr("x2", function(d) { return x(d.stop); })
+				  .attr("y2", function(d) { return y(d.y); })				  
+				  .attr("stroke-width", function(d) { if(d.height == -1) return height/no_lines; return (height/no_lines * d.height) ; })
+				  .attr("stroke", function(d) { return color_beautification(d.color); })
+	});
+
+    var offset = 0
+    var total_len = 0
+    for (var i = 0; i < footer.length; i++) {
+	var array = footer[i].split(","); 
+	total_len = total_len + array[0].length*8 + 15;
+    }
+
+    for (var i = 0; i < footer.length; i++) {
+
+	var array = footer[i].split(","); 
+	svg.append("rect")
+	      .attr("x", (width-total_len)/2 + offset)             
+	      .attr("y", -30)
+	      .attr("width", 10)
+	      .attr("height", 10)
+	      .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
+        
+	svg.append("text")
+	      .attr("x", (width-total_len)/2 + offset + 15)             
+	      .attr("y", -20)
+	      .text(array[0]);
+        offset = offset + array[0].length*8 + 15
+
     }
 
 }

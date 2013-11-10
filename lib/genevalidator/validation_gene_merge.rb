@@ -10,6 +10,14 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_up
 
   def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
+
+    @short_header = "Gene_Merge(slope)"
+    @header       = "Gene Merge"
+    @description = "Check whether BLAST hits make evidence about a merge of two"<<
+    " genes that match the predicted gene. Meaning of the output displayed:"<<
+    " slope of the linear regression of the relationship between the start and"<<
+    " stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees."
+
     @slope          = slope
     @threshold_down = threshold_down
     @threshold_up   = threshold_up
@@ -95,16 +103,16 @@ class GeneMergeValidation < ValidationTest
       @validation_report.plot_files.push(plot1)
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
-      @running_time = Time.now - start
+      @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push "Unexpected Error" 
-      @validation_report = ValidationReport.new("Unexpected error", :error)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report
     end
   
