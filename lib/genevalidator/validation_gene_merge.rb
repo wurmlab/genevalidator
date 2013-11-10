@@ -1,5 +1,5 @@
 require 'json'
-require 'genevalidator/validation_output'
+require 'genevalidator/validation_report'
 
 ##
 # Class that stores the validation output information

@@ -1,4 +1,4 @@
-require 'genevalidator/validation_output'
+require 'genevalidator/validation_report'
 require 'genevalidator/exceptions'
 
 ##
