@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'erb'
 require 'yaml'
+require 'thread'
 
 class Output
 
@@ -18,6 +19,9 @@ class Output
   attr_accessor :start_idx
 
   attr_accessor :overall_score
+  attr_accessor :mutex
+  attr_accessor :mutex_yaml
+  attr_accessor :mutex_html
 
   ##
   # Initilizes the object
@@ -27,7 +31,7 @@ class Output
   # +yaml_path+: path where the yaml output wil be saved
   # +idx+: idnex of the current query
   # +start_idx+: number of the sequence from the file to start with
-  def initialize(filename, html_path, yaml_path, idx = 0, start_idx = 0)
+  def initialize(mutex, mutex_yaml, mutex_html, filename, html_path, yaml_path, idx = 0, start_idx = 0)
 
     @prediction_len = 0
     @prediction_def = "no_definition"
@@ -38,6 +42,10 @@ class Output
     @yaml_path = yaml_path
     @idx = idx
     @start_idx = start_idx
+   
+    @mutex = mutex
+    @mutex_yaml = mutex_yaml
+    @mutex_html = mutex_html
 
   end
   
@@ -90,7 +98,9 @@ class Output
       output << "|"
     end
 
-    puts output
+    @mutex.synchronize {
+      puts output
+    }
 
   end
 
@@ -100,15 +110,19 @@ class Output
     file_yaml = "#{@yaml_path}/#{@filename}.yaml"
     report = validations
     unless @idx == @start_idx
-      hsh = YAML.load_file(file_yaml)
-      hsh[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
-      File.open(file_yaml, "w") do |f|
-        YAML.dump(hsh, f)
-      end
-    else 
-      File.open(file_yaml, "w") do |f|
-        YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => report},f)
-      end
+      @mutex_yaml.synchronize {      
+        hash = YAML.load_file(file_yaml)
+        hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
+        File.open(file_yaml, "w") do |f|
+          YAML.dump(hash, f)
+        end
+      }
+    else
+      @mutex_yaml.synchronize {     
+        File.open(file_yaml, "w") do |f|
+          YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => report},f)
+        end
+      }
     end
 
   end
@@ -154,19 +168,21 @@ class Output
 
     # if it's the first time I write in the html file
     if @idx == @start_idx
-
-      template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.htm.erb"), 'r').read
-      erb = ERB.new(template_file)
-      File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
+      @mutex_html.synchronize {
+        template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.htm.erb"), 'r').read
+        erb = ERB.new(template_file)
+        File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
+      }
     end
 
     toggle = "toggle#{@idx}"
 
-    template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.htm.erb"), 'r').read
-    erb = ERB.new(template_file)
+    @mutex_yaml.synchronize {
+      template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.htm.erb"), 'r').read
+      erb = ERB.new(template_file)
+      File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
+    }
 
-    File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
- 
   end
 
   ##
@@ -174,8 +190,8 @@ class Output
   # Param:
   # +all_query_outputs+: array with +ValidationTest+ objects
   # +html_path+: path of the html folder
-  def self.print_footer(all_query_outputs, html_path)
-    overall_evaluation = overall_evaluation(all_query_outputs)
+  def self.print_footer(all_query_outputs, html_path, filename)
+    overall_evaluation = overall_evaluation(all_query_outputs, filename)
 
     less = overall_evaluation[0]
     less = less.gsub("\n","<br>").gsub("'",%q(\\\'))
@@ -200,9 +216,9 @@ class Output
   # +all_query_outputs+: Array of +ValidationTest+ objects
   # Output
   # Array of Strigs with the reports
-  def self.overall_evaluation(all_query_outputs)
+  def self.overall_evaluation(all_query_outputs, filename)
       score_evaluation = ""
-      score_evaluation << "Query score evaluation:"
+      score_evaluation << "Query score evaluation for #{filename}:"
       
       # count the cases of "not enough evidence"
       no_evidence = all_query_outputs.count{|report|

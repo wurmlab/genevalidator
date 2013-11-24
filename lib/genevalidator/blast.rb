@@ -125,6 +125,7 @@ class BlastUtils
 
         # get all high-scoring segment pairs (hsp)
         hsps = []
+
         hit.hsps.each do |hsp|
           current_hsp            = Hsp.new
           current_hsp.hsp_evalue = hsp.evalue.to_i

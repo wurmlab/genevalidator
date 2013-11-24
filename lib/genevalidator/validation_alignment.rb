@@ -421,19 +421,19 @@ class AlignmentValidation < ValidationTest
       # plot statistical model
       freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
       # hits
-      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>ma.length-j-1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| seq[j] == '-'}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>ma.length-j-1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
+#      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
       # plot prediction
-      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"green", "height"=>-1}] +
-      ma[ma.length-1].split(//).each_index.select{|j| ma[ma.length-1][j] == '-'}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"white", "height"=>-1}}+
+      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
+      ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
       consensus_all_idxs.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}).to_json)
 
       f.close
 
       yAxisValues = "prediction"
       (1..ma.length-1).each do |i|
-         yAxisValues << ", hit#{ma.length - i}"
+         yAxisValues << ", hit#{i}"
       end
 
       yAxisValues << ", statistical model"

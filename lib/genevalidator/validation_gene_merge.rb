@@ -11,7 +11,7 @@ class GeneMergeValidationOutput < ValidationReport
 
   def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
 
-    @short_header = "Gene_Merge(slope)"
+    @short_header = "Gene_Merge"
     @header       = "Gene Merge"
     @description = "Check whether BLAST hits make evidence about a merge of two"<<
     " genes that match the predicted gene. Meaning of the output displayed:"<<
@@ -74,7 +74,7 @@ class GeneMergeValidation < ValidationTest
   def initialize(type, prediction, hits, filename)
     super
     @filename     = filename
-    @short_header = "Gene_Merge(slope)"
+    @short_header = "Gene_Merge"
     @header       = "Gene Merge"
     @description = "Check whether BLAST hits make evidence about a merge of two"<<
     " genes that match the predicted gene. Meaning of the output displayed:"<<
@@ -111,6 +111,7 @@ class GeneMergeValidation < ValidationTest
       @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
+      puts error.backtrace
       @validation_report.errors.push "Unexpected Error" 
       @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report
@@ -127,19 +128,37 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
-      colors   = ["orange", "blue"]
+      colors   = ["orange", "blue"]  ##{colors[i%2]
       f        = File.open(output , "w")
-      no_lines = 120
+      no_lines = hits.length
 
       hits_less = hits[0..[no_lines, hits.length-1].min]
 
-      f.write((hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp| 
-              {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"#{colors[i%2]}"}}}.flatten).to_json)
+      f.write((hits_less.each_with_index.map{|hit, i|{"y"=>i, "start"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
+               "stop"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max,  "color"=>"black", "dotted"=>"true"}}.flatten + 
+               hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
+               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten).to_json)
+                  
+#               hits_less.each_with_index.map{|hit, i| hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj|
+#               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.each_with_index.map{|hsp, j|
+#              {"y"=>i, "start"=>hit.hsp_list[j].match_query_to, "stop"=>hit.hsp_list[j+1].match_query_from, "color"=>"black", "dotted"=>"true"}}}.flatten).to_json)
       f.close
+=begin
+              hits_less.each{|hit| hit.hsp_list.each{|hsp| puts "#{hsp.match_query_from} #{hsp.match_query_to}"}}
+
+              puts hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
+              {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten
+              puts ""
+              hits_less.each_with_index{|hit, i| puts "#{hit.identifier}\n #{hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj| 
+               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.to_s}"}
+#.each_with_index{|hsp, j|
+#              puts "start #{hit.hsp_list[j].match_query_to} stop #{hit.hsp_list[j+1].match_query_from} #{hit.hsp_list[j].match_query_to < hit.hsp_list[j+1].match_query_from}"}}
+
+=end
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
                        :lines,  
-                       "[Gene Merge] Matched regions in the prediction", 
-                       "prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange", 
+                       "[Gene Merge] Query coord covered by blast hit (1 line/hit)", 
+                       "", 
                        "offset in the prediction", 
                        "number of the hit",
                        hits_less.length)
@@ -161,7 +180,7 @@ class GeneMergeValidation < ValidationTest
     f.close
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :scatter,
-                                "[Gene Merge] Start/end of the high-scoring segments in prediction",
+                                "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)",
                                 "",
                                 "start offset (most left hsp)",
                                 "end offset (most right hsp)",

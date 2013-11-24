@@ -93,8 +93,8 @@ class LengthClusterValidation < ValidationTest
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
       plot1 = plot_histo_clusters
       @validation_report.plot_files.push(plot1)
-      plot2 = plot_len_clusters
-      @validation_report.plot_files.push(plot2)
+      #plot2 = plot_len_clusters
+      #@validation_report.plot_files.push(plot2)
       @validation_report.running_time = Time.now - start
 
       return @validation_report
@@ -173,7 +173,7 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
               :bars,
-              "[Length Validation] Distribution of the lengths of the hits",
+              "[Length Cluster] Distribution of the lengths of the hits",
               "query, black;most dense cluster,red;other hits, blue",
               "sequence length",
               "number of sequences",
@@ -203,7 +203,7 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                :lines,
-               "[Length Validation] Matched regions in hits",
+               "[Length Cluster] Matched regions in hits",
                "hit, gray;high-scoring segment pairs (hsp), red",
                "offset in the hit",
                "number of the hit",

@@ -45,10 +45,6 @@ class Validation
 
   attr_reader :wq
   attr_reader :threads
-  attr_reader :mutex
-  attr_reader :mutex_yaml
-  attr_reader :mutex_html
-  attr_reader :mutex_array
 
   ##
   # Initilizes the object
@@ -69,13 +65,28 @@ class Validation
                   start_idx = 1,
                   overall_evaluation = true)
 
+    @wq = WorkQueue.new 5
+
+    @queue = Queue.new
+
     # start a worker thread
     @threads = []
-    @mutex = Mutex.new
-    @mutex_yaml = Mutex.new
-    @mutex_html = Mutex.new
-    @mutex_array = Mutex.new
-
+=begin
+    Thread.new {
+      5.times do |i|
+        @threads[i] = Thread.new {
+          puts "start thread #{i}"
+          begin
+            unless @queue.empty?
+              puts "working"
+              job, args = @queue.pop
+              job.call(*args)
+            end
+          end while 1
+        }
+      end
+    }
+=end
     @fasta_filepath = fasta_filepath
    
     @xml_file = xml_file
@@ -222,9 +233,9 @@ class Validation
         parse_output(file)      
       end
 
-      if @overall_evaluation 
-        Output.print_footer(@all_query_outputs, @html_path, @filename)
-      end
+      #if @overall_evaluation 
+      #  Output.print_footer(@all_query_outputs, @html_path)
+      #end
     rescue SystemCallError => error
       $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: input file is not valid\n"      
@@ -234,7 +245,6 @@ class Validation
         "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
     rescue Exception => error
-       puts error.backtrace
        $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
        exit!
   end
@@ -249,11 +259,11 @@ class Validation
       hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
       iter = iterator_xml.next
       input_file_type = :xml
-
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
+
     rescue Exception => error
       begin 
         query       = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
@@ -332,35 +342,60 @@ class Validation
         break
       end
 
-      # the first validation should be treated separately
-      if @idx == @start_idx
-        validate(prediction, hits, idx)
-      else
-        @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local| 
-          validate(prediction_local, hits_local, idx_local)
-        }
-        #validate(prediction, hits, idx)
+=begin
+      # puts "-- query #{@idx} hits #{hits.length}"
+      @wq.enqueue_b do
+        #puts wq.cur_threads
+        Thread.current['id'] = @id
+        Thread.current['hits'] = hits
+        Thread.current['predition'] = prediction
+        puts "query #{idx}"
+        validate(prediction, hits)
       end
+=end
 
-      hits = nil # free memory
+      prediction_clone = prediction.clone
+      hits_clone = hits.clone
+      #@threads << Thread.new{validate(prediction_clone, hits_clone)}
+      validate(prediction_clone, hits_clone)
+=begin
+      @threads << Thread.new {
+        puts "start new thread"
+        puts @idx
+        #validate(prediction, hits)
+      }
+=end
+      #id_clone = @idx.clone
+#      puts @idx
+#      schedule {puts @idx}
+
+      #hits = nil # free memory
+
       GC.start # force garbage collector
 
     end while 1
 
+    #@wq.join
     @threads.each {|t| t.join}
 
   end
 
-  def validate(prediction, hits, idx)
+  def schedule(*args, &block)
+    # Your given task will not be run immediately; rather, it will be put
+    # into the work `Queue` and executed once a thread is ready to work.
+    puts "add to the queue"
+    @queue << [block, args]
+  end
 
-    query_output = do_validations(prediction, hits, idx)
+  def validate (prediction, hits)
+
+    # get validation report
+    query_output = do_validations(prediction, hits)
     query_output.generate_html
     query_output.print_output_console
     query_output.print_output_file_yaml
 
-    @mutex_array.synchronize {
-      @all_query_outputs.push(query_output)
-    }
+    #@all_query_outputs.push(query_output)
 
   end
 
@@ -402,20 +437,22 @@ class Validation
   # +hits+: Array of +Sequence+ objects
   # Output:
   # +Output+ object
-  def do_validations(prediction, hits, idx)
+  def do_validations(prediction, hits)
 
     begin
       hits = remove_identical_hits(prediction, hits)
       rescue Exception => error #NoPIdentError
     end
-
+    
     # do validations
-    query_output                = Output.new(@mutex, @mutex_yaml, @mutex_html, @filename, @html_path, @yaml_path, idx, @start_idx)
+    query_output                = Output.new(@filename, @html_path, @yaml_path, @idx, @start_idx)
     query_output.prediction_len = prediction.length_protein
     query_output.prediction_def = prediction.definition
+    #puts prediction.definition
+    #puts hits == nil
     query_output.nr_hits        = hits.length
 
-    plot_path = "#{html_path}/#{filename}_#{idx}"
+    plot_path = "#{html_path}/#{filename}_#{@idx}"
 
     validations = []
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
@@ -479,9 +516,9 @@ class Validation
       $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: At least two validations have the same CLI alias\n"
       exit!
-  rescue Exception => error
-      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-      exit!
+#  rescue Exception => error
+#      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+#      exit!
   end
 
   ##
