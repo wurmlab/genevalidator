@@ -33,7 +33,7 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
     prediction.length_protein = 108
 
-    validations = b.do_validations(prediction, hits).validations
+    validations = b.do_validations(prediction, hits,1).validations
 
   describe "Test validations 1" do  
     it "should check the number of hits" do

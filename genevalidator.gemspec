@@ -22,6 +22,7 @@ DESC
   s.add_dependency('shoulda')
   s.add_dependency('mini_shoulda')
   s.add_dependency('rack', "~> 1.5.2")
+  s.add_dependency('work_queue')
 
   s.files       = Dir["test/**/*"] + Dir["aux/**/*"] + Dir['lib/**/*']
   s.executables   = ['genevalidator', 'get_raw_sequences']

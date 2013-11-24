@@ -44,7 +44,7 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       original_stdout = $stdout.clone
       $stdout.reopen(filename_prot_out_xml, "w")
-      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, filename_prot_raw, nil, 1, false)
+      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, filename_prot_raw, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -54,14 +54,14 @@ class ValidateOutput < MiniTest::Unit::TestCase
                          "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
                          filename_prot_tab, 
                          filename_prot_raw,
-                         nil, 1, false)
+                         nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
       diff = FileUtils.compare_file(filename_prot_out_xml, filename_prot_out_tab)
 
-      File.delete(filename_prot_out_xml)
-      File.delete(filename_prot_out_tab)
+#      File.delete(filename_prot_out_xml)
+#      File.delete(filename_prot_out_tab)
       File.delete(filename_prot_yaml)
       FileUtils.rm_rf(filename_prot_html)
 
@@ -76,7 +76,7 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       original_stdout = $stdout.clone
       $stdout.reopen(filename_mrna_out_xml, "w")
-      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, filename_mrna_raw, nil, 1, false)
+      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, filename_mrna_raw, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -86,14 +86,14 @@ class ValidateOutput < MiniTest::Unit::TestCase
                          "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
                          filename_mrna_tab, 
                          filename_mrna_raw,
-                         nil, 1, false)
+                         nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
       diff = FileUtils.compare_file(filename_mrna_out_xml, filename_mrna_out_tab)
 
-      File.delete(filename_mrna_out_xml)
-      File.delete(filename_mrna_out_tab)
+#      File.delete(filename_mrna_out_xml)
+#      File.delete(filename_mrna_out_tab)
       File.delete(filename_mrna_yaml)
       FileUtils.rm_rf(filename_mrna_html)
 

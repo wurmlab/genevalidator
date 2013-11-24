@@ -42,6 +42,7 @@ class Validation
   attr_reader :vlist
   attr_reader :tabular_format
   attr_reader :overall_evaluation
+  attr_reader :multithreading
 
   attr_reader :wq
   attr_reader :threads
@@ -67,7 +68,8 @@ class Validation
                   raw_seq_file = nil,
                   mafft_path = nil, 
                   start_idx = 1,
-                  overall_evaluation = true)
+                  overall_evaluation = true,
+                  multithreading = true)
 
     # start a worker thread
     @threads = []
@@ -152,6 +154,7 @@ class Validation
           YAML.dump(index_hash, f)
         end          
 
+        @multithreading = multithreading
         @overall_evaluation = overall_evaluation
 
       end
@@ -222,9 +225,10 @@ class Validation
         parse_output(file)      
       end
 
-      if @overall_evaluation 
+      if @overall_evaluation
         Output.print_footer(@all_query_outputs, @html_path, @filename)
       end
+
     rescue SystemCallError => error
       $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: input file is not valid\n"      
@@ -336,10 +340,13 @@ class Validation
       if @idx == @start_idx
         validate(prediction, hits, idx)
       else
-        @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local| 
-          validate(prediction_local, hits_local, idx_local)
-        }
-        #validate(prediction, hits, idx)
+        if @multithreading
+          @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local| 
+            validate(prediction_local, hits_local, idx_local)
+          }        
+        else
+          validate(prediction, hits, idx)
+        end
       end
 
       hits = nil # free memory
