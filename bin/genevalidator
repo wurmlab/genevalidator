@@ -92,12 +92,14 @@ end
 
 # Main body
 
+=begin
 if File.directory? ARGV[0]
   require 'rack'
   app = Rack::Static.new nil, :urls => [""], :root => ARGV[0], :index => 'index.html'
   Rack::Server.start :app => app
 else
+=end
   b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:raw], options[:mafft], options[:start])
   b.validation
-end
+
 

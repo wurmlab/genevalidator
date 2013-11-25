@@ -302,7 +302,7 @@
 			
 				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
-				$tableHeaders = $("thead th",table);
+				$tableHeaders = $("thead th.header",table);
 		
 				$tableHeaders.each(function(index) {
 							

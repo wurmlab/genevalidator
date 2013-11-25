@@ -1,54 +1,102 @@
 
+var previous_scroll = $(window).scrollTop();
+
+window.onscroll = function (event) {
+
+    	var scroll = $(window).scrollTop();
+    	scroll_change = scroll - previous_scroll;
+   	previous_scroll = scroll;
+
+    	if(scroll_change > 0)
+		console.log("down");
+    	else
+		console.log("up");
+
+    	var button =  document.getElementById("show_all_plots");
+
+    	if(button.status == "pressed"){
+		show_all_plots(button);
+    	}
+}
+
 function show_all_plots(button){
 
-  button.innerHTML = "<i class='icon-bar-chart'></i> &nbsp;&nbsp;<b>Hide all plots</b>"
-  button.onclick = function() { 
-            hide_all_plots(button) 
-        };
+  if(button.status != "pressed"){
 
-  //remove all plots
-  var extensions = document.querySelectorAll('div')
-  for (var i = 0; i < extensions.length; i++) {
-     if(extensions[i].id.search(/toggle*/) == 0){
-        d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
-     }
-  }
+	button.status = "pressed";
+	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
+	button.onclick = function() { 
+		hide_all_plots(button) 
+	};
+   }
+	// remove all plots
+	remove_all_plots();
 
-  var pressedButtons = document.querySelectorAll('td')
-  var command = "";
-  for (var i = 0; i < pressedButtons.length; i++) {
-        if(pressedButtons[i].onclick != null){
-           var fcts = pressedButtons[i].onclick.toString().match(/addPlot\(.*\);/g)
-	   for (var j = 0; j < fcts.length; j++) {
-               command = command.concat(fcts[j])
-	   }
-        }
-     }
-     eval(command)
+	//display plots for visible dom
 
-     var extensions = document.querySelectorAll('div')
-     for (var i = 0; i < extensions.length; i++) {
-        if(extensions[i].id.search(/toggle*/) == 0){
-           extensions[i].style.display = "block";
-        }
-     }
-     //command = command.concat("showDiv(this, 'toggle1')")
+	//buttons
+	var visible_dom = $(":in-viewport");
+	var buttons_dom = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
+	console.log(visible_dom.length)
 
+	//expand_child divs
+	var expand_children = visible_dom.filter(function(i) {return (visible_dom[i].className == "expand-child")});
+
+	for (var i = 0; i < buttons_dom.length/5; i++) {
+		expand_child_div = expand_children[i].getElementsByTagName('div')[0];
+		show_plot(buttons_dom[i], expand_child_div);
+	}
+
+	//display plots for above visible dom
+
+	//buttons
+	var above_dom = $(":above-the-top");
+	var buttons_above = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
+
+	//expand_child divs
+	var expand_children_above = above_dom.filter(function(i) {return (above_dom[i].className == "expand-child")});
+
+	for (var i = visible_dom.length-1; i >= visible_dom.length * 4/5; i--) {
+		expand_child_div = expand_children_above[i].getElementsByTagName('div')[0];
+		show_plot(buttons_above[i], expand_child_div);
+	}
+
+}
+
+function show_plot(pressedButton, expand_child_div){
+
+	if(pressedButton.status != "pressed"){
+		eval(pressedButton.onclick.toString().replace("function onclick(event) {","").replace("}",""));
+		pressedButton.status="pressed";
+		expand_child_div.style.display = "block";
+	}
+
+}
+
+function remove_all_plots(){
+
+	var extensions = document.querySelectorAll('div')
+	for (var i = 0; i < extensions.length; i++) {
+		if(extensions[i].id.search(/toggle*/) == 0){
+			d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
+		}
+	}
+
+	var buttons = document.getElementsByTagName('button');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].status = "released";	
+	}
 }
 
 function hide_all_plots(button){
 
-  button.innerHTML = "<i class='icon-bar-chart'></i> &nbsp;&nbsp;<b>Show all plots</b>"
-  button.onclick = function() { 
-            show_all_plots(button) 
+	button.status = "released";
+	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Show all plots</b>"
+  	button.onclick = function() { 
+        	show_all_plots(button) 
         };
 
-     var extensions = document.querySelectorAll('div')
-     for (var i = 0; i < extensions.length; i++) {
-        if(extensions[i].id.search(/toggle*/) == 0){
-           d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
-        }
-     }
+	remove_all_plots();
 }
 
 function getElementByAttributeValue(attribute, value)
@@ -86,6 +134,7 @@ function showDiv(source, target){
      source.status="released"
    else
      source.status="pressed"
+
 }
 
 function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, aux2){
@@ -182,7 +231,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 		var xMax = Math.max(xMax, bar); 
 		var x = d3.scale.linear()
                      .domain([xMin-padding, xMax+padding])
-                     .range([10, width]);
+                     .range([13, width]);
 
 		var xAxis = d3.svg.axis()
 		        .scale(x)
@@ -363,7 +412,8 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .attr("r", 2)
 		  .attr("cx", function(d) { return x(d.x); })
 		  .attr("cy", function(d) { return y(d.y); })
-		  .style("fill", function(d) { return color_beautification("red"); });
+		  .style("fill", function(d) { return color_beautification("red"); })
+		  .style("opacity",0.6);
 
 	   if(slope!=undefined && yLine!=undefined){
 
@@ -395,7 +445,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 // maximum 80 lines
 function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
 
-	var margin = {top: 50, right: 170, bottom: 75, left: 50},
+	var margin = {top: 50, right: 50, bottom: 75, left: 50},
 		width = 600 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;		
         var legend_width = 17   
@@ -484,8 +534,10 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 				  .attr("x1", function(d) { return x(d.start); })
 				  .attr("y1", function(d) { return y(d.y); })				  
 				  .attr("x2", function(d) { return x(d.stop); })
+				  .attr("x2", function(d) { return x(d.stop); })
 				  .attr("y2", function(d) { return y(d.y); })				  
-				  .attr("stroke-width", height/no_lines)
+				  .attr("stroke-width", function(d) { if(d.dotted == undefined) return height/no_lines; return height/no_lines/5;})
+			          .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");}) 
 				  .attr("stroke", function(d) { return color_beautification(d.color); })
 	});
 
@@ -552,6 +604,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 		.ticks(5)
 
 	var svg = d3.select("#".concat(target)).append("svg")
+		.style("vertical-align", "top") 
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
@@ -649,4 +702,5 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
     }
 
 }
+
 

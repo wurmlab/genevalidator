@@ -60,8 +60,8 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       diff = FileUtils.compare_file(filename_prot_out_xml, filename_prot_out_tab)
 
-#      File.delete(filename_prot_out_xml)
-#      File.delete(filename_prot_out_tab)
+      File.delete(filename_prot_out_xml)
+      File.delete(filename_prot_out_tab)
       File.delete(filename_prot_yaml)
       FileUtils.rm_rf(filename_prot_html)
 
@@ -92,8 +92,8 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       diff = FileUtils.compare_file(filename_mrna_out_xml, filename_mrna_out_tab)
 
-#      File.delete(filename_mrna_out_xml)
-#      File.delete(filename_mrna_out_tab)
+      File.delete(filename_mrna_out_xml)
+      File.delete(filename_mrna_out_tab)
       File.delete(filename_mrna_yaml)
       FileUtils.rm_rf(filename_mrna_html)
 

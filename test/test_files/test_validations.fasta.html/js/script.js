@@ -1,6 +1,7 @@
-//sot table
+//sort table
+
 $(document).ready(function() { 
-    $("#sortable_table").tablesorter( {sortList: [[0,0]]} ); 
+    $("#sortable_table").tablesorter( {cssHeader: "header", sortList: [[0,0]]} ); 
 }); 
 
 //popover

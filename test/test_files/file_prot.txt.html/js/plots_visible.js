@@ -1,102 +1,71 @@
 
-var previous_scroll = $(window).scrollTop();
+/*window.onscroll = function (oEvent) {
 
-window.onscroll = function (event) {
+	var button =  document.getElementById("show_all_plots");
 
-    	var scroll = $(window).scrollTop();
-    	scroll_change = scroll - previous_scroll;
-   	previous_scroll = scroll;
+        var visible_dom = $(":in-viewport");
+	console.log(visible_dom.length)
 
-    	if(scroll_change > 0)
-		console.log("down");
-    	else
-		console.log("up");
-
-    	var button =  document.getElementById("show_all_plots");
-
-    	if(button.status == "pressed"){
-		show_all_plots(button);
-    	}
-}
+	//if(button.status == "pressed"){		
+	//	show_all_plots(button);
+	//}
+}*/
 
 function show_all_plots(button){
 
-  if(button.status != "pressed"){
+  //if(button.status != "pressed"){
 
-	button.status = "pressed";
-	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
-	button.onclick = function() { 
-		hide_all_plots(button) 
-	};
-   }
-	// remove all plots
-	remove_all_plots();
+	  button.status = "pressed";
 
-	//display plots for visible dom
+	  button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
+	  button.onclick = function() { 
+		    hide_all_plots(button) 
+		};
 
-	//buttons
-	var visible_dom = $(":in-viewport");
-	var buttons_dom = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
-	console.log(visible_dom.length)
-
-	//expand_child divs
-	var expand_children = visible_dom.filter(function(i) {return (visible_dom[i].className == "expand-child")});
-
-	for (var i = 0; i < buttons_dom.length/5; i++) {
-		expand_child_div = expand_children[i].getElementsByTagName('div')[0];
-		show_plot(buttons_dom[i], expand_child_div);
-	}
-
-	//display plots for above visible dom
-
-	//buttons
-	var above_dom = $(":above-the-top");
-	var buttons_above = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
-
-	//expand_child divs
-	var expand_children_above = above_dom.filter(function(i) {return (above_dom[i].className == "expand-child")});
-
-	for (var i = visible_dom.length-1; i >= visible_dom.length * 4/5; i--) {
-		expand_child_div = expand_children_above[i].getElementsByTagName('div')[0];
-		show_plot(buttons_above[i], expand_child_div);
-	}
-
-}
-
-function show_plot(pressedButton, expand_child_div){
-
-	if(pressedButton.status != "pressed"){
-		eval(pressedButton.onclick.toString().replace("function onclick(event) {","").replace("}",""));
-		pressedButton.status="pressed";
-		expand_child_div.style.display = "block";
-	}
-
-}
-
-function remove_all_plots(){
-
-	var extensions = document.querySelectorAll('div')
-	for (var i = 0; i < extensions.length; i++) {
+	  // remove all plots
+	  var extensions = document.querySelectorAll('div')
+	  for (var i = 0; i < extensions.length; i++) {
 		if(extensions[i].id.search(/toggle*/) == 0){
-			d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
+		   d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
 		}
-	}
+	  }
+  
+	  var visible_dom = $(":in-viewport");
+	  visible_dom_less = visible_dom.filter(function(i) {if (visible_dom[i].tagName == "BUTTON")  return true; return false;})
 
-	var buttons = document.getElementsByTagName('button');
-	for (var i = 0; i < buttons.length; i++) {
-		buttons[i].status = "released";	
-	}
+	  for (var i = 0; i < 3; i++) {//visible_dom_less.length/5; i++) {
+		pressedButton = visible_dom_less[i];
+		if(pressedButton.status != "pressed"){
+			eval(pressedButton.onclick.toString().replace("function onclick(event) {","").replace("}",""));
+			pressedButton.status="pressed"
+		}
+	  }
+
+	  var extensions = document.querySelectorAll('div')
+          for (var i = 0; i < extensions.length; i++) {
+          	if(extensions[i].id.search(/toggle*/) == 0){
+          	 	extensions[i].style.display = "block";
+          	}
+          }
+
+  // }
 }
 
 function hide_all_plots(button){
 
-	button.status = "released";
-	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Show all plots</b>"
-  	button.onclick = function() { 
-        	show_all_plots(button) 
+  button.status = "released";
+
+  button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Show all plots</b>"
+  button.onclick = function() { 
+            show_all_plots(button) 
         };
 
-	remove_all_plots();
+  var extensions = document.querySelectorAll('div')
+  for (var i = 0; i < extensions.length; i++) {
+        if(extensions[i].id.search(/toggle*/) == 0){
+           d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
+        }
+  }
 }
 
 function getElementByAttributeValue(attribute, value)
