@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GeneValidator: identify problematic gene predictions</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+       		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
+        	<script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script> 
+		<script type="text/javascript" src="js/jquery.raty.min.js"></script>       
+  		<script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  		<script type="text/javascript" src="js/bootstrap-popover.js"></script>
+	    	<script type="text/javascript" src="js/table-fixed-header.js"></script>          		
+        	<script type="text/javascript" src="js/d3.v3.min.js"></script>  
+        	<script type="text/javascript" src="js/jquery.masonry.min.js"></script>         	    
+	        <script type="text/javascript" src="js/script.js"></script> 
+        	<script type="text/javascript" src="js/plots.js"></script>         
+
+        	<link href="css/style.css" rel="stylesheet">
+	        <link href="css/bootstrap-glyphicons.css" rel="stylesheet">        
+        	<link href="css/bootstrap.css" rel="stylesheet">
+	</head>
+	<body>
+
+	<div>
+
+		<div align="center" class="background_image" style="float:right; width:340px; padding-right:50px;">
+    			<br><h1>Gene Validator <small>beta </small></h1>
+			<h4><i> Identify Problems with Gene Predictions</i></h4><br>
+		</div>
+
+		<br><br>
+
+
+	</div>
+
+	<div class="container">
+	<div id="report" >
+
+		<h4> Validation results for <i>all_validations_prot.fasta</i></h4>
+		<div id="report_1">
+		</div>
+
+		<br><br>
+
+		<div>
+
+   	 		<div align = center style="float:left; padding-right:10px; padding-left:10px;">
+				<a href="doc/about.html">
+					<i class="icon-info" style="font-size: 25px;"></i> <br> <b>About</h4>
+				</a>
+			</div>
+
+
+		 	<div align = center style="float:left; padding-right:10px; padding-left:10px;">
+				<a href="https://github.com/monicadragan/GeneValidator" target = "git">
+					<i class="icon-github" style="font-size: 25px;"></i> <br> <b>Source code</b>
+				</a>
+			</div>
+
+		 	<div align = center style="float:left; padding-right:10px; padding-left:10px;s">
+				<a href="#">
+					<i class="icon-bar-chart" style="font-size: 25px;"></i> <br> <b>Show all plots</b>
+				</a>
+		 	</div>
+		</div>
+
+	</div>
+
+	<br><br><br>
+
+    	<table id="sortable_table" class="table table-collapsed table-bordered table-striped table-condensed tablesorter">
+        <thead>     		        
+        	<tr id="header">
+            	<th class="sort">#</th>        	
+          	<th class="sort">Score</th>
+		<th class="nosort">Ranking</th>
+                <th class="sort">
+                	Identifier
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Query identifier as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>            	
+                <th class="sort">
+                	Description
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Description of the query as it apears in the input fasta file." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                 	
+                </th>
+                <th class="sort">
+                	No. Hits
+	                <a href="#" class="my_popover" rel="popover" 
+	                	data-content="Number of non-identical hits found by BLAST." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	           	</a>                	
+                </th>
+                                        	            
+                	<th class="nosort">
+                		<b>Length Cluster</b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b>Length Rank</b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether the rank of the prediction length lies among 80% of all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b></b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b>Gene Merge</b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene. Meaning of the output displayed: slope of the linear regression of the relationship between the start and stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b>Duplication</b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverag of the prediction, for each hit. Meaning of the output displayed: P-value of the Wilcoxon test which test the distribution of hit average coverage against 1. P-values higher than 5% pass the validation test." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b></b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="" 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                                        	            
+                	<th class="nosort">
+                		<b>Missing/Extra sequences</b>
+	                	<a href="#" class="my_popover" rel="popover" 
+	                	data-content="Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Also counts the percentahe of the conserved regions that appear in the prediction. Meaning of the output: the percentages of the missing/extra sequences with respect to the multiple alignment. Validation fails if one of these values is higher than 20%. Percentage of the conserved residues." 
+	                	data-placement="top">
+    	            		<i class="icon-question-sign"></i>
+    	            	</a>
+                	</th>
+                
+                <td></td>				
+    		</tr>
+    	</thead>   	
+    	
+        <tbody>
+	
+<tr> 
+	<td>1</td>
+	<td class="danger"> 80% </td>		
+	<td><div name="ranking" score=80></div></td>
+	<td title="Identifier">GB10034-PA</td>
+	<td title="Description"> (amel_OGSv1.0_pep.fa_34)</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '554', '');
+             	  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">554 [597, 885]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.41</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '448.6522068954243', '0.2184792510108204');
+             	  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.22</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle1');
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">0% missing, 2% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle1');
+	    
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '554', '');
+             	  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '448.6522068954243', '0.2184792510108204');
+             	  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle1', 'all_validations_prot.fasta_1_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle1 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>2</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">GB10040-PA</td>
+	<td title="Description"> (amel_OGSv1.0_pep.fa_40)</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1070', '');
+             	  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">1070 [724, 1301]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.48</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '935.0320999124344', '-0.36624189434372745');
+             	  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.37</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle2');
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">8% missing, 1% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle2');
+	    
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1070', '');
+             	  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '935.0320999124344', '-0.36624189434372745');
+             	  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle2', 'all_validations_prot.fasta_2_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle2 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>3</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">GB10056-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">199</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '339', '');
+             	  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">339 [333, 382]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.45</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '287.8900264475476', '-0.3540995268047926');
+             	  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.35</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle3');
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">1% missing, 1% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle3');
+	    
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '339', '');
+             	  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '287.8900264475476', '-0.3540995268047926');
+             	  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle3', 'all_validations_prot.fasta_3_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle3 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>4</td>
+	<td class="danger"> 80% </td>		
+	<td><div name="ranking" score=80></div></td>
+	<td title="Identifier">GB10058-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1052', '');
+             	  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">1052 [1115, 1286]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.35</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1027.859973911625', '0.027734230310566387');
+             	  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.03</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle4');
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">7% missing, 0% extra, 97% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle4');
+	    
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1052', '');
+             	  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1027.859973911625', '0.027734230310566387');
+             	  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle4', 'all_validations_prot.fasta_4_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle4 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>5</td>
+	<td class="danger"> 40% </td>		
+	<td><div name="ranking" score=40></div></td>
+	<td title="Identifier">GB10063-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">199</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '615', '');
+             	  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">615 [583, 601]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.16 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '580.4407876426384', '0.9555385471750629');
+             	  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.96</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=0.25</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle5');
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">0% missing, 0% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle5');
+	    
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '615', '');
+             	  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '580.4407876426384', '0.9555385471750629');
+             	  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle5', 'all_validations_prot.fasta_5_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle5 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>6</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">GB10071-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">199</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '494', '');
+             	  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">494 [414, 469]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.06 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '457.05466300814743', '-0.07850717982165417');
+             	  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.08</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle6');
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">0% missing, 0% extra, 99% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle6');
+	    
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '494', '');
+             	  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '457.05466300814743', '-0.07850717982165417');
+             	  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle6', 'all_validations_prot.fasta_6_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle6 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>7</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">GB10091-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">198</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '708', '');
+             	  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">708 [665, 841]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.36</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '631.1760668143997', '0.004471551610159246');
+             	  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.0</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle7');
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">2% missing, 1% extra, 99% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle7');
+	    
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '708', '');
+             	  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '631.1760668143997', '0.004471551610159246');
+             	  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle7', 'all_validations_prot.fasta_7_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle7 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>8</td>
+	<td class="danger"> 40% </td>		
+	<td><div name="ranking" score=40></div></td>
+	<td title="Identifier">GB10098-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '826', '');
+             	  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">826 [1044, 1074]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.18 (too short)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '810.0378430052812', '0.0053170392941149025');
+             	  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.01</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle8');
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">21% missing, 0% extra, 80% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle8');
+	    
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '826', '');
+             	  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '810.0378430052812', '0.0053170392941149025');
+             	  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle8', 'all_validations_prot.fasta_8_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle8 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>9</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">GB10113-PA</td>
+	<td title="Description"></td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '659', '');
+             	  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">659 [390, 773]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.21</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '408.7887582205029', '0.28067560099475014');
+             	  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.28</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle9');
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">3% missing, 6% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle9');
+	    
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '659', '');
+             	  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '408.7887582205029', '0.28067560099475014');
+             	  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle9', 'all_validations_prot.fasta_9_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle9 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>10</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td title="Identifier">sp|P83011|13KDA_SCYCA</td>
+	<td title="Description"> 13.2 kDa protein (Fragment) OS=Scyliorhinus canicula PE=1 SV=1</td>		
+	<td title="No. Hits">0</td>
+		    
+   	    
+  		    <td title='Length Cluster' class = warning>Not enough evidence</td>
+		    
+   	    
+  		    <td title='Length Rank' class = warning>Not enough evidence</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+  		    <td title='Gene Merge' class = warning>Not enough evidence</td>
+		    
+   	    
+  		    <td title='Duplication' class = warning>Not enough evidence</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+  		    <td title='Missing/Extra sequences' class = warning>Not enough evidence</td>
+	
+	<td>
+ 
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle10 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>11</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">sp|Q8GBW6|12S_PROFR</td>
+	<td title="Description"> Methylmalonyl-CoA carboxyltransferase 12S subunit OS=Propionibacterium freudenreichii subsp. shermanii PE=1 SV=3</td>		
+	<td title="No. Hits">199</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '611', '');
+             	  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">611 [508, 517]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.0 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '527.1222991496677', '-0.28706224927589835');
+             	  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.29</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle11');
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '11', 'prediction, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">0% missing, 14% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle11');
+	    
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '611', '');
+             	  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '527.1222991496677', '-0.28706224927589835');
+             	  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle11', 'all_validations_prot.fasta_11_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '11', 'prediction, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle11 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>12</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">SI2.2.0_02565</td>
+	<td title="Description"> locus=Si_gnF.scaffold10535[2342913..2350141].pep_2 quality=99.83 (SI2.2.3_proteins.fa_35)</td>		
+	<td title="No. Hits">198</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1761', '');
+             	  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">1761 [1539, 2169]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.42</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1321.4226360848302', '-0.21165326941270313');
+             	  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.21</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle12');
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">4% missing, 3% extra, 94% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle12');
+	    
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1761', '');
+             	  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1321.4226360848302', '-0.21165326941270313');
+             	  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle12', 'all_validations_prot.fasta_12_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle12 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>13</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">SI2.2.0_07054</td>
+	<td title="Description"> locus=Si_gnF.scaffold08475[8186..10205].pep_2 quality=100.00</td>		
+	<td title="No. Hits">199</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '640', '');
+             	  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">640 [86, 376]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.22</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '258.1465929782326', '0.8178905676149015');
+             	  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.82</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle13');
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">14% missing, 3% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle13');
+	    
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '640', '');
+             	  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '258.1465929782326', '0.8178905676149015');
+             	  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle13', 'all_validations_prot.fasta_13_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle13 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>14</td>
+	<td class="danger"> 80% </td>		
+	<td><div name="ranking" score=80></div></td>
+	<td title="Identifier">SI2.2.0_02651</td>
+	<td title="Description"> locus=Si_gnF.scaffold01722[932834..938174].pep_2 quality=100.00 tag=gw_corrected</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '660', '');
+             	  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">660 [827, 1102]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.21</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '545.96198985329', '-0.01717943916851836');
+             	  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.02</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle14');
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">1% missing, 4% extra, 96% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle14');
+	    
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '660', '');
+             	  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '545.96198985329', '-0.01717943916851836');
+             	  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle14', 'all_validations_prot.fasta_14_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle14 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>15</td>
+	<td class="danger"> 80% </td>		
+	<td><div name="ranking" score=80></div></td>
+	<td title="Identifier">PB26730-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|10|0|347</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '347', '');
+             	  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">347 [330, 422]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.33</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '177.5688106003663', '0.0527072053169678');
+             	  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.05</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle15');
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">8% missing, 25% extra, 50% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle15');
+	    
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '347', '');
+             	  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '177.5688106003663', '0.0527072053169678');
+             	  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle15', 'all_validations_prot.fasta_15_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle15 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>16</td>
+	<td class="danger"> 0% </td>		
+	<td><div name="ranking" score=0></div></td>
+	<td title="Identifier">Or13a-like-1</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|23|0|774</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '774', '');
+             	  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">774 [292, 472]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.04 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '522.6980684641655', '0.49782931114194945');
+             	  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.5</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = danger>pval=0.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle16');
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">4% missing, 36% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle16');
+	    
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '774', '');
+             	  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '522.6980684641655', '0.49782931114194945');
+             	  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle16', 'all_validations_prot.fasta_16_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle16 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>17</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">PB18762-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|2|0|207</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '207', '');
+             	  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">207 [218, 388]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.06 (too short)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '206.64847599122453', '0.003594280347085402');
+             	  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.0</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle17');
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">17% missing, 0% extra, 84% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle17');
+	    
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '207', '');
+             	  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '206.64847599122453', '0.003594280347085402');
+             	  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle17', 'all_validations_prot.fasta_17_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle17 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>18</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">Pbar_fem-RF</td>
+	<td title="Description"> protein AED:1 QI:325|0|0|0|0|0|10|42|452</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '452', '');
+             	  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">452 [64, 267]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.07 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '380.405021609208', '0.19911889065851043');
+             	  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.2</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle18');
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">2% missing, 6% extra, 99% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle18');
+	    
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '452', '');
+             	  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '380.405021609208', '0.19911889065851043');
+             	  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle18', 'all_validations_prot.fasta_18_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle18 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>19</td>
+	<td class="danger"> 20% </td>		
+	<td><div name="ranking" score=20></div></td>
+	<td title="Identifier">PB18775-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|17|0|1160</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1160', '');
+             	  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">1160 [673, 747]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.0 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1057.4654117912532', '0.01935845701391968');
+             	  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.02</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = danger>pval=0.02</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle19');
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">9% missing, 39% extra, 96% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle19');
+	    
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1160', '');
+             	  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '1057.4654117912532', '0.01935845701391968');
+             	  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle19', 'all_validations_prot.fasta_19_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle19 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>20</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">PB11933-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|8|0|845</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '845', '');
+             	  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">845 [637, 1311]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.49</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '749.9463921717296', '0.15467974910606966');
+             	  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.15</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle20');
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">10% missing, 0% extra, 91% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle20');
+	    
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '845', '');
+             	  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '749.9463921717296', '0.15467974910606966');
+             	  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle20', 'all_validations_prot.fasta_20_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle20 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>21</td>
+	<td class="success"> 100% </td>		
+	<td><div name="ranking" score=100></div></td>
+	<td title="Identifier">PB13750-RA</td>
+	<td title="Description"> protein AED:1 QI:198|0|0|0|0|0|12|764|974</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '974', '');
+             	  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">974 [884, 980]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.21</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '966.414255575773', '-0.008934550654066235');
+             	  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.01</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle21');
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">6% missing, 0% extra, 88% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle21');
+	    
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '974', '');
+             	  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '966.414255575773', '-0.008934550654066235');
+             	  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle21', 'all_validations_prot.fasta_21_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle21 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>22</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">PB13758-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|14|0|751</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '751', '');
+             	  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">751 [829, 864]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.07 (too short)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '748.2026875395634', '-0.05254151240272282');
+             	  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.05</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle22');
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">17% missing, 0% extra, 94% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle22');
+	    
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '751', '');
+             	  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '748.2026875395634', '-0.05254151240272282');
+             	  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle22', 'all_validations_prot.fasta_22_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle22 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>23</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">PB20127-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|8|0|679</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '679', '');
+             	  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">679 [589, 647]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.17 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '618.0006558845556', '0.036152518904492004');
+             	  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=0.04</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle23');
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">13% missing, 6% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle23');
+	    
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '679', '');
+             	  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '618.0006558845556', '0.036152518904492004');
+             	  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle23', 'all_validations_prot.fasta_23_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle23 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>24</td>
+	<td class="danger"> 60% </td>		
+	<td><div name="ranking" score=60></div></td>
+	<td title="Identifier">PB18752-RA</td>
+	<td title="Description"> protein AED:1 QI:0|0|0|0|0|0|13|0|794</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle24');
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '794', '');
+             	  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">794 [654, 690]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = danger>0.01 (too long)</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle24');
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '784.105743384934', '-0.6699093595456155');
+             	  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.67</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle24');
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">0% missing, 9% extra, 99% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle24');
+	    
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '794', '');
+             	  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '784.105743384934', '-0.6699093595456155');
+             	  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle24', 'all_validations_prot.fasta_24_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle24 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+<tr> 
+	<td>25</td>
+	<td class="danger"> 80% </td>		
+	<td><div name="ranking" score=80></div></td>
+	<td title="Identifier">PB18768-RA</td>
+	<td title="Description"> protein AED:1 QI:187|0|0|0|0|0|2|127|132</td>		
+	<td title="No. Hits">200</td>
+		    
+   	    
+	   	    <td  title='Length Cluster' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle25');
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '132', '');
+             	  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	 ">132 [104, 144]</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Length Rank' class = success>0.44</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Gene Merge' class="success my-btn-success" onclick="
+		showDiv(this, 'toggle25');
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '130.1043651760573', '-0.004365155460131159');
+             	  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	 ">slope=-0.0</td> 	
+  	    </td>
+		    
+   	    
+  		    <td title='Duplication' class = success>pval=1.0</td>
+		    
+   	    
+  		    <td title='' class = danger></td>
+		    
+   	    
+	   	    <td  title='Missing/Extra sequences' class="danger my-btn-danger" onclick="
+		showDiv(this, 'toggle25');
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	 ">60% missing, 0% extra, 100% conserved</td> 	
+  	    </td>
+	
+	<td>
+ 	    
+	<button title="Show plots" class="btn" onclick="
+	    showDiv(this, 'toggle25');
+	    
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_len_clusters.json', 'bars', '[Length Validation] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '132', '');
+             	  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_len.json', 'lines', '[Length Validation] Matched regions in hits', 'hit, gray;high-scoring segment pairs (hsp), red', 'offset in the hit', 'number of the hit', '101', '');
+             	
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_match_2d.json', 'scatter', '[Gene Merge] Start/end of the high-scoring segments in prediction', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '130.1043651760573', '-0.004365155460131159');
+             	  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_match.json', 'lines', '[Gene Merge] Matched regions in the prediction', 'prediction high-scoring alignmet seq, red; prediction high-scoring alignmet seq, orange', 'offset in the prediction', 'number of the hit', '121', '');
+             	
+		  			
+  		addPlot('toggle25', 'all_validations_prot.fasta_25_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit10, hit9, hit8, hit7, hit6, hit5, hit4, hit3, hit2, hit1, statistical model');
+             	                
+	    ">			 			 
+    	    <i class="icon-bar-chart"></i></button>
+
+        </td>
+</tr>
+
+<tr class="expand-child">
+	<td  colspan=13>
+	<div id=toggle25 style='display:none; text-align: center'>
+
+</div></td></tr>
+
+
+
+</tbody>
+</table>
+
+<script>
+
+	var evaluation_div = document.getElementById('report_1');
+
+	var content_less = "<br>Query score evaluation:<br>There were validated 25 predictions from which:<br>12 are good predictions<br>13 are possibly weak predictions<br>1 of them couldn\'t be evaluated because of low evidence <br> <a style='cursor: pointer;' onClick='evaluation_div.innerHTML=content'> Display the rest of the report >> </a>";
+	var content = "<br>Query score evaluation:<br>There were validated 25 predictions from which:<br>12 are good predictions<br>13 are possibly weak predictions<br>1 of them couldn\'t be evaluated because of low evidence<br><br>Running Time:<br>Average running time for LengthCluster Validation: 0.085s per validation<br>Average running time for LengthRank Validation: 0.0s per validation<br>Average running time for Gene_Merge(slope) Validation: 0.009s per validation<br>Average running time for Duplication Validation: 0.075s per validation<br>Average running time for MA Validation: 1.897s per validation <br> <a style='cursor: pointer;' onClick='evaluation_div.innerHTML=content_less'> << Display less </a>";	
+
+  	evaluation_div.innerHTML = content_less;
+
+</script>
+</div>
+</body>
+
+</html>
+
+

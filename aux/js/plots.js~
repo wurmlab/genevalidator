@@ -21,19 +21,18 @@ window.onscroll = function (event) {
 
 function show_all_plots(button){
 
+  if(button.status != "pressed"){
+
+	button.status = "pressed";
+	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
+	button.onclick = function() { 
+		hide_all_plots(button) 
+	};
+   }
+
 	var expand_children = document.getElementsByClassName('expand-child');
 
-	if(expand_children.length < 30){
-
-		alert("This may take a while. Please wait...");
-
-		if(button.status != "pressed"){
-			button.status = "pressed";
-			button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
-			button.onclick = function() { 
-				hide_all_plots(button) 
-			};
-   		}
+	if(expand_children.length < 20){
 
 		//display plots in the dom
 		var buttons_dom = document.querySelectorAll('button')

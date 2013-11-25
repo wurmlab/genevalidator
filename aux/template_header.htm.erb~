@@ -33,20 +33,20 @@
 
 		<div style="position:absolute; top: 20px; right: 10px; width:340px;">
 
-   	 		<div style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
+   	 		<div align = center style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
 				<a href="doc/about.html">
 					&nbsp;&nbsp;&nbsp;<i class="icon-info" style="font-size: 25px;"></i> <br> <b>About</b>
 				</a>
 			</div>
 
 
-		 	<div style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
+		 	<div align = center style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
 				<a href="https://github.com/monicadragan/GeneValidator" target = "git">
 					&nbsp;&nbsp;&nbsp;<i class="icon-github" style="font-size: 25px;"></i> <br> <b>Source code</b>
 				</a>
 			</div>
 
-		 	<div style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
+		 	<div align = center style="float:left; text-align: center; padding-right:10px; padding-left:10px;">
 				<a id="show_all_plots" onclick="show_all_plots(this);">
 					&nbsp;&nbsp;&nbsp;<i class="icon-bar-chart" style="font-size: 25px;"></i> <br> <b>Show all plots</b>
 				</a>

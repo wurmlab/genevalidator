@@ -1,18 +1,17 @@
 /* table sorter */
 
-table.tablesorter thead th.sort.header {
+table.tablesorter thead th.header {
 background-image: url(../img/bg.gif);
 background-repeat: no-repeat;
 background-position: center right !important;
     padding-right:20px !important;	
-cursor: pointer;
 }
 
-table.tablesorter thead th.sort.headerSortUp {
+table.tablesorter thead th.headerSortUp {
 background-image: url(../img/asc.gif);
     padding-right:20px !important;	
 }
-table.tablesorter thead th.sort.headerSortDown {
+table.tablesorter thead th.headerSortDown {
 background-image: url(../img/desc.gif);
     padding-right:20px !important;	
 }
@@ -70,6 +69,12 @@ pointer-events: none;
   white-space: nowrap !important;
   padding-right:20px !important;
 }
+
+a:link {color:#000000;text-decoration: none !important;}      /* unvisited link */
+a:visited {color:#000000;text-decoration: none !important;}  /* visited link */
+a:hover {color:#3A87AD;text-decoration: none !important;}  /* mouse over link */
+a:active {color:#3A87AD;text-decoration: none !important;}  /* selected link */ 
+
 /*
 thead {
 background-color: #ffffff;
@@ -156,6 +161,7 @@ thead {
   text-align: justify !important;
 }
 
+
 /* axis and d3js */
 
 .axis path,
@@ -170,9 +176,6 @@ thead {
   opacity:0.7;
 }
 
-.icon-bar-chart:before {
-  content: "\f080";
-}
 
 .btn {
   padding: 4px 5px 2px 3px !important;
@@ -211,3 +214,49 @@ thead {
   display: inline-block;
   speak: none;
 }
+
+.icon-bar-chart:before {
+  content: "\f080";
+}
+
+[class="icon-github"],
+[class=" icon-github"] {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+}
+[class="icon-github"]:before,
+[class=" icon-github"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
+}
+
+.icon-github:before {
+  content: "\f09b";
+}
+
+[class="icon-info"],
+[class=" icon-info"] {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+}
+[class="icon-info"]:before,
+[class=" icon-info"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
+}
+
+.icon-info:before {
+  content: "\f05a";
+}
+
+

@@ -34,7 +34,7 @@
 
 <tr class="expand-child">
     <td  colspan=<%=validations.length + 7%>>
-	<div id=<%=toggle%> style='display:none; text-align: center'></div>
+	<div id=<%=toggle%> style='display:block; text-align: center'></div>
     </td>
 </tr>
 

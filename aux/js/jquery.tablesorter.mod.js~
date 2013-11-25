@@ -302,7 +302,7 @@
 			
 				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
-				$tableHeaders = $("thead th.header",table);
+				$tableHeaders = $("thead th",table);
 		
 				$tableHeaders.each(function(index) {
 							
@@ -313,7 +313,7 @@
 					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.sortDisabled = true;
 					
 					if(!this.sortDisabled) {
-						var $th = $(this).addClass(table.config.cssHeader);
+						//var $th = $(this).addClass(table.config.cssHeader);
 						if( table.config.onRenderHeader ) table.config.onRenderHeader.apply($th);
 					}
 					
