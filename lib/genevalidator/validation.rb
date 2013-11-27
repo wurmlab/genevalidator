@@ -238,7 +238,6 @@ class Validation
         "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
     rescue Exception => error
-       puts error.backtrace
        $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
        exit!
   end
@@ -292,6 +291,13 @@ class Validation
 
     begin
 
+      # inspect memory usage
+      counts = Hash.new{ 0 }
+      ObjectSpace.each_object do |o|
+        counts[o.class] += 1
+      end 
+      puts counts.to_s      
+
       if @idx+1 == @query_offset_lst.length
         break
       end
@@ -336,6 +342,8 @@ class Validation
         break
       end
 
+      #validate(prediction, hits, idx)
+
       # the first validation should be treated separately
       if @idx == @start_idx
         validate(prediction, hits, idx)
@@ -343,6 +351,7 @@ class Validation
         if @multithreading
           @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local| 
             validate(prediction_local, hits_local, idx_local)
+            GC.start
           }        
         else
           validate(prediction, hits, idx)
@@ -355,6 +364,13 @@ class Validation
     end while 1
 
     @threads.each {|t| t.join}
+
+    # inspect memory usage
+    counts = Hash.new{ 0 }
+    ObjectSpace.each_object do |o|
+      counts[o.class] += 1
+    end
+    puts counts.to_s
 
   end
 
