@@ -292,11 +292,11 @@ class Validation
     begin
 
       # inspect memory usage
-      counts = Hash.new{ 0 }
-      ObjectSpace.each_object do |o|
-        counts[o.class] += 1
-      end 
-      puts counts.to_s      
+#      counts = Hash.new{ 0 }
+#      ObjectSpace.each_object do |o|
+#        counts[o.class] += 1
+#      end 
+#      puts counts.to_s      
 
       if @idx+1 == @query_offset_lst.length
         break
@@ -364,13 +364,6 @@ class Validation
     end while 1
 
     @threads.each {|t| t.join}
-
-    # inspect memory usage
-    counts = Hash.new{ 0 }
-    ObjectSpace.each_object do |o|
-      counts[o.class] += 1
-    end
-    puts counts.to_s
 
   end
 
