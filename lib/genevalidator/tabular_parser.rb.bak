@@ -7,7 +7,7 @@ TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :
 # This class parses the tabular output of BLAST (outfmt 6) 
 class TabularParser
 
-  attr_reader :lines
+  attr_reader :content_iterator
   attr_reader :format
   attr_reader :type
   attr_reader :column_names
@@ -16,19 +16,11 @@ class TabularParser
 
   ##
   # Initializes the object
-  # +file_content+ : String with the tabular BLAST output
+  # +content+ : String with the tabular BLAST output
   # +format+: format of the tabular output (string with column sepatared by space or coma)
   # +type+: :nucleotide or :mrna
-  def initialize (filename, format, type)
-
-    file = File.open(filename, "r");
-    @lines = file.lines
-
-    # skip the comment lines
-    while CSV.parse(@lines.peek, :col_sep => "\t")[0][0].match(/#.*/) != nil
-      @lines.next
-    end
-    
+  def initialize (content, format, type)
+    @content_iterator = content.gsub(/#.*\n/,"")
     if format == nil
       @format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
     else 
@@ -42,33 +34,63 @@ class TabularParser
   end 
 
   ##
+  # Returns true if there are more hits in the tabular file
+  def has_next
+    return @content_iterator.length > 0
+  end
+
+  ##
   # Jumps to the next query
   def jump_next
-    begin
+    if has_next
       # get current query id
       # search for the endline
+      first_row = @content_iterator.scan(/([^\n]*)\n/)
 
-      entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-      unless entry.length == @column_names.length
+      unless first_row[0][0].scan(/\t/).length + 1 == @column_names.length
         raise InconsistentTabularFormat
       end
 
-      query_id = entry[query_id_idx]
-      while 1
-        entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-        unless query_id == entry[query_id_idx]
-          break;
-        end
-        @lines.next
+      query_id = first_row.join().split("\t")[query_id_idx]
+      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}[^\n]*/)
+
+      next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1
+      @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]
+    end
+  end
+ 
+  # Returns the next query output
+  # +identifier+: +String+, the identifier of the next expected query
+  # if the identifier is nil, it takes the next query
+  # Output:
+  # Array of +Sequence+ objects corresponding to hits
+  def next(identifier = nil)
+    begin
+      unless has_next
+        return nil
       end
 
-    rescue StopIteration => error
-    end
+      # get current query id
+      # search for the endline
+      first_row = @content_iterator.scan(/([^\n]*)\n/)
 
-  end
+      unless first_row[0][0].scan(/\t/).length + 1 == @column_names.length
+        raise InconsistentTabularFormat
+      end
 
-  def make_hit_list(hits)
+      query_id = first_row.join().split("\t")[query_id_idx]
+      if (identifier != nil and query_id != identifier)
+        return []
+      end
+ 
+      hits = @content_iterator.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}\t[^\n]*/)
+
+      next_query = @content_iterator.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1  
+      @content_iterator =  @content_iterator[next_query..@content_iterator.length-1]
+
       hit_list = []
+      hits = hits.map{|hit| hit.split("\t")}
+
       # for each hit 
       hits.group_by{|hit| hit[@hit_id_idx]}.each do |idx, hit|
         hit_seq = Sequence.new
@@ -85,59 +107,23 @@ class TabularParser
             hsp.init_tabular_attribute(column, hsp_array[i], @type)
           end
           hit_seq.hsp_list.push(hsp)
-        end
+        end 
         # all the hits are proteins because are obtained with blastx or blastp
         hit_seq.type = :protein
         hit_list.push(hit_seq)
-      end
+
+      end 
       return hit_list
-  end
- 
-  # Returns the next query output
-  # +identifier+: +String+, the identifier of the next expected query
-  # if the identifier is nil, it takes the next query
-  # Output:
-  # Array of +Sequence+ objects corresponding to hits
-  def next(identifier = nil)
-    begin
-      # get current query id
-      # search for the endline
-
-      entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-      unless entry.length == @column_names.length
-        raise InconsistentTabularFormat
-      end
-
-      query_id = entry[query_id_idx]
-      if (identifier != nil and query_id != identifier)
-        return []
-      end
- 
-      hits = []
-
-      while 1
-        entry = CSV.parse(@lines.peek, :col_sep => "\t")[0] 
-        unless query_id == entry[query_id_idx]
-          return make_hit_list(hits)
-        end
-
-        hits << entry
-        @lines.next
-      end
-
-      return make_hit_list(this)
-
-    rescue InconsistentTabularFormat => error
+    rescue InconsistentTabularFormat =>error
       puts error.backtrace
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: The tabular file and the tabular header do not correspond. "<<
         "Please provide -tabular argument with the correct format of the columns\n"
       exit!
-    rescue StopIteration => error
-      return make_hit_list(hits)
     rescue Exception => error
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit
     end
   end
+
 end

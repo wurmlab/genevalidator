@@ -82,7 +82,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     it "should parse tabular -6 input with default tabular format" do
       filename_prot = "test/test_files/ncbi_mrna.tab.20"
       output = File.open(filename_prot, "rb").read
-      iterator_tab = TabularParser.new(output, nil, :protein)
+      iterator_tab = TabularParser.new(filename_prot, nil, :protein)
       hits = iterator_tab.next
       assert_equal hits.length, 20
       assert_equal hits[0].hsp_list.length, 1
@@ -99,7 +99,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     it "should parse tabular -6 input with tabular format as argument" do
       filename_prot = "test/test_files/output.tab.6"
       output = File.open(filename_prot, "rb").read
-      iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
+      iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
       hits = iterator_tab.next
       assert_equal hits.length, 4
       assert_equal hits[0].length_protein, 199
@@ -111,7 +111,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     it "should parse tabular -6 input with mixed columns" do
       filename_prot = "test/test_files/output.tab.6.mixed"
       output = File.open(filename_prot, "rb").read
-      iterator_tab = TabularParser.new(output, "qend sstart send pident length qframe evalue qseqid sseqid sacc slen qstart", :protein)
+      iterator_tab = TabularParser.new(filename_prot, "qend sstart send pident length qframe evalue qseqid sseqid sacc slen qstart", :protein)
       hits = iterator_tab.next
       assert_equal hits.length, 4
       assert_equal hits[0].length_protein, 199
@@ -123,7 +123,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
     it "should parse tabular -7 input" do
       filename_prot = "test/test_files/output.tab.7"
       output = File.open(filename_prot, "rb").read
-      iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", :protein)
+      iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", :protein)
       hits = iterator_tab.next
       assert_equal hits.length, 4
       assert_equal hits[0].length_protein, 199
@@ -140,7 +140,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       prediction = Sequence.new
       prediction.length_protein = 1808
 
-      iterator_tab = TabularParser.new(output, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
+      iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
       iterator_tab.next
       hits = iterator_tab.next
       # before removal
@@ -164,7 +164,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       prediction = Sequence.new
       prediction.length_protein = 219/3
 
-      iterator_tab = TabularParser.new(output, nil, :nucleotide)
+      iterator_tab = TabularParser.new(filename_prot, nil, :nucleotide)
       hits = iterator_tab.next
 
       assert_equal hits.length, 20

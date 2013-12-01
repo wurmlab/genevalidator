@@ -21,33 +21,43 @@ window.onscroll = function (event) {
 
 function show_all_plots(button){
 
-	var expand_children = document.getElementsByClassName('expand-child');
+  if(button.status != "pressed"){
 
-	if(expand_children.length < 30){
+	button.status = "pressed";
+	button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
+	button.onclick = function() { 
+		hide_all_plots(button) 
+	};
+   }
+	// remove all plots
+	remove_all_plots();
 
-		alert("This may take a while. Please wait...");
+	//display plots for visible dom
 
-		if(button.status != "pressed"){
-			button.status = "pressed";
-			button.innerHTML = "<i class='icon-bar-chart' style='font-size: 25px;'></i> <br> <b>Hide all plots</b>"
-			button.onclick = function() { 
-				hide_all_plots(button) 
-			};
-   		}
+	//buttons
+	var visible_dom = $(":in-viewport");
+	var buttons_dom = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
 
-		//display plots in the dom
-		var buttons_dom = document.querySelectorAll('button')
+	//expand_child divs
+	var expand_children = visible_dom.filter(function(i) {return (visible_dom[i].className == "expand-child")});
 
-		// remove all plots
-		remove_all_plots();
-
-		for (var i = 0; i < buttons_dom.length; i++) {
-			expand_child_div = expand_children[i].getElementsByTagName('div')[0];
-			show_plot(buttons_dom[i], expand_child_div);
-		}
+	for (var i = 0; i < buttons_dom.length/5; i++) {
+		expand_child_div = expand_children[i].getElementsByTagName('div')[0];
+		show_plot(buttons_dom[i], expand_child_div);
 	}
-	else{
-		alert("Operation not posible. Too many queries...");
+
+	//display plots for above visible dom
+
+	//buttons
+	var above_dom = $(":above-the-top");
+	var buttons_above = visible_dom.filter(function(i) {return (visible_dom[i].tagName == "BUTTON")});
+
+	//expand_child divs
+	var expand_children_above = above_dom.filter(function(i) {return (above_dom[i].className == "expand-child")});
+
+	for (var i = visible_dom.length-1; i >= visible_dom.length * 4/5; i--) {
+		expand_child_div = expand_children_above[i].getElementsByTagName('div')[0];
+		show_plot(buttons_above[i], expand_child_div);
 	}
 
 }

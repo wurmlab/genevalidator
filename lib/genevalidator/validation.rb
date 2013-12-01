@@ -84,11 +84,15 @@ class Validation
     @vlist = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
     @idx = 0
 
+=begin
     if start_idx == nil
       @start_idx = 1
     else
       @start_idx = start_idx
     end
+=end
+
+    @start_idx = 1
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
@@ -244,11 +248,9 @@ class Validation
 
   def parse_output(output)
 
-    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, tabular_format, @type)
-
     # check the format of the blat input (xml or tabular)
     begin
+      iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
       iter = iterator_xml.next
       input_file_type = :xml
@@ -259,11 +261,12 @@ class Validation
       exit!
     rescue Exception => error
       begin 
-        query       = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
-        parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+        query          = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
+        parse_query    = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
         definition     = parse_query[0].gsub("\n","")
         identifier     = definition.gsub(/ .*/,"")
 
+        iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
         hits = iterator_tab.next(identifier)
         iterator_tab.jump_next
 
@@ -285,9 +288,11 @@ class Validation
     end
 
     # start parsing the files
-
-    iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-    iterator_tab = TabularParser.new(output, tabular_format, @type)
+    if input_file_type == :tabular
+      iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
+    else
+      iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+    end
 
     begin
 
