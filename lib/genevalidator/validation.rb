@@ -71,6 +71,10 @@ class Validation
                   overall_evaluation = true,
                   multithreading = true)
 
+    puts "\nDepending on your input and your computational "<<
+           "resources, this may take a while. Please wait..."
+
+
     # start a worker thread
     @threads = []
     @mutex = Mutex.new
@@ -199,11 +203,7 @@ class Validation
   ##
   # Parse the blast output and run validations
   def validation
-      puts "\nDepending on your input and your computational "<<
-           "resources, this may take a while. Please wait..."
-
       if @xml_file == nil
-
         #file seek for each query
         @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|      
           if (i+1) >= @start_idx
@@ -217,7 +217,7 @@ class Validation
             end
 
             #parse output
-            parse_output(output)   
+            parse_output(output, :xml)   
           else
             @idx = @idx + 1
           end
@@ -246,44 +246,47 @@ class Validation
        exit!
   end
 
-  def parse_output(output)
+  def parse_output(output, input_file_type = nil)
+
 
     # check the format of the blat input (xml or tabular)
-    begin
-      iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-      hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
-      iter = iterator_xml.next
-      input_file_type = :xml
-
-    rescue SequenceTypeError => error
-      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: the blast output was not obtained against a protein database.\n"
-      exit!
-    rescue Exception => error
-      begin 
-        query          = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
-        parse_query    = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-        definition     = parse_query[0].gsub("\n","")
-        identifier     = definition.gsub(/ .*/,"")
-
-        iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
-        hits = iterator_tab.next(identifier)
-        iterator_tab.jump_next
-
-        input_file_type = :tabular
-
-        if @tabular_format == nil
-          puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
-        end
+    if input_file_type == nil
+      begin
+        iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+        hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
+        iter = iterator_xml.next
+        input_file_type = :xml
 
       rescue SequenceTypeError => error
         $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
           "Possible cause: the blast output was not obtained against a protein database.\n"
         exit!
       rescue Exception => error
-        $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-           "Possible cause: blast output file format is neihter xml nor tabular.\n"
-        exit!
+        begin 
+          query          = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
+          parse_query    = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+          definition     = parse_query[0].gsub("\n","")
+          identifier     = definition.gsub(/ .*/,"")
+
+          iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
+          hits = iterator_tab.next(identifier)
+          iterator_tab.jump_next
+ 
+          input_file_type = :tabular
+  
+          if @tabular_format == nil
+            puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
+          end
+
+        rescue SequenceTypeError => error
+          $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+            "Possible cause: the blast output was not obtained against a protein database.\n"
+          exit!
+        rescue Exception => error
+          $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+             "Possible cause: blast output file format is neihter xml nor tabular.\n"
+          exit!
+        end
       end
     end
 
