@@ -159,7 +159,6 @@ class AlignmentValidation < ValidationTest
       f.write("\n")
       f.close
 =end
-
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
       # remove isolated residues from the statistical model
@@ -194,7 +193,6 @@ class AlignmentValidation < ValidationTest
       @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
-      puts error.backtrace
       @validation_report.errors.push "Unexpected Error"
       @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       @validation_report.errors.push OtherError
