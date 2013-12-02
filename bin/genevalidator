@@ -45,6 +45,7 @@ opt_parser = OptionParser.new do |opt|
   end
   opt.separator  "\tUse: $ genevalidator -x tabular_file -t \"slen qstart qend\" fasta_file\n\tSee blast -h for more details"
 
+=begin
   opt.on("-s","--start [START]", Integer, "starts the validation with a certain sequence in the input file ") do |start|
     if start.is_a? Fixnum
       options[:start] = start
@@ -52,6 +53,7 @@ opt_parser = OptionParser.new do |opt|
       $stderr.print "Error: start must be a natural number." + "\n"
     end
   end
+=end
 
   opt.on("-m", "--mafft [MAFFT_PATH]","path of the MAFFT program installation") do |mafft|
     options[:mafft] = mafft

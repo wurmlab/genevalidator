@@ -70,15 +70,75 @@ db = options[:db]
 # therefore considered in the analisys
 n = options[:nr] + 5 
 
+def parse_hits(hits, n = 15, hit_id_idx = 0, accno_idx, db, output_file)
+
+      cnt = 0
+      hits.group_by{|hit| hit[hit_id_idx]}.each do |idx, hit|
+
+        if cnt == n
+          break
+        end
+
+        accession = hit[0][accno_idx]
+        puts accession
+
+        #get the raw sequence
+        blast_cmd = "blastdbcmd -entry #{accession} -db #{db} -outfmt %f"
+        output_blast = %x[#{blast_cmd}  2>&1]
+
+        if output_blast.downcase.match(/blastdbcmd/) != nil
+          $stderr.print "Did you add BLAST path to the LOADPATH?\n"
+        else
+          if output_blast.downcase.match(/database error/) != nil
+            $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
+          else
+            if output_blast.downcase.match(/error/) != nil
+              $stderr.print "Sequence #{accession} not found in your database. Trying to download it from the internet... "
+
+              # try to get the sequence from the Internet
+              begin
+                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=protein"<<
+                   "&retmax=1&usehistory=y&term=#{accession}/"
+
+                result = Net::HTTP.get(URI.parse(uri))
+
+                result2 = result
+                queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+                webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+
+                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
+                   "retmode=text&retstart=0&retmax=1&db=protein&query_key=#{queryKey}&WebEnv=#{webEnv}"
+                result = Net::HTTP.get(URI.parse(uri))
+                output_blast = result[0..result.length-2]
+
+                unless  output_blast.downcase.index(/error/) == nil
+                  raise Exception
+                end
+                $stderr.print "success\n"
+              rescue Exception => error
+                $stderr.print "fail\n"
+              end
+            end
+
+            if output_blast != ""
+              File.open(output_file, 'a') {|f| f.write(output_blast) }
+            end
+          end
+        end
+        cnt += 1
+      end
+end
+
 File.open(output_file, 'w') {|f| f.write("") }
 
 begin
-  output = File.open(ARGV[0], "rb").read
+  filename = ARGV[0]
 
   puts "Downloading raw sequences..."
 
-  iterator_xml = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
+  iterator_xml = Bio::BlastXMLParser::XmlIterator.new(filename).to_enum
   begin
+    puts ""
     iter = iterator_xml.next
     # parse blast the xml output and get the first 10 hits
     cnt = 0
@@ -87,6 +147,7 @@ begin
 	break
       end
       #get the raw sequence
+      puts hit.accession
       blast_cmd = "blastdbcmd -entry #{hit.accession} -db #{db} -outfmt %f"
       output = %x[#{blast_cmd} 2>&1]
 
@@ -143,76 +204,40 @@ rescue Exception => error
     hit_id_idx   = column_names.index("sseqid")
     accno_idx    = column_names.index("sacc")
 
-    while output.length > 0 do
-      first_row = output.scan(/([^\n]*)\n/)
+    file = File.open(filename, "r");
+    lines = file.lines
 
-      unless first_row[0][0].scan(/\t/).length + 1 == column_names.length
-        raise InconsistentTabularFormat
-      end
+    entry = CSV.parse(lines.peek, :col_sep => "\t")[0]
+    unless entry.length == column_names.length
+      raise InconsistentTabularFormat
+    end
 
-      query_id = first_row.join().split("\t")[query_id_idx]
+    while 1 do
+    begin
+      puts ""
+      # get next query
+      hits = []
 
-      hits = output.scan(/[^\n]*#{query_id.gsub("|","\\|").gsub(".","\\.")}\t[^\n]*/)
+      entry = CSV.parse(lines.peek, :col_sep => "\t")[0]
+      query_id = entry[query_id_idx]
 
-      next_query = output.index("#{hits[hits.length-1]}") + hits[hits.length-1].length + 1
-      output =  output[next_query..output.length-1]
+      while 1
+        entry = CSV.parse(lines.peek, :col_sep => "\t")[0]
 
-      hits = hits.map{|hit| hit.split("\t")}
-      cnt = 0
-      # for each hit 
-      hits.group_by{|hit| hit[hit_id_idx]}.each do |idx, hit|
-        if cnt == n
+        unless query_id == entry[query_id_idx]
           break
         end
 
-        accession = hit[0][accno_idx]            
-
-        #get the raw sequence
-        blast_cmd = "blastdbcmd -entry #{accession} -db #{db} -outfmt %f"
-        output_blast = %x[#{blast_cmd}  2>&1]
-
-        if output_blast.downcase.match(/blastdbcmd/) != nil
-          $stderr.print "Did you add BLAST path to the LOADPATH?\n"
-        else
-          if output_blast.downcase.match(/database error/) != nil
-            $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
-          else
-            if output_blast.downcase.match(/error/) != nil
-              $stderr.print "Sequence #{accession} not found in your database. Trying to download it from the internet... "
-
-              # try to get the sequence from the Internet
-              begin
-                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=protein"<<
-                   "&retmax=1&usehistory=y&term=#{accession}/"
- 
-                result = Net::HTTP.get(URI.parse(uri))
- 
-                result2 = result
-                queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-                webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
-
-                uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
-                   "retmode=text&retstart=0&retmax=1&db=protein&query_key=#{queryKey}&WebEnv=#{webEnv}"
-                result = Net::HTTP.get(URI.parse(uri))
-                output_blast = result[0..result.length-2]
-
-                unless  output_blast.downcase.index(/error/) == nil
-                  raise Exception
-                end
-                $stderr.print "success\n"
-              rescue Exception => error
-                $stderr.print "fail\n"
-              end
-            end
-
-            if output_blast != ""
-              File.open(output_file, 'a') {|f| f.write(output_blast) }
-            end
-          end
-        end
-
-        cnt += 1
+        hits << entry
+        lines.next
       end
+
+      parse_hits(hits, n, hit_id_idx, accno_idx, db, output_file)
+
+    rescue StopIteration => error
+      parse_hits(hits, n, hit_id_idx, accno_idx, db, output_file)
+      break
+    end
     end
 
   rescue InconsistentTabularFormat =>error
@@ -225,4 +250,5 @@ rescue Exception => error
     exit!
   end
 end       
+
 
