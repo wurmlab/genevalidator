@@ -146,7 +146,7 @@ class AlignmentValidation < ValidationTest
       rescue Exception => error
         raise NoMafftInstallationError
       end
-      
+
       out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
       sm = out[0]
       freq = out[1]
@@ -343,9 +343,7 @@ class AlignmentValidation < ValidationTest
       ma.map{|seq| seq[i]}.each{|res| freqs[res] += 1}
       # get the residue with the highest frequency
       max_freq = freqs.map{|res, n| n}.max
-
       residue = (freqs.map{|res, n| n == max_freq ? res : []}.flatten)[0]
-
       if residue == '-'
         freq.push(0)
       else
@@ -398,6 +396,21 @@ class AlignmentValidation < ValidationTest
     !str.match(/[^A-Za-z]/)
   end
 
+  def array_to_ranges(ar)
+
+    prev = ar[0]
+
+    ranges = ar.slice_before { |e|
+      prev, prev2 = e, prev
+      prev2 + 1 != e
+    }.map{|a| a[0]..a[-1]}
+
+    return ranges
+
+#.map{|range| Pair.new(ranges[0].first}
+    #puts ranges[0].last
+  end
+
   # Generates a json file cotaining data used for plotting
   # lines for multiple hits alignment, prediction and statistical model
   # Params:
@@ -412,6 +425,10 @@ class AlignmentValidation < ValidationTest
       consensus_all = get_consensus(@multiple_alignment)
       consensus_all_idxs = consensus_all.split(//).each_index.select{|j| isalpha(consensus_all[j])}
 
+      match_alignment = ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}}
+      match_alignment_ranges = []
+      match_alignment.each { |arr| match_alignment_ranges << array_to_ranges(arr) }
+
       len = ma[0].length
 
       f = File.open(output , "w")
@@ -419,8 +436,9 @@ class AlignmentValidation < ValidationTest
       # plot statistical model
       freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
       # hits
-#      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
+#      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +     
+##      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
+      match_alignment_ranges.each_with_index.map{|ranges, j| ranges.map{ |range| {"y"=>ma.length-j-1, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}}.flatten +
       ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
       # plot prediction
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
