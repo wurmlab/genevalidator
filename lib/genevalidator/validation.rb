@@ -255,9 +255,9 @@ end
     if type == :file
       begin
         iterator_xml = Bio::BlastXMLParser::XmlIterator.new(output).to_enum
-        hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
+
         # the following instruction will raise exception if the file is not xml
-        iter = iterator_xml.next
+        hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
 
         input_file_type = :xml
         iterator_xml = Bio::BlastXMLParser::XmlIterator.new(output).to_enum
@@ -274,9 +274,9 @@ end
           identifier = definition.gsub(/ .*/,"")
 
           iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
-          hits = iterator_tab.next(identifier)
+
           # the following instruction will raise exception if the file is not tabular
-          iterator_tab.jump_next
+          hits = iterator_tab.next(identifier)
  
           input_file_type = :tabular
           iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)

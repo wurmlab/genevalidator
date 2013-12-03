@@ -80,7 +80,6 @@ def parse_hits(hits, n = 15, hit_id_idx = 0, accno_idx, db, output_file)
         end
 
         accession = hit[0][accno_idx]
-        puts accession
 
         #get the raw sequence
         blast_cmd = "blastdbcmd -entry #{accession} -db #{db} -outfmt %f"
@@ -90,7 +89,7 @@ def parse_hits(hits, n = 15, hit_id_idx = 0, accno_idx, db, output_file)
           $stderr.print "Did you add BLAST path to the LOADPATH?\n"
         else
           if output_blast.downcase.match(/database error/) != nil
-            $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
+            $stderr.print "Blast database error. The path is not complete or your custom database is not well configured. \n"
           else
             if output_blast.downcase.match(/error/) != nil
               $stderr.print "Sequence #{accession} not found in your database. Trying to download it from the internet... "
@@ -138,7 +137,6 @@ begin
 
   iterator_xml = Bio::BlastXMLParser::XmlIterator.new(filename).to_enum
   begin
-    puts ""
     iter = iterator_xml.next
     # parse blast the xml output and get the first 10 hits
     cnt = 0
@@ -147,7 +145,6 @@ begin
 	break
       end
       #get the raw sequence
-      puts hit.accession
       blast_cmd = "blastdbcmd -entry #{hit.accession} -db #{db} -outfmt %f"
       output = %x[#{blast_cmd} 2>&1]
 
@@ -214,7 +211,6 @@ rescue Exception => error
 
     while 1 do
     begin
-      puts ""
       # get next query
       hits = []
 

@@ -194,32 +194,20 @@ class GeneMergeValidation < ValidationTest
   # give a set of 2d coordonates of the start/stop offests of the hits
   # Param
   # +hits+: array of Sequence objects
-  # Code inspired from: http://engineering.sharethrough.com/blog/2012/09/12/simple-linear-regression-using-ruby/
   # Output:
   # The ecuation of the regression line: [y slope]
   def slope(hits = @hits)
-    
+
+    require 'statsample'
+  
     pairs = @hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
     xx = pairs.map{|pair| pair.x}
     yy = pairs.map{|pair| pair.y}
 
-    # calculate the slope
-    x_mean = xx.reduce(0) { |sum, x| x + sum } / (xx.length + 0.0)
-    y_mean = yy.reduce(0) { |sum, x| x + sum } / (yy.length + 0.0)
- 
-    numerator = (0...xx.length).reduce(0) do |sum, i|
-      sum + ((xx[i] - x_mean) * (yy[i] - y_mean))
-    end
- 
-    denominator = xx.reduce(0) do |sum, x|
-      sum + ((x - x_mean) ** 2)
-    end
- 
-    slope = numerator / (denominator + 0.0)
-    y_intercept = y_mean - (slope * x_mean)
+    sr=Statsample::Regression.simple(xx.to_scale,yy.to_scale)
 
-    return [y_intercept, slope]
+    return [sr.a, sr.b]
     
   end
 
