@@ -178,8 +178,11 @@ end
     @all_query_outputs = []
 
     # create 'html' directory
-    FileUtils.rm_rf(@html_path)
-     Dir.mkdir(@html_path)
+    if File.exists? @html_path
+      $stderr.print "The output directory already exists for this fasta file. For a new validation please remove the following directory: #{@html_path}\n"
+      exit
+    end
+    Dir.mkdir(@html_path)
 
     # copy auxiliar folders to the html folder
     FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/css"), @html_path)
