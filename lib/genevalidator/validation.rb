@@ -160,6 +160,8 @@ end
           YAML.dump(index_hash, f)
         end
 
+        content = nil
+
         @multithreading = multithreading
         @overall_evaluation = overall_evaluation
 

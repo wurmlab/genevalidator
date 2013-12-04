@@ -67,7 +67,7 @@ class Sequence
   def get_sequence_by_accession_no(accno, db)
     begin
 
-      puts "Tries to connect to the internet for #{accno}"
+      #puts "Tries to connect to the internet for #{accno}"
 
       uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}"<<
          "&retmax=1&usehistory=y&term=#{accno}/"
