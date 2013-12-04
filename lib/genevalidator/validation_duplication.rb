@@ -180,6 +180,7 @@ class DuplicationValidation < ValidationTest
             end
           end
         end
+        puts coverage.to_s
         overlap = coverage.reject{|x| x==0}
         if overlap != []
           averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
