@@ -215,7 +215,7 @@ class AlignmentValidation < ValidationTest
   def multiple_align_mafft(prediction = @prediction, hits = @hits, path = @mafft_path)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      options = ['--maxiterate', '1000', '--localpair', '--quiet']
+      options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
       mafft = Bio::MAFFT.new(path, options)
       sequences = hits.map{|hit| hit.raw_sequence}
       sequences.push(prediction.protein_translation)
@@ -396,6 +396,8 @@ class AlignmentValidation < ValidationTest
     !str.match(/[^A-Za-z]/)
   end
 
+  ##
+  # converts an array of integers into array of ranges
   def array_to_ranges(ar)
 
     prev = ar[0]
@@ -407,8 +409,6 @@ class AlignmentValidation < ValidationTest
 
     return ranges
 
-#.map{|range| Pair.new(ranges[0].first}
-    #puts ranges[0].last
   end
 
   # Generates a json file cotaining data used for plotting
@@ -429,6 +429,9 @@ class AlignmentValidation < ValidationTest
       match_alignment_ranges = []
       match_alignment.each { |arr| match_alignment_ranges << array_to_ranges(arr) }
 
+      query_alignment = ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}      
+      query_alignment_ranges = array_to_ranges(query_alignment) 
+
       len = ma[0].length
 
       f = File.open(output , "w")
@@ -442,7 +445,8 @@ class AlignmentValidation < ValidationTest
       ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
       # plot prediction
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
-      ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
+##      ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
+      query_alignment_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}.flatten +
       consensus_all_idxs.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}).to_json)
 
       f.close
