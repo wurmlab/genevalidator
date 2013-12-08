@@ -73,6 +73,17 @@ class DuplicationValidation < ValidationTest
 
   end
 
+  def is_in_range(ranges, idx)
+    ranges.each do |range|      
+      if range.member?(idx)
+        return true
+      else
+        return false
+      end
+    end
+    return false
+  end
+
   ##
   # Check duplication in the first n hits
   # Output:
@@ -122,9 +133,12 @@ class DuplicationValidation < ValidationTest
       end
 
       averages = []
-
+      
       less_hits.each do |hit|
         coverage = Array.new(hit.length_protein,0)
+        # each residue of the protein should be evluated once only
+        ranges_prediction = []
+
         hit.hsp_list.each do |hsp|
         # align subsequences from the hit and prediction that match (if it's the case)
           if hsp.hit_alignment != nil and hsp.query_alignment != nil
@@ -148,7 +162,7 @@ class DuplicationValidation < ValidationTest
             seqs = [hit_local, query_local]
 
             begin
-              options   = ['--maxiterate', '1000', '--localpair', '--quiet']
+              options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
               mafft     = Bio::MAFFT.new(@mafft_path, options)
               report    = mafft.query_align(seqs)
               raw_align = report.alignment
@@ -173,17 +187,21 @@ class DuplicationValidation < ValidationTest
             if residue_hit != ' ' and residue_hit != '+' and residue_hit != '-'
               if residue_hit == residue_query             
                 # indexing in blast starts from 1
-                idx = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
-                  coverage[idx] += 1
-                #end
+                idx_hit = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
+                idx_query = i + (hsp.match_query_from-1) - query_alignment[0..i].scan(/-/).length
+                unless is_in_range(ranges_prediction, idx_query)
+                  coverage[idx_hit] += 1
+                end
               end
             end
           end
+
+        ranges_prediction.push((hsp.match_query_from..hsp.match_query_to))
+
         end
-        #puts coverage.to_s
         overlap = coverage.reject{|x| x==0}
         if overlap != []
-          averages.push(overlap.inject(:+)/(overlap.length + 0.0)).map{|x| x.round(2)}
+          averages.push((overlap.inject(:+)/(overlap.length + 0.0)).round(2)) #.map{|x| x.round(2)}
         end
       end
 
@@ -212,7 +230,7 @@ class DuplicationValidation < ValidationTest
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
-      #puts error.backtrace
+      puts error.backtrace
       @validation_report.errors.push OtherError
       @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
       return @validation_report
