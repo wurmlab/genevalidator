@@ -142,6 +142,9 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
 		case "bars":
 		  plot_bars(filename, target, title, legend, xtitle, ytitle, aux1)
 		  break;
+		case "simplebars":
+		  plot_simple_bars(filename, target, title, legend, xtitle, ytitle)	
+		  break;
 		case "lines":
                   if(aux2 != "")
 	              aux2 = aux2.split(",");
@@ -216,10 +219,15 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
                      .range([height, 0]);
 
 		var xMin = d3.min(flattened_data, function(d) { return d.key; })
-                var xMin = Math.min(xMin, bar); 
+		if(bar!=undefined){
+                	var xMin = Math.min(xMin, bar); 
+		}
  
                 var xMax = d3.max(flattened_data, function(d) { return d.key; })
-		var xMax = Math.max(xMax, bar); 
+		if(bar!=undefined){
+			var xMax = Math.max(xMax, bar); 
+		}
+
 		var x = d3.scale.linear()
                      .domain([xMin-padding, xMax+padding])
                      .range([13, width]);
@@ -279,14 +287,13 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.attr("height", height - y(yMax + yMax/8))
 				.attr("fill", color_beautification("black"));
 
-	svg.append("text")
-		.attr("transform", "rotate(-90)")
-		.attr("x", -yMax/10 - 35)
-		.attr("y", x(bar) - 5)
-	      	.text("query");
+			svg.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("x", -yMax/10 - 35)
+				.attr("y", x(bar) - 5)
+			      	.text("query");
 
-		}
-	
+				}	
 	});
 
    
@@ -319,6 +326,97 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
 
 }	
+
+// bars plot
+function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
+
+	var margin = {top: 70, right: 50, bottom: 75, left: 50},
+		width = 600 - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom;		
+	var legend_width = 15
+
+	var svg = d3.select("#".concat(target)).append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  	.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+	svg.append("text")
+		.attr("x", (width / 2))             
+		.attr("y", -45)
+		.attr("text-anchor", "middle")  
+		.style("font-size", "16px") 
+		.text(title);	
+		
+	var colors = new Array("orange", "blue", "green", "yellow", "brown");
+	var no_colors = colors.length
+
+        var padding = 0
+
+	d3.json(filename, function(error, alldata) {
+		
+		flattened_data = [].concat.apply([], alldata)			
+		var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3
+		var y = d3.scale.linear()
+                     .domain([0, yMax])
+                     .range([height, 0]);
+
+		var xMin = d3.min(flattened_data, function(d) { return d.key; })
+                var xMax = d3.max(flattened_data, function(d) { return d.key; })
+
+		var x = d3.scale.linear()
+                     .domain([xMin-padding, xMax+padding])
+                     .range([13, width]);
+
+		var xAxis = d3.svg.axis()
+		        .scale(x)
+		        .orient("bottom")
+			.ticks(8)
+
+	        var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left")
+			.tickFormat(d3.format("d"))
+			.ticks(8)
+
+	  	svg.append("g")
+			  .attr("class", "x axis")
+			  .attr("transform", "translate(0," + height + ")")
+			  .call(xAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("x", (width-xTitle.length)/2-50)
+			  .attr("y", 35)
+			  .style("text-anchor", "start")
+			  .text(xTitle)
+
+	 	 svg.append("g")
+			   .attr("class", "y axis")
+			  .call(yAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2-50)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+			  
+		alldata.map( function(data, i) {
+		 
+			color = colors[i % (no_colors - 1)];
+			svg.selectAll(".bar")
+				.data(data)
+				.enter().append("rect")
+				  .attr("x", function(d) { return x(d.key); })
+				  .attr("width", 6)
+				  .attr("y", function(d) { return y(d.value); })
+				  .attr("height", function(d) { return height - y(d.value); })
+				  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
+		});	
+
+	});
+
+}
 
 
 // scatter plot

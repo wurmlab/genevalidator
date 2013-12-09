@@ -191,18 +191,39 @@ class Output
   # +all_query_outputs+: array with +ValidationTest+ objects
   # +html_path+: path of the html folder
   def self.print_footer(all_query_outputs, html_path, filename)
+
+    # compute the statistics
     overall_evaluation = overall_evaluation(all_query_outputs, filename)
 
     less = overall_evaluation[0]
     less = less.gsub("\n","<br>").gsub("'",%q(\\\'))
 
+    scores = overall_evaluation[overall_evaluation.length-1]
+
     # print to console
     evaluation = ""
-    overall_evaluation.each{|e| evaluation << "\n#{e}"}
+    overall_evaluation[0..overall_evaluation.length-2].each{|e| evaluation << "\n#{e}"}
     puts evaluation
     puts ""
 
     # print to html
+
+    # make the historgram with the resulted scores
+    statistics_filename = "#{html_path}/#{filename}_statistics.json"
+    f = File.open(statistics_filename, "w")
+
+    f.write(
+      [scores.group_by{|a| a}.map { |k, vs| {"key"=>k, "value"=>vs.length, "main"=>false}}].to_json)
+    f.close
+
+    plot_statistics = Plot.new("#{filename}_statistics.json",
+              :simplebars,
+              "Overall evaluation",
+              "",
+              "validation score",
+              "number of queries",
+              10)
+
     evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
     index_file = "#{html_path}/index.html"
     template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.htm.erb"), 'r').read
@@ -317,7 +338,7 @@ class Output
         time_evaluation << "\nAverage running time for #{key} Validation: #{average_time.round(3)}s per validation"
       end
 
-      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
+      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation, scores]
       overall_evaluation = overall_evaluation.select{|e| e!=""}
       return overall_evaluation
   end
