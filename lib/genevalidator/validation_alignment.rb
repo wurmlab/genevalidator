@@ -12,8 +12,8 @@ class AlignmentValidationOutput < ValidationReport
 
   def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
 
-    @short_header    = "MA"
-    @header          = "Missing/Extra sequences"
+    @short_header = "MA"
+    @header = "Missing/Extra sequences"
     @description = "Finds missing and extra sequences in the prediction, based"<<
     " on the multiple alignment of the best hits. Also counts the percentahe of"<<
     " the conserved regions that appear in the prediction. Meaning of the output:"<<
@@ -21,12 +21,12 @@ class AlignmentValidationOutput < ValidationReport
     " alignment. Validation fails if one of these values is higher than 20%."<<
     " Percentage of the conserved residues."
 
-    @gaps       = gaps
-    @extra_seq  = extra_seq
-    @consensus  = consensus
-    @threshold  = threshold
-    @result     = validation
-    @expected   = expected
+    @gaps = gaps
+    @extra_seq = extra_seq
+    @consensus = consensus
+    @threshold = threshold
+    @result = validation
+    @expected = expected
     @plot_files = []
   end
 
@@ -58,14 +58,14 @@ class AlignmentValidation < ValidationTest
 
   def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
     super
-    @filename        = filename
-    @mafft_path      = mafft_path
-    @raw_seq_file    = raw_seq_file
+    @filename = filename
+    @mafft_path = mafft_path
+    @raw_seq_file = raw_seq_file
     @index_file_name = index_file_name
     @raw_seq_file_load = raw_seq_file_load
 
-    @short_header    = "MA"
-    @header          = "Missing/Extra sequences"
+    @short_header = "MA"
+    @header = "Missing/Extra sequences"
     @description = "Finds missing and extra sequences in the prediction, based"<<
     " on the multiple alignment of the best hits. Also counts the percentahe of"<<
     " the conserved regions that appear in the prediction. Meaning of the output:"<<
@@ -73,15 +73,15 @@ class AlignmentValidation < ValidationTest
     " alignment. Validation fails if one of these values is higher than 20%."<<
     " Percentage of the conserved residues."
     @multiple_alignment = []
-    @cli_name           = "align"
+    @cli_name = "align"
   end
 
   ##
-  # Find gaps/extra regions based on the multiple alignment 
+  # Find gaps/extra regions based on the multiple alignment
   # of the first n hits
   # Output:
   # +AlignmentValidationOutput+ object
-  def run(n=10)    
+  def run(n=10)
     begin
       if n > 50
         n = 50
@@ -114,7 +114,7 @@ class AlignmentValidation < ValidationTest
           else
             if hit.raw_sequence.empty?
               useless_hits.push(hit)
-            end         
+            end
           end
 
         end
@@ -127,7 +127,7 @@ class AlignmentValidation < ValidationTest
       end
 
       # in case of nucleotide prediction sequence translate into protein
-      # translate with the reading frame of all hits considered for the alignment 
+      # translate with the reading frame of all hits considered for the alignment
 
       reading_frames = less_hits.map{|hit| hit.reading_frame}.uniq
       if reading_frames.length != 1
@@ -140,7 +140,7 @@ class AlignmentValidation < ValidationTest
       end
 
       begin
-        # multiple align sequences from  less_hits with the prediction
+        # multiple align sequences from less_hits with the prediction
         # the prediction is the last sequence in the vector
         multiple_align_mafft(prediction, less_hits)
       rescue Exception => error
@@ -152,12 +152,12 @@ class AlignmentValidation < ValidationTest
       freq = out[1]
 
 =begin
-      # Prints sm to file.
-      f = File.open("#{@filename}_ma.fasta" , "a")
-      f.write(">statistical model\n")
-      f.write(sm)
-      f.write("\n")
-      f.close
+# Prints sm to file.
+f = File.open("#{@filename}_ma.fasta" , "a")
+f.write(">statistical model\n")
+f.write(sm)
+f.write("\n")
+f.close
 =end
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
@@ -167,18 +167,18 @@ class AlignmentValidation < ValidationTest
       a1 = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
       a2 = get_consensus(@multiple_alignment)
   
-      plot1     = plot_alignment(freq)
-      gaps      = gap_validation(prediction_raw, sm)
-      extra_seq = extra_sequence_validation(prediction_raw, sm)      
+      plot1 = plot_alignment(freq)
+      gaps = gap_validation(prediction_raw, sm)
+      extra_seq = extra_sequence_validation(prediction_raw, sm)
       consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
 
-      @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)        
+      @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)
       @validation_report.plot_files.push(plot1)
       @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError => error
+    rescue NotEnoughHitsError => error
       @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
       return @validation_report
     rescue NoMafftInstallationError
@@ -189,7 +189,7 @@ class AlignmentValidation < ValidationTest
       @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description)
       @validation_report.errors.push NoInternetError
       return @validation_report
-    rescue  ReadingFrameError => error
+    rescue ReadingFrameError => error
       @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description)
       return @validation_report
     rescue Exception => error
@@ -201,7 +201,7 @@ class AlignmentValidation < ValidationTest
   end
 
   ##
-  # Builds the multiple alignment between 
+  # Builds the multiple alignment between
   # all the hits and the prediction
   # using MAFFT tool
   # Also creates a fasta file with the alignment
@@ -225,22 +225,24 @@ class AlignmentValidation < ValidationTest
       align = report.alignment
 
       # Prints each sequence to a file.
-      f = File.open("#{@filename}_ma.fasta" , "w")
+#      f = File.open("#{@filename}_ma.fasta" , "w")
       align.each_with_index do |s,i|
          @multiple_alignment.push(s.to_s)
+=begin
          f.write(">seq#{i}\n")
          f.write(s.to_s)
          f.write("\n")
+=end
       end
-      f.close
+#      f.close
 
       return @multiple_alignment
   end
 
   ##
-  # Returns the consensus regions among 
+  # Returns the consensus regions among
   # a set of multiple aligned sequences
-  # i.e positions where there is the same 
+  # i.e positions where there is the same
   # element in all sequences
   # Params:
   # +ma+: array of +String+s, corresponding to the multiple aligned sequences
@@ -252,7 +254,7 @@ class AlignmentValidation < ValidationTest
   end
 
   ##
-  # Returns the percentage of gaps in the prediction 
+  # Returns the percentage of gaps in the prediction
   # with respect to the statistical model
   # Params:
   # +prediction+: +String+ corresponding to the prediction sequence
@@ -267,7 +269,7 @@ class AlignmentValidation < ValidationTest
     end
     no_gaps = 0
     (0..sm.length-1).each do |i|
-      if prediction_raw[i] == '-' and  sm[i]!='-'
+      if prediction_raw[i] == '-' and sm[i]!='-'
         no_gaps += 1
       end
     end
@@ -275,7 +277,7 @@ class AlignmentValidation < ValidationTest
   end
 
   ##
-  # Returns the percentage of extra sequences in the prediction 
+  # Returns the percentage of extra sequences in the prediction
   # with respect to the statistical model
   # Params:
   # +prediction+: +String+ corresponding to the prediction sequence
@@ -290,7 +292,7 @@ class AlignmentValidation < ValidationTest
     # but not in the statistical model
     no_insertions = 0
     (0..sm.length-1).each do |i|
-      if prediction_raw[i] != '-' and  sm[i]=='-'
+      if prediction_raw[i] != '-' and sm[i]=='-'
         no_insertions += 1
       end
     end
@@ -300,7 +302,7 @@ class AlignmentValidation < ValidationTest
 
   ##
   # Returns the percentage of consesnsus residues from the ma
-  # that are in the prediction 
+  # that are in the prediction
   # Params:
   # +prediction+: +String+ corresponding to the prediction sequence
   # +consensus+: +String+ corresponding to the statistical model
@@ -312,7 +314,7 @@ class AlignmentValidation < ValidationTest
       return 1
     end
     # no of conserved residues among the hits
-    no_conserved_residues = consensus.length - consensus.scan(/[\?-]/).length    
+    no_conserved_residues = consensus.length - consensus.scan(/[\?-]/).length
 
     if no_conserved_residues == 0
       return 1
@@ -326,7 +328,7 @@ class AlignmentValidation < ValidationTest
   end
 
   ##
-  # Builds a statistical model from 
+  # Builds a statistical model from
   # a set of multiple aligned sequences
   # based on PSSM (Position Specific Matrix)
   # Params:
@@ -360,7 +362,7 @@ class AlignmentValidation < ValidationTest
   end
 
   ##
-  # Remove isolated residues inside long gaps 
+  # Remove isolated residues inside long gaps
   # from a given sequence
   # Params:
   # +seq+:+String+: sequence of residues
@@ -369,7 +371,7 @@ class AlignmentValidation < ValidationTest
   # +String+: the new sequence
   def remove_isolated_residues(seq, len = 2)
     gap_starts = seq.to_enum(:scan,/(-\w{1,#{len}}-)/i).map{|m| $`.size + 1}
-    # remove isolated residues 
+    # remove isolated residues
     gap_starts.each do |i|
       (i..i+len-1).each do |j|
         if isalpha(seq[j])
@@ -429,23 +431,23 @@ class AlignmentValidation < ValidationTest
       match_alignment_ranges = []
       match_alignment.each { |arr| match_alignment_ranges << array_to_ranges(arr) }
 
-      query_alignment = ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}      
-      query_alignment_ranges = array_to_ranges(query_alignment) 
+      query_alignment = ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}
+      query_alignment_ranges = array_to_ranges(query_alignment)
 
       len = ma[0].length
 
       f = File.open(output , "w")
-      f.write((      
+      f.write((
       # plot statistical model
       freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
       # hits
-#      ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +     
-##      ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
+# ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
+## ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
       match_alignment_ranges.each_with_index.map{|ranges, j| ranges.map{ |range| {"y"=>ma.length-j-1, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}}.flatten +
       ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
       # plot prediction
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
-##      ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
+## ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
       query_alignment_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}.flatten +
       consensus_all_idxs.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}).to_json)
 
@@ -469,4 +471,3 @@ class AlignmentValidation < ValidationTest
 
   end
 end
-

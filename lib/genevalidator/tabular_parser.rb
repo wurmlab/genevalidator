@@ -22,7 +22,7 @@ class TabularParser
   def initialize (filename, format, type)
 
     file = File.open(filename, "r");
-    @lines = file.lines
+    @lines = file.each_line
 
     # skip the comment lines
     while CSV.parse(@lines.peek, :col_sep => "\t")[0][0].match(/#.*/) != nil

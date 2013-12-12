@@ -134,27 +134,23 @@ class GeneMergeValidation < ValidationTest
 
       hits_less = hits[0..[no_lines, hits.length-1].min]
 
+
       f.write((hits_less.each_with_index.map{|hit, i|{"y"=>i, "start"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-               "stop"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max,  "color"=>"black", "dotted"=>"true"}}.flatten + 
+               "stop"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, "color"=>"black", "dotted"=>"true"}}.flatten +
                hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
                {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten).to_json)
-                  
-#               hits_less.each_with_index.map{|hit, i| hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj|
-#               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.each_with_index.map{|hsp, j|
-#              {"y"=>i, "start"=>hit.hsp_list[j].match_query_to, "stop"=>hit.hsp_list[j+1].match_query_from, "color"=>"black", "dotted"=>"true"}}}.flatten).to_json)
-      f.close
+
 =begin
-              hits_less.each{|hit| hit.hsp_list.each{|hsp| puts "#{hsp.match_query_from} #{hsp.match_query_to}"}}
-
-              puts hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
-              {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten
-              puts ""
-              hits_less.each_with_index{|hit, i| puts "#{hit.identifier}\n #{hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj| 
-               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.to_s}"}
-#.each_with_index{|hsp, j|
-#              puts "start #{hit.hsp_list[j].match_query_to} stop #{hit.hsp_list[j+1].match_query_from} #{hit.hsp_list[j].match_query_to < hit.hsp_list[j+1].match_query_from}"}}
-
+      f.write((
+               hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
+               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten +  # ).to_json)
+                  
+               hits_less.each_with_index.map{|hit, i| hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj|
+               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.each_with_index.map{|hsp, j|
+              {"y"=>i, "start"=>hit.hsp_list[j].match_query_to, "stop"=>hit.hsp_list[j+1].match_query_from, "color"=>"black", "dotted"=>"true"}}}.flatten).to_json)
 =end
+      f.close
+
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
                        :lines,  
                        "[Gene Merge] Query coord covered by blast hit (1 line/hit)", 

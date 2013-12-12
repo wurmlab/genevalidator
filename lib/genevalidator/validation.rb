@@ -245,6 +245,7 @@ end
         "Possible cause: the blast output was not obtained against a protein database.\n"
       exit!
     rescue Exception => error
+       puts error.backtrace
        $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
        exit!
   end
@@ -391,8 +392,8 @@ end
 
     query_output = do_validations(prediction, hits, idx)
     query_output.generate_html
-    query_output.print_output_console
     query_output.print_output_file_yaml
+    query_output.print_output_console
 
     @mutex_array.synchronize {
       @all_query_outputs.push(query_output)
