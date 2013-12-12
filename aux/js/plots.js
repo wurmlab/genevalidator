@@ -467,6 +467,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 	d3.json(filename, function(error, data) {
 
           var xMax = d3.max(data, function(d) { return d.x; })
+          var xMin = d3.min(data, function(d) { return d.x; })
           var yMax = d3.max(data, function(d) { return d.y; })
           var yMin = d3.min(data, function(d) { return d.y; })
 	  x.domain(d3.extent(data, function(d) { return d.x; })).nice();
@@ -504,28 +505,42 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .style("fill", function(d) { return color_beautification("red"); })
 		  .style("opacity",0.6);
 
-	   if(slope!=undefined && yLine!=undefined){
+           if(slope!=undefined && yLine!=undefined){
 
-		yLine = parseFloat(yLine.replace(",", "."));
-		var yValue = yLine + slope * xMax
-		if (yValue > yMax){
- 			xMax = (yMax-yLine)/slope
-			yValue = yMax
-		}
+                yLine = parseFloat(yLine.replace(",", "."));
+                var xMaxValue = xMax
+                var yMaxValue = yLine + slope * xMax
+                if (yMaxValue > yMax){
+                        xMaxValue = (yMax-yLine)/slope
+                        yMaxValue = yMax
+                }
 
-		if (yValue < yMin){
- 			xMax = (yMin-yLine)/slope
-			yValue = yMin
-		}
+                if (yMaxValue < yMin){
+                        xMaxValue = (yMin-yLine)/slope
+                        yMaxValue = yMin
+                }
 
-		svg.append("line")
-		  .attr("x1", 0)
-		  .attr("y1", y(yLine))				  
-		  .attr("x2", x(xMax))
-		  .attr("y2", y(yValue))				  
-		  .attr("stroke-width", 2)
-		  .attr("stroke", "black")
-	  }
+                var xMinValue = xMin
+                var yMinValue = yLine + slope * xMin
+                if (yMinValue > yMax){
+                        xMinValue = (yMax-yLine)/slope
+                        yMinValue = yMin
+                }
+
+                if (yMinValue < yMin){
+                        xMinValue = (yMin-yLine)/slope
+                        yMinValue = yMin
+                }
+
+                svg.append("line")
+                  .attr("x1", x(xMinValue))
+                  .attr("y1", y(yMinValue))
+                  .attr("x2", x(xMaxValue))
+                  .attr("y2", y(yMaxValue))
+                  .attr("stroke-width", 2)
+                  .attr("stroke", "black")
+          }
+
 
 	});
 }
