@@ -111,10 +111,11 @@ class Output
     report = validations
     unless @idx == @start_idx
       @mutex_yaml.synchronize {      
-        hash = YAML.load_file(file_yaml)
+        hash = {} #YAML.load_file(file_yaml)
         hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
-        File.open(file_yaml, "w") do |f|
-          YAML.dump(hash, f)
+        File.open(file_yaml, "a") do |f|
+          new_report =  hash.to_yaml
+          f.write(new_report[4..new_report.length-1])         
         end
       }
     else
