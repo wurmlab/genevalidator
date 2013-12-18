@@ -45,7 +45,7 @@ class Sequence
       if hash == nil
         hash = YAML.load_file(index_file_name)
       end
-
+   
       idx = hash[identifier]
 
       query         = IO.binread(raw_seq_file, idx[1] - idx[0], idx[0])

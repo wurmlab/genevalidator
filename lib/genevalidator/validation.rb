@@ -251,7 +251,6 @@ end
   end
 
   ##
-  # Removes identical hits
   # Params:
   # +output+: filename or stream, according to the type
   # +type+: file or stream

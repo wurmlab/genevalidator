@@ -330,6 +330,8 @@ class Output
           end
         end
       end
+     
+      #puts running_times["Duplication"].to_s
 
       time_evaluation = ""
       time_evaluation << "\nRunning Time:"

@@ -85,9 +85,10 @@ class PairCluster
     weight = 0
 
     objects.each do |object, n|
-      object * n
-      mean + object
-      weight += n
+      (1..n).each do |i| 
+        mean + object
+        weight += 1
+      end
     end    
     mean / weight
     return mean
