@@ -86,14 +86,6 @@ class Validation
     @vlist = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
     @idx = 0
 
-=begin
-if start_idx == nil
-@start_idx = 1
-else
-@start_idx = start_idx
-end
-=end
-
     @start_idx = 1
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
@@ -307,13 +299,6 @@ end
 
     begin
 
-      # inspect memory usage
-# counts = Hash.new{ 0 }
-# ObjectSpace.each_object do |o|
-# counts[o.class] += 1
-# end
-# puts counts.to_s
-
       if @idx+1 == @query_offset_lst.length
         break
       end
@@ -435,7 +420,9 @@ end
   # Runs all the validations and prints the outputs given the current
   # prediction query and the corresponding hits
   # Params:
+  # +prediction+: Sequence object
   # +hits+: Array of +Sequence+ objects
+  # +idx+: the index number of the query
   # Output:
   # +Output+ object
   def do_validations(prediction, hits, idx)

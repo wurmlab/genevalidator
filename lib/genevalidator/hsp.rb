@@ -37,43 +37,49 @@ class Hsp
   def init_tabular_attribute(column, value, type=:protein)
     case column
       when "qstart"
-        if type == :nucleotide
-#          @match_query_from = (value.to_i/3)+1
-          @match_query_from = value.to_i
-        else
-          @match_query_from = value.to_i
-        end
+        # this value is relative to the original sequence 
+        #(i.e nucleotide sequence is not translated to protein)
+        @match_query_from = value.to_i
+
       when "qend"
-        if type == :nucleotide
-#          @match_query_to = (value.to_i/3) + 1
-          @match_query_to = value.to_i
-        else
-          @match_query_to = value.to_i
-        end
+        # this value is relative to the original sequence 
+        #(i.e nucleotide sequence is not translated to protein)
+        @match_query_to = value.to_i
+
       when "qframe"
         @query_reading_frame = value.to_i
+
       when "sstart"
         @hit_from = value.to_i
+
       when "send"
         @hit_to = value.to_i
+
       when "qseq"
         @query_alignment = value
         seq_type = BlastUtils.guess_sequence_type(value)
+        # we use only blastp or blastx (i.e outputs are proteins)
         if seq_type != nil and seq_type != :protein
           raise SequenceTypeError
         end
+
       when "sseq"
         @hit_alignment = value
+        # we use only blastp or blastx (i.e outputs are proteins)
         seq_type = BlastUtils.guess_sequence_type(value)
         if seq_type != nil and seq_type != :protein
           raise SequenceTypeError
         end
+
       when "length"
         @align_len = value.to_i
+
       when "pident"
         @pidentity = value.to_f
+
       when "evalue"
         @hsp_evalue = value.to_f
+
     end
   end
 end

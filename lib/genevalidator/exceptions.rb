@@ -52,9 +52,10 @@ end
 class InconsistentTabularFormat < Exception
 end
 
-class OtherError < Exception
+# Exception raised when there are more than one reading frame among the hits of one prediction
+class  ReadingFrameError < Exception
 end
 
-class  ReadingFrameError < Exception
+class OtherError < Exception
 end
 

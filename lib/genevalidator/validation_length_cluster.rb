@@ -56,6 +56,7 @@ class LengthClusterValidation < ValidationTest
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +dilename+: +String+ with the name of the fasta file
   def initialize(type, prediction, hits, filename)
     super
     @filename = filename
@@ -93,8 +94,7 @@ class LengthClusterValidation < ValidationTest
       @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
       plot1 = plot_histo_clusters
       @validation_report.plot_files.push(plot1)
-      #plot2 = plot_len_clusters
-      #@validation_report.plot_files.push(plot2)
+
       @validation_report.running_time = Time.now - start
 
       return @validation_report

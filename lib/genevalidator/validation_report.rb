@@ -22,6 +22,10 @@ class ValidationReport
   # Initilizes the object
   # Params:  
   # +message+: result of the validation (to be displayed in the output)
+  # +validation_result+: :yes for pass validation, :no for fail, :unapplicable or :error
+  # +short_header+: String 
+  # +header+: String
+  # +description+: String
   # +bg_color+: background color of the table cell for the html output (nil by default)
   def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="")
     @message = message

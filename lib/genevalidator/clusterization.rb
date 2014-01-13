@@ -19,7 +19,7 @@ Pair = Struct.new(:x, :y) do
 
   ##
   # Overload '+' operator
-  # This will mutate the current object
+  # This will modify the current object
   def +(p)
     self.x += p.x
     self.y += p.y
@@ -27,7 +27,7 @@ Pair = Struct.new(:x, :y) do
 
   ##
   # Overload '*' operator
-  # This will mutate the current object
+  # This will modify the current object
   def *(val)  
     self.x *= val
     self.y *= val
@@ -35,7 +35,7 @@ Pair = Struct.new(:x, :y) do
 
   ##
   # Overload '/' operator
-  # This will mutate the current object
+  # This will modify the current object
   def /(val)
     self.x /= (val + 0.0)
     self.y /= (val + 0.0)
@@ -43,7 +43,7 @@ Pair = Struct.new(:x, :y) do
 
   ##
   # Overload quality operator
-  # Return true if the pairs are equal, falsei otherwise
+  # Returns true if the pairs are equal, falsei otherwise
   def ==(p)
     if p.x == x and p.y == y
       true
@@ -245,6 +245,8 @@ class Cluster
   # Returns the standard deviation of a set of values
   # Params:
   # +lengths+: a vector of values (optional, by default it takes the values in the cluster)
+  # Output:
+  # Real number
   def standard_deviation(lengths = nil)
     if lengths == nil
       lengths = @lengths.map{|x| a = Array.new(x[1],x[0])}.flatten
@@ -264,6 +266,8 @@ class Cluster
   # Params:
   # +clusters+: a list of Cluster objects
   # +queryLength+: a reference Sequence object
+  # Output:
+  # Real number
   def deviation(clusters, queryLength)
     hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten
     raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
@@ -271,52 +275,6 @@ class Cluster
     sd = R.pull("sd")
     sd = standard_deviation(hits)
     (queryLength - mean).abs / sd
-
-  end
-
-  ##
-  # Returns the p-value of a wilcox test
-  # +clusters+: a list of Cluster objects
-  # +querylength+: a reference Sequence object
-  def wilcox_test(clusters, queryLength)
-    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
-
-    R.eval("library(preprocessCore)")
-    R.eval("x = matrix(c(#{raw_hits}), ncol=1)")
-    mean_length = raw_hits.sum / raw_hits.size.to_f
-    R.eval("target = rnorm(10000, m=#{mean}, sd=sd(c(#{raw_hits})))")
-
-    R.eval("hits = normalize.quantiles.use.target(x,target,copy=TRUE)")
-
-    #make the wilcox-test and get the p-value
-    R.eval("hits = c(#{raw_hits})")
-    #R. eval("pval = wilcox.test(hits - #{queryLength})$p.value")
-    #pval = R.pull "pval"
-    0
-
-  end
-
-  ##
-  # Returns the p-value of a t-test
-  # +clusters+: a list of Cluster objects
-  # +querylength+: a reference Sequence object
-  def t_test(clusters, queryLength)
-    #normalize the data so that to fit a bell curve
-    #raw_hits = lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten.to_s.gsub('[','').gsub(']','')
-    raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
-
-    if raw_hits.length == 1
-      R.eval("library(preprocessCore)")
-      R.eval("x = matrix(c(#{raw_hits}), ncol=1)")
-      mean_length = raw_hits.sum / raw_hits.size.to_f
-      R.eval("target = rnorm(10000, m=#{mean}, sd=sd(c(#{raw_hits})))")
-
-      R.eval("hits = normalize.quantiles.use.target(x,target,copy=TRUE)")
-
-      #make the t-test and get the p-value
-      R. eval("pval = t.test(hits - #{queryLength})$p.value")
-      pval = R.pull "pval"
-    end
 
   end
 
@@ -495,9 +453,9 @@ class HierarchicalClusterization
   # or the distance between clusters is sufficintly big
   # or the desired number of clusters is obtained
   # Params:
-  # +vec+: a vector of values (by default the values from initialization)
   # +no_clusters+: stop test (number of clusters)
   # +distance_method+: distance method (method 0 or method 1)
+  # +vec+: a vector of values (by default the values from initialization)
   # +debug+: display debug information
   # Output:
   # vector of +Cluster+ objects

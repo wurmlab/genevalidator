@@ -101,7 +101,7 @@ class BlastUtils
   # +iterator+: blast xml iterator for hits
   # +type+: the type of the sequence: :nucleotide or :protein
   # Outputs:
-  # Array of +Sequence+ ojbects for hits
+  # Array of +Sequence+ objects corresponding to the list of hits
   def self.parse_next_query_xml(iterator, type)
     begin
       raise TypeError unless iterator.is_a? Enumerator
@@ -211,6 +211,7 @@ class BlastUtils
     putative_NA_counts = composition_NAs.collect { |key_value_array| key_value_array[1] } # only count, not char
     putative_NA_sum = putative_NA_counts.inject { |sum, n| sum + n } # count of all putative NA
     putative_NA_sum = 0 if putative_NA_sum.nil?
+
 
     if putative_NA_sum > (0.9 * cleaned_sequence.length)
       return :nucleotide

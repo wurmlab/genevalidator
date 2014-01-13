@@ -56,6 +56,17 @@ class AlignmentValidation < ValidationTest
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
 
+  ##
+  # Initilizes the object
+  # Params:  
+  # +type+: type of the predicted sequence (:nucleotide or :protein)
+  # +prediction+: a +Sequence+ object representing the blast query
+  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +filename+: name of the fasta file
+  # +mafft_path+: path of the MAFFT installation
+  # +raw_seq_file+: name of the fasta file with raw sequences
+  # +index_file_name+: name of the fasta index file
+  # +raw_seq_file_load+: String - loaded content of the index file
   def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
     super
     @filename = filename
@@ -151,14 +162,6 @@ class AlignmentValidation < ValidationTest
       sm = out[0]
       freq = out[1]
 
-=begin
-# Prints sm to file.
-f = File.open("#{@filename}_ma.fasta" , "a")
-f.write(">statistical model\n")
-f.write(sm)
-f.write("\n")
-f.close
-=end
       # remove isolated residues from the predicted sequence
       prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
       # remove isolated residues from the statistical model
@@ -224,17 +227,9 @@ f.close
       # Accesses the actual alignment.
       align = report.alignment
 
-      # Prints each sequence to a file.
-#      f = File.open("#{@filename}_ma.fasta" , "w")
       align.each_with_index do |s,i|
          @multiple_alignment.push(s.to_s)
-=begin
-         f.write(">seq#{i}\n")
-         f.write(s.to_s)
-         f.write("\n")
-=end
       end
-#      f.close
 
       return @multiple_alignment
   end
@@ -304,7 +299,7 @@ f.close
   # Returns the percentage of consesnsus residues from the ma
   # that are in the prediction
   # Params:
-  # +prediction+: +String+ corresponding to the prediction sequence
+  # +prediction_raw+: +String+ corresponding to the prediction sequence
   # +consensus+: +String+ corresponding to the statistical model
   # Output:
   # +Fixnum+ with the score
@@ -424,8 +419,11 @@ f.close
       # get indeces of consensus in the multiple alignment
       consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
       consensus_idxs = consensus.split(//).each_index.select{|j| isalpha(consensus[j])}
+      consensus_ranges = array_to_ranges(consensus_idxs)
+
       consensus_all = get_consensus(@multiple_alignment)
       consensus_all_idxs = consensus_all.split(//).each_index.select{|j| isalpha(consensus_all[j])}
+      consensus_all_ranges = array_to_ranges(consensus_all_idxs)
 
       match_alignment = ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}}
       match_alignment_ranges = []
@@ -441,15 +439,15 @@ f.close
       # plot statistical model
       freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
       # hits
-# ma[0..ma.length-2].each_with_index.map{ |seq, j| {"y"=>j+1, "start"=>0, "stop"=>len, "color"=>"red", "height"=>-1}} +
-## ma[0..ma.length-2].each_with_index.map{|seq, j| seq.split(//).each_index.select{|j| isalpha(seq[j])}.map{|gap| {"y"=>ma.length-j-1, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}}.flatten +
       match_alignment_ranges.each_with_index.map{|ranges, j| ranges.map{ |range| {"y"=>ma.length-j-1, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| #consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
+                           consensus_ranges.map{ |range| {"y"=>j+1, "start"=>range.first, "stop"=>range.last, "color"=>"yellow", "height"=>-1}}}.flatten +
       # plot prediction
       [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
-## ma[ma.length-1].split(//).each_index.select{|j| isalpha(ma[ma.length-1][j])}.map{|gap|{"y"=>0, "start"=>gap, "stop"=>gap+1, "color"=>"red", "height"=>-1}}+
       query_alignment_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}.flatten +
-      consensus_all_idxs.map{|con|{"y"=>0, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}).to_json)
+
+      # plot consensus
+      consensus_all_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"yellow", "height"=>-1}}.flatten).to_json)
 
       f.close
 
@@ -463,7 +461,7 @@ f.close
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :align,
                                 "[Missing/Extra sequences] Multiple Align. & Statistical model of hits",
-                                "conserved region, yellow", #mismatches, red;prediction, blue;statistical model,orange",
+                                "conserved region, yellow", 
                                 "offset in the alignment",
                                 "",
                                 ma.length+1,

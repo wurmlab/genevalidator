@@ -34,9 +34,10 @@ class Sequence
   ##
   # Gets raw sequence by fasta identifier from a fasta index file 
   # Params:
-  # +index_file_name+: name of the fasta file with raw sequences
+  # +raw_seq_file+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +identifier+: String
+  # +hash+: String - loaded content of the index file
   # Output:
   # String with the nucleotide sequence corresponding to the identifier
   def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier, hash = nil)

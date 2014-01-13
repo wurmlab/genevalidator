@@ -26,6 +26,9 @@ class Output
   ##
   # Initilizes the object
   # Params:
+  # +mutex+: +Mutex+ for exclusive access to the console
+  # +mutex_yaml+: +Mutex+ for exclusive access to the YAML file
+  # +mutex_html+: +Mutex+ for exclusive access to the HTML file
   # +filename+: name of the fasta input file
   # +html_path+: path of the html folder
   # +yaml_path+: path where the yaml output wil be saved
@@ -60,7 +63,6 @@ class Output
     end
 
     short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-    #short_def = short_def[0..[20,short_def.length].min]
     validation_outputs = validations.map{|v| v.print}
 
     successes = validations.map{|v| v.result ==
@@ -191,6 +193,7 @@ class Output
   # Param:
   # +all_query_outputs+: array with +ValidationTest+ objects
   # +html_path+: path of the html folder
+  # +filemane+: name of the fasta input file
   def self.print_footer(all_query_outputs, html_path, filename)
 
     # compute the statistics
@@ -236,6 +239,7 @@ class Output
   # Calculates an overall evaluation of the output
   # Params:
   # +all_query_outputs+: Array of +ValidationTest+ objects
+  # +filemane+: name of the fasta input file
   # Output
   # Array of Strigs with the reports
   def self.overall_evaluation(all_query_outputs, filename)
@@ -331,8 +335,6 @@ class Output
         end
       end
      
-      #puts running_times["Duplication"].to_s
-
       time_evaluation = ""
       time_evaluation << "\nRunning Time:"
       running_times = running_times.select{|k,v| v.length!=0}
