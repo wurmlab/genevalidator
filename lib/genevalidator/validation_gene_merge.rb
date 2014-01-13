@@ -1,6 +1,7 @@
 require 'json'
 require 'rinruby'
 require 'genevalidator/validation_report'
+require 'genevalidator/enumerable'
 
 ##
 # Class that stores the validation output information
@@ -55,44 +56,13 @@ class GeneMergeValidationOutput < ValidationReport
 
 end
 
-module Enumerable
-
-  def sum
-    return self.inject(0){|accum, i| accum + i }
-  end
-
-  def mean
-    return self.sum / self.length.to_f
-  end
-
-  def median
-    sorted = self.sort
-    len = sorted.length
-    return (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
-  end
-
-  def mode
-    freq = self.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-    self.sort_by { |v| freq[v] }.last
-  end
-
-  def sample_variance
-    m = self.mean
-    sum = self.inject(0){|accum, i| accum + (i - m) ** 2 }
-    return sum / (self.length - 1).to_f
-  end
-
-  def standard_deviation
-    return Math.sqrt(self.sample_variance)
-  end
-
-end
-
 ##
 # This class contains the methods necessary for
 # checking whether there is evidence that the
 # prediction is a merge of multiple genes
 class GeneMergeValidation < ValidationTest
+
+  include Enumerable
 
   attr_reader :hits
   attr_reader :prediction
@@ -105,7 +75,8 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +filename+: name of the input file, used when generatig the plot files
-  def initialize(type, prediction, hits, filename)
+  # +boundary+: the offset of the hit from which we start analysing the hit
+  def initialize(type, prediction, hits, filename, boundary=10)
     super
     @filename     = filename
     @short_header = "Gene_Merge"
@@ -115,6 +86,7 @@ class GeneMergeValidation < ValidationTest
     " slope of the linear regression of the relationship between the start and"<<
     " stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees."
     @cli_name     = "merge"
+    @boundary = boundary
   end
 
   ##
@@ -129,20 +101,47 @@ class GeneMergeValidation < ValidationTest
       start = Time.now
 
       pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
-      xx = pairs.map{|pair| pair.x}
-      yy = pairs.map{|pair| pair.y}
+      xx_0 = pairs.map{|pair| pair.x}
+      yy_0 = pairs.map{|pair| pair.y}
 
-      if unimodlity_test(xx, yy)
+      # minimum start shoud be at 'boundary' residues
+      xx = xx_0.map do |x|
+        if x < @boundary
+          x = @boundary
+        else
+          x = x
+        end
+      end
+
+      # maximum end should be at length - 'boundary' residues
+      yy = yy_0.map do |y|
+        if y > @prediction.raw_sequence.length - @boundary
+          y = @prediction.raw_sequence.length - @boundary
+        else
+          y = y
+        end
+      end
+
+      line_slope = slope(xx, yy, (1..hits.length).map{|x| 1 / (x + 0.0)})
+
+      unimodality = false
+      if unimodality_test(xx, yy)
+        unimodality = true
         lm_slope = 0.0
       else
-        lm_slope = slope[1]
+        lm_slope = line_slope[1]
       end
         
-      y_intercept = slope[0]
+      y_intercept = line_slope[0]
 
       @validation_report = GeneMergeValidationOutput.new(lm_slope)
 
-      plot1 = plot_2d_start_from(lm_slope, y_intercept)
+      unless unimodality  
+        plot1 = plot_2d_start_from(lm_slope, y_intercept)
+      else
+        plot1 = plot_2d_start_from
+      end
+
       @validation_report.plot_files.push(plot1)
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
@@ -183,15 +182,6 @@ class GeneMergeValidation < ValidationTest
                hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
                {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten).to_json)
 
-=begin
-      f.write((
-               hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
-               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten +  # ).to_json)
-                  
-               hits_less.each_with_index.map{|hit, i| hit.hsp_list[1.. hit.hsp_list.length-1].select.with_index{|hsp,jj|
-               hit.hsp_list[jj].match_query_to < hit.hsp_list[jj+1].match_query_from}.each_with_index.map{|hsp, j|
-              {"y"=>i, "start"=>hit.hsp_list[j].match_query_to, "stop"=>hit.hsp_list[j+1].match_query_from, "color"=>"black", "dotted"=>"true"}}}.flatten).to_json)
-=end
       f.close
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
@@ -212,9 +202,13 @@ class GeneMergeValidation < ValidationTest
   # +y_intercept+: the ecuation of the line is y= slope*x + y_intercept
   # +output+: location where the plot will be saved in jped file format
   # +hits+: array of Sequence objects
-  def plot_2d_start_from(slope, y_intercept, output = "#{filename}_match_2d.json", hits = @hits)    
+  def plot_2d_start_from(slope = nil, y_intercept = nil, output = "#{filename}_match_2d.json", hits = @hits)    
 
-=begin
+      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+
+      xx = pairs.map{|pair| pair.x}
+      yy = pairs.map{|pair| pair.y}
+
       freq_x = xx.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
       filename_x = "#{filename}_merge_x.json"
       f = File.open(filename_x, "w")
@@ -228,7 +222,7 @@ class GeneMergeValidation < ValidationTest
               "",
               "x projection",
               "number of sequences")
-       @validation_report.plot_files.push(plot3)
+#       @validation_report.plot_files.push(plot3)
 
       freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
       filename_y = "#{filename}_merge_y.json"
@@ -243,58 +237,12 @@ class GeneMergeValidation < ValidationTest
               "",
               "y projection",
               "number of sequences")
-       @validation_report.plot_files.push(plot4)
-
-=begin
-    R.eval "jpeg('#{filename}_merge_x.jpg')"
-    R.eval "hist(c#{xx.to_s.gsub('[','(').gsub(']',')')},
-              breaks = 30,
-              main='X projection', xlab='x_projection')" 
-    R.eval "par(new=T)" 
-
-    R.eval "jpeg('#{filename}_merge_y.jpg')"
-    R.eval "hist(c#{yy.to_s.gsub('[','(').gsub(']',')')},
-              breaks = 30,
-              main='X projection', xlab='x_projection')"
-    R.eval "par(new=T)"
-
-=begin
-    R.echo "enable = nil, stderr = nil" #redirect the cosole messages of R
-    R.eval "library(diptest)"
-    R.eval "pval_x = dip(c#{xx.to_s.gsub('[','(').gsub(']',')')})"
-    pval_x = R.pull("pval_x")
-
-    R.eval "pval_y = dip(c#{yy.to_s.gsub('[','(').gsub(']',')')})"
-    pval_y = R.pull("pval_y")
-
-    puts "pval_x = dip(c#{xx.to_s.gsub('[','(').gsub(']',')')})"
-    puts "pval_y = dip(c#{yy.to_s.gsub('[','(').gsub(']',')')})"
-
-    puts "pval_x = #{pval_x.round(2)}, pval_y = #{pval_y.round(2)}"
-=end
-
-=begin
-    pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
-    xx = pairs.map{|pair| pair.x}
-    yy = pairs.map{|pair| pair.y}
-
-    hc = HierarchicalClusterization.new(pairs)
-    clusters = hc.hierarchical_clusterization_2d(2, 1)
-
-    f = File.open(output , "w")
-    f.write((clusters[0].objects.map{|elem|  {"x"=>elem[0].x,
-                                              "y"=>elem[0].y,
-                                              "color"=>"red"}} +
-             clusters[1].objects.map{|elem|  {"x"=>elem[0].x,
-                                              "y"=>elem[0].y,
-                                              "color"=>"blue"}}).to_json)
-
-    f.close
-=end
+#       @validation_report.plot_files.push(plot4)
 
     f = File.open(output , "w")
     f.write(hits.map{|hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-                             "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max}}.to_json)
+                            "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 
+                            "color"=>"red"}}.to_json)
     f.close
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
@@ -311,18 +259,53 @@ class GeneMergeValidation < ValidationTest
   # Caclulates the slope of the regression line
   # give a set of 2d coordonates of the start/stop offests of the hits
   # Param
-  # +hits+: array of Sequence objects
+  # xx: +Array+ of integers
+  # yy : +Array+ of integers
+  # weights: +Array+ of integers
   # Output:
   # The ecuation of the regression line: [y slope]
-  def slope(hits = @hits)
+  def slope(xx, yy, weights = nil)
+
+    if weights == nil
+      weights = Array.new(hits.length, 1)
+    end
+
+    # calculate the slope
+    xx_weighted = xx.each_with_index.map{|x, i| x * weights[i]}
+    yy_weighted = yy.each_with_index.map{|y, i| y * weights[i]}
+
+    denominator = weights.reduce(0) { |sum, w| w + sum }
+
+    x_mean = xx_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
+    y_mean = yy_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
+ 
+    numerator = (0...xx.length).reduce(0) do |sum, i|
+      sum + (weights[i] * (xx[i] - x_mean) * (yy[i] - y_mean))
+    end
+ 
+    denominator = (0...xx.length).reduce(0) do |sum, i|
+      sum + (weights[i] * ((xx[i] - x_mean) ** 2))
+    end
+
+    slope = numerator / (denominator + 0.0)
+    y_intercept = y_mean - (slope * x_mean)
+
+    return [y_intercept, slope]
+
+  end
+
+  ##  
+  # Caclulates the slope of the regression line
+  # give a set of 2d coordonates of the start/stop offests of the hits
+  # Param
+  # xx : +Array+ of integers
+  # yy : +Array+ of integers
+  # Output:
+  # The ecuation of the regression line: [y slope]
+  def slope_statsample(xx, yy)
 
     require 'statsample'
   
-    pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
-
-    xx = pairs.map{|pair| pair.x}
-    yy = pairs.map{|pair| pair.y}
-
     sr=Statsample::Regression.simple(xx.to_scale,yy.to_scale)
 
     return [sr.a, sr.b]
@@ -331,25 +314,37 @@ class GeneMergeValidation < ValidationTest
 
   ##
   # xx and yy are the projections of the 2-d data on the two axes
-  def unimodlity_test(xx, yy)
+  def unimodality_test(xx, yy)
 
     mean_x = xx.mean
     median_x = xx.median
     mode_x = xx.mode
     sd_x = xx.standard_deviation
 
-    cond1_x = ((mean_x - median_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.6)
-    cond2_x = ((mean_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
-    cond3_x = ((median_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
+    if sd_x == 0
+      cond1_x = true
+      cond2_x = true
+      cond3_x = true
+    else
+      cond1_x = ((mean_x - median_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.6)
+      cond2_x = ((mean_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
+      cond3_x = ((median_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
+    end
 
     mean_y = yy.mean
     median_y = yy.median
     mode_y = yy.mode
     sd_y = yy.standard_deviation
 
-    cond1_y = ((mean_y - median_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.6)
-    cond2_y = ((mean_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
-    cond3_y = ((median_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
+    if sd_y == 0
+      cond1_y = true
+      cond2_y = true
+      cond3_y = true
+    else
+      cond1_y = ((mean_y - median_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.6)
+      cond2_y = ((mean_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
+      cond3_y = ((median_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
+    end
 
     if cond1_x and cond2_x and cond3_x and cond1_y and cond2_y and cond3_y
       return true
@@ -360,6 +355,7 @@ class GeneMergeValidation < ValidationTest
   end
 
   ##
+  # FUNCTION NOT USED
   # v1 and v2 are two ClusterClass objects
   def modality_test(c1, c2) 
 
