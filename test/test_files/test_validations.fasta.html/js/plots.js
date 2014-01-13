@@ -1,23 +1,3 @@
-/*
-var previous_scroll = $(window).scrollTop();
-
-window.onscroll = function (event) {
-
-    	var scroll = $(window).scrollTop();
-    	scroll_change = scroll - previous_scroll;
-   	previous_scroll = scroll;
-
-    	if(scroll_change > 0)
-		console.log("down");
-    	else
-		console.log("up");
-
-    	var button =  document.getElementById("show_all_plots");
-
-    	if(button.status == "pressed"){
-		show_all_plots(button);
-    	}
-}*/
 
 function show_all_plots(button){
 
@@ -142,6 +122,9 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
 		case "bars":
 		  plot_bars(filename, target, title, legend, xtitle, ytitle, aux1)
 		  break;
+		case "simplebars":
+		  plot_simple_bars(filename, target, title, legend, xtitle, ytitle)	
+		  break;
 		case "lines":
                   if(aux2 != "")
 	              aux2 = aux2.split(",");
@@ -216,10 +199,15 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
                      .range([height, 0]);
 
 		var xMin = d3.min(flattened_data, function(d) { return d.key; })
-                var xMin = Math.min(xMin, bar); 
+		if(bar!=undefined){
+                	var xMin = Math.min(xMin, bar); 
+		}
  
                 var xMax = d3.max(flattened_data, function(d) { return d.key; })
-		var xMax = Math.max(xMax, bar); 
+		if(bar!=undefined){
+			var xMax = Math.max(xMax, bar); 
+		}
+
 		var x = d3.scale.linear()
                      .domain([xMin-padding, xMax+padding])
                      .range([13, width]);
@@ -279,14 +267,13 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 				.attr("height", height - y(yMax + yMax/8))
 				.attr("fill", color_beautification("black"));
 
-	svg.append("text")
-		.attr("transform", "rotate(-90)")
-		.attr("x", -yMax/10 - 35)
-		.attr("y", x(bar) - 5)
-	      	.text("query");
+			svg.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("x", -yMax/10 - 35)
+				.attr("y", x(bar) - 5)
+			      	.text("query");
 
-		}
-	
+				}	
 	});
 
    
@@ -319,6 +306,97 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
 
 }	
+
+// bars plot
+function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
+
+	var margin = {top: 70, right: 50, bottom: 75, left: 50},
+		width = 600 - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom;		
+	var legend_width = 15
+
+	var svg = d3.select("#".concat(target)).append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  	.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+	svg.append("text")
+		.attr("x", (width / 2))             
+		.attr("y", -45)
+		.attr("text-anchor", "middle")  
+		.style("font-size", "16px") 
+		.text(title);	
+		
+	var colors = new Array("orange", "blue", "green", "yellow", "brown");
+	var no_colors = colors.length
+
+        var padding = 0
+
+	d3.json(filename, function(error, alldata) {
+		
+		flattened_data = [].concat.apply([], alldata)			
+		var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3
+		var y = d3.scale.linear()
+                     .domain([0, yMax])
+                     .range([height, 0]);
+
+		var xMin = d3.min(flattened_data, function(d) { return d.key; })
+                var xMax = d3.max(flattened_data, function(d) { return d.key; })
+
+		var x = d3.scale.linear()
+                     .domain([xMin-padding, xMax+padding])
+                     .range([13, width]);
+
+		var xAxis = d3.svg.axis()
+		        .scale(x)
+		        .orient("bottom")
+			.ticks(8)
+
+	        var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left")
+			.tickFormat(d3.format("d"))
+			.ticks(8)
+
+	  	svg.append("g")
+			  .attr("class", "x axis")
+			  .attr("transform", "translate(0," + height + ")")
+			  .call(xAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("x", (width-xTitle.length)/2-50)
+			  .attr("y", 35)
+			  .style("text-anchor", "start")
+			  .text(xTitle)
+
+	 	 svg.append("g")
+			   .attr("class", "y axis")
+			  .call(yAxis)
+			.append("text")
+			  .attr("class", "label")
+			  .attr("transform", "rotate(-90)")
+			  .attr("x", -(height+yTitle.length)/2-50)
+			  .attr("y", -40)
+			  .style("text-anchor", "start")
+			  .text(yTitle)
+			  
+		alldata.map( function(data, i) {
+		 
+			color = colors[i % (no_colors - 1)];
+			svg.selectAll(".bar")
+				.data(data)
+				.enter().append("rect")
+				  .attr("x", function(d) { return x(d.key); })
+				  .attr("width", 6)
+				  .attr("y", function(d) { return y(d.value); })
+				  .attr("height", function(d) { return height - y(d.value); })
+				  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
+		});	
+
+	});
+
+}
 
 
 // scatter plot
@@ -369,6 +447,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 	d3.json(filename, function(error, data) {
 
           var xMax = d3.max(data, function(d) { return d.x; })
+          var xMin = d3.min(data, function(d) { return d.x; })
           var yMax = d3.max(data, function(d) { return d.y; })
           var yMin = d3.min(data, function(d) { return d.y; })
 	  x.domain(d3.extent(data, function(d) { return d.x; })).nice();
@@ -403,31 +482,45 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .attr("r", 2)
 		  .attr("cx", function(d) { return x(d.x); })
 		  .attr("cy", function(d) { return y(d.y); })
-		  .style("fill", function(d) { return color_beautification("red"); })
+		  .style("fill", function(d) { return color_beautification(d.color); })
 		  .style("opacity",0.6);
 
-	   if(slope!=undefined && yLine!=undefined){
+           if(!(slope==undefined || yLine==undefined || slope == "" || yLine == "")){
 
-		yLine = parseFloat(yLine.replace(",", "."));
-		var yValue = yLine + slope * xMax
-		if (yValue > yMax){
- 			xMax = (yMax-yLine)/slope
-			yValue = yMax
-		}
+                yLine = parseFloat(yLine.replace(",", "."));
+                var xMaxValue = xMax
+                var yMaxValue = yLine + slope * xMax
+                if (yMaxValue > yMax){
+                        xMaxValue = (yMax-yLine)/slope
+                        yMaxValue = yMax
+                }
 
-		if (yValue < yMin){
- 			xMax = (yMin-yLine)/slope
-			yValue = yMin
-		}
+                if (yMaxValue < yMin){
+                        xMaxValue = (yMin-yLine)/slope
+                        yMaxValue = yMin
+                }
 
-		svg.append("line")
-		  .attr("x1", 0)
-		  .attr("y1", y(yLine))				  
-		  .attr("x2", x(xMax))
-		  .attr("y2", y(yValue))				  
-		  .attr("stroke-width", 2)
-		  .attr("stroke", "black")
-	  }
+                var xMinValue = xMin
+                var yMinValue = yLine + slope * xMin
+                if (yMinValue > yMax){
+                        xMinValue = (yMax-yLine)/slope
+                        yMinValue = yMin
+                }
+
+                if (yMinValue < yMin){
+                        xMinValue = (yMin-yLine)/slope
+                        yMinValue = yMin
+                }
+
+                svg.append("line")
+                  .attr("x1", x(xMinValue))
+                  .attr("y1", y(yMinValue))
+                  .attr("x2", x(xMaxValue))
+                  .attr("y2", y(yMaxValue))
+                  .attr("stroke-width", 2)
+                  .attr("stroke", "black")
+          }
+
 
 	});
 }

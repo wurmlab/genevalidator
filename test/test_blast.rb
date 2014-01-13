@@ -2,6 +2,7 @@ require "rubygems"
 require "shoulda"
 require 'mini_shoulda'
 require 'minitest/autorun'
+#require 'fileutils'
 require 'genevalidator/validation'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
@@ -25,6 +26,11 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
       file_mrna.puts(query_mrna)
       file_mrna.close
 
+      begin
+        FileUtils.rm_rf("#{filename_mrna}.html")
+      rescue Error
+      end
+
       b = Validation.new(filename_mrna)
 
       File.delete(filename_mrna)      
@@ -45,6 +51,11 @@ NNIPTNSAQLSPSHSMSLRVSQSNSFSSSPIMTHKLDNYVGNTENTEYKSTFIKPIPCTNERNVNHEAVGKQDRNNLHEE
 DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       file_prot.puts(query_prot)
       file_prot.close
+
+      begin
+        FileUtils.rm_rf("#{filename_prot}.html")
+      rescue Error
+      end
  
       b = Validation.new(filename_prot)
 
@@ -59,6 +70,12 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       begin
         original_stderr = $stderr
         $stderr.reopen("/dev/null", "w")
+
+        begin
+          FileUtils.rm_rf("#{filename_prot}.html")
+        rescue Error
+        end
+
         b = Validation.new(filename_prot)
       rescue SystemExit => e
         mixed = true
@@ -130,12 +147,18 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits[0].accession_no, "EFZ19000"
       assert_equal hits[0].hsp_list.length, 3
       assert_equal hits[0].hsp_list[2].hit_to, 100
-    end
-
+      end
+=begin
     it "should remove identical matches among protein sequences" do
       filename_prot = "test/test_files/output.tab.6"
       output = File.open(filename_prot, "rb").read
       filename_fasta = "test/test_files/test_validations.fasta"
+
+      begin
+        FileUtils.rm_rf("#{filename_fasta}.html")
+      rescue Error
+      end
+
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
       prediction = Sequence.new
       prediction.length_protein = 1808
@@ -143,12 +166,14 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
       iterator_tab.next
       hits = iterator_tab.next
+
       # before removal
       assert_equal hits.length, 2
       assert_equal hits[0].hsp_list[0].pidentity, 100
       assert_in_delta hits[0].hsp_list[1].pidentity, 99.23, 0.01
       assert_in_delta hits[1].hsp_list[0].pidentity, 90, 0.01 
       hits = b.remove_identical_hits(prediction, hits)
+
       # after removal
       assert_equal hits.length, 1
       assert_in_delta hits[0].hsp_list[0].pidentity, 90, 0.01
@@ -159,6 +184,12 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
 
       filename_fasta = "test/test_files/test_validations.fasta"
+
+      begin
+        FileUtils.rm_rf("#{filename_fasta}.html")
+      rescue Error
+      end
+
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
       prediction = Sequence.new
@@ -170,6 +201,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits.length, 20
 
       hits = b.remove_identical_hits(prediction, hits)
+ 
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
     end
@@ -179,6 +211,12 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
 
       filename_fasta = "test/test_files/test_validations.fasta"
+
+      begin
+        FileUtils.rm_rf("#{filename_fasta}.html")
+      rescue Error
+      end
+
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
       prediction = Sequence.new
@@ -190,10 +228,11 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits.length, 20
 
       hits = b.remove_identical_hits(prediction, hits)
+
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
     end
-
+=end
     it "should return error when using a nonexisting input file" do
       original_stderr = $stderr
       $stderr.reopen("/dev/null", "w")

@@ -44,11 +44,22 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       original_stdout = $stdout.clone
       $stdout.reopen(filename_prot_out_xml, "w")
+
+      begin
+        FileUtils.rm_rf(filename_prot_html)
+        rescue Error
+      end
+
       b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, filename_prot_raw, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
-
       $stdout.reopen(filename_prot_out_tab, "w")
+
+      begin
+        FileUtils.rm_rf(filename_prot_html)
+        rescue Error
+      end
+
       b = Validation.new(filename_prot_fasta, 
                          validations, 
                          "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
@@ -63,7 +74,6 @@ class ValidateOutput < MiniTest::Unit::TestCase
       File.delete(filename_prot_out_xml)
       File.delete(filename_prot_out_tab)
       File.delete(filename_prot_yaml)
-      FileUtils.rm_rf(filename_prot_html)
 
       assert_equal diff, true
 
@@ -76,11 +86,22 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
       original_stdout = $stdout.clone
       $stdout.reopen(filename_mrna_out_xml, "w")
+
+      begin
+        FileUtils.rm_rf(filename_mrna_html)
+        rescue Error
+      end
+
       b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, filename_mrna_raw, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
-
       $stdout.reopen(filename_mrna_out_tab, "w")
+
+      begin
+        FileUtils.rm_rf(filename_mrna_html)
+        rescue Error
+      end
+
       b = Validation.new(filename_mrna_fasta, 
                          validations, 
                          "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
@@ -95,7 +116,6 @@ class ValidateOutput < MiniTest::Unit::TestCase
       File.delete(filename_mrna_out_xml)
       File.delete(filename_mrna_out_tab)
       File.delete(filename_mrna_yaml)
-      FileUtils.rm_rf(filename_mrna_html)
 
       assert_equal diff, true
     end

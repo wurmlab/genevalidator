@@ -19,6 +19,12 @@ class ValidateOutput < MiniTest::Unit::TestCase
     filename = "test/test_files/test_validations"
     filename_fasta = "#{filename}.fasta"
     filename_xml = "#{filename}.xml"   
+
+    begin
+      FileUtils.rm_rf("#{filename_fasta}.html")
+    rescue Error
+    end
+
     b = Validation.new(filename_fasta, ["all"], nil, filename_xml)
     output = File.open(filename_xml, "rb").read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
@@ -59,7 +65,7 @@ class ValidateOutput < MiniTest::Unit::TestCase
 
     it "should validate gene merge" do
       gmv = validations.select{|v| v.class == GeneMergeValidationOutput}[0]
-      assert_equal gmv.slope.round(4), -0.1089
+      assert_equal gmv.slope.round(4), 0.0
     end
 
     it "should validate duplication" do

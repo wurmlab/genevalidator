@@ -70,10 +70,10 @@ pointer-events: none;
   padding-right:20px !important;
 }
 
-a:link {color:#000000;text-decoration: none !important;}      /* unvisited link */
-a:visited {color:#000000;text-decoration: none !important;}  /* visited link */
-a:hover {color:#3A87AD;text-decoration: none !important;}  /* mouse over link */
-a:active {color:#3A87AD;text-decoration: none !important;}  /* selected link */ 
+a:link {text-decoration: none !important;}      /* unvisited link */
+a:visited {text-decoration: none !important;}  /* visited link */
+a:hover {text-decoration: none !important;}  /* mouse over link */
+a:active {text-decoration: none !important;}  /* selected link */ 
 
 /*
 thead {
@@ -207,6 +207,7 @@ thead {
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
   *margin-right: .3em;
+  cursor: hand !important;
 }
 [class="icon-bar-chart"]:before,
 [class=" icon-bar-chart"]:before {

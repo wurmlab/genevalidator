@@ -2,7 +2,6 @@ require "rubygems"
 require 'shoulda'
 require 'mini_shoulda'
 require 'minitest/autorun'
-require 'rinruby'
 require 'genevalidator/validation_test'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/sequences'
@@ -10,9 +9,6 @@ require 'genevalidator/sequences'
 class TestORFValidation < MiniTest::Unit::TestCase
 
   describe "ORF Validation" do
-
-    # redirect the cosole messages of R
-    R.echo "enable = nil, stderr = nil, warn = nil"
 
     prediction = Sequence.new
     prediction.raw_sequence = 

@@ -70,10 +70,10 @@ pointer-events: none;
   padding-right:20px !important;
 }
 
-a:link {cursor: hand !important; color:#000000;text-decoration: none !important;}      /* unvisited link */
-a:visited {cursor: hand !important; color:#000000;text-decoration: none !important;}  /* visited link */
-a:hover {cursor: hand !important; color:#3A87AD;text-decoration: none !important;}  /* mouse over link */
-a:active {cursor: hand !important; color:#3A87AD;text-decoration: none !important;}  /* selected link */ 
+a:link {color:#000000;text-decoration: none !important;}      /* unvisited link */
+a:visited {color:#000000;text-decoration: none !important;}  /* visited link */
+a:hover {color:#3A87AD;text-decoration: none !important;}  /* mouse over link */
+a:active {color:#3A87AD;text-decoration: none !important;}  /* selected link */ 
 
 /*
 thead {
