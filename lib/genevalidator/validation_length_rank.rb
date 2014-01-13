@@ -1,7 +1,7 @@
 require 'genevalidator/validation_report'
 require 'genevalidator/validation_test'
 require 'genevalidator/exceptions'
-
+require 'genevalidator/enumerable'
 ##
 # Class that stores the validation output information
 class LengthRankValidationOutput < ValidationReport
@@ -44,6 +44,8 @@ end
 # length validation by ranking the hit lengths
 class LengthRankValidation < ValidationTest
 
+  include Enumerable
+
   attr_reader :threshold
 
   ##
@@ -78,14 +80,13 @@ class LengthRankValidation < ValidationTest
       start = Time.now
 
       lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+
       len = lengths.length
-      median = len % 2 == 1 ? 
-               lengths[len/2] : 
-               (lengths[len/2 - 1] + lengths[len/2]).to_f / 2
+      median = lengths.median
 
       predicted_len = prediction.length_protein
 
-      if hits.length == 1
+      if hits.length == 1 || lengths.standard_deviation <= 5
         msg = ""
         percentage = 1
       else
