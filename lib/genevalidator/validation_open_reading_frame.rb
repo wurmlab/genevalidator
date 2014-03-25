@@ -16,7 +16,7 @@ class ORFValidationOutput < ValidationReport
     @description = 'Check whether there is a single main Open Reading Frame'<<
     ' in the predicted gene. Aplicable only for nucleotide queries. Meaning'<<
     '  of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80%'<<
-    ' passe the validation test.'
+    ' passes the validation test.'
 
     @orfs = orfs
     @ratio = ratio
