@@ -16,7 +16,6 @@ DESC
 #  s.required_ruby_version     = '> 1.9.3'
 
   s.add_dependency('bio-blastxmlparser')
-  s.add_dependency('rinruby')
   s.add_dependency('bio')
   s.add_dependency('statsample')
   s.add_dependency('shoulda')

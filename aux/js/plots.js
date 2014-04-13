@@ -505,7 +505,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .style("fill", function(d) { return color_beautification("red"); })
 		  .style("opacity",0.6);
 
-           if(slope!=undefined && yLine!=undefined){
+           if((slope!=undefined && slope != "") && (yLine!=undefined && yLine != "")){
 
                 yLine = parseFloat(yLine.replace(",", "."));
                 var xMaxValue = xMax

@@ -1,5 +1,4 @@
 require 'json'
-require 'rinruby'
 require 'genevalidator/validation_report'
 require 'genevalidator/enumerable'
 
