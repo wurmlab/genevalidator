@@ -502,8 +502,10 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .attr("r", 2)
 		  .attr("cx", function(d) { return x(d.x); })
 		  .attr("cy", function(d) { return y(d.y); })
-		  .style("fill", function(d) { return color_beautification(d.color); })
+		  .style("fill", function(d) { return color_beautification("red"); })
 		  .style("opacity",0.6);
+
+	   alert(slope);
 
            if(slope!=undefined && yLine!=undefined){
 

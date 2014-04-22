@@ -101,7 +101,13 @@ if File.directory? ARGV[0]
   Rack::Server.start :app => app
 else
 =end
+
+def get_memory_usage
+  `ps -o rss= -p #{Process.pid}`.to_i
+end
+
+  start = Time.now
+
   b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:raw], options[:mafft], options[:start])
   b.validation
-
-
+  puts "Total running time: #{(Time.now - start).round(3)}s\n"

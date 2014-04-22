@@ -1,7 +1,9 @@
 require "rubygems"
 require 'shoulda'
-require 'mini_shoulda'
+require 'minitest'
 require 'minitest/autorun'
+#require 'mini_shoulda'
+
 require 'genevalidator/validation_test'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/sequences'
@@ -30,12 +32,5 @@ AAAACCCGTGCTCCCTCTACCAACTGGAAAACTACTGCAACTAG"
       assert_equal result , validation.get_orfs
     end
 
-    it "should create plot file" do
-      filename = "output"
-      validation = OpenReadingFrameValidation.new(:nucleotide, prediction, [prediction], filename)
-      validation.run
-      #assert_equal true, File.exist?("#{filename}_orfs.json")
-      #File.delete("#{filename}_orfs.jpg")
-    end
   end
 end

@@ -1,6 +1,6 @@
 require "rubygems"
 require "shoulda"
-require 'mini_shoulda'
+require 'minitest'
 require 'minitest/autorun'
 require 'genevalidator/clusterization'
 

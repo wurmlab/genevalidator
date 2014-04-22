@@ -19,6 +19,9 @@ class Output
   attr_accessor :start_idx
 
   attr_accessor :overall_score
+  attr_accessor :fails
+  attr_accessor :successes
+
   attr_accessor :mutex
   attr_accessor :mutex_yaml
   attr_accessor :mutex_html
@@ -65,35 +68,7 @@ class Output
     short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
     validation_outputs = validations.map{|v| v.print}
 
-    successes = validations.map{|v| v.result ==
-      v.expected}.count(true)
-
-    fails = validations.map{|v| v.validation != :unapplicable and
-      v.validation != :error and
-      v.result != v.expected}.count(true)
-
-    lcv = validations.select{|v| v.class == LengthClusterValidationOutput}
-    lrv = validations.select{|v| v.class == LengthRankValidationOutput}
-    if lcv.length == 1 and lrv.length == 1
-      score_lcv = (lcv[0].result == lcv[0].expected)
-      score_lrv = (lrv[0].result == lrv[0].expected)
-      # if both are true this should be counted as a single success
-      if score_lcv == true and score_lrv == true
-        successes = successes - 1
-      else
-      # if both are false this will be a fail
-        if score_lcv == false and score_lrv == false
-          fails = fails - 1
-        else
-          successes = successes - 0.5
-          fails = fails - 0.5
-        end
-      end
-    end
-
-    overall_score = (successes*100/(successes + fails + 0.0)).round(0)
-
-    output = sprintf("%3s|%d|%20s|%5s|", @idx, overall_score, short_def, @nr_hits)
+    output = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
     validation_outputs.each do |item|
       item_padd = sprintf("%17s", item);
       output << item
@@ -133,35 +108,7 @@ class Output
 
   def generate_html
 
-    successes = validations.map{|v| v.result == 
-      v.expected}.count(true)
-
-    fails = validations.map{|v| v.validation != :unapplicable and
-      v.validation != :error and 
-      v.result != v.expected}.count(true)
-
-    lcv = validations.select{|v| v.class == LengthClusterValidation}
-    lrv = validations.select{|v| v.class == LengthRankValidation}
-    if lcv.length == 1 and lrv.length == 1
-      score_lcv = (lcv[0].result == lcv[0].expected)
-      score_lrv = (lrv[0].result == lrv[0].expected)
-      # if both are true this should be counted as a single success
-      if score_lcv == true and score_lrv == true
-        successes = successes - 1
-      else 
-      # if both are false this will be a fail
-        if score_lcv == false and score_lrv == false
-          fails = fails - 1
-        else
-          successes = successes - 0.5
-          fails = fails - 0.5
-        end
-      end
-    end
-
-    overall_score = (successes*100/(successes + fails + 0.0)).round(0)
-
-    if fails == 0
+    if @fails == 0
       bg_icon = "success"
     else
       bg_icon = "danger"
@@ -194,19 +141,19 @@ class Output
   # +all_query_outputs+: array with +ValidationTest+ objects
   # +html_path+: path of the html folder
   # +filemane+: name of the fasta input file
-  def self.print_footer(all_query_outputs, html_path, filename)
+  #def self.print_footer(all_query_outputs, html_path, filename)
+  def self.print_footer(no_queries, scores, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, html_path, filename)
 
     # compute the statistics
-    overall_evaluation = overall_evaluation(all_query_outputs, filename)
+    #overall_evaluation = overall_evaluation(all_query_outputs, filename)
+    overall_evaluation = overall_evaluation(no_queries, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, filename)
 
     less = overall_evaluation[0]
     less = less.gsub("\n","<br>").gsub("'",%q(\\\'))
 
-    scores = overall_evaluation[overall_evaluation.length-1]
-
     # print to console
     evaluation = ""
-    overall_evaluation[0..overall_evaluation.length-2].each{|e| evaluation << "\n#{e}"}
+    overall_evaluation.each{|e| evaluation << "\n#{e}"}
     puts evaluation
     puts ""
 
@@ -233,6 +180,7 @@ class Output
     template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.htm.erb"), 'r').read
     erb = ERB.new(template_file)
     File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
+
   end
 
   ##
@@ -242,45 +190,22 @@ class Output
   # +filemane+: name of the fasta input file
   # Output
   # Array of Strigs with the reports
-  def self.overall_evaluation(all_query_outputs, filename)
+  #def self.overall_evaluation(all_query_outputs, filename)
+  def self.overall_evaluation(no_queries, good_scores, bad_scores, no_evidence, no_mafft, no_internet, map_errors, running_times, filename)
       score_evaluation = ""
       score_evaluation << "Query score evaluation for #{filename}:"
       
       # count the cases of "not enough evidence"
-      no_evidence = all_query_outputs.count{|report|
-        report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
-      }  
+      #no_evidence = all_query_outputs.count{|report|
+      #  report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
+      #}  
 
       # print at the console
-      scores = []
-      no_mafft = 0
-      no_internet = 0
+      #scores = all_query_outputs.map{|query| query.score}
 
       # how many genes are good
-      all_query_outputs.each do |report| 
-        successes = report.validations.map{|v| v.result == v.expected}.count(true)
-        fails = report.validations.map{|v| v.validation != :unapplicable and v.validation != :error and
-          v.result != v.expected}.count(true)
-        overall_score = (successes*100/(successes + fails + 0.0)).round(0)
-        scores.push overall_score
 
-        report.validations.each do |v| 
-          if v.errors != nil
-            no_mafft += v.errors.select{|e| e == NoMafftInstallationError}.length
-          end
-        end
-
-        report.validations.each do |v| 
-          if v.errors != nil
-            no_internet += v.errors.select{|e| e == NoInternetError}.length
-          end
-        end
-      end
-
-      good_scores = scores.count{|v| v > 75}
-      bad_scores = scores.length - good_scores 
-
-      score_evaluation << "\nThere were validated #{all_query_outputs.length} predictions from which:"
+      score_evaluation << "\nThere were validated #{no_queries} predictions from which:"
       if good_scores == 1
         score_evaluation << "\nOne good prediction"
       else
@@ -296,54 +221,24 @@ class Output
         score_evaluation << "\n#{no_evidence} of them couldn't be evaluated because of low evidence"
       end
 
-      error_evaluation = ""
       # errors per validation
-      validations = all_query_outputs[0].validations
-      validations.each_with_index do |v,i|
-        no_errors = 0
-        all_query_outputs.each do |report|
-          if report.validations[i].validation == :error
-            no_errors += 1
-          end
-        end
-        if no_errors != 0
-          error_evaluation <<  "\nWe couldn't run #{v.short_header} Validation for #{no_errors} queries"
-        end
-      end
+      error_evaluation = ""
+      map_errors.each{|k,v| error_evaluation <<  "\nWe couldn't run #{k} Validation for #{v} queries"}
 
-      if no_mafft >=  (all_query_outputs.length - no_evidence) 
+      if no_mafft >=  (no_queries - no_evidence) 
         error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
       end
-      if no_internet >=  (all_query_outputs.length - no_evidence)
+      if no_internet >=  (no_queries - no_evidence)
         error_evaluation << "\nWe couldn't make use of your internet connection"
       end
 
-      # Running time statistics
-      running_times = {}
-      all_query_outputs[0].validations.each do |v|
-        running_times[v.short_header] = []
-      end
-
-      all_query_outputs.each do |output|
-        output.validations.each do |v|
-          if v.running_time != 0 and 
-             v.running_time != nil and 
-             v.validation != :unapplicable and
-             v.validation != :error
-             running_times[v.short_header].push v.running_time
-          end
-        end
-      end
-     
       time_evaluation = ""
-      time_evaluation << "\nRunning Time:"
-      running_times = running_times.select{|k,v| v.length!=0}
-      running_times.each do |key, array|
-        average_time = array.inject{ |sum, el| sum + el }.to_f / array.size
+      running_times.each do |key, value|
+        average_time = value.x / (value.y + 0.0)
         time_evaluation << "\nAverage running time for #{key} Validation: #{average_time.round(3)}s per validation"
       end
 
-      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation, scores]
+      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
       overall_evaluation = overall_evaluation.select{|e| e!=""}
       return overall_evaluation
   end
