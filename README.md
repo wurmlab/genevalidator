@@ -42,7 +42,7 @@ Linux and MacOS are officially supported!
 
 ### Installation
 1. Get the source code<br>
-`$ git clone git@github.com:monicadragan/GeneValidator.git`
+`$ git clone git://github.com/monicadragan/GeneValidator.git`
 
 2. Be sudo and build the gem<br>
 `$ sudo rake`
@@ -55,6 +55,9 @@ Example that emphasizes all the validations:<br>
 
 Learn more:<br>
 `$ genevalidator -h`
+
+Uninstall GeneValidator: <br>
+`$ sudo gem uninstall GeneValidator `
 
 ### Outputs
 By running GeneValidator on your dataset you get numbers and plots. Some relevant files will be generated at the same path with the input file. The results are available in 3 formats:
