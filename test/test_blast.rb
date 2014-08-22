@@ -6,7 +6,7 @@ require 'genevalidator/validation'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
 
-class TestBlastClass < MiniTest::Unit::TestCase
+class TestBlastClass < Minitest::Test
 
   describe "Test Blast Class" do
 

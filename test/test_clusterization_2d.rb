@@ -4,7 +4,7 @@ require 'minitest'
 require 'minitest/autorun'
 require 'genevalidator/clusterization'
 
-class Test2DClusterization < MiniTest::Unit::TestCase
+class Test2DClusterization < Minitest::Test
 
   describe "2D clusterization" do
 

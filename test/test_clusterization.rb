@@ -4,7 +4,7 @@ require 'minitest'
 require 'minitest/autorun'
 require 'genevalidator/clusterization'
 
-class TestHierarchicalClusterization < MiniTest::Unit::TestCase
+class TestHierarchicalClusterization < Minitest::Test
 
   describe "Hierarchical clusterization" do
 

@@ -1,6 +1,6 @@
 require 'genevalidator/enumerable'
 
-class TestEnumerable < MiniTest::Unit::TestCase
+class TestEnumerable < Minitest::Test
 
   include Enumerable
 

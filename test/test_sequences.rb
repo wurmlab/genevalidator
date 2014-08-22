@@ -5,7 +5,7 @@ require 'minitest/autorun'
 require 'genevalidator/sequences'
 require 'genevalidator/hsp'
 
-class TestSequenceClass < MiniTest::Unit::TestCase
+class TestSequenceClass < Minitest::Test
 
   describe "Test Sequence Class" do
 

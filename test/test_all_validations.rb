@@ -14,7 +14,7 @@ require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
 
-class ValidateOutput < MiniTest::Unit::TestCase
+class ValidateOutput < Minitest::Test
 
   filename_prot = "data/all_validations_prot/all_validations_prot"
   filename_prot_fasta = "#{filename_prot}.fasta"

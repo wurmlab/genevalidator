@@ -8,7 +8,7 @@ require 'genevalidator/validation_test'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/sequences'
 
-class TestORFValidation < MiniTest::Unit::TestCase
+class TestORFValidation < Minitest::Test
 
   describe "ORF Validation" do
 

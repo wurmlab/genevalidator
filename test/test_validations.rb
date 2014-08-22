@@ -13,7 +13,7 @@ require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
 
-class ValidateOutput < MiniTest::Unit::TestCase
+class ValidateOutput < Minitest::Test
 
 
     filename = "test/test_files/test_validations"
