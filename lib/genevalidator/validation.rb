@@ -206,7 +206,7 @@ class Validation
     FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/css"), @html_path)
     FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/js"), @html_path)
     FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/img"), @html_path)
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/font"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/fonts"), @html_path)
     FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/doc"), @html_path)
 
   rescue SequenceTypeError => error
