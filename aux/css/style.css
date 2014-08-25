@@ -180,6 +180,11 @@ ___________________________*/
   color: #AAA;
 }
 
+.rating-container
+.rating-stars {
+	color: #EDA100;
+}
+
 .rating-xs {
   font-size: 1.25em;
 }
