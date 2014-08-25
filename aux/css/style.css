@@ -1,169 +1,146 @@
-/* table sorter */
 
-table.tablesorter thead th.header {
-background-image: url(../img/bg.gif);
-background-repeat: no-repeat;
-background-position: center right !important;
-    padding-right:20px !important;	
+/* MAIN STRUCTURE
+__________________________*/
+
+body {
+  text-align: center;
+  padding-top: 10px;
+  background-color: #EEE;
 }
 
-table.tablesorter thead th.headerSortUp {
-background-image: url(../img/asc.gif);
-    padding-right:20px !important;	
-}
-table.tablesorter thead th.headerSortDown {
-background-image: url(../img/desc.gif);
-    padding-right:20px !important;	
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none
 }
 
-table.tablesorter thead tr .nosort {
-background-image: none !important;
-cursor: default !important;
-pointer-events: none;
+.container {
+  width: 99%;
 }
 
-.table tbody td.success{
-  color: #000000 !important;
-  vertical-align: middle !important;
-  padding-left:30px !important;	
- 
-  background-repeat: no-repeat;
-  background-image: url(../img/yes-icon.png);
-  background-position: left center;
-  background-color: #dff0d8 !important;
-  /* white-space:nowrap; */
+/* MAIN HEADER
+___________________________*/
+
+.page-title { 
+  font-size: 40px;
+  margin: -65px auto;
+  padding-left:250px;
 }
 
-.table tbody td.danger{
-  color: #000000 !important;
-  vertical-align: middle !important;
-  padding-left:30px !important;	
- 
-  background-repeat: no-repeat;
-  background-image: url(../img/no-icon.png);
-  background-position: left center;
-  background-color: #f2dede !important; /*#FF6666; */
-  /* white-space:nowrap; */
+.subheading {
+  margin-top: -5px;
+  font-style: italic;
+  font-weight: bold;
 }
 
-.table tbody td.warning{
-  color: #000000 !important;
-  vertical-align: middle !important;
-  padding-left:30px !important;	
- 
-  background-repeat: no-repeat;
-  background-image: url(../img/w-icon.png);
-  background-position: left center;
-  background-color: #f2dede !important; /*#FF6666; */
-  /* white-space:nowrap; */
+.logo {
+  margin-top: -30px;
+}
+
+.menu_icon {
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+/* TABLE
+___________________________*/
+
+.table-responsive {
+  overflow-x: auto;
 }
 
 .table td {
   vertical-align: middle !important;
+  border-collapse: collapse;
+
 }
 
 .table th,
 .table thead td {
-  background-color: #E8E8E8 !important;
-  vertical-align: middle !important;
-  white-space: nowrap !important;
-  padding-right:20px !important;
+  background-color: #E8E8E8;
+  white-space: nowrap;
 }
 
-a:link {text-decoration: none !important;}      /* unvisited link */
-a:visited {text-decoration: none !important;}  /* visited link */
-a:hover {text-decoration: none !important;}  /* mouse over link */
-a:active {text-decoration: none !important;}  /* selected link */ 
-
-/*
-thead {
-background-color: #ffffff;
-position:fixed;
+tr {
+  height: 39px;
 }
 
-tbody{
-padding-top:150px;
-}*/
-
-.container {
-  width: 99% !important;
+tr.expand-child {
+  height:11px;
 }
 
-.background_image {
-  height: 100px;
-  background-image: url(../img/gene.png);
+/* table sorter ___________*/
+table.tablesorter thead th.header {
+  background-image: url(../img/bg.gif);
   background-repeat: no-repeat;
-  background-position: left;
-  background-size: 468px 112px;
-  padding-left: 160px;
-  padding-top: 50px;
-
+  background-position: center right;
+  padding-right:20px;
 }
 
-.my-btn-success {
-cursor: pointer !important;
-    border: outset;
-    border-color:#98bf21;
+table.tablesorter thead th.headerSortUp {
+  background-image: url(../img/asc.gif);
+  padding-right:20px;
 }
 
-.my-btn-danger {
-cursor: pointer !important;
-    border: outset;
-    border-color:#C00000;
+table.tablesorter thead th.headerSortDown {
+  background-image: url(../img/desc.gif);
+  padding-right:20px;
 }
 
-.header{
-  background-color: #E8E8E8 !important;
+table.tablesorter thead tr .nosort {
+  background-image: none;
+  pointer-events: none;
 }
 
-td.my-btn-success:hover {
-  background-color: #51a351 !important;
+/* table icons ___________*/
+
+.table tbody td.success,
+.table tbody td.danger,
+.table tbody td.warning {
+  /*padding required for the icon...*/
+  padding-left:30px !important; 
+  position:relative;
+  /* white-space:nowrap; */
 }
 
-td.my-btn-danger:hover {
-  background-color: #da4f49 !important;
+.table tbody td.success:before,
+.table tbody td.danger:before,
+.table tbody td.warning:before {
+  font-family: FontAwesome;
+  position: absolute;
+  margin-left:-25px;
+  font-size: 1.5em;
+  margin-top: -0.25em;
 }
 
-table {
-  cell-spacing: 1;
+.table tbody td.success:before {
+  content: "\f058";
+  color:#1AA882;
 }
 
-.table-striped tbody > tr:nth-child(4n+1) > td,
-.table-striped tbody > tr:nth-child(4n+2) > td{
-  background-color: #ffffff;
+.table tbody td.danger:before {
+  content: "\f057";
+  color:#FC585A;
 }
 
-.table-striped tbody > tr:nth-child(4n+3) > td,
-.table-striped tbody > tr:nth-child(4n) > td{
-  background-color: #f9f9f9;
+.table tbody td.warning:before{
+  content: "\f06a";
+  color:#FCB83F;
 }
 
-table .header-fixed {
-  position: fixed;
-  top: 0px;
-  /*left: 0;*/
-  /*right: 0;*/
-  z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
-  border-bottom: 1px solid #d5d5d5;
-  -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-          border-radius: 0;
-}
-thead {
-  background-color: #ffffff;
+/* Buttons
+___________________________*/
+
+td.my-btn-success  {
+  cursor: pointer !important;
+  border-bottom: 4px solid #98bf21 !important;
 }
 
-[id^="toggle"] {
-  text-align:center;
+td.danger.my-btn-danger {
+  cursor: pointer !important;
+  border-bottom: 4px solid #C48181 !important;
 }
 
-.popover {
-  text-align: justify !important;
-}
-
-
-/* axis and d3js */
-
+/* D3Js & Axis
+___________________________*/
 .axis path,
 .axis line {
   fill: none;
@@ -176,11 +153,6 @@ thead {
   opacity:0.7;
 }
 
-
-.btn {
-  padding: 4px 5px 2px 3px !important;
-}
-
 .line1 {
   fill: green;
   stroke: black;
@@ -188,76 +160,46 @@ thead {
   opacity:0.5;
 }
 
-/* extracted from awsome icons */
-
-@font-face {
-  font-family: 'FontAwesome';
-  src: url('../font/fontawesome-webfont.eot?v=3.2.1');
-  src: url('../font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../font/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-/* FONT AWESOME CORE
-* -------------------------- */
-[class="icon-bar-chart"],
-[class=" icon-bar-chart"] {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-  cursor: hand !important;
-}
-[class="icon-bar-chart"]:before,
-[class=" icon-bar-chart"]:before {
-  text-decoration: inherit;
-  display: inline-block;
-  speak: none;
+svg:not(:root) {
+  overflow: visible;
 }
 
-.icon-bar-chart:before {
-  content: "\f080";
+svg {
+  margin:30px;
+}
+.expanded-child{
+  display: block;
+  text-align: center;
 }
 
-[class="icon-github"],
-[class=" icon-github"] {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-}
-[class="icon-github"]:before,
-[class=" icon-github"]:before {
-  text-decoration: inherit;
-  display: inline-block;
-  speak: none;
-}
-
-.icon-github:before {
-  content: "\f09b";
-}
-
-[class="icon-info"],
-[class=" icon-info"] {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-}
-[class="icon-info"]:before,
-[class=" icon-info"]:before {
-  text-decoration: inherit;
-  display: inline-block;
-  speak: none;
-}
-
-.icon-info:before {
-  content: "\f05a";
-}
+/* Ratings...
+___________________________*/
 
 
+.rating-container {
+  color: #AAA;
+}
+
+.rating-xs {
+  font-size: 1.25em;
+}
+
+.rating-disabled {
+cursor: auto;
+}
+
+/* 
+___________________________*/
+
+[id^="toggle"] {
+  text-align:center;
+}
+
+.btn {
+  padding: 4px 5px 2px 3px;
+}
+
+.tooltip-inner {
+  white-space: pre-wrap;
+  min-width: 100px;
+}
