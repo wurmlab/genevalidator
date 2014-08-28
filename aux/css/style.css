@@ -20,8 +20,7 @@ a:link, a:visited, a:hover, a:active {
 ___________________________*/
 
 .page-title { 
-  font-size: 40px;
-  margin: -65px auto;
+   margin: -65px auto;
   padding-left:250px;
 }
 
@@ -33,11 +32,6 @@ ___________________________*/
 
 .logo {
   margin-top: -30px;
-}
-
-.menu_icon {
-  padding-left: 10px;
-  font-weight: bold;
 }
 
 /* TABLE
@@ -175,36 +169,51 @@ svg {
 /* Ratings...
 ___________________________*/
 
-
-.rating-container {
+.ratings {
+  position: relative;
+  vertical-align: middle;
+  display: inline-block;
   color: #AAA;
+  overflow: hidden;
 }
 
-.rating-container
-.rating-stars {
-	color: #EDA100;
+.full-stars{
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fde16d;
 }
 
-.rating-xs {
-  font-size: 1.25em;
-}
-
-.rating-disabled {
-cursor: auto;
+.empty-stars:before,
+.full-stars:before {
+  font-family: FontAwesome;
+  content: "\f005\f005\f005\f005\f005";
+  font-size: 14pt;
 }
 
 /* 
 ___________________________*/
 
-[id^="toggle"] {
-  text-align:center;
+.menu_icon {
+  padding-left: 10px;
+  font-weight: bold;
 }
 
-.btn {
+#plot_btn {
   padding: 4px 5px 2px 3px;
+}
+
+[id^="toggle"] {
+  text-align:center;
 }
 
 .tooltip-inner {
   white-space: pre-wrap;
   min-width: 100px;
+}
+
+#report {
+  text-align: left;
 }

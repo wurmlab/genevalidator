@@ -111,6 +111,8 @@ class Validation
     @no_internet = 0
     @map_errors = Hash.new(0)
     @map_running_times = Hash.new(Pair1.new(0,0))
+    @multithreading = multithreading
+    @overall_evaluation = overall_evaluation
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
@@ -177,9 +179,6 @@ class Validation
         end
 
         content = nil
-
-        @multithreading = multithreading
-        @overall_evaluation = overall_evaluation
 
       end
       rescue Exception => error

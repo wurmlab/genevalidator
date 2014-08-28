@@ -24,7 +24,7 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote", nr_hits=200)
+  def self.call_blast_from_stdin(command, query, gapopen, gapextend, db="sp", nr_hits=200)
     begin
       raise TypeError unless command.is_a? String and query.is_a? String
 
@@ -63,7 +63,7 @@ class BlastUtils
   # +db+: database
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
+  def self.call_blast_from_file(command, filename, gapopen, gapextend, db="sp")
     begin  
       raise TypeError unless command.is_a? String and filename.is_a? String
 

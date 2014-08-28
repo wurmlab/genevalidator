@@ -24,7 +24,7 @@ function show_all_plots(button){
     var expand_children = document.getElementsByClassName('expand-child');
     if(expand_children.length < 30){
         // show activity spinner
-        $('#spinner').modal({
+        $('#spinner1').modal({
             backdrop: 'static',
             keyboard: 'false'
           });
@@ -46,11 +46,11 @@ function show_all_plots(button){
             expand_child_div = expand_children[i].getElementsByTagName('div')[0];
             show_plot(buttons_dom[i], expand_child_div);
             // remove progress notification
-            $('#spinner').modal('hide');
+            $('#spinner1').modal('hide');
         }
     }
     else{
-        $('#alert').modal();
+        $('#§§').modal();
     }
 }
 
