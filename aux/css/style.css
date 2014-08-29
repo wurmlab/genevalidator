@@ -201,22 +201,6 @@ ___________________________*/
   -webkit-text-stroke: 1px orange;
 }
 
-/* Webkit-text- stroke doesn't work on firefox or IE
-    So alternative css below... */
-@-moz-document url-prefix() {
-  /* This targets Firefox only */
-  .full-stars{
-    color: #ECBE24;
-  }
-}
-
-<!--[if IE]>
-/*This will work for IE*/
-.full-stars{
-  color: #ECBE24;
-}
-<![endif]-->
-
 /* 
 ___________________________*/
 
@@ -241,3 +225,22 @@ ___________________________*/
 #report {
   text-align: left;
 }
+
+/* Browser Specific 
+___________________________*/
+
+/* Border on Stars ________*/
+/* Webkit-text-stroke not support on firefox or IE */
+/* Firefox */
+@-moz-document url-prefix() {
+  .full-stars{
+    color: #ECBE24;
+  }
+}
+/* IE */
+<!--[if IE]>
+/*This will work for IE*/
+.full-stars{
+  color: #ECBE24;
+}
+<![endif]-->
