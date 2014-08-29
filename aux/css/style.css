@@ -173,7 +173,7 @@ ___________________________*/
   position: relative;
   vertical-align: middle;
   display: inline-block;
-  color: #AAA;
+  color: #b1b1b1;
   overflow: hidden;
 }
 
@@ -192,6 +192,30 @@ ___________________________*/
   content: "\f005\f005\f005\f005\f005";
   font-size: 14pt;
 }
+
+.empty-stars:before {
+  -webkit-text-stroke: 1px #848484;
+}
+
+.full-stars:before {
+  -webkit-text-stroke: 1px orange;
+}
+
+/* Webkit-text- stroke doesn't work on firefox or IE
+    So alternative css below... */
+@-moz-document url-prefix() {
+  /* This targets Firefox only */
+  .full-stars{
+    color: #ECBE24;
+  }
+}
+
+<!--[if IE]>
+/*This will work for IE*/
+.full-stars{
+  color: #ECBE24;
+}
+<![endif]-->
 
 /* 
 ___________________________*/
