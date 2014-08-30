@@ -20,8 +20,8 @@ a:link, a:visited, a:hover, a:active {
 ___________________________*/
 
 .page-title { 
-   margin: -65px auto;
-  padding-left:250px;
+  margin: -65px auto;
+  padding-left: 250px;
 }
 
 .subheading {
@@ -44,7 +44,6 @@ ___________________________*/
 .table td {
   vertical-align: middle !important;
   border-collapse: collapse;
-
 }
 
 .table th,
@@ -92,7 +91,6 @@ table.tablesorter thead tr .nosort {
   /*padding required for the icon...*/
   padding-left:30px !important; 
   position:relative;
-  /* white-space:nowrap; */
 }
 
 .table tbody td.success:before,
@@ -107,17 +105,17 @@ table.tablesorter thead tr .nosort {
 
 .table tbody td.success:before {
   content: "\f058";
-  color:#1AA882;
+  color: #1AA882;
 }
 
 .table tbody td.danger:before {
   content: "\f057";
-  color:#FC585A;
+  color: #FC585A;
 }
 
 .table tbody td.warning:before{
   content: "\f06a";
-  color:#FCB83F;
+  color: #FCB83F;
 }
 
 /* Buttons
@@ -213,7 +211,7 @@ ___________________________*/
   padding: 4px 5px 2px 3px;
 }
 
-[id^="toggle"] {
+#toggle {
   text-align:center;
 }
 
@@ -230,7 +228,7 @@ ___________________________*/
 ___________________________*/
 
 /* Border on Stars ________*/
-/* Webkit-text-stroke not support on firefox or IE */
+/* Webkit-text-stroke is not supported on firefox or IE */
 /* Firefox */
 @-moz-document url-prefix() {
   .full-stars{
@@ -239,8 +237,7 @@ ___________________________*/
 }
 /* IE */
 <!--[if IE]>
-/*This will work for IE*/
-.full-stars{
-  color: #ECBE24;
-}
+  .full-stars{
+    color: #ECBE24;
+  }
 <![endif]-->
