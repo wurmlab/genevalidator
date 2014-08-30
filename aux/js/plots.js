@@ -50,7 +50,7 @@ function show_all_plots(button){
         }
     }
     else{
-        $('#§§').modal();
+        $('#alert').modal();
     }
 }
 
