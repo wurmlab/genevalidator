@@ -45,9 +45,9 @@ function show_all_plots(button){
         for (var i = 0; i < buttons_dom.length; i++) {
             expand_child_div = expand_children[i].getElementsByTagName('div')[0];
             show_plot(buttons_dom[i], expand_child_div);
-            // remove progress notification
-            $('#spinner1').modal('hide');
         }
+        // remove progress notification
+        $('#spinner1').modal('hide');
     }
     else{
         $('#alert').modal();
