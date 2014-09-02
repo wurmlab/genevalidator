@@ -41,8 +41,16 @@ function show_all_plots(button){
 		// remove all plots
 		remove_all_plots();
 
+		var j = 0;
 		for (var i = 0; i < buttons_dom.length; i++) {
-			expand_child_div = expand_children[i].getElementsByTagName('div')[0];
+			
+			// match button with extend_child
+			alert(expand_children[j].id)
+			alert(buttons_dom[i].id)
+			while(expand_children[j].id == buttons_dom[i].id){
+				j++;
+			}
+			expand_child_div = expand_children[j].getElementsByTagName('div')[0];
 			show_plot(buttons_dom[i], expand_child_div);
 		}
 	}
@@ -505,9 +513,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 		  .style("fill", function(d) { return color_beautification("red"); })
 		  .style("opacity",0.6);
 
-	   alert(slope);
-
-           if(slope!=undefined && yLine!=undefined){
+           if((slope!=undefined && slope != "") && (yLine!=undefined && yLine != "")){
 
                 yLine = parseFloat(yLine.replace(",", "."));
                 var xMaxValue = xMax

@@ -101,9 +101,14 @@ class TabularParser
   def next(identifier = nil)
     begin
       # get current query id
-      # search for the endline
+      # search for the endline      
 
-      entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
+      begin
+        entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
+      rescue StopIteration => error
+        return []
+      end
+      
       unless entry.length == @column_names.length
         raise InconsistentTabularFormat
       end
@@ -115,14 +120,18 @@ class TabularParser
  
       hits = []
 
-      while 1
-        entry = CSV.parse(@lines.peek, :col_sep => "\t")[0] 
-        unless query_id == entry[query_id_idx]
-          return make_hit_list(hits)
-        end
+      begin
+        while 1
+          entry = CSV.parse(@lines.peek, :col_sep => "\t")[0] 
+          unless query_id == entry[query_id_idx]
+            return make_hit_list(hits)
+          end
 
-        hits << entry
-        @lines.next
+          hits << entry
+          @lines.next
+        end
+      rescue StopIteration => error
+        return make_hit_list(hits)
       end
 
       return make_hit_list(this)
@@ -133,8 +142,6 @@ class TabularParser
         "Possible cause: The tabular file and the tabular header do not correspond. "<<
         "Please provide -tabular argument with the correct format of the columns\n"
       exit!
-    rescue StopIteration => error
-      return make_hit_list(hits)
     rescue Exception => error
       $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit

@@ -5,7 +5,6 @@
   <td title="Identifier"><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
   <td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
-
   <% @validations.each do |item| %>
     <% if item.plot_files != nil %>
         <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
@@ -42,12 +41,11 @@
           <% end %>
         <% end %>
       <% end %>"><i class="fa fa-bar-chart-o"></i></button>
-    <% end %>
   </td>
-
 </tr>
 <tr class="expand-child">
   <td colspan="<%=validations.length + 7%>">
     <div id="<%=toggle%>" class="expanded-child"></div>
+  <% end %>
   </td>
 </tr>

@@ -29,8 +29,7 @@ class BlastRFValidationOutput < ValidationReport
   end
 
   def validation
-    # if there are different reading frames of the same sign
-    # count for positive reading frames
+    # chack if there are different reading frames 
     count_p = 0
     count_n = 0
     frames_histo.each do |x, y|

@@ -10,7 +10,7 @@ options = {}
 opt_parser = OptionParser.new do |opt|
   opt.separator  ""
   opt.banner = "USE:"
-  opt.separator  "\t $ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FILE"
+  opt.separator  "\t $ genevalidator [validations] [skip_blast] [db] [tabular]  [mafft] [raw_seq] FILE"
   opt.separator  ""
   opt.separator  "ARGUMENTS:"
   opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
@@ -38,6 +38,12 @@ opt_parser = OptionParser.new do |opt|
     options[:skip_blast] = skip
   end
   opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6 or 7) outputs"
+
+  opt.on("-d", "--db [BLAST_DATABASE]","base where to look up the sequences") do |db|
+    options[:db] = db
+  end
+  opt.separator  "\tExample: 'nr -remote' or a local BLAST database "
+
 
   # default blast tabular columns
   opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
@@ -76,6 +82,10 @@ begin
     options[:skip_blast] = nil
   end
 
+  if options[:skip_blast] != nil and options[:db] != nil
+    $stderr.puts "skip_blast and db arguments cannot be both set in the same run. Please specify only skip_blast argument if you have already precomputed the BLAST output."
+  end
+
   if ARGV.length == 0
     puts opt_parser
     exit
@@ -108,6 +118,6 @@ end
 
   start = Time.now
 
-  b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:raw], options[:mafft], options[:start])
+  b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:db], options[:raw], options[:mafft], options[:start])
   b.validation
   puts "Total running time: #{(Time.now - start).round(3)}s\n"

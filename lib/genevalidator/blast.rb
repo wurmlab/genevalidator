@@ -24,11 +24,14 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(command, query, gapopen, gapextend, db="nr -remote", nr_hits=200)
+  def self.call_blast_from_stdin(command, query, gapopen=11, gapextend=1, db="swissprot -remote", nr_hits=200)
     begin
       raise TypeError unless command.is_a? String and query.is_a? String
 
       evalue = "1e-5"
+      if db == nil
+        db="swissprot -remote"
+      end
 
       #output format = 5 (XML Blast output)
       blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
@@ -43,11 +46,11 @@ class BlastUtils
 
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
+        "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
       exit!
     rescue ClasspathError => error
       $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: BLAST installation path is not in the LOAD PATH.\n" 
+        "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n" 
       exit! 
     end
   end
