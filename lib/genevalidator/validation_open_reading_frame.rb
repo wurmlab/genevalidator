@@ -31,7 +31,7 @@ class ORFValidationOutput < ValidationReport
     orf_list = ""
     @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
 
-    "#{validation.to_s} (%=#{@ratio.round(2)*100})"
+    "#{validation.to_s} (%=#{(@ratio*100).round})"
   end
 
   def validation
@@ -296,7 +296,7 @@ class OpenReadingFrameValidation < ValidationTest
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                     :lines,
-                    "Open reading frame with START codon",
+                    "Open reading frame with STOP codon",
                     "",
                     "offset in the prediction",
                     "Reading Frame",
