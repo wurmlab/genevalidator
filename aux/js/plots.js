@@ -40,9 +40,9 @@ function show_all_plots(button){
         //display plots in the dom
         var buttons_dom = document.querySelectorAll('button')
         // remove all plots
-        remove_all_plots();
+        remove_all_plots(expand_children);
 
-        for (var i = 0; i < buttons_dom.length; i++) {
+        for (var i = 0; i < expand_children.length; i++) {
             expand_child_div = expand_children[i].getElementsByTagName('div')[0];
             show_plot(buttons_dom[i], expand_child_div);
         }
@@ -60,16 +60,23 @@ function show_plot(pressedButton, expand_child_div){
         eval(pressedButton.onclick.toString().replace("function onclick(event) {","").replace("}",""));
         pressedButton.status="pressed";
         expand_child_div.style.display = "block";
+        $(expand_child_div).parent().parent().show()
     }
 }
 
-function remove_all_plots(){
+function remove_all_plots(expand_children){
     var extensions = document.querySelectorAll('div')
     for (var i = 0; i < extensions.length; i++) {
         if(extensions[i].id.search(/toggle*/) == 0){
             d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
         }
     }
+    
+    for (var i = 0; i < expand_children.length; i++) {
+      expand_child_div = expand_children[i].getElementsByTagName('div')[0];
+      $(expand_child_div).parent().parent().hide()
+    } 
+    
     var buttons = document.getElementsByTagName('button');
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].status = "released"; 
@@ -82,7 +89,7 @@ function hide_all_plots(button){
     button.onclick = function() { 
             show_all_plots(button) 
         };
-    remove_all_plots();
+    remove_all_plots(expand_children);
 }
 
 function getElementByAttributeValue(attribute, value) {
@@ -99,10 +106,12 @@ function showDiv(source, target){
     var button = document.getElementById(target)
     if(source.status == "pressed"){
         button.style.display = "none";
+        $(button).parent().parent().hide();
     }
     else {
         d3.select("#".concat(target)).selectAll("svg").remove();    
         button.style.display = "block";
+        $(button).parent().parent().show()
         var pressedButtons = document.querySelectorAll('td')
         for (var i = 0; i < pressedButtons.length; i++) {
             if(pressedButtons[i].status == "pressed") {

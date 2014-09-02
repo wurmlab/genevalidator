@@ -41,11 +41,13 @@
           <% end %>
         <% end %>
       <% end %>"><i class="fa fa-bar-chart-o"></i></button>
+    <% end %>
   </td>
 </tr>
-<tr class="expand-child">
+<tr class="expand-child" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
-    <div id="<%=toggle%>" class="expanded-child"></div>
-  <% end %>
+    <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
+      <div id="<%=toggle%>" class="expanded-child"></div>
+    <% end  %>
   </td>
 </tr>
