@@ -44,6 +44,7 @@ ___________________________*/
 .table td {
   vertical-align: middle !important;
   border-collapse: collapse;
+  background-clip: padding-box;
 }
 
 .table th,
@@ -60,7 +61,14 @@ tr.expand-child {
   height:11px;
 }
 
+/* table striped backgrounds ___________*/
+
+tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
+  background-color: #fff;
+}
+
 /* table sorter ___________*/
+
 table.tablesorter thead th.header {
   background-image: url(../img/bg.gif);
   background-repeat: no-repeat;
@@ -205,10 +213,6 @@ ___________________________*/
 .menu_icon {
   padding-left: 10px;
   font-weight: bold;
-}
-
-#plot_btn {
-  padding: 4px 5px 2px 3px;
 }
 
 #toggle {

@@ -30,10 +30,10 @@
 
   <% end %>
 
-  <td>
-    <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
-      
-      <button title="Show plots" id="plot_btn" class="btn btn-default" onclick="showDiv(this, '<%= toggle %>');
+<% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
+
+  <td>      
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, '<%= toggle %>');
       <% @validations.each do |item| %>
         <% if item.plot_files != nil %> 
           <% item.plot_files.each do |plot| %> 
@@ -41,13 +41,20 @@
           <% end %>
         <% end %>
       <% end %>"><i class="fa fa-bar-chart-o"></i></button>
-    <% end %>
   </td>
 </tr>
+<tr class="expand-child" name="plot_row" style="display:none;">
+  <td colspan="<%=validations.length + 7%>">
+      <div id="<%=toggle%>" class="expanded-child"></div>
+  </td>
+</tr>
+
+<% else %>
+
+<td></td>
 <tr class="expand-child" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
-    <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
-      <div id="<%=toggle%>" class="expanded-child"></div>
-    <% end  %>
+      <div></div>
   </td>
 </tr>
+<% end %>
