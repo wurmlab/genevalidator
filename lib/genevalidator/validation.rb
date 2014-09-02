@@ -69,13 +69,16 @@ class Validation
   # +vlist+: list of validations
   # +tabular_format+: list of column names for parsing the tablar blast output
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
+  # +db+: comparition BLAST database (in case xml_file is not specified)
   # +mafft_path+: path of the MAFFT program installation
   # +start_idx+: number of the sequence from the file to start with
   # +overall_evaluation+: boolean variable for printing / not printing overall evaluation
+  # +multithreading+: boolean variable for enabling multithreading
   def initialize( fasta_filepath,
                   vlist = ["all"],
                   tabular_format = nil,
                   xml_file = nil,
+                  db = nil,
                   raw_seq_file = nil,
                   mafft_path = nil,
                   start_idx = 1,
@@ -84,7 +87,6 @@ class Validation
 
     puts "\nDepending on your input and your computational "<<
            "resources, this may take a while. Please wait..."
-
 
     # start a worker thread
     @threads = []
@@ -96,6 +98,7 @@ class Validation
     @fasta_filepath = fasta_filepath
    
     @xml_file = xml_file
+    @db = db
     @vlist = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
 
     @idx = 0
@@ -178,10 +181,11 @@ class Validation
 
         content = nil
 
-        @multithreading = multithreading
-        @overall_evaluation = overall_evaluation
-
       end
+
+      @multithreading = multithreading
+      @overall_evaluation = overall_evaluation
+
       rescue Exception => error
         $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
           "Possible cause: your file with raw sequences is not FASTA. Please use get_raw_sequences executable to create a correct one.\n"
@@ -230,9 +234,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1, @db)
             else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1, @db)
             end
 
             #parse output
@@ -528,7 +532,7 @@ class Validation
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
     validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
-    validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, ["ATG"])
+    validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
     validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 

@@ -147,7 +147,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits[0].hsp_list.length, 3
       assert_equal hits[0].hsp_list[2].hit_to, 100
       end
-=begin
+
     it "should remove identical matches among protein sequences" do
       filename_prot = "test/test_files/output.tab.6"
       output = File.open(filename_prot, "rb").read
@@ -231,7 +231,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
     end
-=end
+
     it "should return error when using a nonexisting input file" do
       original_stderr = $stderr
       $stderr.reopen("/dev/null", "w")
