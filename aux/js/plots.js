@@ -21,7 +21,7 @@ window.onscroll = function (event) {
 
 function show_all_plots(button){
 
-    var expand_children = document.getElementsByClassName('expand-child');
+    var expand_children = document.getElementsByName('plot_row');
     if(expand_children.length < 30){
         // show activity spinner
         $('#spinner1').modal({
@@ -33,12 +33,12 @@ function show_all_plots(button){
             button.status = "pressed";
             button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Hide All Charts'
             button.onclick = function() {
-                hide_all_plots(button)
+                hide_all_plots(button, expand_children)
             };
         }
 
         //display plots in the dom
-        var buttons_dom = document.querySelectorAll('button')
+        var buttons_dom = document.getElementsByName('plot_btn')
         // remove all plots
         remove_all_plots(expand_children);
 
@@ -59,8 +59,8 @@ function show_plot(pressedButton, expand_child_div){
     if(pressedButton.status != "pressed"){
         eval(pressedButton.onclick.toString().replace("function onclick(event) {","").replace("}",""));
         pressedButton.status="pressed";
-        expand_child_div.style.display = "block";
         $(expand_child_div).parent().parent().show()
+        expand_child_div.style.display = "block";
     }
 }
 
@@ -83,7 +83,7 @@ function remove_all_plots(expand_children){
     }
 }
 
-function hide_all_plots(button){
+function hide_all_plots(button, expand_children){
     button.status = "released";
     button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts'
     button.onclick = function() { 
