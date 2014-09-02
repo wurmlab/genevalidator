@@ -38,6 +38,7 @@ class ValidateOutput < Minitest::Test
 
   validations = ["lenc", "lenr", "dup", "orf", "align"]
 
+=begin
   describe "Protein dataset" do  
     it "xml and tabular inputs give the same output" do
       #puts "Validating all_validations_prot dataset..."
@@ -122,5 +123,5 @@ class ValidateOutput < Minitest::Test
       assert_equal diff, true
     end
   end
-
+=end
 end
