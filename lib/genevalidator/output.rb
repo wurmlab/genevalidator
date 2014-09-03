@@ -120,7 +120,7 @@ class Output
     if @idx == @start_idx
       @mutex_html.synchronize {
         template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.htm.erb"), 'r').read
-        erb = ERB.new(template_file)
+        erb = ERB.new(template_file, 0, '>')
         File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }      
       }
     end
@@ -129,7 +129,7 @@ class Output
 
     @mutex_yaml.synchronize {
       template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.htm.erb"), 'r').read
-      erb = ERB.new(template_file)
+      erb = ERB.new(template_file , 0, '>')
       File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
     }
 
@@ -178,7 +178,7 @@ class Output
     evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
     index_file = "#{html_path}/index.html"
     template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.htm.erb"), 'r').read
-    erb = ERB.new(template_file)
+    erb = ERB.new(template_file, 0, '>')
     File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
 
   end
