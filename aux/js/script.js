@@ -1,7 +1,30 @@
 //sort table
-$(function() {
-  $("#sortable_table").tablesorter();
+$(function(){
+
+  // add custom parser to make the stars column to sort according to attr.
+  $.tablesorter.addParser({
+    id: 'star_scores', // called later when init the tablesorter
+    is: function(s) {
+      return false; // return false so this parser is not auto detected
+    },
+    format: function(s, table, cell, cellIndex) {
+      var $cell = $(cell);
+      if (cellIndex === 2) {
+        return $cell.attr('data-score') || s;
+      } 
+      return s;
+    },
+    parsed: false,
+    type: 'numeric' // Setting type of data...
+  });
+
+  $('table').tablesorter({
+    headers: {
+      2 : { sorter: 'star_scores' } // Telling it to use custom parser...
+    },
+  });
 });
+
 
 //ToolTip
 $(function () { 
