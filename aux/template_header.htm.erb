@@ -6,13 +6,10 @@
 
   <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/jquery.tablesorter.mod.js"></script>
-  <script type="text/javascript" src="js/table-fixed-header.js"></script>
+  <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
   <script type="text/javascript" src="js/d3.v3.min.js"></script>
-  <script type="text/javascript" src="js/jquery.masonry.min.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript" src="js/plots.js"></script>
-  <script type="text/javascript" src="js/jquery.viewport.mini.js"></script>
 
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -39,25 +36,25 @@
       <table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
         <thead>
           <tr id="header">
-            <th class="header">#</th>
-            <th class="header">Score</th>
-            <th class="header">Ranking</th>
-            <th class="header">Identifier
+            <th>#</th>
+            <th>Score</th>
+            <th>Ranking</th>
+            <th>Identifier
               <span data-toggle="tooltip" title="Query identifier as it apears in the input fasta file." data-placement="bottom"><i class="fa fa-question-circle"></i></span>
             </th>
-            <th class="header">Description
+            <th>Description
               <span data-toggle="tooltip" title="Description of the query as it apears in the input fasta file." data-placement="bottom"><i class="fa fa-question-circle"></i></span>
             </th>
-            <th class="header">No. Hits
+            <th>No. Hits
               <span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="bottom"><i class="fa fa-question-circle"></i></span>
             </th> 
             <% @validations.each do |item| %>
-            <th>
+            <th class="sorter-false">
               <b><%= item.header %></b>
               <span data-toggle="tooltip" title="<%=item.description%>" data-placement="bottom"><i class="fa fa-question-circle"></i></span>
             </th>
             <% end %>
-            <td></td>
+            <th class="sorter-false"></th>
           </tr>
         </thead>
 

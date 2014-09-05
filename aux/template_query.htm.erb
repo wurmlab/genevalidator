@@ -1,11 +1,7 @@
 <tr>
   <td><%= @idx %></td>
   <td class="<%=bg_icon%>"> <%= overall_score %>% </td>
-  <% if overall_score.to_i == 100 %>
-  <td><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:99.99999%;"></div></div></td>
-  <% else %>
-  <td><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:<%= overall_score %>%;"></div></div></td>
-  <% end %>
+  <td data-text="<%= overall_score %>"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:<%= overall_score %>%;"></div></div></td>
   <td title="Identifier"><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
   <td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
@@ -42,7 +38,7 @@ addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.t
       <% end %>"><i class="fa fa-bar-chart-o"></i></button>
   </td>
 </tr>
-<tr class="expand-child" name="plot_row" style="display:none;">
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
       <div id="<%=toggle%>" class="expanded-child"></div>
   </td>
@@ -51,7 +47,7 @@ addPlot('<%= toggle %>', '<%= plot.filename %>', '<%= plot.type %>', '<%= plot.t
 <% else %>
 
 <td></td>
-<tr class="expand-child" style="display:none;">
+<tr class="tablesorter-childRow" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
       <div></div>
   </td>

@@ -1,6 +1,6 @@
 //sort table
-$(document).ready(function() { 
-  $("#sortable_table").tablesorter( {cssHeader: "header", sortList: [[0,0]]} ); 
+$(function() {
+  $("#sortable_table").tablesorter();
 });
 
 //ToolTip
