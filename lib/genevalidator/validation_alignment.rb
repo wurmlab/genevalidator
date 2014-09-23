@@ -67,13 +67,14 @@ class AlignmentValidation < ValidationTest
   # +raw_seq_file+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +raw_seq_file_load+: String - loaded content of the index file
-  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
+  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
     super
     @filename = filename
     @mafft_path = mafft_path
     @raw_seq_file = raw_seq_file
     @index_file_name = index_file_name
     @raw_seq_file_load = raw_seq_file_load
+    @db = db
 
     @short_header = "MA"
     @header = "Missing/Extra sequences"
@@ -114,9 +115,9 @@ class AlignmentValidation < ValidationTest
 
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein", @db)
             else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide", @db)
             end
           end
 

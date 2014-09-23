@@ -65,37 +65,43 @@ class Sequence
   # +db+: database as String
   # Output:
   # String with the nucleotide sequence corresponding to the accno
-  def get_sequence_by_accession_no(accno, db)
+  def get_sequence_by_accession_no(accno, dbtype, db)
     begin
+      if (db != /-remote$/)
+        blast_cmd     = "blastdbcmd -target_only -entry #{accno} -db #{db} -outfmt %f"
+        seq           = %x[#{blast_cmd}  2>&1]
+        @raw_sequence = seq.gsub!(/\n/,'')
+      else
+        #puts "Tries to connect to the internet for #{accno}"
+        puts 'bad'
+        uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{dbtype}"<<
+           "&retmax=1&usehistory=y&term=#{accno}/"
+        result = Net::HTTP.get(URI.parse(uri))
 
-      #puts "Tries to connect to the internet for #{accno}"
+        result2  = result
+        queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+        webEnv   = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
 
-      uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{db}"<<
-         "&retmax=1&usehistory=y&term=#{accno}/"
-      result = Net::HTTP.get(URI.parse(uri))
+        uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
+           "retmode=text&retstart=0&retmax=1&db=#{dbtype}&query_key=#{queryKey}&WebEnv=#{webEnv}"
+        result = Net::HTTP.get(URI.parse(uri))
 
-      result2 = result
-      queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-      webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
-
-      uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
-         "retmode=text&retstart=0&retmax=1&db=#{db}&query_key=#{queryKey}&WebEnv=#{webEnv}"
-      result = Net::HTTP.get(URI.parse(uri))
-
-      #parse FASTA output
-      rec=result
-      nl = rec.index("\n")
-      header = rec[0..nl-1]
-      seq = rec[nl+1..-1]
-      @raw_sequence = seq.gsub!(/\n/,'')
-      unless  @raw_sequence.index(/ERROR/) == nil
-        @raw_sequence = ""
+        #parse FASTA output
+        rec           = result
+        nl            = rec.index("\n")
+        header        = rec[0..nl-1]
+        seq           = rec[nl+1..-1]
+        @raw_sequence = seq.gsub!(/\n/,'')
+        unless  @raw_sequence.index(/ERROR/) == nil
+          @raw_sequence = ""
+        end
       end
       @raw_sequence
     rescue Exception => error
 #      @raw_sequence = ""
     end
   end
+
 
   ##
   # Initializes the corresponding attribute of the sequence

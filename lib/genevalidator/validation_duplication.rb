@@ -55,12 +55,13 @@ class DuplicationValidation < ValidationTest
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
  
-  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load)
+  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
     super
     @mafft_path      = mafft_path
     @raw_seq_file    = raw_seq_file
     @index_file_name = index_file_name
     @raw_seq_file_load = raw_seq_file_load
+    @db = db
 
     @short_header    = "Duplication"
     @header          = "Duplication"
@@ -109,9 +110,9 @@ class DuplicationValidation < ValidationTest
   
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein")
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein", @db)
             else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide")
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide", @db)
             end
           end
 
