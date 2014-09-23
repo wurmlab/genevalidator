@@ -207,11 +207,7 @@ class Validation
     Dir.mkdir(@html_path)
 
     # copy auxiliar folders to the html folder
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/css"), @html_path)
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/js"), @html_path)
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/img"), @html_path)
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/fonts"), @html_path)
-    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/doc"), @html_path)
+    FileUtils.cp_r(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/files"), @html_path)
 
   rescue SequenceTypeError => error
     $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<

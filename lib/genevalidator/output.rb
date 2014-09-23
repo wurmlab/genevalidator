@@ -110,7 +110,7 @@ class Output
       bg_icon = "danger"
     end
 
-    index_file = "#{@html_path}/index.html"
+    index_file = "#{@html_path}/results.html"
 
     # if it's the first time I write in the html file
     if @idx == @start_idx
@@ -122,7 +122,7 @@ class Output
         #  Creating a Separate output file with just the table in it (for the web app)
         table_template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_table_header.erb"), 'r').read
         erb_table = ERB.new(table_template_file , 0, '>')
-        File.open("#{@html_path}/table.html", 'w+') { |file| file.write(erb_table.result(binding)) }
+        File.open("#{@html_path}/files/table.html", 'w+') { |file| file.write(erb_table.result(binding)) }
       }
     end
 
@@ -132,7 +132,7 @@ class Output
       template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.erb"), 'r').read
       erb = ERB.new(template_file , 0, '>')
       File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
-      File.open("#{@html_path}/table.html", 'a') { |file| file.write(erb.result(binding)) }
+      File.open("#{@html_path}/files/table.html", 'a') { |file| file.write(erb.result(binding)) }
     }
 
   end
@@ -159,7 +159,6 @@ class Output
     puts ""
 
     # print to html
-
     # make the historgram with the resulted scores
     statistics_filename = "#{html_path}/#{filename}_statistics.json"
     f = File.open(statistics_filename, "w")
@@ -168,7 +167,7 @@ class Output
       [scores.group_by{|a| a}.map { |k, vs| {"key"=>k, "value"=>vs.length, "main"=>false}}].to_json)
     f.close
 
-    plot_statistics = Plot.new("#{filename}_statistics.json",
+    plot_statistics = Plot.new("files/json/#{filename}_statistics.json",
               :simplebars,
               "Overall evaluation",
               "",
@@ -177,17 +176,18 @@ class Output
               10)
 
     evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
-    index_file = "#{html_path}/index.html"
+    index_file = "#{html_path}/results.html"
     template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.erb"), 'r').read
     erb = ERB.new(template_file, 0, '>')
     File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
 
-    table_file = "#{html_path}/table.html"
+    table_file = "#{html_path}/files/table.html"
     table_footer_template = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer_table.erb"), 'r').read
     table_erb = ERB.new(table_footer_template, 0, '>')
     File.open(table_file, 'a+') { |file| file.write(table_erb.result(binding)) }
 
-
+    FileUtils.mkdir("#{html_path}/files/json/")
+    FileUtils.mv Dir.glob("#{html_path}/#{filename}_*.json"), "#{html_path}/files/json/"
 
   end
 
@@ -202,11 +202,11 @@ class Output
   def self.overall_evaluation(no_queries, good_scores, bad_scores, no_evidence, no_mafft, no_internet, map_errors, running_times, filename)
       score_evaluation = ""
       score_evaluation << "Query score evaluation for #{filename}:"
-      
+
       # count the cases of "not enough evidence"
       #no_evidence = all_query_outputs.count{|report|
       #  report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
-      #}  
+      #}
 
       # print at the console
       #scores = all_query_outputs.map{|query| query.score}
@@ -233,7 +233,7 @@ class Output
       error_evaluation = ""
       map_errors.each{|k,v| error_evaluation <<  "\nWe couldn't run #{k} Validation for #{v} queries"}
 
-      if no_mafft >=  (no_queries - no_evidence) 
+      if no_mafft >=  (no_queries - no_evidence)
         error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
       end
       if no_internet >=  (no_queries - no_evidence)
