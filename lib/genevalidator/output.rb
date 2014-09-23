@@ -145,7 +145,6 @@ class Output
   # +filemane+: name of the fasta input file
   #def self.print_footer(all_query_outputs, html_path, filename)
   def self.print_footer(no_queries, scores, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, html_path, filename)
-    puts 'ho'
     # compute the statistics
     #overall_evaluation = overall_evaluation(all_query_outputs, filename)
     overall_evaluation = overall_evaluation(no_queries, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, filename)

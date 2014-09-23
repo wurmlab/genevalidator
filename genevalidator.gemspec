@@ -31,7 +31,7 @@ DESC
   s.add_dependency('minitest', "~> 5.3")
   s.add_dependency('shoulda', "~> 3.5")
   s.add_dependency('mini_shoulda', "~> 0.5")
-  s.add_dependency('rack', "~> 1.5.2")
+  s.add_dependency('rack', "~> 1.5")
 # >>>>>>> upstream/alpha
 
   s.files       = Dir["test/**/*"] + Dir["aux/**/*"] + Dir['lib/**/*']
