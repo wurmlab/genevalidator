@@ -58,6 +58,11 @@ tr {
   height: 39px;
 }
 
+.expanded-child{
+  display: block;
+  text-align: center;
+}
+
 /* table striped backgrounds ___________*/
 
 tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
@@ -177,10 +182,6 @@ svg:not(:root) {
 
 svg {
   margin:30px;
-}
-.expanded-child{
-  display: block;
-  text-align: center;
 }
 
 /* Ratings...
