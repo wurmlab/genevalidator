@@ -71,7 +71,7 @@ opt_parser = OptionParser.new do |opt|
 
   opt.on("--version", "The version of GeneValidator that you are running.") do
       gemspec_file = File.join(File.dirname(__FILE__), '..', 'genevalidator.gemspec')
-      gemspec = eval File.read gemspec_file
+      gemspec = eval File.read(gemspec_file)
       puts gemspec.version
       exit
   end
