@@ -9,7 +9,7 @@ $(function(){
     },
     format: function(s, table, cell, cellIndex) {
       var $cell = $(cell);
-      if (cellIndex === 2) {
+      if (cellIndex === 1) {
         return $cell.attr('data-score') || s;
       } 
       return s;
@@ -20,7 +20,7 @@ $(function(){
 
   $('table').tablesorter({
     headers: {
-      2 : { sorter: 'star_scores' } // Telling it to use custom parser...
+      1 : { sorter: 'star_scores' } // Telling it to use custom parser...
     },
   });
 });
