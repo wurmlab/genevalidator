@@ -18,7 +18,7 @@ a:link, a:visited, a:hover, a:active {
 /* MAIN HEADER
 ___________________________*/
 
-.page-title { 
+.page-title {
   margin: -65px auto;
   padding-left: 250px;
 }
@@ -218,7 +218,7 @@ ___________________________*/
   -webkit-text-stroke: 1px orange;
 }
 
-/* 
+/*
 ___________________________*/
 
 .menu_icon {
@@ -239,7 +239,12 @@ ___________________________*/
   text-align: left;
 }
 
-/* Browser Specific 
+.tooltip > .tooltip-inner {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Browser Specific
 ___________________________*/
 
 /* Border on Stars ________*/
