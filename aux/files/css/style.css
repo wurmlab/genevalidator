@@ -218,6 +218,24 @@ ___________________________*/
   -webkit-text-stroke: 1px orange;
 }
 
+/* Tooltips 
+___________________________*/
+
+.tooltip > .tooltip-inner {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #CCCCCC;
+}
+
+.tooltip.top > .tooltip-arrow{
+  top:0;
+  left:50%;
+  margin-left:-5px;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-bottom:5px solid #CCC;
+}
+
 /*
 ___________________________*/
 
@@ -237,11 +255,6 @@ ___________________________*/
 
 #report {
   text-align: left;
-}
-
-.tooltip > .tooltip-inner {
-  background-color: #fff;
-  color: #000;
 }
 
 /* Browser Specific
