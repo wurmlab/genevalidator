@@ -120,7 +120,7 @@ class Output
         File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }
 
         #  Creating a Separate output file with just the table in it (for the web app)
-        table_template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_table_header.erb"), 'r').read
+        table_template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/app_template_header.erb"), 'r').read
         erb_table = ERB.new(table_template_file , 0, '>')
         File.open("#{@html_path}/files/table.html", 'w+') { |file| file.write(erb_table.result(binding)) }
       }
@@ -182,7 +182,7 @@ class Output
     File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
 
     table_file = "#{html_path}/files/table.html"
-    table_footer_template = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer_table.erb"), 'r').read
+    table_footer_template = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/app_template_footer.erb"), 'r').read
     table_erb = ERB.new(table_footer_template, 0, '>')
     File.open(table_file, 'a+') { |file| file.write(table_erb.result(binding)) }
 
