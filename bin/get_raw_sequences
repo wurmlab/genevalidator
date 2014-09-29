@@ -192,7 +192,7 @@ begin
     end
   end while 1
 rescue StopIteration => error
-  exit!
+  exit
 rescue Exception => error
   begin
     format = options[:tabular]
