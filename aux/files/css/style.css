@@ -225,16 +225,18 @@ ___________________________*/
   background-color: #fff;
   color: #000;
   border: 1px solid #CCCCCC;
+  max-width:275px;
 }
 
-.tooltip.top > .tooltip-arrow{
-  top:0;
-  left:50%;
-  margin-left:-5px;
-  border-left:5px solid transparent;
-  border-right:5px solid transparent;
-  border-bottom:5px solid #CCC;
+.tooltip.top > .tooltip-arrow {
+    bottom:0;
+    left:50%;
+    margin-left:-5px;
+    border-left:5px solid transparent;
+    border-right:5px solid transparent;
+    border-top:5px solid #CCC
 }
+
 
 /*
 ___________________________*/

@@ -67,7 +67,6 @@ class Sequence
   # String with the nucleotide sequence corresponding to the accno
   def get_sequence_by_accession_no(accno, dbtype, db)
     begin
-      puts db
       if (db !~ /remote/)
         blast_cmd     = "blastdbcmd -target_only -entry #{accno} -db #{db} -outfmt %f"
         seq           = %x[#{blast_cmd}  2>&1]
