@@ -19,7 +19,7 @@ class TestSequenceClass < Minitest::Test
 
     it "should get sequence by accession for protein" do
       seq_prot = Sequence.new
-      seq_prot.get_sequence_by_accession_no("F8WCM5","protein", 'SwissProt --remote'))
+      seq_prot.get_sequence_by_accession_no("F8WCM5","protein", 'SwissProt --remote')
       assert_equal seq_prot.raw_sequence[0..9], "MALWMRLLPL"
       assert_equal seq_prot.raw_sequence[seq_prot.raw_sequence.length-10..seq_prot.raw_sequence.length-1], "WPRRPQRSQN"
     end
