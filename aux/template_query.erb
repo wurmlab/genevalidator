@@ -28,9 +28,7 @@ addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', 
       <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, '<%= toggle %>');
       <% @validations.each do |item| %>
         <% if item.plot_files != nil %>
-          <% item.plot_files.each do |plot| %>
-              addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-          <% end %>
+          <% item.plot_files.each do |plot| %> addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');<% end %>
         <% end %>
       <% end %>"><i class="fa fa-bar-chart-o"></i></button>
   </td>
