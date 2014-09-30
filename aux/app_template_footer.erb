@@ -4,15 +4,15 @@
 <script>
   var evaluation_div = document.getElementById('report_1');
 
-  var content_less = "<br><%= less %> <br> <a style='cursor: pointer;' onClick='add_content()'> Display the rest of the report >> </a>";
-  var content = "<%= evaluation %> <br> <a style='cursor: pointer;' onClick='evaluation_div.innerHTML=content_less'> << Display less </a>";
+  var content_less = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='add_content()' class=\"btn btn-primary btn-sm\"> Read More</button>";
+  var content = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='evaluation_div.innerHTML=content_less' class=\"btn btn-primary btn-sm\"> Read Less</button>";
 
     evaluation_div.innerHTML = content_less;
   //addPlot('report_1', '<%= plot_statistics.filename %>', '<%= plot_statistics.type %>', '<%= plot_statistics.title %>', '<%= plot_statistics.footer %>', '<%= plot_statistics.xtitle %>', '<%= plot_statistics.ytitle %>');
 
   function add_content(){
     evaluation_div = document.getElementById('report_1')
-    evaluation_div.innerHTML=content; 
+    evaluation_div.innerHTML=content;
     addPlot('report_1', '<%= plot_statistics.filename %>', '<%= plot_statistics.type %>', '<%= plot_statistics.title %>', '<%= plot_statistics.footer %>', '<%= plot_statistics.xtitle %>', '<%= plot_statistics.ytitle %>');
   }
 
