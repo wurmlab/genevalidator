@@ -4,8 +4,8 @@
 <script>
   var evaluation_div = document.getElementById('report_1');
 
-  var content_less = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='add_content()' class=\"btn btn-primary btn-sm\"> Read More</button>";
-  var content = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='evaluation_div.innerHTML=content_less' class=\"btn btn-primary btn-sm\"> Read Less</button>";
+  var content_less = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='add_content()' class=\"btn btn-primary btn-sm\"> Show Graph</button>";
+  var content = "<%= less %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='evaluation_div.innerHTML=content_less' class=\"btn btn-primary btn-sm\"> Hide Graph</button>";
 
     evaluation_div.innerHTML = content_less;
   //addPlot('report_1', '<%= plot_statistics.filename %>', '<%= plot_statistics.type %>', '<%= plot_statistics.title %>', '<%= plot_statistics.footer %>', '<%= plot_statistics.xtitle %>', '<%= plot_statistics.ytitle %>');
