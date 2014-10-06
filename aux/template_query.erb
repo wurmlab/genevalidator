@@ -5,24 +5,25 @@
   <td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
 <% @validations.each do |item| %>
-<% if item.plot_files != nil %>
-<td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
-<% item.plot_files.each do |plot| %>
-addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-<% end %>">
-<%if item.print.match(/TOO_/)!=nil%>
-<%= item.print.downcase.gsub('_',' ') %></td>
-<%else%>
-<%= item.print%></td>
-<%end%>
-<% else %>
-<%if item.print.match(/TOO_/)!=nil%>
-<td title="<%=item.header%>" class="<%=item.color%>"><%= item.print.downcase.gsub('_',' ') %></td>
-<%else%>
-<td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
-<%end%>
+  <% if item.plot_files != nil %>
+    <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
+    <% item.plot_files.each do |plot| %>
+      addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
+    <% end %>">
+    <%if item.print.match(/TOO_/)!=nil%>
+      <%= item.print.downcase.gsub('_',' ') %></td>
+    <%else%>
+      <%= item.print%></td>
+    <%end%>
+  <% else %>
+    <%if item.print.match(/TOO_/)!=nil%>
+      <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print.downcase.gsub('_',' ') %></td>
+    <%else%>
+      <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
+    <%end%>
+  <% end %>
 <% end %>
-<% end %>
+
 <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
   <td>
       <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, '<%= toggle %>');
@@ -40,6 +41,7 @@ addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', 
 </tr>
 <% else %>
 <td></td>
+</tr>
 <tr class="tablesorter-childRow" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
       <div></div>
