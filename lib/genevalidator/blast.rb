@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 require 'genevalidator/sequences'
 require 'genevalidator/hsp'
 require 'genevalidator/output'
