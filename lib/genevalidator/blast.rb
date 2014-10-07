@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+
 require 'genevalidator/sequences'
 require 'genevalidator/hsp'
 require 'genevalidator/output'
@@ -24,7 +25,7 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(command, query, gapopen=11, gapextend=1, db="swissprot -remote", nr_hits=200)
+  def self.call_blast_from_stdin(command, query, gapopen=11, gapextend=1, db, nr_hits=200)
     begin
       raise TypeError unless command.is_a? String and query.is_a? String
 

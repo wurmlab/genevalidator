@@ -78,7 +78,7 @@ class Validation
                   vlist = ["all"],
                   tabular_format = nil,
                   xml_file = nil,
-                  db = nil,
+                  db = "swissprot -remote",
                   raw_seq_file = nil,
                   mafft_path = nil,
                   start_idx = 1,
