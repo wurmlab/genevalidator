@@ -29,7 +29,7 @@ opt_parser = OptionParser.new do |opt|
   opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
     options[:tabular] = lst
   end
-	  
+
   options[:nr] = 10
   opt.on("-n","--nr [NR]", Integer, "number of queries per query that must be retrieved from the database") do |nr|
     if start.is_a? Fixnum
@@ -66,9 +66,9 @@ end
 output_file = options[:out]
 db = options[:db]
 
-# some of the hits may be identical hits and 
+# some of the hits may be identical hits and
 # therefore considered in the analisys
-n = options[:nr] + 5 
+n = options[:nr] + 5
 
 def parse_hits(hits, n = 15, hit_id_idx = 0, accno_idx, db, output_file)
 
@@ -150,7 +150,7 @@ begin
 
       if output.downcase.match(/blastdbcmd/) != nil
         $stderr.print "Did you add BLAST path to the LOADPATH?\n"
-      else 
+      else
         if output.downcase.match(/database error/) != nil
           $stderr.print "Blast database error. The path is not complete or your custom database is not well configured.\n"
         else
@@ -163,7 +163,7 @@ begin
                  "&retmax=1&usehistory=y&term=#{hit.accession}/"
 
               result = Net::HTTP.get(URI.parse(uri))
-  
+
               result2 = result
               queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
               webEnv = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
@@ -181,9 +181,9 @@ begin
               $stderr.print "fail\n"
             end
           end
-        
-          if output != ""  
-            File.open(output_file, 'a') {|f| f.write(output) }        
+
+          if output != ""
+            File.open(output_file, 'a') {|f| f.write(output) }
           end
         end
       end
@@ -192,7 +192,7 @@ begin
     end
   end while 1
 rescue StopIteration => error
-  exit!
+  exit
 rescue Exception => error
   begin
     format = options[:tabular]
@@ -245,6 +245,4 @@ rescue Exception => error
     $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
     exit!
   end
-end       
-
-
+end
