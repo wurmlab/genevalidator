@@ -1,3 +1,6 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 Gem::Specification.new do |s|
   # meta
   s.name        = 'GeneValidator'
@@ -22,8 +25,10 @@ DESC
   s.add_dependency('mini_shoulda', "~> 0.5")
   s.add_dependency('rack', "~> 1.5.2")
 
-  s.files       = Dir["test/**/*"] + Dir["aux/**/*"] + Dir['lib/**/*']
-  s.executables   = ['genevalidator', 'get_raw_sequences']
+  s.files         = `git ls-files -z`.split("\x0")
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ["lib"]
 
   # post install information
   s.post_install_message = <<INFO
