@@ -78,7 +78,7 @@ class Validation
                   vlist = ["all"],
                   tabular_format = nil,
                   xml_file = nil,
-                  db = nil,
+                  db = "swissprot -remote",
                   raw_seq_file = nil,
                   mafft_path = nil,
                   start_idx = 1,
@@ -234,9 +234,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1, @db)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1, @db)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, 11, 1)
             end
 
             #parse output
@@ -531,9 +531,9 @@ class Validation
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list
