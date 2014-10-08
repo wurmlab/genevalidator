@@ -543,7 +543,6 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 // line plot
 // maximum 80 lines
 function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
-
     var margin = {top: 50, right: 50, bottom: 75, left: 50},
         width = 600 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;      
@@ -556,10 +555,17 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
     var color = d3.scale.category10();
 
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .ticks(5);
+    if (title === 'Open reading frame with STOP codon') {  
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+          .ticks(0); 
+    } else {
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+          .ticks(5);
+    }
 
     var yAxis = d3.svg.axis()
         .scale(y)

@@ -288,10 +288,24 @@ class OpenReadingFrameValidation < ValidationTest
     raise QueryError unless orfs.is_a? Hash
 
     len = prediction.raw_sequence.length
+    chopping = len*0.02
+    results = []
+
+    # Create hashes for the Background
+    (-3..3).each do |frame|
+      next if frame == 0
+      results << {"y"=>frame, "start"=>0, "stop"=>len-chopping, "color"=>"black"}
+    end
+
+    # Create the hashes for the ORFs...
+    orfs.each do |frame, all_orfs|
+      all_orfs.each do |orf|
+        results << {"y"=>frame, "start"=>orf[0], "stop"=>orf[1]-chopping, "color"=>"red"}
+      end
+    end
 
     f = File.open(output, "w")    
-    f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
-       orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
+    f.write((results).to_json)
     f.close
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
