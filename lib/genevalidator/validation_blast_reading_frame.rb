@@ -18,7 +18,7 @@ class BlastRFValidationOutput < ValidationReport
     @frames_histo = frames_histo
     @msg = ""
     frames_histo.each do |x, y|
-      @msg << "#{x}:#{y}; "      
+      @msg << "Frame:#{x}&nbsp;Hits:#{y}; "      
     end
     @expected = expected
     @result = validation
