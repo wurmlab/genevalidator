@@ -3,6 +3,8 @@ require 'optparse'
 require 'genevalidator/clusterization'
 require 'genevalidator/validation'
 require 'genevalidator/sequences'
+require 'genevalidator/version'
+
 
 # Argument validation
 
@@ -70,9 +72,7 @@ opt_parser = OptionParser.new do |opt|
   end
 
   opt.on("--version", "The version of GeneValidator that you are running.") do
-      gemspec_file = File.join(File.dirname(__FILE__), '..', 'genevalidator.gemspec')
-      gemspec = eval File.read gemspec_file
-      puts gemspec.version
+      puts GeneValidator::VERSION
       exit
 
   end

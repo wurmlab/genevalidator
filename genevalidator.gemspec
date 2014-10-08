@@ -1,12 +1,13 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'GeneValidatorApp/version'
 
 Gem::Specification.new do |s|
   # meta
   s.name        = 'GeneValidator'
   s.date        = '2013-07-22'
-  s.version     = '0.1'
+  s.version     =  GeneValidator::VERSION
   s.authors     = ['Monica Dragan', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'monica.dragan@cti.pub.ro'
   s.homepage    = 'https://github.com/monicadragan/GeneValidator'
