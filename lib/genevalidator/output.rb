@@ -185,10 +185,6 @@ class Output
     table_footer_template = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/app_template_footer.erb"), 'r').read
     table_erb = ERB.new(table_footer_template, 0, '>')
     File.open(table_file, 'a+') { |file| file.write(table_erb.result(binding)) }
-
-    FileUtils.mkdir("#{html_path}/files/json/")
-    FileUtils.mv Dir.glob("#{html_path}/#{filename}_*.json"), "#{html_path}/files/json/"
-
   end
 
   ##

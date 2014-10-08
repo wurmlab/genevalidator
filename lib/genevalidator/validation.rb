@@ -195,7 +195,6 @@ class Validation
     path = File.dirname(@fasta_filepath)
     @html_path = "#{fasta_filepath}.html"
     @yaml_path = path
-
     @filename = File.basename(@fasta_filepath)#.scan(/\/([^\/]+)$/)[0][0]
     @all_query_outputs = []
 
@@ -519,14 +518,14 @@ class Validation
     query_output.prediction_def = prediction.definition
     query_output.nr_hits = hits.length
 
-    plot_path = "#{html_path}/#{filename}_#{idx}"
+    plot_path = "#{html_path}/files/json/#{filename}_#{idx}"
 
     validations = []
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
     validations.push LengthRankValidation.new(@type, prediction, hits)
-    validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
     validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
+    validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
     validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
