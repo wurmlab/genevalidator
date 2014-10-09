@@ -49,7 +49,11 @@
             <% @validations.each do |item| %>
             <th class="sorter-false">
               <b><%= item.header %></b>
-              <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+                <% if item.plot_files != nil %>
+                  <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+                <% else %>
+                   <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+                <% end %>
             </th>
             <% end %>
             <th class="sorter-false"></th>

@@ -147,14 +147,8 @@ tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
 /* Buttons
 ___________________________*/
 
-td.my-btn-success  {
+td.danger, td.warning, td.success {
   cursor: pointer !important;
-  border-bottom: 4px solid #98bf21 !important;
-}
-
-td.danger.my-btn-danger {
-  cursor: pointer !important;
-  border-bottom: 4px solid #C48181 !important;
 }
 
 /* D3Js & Axis

@@ -160,7 +160,7 @@ class Output
 
     # print to html
     # make the historgram with the resulted scores
-    statistics_filename = "#{html_path}/#{filename}_statistics.json"
+    statistics_filename = "#{html_path}/files/json/#{filename}_statistics.json"
     f = File.open(statistics_filename, "w")
 
     f.write(
