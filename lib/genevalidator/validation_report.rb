@@ -17,6 +17,7 @@ class ValidationReport
   attr_accessor :header
   attr_accessor :description
   attr_accessor :running_time
+  attr_accessor :explanation
 
   ##
   # Initilizes the object
@@ -27,7 +28,7 @@ class ValidationReport
   # +header+: String
   # +description+: String
   # +bg_color+: background color of the table cell for the html output (nil by default)
-  def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="")
+  def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="", explanation="")
     @message = message
     @errors = []
     @result = validation_result
@@ -36,6 +37,7 @@ class ValidationReport
     @short_header = short_header
     @header = header
     @description = description
+    @explanation = explanation
   end
 
   def print

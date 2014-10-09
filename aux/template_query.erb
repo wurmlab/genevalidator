@@ -9,7 +9,7 @@
     <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
     <% item.plot_files.each do |plot| %>
       addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-    <% end %>">
+    <% end %>  <%= item.short_header%>AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');">
     <%if item.print.match(/TOO_/)!=nil%>
       <%= item.print.downcase.gsub('_',' ') %></td>
     <%else%>
@@ -17,9 +17,9 @@
     <%end%>
   <% else %>
     <%if item.print.match(/TOO_/)!=nil%>
-      <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print.downcase.gsub('_',' ') %></td>
+      <td title="<%=item.header%>" class="<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');<%= item.short_header%>AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');"><%= item.print.downcase.gsub('_',' ') %></td>
     <%else%>
-      <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
+      <td title="<%=item.header%>" class="<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');<%= item.short_header%>AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');"><%= item.print%></td>
     <%end%>
   <% end %>
 <% end %>
@@ -36,7 +36,8 @@
 </tr>
 <tr class="tablesorter-childRow" name="plot_row" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
-      <div id="<%=toggle%>" class="expanded-child"></div>
+    <div id="<%=toggle%>Explanation" class="alert alert-info explanation_alert" role="alert" style="display:none;"></div>
+    <div id="<%=toggle%>" class="expanded-child"></div>
   </td>
 </tr>
 <% else %>

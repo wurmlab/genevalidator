@@ -28,6 +28,7 @@ class AlignmentValidationOutput < ValidationReport
     @result = validation
     @expected = expected
     @plot_files = []
+    @explanation = "#{gaps},#{extra_seq},#{consensus}"
   end
 
   def print
@@ -183,22 +184,22 @@ class AlignmentValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue ReadingFrameError => error
-      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push "Unexpected Error"
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
     end

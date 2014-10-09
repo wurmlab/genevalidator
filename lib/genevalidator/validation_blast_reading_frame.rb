@@ -17,8 +17,10 @@ class BlastRFValidationOutput < ValidationReport
 
     @frames_histo = frames_histo
     @msg = ""
+    @explanation = ""
     frames_histo.each do |x, y|
       @msg << "Frame:#{x}&nbsp;Hits:#{y}; "      
+      @explanation << "#{x},#{y}; "
     end
     @expected = expected
     @result = validation
@@ -97,10 +99,10 @@ class BlastReadingFrameValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       return @validation_report
     end
   end

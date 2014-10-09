@@ -24,6 +24,7 @@ class LengthClusterValidationOutput < ValidationReport
     @expected = expected
     @result = validation
     @plot_files = []
+    @explanation = "#{limits[0]},#{limits[1]},#{prediction_len},#{validation}"
   end
 
   def print
@@ -101,10 +102,10 @@ class LengthClusterValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     else 
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
     end       

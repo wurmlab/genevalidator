@@ -20,6 +20,7 @@ class LengthRankValidationOutput < ValidationReport
     @msg = msg
     @result = validation
     @expected = expected
+    @explanation = "#{percentage}"
   end
 
   def print
@@ -111,9 +112,9 @@ class LengthRankValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
      rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
      else
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
     end
 

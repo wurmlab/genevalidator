@@ -24,6 +24,7 @@ class ORFValidationOutput < ValidationReport
     @expected = expected
     @result = validation
     @plot_files = []
+    @explanation = "#{ratio}" # Add longest ORF length and query length 
   end
 
   def print
@@ -109,11 +110,11 @@ class OpenReadingFrameValidation < ValidationTest
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
     end
   end
 
