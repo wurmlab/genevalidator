@@ -78,7 +78,7 @@ class Validation
                   vlist = ["all"],
                   tabular_format = nil,
                   xml_file = nil,
-                  db = nil,
+                  db = "swissprot -remote",
                   raw_seq_file = nil,
                   mafft_path = nil,
                   start_idx = 1,
@@ -229,9 +229,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, 11, 1, @db)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, 11, 1, @db)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, 11, 1)
             end
 
             #parse output

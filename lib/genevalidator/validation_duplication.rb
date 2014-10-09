@@ -58,14 +58,14 @@ class DuplicationValidation < ValidationTest
  
   def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
     super
-    @mafft_path      = mafft_path
-    @raw_seq_file    = raw_seq_file
-    @index_file_name = index_file_name
+    @mafft_path        = mafft_path
+    @raw_seq_file      = raw_seq_file
+    @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
-    @db = db
+    @db                = db
 
-    @short_header    = "Duplication"
-    @header          = "Duplication"
+    @short_header      = "Duplication"
+    @header            = "Duplication"
     @description = "Check whether there is a duplicated subsequence in the"<<
     " predicted gene by counting the hsp residue coverag of the prediction,"<<
     " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<

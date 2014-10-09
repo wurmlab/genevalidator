@@ -41,6 +41,7 @@ opt_parser = OptionParser.new do |opt|
   end
   opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6 or 7) outputs"
 
+  options[:db] = "swissprot -remote"
   opt.on("-d", "--db [BLAST_DATABASE]","base where to look up the sequences") do |db|
     options[:db] = db
   end
@@ -74,7 +75,6 @@ opt_parser = OptionParser.new do |opt|
   opt.on("--version", "The version of GeneValidator that you are running.") do
       puts GeneValidator::VERSION
       exit
-
   end
 
   opt.on("-h","--help","help") do
