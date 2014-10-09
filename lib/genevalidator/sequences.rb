@@ -69,7 +69,11 @@ class Sequence
     begin
       if (db !~ /remote/)
         blast_cmd     = "blastdbcmd -target_only -entry #{accno} -db #{db} -outfmt %f"
-        seq           = %x[#{blast_cmd}  2>&1]
+        result        = %x[#{blast_cmd}  2>&1]
+        rec           = result
+        nl            = rec.index("\n")
+        header        = rec[0..nl-1]
+        seq           = rec[nl+1..-1]
         @raw_sequence = seq.gsub!(/\n/,'')
       else
         #puts "Tries to connect to the internet for #{accno}"
