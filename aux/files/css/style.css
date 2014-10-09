@@ -39,10 +39,6 @@ ___________________________*/
 /* TABLE
 ___________________________*/
 
-.table-responsive {
-  overflow-x: auto;
-}
-
 .table td {
   vertical-align: middle !important;
   border-collapse: collapse;
@@ -116,6 +112,7 @@ tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
   /*padding required for the icon...*/
   padding-left:30px !important; 
   position:relative;
+  cursor: pointer !important;
 }
 
 .table tbody td.success:before,
@@ -144,12 +141,6 @@ tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
   color: #FCB83F;
 }
 
-/* Buttons
-___________________________*/
-
-td.danger, td.warning, td.success {
-  cursor: pointer !important;
-}
 
 /* D3Js & Axis
 ___________________________*/
@@ -177,7 +168,7 @@ svg:not(:root) {
 }
 
 svg {
-  margin:30px;
+  margin-top:20px;
 }
 
 /* Ratings...
