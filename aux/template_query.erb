@@ -8,19 +8,22 @@
   <% if item.plot_files != nil %>
     <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
     <% item.plot_files.each do |plot| %>
-      addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-    <% end %> AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');">
-    <%if item.print.match(/TOO_/)!=nil%>
-      <%= item.print.downcase.gsub('_',' ') %></td>
-    <%else%>
+      addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>'); console.log('hi')
+    <% end %> 
+    <% if item.color == 'warning' %>
+      ">
+    <% else %>
+      AddExplanation(this, '<%= item.explanation%>', '<%=toggle%>');">
+    <% end %>
       <%= item.print%></td>
-    <%end%>
   <% else %>
-    <%if item.print.match(/TOO_/)!=nil%>
-      <td title="<%=item.header%>" class="<%=item.color%>" onclick="showDiv(this, '<%= toggle %>'); AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');"><%= item.print.downcase.gsub('_',' ') %></td>
-    <%else%>
-      <td title="<%=item.header%>" class="<%=item.color%>" onclick="showDiv(this, '<%= toggle %>'); AddExplanation('<%= item.explanation%>', '<%=toggle%>Explanation');"><%= item.print%></td>
-    <%end%>
+      <td title="<%=item.header%>" class="<%=item.color%>" 
+      <% if item.color == 'warning' %>
+        >
+      <% else %>
+        onclick="showDiv(this, '<%= toggle %>'); AddExplanation(this, '<%= item.explanation%>', '<%=toggle%>');">
+      <% end %>
+      <%= item.print%></td>
   <% end %>
 <% end %>
 
@@ -35,8 +38,7 @@
   </td>
 </tr>
 <tr class="tablesorter-childRow" name="plot_row" style="display:none;">
-  <td colspan="<%=validations.length + 7%>">
-    <div id="<%=toggle%>Explanation" class="alert alert-info explanation_alert" role="alert" style="display:none;"></div>
+  <td colspan="<%=validations.length + 7%>" id="<%=toggle %>row">
     <div id="<%=toggle%>" class="expanded-child"></div>
   </td>
 </tr>

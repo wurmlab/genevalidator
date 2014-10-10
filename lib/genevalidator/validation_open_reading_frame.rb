@@ -25,6 +25,7 @@ class ORFValidationOutput < ValidationReport
     @explanation  = "When translating the query sequence in all 6 frame, the"<<
                     " longest open reading frame is in frame #{longest_orf_frame}"<<
                     " and it covers #{(@ratio*100).round}% of the full sequence"
+    @longest_orf_frame = longest_orf_frame
   end
 
   def print
@@ -32,7 +33,7 @@ class ORFValidationOutput < ValidationReport
     orf_list = ""
     @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
 
-    "#{(@ratio*100).round}%"
+    "#{(@ratio*100).round}%&nbsp;(frame&nbsp;#{@longest_orf_frame})"
   end
 
   def validation

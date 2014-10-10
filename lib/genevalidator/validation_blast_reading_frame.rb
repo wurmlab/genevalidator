@@ -18,7 +18,7 @@ class BlastRFValidationOutput < ValidationReport
     @explainpart  = ""
     @totalHSP     = 0
     frames_histo.each do |x, y|
-      @msg         << "#{y} HSPs in frame #{x}; "      
+      @msg         << "#{y}&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;#{x}; "      
       @explainpart << "#{y} HSPs were in frame #{x}; "
       @totalHSP += y.to_i
     end

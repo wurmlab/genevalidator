@@ -26,7 +26,7 @@ class LengthRankValidationOutput < ValidationReport
 
   def print
     if msg != ""
-      return "#{@percentage} (#{msg})"
+      return "#{@percentage}&nbsp;(#{msg})"
     else 
       return @percentage.to_s
     end
@@ -95,11 +95,11 @@ class LengthRankValidation < ValidationTest
         if predicted_len < median
           rank = lengths.find_all{|x| x < predicted_len}.length
           percentage = rank / (len + 0.0)
-          msg = "TOO_SHORT"
+          msg = "too&nbsp;short"
         else
           rank = lengths.find_all{|x| x > predicted_len}.length
           percentage = rank / (len + 0.0)
-          msg = "TOO_LONG"
+          msg = "too&nbsp;long"
         end
       end
 
