@@ -12,15 +12,16 @@ class LengthRankValidationOutput < ValidationReport
   def initialize (msg, percentage, expected = :yes)       
 
     @short_header = "LengthRank"
-    @header = "Length Rank"
-    @description = "Check whether the rank of the prediction length lies among 80% of "<<
+    @header       = "Length Rank"
+    @description  = "Check whether the rank of the prediction length lies among 80% of "<<
         "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
 
-    @percentage = percentage
-    @msg = msg
-    @result = validation
-    @expected = expected
-    @explanation = "#{percentage}"
+    @percentage   = percentage
+    @msg          = msg
+    @result       = validation
+    @expected     = expected
+    @explanation  = "#{percentage}% of the BLAST hits have a length that is more extreme"<<
+                    " (i.e. further away from the median) than the prediction."
   end
 
   def print

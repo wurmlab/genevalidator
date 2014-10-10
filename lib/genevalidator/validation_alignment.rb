@@ -13,22 +13,23 @@ class AlignmentValidationOutput < ValidationReport
   def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
 
     @short_header = "MA"
-    @header = "Missing/Extra sequences"
-    @description = "Finds missing and extra sequences in the prediction, based"<<
+    @header       = "Missing/Extra sequences"
+    @description  = "Finds missing and extra sequences in the prediction, based"<<
     " on the multiple alignment of the best hits. Also counts the percentahe of"<<
-    " the conserved regions that appear in the prediction. Meaning of the output:"<<
-    " the percentages of the missing/extra sequences with respect to the multiple"<<
-    " alignment. Validation fails if one of these values is higher than 20%."<<
-    " Percentage of the conserved residues."
+    " the conserved regions that appear in the prediction."
 
-    @gaps = gaps
-    @extra_seq = extra_seq
-    @consensus = consensus
-    @threshold = threshold
-    @result = validation
-    @expected = expected
-    @plot_files = []
-    @explanation = "#{gaps},#{extra_seq},#{consensus}"
+    @gaps         = gaps
+    @extra_seq    = extra_seq
+    @consensus    = consensus
+    @threshold    = threshold
+    @result       = validation
+    @expected     = expected
+    @plot_files   = []
+    @explanation  = "Alignment Analysis of the hits was carried out to produce a statistical model." \
+                    " Further analysis shows that #{(consensus*100).round(0)}% of the this *model*" \
+                    " is conserved and can be found in the query sequence. However, " \
+                    " #{(gaps*100).round(0)}% of this *model* seems to be missing in the query and" \
+                    " the query seems to have #{(extra_seq*100).round(0)}% extra sequence within it."
   end
 
   def print

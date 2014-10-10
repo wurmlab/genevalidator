@@ -129,6 +129,14 @@ function showDiv(source, target){
 }
 
 
+function AddExplanation(explanation, target){
+  var target_id = '#' + target
+  var explain = "<b>Explanation:</b> " + explanation
+  $(target_id).show()
+  $(target_id).html(explain)
+}
+
+
 function LengthClusterAddExplanation(results, target){
   var data = results.split(',')
   var maincluster1 = data[0]

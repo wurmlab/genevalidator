@@ -10,23 +10,23 @@ class DuplicationValidationOutput < ValidationReport
 
   def initialize (pvalue, threshold = 0.05, expected = :no)
 
-    @short_header    = "Duplication"
-    @header          = "Duplication"
-    @description = "Check whether there is a duplicated subsequence in the"<<
+    @short_header = "Duplication"
+    @header       = "Duplication"
+    @description  = "Check whether there is a duplicated subsequence in the"<<
     " predicted gene by counting the hsp residue coverag of the prediction,"<<
-    " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<
-    " test which test the distribution of hit average coverage against 1."<<
-    " P-values higher than 5% pass the validation test."
+    " for each hit." 
 
-    @pvalue    = pvalue
-    @threshold = threshold
-    @result    = validation
-    @expected  = expected
-    @explanation = "#{pvalue},#{threshold}"
+    @pvalue      = pvalue
+    @threshold   = threshold
+    @result      = validation
+    @expected    = expected
+    @explanation = "A Wilcoxon signed-rank****OR****rank-sum test (a paired difference test)."<<
+                   " was carried out on the hits. A p-value of #{pvalue.round(2)} was obtained."<<
+                   " Since this is above the 5% threshold, this query passes the Wilcoxon test."
   end
 
   def print
-    "pval=#{@pvalue.round(2)}"
+    "#{@pvalue.round(2)}"
   end
 
   def validation

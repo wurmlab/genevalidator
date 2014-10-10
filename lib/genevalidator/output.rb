@@ -73,7 +73,7 @@ class Output
     end
 
     @mutex.synchronize {
-      puts output
+      puts output.gsub('&nbsp;', ' ')
     }
 
   end

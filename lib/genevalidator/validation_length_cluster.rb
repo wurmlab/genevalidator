@@ -13,22 +13,25 @@ class LengthClusterValidationOutput < ValidationReport
 
   def initialize (prediction_len, limits, expected = :yes)
 
-    @short_header = "LengthCluster"
-    @header = "Length Cluster"
-    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
+    @short_header   = "LengthCluster"
+    @header         = "Length Cluster"
+    @description    = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
       " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
       " [Main Cluster Length Interval]"
 
-    @limits = limits
+    @limits         = limits
     @prediction_len = prediction_len
-    @expected = expected
-    @result = validation
-    @plot_files = []
-    @explanation = "#{limits[0]},#{limits[1]},#{prediction_len},#{validation}"
+    @expected       = expected
+    @result         = validation
+    @plot_files     = []
+    @explanation    = "The majority of the BLAST hits have a sequence length between #{limits[0]}"<<
+                      " and #{limits[1]}. The query has a sequence length of #{prediction_len}."<<
+                      " Thus the query sequence is #{(validation == :yes) ? "inside" : "outside"}"<<
+                      " the most dense cluster. Please see below for a graphical representation of this."
   end
 
   def print
-    "#{@prediction_len} #{@limits.to_s}"
+    "#{@prediction_len}&nbsp;#{@limits.to_s.gsub(' ', '&nbsp;')}"
   end
 
   def validation
