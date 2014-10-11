@@ -20,9 +20,15 @@ window.onscroll = function (event) {
 }*/
 
 function show_all_plots(button){
-
     var expand_children = document.getElementsByName('plot_row');
     if(expand_children.length < 30){
+      if (window.chrome) {
+        if (($('#browser-alert').length) == 0) { 
+          $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
+          $('#browseralert').modal()
+        }
+      } 
+      else {
         // show activity spinner
         $('#spinner1').modal({
             backdrop: 'static',
@@ -48,6 +54,7 @@ function show_all_plots(button){
         }
         // remove progress notification
         $('#spinner1').modal('hide');
+      }
     }
     else{
         $('#alert').modal();
@@ -104,6 +111,13 @@ function getElementByAttributeValue(attribute, value) {
 }
 
 function showDiv(source, target){
+  if (window.chrome) {
+    if (($('#browser-alert').length) == 0) { 
+      $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
+      $('#browseralert').modal()
+    }
+    return;
+  } 
     var explanationId = '#' + target + 'explanation'
 
     if( $(explanationId).length) {

@@ -33,6 +33,11 @@ $(function () {
 
 //Hide empty columns
 $(document).ready(function() { 
+  if (window.chrome) {
+    $('#browseralert').modal()
+  }
+
+
   $('#sortable_table tr th').each(function(i) {
     //select all tds in this column
     var tds = $(this).parents('table')

@@ -249,6 +249,16 @@ ___________________________*/
   text-align: left;
 }
 
+.browser-alert {
+  background-color: #f2dede;
+border-color: #ebccd1;
+color: #a94442;
+}
+
+.modal-header{
+  border-bottom: 2px solid #903636;
+}
+
 /* Browser Specific
 ___________________________*/
 
