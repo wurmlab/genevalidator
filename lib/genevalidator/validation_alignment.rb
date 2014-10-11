@@ -33,7 +33,7 @@ class AlignmentValidationOutput < ValidationReport
   end
 
   def print
-    "#{(gaps*100).round(0)}% missing, #{(extra_seq*100).round(0)}% extra, #{(consensus*100).round(0)}% conserved"
+    "#{(consensus*100).round(0)}%&nbsp;conserved; #{(extra_seq*100).round(0)}%&nbsp;extra; #{(gaps*100).round(0)}%&nbsp;missing."
   end
 
   def validation
