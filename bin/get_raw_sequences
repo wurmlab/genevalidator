@@ -142,10 +142,11 @@ begin
     cnt = 0
     iter.each do | hit |
       if cnt == n
-	break
+    break
       end
       #get the raw sequence
-      blast_cmd = "blastdbcmd -target_only -entry #{hit.identifier} -db #{db} -outfmt %f"
+
+      blast_cmd = "blastdbcmd -target_only -entry '#{hit.hit_id}' -db '#{db}' -outfmt '%f'"
       output = %x[#{blast_cmd} 2>&1]
 
       if output.downcase.match(/blastdbcmd/) != nil
