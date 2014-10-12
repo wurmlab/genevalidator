@@ -1,10 +1,14 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'genevalidator/version'
 require 'rake/testtask'
 
 task :default => [:build]
 
 desc "Installs the ruby gem"
 task :build do
-  exec("gem build genevalidator.gemspec && gem install ./GeneValidator-0.1.gem")
+  exec("gem build genevalidator.gemspec && gem install ./GeneValidator-#{GeneValidator::VERSION}.gem")
 end
 
 desc "Unit tests for the majority of class methods"
