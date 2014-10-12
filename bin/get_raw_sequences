@@ -202,7 +202,7 @@ rescue Exception => error
     accno_idx    = column_names.index("sacc")
 
     file = File.open(filename, "r");
-    lines = file.lines
+    lines = file.each_line
 
     entry = CSV.parse(lines.peek, :col_sep => "\t")[0]
     unless entry.length == column_names.length
