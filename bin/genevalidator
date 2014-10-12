@@ -90,7 +90,7 @@ begin
     options[:skip_blast] = nil
   end
 
-  if options[:skip_blast] != nil and options[:db] != nil
+  if options[:skip_blast] != nil and options[:db] != "swissprot -remote"
     $stderr.puts "skip_blast and db arguments cannot be both set in the same run. Please specify only skip_blast argument if you have already precomputed the BLAST output."
   end
 
