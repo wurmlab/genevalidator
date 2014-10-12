@@ -68,13 +68,9 @@ class Sequence
   def get_sequence_by_accession_no(accno, dbtype, db)
     begin
       if (db !~ /remote/)
-        blast_cmd     = "blastdbcmd -target_only -entry #{accno} -db #{db} -outfmt %f"
-        result        = %x[#{blast_cmd}  2>&1]
-        rec           = result
-        nl            = rec.index("\n")
-        header        = rec[0..nl-1]
-        seq           = rec[nl+1..-1]
-        @raw_sequence = seq.gsub!(/\n/,'')
+        blast_cmd     = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
+        seq           = %x[#{blast_cmd}  2>&1]
+        @raw_sequence = seq
       else
         #puts "Tries to connect to the internet for #{accno}"
         uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{dbtype}"<<
