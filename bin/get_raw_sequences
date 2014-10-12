@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
-require 'optparse'
 require 'genevalidator/sequences'
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 require 'genevalidator/tabular_parser'
+require 'optparse'
 require 'bio-blastxmlparser'
 require 'net/http'
 require 'open-uri'

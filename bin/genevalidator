@@ -1,25 +1,23 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'genevalidator/clusterization'
-require 'genevalidator/validation'
-require 'genevalidator/sequences'
+require 'validation'
 require 'genevalidator/version'
-
-
-# Argument validation
 
 options = {}
 opt_parser = OptionParser.new do |opt|
   opt.separator  ""
-  opt.banner = "USE:"
-  opt.separator  "\t $ genevalidator [validations] [skip_blast] [db] [tabular]  [mafft] [raw_seq] FILE"
-  opt.separator  ""
-  opt.separator  "ARGUMENTS:"
-  opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
+  opt.banner =<<BANNER
 
-  opt.separator  ""
-  opt.separator  "OPTIONAL ARGUMENTS:"
-  opt.separator  ""
+USAGE:
+    $ genevalidator [validations] [skip_blast] [db] [tabular]  [mafft] [raw_seq] FILE
+
+ARGUMENTS:\
+    FILE: filename of the FASTA file containing the predicted sequences
+
+OPTIONAL ARGUMENTS:
+
+BANNER
+
   options[:vlist] = ["all"]
   opt.on( '-v', '--validations <String>', Array, "list of validations to be applied" ) do |lst|
     options[:vlist] = lst
@@ -35,7 +33,7 @@ opt_parser = OptionParser.new do |opt|
   opt.separator  "\t\torf = main ORF validation (applicable for nucleotides)"
   opt.separator  "\t\talign = validation based on multiple alignment"
   opt.separator  "\t\tcodons = codon coverage ~ under development"
-  
+
   opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml or tabular output as input to this script") do |skip|
     options[:skip_blast] = skip
   end
@@ -47,22 +45,11 @@ opt_parser = OptionParser.new do |opt|
   end
   opt.separator  "\tExample: 'nr -remote' or a local BLAST database "
 
-
   # default blast tabular columns
   opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
     options[:tabular] = lst
   end
   opt.separator  "\tUse: $ genevalidator -x tabular_file -t \"slen qstart qend\" fasta_file\n\tSee blast -h for more details"
-
-=begin
-  opt.on("-s","--start [START]", Integer, "starts the validation with a certain sequence in the input file ") do |start|
-    if start.is_a? Fixnum
-      options[:start] = start
-    else
-      $stderr.print "Error: start must be a natural number." + "\n"
-    end
-  end
-=end
 
   opt.on("-m", "--mafft [MAFFT_PATH]","path of the MAFFT program installation") do |mafft|
     options[:mafft] = mafft
@@ -102,26 +89,11 @@ begin
   if ARGV.length > 1
     $stderr.puts "Error: you must specify a single fasta input file instead of #{ARGV.length}." + "\n"
     exit
-  end 
+  end
 
   rescue OptionParser::ParseError
     $stderr.print "Error: " + $! + "\n"
     exit
-end
-
-
-# Main body
-
-=begin
-if File.directory? ARGV[0]
-  require 'rack'
-  app = Rack::Static.new nil, :urls => [""], :root => ARGV[0], :index => 'index.html'
-  Rack::Server.start :app => app
-else
-=end
-
-def get_memory_usage
-  `ps -o rss= -p #{Process.pid}`.to_i
 end
 
   start = Time.now
