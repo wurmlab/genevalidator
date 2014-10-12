@@ -68,8 +68,11 @@ class Sequence
   def get_sequence_by_accession_no(accno, dbtype, db)
     begin
       if (db !~ /remote/)
-        blast_cmd     = "blastdbcmd -target_only -entry '#{accno}' -db '#{db}' -outfmt '%s'"
+        blast_cmd     = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
         seq           = %x[#{blast_cmd}  2>&1]
+        if /Error/ =~ seq 
+          raise IOError, 'GeneValidator was unable to obtain the raw sequences for the BLAST hits.'
+        end
         @raw_sequence = seq
       else
         #puts "Tries to connect to the internet for #{accno}"
