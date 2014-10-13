@@ -43,11 +43,15 @@ $(document).ready(function() {
     var tds = $(this).parents('table')
     .find('tr td:nth-child(' + (i + 1) + ')');
     //check if all the cells in this column are empty
-    if(tds.length == tds.filter(':empty').length) { 
-      //hide header
-      $(this).hide();
-      //hide cells
-      tds.hide();
+    // 
+    if ($(this).hasClass( "chart-column" )) {
+    } else {
+      if ($(this).text().trim() == '') { 
+        //hide header
+        $(this).hide();
+        //hide cells
+        tds.hide();
+      }
     }
   });
 });
