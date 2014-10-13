@@ -40,6 +40,8 @@ class ValidateOutput < Minitest::Test
     prediction.length_protein = 108
 
     validations = b.do_validations(prediction, hits,1).validations
+    puts b.do_validations(prediction, hits,1)
+    puts validations
 
   describe "Test validations 1" do  
     it "should check the number of hits" do
@@ -69,13 +71,7 @@ class ValidateOutput < Minitest::Test
     end
 
     it "should validate duplication" do
-      puts validations
-      puts ''
-      puts '___'
       dv  = validations.select{|v| v.class == DuplicationValidationOutput}[0]
-      puts dv
-      puts '___'
-      
       assert_equal dv.pvalue.round(4), 1
     end
   end

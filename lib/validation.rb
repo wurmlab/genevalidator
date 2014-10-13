@@ -529,7 +529,7 @@ class Validation
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
     validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
-
+    puts validations
     # check the class type of the elements in the list
     validations.each do |v|
       raise ValidationClassError unless v.is_a? ValidationTest
@@ -606,6 +606,7 @@ ObjectSpace.each_object do |o|
 end
 puts counts.to_s
 =end
+    puts query_output
     return query_output
 
   rescue ValidationClassError => error
