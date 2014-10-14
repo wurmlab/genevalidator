@@ -307,7 +307,7 @@ class OpenReadingFrameValidation < ValidationTest
     # Create hashes for the Background
     (-3..3).each do |frame|
       next if frame == 0
-      results << {"y"=>frame, "start"=>0, "stop"=>len-chopping, "color"=>"black"}
+      results << {"y"=>frame, "start"=>0, "stop"=>len-chopping, "color"=>"gray"}
     end
 
     # Create the hashes for the ORFs...
