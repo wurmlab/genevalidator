@@ -59,8 +59,12 @@ BANNER
   end
 
   opt.on('-m', '--mafft [MAFFT_PATH]', 
-         'Path of the MAFFT program installation') do |mafft|
+         'Path to MAFFT program installation') do |mafft|
     options[:mafft] = mafft
+  end
+
+  opt.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
+    options[:blast] = blast
   end
 
   opt.on('-r', '--raw_seq [FASTA_FILE]', 
@@ -84,16 +88,18 @@ begin
   opt_parser.parse!(ARGV)
 
   if options[:skip_blast] != nil && options[:db] != 'swissprot -remote'
-    $stderr.puts 'skip_blast and db arguments cannot be both set in the same run. Please specify only skip_blast argument if you have already precomputed the BLAST output.'
-  end
-
-  if ARGV.length == 0
-    puts opt_parser
-    exit
+    $stderr.puts 'The skip_blast ("-x") and database (-d) arguments cannot' \
+                 ' both be set in the same run.'\
+                 ' Please specify only skip_blast argument if you have' \
+                 ' already precomputed the BLAST output.'
   end
 
   if ARGV.length > 1
-    $stderr.puts 'Error: you must specify a single fasta input file instead of #{ARGV.length}.' + '\n'
+    $stderr.puts 'Error: you must specify a single fasta input file instead' \
+                 ' of #{ARGV.length}.' + '\n'
+    exit
+  elsif ARGV.length == 0
+    puts opt_parser
     exit
   end
 
@@ -104,6 +110,8 @@ end
 
   start = Time.now
 
-  b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:db], options[:raw], options[:mafft], options[:start])
+  b = Validation.new(ARGV[0], options[:vlist], options[:tabular],
+                     options[:skip_blast], options[:db], options[:raw],
+                     options[:mafft], options[:blast], options[:start])
   b.validation
   puts 'Total running time: #{(Time.now - start).round(3)}s\n'

@@ -52,6 +52,8 @@ class BlastUtils
     end
   end
 
+  # NOTE: The below method isn't currently being used...
+
   ##
   # Calls blast from file with specific parameters
   # Param:

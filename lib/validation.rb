@@ -27,6 +27,7 @@ class Validation
   attr_reader :html_path
   attr_reader :yaml_path
   attr_reader :mafft_path
+  attr_reader :blast_path
   attr_reader :filename
   attr_reader :raw_seq_file
   attr_reader :raw_seq_file_index
@@ -81,6 +82,7 @@ class Validation
                   db = "swissprot -remote",
                   raw_seq_file = nil,
                   mafft_path = nil,
+                  blast_path = nil,
                   start_idx = 1,
                   overall_evaluation = true,
                   multithreading = true)
@@ -139,6 +141,13 @@ class Validation
       @mafft_path = which("mafft")
     else
       @mafft_path = mafft_path
+    end
+
+    if blast_path == nil
+      blastp_path = which("blastp")
+      @blast_path = File.dirname(blastp_path)
+    else
+      @blast_path = blast_path
     end
 
     begin
@@ -229,9 +238,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("#{@blast_path}/blastp", query, @db, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("#{@blast_path}/blastx", query, @db, 11, 1)
             end
 
             #parse output
@@ -271,7 +280,7 @@ class Validation
   # +type+: file or stream
   def parse_output(output, type=:file)
 
-    # check the format of the blat input (xml or tabular)
+    # check the format of the blast input (xml or tabular)
     if type == :file
       begin
         iterator_xml = Bio::BlastXMLParser::XmlIterator.new(output).to_enum
@@ -322,7 +331,7 @@ class Validation
 
     begin
 
-      if @idx+1 == @query_offset_lst.length
+      if @idx + 1 == @query_offset_lst.length
         break
       end
 
