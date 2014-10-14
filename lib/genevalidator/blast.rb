@@ -27,9 +27,9 @@ class BlastUtils
   def self.call_blast_from_stdin(blastpath, blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
     begin
       if blastpath == nil 
-        command = File.join(blastpath, blast_type)
-      else
         command = blast_type
+      else
+        command = File.join(blastpath, blast_type)
       end
       raise TypeError unless command.is_a? String and query.is_a? String
 
