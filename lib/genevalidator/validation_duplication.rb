@@ -111,9 +111,9 @@ class DuplicationValidation < ValidationTest
   
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.identifier, "protein", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, "protein", @db)
             else
-              hit.get_sequence_by_accession_no(hit.identifier, "nucleotide", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide", @db)
             end
           end
 

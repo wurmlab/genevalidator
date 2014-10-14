@@ -40,9 +40,7 @@ class ValidateOutput < Minitest::Test
     prediction.length_protein = 108
 
     validations = b.do_validations(prediction, hits,1).validations
-    puts b.do_validations(prediction, hits,1)
     puts validations
-
   describe "Test validations 1" do  
     it "should check the number of hits" do
       assert_equal hits.length, 499
