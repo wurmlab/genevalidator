@@ -42,12 +42,9 @@ Linux and MacOS are officially supported!
 
 ### Installation
 1. Get the source code<br>
-`$ git clone git://github.com/monicadragan/GeneValidator.git`
+`$ gem install GeneValidator`
 
-2. Be sudo and build the gem<br>
-`$ sudo rake`
-
-3. Run GeneValidation<br>
+2. Run GeneValidation<br>
 `$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE` 
 
 Example that emphasizes all the validations:<br>
