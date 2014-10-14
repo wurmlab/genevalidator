@@ -8,30 +8,32 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :gaps
   attr_reader :extra_seq
   attr_reader :consensus
-  attr_reader :threahsold
+  attr_reader :threshold
 
   def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
 
     @short_header = "MA"
-    @header = "Missing/Extra sequences"
-    @description = "Finds missing and extra sequences in the prediction, based"<<
+    @header       = "Missing/Extra sequences"
+    @description  = "Finds missing and extra sequences in the prediction, based"<<
     " on the multiple alignment of the best hits. Also counts the percentahe of"<<
-    " the conserved regions that appear in the prediction. Meaning of the output:"<<
-    " the percentages of the missing/extra sequences with respect to the multiple"<<
-    " alignment. Validation fails if one of these values is higher than 20%."<<
-    " Percentage of the conserved residues."
+    " the conserved regions that appear in the prediction."
 
-    @gaps = gaps
-    @extra_seq = extra_seq
-    @consensus = consensus
-    @threshold = threshold
-    @result = validation
-    @expected = expected
-    @plot_files = []
+    @gaps         = gaps
+    @extra_seq    = extra_seq
+    @consensus    = consensus
+    @threshold    = threshold
+    @result       = validation
+    @expected     = expected
+    @plot_files   = []
+    @explanation  = "Alignment Analysis of the hits was carried out to produce a statistical model." \
+                    " Further analysis shows that #{(consensus*100).round(0)}% of the this *model*" \
+                    " is conserved and can be found in the query sequence. However, " \
+                    " #{(gaps*100).round(0)}% of this *model* seems to be missing in the query and" \
+                    " the query seems to have #{(extra_seq*100).round(0)}% extra sequence within it."
   end
 
   def print
-    "#{(gaps*100).round(0)}% missing, #{(extra_seq*100).round(0)}% extra, #{(consensus*100).round(0)}% conserved"
+    "#{(consensus*100).round(0)}%&nbsp;conserved; #{(extra_seq*100).round(0)}%&nbsp;extra; #{(gaps*100).round(0)}%&nbsp;missing."
   end
 
   def validation
@@ -183,22 +185,22 @@ class AlignmentValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue ReadingFrameError => error
-      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push "Unexpected Error"
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
     end

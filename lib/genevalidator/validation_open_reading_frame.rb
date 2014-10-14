@@ -9,21 +9,23 @@ class ORFValidationOutput < ValidationReport
   attr_reader :ratio
   attr_reader :threshold
 
-  def initialize (orfs, ratio, threshold = 0.8, expected = :yes)
+  def initialize (orfs, ratio, longest_orf_frame, threshold = 0.8, expected = :yes)
 
     @short_header = "ORF"
-    @header = "Main ORF"
-    @description = 'Check whether there is a single main Open Reading Frame'<<
-    ' in the predicted gene. Aplicable only for nucleotide queries. Meaning'<<
-    '  of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80%'<<
-    ' passes the validation test.'
+    @header       = "Main ORF"
+    @description  = 'Check whether there is a single main Open Reading Frame'<<
+    ' in the predicted gene. Aplicable only for nucleotide queries.'
 
-    @orfs = orfs
-    @ratio = ratio
-    @threshold = threshold
-    @expected = expected
-    @result = validation
-    @plot_files = []
+    @orfs         = orfs
+    @ratio        = ratio
+    @threshold    = threshold
+    @expected     = expected
+    @result       = validation
+    @plot_files   = []
+    @explanation  = "When translating the query sequence in all 6 frame, the"<<
+                    " longest open reading frame is in frame #{longest_orf_frame}"<<
+                    " and it covers #{(@ratio*100).round}% of the full sequence"
+    @longest_orf_frame = longest_orf_frame
   end
 
   def print
@@ -31,7 +33,7 @@ class ORFValidationOutput < ValidationReport
     orf_list = ""
     @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
 
-    "#{validation.to_s} (%=#{(@ratio*100).round})"
+    "#{(@ratio*100).round}%&nbsp;(frame&nbsp;#{@longest_orf_frame})"
   end
 
   def validation
@@ -96,24 +98,35 @@ class OpenReadingFrameValidation < ValidationTest
       orfs = get_orfs
 
       # check if longest ORF / prediction > 0.8 (ok)
-      prediction_len = prediction.raw_sequence.length 
-      longest_orf = orfs.map{|elem| elem[1].map{|orf| orf[1]-orf[0]}}.flatten.max
+      prediction_len = prediction.raw_sequence.length
+      data = {}
+      orfs.each do |frame, all_orfs|
+        maxORF =[]
+        all_orfs.each do |orf|
+          maxORF << orf[1] - orf[0]
+        end
+        data[frame] = maxORF.max
+      end
+
+      longest_orf = data.values.max
+      longest_orf_frame = data.key(longest_orf)
+
       ratio =  longest_orf/(prediction_len + 0.0)
 
       plot1 = plot_orfs(orfs)
 
-      @validation_report = ORFValidationOutput.new(orfs, ratio)
+      @validation_report = ORFValidationOutput.new(orfs, ratio, longest_orf_frame)
       @validation_report.running_time = Time.now - start
 
       @validation_report.plot_files.push(plot1)
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
     end
   end
 
@@ -288,10 +301,24 @@ class OpenReadingFrameValidation < ValidationTest
     raise QueryError unless orfs.is_a? Hash
 
     len = prediction.raw_sequence.length
+    chopping = len*0.02
+    results = []
+
+    # Create hashes for the Background
+    (-3..3).each do |frame|
+      next if frame == 0
+      results << {"y"=>frame, "start"=>0, "stop"=>len-chopping, "color"=>"black"}
+    end
+
+    # Create the hashes for the ORFs...
+    orfs.each do |frame, all_orfs|
+      all_orfs.each do |orf|
+        results << {"y"=>frame, "start"=>orf[0], "stop"=>orf[1]-chopping, "color"=>"red"}
+      end
+    end
 
     f = File.open(output, "w")    
-    f.write((orfs.each_with_index.map{|elem, i| {"y"=>elem[0], "start"=>0, "stop"=>len, "color"=>"black"}} +
-       orfs.each_with_index.map{|elem, i| elem[1].map{|orf| {"y"=>elem[0], "start"=>orf[0], "stop"=>orf[1], "color"=>"red"}}}.flatten).to_json)
+    f.write((results).to_json)
     f.close
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],

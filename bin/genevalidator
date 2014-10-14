@@ -1,83 +1,84 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'genevalidator/clusterization'
-require 'genevalidator/validation'
-require 'genevalidator/sequences'
-
-# Argument validation
+require 'validation'
+require 'genevalidator/version'
 
 options = {}
 opt_parser = OptionParser.new do |opt|
-  opt.separator  ""
-  opt.banner = "USE:"
-  opt.separator  "\t $ genevalidator [validations] [skip_blast] [db] [tabular]  [mafft] [raw_seq] FILE"
-  opt.separator  ""
-  opt.separator  "ARGUMENTS:"
-  opt.separator  "     FILE: filename of the FASTA file containing the predicted sequences"
+  opt.banner =<<BANNER
 
-  opt.separator  ""
-  opt.separator  "OPTIONAL ARGUMENTS:"
-  opt.separator  ""
-  options[:vlist] = ["all"]
-  opt.on( '-v', '--validations <String>', Array, "list of validations to be applied" ) do |lst|
+USAGE:
+    $ genevalidator [OPTIONS] INPUT_FILE
+
+ARGUMENTS:
+    INPUT_FILE: Path to the input FASTA file containing the predicted sequences.
+
+OPTIONAL ARGUMENTS:
+
+BANNER
+
+  options[:vlist] = ['all']
+  opt.on( '-v', '--validations <String>', Array, 
+          'The Validations to be applied.',
+          'Validation Options Available (separated by coma):',
+          '  all    = run all validations (default)',
+          '  lenc   = length validation by clusterization',
+          '  lenr   = length validation by ranking',
+          '  frame  = reading frame validation',
+          '  merge  = check gene merge',
+          '  dup    = check duplications',
+          '  orf    = main ORF validation (applicable for nucleotides)',
+          '  align  = validation based on multiple alignment',
+          '  codons = codon coverage ~ under development') do |lst|
     options[:vlist] = lst
   end
 
-  opt.separator  "\tUse from the fallowing validation options, separated by coma:"
-  opt.separator  "\t\tall = run all validations (default)"
-  opt.separator  "\t\tlenc = length validation by clusterization"
-  opt.separator  "\t\tlenr = length validation by ranking"
-  opt.separator  "\t\tframe = reading frame validation"
-  opt.separator  "\t\tmerge = check gene merge"
-  opt.separator  "\t\tdup = check duplications"
-  opt.separator  "\t\torf = main ORF validation (applicable for nucleotides)"
-  opt.separator  "\t\talign = validation based on multiple alignment"
-  opt.separator  "\t\tcodons = codon coverage ~ under development"
-  
-  opt.on("-x", "--skip_blast [FILENAME]","skip blast-ing part and provide a blast xml or tabular output as input to this script") do |skip|
-    options[:skip_blast] = skip
-  end
-  opt.separator  "\tFiles accepted: BLAST xml (blsat -outfmt 5) and basic tabular (blast -outfmt 6 or 7) outputs"
-
-  options[:db] = "swissprot -remote"
-  opt.on("-d", "--db [BLAST_DATABASE]","base where to look up the sequences") do |db|
+  options[:db] = 'swissprot -remote'
+  opt.on('-d', '--db [BLAST_DATABASE]', 'base where to look up the sequences',
+         'e.g. "swissprot -remote" or a local BLAST database') do |db|
     options[:db] = db
   end
-  opt.separator  "\tExample: 'nr -remote' or a local BLAST database "
-
+    
+  options[:skip_blast] = nil
+  opt.on('-x', '--skip_blast [FILENAME]', 
+         'Skip blast-ing part and provide a blast xml or tabular output', 
+         'as input to this script.',
+         'Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6',
+         'or 7) outputs accepted') do |skip|
+    options[:skip_blast] = skip
+  end
 
   # default blast tabular columns
-  opt.on("-t", "--tabular [BLAST OUTFMT STRING]","custom format used in BLAST -outfmt argument") do |lst|
+  opt.on('-t', '--tabular [BLAST OUTFMT STRING]', 
+         'Custom format used in BLAST -outfmt argument',
+         'Usage:',
+         '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
+         ' See the manual pages of BLAST for more details'
+    ) do |lst|
     options[:tabular] = lst
   end
-  opt.separator  "\tUse: $ genevalidator -x tabular_file -t \"slen qstart qend\" fasta_file\n\tSee blast -h for more details"
 
-=begin
-  opt.on("-s","--start [START]", Integer, "starts the validation with a certain sequence in the input file ") do |start|
-    if start.is_a? Fixnum
-      options[:start] = start
-    else
-      $stderr.print "Error: start must be a natural number." + "\n"
-    end
-  end
-=end
-
-  opt.on("-m", "--mafft [MAFFT_PATH]","path of the MAFFT program installation") do |mafft|
+  opt.on('-m', '--mafft [MAFFT_PATH]', 
+         'Path to MAFFT program installation') do |mafft|
     options[:mafft] = mafft
   end
 
-  opt.on("-r", "--raw_seq [FASTA_FILE]","fasta file with raw sequences") do |raw|
+  opt.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
+    options[:blast] = blast
+  end
+
+  opt.on('-r', '--raw_seq [FASTA_FILE]', 
+         'Fasta file containing the raw sequences of each of the BLAST hits in',
+         'BLAST XML output file.') do |raw|
     options[:raw] = raw
   end
 
-  opt.on("--version", "The version of GeneValidator that you are running.") do
-      gemspec_file = File.join(File.dirname(__FILE__), '..', 'genevalidator.gemspec')
-      gemspec = eval File.read(gemspec_file)
-      puts gemspec.version
+  opt.on('--version', 'The version of GeneValidator that you are running.') do
+      puts GeneValidator::VERSION
       exit
   end
 
-  opt.on("-h","--help","help") do
+  opt.on('-h', '--help', 'Show this screen.') do
     puts opt_parser
     exit
   end
@@ -86,46 +87,31 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  unless options[:skip_blast]
-    options[:skip_blast] = nil
+  if options[:skip_blast] != nil && options[:db] != 'swissprot -remote'
+    $stderr.puts 'The skip_blast ("-x") and database (-d) arguments cannot' \
+                 ' both be set in the same run.'\
+                 ' Please specify only skip_blast argument if you have' \
+                 ' already precomputed the BLAST output.'
   end
 
-  if options[:skip_blast] != nil and options[:db] != nil
-    $stderr.puts "skip_blast and db arguments cannot be both set in the same run. Please specify only skip_blast argument if you have already precomputed the BLAST output."
-  end
-
-  if ARGV.length == 0
+  if ARGV.length > 1
+    $stderr.puts 'Error: you must specify a single fasta input file instead' \
+                 ' of #{ARGV.length}.' + '\n'
+    exit
+  elsif ARGV.length == 0
     puts opt_parser
     exit
   end
 
-  if ARGV.length > 1
-    $stderr.puts "Error: you must specify a single fasta input file instead of #{ARGV.length}." + "\n"
-    exit
-  end 
-
   rescue OptionParser::ParseError
-    $stderr.print "Error: " + $! + "\n"
+    $stderr.print 'Error: ' + $! + '\n'
     exit
-end
-
-
-# Main body
-
-=begin
-if File.directory? ARGV[0]
-  require 'rack'
-  app = Rack::Static.new nil, :urls => [""], :root => ARGV[0], :index => 'index.html'
-  Rack::Server.start :app => app
-else
-=end
-
-def get_memory_usage
-  `ps -o rss= -p #{Process.pid}`.to_i
 end
 
   start = Time.now
 
-  b = Validation.new(ARGV[0], options[:vlist], options[:tabular], options[:skip_blast], options[:db], options[:raw], options[:mafft], options[:start])
+  b = Validation.new(ARGV[0], options[:vlist], options[:tabular],
+                     options[:skip_blast], options[:db], options[:raw],
+                     options[:mafft], options[:blast], options[:start])
   b.validation
-  puts "Total running time: #{(Time.now - start).round(3)}s\n"
+  puts 'Total running time: #{(Time.now - start).round(3)}s\n'

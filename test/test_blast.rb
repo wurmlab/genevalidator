@@ -2,7 +2,7 @@ require "rubygems"
 require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
-require 'genevalidator/validation'
+require 'validation'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
 

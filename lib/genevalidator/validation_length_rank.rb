@@ -12,19 +12,21 @@ class LengthRankValidationOutput < ValidationReport
   def initialize (msg, percentage, expected = :yes)       
 
     @short_header = "LengthRank"
-    @header = "Length Rank"
-    @description = "Check whether the rank of the prediction length lies among 80% of "<<
+    @header       = "Length Rank"
+    @description  = "Check whether the rank of the prediction length lies among 80% of "<<
         "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
 
-    @percentage = percentage
-    @msg = msg
-    @result = validation
-    @expected = expected
+    @percentage   = percentage
+    @msg          = msg
+    @result       = validation
+    @expected     = expected
+    @explanation  = "#{percentage}% of the BLAST hits have a length that is more extreme"<<
+                    " (i.e. further away from the median) than the prediction."
   end
 
   def print
     if msg != ""
-      return "#{@percentage} (#{msg})"
+      return "#{@percentage}&nbsp;(#{msg})"
     else 
       return @percentage.to_s
     end
@@ -93,11 +95,11 @@ class LengthRankValidation < ValidationTest
         if predicted_len < median
           rank = lengths.find_all{|x| x < predicted_len}.length
           percentage = rank / (len + 0.0)
-          msg = "TOO_SHORT"
+          msg = "too&nbsp;short"
         else
           rank = lengths.find_all{|x| x > predicted_len}.length
           percentage = rank / (len + 0.0)
-          msg = "TOO_LONG"
+          msg = "too&nbsp;long"
         end
       end
 
@@ -111,9 +113,9 @@ class LengthRankValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
      rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
      else
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
     end
 

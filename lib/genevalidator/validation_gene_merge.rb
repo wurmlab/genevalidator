@@ -14,10 +14,8 @@ class GeneMergeValidationOutput < ValidationReport
 
     @short_header = "Gene_Merge"
     @header       = "Gene Merge"
-    @description = "Check whether BLAST hits make evidence about a merge of two"<<
-    " genes that match the predicted gene. Meaning of the output displayed:"<<
-    " slope of the linear regression of the relationship between the start and"<<
-    " stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees."
+    @description  = "Check whether BLAST hits make evidence about a merge of two"<<
+                    " genes that match the predicted gene."
 
     @slope          = slope
     @threshold_down = threshold_down
@@ -25,13 +23,17 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
+    @explanation    = "This validation test analyses the relationship between the"<<
+                      " start and stop offsets of the High-scoring Segment Pairs."<<
+                      " A linear regression analysis is done which produced a"<<
+                      " result of #{@slope.round(2)}"
   end
 
   def print
     if @slope.nan?  
-      "slope=Inf"
+      "Inf"
     else
-      "slope=#{@slope.round(2)}"
+      "#{@slope.round(2)}"
     end
   end
 
@@ -149,12 +151,12 @@ class GeneMergeValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
       @validation_report.errors.push "Unexpected Error" 
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description)
+      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
       return @validation_report
     end
   

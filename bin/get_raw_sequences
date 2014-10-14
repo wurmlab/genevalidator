@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
-require 'optparse'
 require 'genevalidator/sequences'
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 require 'genevalidator/tabular_parser'
+require 'optparse'
 require 'bio-blastxmlparser'
 require 'net/http'
 require 'open-uri'
@@ -82,7 +82,7 @@ def parse_hits(hits, n = 15, hit_id_idx = 0, accno_idx, db, output_file)
         accession = hit[0][accno_idx]
 
         #get the raw sequence
-        blast_cmd = "blastdbcmd -target_only -entry #{accession} -db #{db} -outfmt %f"
+        blast_cmd = "blastdbcmd -target_only -entry '#{accession}' -db '#{db}' -outfmt '%f'"
         output_blast = %x[#{blast_cmd}  2>&1]
 
         if output_blast.downcase.match(/blastdbcmd/) != nil
@@ -142,10 +142,11 @@ begin
     cnt = 0
     iter.each do | hit |
       if cnt == n
-	break
+    break
       end
       #get the raw sequence
-      blast_cmd = "blastdbcmd -target_only -entry #{hit.accession} -db #{db} -outfmt %f"
+
+      blast_cmd = "blastdbcmd -entry '#{hit.hit_id}' -db '#{db}' -outfmt '%f'"
       output = %x[#{blast_cmd} 2>&1]
 
       if output.downcase.match(/blastdbcmd/) != nil
@@ -202,7 +203,7 @@ rescue Exception => error
     accno_idx    = column_names.index("sacc")
 
     file = File.open(filename, "r");
-    lines = file.lines
+    lines = file.each_line
 
     entry = CSV.parse(lines.peek, :col_sep => "\t")[0]
     unless entry.length == column_names.length

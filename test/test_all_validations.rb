@@ -4,7 +4,7 @@ require 'minitest'
 require 'minitest/autorun'
 require "yaml"
 require 'genevalidator/blast'
-require 'genevalidator/validation'
+require 'validation'
 require 'genevalidator/blast'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
