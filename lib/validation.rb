@@ -143,7 +143,7 @@ class Validation
       @mafft_path = mafft_path
     end
 
-    if blast_path == nil
+    if blast_path == nil && @xml_file == nil
       blastp_path = which("blastp")
       @blast_path = File.dirname(blastp_path)
     else
