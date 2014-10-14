@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = 'GeneValidator'
   s.date        = '2013-07-22'
   s.version     =  GeneValidator::VERSION
-  s.authors     = ['Monica Dragan', 'Anurag Priyam', 'Yannick Wurm']
+  s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'monica.dragan@cti.pub.ro'
   s.homepage    = 'https://github.com/monicadragan/GeneValidator'
   s.license     = "GPL"
