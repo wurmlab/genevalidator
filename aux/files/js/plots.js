@@ -651,8 +651,18 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
                   .attr("x2", function(d) { return x(d.stop); })
                   .attr("x2", function(d) { return x(d.stop); })
                   .attr("y2", function(d) { return y(d.y); })                 
-                  .attr("stroke-width", function(d) { if(d.dotted == undefined) return height/no_lines; return height/no_lines/5;})
-                      .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");}) 
+                  .attr("stroke-width", function(d) {
+                    if (d.dotted == undefined) {
+                        if (d.color == "red" ) {
+                          return height/no_lines/2.5
+                        } else {
+                          return height/no_lines
+                        }
+                    } else {
+                      return height/no_lines/5
+                    }
+                  })
+                  .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");}) 
                   .attr("stroke", function(d) { return color_beautification(d.color); })
     });
 
@@ -689,7 +699,6 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
             h += 1
         }
     }
-
 }
 
 // line plot
