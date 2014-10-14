@@ -49,7 +49,7 @@
             <% @validations.each do |item| %>
             <th class="sorter-false">
               <b><%= item.header %></b>
-                <% if item.plot_files != nil %>
+                <% if item.short_header == "LengthCluster" || item.short_header == "Gene_Merge" || item.short_header == "ORF" || item.short_header == "MA" %>
                   <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
                 <% else %>
                    <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
