@@ -116,6 +116,7 @@ class Validation
     @no_internet = 0
     @map_errors = Hash.new(0)
     @map_running_times = Hash.new(Pair1.new(0,0))
+    @blast_path = blast_path
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
@@ -141,13 +142,6 @@ class Validation
       @mafft_path = which("mafft")
     else
       @mafft_path = mafft_path
-    end
-
-    if blast_path == nil && @xml_file == nil
-      blastp_path = which("blastp")
-      @blast_path = File.dirname(blastp_path)
-    else
-      @blast_path = blast_path
     end
 
     begin
@@ -238,9 +232,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("#{@blast_path}/blastp", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastp", query, @db, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin("#{@blast_path}/blastx", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, 11, 1)
             end
 
             #parse output

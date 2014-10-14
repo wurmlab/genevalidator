@@ -24,8 +24,13 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(command, query, db, gapopen=11, gapextend=1, nr_hits=200)
+  def self.call_blast_from_stdin(blastpath, blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
     begin
+      if blastpath == nil 
+        command = File.join(blastpath, blast_type)
+      else
+        command = blast_type
+      end
       raise TypeError unless command.is_a? String and query.is_a? String
 
       evalue = "1e-5"
