@@ -25,11 +25,7 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @explanation  = "Alignment Analysis of the hits was carried out to produce a statistical model." \
-                    " Further analysis shows that #{(consensus*100).round(0)}% of the this *model*" \
-                    " is conserved and can be found in the query sequence. However, " \
-                    " #{(gaps*100).round(0)}% of this *model* seems to be missing in the query and" \
-                    " the query seems to have #{(extra_seq*100).round(0)}% extra sequence within it."
+    @explanation  = "A position specific scoring matrix of the strongest 10 results show that: #{(extra_seq*100).round(0)}% of residues in the prediction do not appear in profile; #{(gaps*100).round(0)}% of residues in the profile do not appear in the prediction and when compared to the model, #{(consensus*100).round(0)}% of residues are conserved in the prediciton."
   end
 
   def print

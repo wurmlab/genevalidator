@@ -24,7 +24,7 @@ class ORFValidationOutput < ValidationReport
     @plot_files   = []
     @explanation  = "When translating the query sequence in all 6 frame, the"<<
                     " longest open reading frame is in frame #{longest_orf_frame}"<<
-                    " and it covers #{(@ratio*100).round}% of the full sequence"
+                    " and it covers #{(@ratio*100).round}% of the full sequence. Please see below for agraphic representation of this. "
     @longest_orf_frame = longest_orf_frame
   end
 

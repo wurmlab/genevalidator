@@ -20,9 +20,7 @@ class DuplicationValidationOutput < ValidationReport
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @explanation = "A Wilcoxon signed-rank****OR****rank-sum test (a paired difference test)."<<
-                   " was carried out on the hits. A p-value of #{pvalue.round(2)} was obtained."<<
-                   " Since this is above the 5% threshold, this query passes the Wilcoxon test."
+    @explanation = "We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that average coverage of hit regions #{(validation == :yes) ? "is less than 1. This suggests that each region of the each homologous hit gene matches the predicted gene at most once." : "is greater than 1. This can occur if tandem duplicated genes were erroneously included in the same gene model"}"
   end
 
   def print
@@ -31,9 +29,9 @@ class DuplicationValidationOutput < ValidationReport
 
   def validation
     if @pvalue < @threshold
-      :yes
-    else
       :no
+    else
+      :yes
     end
   end
 

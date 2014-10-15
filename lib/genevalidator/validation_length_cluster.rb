@@ -24,10 +24,9 @@ class LengthClusterValidationOutput < ValidationReport
     @expected       = expected
     @result         = validation
     @plot_files     = []
-    @explanation    = "The majority of the BLAST hits have a sequence length between #{limits[0]}"<<
-                      " and #{limits[1]}. The query has a sequence length of #{prediction_len}."<<
-                      " Thus the query sequence is #{(validation == :yes) ? "inside" : "outside"}"<<
-                      " the most dense cluster. Please see below for a graphical representation of this."
+    @explanation    = "If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is #{prediction_len} amino-acid residues. The most dense cluster of hit sequences includes lengths between #{limits[0]} and #{limits[1]} amino-acid residues. Thus the query sequence #{(validation == :yes) ? "has a similiar size to sequences within" : "is longer/shorter than"} the most dense cluster of hits.  Please see below for a graphical representation of this."
+
+
   end
 
   def print

@@ -29,10 +29,7 @@ class BlastRFValidationOutput < ValidationReport
     else
       conclusion  = "Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query... This may suggest a frame shift in the query. "
     end
-    @explanation  = "BLAST Analysis of the query sequence produced #{@totalHSP}"<<
-                    " High-scoring Segment Pairs (HSPs). Further analysis of"<<
-                    " these HSPs with regards to their main Open Reading"<<
-                    "  Frame showed: #{@explainpart.gsub(/; $/, '')}. #{conclusion}"
+    @explanation  = "BLAST Analysis of the query sequence produced #{@totalHSP} High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: #{@explainpart.gsub(/; $/, '')}. #{(validation == :yes) ? "Since all of the HSPs are in a single open reading frame, we can be relatively confident about the query." : "Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query."} "
   end
 
   def print

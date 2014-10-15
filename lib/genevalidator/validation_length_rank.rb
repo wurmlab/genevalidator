@@ -20,8 +20,7 @@ class LengthRankValidationOutput < ValidationReport
     @msg          = msg
     @result       = validation
     @expected     = expected
-    @explanation  = "#{percentage}% of the BLAST hits have a length that is more extreme"<<
-                    " (i.e. further away from the median) than the prediction."
+    @explanation  = "If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, only #{percentage}% of the BLAST hits have a length that is more extreme (i.e. further away from the median length) than the prediction."
   end
 
   def print
