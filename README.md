@@ -1,15 +1,15 @@
 # GeneValidator - Identify problems with predicted genes 
 
-### Introduction
+## Introduction
 The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases. The results produced will make provide evidence on how sequencing curation may be done and will be useful in improving or trying out new approaches for gene prediction tools. The main target of this tool are biologists who wish to validate the data produced in their labs.
 
-#### Citation
+### Citation
 If you use GeneValidator in your work, please cite us as follows:
 
 "Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) 2014 GeneValidator: identify problematic gene predictions"
 
 
-#### Validations
+### Validations
 GeneValidator currently carries out a number of validations which include:
 * Length validation by clusterization (a graph is dynamically produced)
 * Length validation by ranking
@@ -19,13 +19,13 @@ GeneValidator currently carries out a number of validations which include:
 * Main ORF validation (for nucleotides) (a graph is dynamically produced)
 * Validation based on multiple alignment (a graph is dynamically produced)
 
-#### Resources
+### Resources
 
 * [Full Documentation](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/all_validations_prot.fasta.html/doc/about.html)
 * [Blog](http://gene-prediction.blogspot.ro/)
 * [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
 
-### Installation Requirements
+## Installation Requirements
 * Ruby (>= 1.9.3)
 * NCBI BLAST+ (>= 2.2.25+)
 * MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
@@ -33,13 +33,13 @@ Linux and MacOS are officially supported!
 * Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox.
 
 
-### Installation
+## Installation
 1. Type the following command in the terminal
 
 `$ gem install GeneValidator`
 
 
-### Usage 
+## Usage 
 1. After installing, GeneValidator can be run by typing the following command in the terminal
 
 ```bash
@@ -81,18 +81,17 @@ OPTIONAL ARGUMENTS:
     -h, --help                       Show this screen.
 
 ```
-<br>
 
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
-### Output
+## Output
 The output produced by GeneValidator is presented in three manners
 
-#### HTML Output
+### HTML Output
 Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations 
 
-#### Yaml Output
+### Yaml Output
 The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
 
-#### Terminal Output
+### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
