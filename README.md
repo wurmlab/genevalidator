@@ -1,79 +1,98 @@
-Identify problems with predicted genes
-===============
-<br>
-<h3><div align = center><font color="blue">
-GSoC13 version of the tool can be found on rubygem branch.<br><br> This is the alpha version of GeneValidator.<br> We continue the development.<br> So, stay tunned!
+# GeneValidator - Identify problems with predicted genes 
+
+### Introduction
+The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases. The results produced will make provide evidence on how sequencing curation may be done and will be useful in improving or trying out new approaches for gene prediction tools. The main target of this tool are biologists who wish to validate the data produced in their labs.
+
+#### Citation
+If you use GeneValidator in your work, please cite us as follows:
+
+"Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) 2014 GeneValidator: identify problematic gene predictions"
 
 
-</font></div></h3>
-<br><br>
+#### Validations
+GeneValidator currently carries out a number of validations which include:
+* Length validation by clusterization (a graph is dynamically produced)
+* Length validation by ranking
+* Check gene merge (a graph is dynamically produced)
+* Check duplications
+* Reading frame validation (for nucleotides)
+* Main ORF validation (for nucleotides) (a graph is dynamically produced)
+* Validation based on multiple alignment (a graph is dynamically produced)
 
-### Authors
-
-* GSoC student: [Monica Dragan](http://swarm.cs.pub.ro/~mdragan/gsoc2013/Monica_Dragan_CV.pdf) ([email](mailto:monica.dragan@cti.pub.ro))
-* Mentors: [Anurag Priyam](https://plus.google.com/114122400102590087616/about)([email](mailto:anurag08priyam@gmail.com)) and [Yannick Wurm](http://yannick.poulet.org/)([email](mailto:y.wurm@qmul.ac.uk))
-
-### Resources
+#### Resources
 
 * [Full Documentation](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/all_validations_prot.fasta.html/doc/about.html)
 * [Blog](http://gene-prediction.blogspot.ro/)
 * [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
-<br>
 
-### Abstract
-The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases.The results of the prediction validation will make evidence about how the sequencing curation may be done and can be useful in improving / trying new approaches for gene prediction tools. The main target users of this tool are the Biologists who want to validate the data obtained in their own laboratories.
-
-### Current Validations
-* Length validation by clusterization
-* Length validation by ranking
-* Check gene merge
-* Check duplications
-* Reading frame validation (for nucleotides)
-* Main ORF validation (for nucleotides)
-* Validation based on multiple alignment
-* Codon coverage ~ under development
-
-### Requirements
+### Installation Requirements
 * Ruby (>= 1.9.3)
-* RubyGems (>= 1.3.6)
 * NCBI BLAST+ (>= 2.2.25+)
 * MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
 Linux and MacOS are officially supported!
+* Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox.
+
 
 ### Installation
-1. Get the source code<br>
+1. Type the following command in the terminal
+
 `$ gem install GeneValidator`
 
-2. Run GeneValidation<br>
-`$ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE` 
 
-Example that emphasizes all the validations:<br>
-`$ genevalidator -x data/all_validations_prot/all_validations_prot.xml data/all_validations_prot/all_validations_prot.fasta`
+### Usage 
+1. After installing, GeneValidator can be run by typing the following command in the terminal
 
-Learn more:<br>
-`$ genevalidator -h`
+```bash
 
-Uninstall GeneValidator: <br>
-`$ sudo gem uninstall GeneValidator `
+USAGE:
+    $ genevalidator [OPTIONS] INPUT_FILE
 
-### Outputs
-By running GeneValidator on your dataset you get numbers and plots. Some relevant files will be generated at the same path with the input file. The results are available in 3 formats:
-* console table output 
-* validation results in YAML format (the YAML file has the same name with the input file + YAML extension) 
-* html output with plot visualization (the useful files will be generated in the 'html' directory, at the same path with the input file)<br>
-! Note: for the moment check the html output with Firefox browser only !
+ARGUMENTS:
+    INPUT_FILE: Path to the input FASTA file containing the predicted sequences.
 
-[Have a look at our results!](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator)
+OPTIONAL ARGUMENTS:
 
-### Other things
+    -v, --validations <String>       The Validations to be applied.
+                                     Validation Options Available (separated by coma):
+                                       all    = run all validations (default)
+                                       lenc   = length validation by clusterization
+                                       lenr   = length validation by ranking
+                                       frame  = reading frame validation
+                                       merge  = check gene merge
+                                       dup    = check duplications
+                                       orf    = main ORF validation (applicable for nucleotides)
+                                       align  = validation based on multiple alignment
+                                       codons = codon coverage ~ under development
+    -d, --db [BLAST_DATABASE]        base where to look up the sequences
+                                     e.g. "swissprot -remote" or a local BLAST database
+    -x, --skip_blast [FILENAME]      Skip blast-ing part and provide a blast xml or tabular output
+                                     as input to this script.
+                                     Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6
+                                     or 7) outputs accepted
+    -t [BLAST OUTFMT STRING],        Custom format used in BLAST -outfmt argument
+        --tabular                    Usage:
+                                        $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE
+                                      See the manual pages of BLAST for more details
+    -m, --mafft [MAFFT_PATH]         Path to MAFFT program installation
+    -b, --blast [BLAST_PATH]         Path to BLAST+ bin folder
+    -r, --raw_seq [FASTA_FILE]       Fasta file containing the raw sequences of each of the BLAST hits in
+                                     BLAST XML output file.
+        --version                    The version of GeneValidator that you are running.
+    -h, --help                       Show this screen.
 
-4. Run unit tests<br>
-`$ rake test`
+```
+<br>
 
-5. Generate documentation<br>
-`$ rake doc`
+Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
+### Output
+The output produced by GeneValidator is presented in three manners
 
- 
+#### HTML Output
+Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations 
 
+#### Yaml Output
+The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
 
+#### Terminal Output
+Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
