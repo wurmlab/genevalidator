@@ -9,18 +9,27 @@ class DuplicationValidationOutput < ValidationReport
   attr_reader :threshold
 
   def initialize (pvalue, threshold = 0.05, expected = :no)
-
-    @short_header = "Duplication"
-    @header       = "Duplication"
-    @description  = "Check whether there is a duplicated subsequence in the"<<
-    " predicted gene by counting the hsp residue coverag of the prediction,"<<
-    " for each hit." 
-
+    @short_header = 'Duplication'
+    @header       = 'Duplication'
+    @description  = 'Check whether there is a duplicated subsequence in the' \
+                    ' predicted gene by counting the hsp residue coverage of' \
+                    ' the prediction, for each hit.'
     @pvalue      = pvalue
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @explanation = "We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that average coverage of hit regions #{(validation == :yes) ? "is less than 1. This suggests that each region of the each homologous hit gene matches the predicted gene at most once." : "is greater than 1. This can occur if tandem duplicated genes were erroneously included in the same gene model"}"
+    if validation == :yes 
+      @explainpart = 'less than 1. This suggests that each region of' \
+                     ' each homologous hit matches the predicted gene at' \
+                     ' most once.'
+    elsif validation == :no
+      @explainpart = 'greater than 1. This can occur if tandem duplicated' \
+                     ' genes were erroneously included in the same gene model'
+    end
+    @explanation = "We expect each region of each homologous hit gene to" \
+                   " match the predicted gene at most once. The result here" \
+                   " suggests that the average coverage of hit regions is" \
+                   " #{@explainpart}"
   end
 
   def print
@@ -37,9 +46,9 @@ class DuplicationValidationOutput < ValidationReport
 
   def color
     if validation == :no
-      "success"
+      'success'
     else
-      "danger"
+      'danger'
     end
   end
 end
@@ -54,23 +63,20 @@ class DuplicationValidation < ValidationTest
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
  
-  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
+  def initialize(type, prediction, hits, mafft_path, raw_seq_file,
+                 index_file_name, raw_seq_file_load, db)
     super
+    @short_header      = 'Duplication'
+    @header            = 'Duplication'
+    @description       = 'Check whether there is a duplicated subsequence in' \
+                         ' the predicted gene by counting the hsp residue' \
+                         ' coverage of the prediction, for each hit.' 
+    @cli_name          = 'dup'
     @mafft_path        = mafft_path
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
     @db                = db
-
-    @short_header      = "Duplication"
-    @header            = "Duplication"
-    @description = "Check whether there is a duplicated subsequence in the"<<
-    " predicted gene by counting the hsp residue coverag of the prediction,"<<
-    " for each hit. Meaning of the output displayed: P-value of the Wilcoxon"<<
-    " test which test the distribution of hit average coverage against 1."<<
-    " P-values higher than 5% pass the validation test."
-    @cli_name        = "dup"
-
   end
 
   def is_in_range(ranges, idx)
@@ -109,9 +115,9 @@ class DuplicationValidation < ValidationTest
   
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
             else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
             end
           end
 
@@ -219,19 +225,19 @@ class DuplicationValidation < ValidationTest
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoMafftInstallationError                          
       return @validation_report
     rescue NoInternetError 
-      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       return @validation_report
     end
   end
@@ -263,13 +269,13 @@ class DuplicationValidation < ValidationTest
       $stdout = File.new('/dev/null', 'w')
       $stderr = File.new('/dev/null', 'w')
 
-      R.echo "enable = nil, stderr = nil, warn = nil"
+      R.echo 'enable = nil, stderr = nil, warn = nil'
       #make the wilcox-test and get the p-value
       R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
       R.eval("coverageDistrib = c#{averages.to_s.gsub('[','(').gsub(']',')')}")
       R. eval("pval = wilcox.test(coverageDistrib - 1)$p.value")
 
-      pval = R.pull "pval"
+      pval = R.pull 'pval'
       $stdout = original_stdout
       $stderr = original_stderr
 

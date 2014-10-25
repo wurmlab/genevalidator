@@ -11,19 +11,21 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_up
 
   def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
-
-    @short_header = "Gene_Merge"
-    @header       = "Gene Merge"
-    @description  = "Check whether BLAST hits make evidence about a merge of two"<<
-                    " genes that match the predicted gene."
-
+    @short_header   = "Gene_Merge"
+    @header         = "Gene Merge"
+    @description    = "Check whether BLAST hits make evidence about a merge" \
+                      " of two genes that match the predicted gene."
     @slope          = slope
     @threshold_down = threshold_down
     @threshold_up   = threshold_up
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @explanation    = "This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of #{@slope.round(2)}. Please see below for a graphical representation of this."
+    @explanation    = "This validation test analyses the relationship between" \
+                      " the start and stop offsets of the High-scoring" \
+                      " Segment Pairs. A linear regression analysis produced" \
+                      " a result of #{@slope.round(2)}. Please see below for" \
+                      " a graphical representation of this."
   end
 
   def print
@@ -76,15 +78,13 @@ class GeneMergeValidation < ValidationTest
   # +boundary+: the offset of the hit from which we start analysing the hit
   def initialize(type, prediction, hits, filename, boundary=10)
     super
+    @short_header = 'Gene_Merge'
+    @header       = 'Gene Merge'
+    @description  = 'Check whether BLAST hits make evidence about a merge of' \
+                    ' two genes that match the predicted gene.'
+    @cli_name     = 'merge'
     @filename     = filename
-    @short_header = "Gene_Merge"
-    @header       = "Gene Merge"
-    @description = "Check whether BLAST hits make evidence about a merge of two"<<
-    " genes that match the predicted gene. Meaning of the output displayed:"<<
-    " slope of the linear regression of the relationship between the start and"<<
-    " stop offsets of the hsps (see the plot). Invalid slopes are around 45 degrees."
-    @cli_name     = "merge"
-    @boundary = boundary
+    @boundary     = boundary
   end
 
   ##
@@ -148,12 +148,12 @@ class GeneMergeValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
-      @validation_report.errors.push "Unexpected Error" 
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report.errors.push 'Unexpected Error' 
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       return @validation_report
     end
   
@@ -168,17 +168,17 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
-      colors   = ["orange", "blue"]  ##{colors[i%2]
-      f        = File.open(output , "w")
+      colors   = ['orange', 'blue']  ##{colors[i%2]
+      f        = File.open(output , 'w')
       no_lines = hits.length
 
       hits_less = hits[0..[no_lines, hits.length-1].min]
 
 
-      f.write((hits_less.each_with_index.map{|hit, i|{"y"=>i, "start"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-               "stop"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, "color"=>"black", "dotted"=>"true"}}.flatten +
+      f.write((hits_less.each_with_index.map{|hit, i|{'y'=>i, 'start'=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
+               'stop'=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 'color'=>'black', 'dotted'=>'true'}}.flatten +
                hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
-               {"y"=>i, "start"=>hsp.match_query_from, "stop"=>hsp.match_query_to, "color"=>"orange"}}}.flatten).to_json)
+               {'y'=>i, 'start'=>hsp.match_query_from, 'stop'=>hsp.match_query_to, 'color'=>'orange'}}}.flatten).to_json)
 
       f.close
 

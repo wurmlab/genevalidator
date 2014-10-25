@@ -12,21 +12,36 @@ class LengthClusterValidationOutput < ValidationReport
   attr_reader :limits
 
   def initialize (prediction_len, limits, expected = :yes)
-
-    @short_header   = "LengthCluster"
-    @header         = "Length Cluster"
-    @description    = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
-      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
-      " [Main Cluster Length Interval]"
-
+    @short_header   = 'LengthCluster'
+    @header         = 'Length Cluster'
+    @description    = 'Check whether the prediction length fits most of the' \
+                      ' BLAST hit lengths, by 1D hierarchical clusterization.' \
+                      ' Meaning of the output displayed: Prediction_len' \
+                      ' [Main Cluster Length Interval]'
     @limits         = limits
     @prediction_len = prediction_len
     @expected       = expected
     @result         = validation
     @plot_files     = []
-    @explanation    = "If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is #{prediction_len} amino-acid residues. The most dense cluster of hit sequences includes lengths between #{limits[0]} and #{limits[1]} amino-acid residues. Thus the query sequence #{(validation == :yes) ? "has a similiar size to sequences within" : "is longer/shorter than"} the most dense cluster of hits.  Please see below for a graphical representation of this."
-
-
+    if validation   == :yes 
+      @explainpart  = 'has a similiar size to sequences within'
+    elsif validation == :no 
+      if @prediction_len > @limits[1]
+        @explainpart  = 'is longer than sequences within'
+      elsif @prediction_len < @limits[0]
+        @explainpart = 'is shorter than sequences within'
+      end
+    end
+    @explanation    = "If the query sequence is well conserved and database" \
+                      " sequences are correct, we would expect the query and" \
+                      " hit sequences to have similar lengths.  The length of" \
+                      " the query sequence is #{prediction_len} amino-acid" \
+                      " residues. The most dense cluster of hit sequences" \
+                      " includes lengths between #{limits[0]} and" \
+                      " #{limits[1]} amino-acid residues. Thus the query" \
+                      " sequence #{@explainpart} the most dense cluster of" \
+                      " hits. Please see below for a graphical representation" \
+                      " of this."
   end
 
   def print
@@ -62,13 +77,14 @@ class LengthClusterValidation < ValidationTest
   # +dilename+: +String+ with the name of the fasta file
   def initialize(type, prediction, hits, filename)
     super
-    @filename = filename
-    @short_header = "LengthCluster"
-    @header = "Length Cluster"
-    @description = "Check whether the prediction length fits most of the BLAST hit lengths,"<<
-      " by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len"<<
-      " [Main Cluster Length Interval]"
-    @cli_name = "lenc" 
+    @filename     = filename
+    @short_header = 'LengthCluster'
+    @header       = 'Length Cluster'
+    @description  = 'Check whether the prediction length fits most of the' \
+                    ' BLAST hit lengths, by 1D hierarchical clusterization.' \
+                    ' Meaning of the output displayed: Prediction_len' \
+                    ' [Main Cluster Length Interval]'
+    @cli_name     = 'lenc' 
   end
 
 
@@ -104,10 +120,10 @@ class LengthClusterValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     else 
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
     end       

@@ -9,31 +9,40 @@ class BlastRFValidationOutput < ValidationReport
 
   def initialize (frames_histo, expected = :yes)
 
-    @short_header = "Frame"
-    @header       = "Reading Frame"
-    @description  = "Check whether there is a single reading frame among BLAST"<<
-    " hits. Otherwise there might be a reading frame shift in the query sequence."
+    @short_header = 'Frame'
+    @header       = 'Reading Frame'
+    @description  = 'Check whether there is a single reading frame among' \
+                    ' BLAST hits. Otherwise there might be a reading frame' \
+                    ' shift in the query sequence.'
     @frames_histo = frames_histo
-    @msg          = ""
-    @explainpart  = ""
+    @msg          = ''
+    @expected     = expected
+    @result       = validation
+    @explainpart  = ''
     @totalHSP     = 0
     frames_histo.each do |x, y|
       @msg         << "#{y}&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;#{x}; "      
       @explainpart << "#{y} HSPs were in frame #{x}; "
       @totalHSP += y.to_i
     end
-    @expected     = expected
-    @result       = validation
+    
     if frames_histo.size == 1
-      conclusion  = "Since all of the HSPs are in a single open reading frame, we can be relatively confident about the query... "
+      conclusion  = 'Since all of the HSPs are in a single open reading frame' \
+                    ', we can be relatively confident about the query.'
     else
-      conclusion  = "Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query... This may suggest a frame shift in the query. "
+      conclusion  = 'Since all of the HSPs are not all in a single open' \
+                    ' reading frame, we are not as confident about the query.' \
+                    ' This may suggest a frame shift in the query.'
     end
-    @explanation  = "BLAST Analysis of the query sequence produced #{@totalHSP} High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: #{@explainpart.gsub(/; $/, '')}. #{(validation == :yes) ? "Since all of the HSPs are in a single open reading frame, we can be relatively confident about the query." : "Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query."} "
+    @explanation  = "BLAST Analysis of the query sequence produced" \
+                    " #{@totalHSP} High-scoring Segment Pairs (HSPs). Further" \
+                    " analysis of these HSPs with regards to their main Open" \
+                    " Reading Frame showed that:" \
+                    " #{@explainpart.gsub(/; $/, '')}. #{conclusion}"
   end
 
   def print
-    @msg
+    @msg.gsub(/; $/, '')
   end
 
   def validation
@@ -66,12 +75,12 @@ class BlastReadingFrameValidation < ValidationTest
 
   def initialize(type, prediction, hits = nil)
     super
-    @short_header = "Frame"
-    @header       = "Reading Frame"
-    @description  = "Check whether there is a single reading frame among BLAST"<<
-    " hits. Otherwise there might be a reading frame shift in the query sequence."<<
-    " Meaning of the output displayed: (reading frame: no hsps)"
-    @cli_name     = "frame"
+    @short_header = 'Frame'
+    @header       = 'Reading Frame'
+    @description  = 'Check whether there is a single reading frame among' \
+                    ' BLAST hits. Otherwise there might be a reading frame' \
+                    ' shift in the query sequence.'
+    @cli_name     = 'frame'
   end
 
   ## 
@@ -82,8 +91,8 @@ class BlastReadingFrameValidation < ValidationTest
   # +BlastRFValidationOutput+ object
   def run(lst = @hits)
     begin
-      if type.to_s != "nucleotide"
-        @validation_report = ValidationReport.new("", :unapplicable)
+      if type.to_s != 'nucleotide'
+        @validation_report = ValidationReport.new('', :unapplicable)
         return @validation_report
       end
 
@@ -105,10 +114,10 @@ class BlastReadingFrameValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       return @validation_report
     end
   end

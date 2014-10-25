@@ -10,14 +10,15 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :consensus
   attr_reader :threshold
 
-  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2, expected = :yes)
+  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2,
+                  expected = :yes)
 
-    @short_header = "MA"
-    @header       = "Missing/Extra sequences"
-    @description  = "Finds missing and extra sequences in the prediction, based"<<
-    " on the multiple alignment of the best hits. Also counts the percentahe of"<<
-    " the conserved regions that appear in the prediction."
-
+    @short_header = 'MA'
+    @header       = 'Missing/Extra sequences'
+    @description  = 'Finds missing and extra sequences in the prediction,' \
+                    ' based on the multiple alignment of the best hits. Also' \
+                    ' counts the percentahe of the conserved regions that' \
+                    ' appear in the prediction.'
     @gaps         = gaps
     @extra_seq    = extra_seq
     @consensus    = consensus
@@ -25,7 +26,13 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @explanation  = "A position specific scoring matrix of the strongest 10 results show that: #{(extra_seq*100).round(0)}% of residues in the prediction do not appear in profile; #{(gaps*100).round(0)}% of residues in the profile do not appear in the prediction and when compared to the model, #{(consensus*100).round(0)}% of residues are conserved in the prediciton."
+    @explanation  = "A position specific scoring matrix of the strongest 10" \
+                    " results show that: #{(extra_seq*100).round(0)}% of" \
+                    " residues in the prediction do not appear in profile;" \
+                    " #{(gaps*100).round(0)}% of residues in the profile do" \
+                    " not appear in the prediction and when compared to the" \
+                    " model, #{(consensus*100).round(0)}% of residues are" \
+                    " conserved in the prediciton."
   end
 
   def print
@@ -65,25 +72,23 @@ class AlignmentValidation < ValidationTest
   # +raw_seq_file+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +raw_seq_file_load+: String - loaded content of the index file
-  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
+  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file,
+                 index_file_name, raw_seq_file_load, db)
     super
-    @filename          = filename
-    @mafft_path        = mafft_path
-    @raw_seq_file      = raw_seq_file
-    @index_file_name   = index_file_name
-    @raw_seq_file_load = raw_seq_file_load
-    @db                = db
-
-    @short_header = "MA"
-    @header = "Missing/Extra sequences"
-    @description = "Finds missing and extra sequences in the prediction, based"<<
-    " on the multiple alignment of the best hits. Also counts the percentahe of"<<
-    " the conserved regions that appear in the prediction. Meaning of the output:"<<
-    " the percentages of the missing/extra sequences with respect to the multiple"<<
-    " alignment. Validation fails if one of these values is higher than 20%."<<
-    " Percentage of the conserved residues."
+    @short_header       = 'MA'
+    @header             = 'Missing/Extra sequences'
+    @description        = 'Finds missing and extra sequences in the' \
+                          ' prediction, based on the multiple alignment of' \
+                          ' the best hits. Also counts the percentage of the' \
+                          '  conserved regions that appear in the prediction.'
+    @filename           = filename
+    @mafft_path         = mafft_path
+    @raw_seq_file       = raw_seq_file
+    @index_file_name    = index_file_name
+    @raw_seq_file_load  = raw_seq_file_load
+    @db                 = db
     @multiple_alignment = []
-    @cli_name = "align"
+    @cli_name           = 'align'
   end
 
   ##
@@ -113,9 +118,9 @@ class AlignmentValidation < ValidationTest
 
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, "protein", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
             else
-              hit.get_sequence_by_accession_no(hit.accession_no, "nucleotide", @db)
+              hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
             end
           end
 
@@ -181,22 +186,22 @@ class AlignmentValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new("Mafft error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new("Internet error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue ReadingFrameError => error
-      @validation_report = ValidationReport.new("Multiple reading frames", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Multiple reading frames', :error, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
-      @validation_report.errors.push "Unexpected Error"
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report.errors.push 'Unexpected Error'
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
     end
@@ -433,29 +438,29 @@ class AlignmentValidation < ValidationTest
 
       len = ma[0].length
 
-      f = File.open(output , "w")
+      f = File.open(output , 'w')
       f.write((
       # plot statistical model
-      freq.each_with_index.map{|f, j| {"y"=>ma.length, "start"=>j, "stop"=>j+1, "color"=>"orange", "height"=>f}} +
+      freq.each_with_index.map{|f, j| {'y'=>ma.length, 'start'=>j, 'stop'=>j+1, 'color'=>'orange', 'height'=>f}} +
       # hits
-      match_alignment_ranges.each_with_index.map{|ranges, j| ranges.map{ |range| {"y"=>ma.length-j-1, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}}.flatten +
-      ma[0..ma.length-2].each_with_index.map{|seq, j| #consensus_idxs.map{|con|{"y"=>j+1, "start"=>con, "stop"=>con+1, "color"=>"yellow", "height"=>-1}}}.flatten +
-                           consensus_ranges.map{ |range| {"y"=>j+1, "start"=>range.first, "stop"=>range.last, "color"=>"yellow", "height"=>-1}}}.flatten +
+      match_alignment_ranges.each_with_index.map{|ranges, j| ranges.map{ |range| {'y'=>ma.length-j-1, 'start'=>range.first, 'stop'=>range.last, 'color'=>'red', 'height'=>-1}}}.flatten +
+      ma[0..ma.length-2].each_with_index.map{|seq, j| #consensus_idxs.map{|con|{'y'=>j+1, 'start'=>con, 'stop'=>con+1, 'color'=>'yellow', 'height'=>-1}}}.flatten +
+                           consensus_ranges.map{ |range| {'y'=>j+1, 'start'=>range.first, 'stop'=>range.last, 'color'=>'yellow', 'height'=>-1}}}.flatten +
       # plot prediction
-      [{"y"=>0, "start"=>0, "stop"=>len, "color"=>"gray", "height"=>-1}] +
-      query_alignment_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"red", "height"=>-1}}.flatten +
+      [{'y'=>0, 'start'=>0, 'stop'=>len, 'color'=>'gray', 'height'=>-1}] +
+      query_alignment_ranges.map{ |range| {'y'=>0, 'start'=>range.first, 'stop'=>range.last, 'color'=>'red', 'height'=>-1}}.flatten +
 
       # plot consensus
-      consensus_all_ranges.map{ |range| {"y"=>0, "start"=>range.first, "stop"=>range.last, "color"=>"yellow", "height"=>-1}}.flatten).to_json)
+      consensus_all_ranges.map{ |range| {'y'=>0, 'start'=>range.first, 'stop'=>range.last, 'color'=>'yellow', 'height'=>-1}}.flatten).to_json)
 
       f.close
 
-      yAxisValues = "prediction"
+      yAxisValues = 'prediction'
       (1..ma.length-1).each do |i|
-         yAxisValues << ", hit#{i}"
+         yAxisValues << ', hit#{i}'
       end
 
-      yAxisValues << ", statistical model"
+      yAxisValues << ', statistical model'
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :align,

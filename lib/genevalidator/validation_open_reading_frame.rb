@@ -11,10 +11,11 @@ class ORFValidationOutput < ValidationReport
 
   def initialize (orfs, ratio, longest_orf_frame, threshold = 0.8, expected = :yes)
 
-    @short_header = "ORF"
-    @header       = "Main ORF"
-    @description  = 'Check whether there is a single main Open Reading Frame'<<
-    ' in the predicted gene. Aplicable only for nucleotide queries.'
+    @short_header = 'ORF'
+    @header       = 'Main ORF'
+    @description  = 'Check whether there is a single main Open Reading Frame' \
+                    ' in the predicted gene. Aplicable only for nucleotide' \
+                    ' queries.'
 
     @orfs         = orfs
     @ratio        = ratio
@@ -22,9 +23,10 @@ class ORFValidationOutput < ValidationReport
     @expected     = expected
     @result       = validation
     @plot_files   = []
-    @explanation  = "When translating the query sequence in all 6 frame, the"<<
-                    " longest open reading frame is in frame #{longest_orf_frame}"<<
-                    " and it covers #{(@ratio*100).round}% of the full sequence. Please see below for agraphic representation of this. "
+    @explanation  = "When translating the query sequence in all 6 frame, the" \
+                    " longest open reading frame is in frame #{longest_orf_frame}" \
+                    " and it covers #{(@ratio*100).round}% of the full sequence." \
+                    " Please see below for a graphic representation of this."
     @longest_orf_frame = longest_orf_frame
   end
 
@@ -66,16 +68,15 @@ class OpenReadingFrameValidation < ValidationTest
   # +stop_codons+: +Array+ of codons
   def initialize (type, prediction, hits, filename, start_codons = [], stop_codons = [])
     super
-    @filename = filename
+    @short_header = 'ORF'
+    @header       = 'Main ORF'
+    @description  = 'Check whether there is a single main Open Reading Frame' \
+                    ' in the predicted gene. Aplicable only for nucleotide' \
+                    ' queries.'
+    @cli_name     = "orf"
+    @filename     = filename
     @start_codons = start_codons
-    @stop_codons = stop_codons
-    @short_header = "ORF"
-    @header = "Main ORF"
-    @description = 'Check whether there is a single main Open Reading Frame'<<
-    ' in the predicted gene. Aplicable only for nucleotide queries. Meaning'<<
-    '  of the output displayed: %=MAIN ORF COVERAGE. Coverage higher than 80%'<<
-    ' passe the validation test.'
-    @cli_name = "orf"
+    @stop_codons  = stop_codons
   end
 
 
@@ -122,11 +123,11 @@ class OpenReadingFrameValidation < ValidationTest
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      return ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      return ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
     end
   end
 
@@ -142,8 +143,8 @@ class OpenReadingFrameValidation < ValidationTest
   # +Hash+ containing the reading frame (the key) and a list of intervals (the values) 
   def get_orfs(orf_length = 100, prediction = @prediction, start_codons = @start_codons, stop_codons = @stop_codons)
 
-    if prediction.type != "nucleotide"
-      "-"
+    if prediction.type != 'nucleotide'
+      '-'
     end
 
     seq = prediction.raw_sequence
@@ -307,13 +308,13 @@ class OpenReadingFrameValidation < ValidationTest
     # Create hashes for the Background
     (-3..3).each do |frame|
       next if frame == 0
-      results << {"y"=>frame, "start"=>0, "stop"=>len-chopping, "color"=>"gray"}
+      results << {'y'=>frame, 'start'=>0, 'stop'=>len-chopping, 'color'=>'gray'}
     end
 
     # Create the hashes for the ORFs...
     orfs.each do |frame, all_orfs|
       all_orfs.each do |orf|
-        results << {"y"=>frame, "start"=>orf[0], "stop"=>orf[1]-chopping, "color"=>"red"}
+        results << {'y'=>frame, 'start'=>orf[0], 'stop'=>orf[1]-chopping, 'color'=>'red'}
       end
     end
 

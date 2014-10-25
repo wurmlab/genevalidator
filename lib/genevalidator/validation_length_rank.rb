@@ -9,25 +9,39 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize (msg, percentage, expected = :yes)       
+  def initialize (msg, no_of_hits, median, predicted_len, extreme_hits, 
+                  percentage, expected = :yes)       
 
-    @short_header = "LengthRank"
-    @header       = "Length Rank"
-    @description  = "Check whether the rank of the prediction length lies among 80% of "<<
-        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
+    @short_header  = 'LengthRank'
+    @header        = 'Length Rank'
+    @description   = 'Check whether the rank of the prediction length lies ' \
+                     ' among 80% of all the BLAST hit lengths.'
 
-    @percentage   = percentage
-    @msg          = msg
-    @result       = validation
-    @expected     = expected
-    @explanation  = "If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, only #{percentage}% of the BLAST hits have a length that is more extreme (i.e. further away from the median length) than the prediction."
+    @msg           = msg
+    @no_of_hits    = no_of_hits
+    @median        = median
+    @predicted_len = predicted_len
+    @extreme_hits  = extreme_hits
+    @percentage    = percentage
+    @result        = validation
+    @expected      = expected
+    @explanation   = "If the query sequence is well conserved and database" \
+                     " sequences are correct, we would expect the query and" \
+                     " hit sequences to have similar lengths.  Here, BLAST" \
+                     " produced #{@no_of_hits} hits(s), where the median" \
+                     " sequence length is #{@median} base pairs. The" \
+                     " prediction has a length of #{@predicted_len} base" \
+                     " pairs. There are #{@extreme_hits} hit(s) that have" \
+                     " sequence length that is further away from the median" \
+                     ' compared to the prediction. The rank of the prediction' \
+                     " length lies within #{@percentage}% of all BLAST hits."
   end
 
   def print
     if msg != ""
-      return "#{@percentage}&nbsp;(#{msg})"
+      return "#{@percentage}%&nbsp;(#{@msg})"
     else 
-      return @percentage.to_s
+      return "#{@percentage}%"
     end
   end
 
@@ -54,15 +68,15 @@ class LengthRankValidation < ValidationTest
   # Params:
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +threashold+: threashold below which the prediction length rank is considered to be inadequate 
-  def initialize(type, prediction, hits, threshold = 0.2)
+  # +threashold+: threshold below which the prediction length rank is considered to be inadequate 
+  def initialize(type, prediction, hits, threshold = 80)
     super
-    @threshold = threshold
-    @short_header = "LengthRank"
-    @header = "Length Rank"
-    @description = "Check whether the rank of the prediction length lies among 80% of "<<
-        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
-    @cli_name = "lenr"
+    @threshold    = threshold
+    @short_header = 'LengthRank'
+    @header       = 'Length Rank'
+    @description  = 'Check whether the rank of the prediction length lies ' \
+                    ' among 80% of all the BLAST hit lengths.'
+    @cli_name     = 'lenr'
   end
 
   ##
@@ -80,41 +94,42 @@ class LengthRankValidation < ValidationTest
 
       start = Time.now
 
-      lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+      hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
 
-      len = lengths.length
-      median = lengths.median
-
+      no_of_hits = hits_lengths.length
+      median = hits_lengths.median
       predicted_len = prediction.length_protein
 
-      if hits.length == 1 || lengths.standard_deviation <= 5
+      if hits.length == 1 || hits_lengths.standard_deviation <= 5
         msg = ""
         percentage = 1
       else
+        # extreme_hits are hits that further away from the median than the
+        #   predicted...
         if predicted_len < median
-          rank = lengths.find_all{|x| x < predicted_len}.length
-          percentage = rank / (len + 0.0)
-          msg = "too&nbsp;short"
+          extreme_hits = hits_lengths.find_all{|x| x < predicted_len}.length
+          percentage = ((1-((extreme_hits.to_f * 2)/no_of_hits))*100).round
+          msg = 'too&nbsp;short'
         else
-          rank = lengths.find_all{|x| x > predicted_len}.length
-          percentage = rank / (len + 0.0)
-          msg = "too&nbsp;long"
+          extreme_hits = hits_lengths.find_all{|x| x > predicted_len}.length
+          percentage = ((1-((extreme_hits.to_f * 2)/no_of_hits))*100).round
+          msg = 'too&nbsp;long'
         end
       end
 
-      if percentage >= threshold
+      if percentage <= threshold
         msg = ""
       end
 
-      @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
+      @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, predicted_len, extreme_hits, percentage)
       @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
      rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
      else
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
     end
 
