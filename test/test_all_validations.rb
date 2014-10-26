@@ -57,12 +57,7 @@ class ValidateOutput < Minitest::Test
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
-      puts
-      puts
-      puts contents = File.read(filename_prot_out_xml)
 
-      puts
-      puts
       begin
         FileUtils.rm_rf(filename_prot_html)
         rescue Error
@@ -77,12 +72,6 @@ class ValidateOutput < Minitest::Test
                          nil, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
-      puts
-      puts
-
-      puts contents = File.read(filename_prot_out_tab)
-      puts
-      puts
 
       diff = FileUtils.compare_file(filename_prot_out_xml, filename_prot_out_tab)
 
@@ -92,8 +81,7 @@ class ValidateOutput < Minitest::Test
       File.delete(filename_prot_raw_idx)
 
       FileUtils.rm_rf(filename_prot_html)
-      puts 
-      puts 
+      puts
       puts diff
       puts 
       assert_equal diff, true
