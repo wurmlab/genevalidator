@@ -3,6 +3,7 @@ require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
 require "yaml"
+require 'fileutils'
 require 'genevalidator/blast'
 require 'validation'
 require 'genevalidator/validation_length_cluster'
@@ -74,4 +75,5 @@ class ValidateOutput < Minitest::Test
     end
   end
 
+  FileUtils.rm_rf("#{filename_fasta}.html")
 end
