@@ -16,7 +16,7 @@ require 'genevalidator/validation_alignment'
 
 class ValidateOutput < Minitest::Test
 
-  filename_prot = "data/all_validations_prot/all_validations_prot"
+  filename_prot = "test/test_files/all_validations_prot/all_validations_prot"
   filename_prot_fasta = "#{filename_prot}.fasta"
   filename_prot_xml = "#{filename_prot}.xml"
   filename_prot_tab = "#{filename_prot}.tab"
@@ -27,7 +27,7 @@ class ValidateOutput < Minitest::Test
   filename_prot_out_tab = "#{filename_prot_tab}.out"
   filename_prot_raw_idx = "#{filename_prot_raw}.idx"
 
-  filename_mrna = "data/all_validations_mrna/all_validations_mrna"
+  filename_mrna = "test/test_files/all_validations_mrna/all_validations_mrna"
   filename_mrna_fasta = "#{filename_mrna}.fasta"
   filename_mrna_xml = "#{filename_mrna}.xml"
   filename_mrna_tab = "#{filename_mrna}.tab"
