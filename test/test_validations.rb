@@ -40,7 +40,7 @@ class ValidateOutput < Minitest::Test
     prediction.length_protein = 108
 
     validations = b.do_validations(prediction, hits,1).validations
-    puts validations
+
   describe "Test validations 1" do  
     it "should check the number of hits" do
       assert_equal hits.length, 499
@@ -55,7 +55,7 @@ class ValidateOutput < Minitest::Test
 
     it "should validate length by rank" do
       lrv = validations.select{|v| v.class == LengthRankValidationOutput}[0]
-      assert_equal lrv.percentage.round(4), 0.46
+      assert_equal lrv.percentage.round(4), 8.0
     end
 
     it "should validate reading frame" do
