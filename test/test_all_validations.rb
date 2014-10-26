@@ -23,8 +23,9 @@ class ValidateOutput < Minitest::Test
   filename_prot_yaml = "#{filename_prot_fasta}.yaml"
   filename_prot_html = "#{filename_prot_fasta}.html"
   filename_prot_raw = "#{filename_prot_xml}.raw_seq" 
-  filename_prot_out_xml = "#{filename_prot_xml}.out"  
+  filename_prot_out_xml = "#{filename_prot_xml}.out"
   filename_prot_out_tab = "#{filename_prot_tab}.out"
+  filename_prot_raw_idx = "#{filename_prot_raw}.idx"
 
   filename_mrna = "data/all_validations_mrna/all_validations_mrna"
   filename_mrna_fasta = "#{filename_mrna}.fasta"
@@ -38,7 +39,7 @@ class ValidateOutput < Minitest::Test
 
   validations = ["lenc", "lenr", "dup", "orf", "align"]
 
-=begin
+
   describe "Protein dataset" do  
     it "xml and tabular inputs give the same output" do
       #puts "Validating all_validations_prot dataset..."
@@ -50,8 +51,8 @@ class ValidateOutput < Minitest::Test
         FileUtils.rm_rf(filename_prot_html)
         rescue Error
       end
+      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, nil, nil, 1, false, false)
 
-      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, nil, filename_prot_raw, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
@@ -65,9 +66,9 @@ class ValidateOutput < Minitest::Test
                          validations, 
                          "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
                          filename_prot_tab, 
-                         nil,			
+                         "swissprot -remote",			
                          filename_prot_raw,
-                         nil, 1, false, false)
+                         nil, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -76,52 +77,55 @@ class ValidateOutput < Minitest::Test
       File.delete(filename_prot_out_xml)
       File.delete(filename_prot_out_tab)
       File.delete(filename_prot_yaml)
+      File.delete(filename_prot_raw_idx)
+      
+      FileUtils.rm_rf(filename_prot_html)
 
       assert_equal diff, true
 
     end
   end
 
-  describe "mRNA dataset" do
-    it "xml and tabular inputs give the same output" do
-      #puts "Validating all_validations_mrna dataset..."
+  # describe "mRNA dataset" do
+  #   it "xml and tabular inputs give the same output" do
+  #     #puts "Validating all_validations_mrna dataset..."
 
-      original_stdout = $stdout.clone
-      $stdout.reopen(filename_mrna_out_xml, "w")
+  #     original_stdout = $stdout.clone
+  #     $stdout.reopen(filename_mrna_out_xml, "w")
 
-      begin
-        FileUtils.rm_rf(filename_mrna_html)
-        rescue Error
-      end
+  #     begin
+  #       FileUtils.rm_rf(filename_mrna_html)
+  #       rescue Error
+  #     end
 
-      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, nil, filename_mrna_raw, nil, 1, false, false)
-      b.validation
-      $stdout.reopen original_stdout
-      $stdout.reopen(filename_mrna_out_tab, "w")
+  #     b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, nil, filename_mrna_raw, nil, 1, false, false)
+  #     b.validation
+  #     $stdout.reopen original_stdout
+  #     $stdout.reopen(filename_mrna_out_tab, "w")
 
-      begin
-        FileUtils.rm_rf(filename_mrna_html)
-        rescue Error
-      end
+  #     begin
+  #       FileUtils.rm_rf(filename_mrna_html)
+  #       rescue Error
+  #     end
 
-      b = Validation.new(filename_mrna_fasta, 
-                         validations, 
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
-                         filename_mrna_tab, 
-                         nil,
-                         filename_mrna_raw,
-                         nil, 1, false, false)
-      b.validation
-      $stdout.reopen original_stdout
+  #     b = Validation.new(filename_mrna_fasta, 
+  #                        validations, 
+  #                        "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
+  #                        filename_mrna_tab, 
+  #                        nil,
+  #                        filename_mrna_raw,
+  #                        nil, 1, false, false)
+  #     b.validation
+  #     $stdout.reopen original_stdout
 
-      diff = FileUtils.compare_file(filename_mrna_out_xml, filename_mrna_out_tab)
+  #     diff = FileUtils.compare_file(filename_mrna_out_xml, filename_mrna_out_tab)
 
-      File.delete(filename_mrna_out_xml)
-      File.delete(filename_mrna_out_tab)
-      File.delete(filename_mrna_yaml)
+  #     File.delete(filename_mrna_out_xml)
+  #     File.delete(filename_mrna_out_tab)
+  #     File.delete(filename_mrna_yaml)
 
-      assert_equal diff, true
-    end
-  end
-=end
+  #     assert_equal diff, true
+  #   end
+  # end
+
 end
