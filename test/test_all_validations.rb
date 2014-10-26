@@ -4,6 +4,7 @@ require 'minitest'
 require 'minitest/autorun'
 require "yaml"
 require 'genevalidator/blast'
+require 'fileutils'
 require 'validation'
 require 'genevalidator/blast'
 require 'genevalidator/validation_length_cluster'
@@ -22,7 +23,7 @@ class ValidateOutput < Minitest::Test
   filename_prot_tab = "#{filename_prot}.tab"
   filename_prot_yaml = "#{filename_prot_fasta}.yaml"
   filename_prot_html = "#{filename_prot_fasta}.html"
-  filename_prot_raw = "#{filename_prot_xml}.raw_seq" 
+  filename_prot_raw = "#{filename_prot_xml}.raw_seq"
   filename_prot_out_xml = "#{filename_prot_xml}.out"
   filename_prot_out_tab = "#{filename_prot_tab}.out"
   filename_prot_raw_idx = "#{filename_prot_raw}.idx"
@@ -40,7 +41,7 @@ class ValidateOutput < Minitest::Test
   validations = ["lenc", "lenr", "dup", "orf", "align"]
 
 
-  describe "Protein dataset" do  
+  describe "Protein dataset" do
     it "xml and tabular inputs give the same output" do
       #puts "Validating all_validations_prot dataset..."
 
@@ -56,21 +57,32 @@ class ValidateOutput < Minitest::Test
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
+      puts
+      puts
+      puts contents = File.read(filename_prot_out_xml)
 
+      puts
+      puts
       begin
         FileUtils.rm_rf(filename_prot_html)
         rescue Error
       end
 
-      b = Validation.new(filename_prot_fasta, 
-                         validations, 
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
-                         filename_prot_tab, 
-                         "swissprot -remote",			
+      b = Validation.new(filename_prot_fasta,
+                         validations,
+                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
+                         filename_prot_tab,
+                         "swissprot -remote",
                          filename_prot_raw,
                          nil, nil, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
+      puts
+      puts
+
+      puts contents = File.read(filename_prot_out_tab)
+      puts
+      puts
 
       diff = FileUtils.compare_file(filename_prot_out_xml, filename_prot_out_tab)
 
@@ -78,9 +90,12 @@ class ValidateOutput < Minitest::Test
       File.delete(filename_prot_out_tab)
       File.delete(filename_prot_yaml)
       File.delete(filename_prot_raw_idx)
-      
-      FileUtils.rm_rf(filename_prot_html)
 
+      FileUtils.rm_rf(filename_prot_html)
+      puts 
+      puts 
+      puts diff
+      puts 
       assert_equal diff, true
 
     end
@@ -108,10 +123,10 @@ class ValidateOutput < Minitest::Test
   #       rescue Error
   #     end
 
-  #     b = Validation.new(filename_mrna_fasta, 
-  #                        validations, 
-  #                        "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
-  #                        filename_mrna_tab, 
+  #     b = Validation.new(filename_mrna_fasta,
+  #                        validations,
+  #                        "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
+  #                        filename_mrna_tab,
   #                        nil,
   #                        filename_mrna_raw,
   #                        nil, 1, false, false)
