@@ -9,7 +9,6 @@ require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
-require 'genevalidator/validation_codon_bias'
 require 'bio-blastxmlparser'
 require 'net/http'
 require 'open-uri'
@@ -198,7 +197,7 @@ class Validation
     path = File.dirname(@fasta_filepath)
     @html_path = "#{fasta_filepath}.html"
     @yaml_path = path
-    @filename = File.basename(@fasta_filepath)#.scan(/\/([^\/]+)$/)[0][0]
+    @filename = File.basename(@fasta_filepath)
     @all_query_outputs = []
 
     # create 'html' directory
@@ -237,7 +236,6 @@ class Validation
               output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, 11, 1)
             end
 
-            #parse output
             parse_output(output, :stream)
           else
             @idx = @idx + 1
@@ -245,14 +243,11 @@ class Validation
         end
       else
 
-        #file = File.open(@xml_file, "rb").read
         #check the format of the input file
         parse_output(@xml_file)
       end
       if @overall_evaluation
-        #Output.print_footer(@all_query_outputs, @html_path, @filename)
          Output.print_footer(@no_queries, @scores, @good_predictions, @bad_predictions, @nee, @no_mafft, @no_internet, @map_errors, @map_running_times, @html_path, @filename)
-        #@map_running_times
       end
 
     rescue SystemCallError => error
