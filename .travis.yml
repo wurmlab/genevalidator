@@ -17,4 +17,6 @@ before_install:
   - sudo make install
   - which mafft
   - pwd
+  - cd -
+  - pwd
 script: rake test
