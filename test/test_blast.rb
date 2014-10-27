@@ -2,6 +2,7 @@ require "rubygems"
 require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
+require 'fileutils'
 require 'validation'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
@@ -32,7 +33,8 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
 
       b = Validation.new(filename_mrna)
 
-      File.delete(filename_mrna)      
+      File.delete(filename_mrna)
+      FileUtils.rm_rf("#{filename_mrna}.html")
       assert_equal b.type, :nucleotide      
     end
 
@@ -59,6 +61,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       b = Validation.new(filename_prot)
 
       File.delete(filename_prot)
+      FileUtils.rm_rf("#{filename_prot}.html")
       assert_equal b.type, :protein
 
       end
@@ -176,6 +179,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       # after removal
       assert_equal hits.length, 1
       assert_in_delta hits[0].hsp_list[0].pidentity, 90, 0.01
+      FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
     it "should remove identical matches among nucleotide sequences with tabular input" do
@@ -203,6 +207,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
  
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
+      FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
     it "should remove identical matches among nucleotide sequences with xml input" do
@@ -230,6 +235,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       assert_equal hits.length, 13
       assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
+      FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
     it "should return error when using a nonexisting input file" do
