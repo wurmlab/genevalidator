@@ -131,5 +131,4 @@ class ValidateOutput < Minitest::Test
       assert_equal diff, true
     end
   end
-
 end
