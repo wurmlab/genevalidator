@@ -1,0 +1,63 @@
+# Running GeneValidator with sample data
+
+Here, we walk through the steps involved in analysing some sample data with GeneValidator. There are two options on how to run genevalidator - the second option is faster with larger input files. 
+
+## Running just GeneValidator
+
+1) Run GeneValidator
+
+```
+$ genevalidator -d [BLAST database] [Input File]
+
+e.g. 
+
+$ genevalidator -d ~/blastdb/SwissProt protein_data.fasta
+$ genevalidator -d ~/blastdb/SwissProt mrna_data.fasta
+
+```
+This will produce a yaml file (in the same directory as the input file) and html file (within a subdirectory in the directory of the input files). 
+
+## Running BLAST Separately
+
+GeneValidator accepts BLAST XML files (as well as BLAST tabular outputs).
+
+1. Run BLAST
+
+```
+$ blastp -db [BLAST database] -evalue 1e-5 -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query [input_file] -out [Output XML file]
+
+e.g.
+
+$ blastp -db ~/blastdb/SwissProt -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query protein_data.fasta -out protein_data.xml
+$ blastx -db ~/blastdb/SwissProt -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query mrna_data.fasta -out mrna_data.xml
+
+```
+
+2) Run get_raw_sequences script
+
+```
+$ get_raw_sequences -d [BLAST database] -o [Output Raw sequences file] [XML file]
+
+e.g.
+
+$ get_raw_sequences -d ~/blastdb/SwissProt -o protein_data.raw_seq protein_data.xml
+$ get_raw_sequences -d ~/blastdb/SwissProt -o mrna_data.raw_seq mrna_data.xml
+
+```
+
+3) Run GeneValidator
+
+```
+$ genevalidator [Options] -x [XML file] -r [Raw sequences file] [Input File]
+
+e.g.
+
+$ genevalidator -x protein_data.xml -r protein_data.raw_seq protein_data.fasta
+$ genevalidator -x mrna_data.xml -r mrna_data.raw_seq mrna_data.fasta
+
+```
+
+## Output
+
+The HTML output can be found within the 
+Yaml 

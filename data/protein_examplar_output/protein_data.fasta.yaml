@@ -1,0 +1,3192 @@
+---
+GB10034-PA:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+GB10091-PA:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+sp|P83011|13KDA_SCYCA:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+Or13a-like-1:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+SI2.2.0_07054:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+PB26730-RA:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+Pbar_fem-RF:
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  explanation: 
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+sp|Q8GBW6|12S_PROFR:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 289
+  - 314
+  prediction_len: 611
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_11_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 611
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 611 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 289 and 314 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.175082
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;long
+  no_of_hits: 199
+  median: 304.0
+  predicted_len: 611
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 199 hits(s), where the median sequence length is 304.0 base pairs.
+    The prediction has a length of 611 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 0.000245
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.9095048678203813
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_11_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 434.56171532026354
+    aux2: -0.9095048678203813
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_11_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 199
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.91. Please see below for a graphical representation of this.
+  running_time: 0.220142
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.923974
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.05246913580246913
+  extra_seq: 0.13425925925925927
+  consensus: 0.8601036269430051
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_11_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 13% of residues in the prediction do not appear in profile; 5% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    86% of residues are conserved in the prediciton.'
+  running_time: 0.966415
+GB10098-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 633
+  - 965
+  prediction_len: 826
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_8_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 826
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 826 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 633 and 965 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.027851
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 93
+  median: 798.0
+  predicted_len: 826
+  extreme_hits: 37
+  percentage: 20
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 93 hits(s), where the median sequence length is 798.0 base pairs.
+    The prediction has a length of 826 base pairs. There are 37 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 20% of all BLAST hits.
+  running_time: 0.000151
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.036663940433547745
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_8_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 809.121555586734
+    aux2: -0.036663940433547745
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_8_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 93
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.04. Please see below for a graphical representation of this.
+  running_time: 0.503897
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.424731
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.18102824040550325
+  extra_seq: 0.020275162925416364
+  consensus: 0.8837209302325582
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_8_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 2% of residues in the prediction do not appear in profile; 18% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    88% of residues are conserved in the prediciton.'
+  running_time: 1.907912
+PB18762-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 237
+  - 327
+  prediction_len: 207
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_17_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 207
+    aux2: 
+  explainpart: is shorter than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 207 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 237 and 327 amino-acid residues. Thus
+    the query sequence is shorter than sequences within the most dense cluster of
+    hits. Please see below for a graphical representation of this.
+  running_time: 0.013216
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;short
+  no_of_hits: 35
+  median: 283.0
+  predicted_len: 207
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 35 hits(s), where the median sequence length is 283.0 base pairs.
+    The prediction has a length of 207 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 8.4e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -5.960564399736211
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_17_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 217.31506802272074
+    aux2: -5.960564399736211
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_17_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 35
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -5.96. Please see below for a graphical representation of this.
+  running_time: 0.918513
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.294137
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.4746376811594203
+  extra_seq: 0.010869565217391304
+  consensus: 0.6551724137931034
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_17_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 1% of residues in the prediction do not appear in profile; 47% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    66% of residues are conserved in the prediciton.'
+  running_time: 0.977718
+PB18768-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 124
+  - 137
+  prediction_len: 132
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_25_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 132
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 132 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 124 and 137 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.074086
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 7
+  median: 136.0
+  predicted_len: 132
+  extreme_hits: 3
+  percentage: 14
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 7 hits(s), where the median sequence length is 136.0 base pairs.
+    The prediction has a length of 132 base pairs. There are 3 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 14% of all BLAST hits.
+  running_time: 8.9e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 0.0
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_25_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 
+    aux2: 
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_25_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 7
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 0.0. Please see below for a graphical representation of this.
+  running_time: 0.618264
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.026078
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: Not enough evidence
+  errors: []
+  result: :warning
+  expected: :yes
+  validation_result: :warning
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentage of the  conserved regions
+    that appear in the prediction.
+  explanation: 
+GB10056-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 317
+  - 365
+  prediction_len: 339
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_3_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 339
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 339 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 317 and 365 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.277802
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 10
+  median: 331.0
+  predicted_len: 339
+  extreme_hits: 4
+  percentage: 20
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 10 hits(s), where the median sequence length is 331.0 base pairs.
+    The prediction has a length of 339 base pairs. There are 4 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 20% of all BLAST hits.
+  running_time: 5.8e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -3.500833679692545
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_3_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 352.3021657808258
+    aux2: -3.500833679692545
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_3_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 10
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -3.5. Please see below for a graphical representation of this.
+  running_time: 0.489722
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.234312
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.1100244498777506
+  extra_seq: 0.017114914425427872
+  consensus: 0.9473684210526315
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_3_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 2% of residues in the prediction do not appear in profile; 11% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    95% of residues are conserved in the prediciton.'
+  running_time: 2.064909
+GB10071-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 379
+  - 402
+  prediction_len: 494
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_6_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 494
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 494 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 379 and 402 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.133045
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;long
+  no_of_hits: 27
+  median: 398.0
+  predicted_len: 494
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 27 hits(s), where the median sequence length is 398.0 base pairs.
+    The prediction has a length of 494 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 5.7e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -6.977334922898902
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_6_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 494.21460450242125
+    aux2: -6.977334922898902
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_6_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 27
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -6.98. Please see below for a graphical representation of this.
+  running_time: 0.386733
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 0.001953125
+  threshold: 0.05
+  result: :no
+  expected: :no
+  explainpart: greater than 1. This can occur if tandem duplicated genes were erroneously
+    included in the same gene model
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is greater than 1. This can occur if tandem duplicated genes were erroneously
+    included in the same gene model
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.06060606060606061
+  extra_seq: 0.21212121212121213
+  consensus: 0.7945205479452054
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_6_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 21% of residues in the prediction do not appear in profile; 6% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    79% of residues are conserved in the prediciton.'
+  running_time: 0.960904
+PB18752-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 594
+  - 698
+  prediction_len: 794
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_24_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 794
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 794 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 594 and 698 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.174975
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;long
+  no_of_hits: 71
+  median: 618.0
+  predicted_len: 794
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 71 hits(s), where the median sequence length is 618.0 base pairs.
+    The prediction has a length of 794 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 0.000177
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.2312415896245225
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_24_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 743.8330749434261
+    aux2: -0.2312415896245225
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_24_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 71
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.23. Please see below for a graphical representation of this.
+  running_time: 0.38983
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.531592
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.0049079754601227
+  extra_seq: 0.1570552147239264
+  consensus: 0.8023255813953488
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_24_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 16% of residues in the prediction do not appear in profile; 0% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    80% of residues are conserved in the prediciton.'
+  running_time: 1.902529
+GB10063-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 105
+  - 629
+  prediction_len: 615
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_5_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 615
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 615 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 105 and 629 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.243291
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 200
+  median: 748.0
+  predicted_len: 615
+  extreme_hits: 90
+  percentage: 10
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 200 hits(s), where the median sequence length is 748.0 base pairs.
+    The prediction has a length of 615 base pairs. There are 90 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 10% of all BLAST hits.
+  running_time: 0.00029
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.01847710358414582
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_5_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 552.571307882806
+    aux2: -0.01847710358414582
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_5_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 200
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.02. Please see below for a graphical representation of this.
+  running_time: 0.339318
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1.0
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.06314699792960662
+  extra_seq: 0.044513457556935816
+  consensus: 0.9433962264150944
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_5_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 4% of residues in the prediction do not appear in profile; 6% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    94% of residues are conserved in the prediciton.'
+  running_time: 1.796676
+GB10058-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 1106
+  - 1567
+  prediction_len: 1052
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_4_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 1052
+    aux2: 
+  explainpart: is shorter than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 1052 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 1106 and 1567 amino-acid residues. Thus
+    the query sequence is shorter than sequences within the most dense cluster of
+    hits. Please see below for a graphical representation of this.
+  running_time: 0.205822
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 114
+  median: 1168.0
+  predicted_len: 1052
+  extreme_hits: 46
+  percentage: 19
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 114 hits(s), where the median sequence length is 1168.0 base pairs.
+    The prediction has a length of 1052 base pairs. There are 46 hit(s) that have
+    sequence length that is further away from the median compared to the prediction.
+    The rank of the prediction length lies within 19% of all BLAST hits.
+  running_time: 0.000283
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.25314129112975275
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_4_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 1053.589103259333
+    aux2: -0.25314129112975275
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_4_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 114
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.25. Please see below for a graphical representation of this.
+  running_time: 0.331205
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.175579
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.18771566597653555
+  extra_seq: 0.018633540372670808
+  consensus: 0.8382352941176471
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_4_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 2% of residues in the prediction do not appear in profile; 19% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    84% of residues are conserved in the prediciton.'
+  running_time: 5.259178
+PB20127-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 555
+  - 640
+  prediction_len: 679
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_23_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 679
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 679 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 555 and 640 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.050983
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;long
+  no_of_hits: 12
+  median: 556.5
+  predicted_len: 679
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 12 hits(s), where the median sequence length is 556.5 base pairs.
+    The prediction has a length of 679 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 7.9e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.0022767901152887125
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_23_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 642.2260673646898
+    aux2: -0.0022767901152887125
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_23_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 12
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.0. Please see below for a graphical representation of this.
+  running_time: 0.332323
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.610415
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.13501144164759726
+  extra_seq: 0.18421052631578946
+  consensus: 0.7941176470588235
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_23_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 18% of residues in the prediction do not appear in profile; 14% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    79% of residues are conserved in the prediciton.'
+  running_time: 2.931925
+GB10040-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 694
+  - 810
+  prediction_len: 1070
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_2_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 1070
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 1070 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 694 and 810 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.089265
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 23
+  median: 805.0
+  predicted_len: 1070
+  extreme_hits: 5
+  percentage: 57
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 23 hits(s), where the median sequence length is 805.0 base pairs.
+    The prediction has a length of 1070 base pairs. There are 5 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 57% of all BLAST hits.
+  running_time: 7.0e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 0.0
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_2_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 
+    aux2: 
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_2_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 23
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 0.0. Please see below for a graphical representation of this.
+  running_time: 0.738833
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.548057
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.22201946472019465
+  extra_seq: 0.1599756690997567
+  consensus: 0.9382716049382716
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_2_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 16% of residues in the prediction do not appear in profile; 22% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    94% of residues are conserved in the prediciton.'
+  running_time: 4.284856
+PB13758-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 813
+  - 1531
+  prediction_len: 751
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_22_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 751
+    aux2: 
+  explainpart: is shorter than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 751 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 813 and 1531 amino-acid residues. Thus
+    the query sequence is shorter than sequences within the most dense cluster of
+    hits. Please see below for a graphical representation of this.
+  running_time: 0.103682
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;short
+  no_of_hits: 166
+  median: 1227.0
+  predicted_len: 751
+  extreme_hits: 5
+  percentage: 94
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 166 hits(s), where the median sequence length is 1227.0 base pairs.
+    The prediction has a length of 751 base pairs. There are 5 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 94% of all BLAST hits.
+  running_time: 0.000223
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 0.0
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_22_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 
+    aux2: 
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_22_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 166
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 0.0. Please see below for a graphical representation of this.
+  running_time: 0.541073
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.498903
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.26583034647550774
+  extra_seq: 0.0011947431302270011
+  consensus: 0.8135593220338984
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_22_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 0% of residues in the prediction do not appear in profile; 27% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    81% of residues are conserved in the prediciton.'
+  running_time: 3.168693
+GB10113-PA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 300
+  - 506
+  prediction_len: 659
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_9_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 659
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 659 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 300 and 506 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.017048
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 18
+  median: 503.0
+  predicted_len: 659
+  extreme_hits: 7
+  percentage: 22
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 18 hits(s), where the median sequence length is 503.0 base pairs.
+    The prediction has a length of 659 base pairs. There are 7 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 22% of all BLAST hits.
+  running_time: 3.5e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -2.323577963298711
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_9_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 372.8025039114409
+    aux2: -2.323577963298711
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_9_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 18
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -2.32. Please see below for a graphical representation of this.
+  running_time: 0.536234
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 0.25
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.08261287223823247
+  extra_seq: 0.17579250720461095
+  consensus: 0.92
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_9_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 18% of residues in the prediction do not appear in profile; 8% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    92% of residues are conserved in the prediciton.'
+  running_time: 2.157824
+PB13750-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 661
+  - 1132
+  prediction_len: 974
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_21_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 974
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 974 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 661 and 1132 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.364614
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 166
+  median: 767.5
+  predicted_len: 974
+  extreme_hits: 33
+  percentage: 60
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 166 hits(s), where the median sequence length is 767.5 base pairs.
+    The prediction has a length of 974 base pairs. There are 33 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 60% of all BLAST hits.
+  running_time: 0.000384
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 0.0062008376682168714
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_21_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 953.8483533636197
+    aux2: 0.0062008376682168714
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_21_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 166
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 0.01. Please see below for a graphical representation of this.
+  running_time: 0.506693
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.569051
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.17900302114803626
+  extra_seq: 0.1729607250755287
+  consensus: 0.4418604651162791
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_21_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 17% of residues in the prediction do not appear in profile; 18% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    44% of residues are conserved in the prediciton.'
+  running_time: 3.229233
+PB11933-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 667
+  - 885
+  prediction_len: 845
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_20_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 845
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 845 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 667 and 885 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.068196
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 50
+  median: 815.5
+  predicted_len: 845
+  extreme_hits: 19
+  percentage: 24
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 50 hits(s), where the median sequence length is 815.5 base pairs.
+    The prediction has a length of 845 base pairs. There are 19 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 24% of all BLAST hits.
+  running_time: 0.00012
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 1.1232294564201004
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :yes
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_20_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 549.0521352065657
+    aux2: 1.1232294564201004
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_20_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 50
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 1.12. Please see below for a graphical representation of this.
+  running_time: 0.684085
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.375574
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.22259358288770054
+  extra_seq: 0.017379679144385027
+  consensus: 0.8235294117647058
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_20_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 2% of residues in the prediction do not appear in profile; 22% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    82% of residues are conserved in the prediciton.'
+  running_time: 3.564955
+PB18775-RA:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 682
+  - 719
+  prediction_len: 1160
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_19_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 1160
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 1160 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 682 and 719 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.177411
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: too&nbsp;long
+  no_of_hits: 17
+  median: 687.0
+  predicted_len: 1160
+  extreme_hits: 0
+  percentage: 100
+  result: :no
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 17 hits(s), where the median sequence length is 687.0 base pairs.
+    The prediction has a length of 1160 base pairs. There are 0 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 100% of all BLAST hits.
+  running_time: 3.9e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.8027291147879915
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_19_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 1167.8122700385313
+    aux2: -0.8027291147879915
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_19_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 17
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.8. Please see below for a graphical representation of this.
+  running_time: 0.797104
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 0.640517
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.08064516129032258
+  extra_seq: 0.445468509984639
+  consensus: 0.7857142857142857
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_19_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 45% of residues in the prediction do not appear in profile; 8% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    79% of residues are conserved in the prediciton.'
+  running_time: 2.865034
+SI2.2.0_02651:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 404
+  - 1242
+  prediction_len: 660
+  expected: :yes
+  result: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_14_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 660
+    aux2: 
+  explainpart: has a similiar size to sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 660 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 404 and 1242 amino-acid residues. Thus
+    the query sequence has a similiar size to sequences within the most dense cluster
+    of hits. Please see below for a graphical representation of this.
+  running_time: 0.047469
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 32
+  median: 1134.5
+  predicted_len: 660
+  extreme_hits: 6
+  percentage: 63
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 32 hits(s), where the median sequence length is 1134.5 base pairs.
+    The prediction has a length of 660 base pairs. There are 6 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 63% of all BLAST hits.
+  running_time: 4.6e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: 0.0
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_14_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 
+    aux2: 
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_14_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 32
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of 0.0. Please see below for a graphical representation of this.
+  running_time: 0.415339
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 1.077607
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.20103259115843822
+  extra_seq: 0.016456921587608905
+  consensus: 1.0
+  threshold: 0.2
+  result: :no
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_14_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 2% of residues in the prediction do not appear in profile; 20% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    100% of residues are conserved in the prediciton.'
+  running_time: 4.960491
+SI2.2.0_02565:
+- !ruby/object:LengthClusterValidationOutput
+  short_header: LengthCluster
+  header: Length Cluster
+  description: 'Check whether the prediction length fits most of the BLAST hit lengths,
+    by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len
+    [Main Cluster Length Interval]'
+  limits:
+  - 1603
+  - 1677
+  prediction_len: 1761
+  expected: :yes
+  result: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_12_len_clusters.json
+    type: :bars
+    title: "[Length Cluster] Distribution of the lengths of the hits"
+    footer: query, black;most dense cluster,red;other hits, blue
+    xtitle: sequence length
+    ytitle: number of sequences
+    aux1: 1761
+    aux2: 
+  explainpart: is longer than sequences within
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  The
+    length of the query sequence is 1761 amino-acid residues. The most dense cluster
+    of hit sequences includes lengths between 1603 and 1677 amino-acid residues. Thus
+    the query sequence is longer than sequences within the most dense cluster of hits.
+    Please see below for a graphical representation of this.
+  running_time: 0.08924
+- !ruby/object:LengthRankValidationOutput
+  short_header: LengthRank
+  header: Length Rank
+  description: Check whether the rank of the prediction length lies  among 80% of
+    all the BLAST hit lengths.
+  msg: ''
+  no_of_hits: 18
+  median: 1723.5
+  predicted_len: 1761
+  extreme_hits: 9
+  percentage: 0
+  result: :yes
+  expected: :yes
+  explanation: If the query sequence is well conserved and database sequences are
+    correct, we would expect the query and hit sequences to have similar lengths.  Here,
+    BLAST produced 18 hits(s), where the median sequence length is 1723.5 base pairs.
+    The prediction has a length of 1761 base pairs. There are 9 hit(s) that have sequence
+    length that is further away from the median compared to the prediction. The rank
+    of the prediction length lies within 0% of all BLAST hits.
+  running_time: 4.3e-05
+- !ruby/object:GeneMergeValidationOutput
+  short_header: Gene_Merge
+  header: Gene Merge
+  description: Check whether BLAST hits make evidence about a merge of two genes that
+    match the predicted gene.
+  slope: -0.05101901119824278
+  threshold_down: 0.4
+  threshold_up: 1.2
+  result: :no
+  expected: :no
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_12_match_2d.json
+    type: :scatter
+    title: "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)"
+    footer: ''
+    xtitle: start offset (most left hsp)
+    ytitle: end offset (most right hsp)
+    aux1: 1704.5100843488747
+    aux2: -0.05101901119824278
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_12_match.json
+    type: :lines
+    title: "[Gene Merge] Query coord covered by blast hit (1 line/hit)"
+    footer: ''
+    xtitle: offset in the prediction
+    ytitle: number of the hit
+    aux1: 18
+    aux2: 
+  explanation: This validation test analyses the relationship between the start and
+    stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced
+    a result of -0.05. Please see below for a graphical representation of this.
+  running_time: 0.354055
+- !ruby/object:DuplicationValidationOutput
+  short_header: Duplication
+  header: Duplication
+  description: Check whether there is a duplicated subsequence in the predicted gene
+    by counting the hsp residue coverage of the prediction, for each hit.
+  pvalue: 1
+  threshold: 0.05
+  result: :yes
+  expected: :no
+  explainpart: less than 1. This suggests that each region of each homologous hit
+    matches the predicted gene at most once.
+  explanation: We expect each region of each homologous hit gene to match the predicted
+    gene at most once. The result here suggests that the average coverage of hit regions
+    is less than 1. This suggests that each region of each homologous hit matches
+    the predicted gene at most once.
+  running_time: 1.28046
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:ValidationReport
+  message: ''
+  errors: []
+  result: :unapplicable
+  expected: :yes
+  validation_result: :unapplicable
+  short_header: ''
+  header: ''
+  description: ''
+  explanation: ''
+- !ruby/object:AlignmentValidationOutput
+  short_header: MA
+  header: Missing/Extra sequences
+  description: Finds missing and extra sequences in the prediction, based on the multiple
+    alignment of the best hits. Also counts the percentahe of the conserved regions
+    that appear in the prediction.
+  gaps: 0.05685763888888889
+  extra_seq: 0.004774305555555556
+  consensus: 1.0
+  threshold: 0.2
+  result: :yes
+  expected: :yes
+  plot_files:
+  - !ruby/struct:Plot
+    filename: protein_data.fasta_12_ma.json
+    type: :align
+    title: "[Missing/Extra sequences] Multiple Align. & Statistical model of hits"
+    footer: conserved region, yellow
+    xtitle: offset in the alignment
+    ytitle: ''
+    aux1: 12
+    aux2: prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i},
+      hit#{i}, hit#{i}, hit#{i}, statistical model
+  explanation: 'A position specific scoring matrix of the strongest 10 results show
+    that: 0% of residues in the prediction do not appear in profile; 6% of residues
+    in the profile do not appear in the prediction and when compared to the model,
+    100% of residues are conserved in the prediciton.'
+  running_time: 16.177719

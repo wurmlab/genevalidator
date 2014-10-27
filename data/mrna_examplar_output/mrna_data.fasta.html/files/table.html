@@ -1,0 +1,581 @@
+    <h3>Overview</h3>
+    <div id="report">
+      <div id="report_1"></div>
+    </div>
+    <hr>
+    <h3>Results</h3>
+    <div class="table-responsive">
+      <table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
+        <thead>
+          <tr id="header">
+            <th>#</th>
+            <th>Ranking</th>
+            <th>Identifier
+              <span data-toggle="tooltip" title="Query identifier as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span>
+            </th>
+            <th>Description
+              <span data-toggle="tooltip" title="Description of the query as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span>
+            </th>
+            <th>No. Hits
+              <span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="top"><i class="fa fa-question-circle"></i></span>
+            </th> 
+                        <th class="sorter-false">
+              <b>Length Cluster</b>
+                                <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="Check whether the prediction length fits most of the BLAST hit lengths, by 1D hierarchical clusterization. Meaning of the output displayed: Prediction_len [Main Cluster Length Interval]" data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Length Rank</b>
+                                 <span data-toggle="tooltip" title="Check whether the rank of the prediction length lies  among 80% of all the BLAST hit lengths." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Gene Merge</b>
+                                <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="Check whether BLAST hits make evidence about a merge of two genes that match the predicted gene." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Duplication</b>
+                                 <span data-toggle="tooltip" title="Check whether there is a duplicated subsequence in the predicted gene by counting the hsp residue coverage of the prediction, for each hit." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Reading Frame</b>
+                                 <span data-toggle="tooltip" title="Check whether there is a single reading frame among BLAST hits. Otherwise there might be a reading frame shift in the query sequence." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Main ORF</b>
+                                <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="Check whether there is a single main Open Reading Frame in the predicted gene. Aplicable only for nucleotide queries." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false">
+              <b>Missing/Extra sequences</b>
+                                <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="Finds missing and extra sequences in the prediction, based on the multiple alignment of the best hits. Also counts the percentahe of the conserved regions that appear in the prediction." data-placement="top"><i class="fa fa-question-circle"></i></span>
+                          </th>
+                        <th class="sorter-false chart-column"></th>
+          </tr>
+        </thead>
+
+        <tbody><tr>
+  <td>1</td>
+  <td data-score="75"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:63.75%;"></div></div></td>
+  <td title="Identifier">gi|514746961|ref|XM_005019748.1|</td>
+  <td title="Description"> PREDICTED: Anas platyrhynchos insulin (INS), mRNA</td>
+  <td title="No. Hits">129</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle1');
+          addPlot('toggle1', 'files/json/mrna_data.fasta_1_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '108', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 108 amino-acid residues. The most dense cluster of hit sequences includes lengths between 50 and 89 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle1');">
+          108&nbsp;[50,&nbsp;89]</td>
+          <td title="Length Rank" class="success" 
+              onclick="showDiv(this, 'toggle1'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 129 hits(s), where the median sequence length is 108.0 base pairs. The prediction has a length of 108 base pairs. There are 59 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 9% of all BLAST hits.', 'toggle1');">
+            9%</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle1');
+          addPlot('toggle1', 'files/json/mrna_data.fasta_1_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '107.74835275496551', '0.004789844538370027');
+          addPlot('toggle1', 'files/json/mrna_data.fasta_1_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '129', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of 0.0. Please see below for a graphical representation of this.', 'toggle1');">
+          0.0</td>
+          <td title="Duplication" class="danger" 
+              onclick="showDiv(this, 'toggle1'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is less than 1. This suggests that each region of each homologous hit matches the predicted gene at most once.', 'toggle1');">
+            1.0</td>
+          <td title="Reading Frame" class="success" 
+              onclick="showDiv(this, 'toggle1'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 129 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 129 HSPs were in frame 1. Since all of the HSPs are in a single open reading frame, we can be relatively confident about the query.', 'toggle1');">
+            129&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;1</td>
+        <td title="Main ORF" class="success my-btn-success" onclick="showDiv(this, 'toggle1');
+          addPlot('toggle1', 'files/json/mrna_data.fasta_1_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 1 and it covers 100% of the full sequence. Please see below for a graphic representation of this.', 'toggle1');">
+          100%&nbsp;(frame&nbsp;1)</td>
+        <td title="Missing/Extra sequences" class="success my-btn-success" onclick="showDiv(this, 'toggle1');
+          addPlot('toggle1', 'files/json/mrna_data.fasta_1_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');
+     
+          AddExplanation(this, 'A position specific scoring matrix of the strongest 10 results show that: 1% of residues in the prediction do not appear in profile; 5% of residues in the profile do not appear in the prediction and when compared to the model, 100% of residues are conserved in the prediciton.', 'toggle1');">
+          100%&nbsp;conserved; 1%&nbsp;extra; 5%&nbsp;missing.</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle1');
+                         addPlot('toggle1', 'files/json/mrna_data.fasta_1_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '108', '');                                               addPlot('toggle1', 'files/json/mrna_data.fasta_1_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '107.74835275496551', '0.004789844538370027'); addPlot('toggle1', 'files/json/mrna_data.fasta_1_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '129', '');                                                             addPlot('toggle1', 'files/json/mrna_data.fasta_1_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                                 addPlot('toggle1', 'files/json/mrna_data.fasta_1_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');              "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle1row">
+    <div id="toggle1" class="expanded-child"></div>
+  </td>
+</tr>
+<tr>
+  <td>6</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00022</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>8</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00037</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>10</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00039</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>9</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00038</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>13</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00042</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>11</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00040</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>12</td>
+  <td data-score="0"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:0.0%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00041</td>
+  <td title="Description"></td>
+  <td title="No. Hits">0</td>
+        <td title="Length Cluster" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Length Rank" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Gene Merge" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Duplication" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Reading Frame" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Main ORF" class="warning" 
+              >
+            Not enough evidence</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+<td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="14">
+      <div></div>
+  </td>
+</tr>
+<tr>
+  <td>3</td>
+  <td data-score="33"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:28.05%;"></div></div></td>
+  <td title="Identifier">gi|251823817|ref|NM_010785.2|</td>
+  <td title="Description"> Mus musculus transformed mouse 3T3 cell double minute 1 (Mdm1), transcript variant 1, mRNA</td>
+  <td title="No. Hits">6</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle3');
+          addPlot('toggle3', 'files/json/mrna_data.fasta_3_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1023', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 1023 amino-acid residues. The most dense cluster of hit sequences includes lengths between 708 and 724 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle3');">
+          1023&nbsp;[708,&nbsp;724]</td>
+          <td title="Length Rank" class="danger" 
+              onclick="showDiv(this, 'toggle3'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 6 hits(s), where the median sequence length is 711.0 base pairs. The prediction has a length of 1023 base pairs. There are 0 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 100% of all BLAST hits.', 'toggle3');">
+            100%&nbsp;(too&nbsp;long)</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle3');
+          addPlot('toggle3', 'files/json/mrna_data.fasta_3_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', '');
+          addPlot('toggle3', 'files/json/mrna_data.fasta_3_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of 0.0. Please see below for a graphical representation of this.', 'toggle3');">
+          0.0</td>
+          <td title="Duplication" class="danger" 
+              onclick="showDiv(this, 'toggle3'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is less than 1. This suggests that each region of each homologous hit matches the predicted gene at most once.', 'toggle3');">
+            1.0</td>
+          <td title="Reading Frame" class="success" 
+              onclick="showDiv(this, 'toggle3'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 6 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 6 HSPs were in frame 3. Since all of the HSPs are in a single open reading frame, we can be relatively confident about the query.', 'toggle3');">
+            6&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;3</td>
+        <td title="Main ORF" class="danger my-btn-danger" onclick="showDiv(this, 'toggle3');
+          addPlot('toggle3', 'files/json/mrna_data.fasta_3_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 3 and it covers 72% of the full sequence. Please see below for a graphic representation of this.', 'toggle3');">
+          72%&nbsp;(frame&nbsp;3)</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle3');
+                         addPlot('toggle3', 'files/json/mrna_data.fasta_3_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1023', '');                                               addPlot('toggle3', 'files/json/mrna_data.fasta_3_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', ''); addPlot('toggle3', 'files/json/mrna_data.fasta_3_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');                                                             addPlot('toggle3', 'files/json/mrna_data.fasta_3_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                            "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle3row">
+    <div id="toggle3" class="expanded-child"></div>
+  </td>
+</tr>
+<tr>
+  <td>5</td>
+  <td data-score="33"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:28.05%;"></div></div></td>
+  <td title="Identifier">gi|251823817|ref|NM_010785.2|dup2</td>
+  <td title="Description"> Mus musculus transformed mouse 3T3 cell double minute 1 (Mdm1), transcript variant 1, mRNA</td>
+  <td title="No. Hits">6</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle5');
+          addPlot('toggle5', 'files/json/mrna_data.fasta_5_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1303', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 1303 amino-acid residues. The most dense cluster of hit sequences includes lengths between 708 and 724 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle5');">
+          1303&nbsp;[708,&nbsp;724]</td>
+          <td title="Length Rank" class="danger" 
+              onclick="showDiv(this, 'toggle5'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 6 hits(s), where the median sequence length is 711.0 base pairs. The prediction has a length of 1303 base pairs. There are 0 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 100% of all BLAST hits.', 'toggle5');">
+            100%&nbsp;(too&nbsp;long)</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle5');
+          addPlot('toggle5', 'files/json/mrna_data.fasta_5_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', '');
+          addPlot('toggle5', 'files/json/mrna_data.fasta_5_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of 0.0. Please see below for a graphical representation of this.', 'toggle5');">
+          0.0</td>
+          <td title="Duplication" class="success" 
+              onclick="showDiv(this, 'toggle5'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is greater than 1. This can occur if tandem duplicated genes were erroneously included in the same gene model', 'toggle5');">
+            0.03</td>
+          <td title="Reading Frame" class="danger" 
+              onclick="showDiv(this, 'toggle5'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 16 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 6 HSPs were in frame 1; 6 HSPs were in frame 3; 4 HSPs were in frame 2. Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query.', 'toggle5');">
+            6&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;1; 6&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;3; 4&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;2</td>
+        <td title="Main ORF" class="danger my-btn-danger" onclick="showDiv(this, 'toggle5');
+          addPlot('toggle5', 'files/json/mrna_data.fasta_5_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 1 and it covers 37% of the full sequence. Please see below for a graphic representation of this.', 'toggle5');">
+          37%&nbsp;(frame&nbsp;1)</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle5');
+                         addPlot('toggle5', 'files/json/mrna_data.fasta_5_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1303', '');                                               addPlot('toggle5', 'files/json/mrna_data.fasta_5_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', ''); addPlot('toggle5', 'files/json/mrna_data.fasta_5_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');                                                             addPlot('toggle5', 'files/json/mrna_data.fasta_5_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                            "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle5row">
+    <div id="toggle5" class="expanded-child"></div>
+  </td>
+</tr>
+<tr>
+  <td>4</td>
+  <td data-score="33"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:28.05%;"></div></div></td>
+  <td title="Identifier">gi|251823817|ref|NM_010785.2|dup</td>
+  <td title="Description"> Mus musculus transformed mouse 3T3 cell double minute 1 (Mdm1), transcript variant 1, mRNA</td>
+  <td title="No. Hits">6</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle4');
+          addPlot('toggle4', 'files/json/mrna_data.fasta_4_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1327', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 1327 amino-acid residues. The most dense cluster of hit sequences includes lengths between 708 and 724 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle4');">
+          1327&nbsp;[708,&nbsp;724]</td>
+          <td title="Length Rank" class="danger" 
+              onclick="showDiv(this, 'toggle4'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 6 hits(s), where the median sequence length is 711.0 base pairs. The prediction has a length of 1327 base pairs. There are 0 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 100% of all BLAST hits.', 'toggle4');">
+            100%&nbsp;(too&nbsp;long)</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle4');
+          addPlot('toggle4', 'files/json/mrna_data.fasta_4_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', '');
+          addPlot('toggle4', 'files/json/mrna_data.fasta_4_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of 0.0. Please see below for a graphical representation of this.', 'toggle4');">
+          0.0</td>
+          <td title="Duplication" class="success" 
+              onclick="showDiv(this, 'toggle4'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is greater than 1. This can occur if tandem duplicated genes were erroneously included in the same gene model', 'toggle4');">
+            0.03</td>
+          <td title="Reading Frame" class="danger" 
+              onclick="showDiv(this, 'toggle4'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 12 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 6 HSPs were in frame 1; 6 HSPs were in frame 3. Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query.', 'toggle4');">
+            6&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;1; 6&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;3</td>
+        <td title="Main ORF" class="danger my-btn-danger" onclick="showDiv(this, 'toggle4');
+          addPlot('toggle4', 'files/json/mrna_data.fasta_4_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 1 and it covers 48% of the full sequence. Please see below for a graphic representation of this.', 'toggle4');">
+          48%&nbsp;(frame&nbsp;1)</td>
+          <td title="Missing/Extra sequences" class="warning" 
+              >
+            Not enough evidence</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle4');
+                         addPlot('toggle4', 'files/json/mrna_data.fasta_4_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '1327', '');                                               addPlot('toggle4', 'files/json/mrna_data.fasta_4_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', ''); addPlot('toggle4', 'files/json/mrna_data.fasta_4_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '6', '');                                                             addPlot('toggle4', 'files/json/mrna_data.fasta_4_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                            "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle4row">
+    <div id="toggle4" class="expanded-child"></div>
+  </td>
+</tr>
+<tr>
+  <td>7</td>
+  <td data-score="17"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:14.45%;"></div></div></td>
+  <td title="Identifier">Brasy-EspV1T00061</td>
+  <td title="Description"></td>
+  <td title="No. Hits">200</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle7');
+          addPlot('toggle7', 'files/json/mrna_data.fasta_7_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '466', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 466 amino-acid residues. The most dense cluster of hit sequences includes lengths between 376 and 377 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle7');">
+          466&nbsp;[376,&nbsp;377]</td>
+          <td title="Length Rank" class="danger" 
+              onclick="showDiv(this, 'toggle7'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 200 hits(s), where the median sequence length is 376.0 base pairs. The prediction has a length of 466 base pairs. There are 4 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 96% of all BLAST hits.', 'toggle7');">
+            96%&nbsp;(too&nbsp;long)</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle7');
+          addPlot('toggle7', 'files/json/mrna_data.fasta_7_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', '');
+          addPlot('toggle7', 'files/json/mrna_data.fasta_7_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '200', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of 0.0. Please see below for a graphical representation of this.', 'toggle7');">
+          0.0</td>
+          <td title="Duplication" class="danger" 
+              onclick="showDiv(this, 'toggle7'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is less than 1. This suggests that each region of each homologous hit matches the predicted gene at most once.', 'toggle7');">
+            1.0</td>
+          <td title="Reading Frame" class="danger" 
+              onclick="showDiv(this, 'toggle7'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 600 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 200 HSPs were in frame 1; 400 HSPs were in frame 2. Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query.', 'toggle7');">
+            200&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;1; 400&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;2</td>
+        <td title="Main ORF" class="danger my-btn-danger" onclick="showDiv(this, 'toggle7');
+          addPlot('toggle7', 'files/json/mrna_data.fasta_7_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 1 and it covers 49% of the full sequence. Please see below for a graphic representation of this.', 'toggle7');">
+          49%&nbsp;(frame&nbsp;1)</td>
+        <td title="Missing/Extra sequences" class="danger my-btn-danger" onclick="showDiv(this, 'toggle7');
+          addPlot('toggle7', 'files/json/mrna_data.fasta_7_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');
+     
+          AddExplanation(this, 'A position specific scoring matrix of the strongest 10 results show that: 37% of residues in the prediction do not appear in profile; 22% of residues in the profile do not appear in the prediction and when compared to the model, 33% of residues are conserved in the prediciton.', 'toggle7');">
+          33%&nbsp;conserved; 37%&nbsp;extra; 22%&nbsp;missing.</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle7');
+                         addPlot('toggle7', 'files/json/mrna_data.fasta_7_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '466', '');                                               addPlot('toggle7', 'files/json/mrna_data.fasta_7_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '', ''); addPlot('toggle7', 'files/json/mrna_data.fasta_7_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '200', '');                                                             addPlot('toggle7', 'files/json/mrna_data.fasta_7_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                                 addPlot('toggle7', 'files/json/mrna_data.fasta_7_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');              "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle7row">
+    <div id="toggle7" class="expanded-child"></div>
+  </td>
+</tr>
+<tr>
+  <td>2</td>
+  <td data-score="42"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:35.699999999999996%;"></div></div></td>
+  <td title="Identifier">gi|514746961|ref|XM_005019748.1|dup</td>
+  <td title="Description"> PREDICTED: Anas platyrhynchos insulin (INS), mRNA</td>
+  <td title="No. Hits">113</td>
+      <td title="Length Cluster" class="danger my-btn-danger" onclick="showDiv(this, 'toggle2');
+          addPlot('toggle2', 'files/json/mrna_data.fasta_2_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '163', '');
+     
+          AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  The length of the query sequence is 163 amino-acid residues. The most dense cluster of hit sequences includes lengths between 50 and 139 amino-acid residues. Thus the query sequence is longer than sequences within the most dense cluster of hits. Please see below for a graphical representation of this.', 'toggle2');">
+          163&nbsp;[50,&nbsp;139]</td>
+          <td title="Length Rank" class="success" 
+              onclick="showDiv(this, 'toggle2'); AddExplanation(this, 'If the query sequence is well conserved and database sequences are correct, we would expect the query and hit sequences to have similar lengths.  Here, BLAST produced 113 hits(s), where the median sequence length is 103.0 base pairs. The prediction has a length of 163 base pairs. There are 13 hit(s) that have sequence length that is further away from the median compared to the prediction. The rank of the prediction length lies within 77% of all BLAST hits.', 'toggle2');">
+            77%</td>
+        <td title="Gene Merge" class="success my-btn-success" onclick="showDiv(this, 'toggle2');
+          addPlot('toggle2', 'files/json/mrna_data.fasta_2_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '162.91685486922796', '-0.004967264491902382');
+          addPlot('toggle2', 'files/json/mrna_data.fasta_2_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '113', '');
+     
+          AddExplanation(this, 'This validation test analyses the relationship between the start and stop offsets of the High-scoring Segment Pairs. A linear regression analysis produced a result of -0.0. Please see below for a graphical representation of this.', 'toggle2');">
+          -0.0</td>
+          <td title="Duplication" class="success" 
+              onclick="showDiv(this, 'toggle2'); AddExplanation(this, 'We expect each region of each homologous hit gene to match the predicted gene at most once. The result here suggests that the average coverage of hit regions is greater than 1. This can occur if tandem duplicated genes were erroneously included in the same gene model', 'toggle2');">
+            0.0</td>
+          <td title="Reading Frame" class="danger" 
+              onclick="showDiv(this, 'toggle2'); AddExplanation(this, 'BLAST Analysis of the query sequence produced 204 High-scoring Segment Pairs (HSPs). Further analysis of these HSPs with regards to their main Open Reading Frame showed that: 113 HSPs were in frame 2; 91 HSPs were in frame 1. Since all of the HSPs are not all in a single open reading frame, we are not as confident about the query. This may suggest a frame shift in the query.', 'toggle2');">
+            113&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;2; 91&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;1</td>
+        <td title="Main ORF" class="danger my-btn-danger" onclick="showDiv(this, 'toggle2');
+          addPlot('toggle2', 'files/json/mrna_data.fasta_2_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');
+     
+          AddExplanation(this, 'When translating the query sequence in all 6 frame, the longest open reading frame is in frame 2 and it covers 61% of the full sequence. Please see below for a graphic representation of this.', 'toggle2');">
+          61%&nbsp;(frame&nbsp;2)</td>
+        <td title="Missing/Extra sequences" class="danger my-btn-danger" onclick="showDiv(this, 'toggle2');
+          addPlot('toggle2', 'files/json/mrna_data.fasta_2_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');
+     
+          AddExplanation(this, 'A position specific scoring matrix of the strongest 10 results show that: 35% of residues in the prediction do not appear in profile; 6% of residues in the profile do not appear in the prediction and when compared to the model, 73% of residues are conserved in the prediciton.', 'toggle2');">
+          73%&nbsp;conserved; 35%&nbsp;extra; 6%&nbsp;missing.</td>
+  
+  <td>
+      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, 'toggle2');
+                         addPlot('toggle2', 'files/json/mrna_data.fasta_2_len_clusters.json', 'bars', '[Length Cluster] Distribution of the lengths of the hits', 'query, black;most dense cluster,red;other hits, blue', 'sequence length', 'number of sequences', '163', '');                                               addPlot('toggle2', 'files/json/mrna_data.fasta_2_match_2d.json', 'scatter', '[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)', '', 'start offset (most left hsp)', 'end offset (most right hsp)', '162.91685486922796', '-0.004967264491902382'); addPlot('toggle2', 'files/json/mrna_data.fasta_2_match.json', 'lines', '[Gene Merge] Query coord covered by blast hit (1 line/hit)', '', 'offset in the prediction', 'number of the hit', '113', '');                                                             addPlot('toggle2', 'files/json/mrna_data.fasta_2_orfs.json', 'lines', 'Open reading frame with STOP codon', '', 'offset in the prediction', 'Reading Frame', '14', '');                                 addPlot('toggle2', 'files/json/mrna_data.fasta_2_ma.json', 'align', '[Missing/Extra sequences] Multiple Align. & Statistical model of hits', 'conserved region, yellow', 'offset in the alignment', '', '12', 'prediction, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, hit#{i}, statistical model');              "><i class="fa fa-bar-chart-o"></i></button>
+  </td>
+</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="14" id="toggle2row">
+    <div id="toggle2" class="expanded-child"></div>
+  </td>
+</tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  var evaluation_div = document.getElementById('report_1');
+  evaluation_div.innerHTML = "Query score evaluation for mrna_data.fasta:<br>There were validated 13 predictions from which:<br>One good prediction<br>12 are possibly weak predictions<br>7 of them couldn\'t be evaluated because of low evidence";
+</script>
