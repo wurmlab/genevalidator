@@ -22,6 +22,7 @@ $(function(){
     headers: {
       1 : { sorter: 'star_scores' } // Telling it to use custom parser...
     },
+    sortList: [[0,0]],
   });
 });
 
