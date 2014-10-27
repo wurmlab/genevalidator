@@ -3,6 +3,7 @@ require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
 require "yaml"
+require 'fileutils'
 require 'genevalidator/blast'
 require 'validation'
 require 'genevalidator/validation_length_cluster'
@@ -40,7 +41,7 @@ class ValidateOutput < Minitest::Test
     prediction.length_protein = 108
 
     validations = b.do_validations(prediction, hits,1).validations
-    puts validations
+
   describe "Test validations 1" do  
     it "should check the number of hits" do
       assert_equal hits.length, 499
@@ -74,4 +75,5 @@ class ValidateOutput < Minitest::Test
     end
   end
 
+  FileUtils.rm_rf("#{filename_fasta}.html")
 end

@@ -1,3 +1,4 @@
+require 'genevalidator/version'
 require 'fileutils'
 require 'erb'
 require 'yaml'
