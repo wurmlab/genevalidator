@@ -56,7 +56,7 @@ class ValidateOutput < Minitest::Test
 
     it "should validate length by rank" do
       lrv = validations.select{|v| v.class == LengthRankValidationOutput}[0]
-      assert_equal lrv.percentage.round(4), 8.0
+      assert_equal lrv.percentage.round(4), 0.46
     end
 
     it "should validate reading frame" do
