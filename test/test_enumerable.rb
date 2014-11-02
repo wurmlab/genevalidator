@@ -9,9 +9,9 @@ class TestEnumerable < Minitest::Test
     it "test1 " do
 
       v = [1, 2, 3, 4, 5, 6]
-      assert_equal v.mean, 3.5
-      assert_equal v.median, 3.5
-      assert_equal v.standard_deviation.round(6), 1.870829
+      assert_equal(3.5, v.mean)
+      assert_equal(3.5, v.median)
+      assert_equal(1.870829, v.standard_deviation.round(6))
 
     end
   end

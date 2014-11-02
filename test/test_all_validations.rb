@@ -1,9 +1,6 @@
-require "rubygems"
-require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
 require "yaml"
-require 'genevalidator/blast'
 require 'fileutils'
 require 'validation'
 require 'genevalidator/blast'
@@ -82,7 +79,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_prot_html)
 
-      assert_equal diff, true
+      assert_equal(true, diff)
 
     end
   end
@@ -128,7 +125,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_mrna_html)
 
-      assert_equal diff, true
+      assert_equal(true, diff)
     end
   end
 end

@@ -1,11 +1,9 @@
-require "rubygems"
-require "shoulda"
 require 'minitest'
 require 'minitest/autorun'
-require "yaml"
+require 'yaml'
 require 'fileutils'
-require 'genevalidator/blast'
 require 'validation'
+require 'genevalidator/blast'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
 require 'genevalidator/validation_blast_reading_frame'
@@ -19,7 +17,7 @@ class ValidateOutput < Minitest::Test
 
     filename = "test/test_files/test_validations"
     filename_fasta = "#{filename}.fasta"
-    filename_xml = "#{filename}.xml"   
+    filename_xml = "#{filename}.xml"
 
     begin
       FileUtils.rm_rf("#{filename_fasta}.html")
@@ -30,7 +28,7 @@ class ValidateOutput < Minitest::Test
     output = File.open(filename_xml, "rb").read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
     hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
-    
+
     prediction = Sequence.new
 
     prediction.definition = ""
@@ -42,36 +40,36 @@ class ValidateOutput < Minitest::Test
 
     validations = b.do_validations(prediction, hits,1).validations
 
-  describe "Test validations 1" do  
+  describe "Test validations 1" do
     it "should check the number of hits" do
-      assert_equal hits.length, 499
+      assert_equal(499, hits.length)
     end
 
 
     it "should validate length by clusterization" do
        lcv = validations.select{|v| v.class == LengthClusterValidationOutput}[0]
-       assert_equal lcv.limits, [23,135]
-       assert_equal lcv.prediction_len, 108
+       assert_equal([23,135], lcv.limits)
+       assert_equal(108, lcv.prediction_len)
     end
 
     it "should validate length by rank" do
       lrv = validations.select{|v| v.class == LengthRankValidationOutput}[0]
-      assert_equal lrv.percentage.round(4), 46.0
+      assert_equal(46.0, lrv.percentage.round(4))
     end
 
     it "should validate reading frame" do
       rfv = validations.select{|v| v.class == BlastRFValidationOutput}[0]
-      assert_equal rfv.frames_histo, {1=>500}
+      assert_equal({1=>500}, rfv.frames_histo)
     end
 
     it "should validate gene merge" do
       gmv = validations.select{|v| v.class == GeneMergeValidationOutput}[0]
-      assert_equal gmv.slope.round(4), 0.0
+      assert_equal(0.0, gmv.slope.round(4))
     end
 
     it "should validate duplication" do
       dv  = validations.select{|v| v.class == DuplicationValidationOutput}[0]
-      assert_equal dv.pvalue.round(4), 1
+      assert_equal(1, dv.pvalue.round(4))
     end
   end
 

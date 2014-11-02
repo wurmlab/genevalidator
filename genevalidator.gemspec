@@ -18,12 +18,12 @@ The tool validates the input predicted genes and provides useful information (le
 DESC
 
   s.required_ruby_version     = '>= 1.9.3'
+  s.add_development_dependency 'bundler', '~> 1.6'
+  s.add_development_dependency 'rake', '~>10.3'
   s.add_dependency('bio-blastxmlparser', "~>1.1")
   s.add_dependency('bio', "~> 1.4")
   s.add_dependency('statsample', "~> 1.3")
   s.add_dependency('minitest', "~> 5.3")
-  s.add_dependency('shoulda', "~> 3.5")
-  s.add_dependency('mini_shoulda', "~> 0.5")
   s.add_dependency('rack', "~> 1.5")
 
   s.files         = `git ls-files -z`.split("\x0")
