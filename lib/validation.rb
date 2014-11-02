@@ -84,7 +84,7 @@ class Validation
                   mafft_path = nil,
                   blast_path = nil,
                   start_idx = 1,
-                  cores = 1
+                  cores = 1,
                   overall_evaluation = true,
                   multithreading = true)
 
