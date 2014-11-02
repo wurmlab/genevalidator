@@ -84,6 +84,7 @@ class Validation
                   mafft_path = nil,
                   blast_path = nil,
                   start_idx = 1,
+                  cores = 1
                   overall_evaluation = true,
                   multithreading = true)
 
@@ -96,6 +97,7 @@ class Validation
     @mutex_yaml = Mutex.new
     @mutex_html = Mutex.new
     @mutex_array = Mutex.new
+    @cores = cores
 
     @fasta_filepath = fasta_filepath
    
@@ -232,9 +234,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastp", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastp", query, @db, @cores, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, @cores, 11, 1)
             end
 
             #parse output
@@ -527,10 +529,10 @@ class Validation
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @cores)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @cores)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list
