@@ -36,7 +36,12 @@ class BlastUtils
       evalue = "1e-5"
       
       #output format = 5 (XML Blast output)
-      blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{cores}"
+      # If BLAST is not run remotely, then utilise the -num_threads argument
+      if (db !~ /remote/)
+        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{cores}"
+      else
+        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+      end
       cmd       = "echo \"#{query}\" | #{blast_cmd}"
       output    = %x[#{cmd} 2>/dev/null]
 
