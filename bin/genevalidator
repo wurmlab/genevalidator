@@ -3,9 +3,9 @@ require 'optparse'
 require 'validation'
 require 'genevalidator/version'
 
-options = {}
-opt_parser = OptionParser.new do |opt|
-  opt.banner =<<BANNER
+opt = {}
+opt_parser = OptionParser.new do |opts|
+  opts.banner =<<BANNER
 
 USAGE:
     $ genevalidator [OPTIONS] INPUT_FILE
@@ -17,8 +17,8 @@ OPTIONAL ARGUMENTS:
 
 BANNER
 
-  options[:vlist] = ['all']
-  opt.on( '-v', '--validations <String>', Array, 
+  opt[:vlist] = ['all']
+  opts.on( '-v', '--validations <String>', Array, 
           'The Validations to be applied.',
           'Validation Options Available (separated by coma):',
           '  all    = run all validations (default)',
@@ -30,55 +30,61 @@ BANNER
           '  orf    = main ORF validation (applicable for nucleotides)',
           '  align  = validation based on multiple alignment',
           '  codons = codon coverage ~ under development') do |lst|
-    options[:vlist] = lst
+    opt[:vlist] = lst
   end
 
-  options[:db] = 'swissprot -remote'
-  opt.on('-d', '--db [BLAST_DATABASE]', 'base where to look up the sequences',
+  opt[:db] = 'swissprot -remote'
+  opts.on('-d', '--db [BLAST_DATABASE]', 'base where to look up the sequences',
          'e.g. "swissprot -remote" or a local BLAST database') do |db|
-    options[:db] = db
+    opt[:db] = db
   end
     
-  options[:skip_blast] = nil
-  opt.on('-x', '--skip_blast [FILENAME]', 
+  opt[:skip_blast] = nil
+  opts.on('-x', '--skip_blast [FILENAME]', 
          'Skip blast-ing part and provide a blast xml or tabular output', 
          'as input to this script.',
          'Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6',
          'or 7) outputs accepted') do |skip|
-    options[:skip_blast] = skip
+    opt[:skip_blast] = skip
   end
 
   # default blast tabular columns
-  opt.on('-t', '--tabular [BLAST OUTFMT STRING]', 
+  opts.on('-t', '--tabular [BLAST OUTFMT STRING]', 
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
          '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
          ' See the manual pages of BLAST for more details'
     ) do |lst|
-    options[:tabular] = lst
+    opt[:tabular] = lst
   end
 
-  opt.on('-m', '--mafft [MAFFT_PATH]', 
+  opts.on('-m', '--mafft [MAFFT_PATH]', 
          'Path to MAFFT program installation') do |mafft|
-    options[:mafft] = mafft
+    opt[:mafft] = mafft
   end
 
-  opt.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
-    options[:blast] = blast
+  opts.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
+    opt[:blast] = blast
   end
 
-  opt.on('-r', '--raw_seq [FASTA_FILE]', 
+  opts.on('-r', '--raw_seq [FASTA_FILE]', 
          'Fasta file containing the raw sequences of each of the BLAST hits in',
          'BLAST XML output file.') do |raw|
-    options[:raw] = raw
+    opt[:raw] = raw
   end
 
-  opt.on('--version', 'The version of GeneValidator that you are running.') do
+  opt[:cores] = 1
+  opts.on('-c', '--cores num_of_threads', 'Run the resource heavy BLAST (&',
+          ' Mafft) with more than one core.') do |core|
+    opt[:cores] = core
+  end
+
+  opts.on('--version', 'The version of GeneValidator that you are running.') do
       puts GeneValidator::VERSION
       exit
   end
 
-  opt.on('-h', '--help', 'Show this screen.') do
+  opts.on('-h', '--help', 'Show this screen.') do
     puts opt_parser
     exit
   end
@@ -87,7 +93,7 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  if options[:skip_blast] != nil && options[:db] != 'swissprot -remote'
+  if opt[:skip_blast] != nil && opt[:db] != 'swissprot -remote'
     $stderr.puts 'The skip_blast ("-x") and database (-d) arguments cannot' \
                  ' both be set in the same run.'\
                  ' Please specify only skip_blast argument if you have' \
@@ -110,8 +116,8 @@ end
 
   start = Time.now
 
-  b = Validation.new(ARGV[0], options[:vlist], options[:tabular],
-                     options[:skip_blast], options[:db], options[:raw],
-                     options[:mafft], options[:blast], options[:start])
+  b = Validation.new(ARGV[0], opt[:vlist], opt[:tabular], opt[:skip_blast],
+                     opt[:db], opt[:raw], opt[:mafft], opt[:blast], opt[:start],
+                     opt[:cores])
   b.validation
   puts "Total running time: #{(Time.now - start).round(3)}s\n"

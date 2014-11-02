@@ -24,12 +24,12 @@ class DuplicationValidationOutput < ValidationReport
                      ' most once.'
     elsif validation == :no
       @explainpart = 'greater than 1. This can occur if tandem duplicated' \
-                     ' genes were erroneously included in the same gene model'
+                     ' genes were erroneously included in the same gene model.'
     end
     @explanation = "We expect each region of each homologous hit gene to" \
-                   " match the predicted gene at most once. The result here" \
-                   " suggests that the average coverage of hit regions is" \
-                   " #{@explainpart}"
+                   " match the predicted gene at most once. Here, a p-value" \
+                   " of #{@pvalue.round(2)} suggests that the average coverage" \
+                   "  of hit regions is #{@explainpart}"
   end
 
   def print
@@ -37,7 +37,7 @@ class DuplicationValidationOutput < ValidationReport
   end
 
   def validation
-    if @pvalue < @threshold
+    if @pvalue > @threshold
       :no
     else
       :yes
@@ -64,7 +64,7 @@ class DuplicationValidation < ValidationTest
   attr_reader :raw_seq_file_load
  
   def initialize(type, prediction, hits, mafft_path, raw_seq_file,
-                 index_file_name, raw_seq_file_load, db)
+                 index_file_name, raw_seq_file_load, db, cores)
     super
     @short_header      = 'Duplication'
     @header            = 'Duplication'
@@ -77,6 +77,7 @@ class DuplicationValidation < ValidationTest
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
     @db                = db
+    @cores             = cores
   end
 
   def is_in_range(ranges, idx)
@@ -168,7 +169,7 @@ class DuplicationValidation < ValidationTest
             seqs = [hit_local, query_local]
 
             begin
-              options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+              options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet',  '--thread', "#{@cores}" ]
               mafft     = Bio::MAFFT.new(@mafft_path, options)
               report    = mafft.query_align(seqs)
               raw_align = report.alignment

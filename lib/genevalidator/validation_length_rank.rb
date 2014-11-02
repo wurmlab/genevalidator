@@ -28,13 +28,17 @@ class LengthRankValidationOutput < ValidationReport
     @explanation   = "If the query sequence is well conserved and database" \
                      " sequences are correct, we would expect the query and" \
                      " hit sequences to have similar lengths.  Here, BLAST" \
-                     " produced #{@no_of_hits} hits(s), where the median" \
-                     " sequence length is #{@median} base pairs. The" \
-                     " prediction has a length of #{@predicted_len} base" \
-                     " pairs. There are #{@extreme_hits} hit(s) that have" \
-                     " sequence length that is further away from the median" \
-                     ' compared to the prediction. The rank of the prediction' \
-                     " length lies within #{@percentage}% of all BLAST hits."
+                     " produced "
+                     " #{@no_of_hits} #{(@no_of_hits == 1) ? 'hit' : 'hits'}" \
+                     " with a median sequence length of #{@median} amino" \
+                     " acid residues. The prediction has a length of" \
+                     " #{@predicted_len} amino acid residues. There are " \
+                     " #{@extreme_hits}" \
+                     " #{(@extreme_hits == 1) ? 'hit that is' : 'hits that are'}" \
+                     " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
+                     " than the prediction and thus further away from the median" \
+                     " compared to the prediction. This refers to a rank of " \
+                     " #{@percentage}%."
   end
 
   def print
@@ -64,12 +68,12 @@ class LengthRankValidation < ValidationTest
   attr_reader :threshold
 
   ##
-  # Initilizes the object
+  # Initializes the object
   # Params:
-  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +hits+: a vector of +Sequence+ objects (usually representing the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +threashold+: threshold below which the prediction length rank is considered to be inadequate 
-  def initialize(type, prediction, hits, threshold = 80)
+  # +threshold+: threshold below which the prediction length rank is considered to be inadequate 
+  def initialize(type, prediction, hits, threshold = 20)
     super
     @threshold    = threshold
     @short_header = 'LengthRank'
@@ -80,7 +84,7 @@ class LengthRankValidation < ValidationTest
   end
 
   ##
-  # Calculates a precentage based on the rank of the predicion among the hit lengths
+  # Calculates a percentage based on the rank of the prediction among the hit lengths
   # Params:
   # +hits+ (optional): a vector of +Sequence+ objects
   # +prediction+ (optional): a +Sequence+ object
@@ -97,7 +101,7 @@ class LengthRankValidation < ValidationTest
       hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
 
       no_of_hits = hits_lengths.length
-      median = hits_lengths.median
+      median = hits_lengths.median.round
       predicted_len = prediction.length_protein
 
       if hits.length == 1 || hits_lengths.standard_deviation <= 5
@@ -108,16 +112,16 @@ class LengthRankValidation < ValidationTest
         #   predicted...
         if predicted_len < median
           extreme_hits = hits_lengths.find_all{|x| x < predicted_len}.length
-          percentage = ((1-((extreme_hits.to_f * 2)/no_of_hits))*100).round
+          percentage = ((extreme_hits.to_f / no_of_hits)*100).round
           msg = 'too&nbsp;short'
         else
           extreme_hits = hits_lengths.find_all{|x| x > predicted_len}.length
-          percentage = ((1-((extreme_hits.to_f * 2)/no_of_hits))*100).round
+          percentage = ((extreme_hits.to_f / no_of_hits)*100).round
           msg = 'too&nbsp;long'
         end
       end
 
-      if percentage <= threshold
+      if percentage >= threshold
         msg = ""
       end
 
@@ -132,7 +136,5 @@ class LengthRankValidation < ValidationTest
       @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
     end
-
   end
-
 end
