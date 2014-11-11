@@ -9,4 +9,6 @@ before_install:
   - tar -zxvf ~/mafft-7.205-with-extensions-src.tgz -C ~
   - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && sudo make install)
   - which mafft
+  - mkdir ~/examplar_bin && touch ~/examplar_bin/blastp && chmod +x ~/examplar_bin/blastp
+  - export PATH=$PATH:~/examplar_bin
 script: rake test
