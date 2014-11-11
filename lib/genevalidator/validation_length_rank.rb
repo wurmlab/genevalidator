@@ -19,26 +19,72 @@ class LengthRankValidationOutput < ValidationReport
 
     @msg           = msg
     @no_of_hits    = no_of_hits
+
     @median        = median
     @predicted_len = predicted_len
     @extreme_hits  = extreme_hits
     @percentage    = percentage
     @result        = validation
     @expected      = expected
-    @explanation   = "If the query sequence is well conserved and database" \
-                     " sequences are correct, we would expect the query and" \
-                     " hit sequences to have similar lengths.  Here, BLAST" \
-                     " produced "
-                     " #{@no_of_hits} #{(@no_of_hits == 1) ? 'hit' : 'hits'}" \
-                     " with a median sequence length of #{@median} amino" \
-                     " acid residues. The prediction has a length of" \
-                     " #{@predicted_len} amino acid residues. There are " \
-                     " #{@extreme_hits}" \
-                     " #{(@extreme_hits == 1) ? 'hit that is' : 'hits that are'}" \
+    @explanation   = put_explanation_together
+  end
+    
+  # A method that simply puts the three parts of the explanation together...
+  def put_explanation_together
+
+    explanation1   = "If the query sequence is well conserved and homologous" \
+                     " sequences derived from the reference database are" \
+                     " correct, we would expect the lengths of query and" \
+                     " homologous sequences to be similar. That is to say, if" \
+                     " the query and homologous sequences were ranked by" \
+                     " their length, we would expect the query sequence to be" \
+                     " close to the median length of homologous sequences. "
+    if @no_of_hits == 1
+    ### Single homologous sequence
+      explanation2 = " Here, BLAST produced a single hit that has a sequence" \
+                      " length of #{@median}. "
+      explanation3 = " Since the query sequence is #{@predicted_len}" \
+                     " amino-acid residues long, it is" \
                      " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
-                     " than the prediction and thus further away from the median" \
-                     " compared to the prediction. This refers to a rank of " \
-                     " #{@percentage}%."
+                     " than the homologous sequence."
+    else 
+    ### If more than 1 homologous sequence
+      explanation2 = "Here, BLAST produced #{@no_of_hits} homologous" \
+                     " sequences with a median sequence length of" \
+                     " #{@median} amino-acid residues. "
+    
+      if (@predicted_len < @median) && (@extreme_hits == 0) 
+        # query seq is shorter than median and all homologous sequences are 
+        ### longer than the query sequence
+        explanation3  = "The query sequence (#{@predicted_len} amino-acid" \
+                        " residues) is shorter than the median length of" \
+                        " homologous sequences. Furthermore, all homologous"\
+                        " sequences are longer than the query sequence."
+      elsif (@predicted_len < @median)
+        # prediction is shorter than median
+        explanation3  = "Since the query sequence has a sequence length of" \
+                        " #{@predicted_len} amino-acid residue, it is shorter" \
+                        " than the median length of homologous" \
+                        " sequences. There are #{@extreme_hits} homologous" \
+                        " sequences that are shorter than the query sequence."
+      elsif (@predicted_len > @median) && (@extreme_hits == 0) 
+        # query seq is LONGER than median and all homologous sequences are 
+        ### shorter than the query sequence
+        explanation3  = "The query sequence (#{@predicted_len} amino-acid" \
+                        " residues) is longer than the median length of" \
+                        " homologous sequences. Furthermore, all homologous"\
+                        " sequences are shorter than the query sequence."
+      else (@predicted_len > @median)
+      # prediction is longer than the median
+        explanation3  = "Since the query sequence has a sequence length of" \
+                        " #{@predicted_len} amino-acid residue, it is longer" \
+                        " than the median length of homologous" \
+                        " sequences. There are #{@extreme_hits} homologous" \
+                        " sequences that are longer than the query sequence."
+      end
+    end
+    explanation = explanation1 + explanation2 + explanation3
+    explanation
   end
 
   def print

@@ -24,24 +24,28 @@ class LengthClusterValidationOutput < ValidationReport
     @result         = validation
     @plot_files     = []
     if validation   == :yes 
-      @explainpart  = 'has a similiar size to sequences within'
+      @explainpart  = "it's length is similiar to sequences within"
     elsif validation == :no 
       if @prediction_len > @limits[1]
-        @explainpart  = 'is longer than sequences within'
+        @explainpart  = 'it is longer than sequences within'
       elsif @prediction_len < @limits[0]
-        @explainpart = 'is shorter than sequences within'
+        @explainpart = 'it is shorter than sequences within'
       end
     end
-    @explanation    = "If the query sequence is well conserved and database" \
-                      " sequences are correct, we would expect the query and" \
-                      " hit sequences to have similar lengths.  The length of" \
-                      " the query sequence is #{prediction_len} amino-acid" \
-                      " residues. The most dense cluster of hit sequences" \
-                      " includes lengths between #{limits[0]} and" \
-                      " #{limits[1]} amino-acid residues. Thus the query" \
-                      " sequence #{@explainpart} the most dense cluster of" \
-                      " hits. Please see below for a graphical representation" \
-                      " of this."
+    @explanation    = "If the query sequence is well conserved and homologous" \
+                      " sequences derived from the reference database are" \
+                      " correct, we would expect the lengths of query and" \
+                      " homologous sequences to be similar. That is to say," \
+                      " if the query and homologous sequences were clustered" \
+                      " by their length, the query sequence will belong to" \
+                      " the most dense cluster. In this case, the most dense" \
+                      " cluster of homologous sequences includes lengths" \
+                      " between #{limits[0]} and #{limits[1]} amino-acid" \
+                      " residues. Since the query sequence has a length of" \
+                      " #{prediction_len} amino-acid residues," \
+                      " #{@explainpart} the most dense cluster of homologous." \
+                      " sequences. Please see below for a graphical" \
+                      " representation of this."
   end
 
   def print
