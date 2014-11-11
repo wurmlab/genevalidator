@@ -73,10 +73,10 @@ BANNER
     options[:raw] = raw
   end
 
-  options[:cores] = 1
-  opt.on('-c', '--cores num_of_threads', 'Specify the number of processor',
-          'threads to utilise when running GeneValidator.') do |core|
-    options[:cores] = core
+  options[:threads] = 1
+  opt.on('-n', '--num_threads num_of_threads', 'Specify the number of processor',
+          'threads to utilise when running GeneValidator.') do |threads|
+    options[:num_threads] = threads
   end
 
 
@@ -120,6 +120,6 @@ end
   b = Validation.new(ARGV[0], options[:vlist], options[:tabular],
                      options[:skip_blast], options[:db], options[:raw],
                      options[:mafft], options[:blast], options[:start], 
-                     options[:cores])
+                     options[:num_threads])
   b.validation
   puts "Total running time: #{(Time.now - start).round(3)}s\n'
