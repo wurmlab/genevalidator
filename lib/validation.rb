@@ -116,7 +116,6 @@ class Validation
     @no_internet = 0
     @map_errors = Hash.new(0)
     @map_running_times = Hash.new(Pair1.new(0,0))
-    @blast_path = blast_path
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
@@ -138,10 +137,24 @@ class Validation
     GC.start
     @tabular_format = tabular_format
 
-    if mafft_path == nil
-      @mafft_path = which("mafft")
-    else
-      @mafft_path = mafft_path
+    begin
+      if mafft_path == nil
+        @mafft_path = which("mafft")
+      else
+        @mafft_path = mafft_path
+      end
+
+      if blast_path == nil
+        blastp_path = which('blastp')
+        raise ClasspathError if blastp_path == nil
+        @blast_path = File.dirname(blastp_path)
+      else 
+        @blast_path = blast_path
+      end
+    rescue ClasspathError => error
+      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+      "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n" 
+      exit! 
     end
 
     begin
