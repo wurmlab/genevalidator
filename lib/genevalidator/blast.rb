@@ -13,10 +13,13 @@ require 'yaml'
 
 class BlastUtils
 
+  EVALUE = 1e-5
+
   ##
   # Calls blast from standard input with specific parameters
   # Params:
-  # +command+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +blastpath+: location of blast binaries
+  # +blastcmd+: blast command in String format (e.g 'blastx' or 'blastp')
   # +query+: String containing the the query in fasta format
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
@@ -24,27 +27,24 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blastpath, blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
-    if blastpath == nil
-      command = blast_type
-    else
-      command = File.join(blastpath, blast_type)
-    end
-    raise TypeError unless command.is_a? String and query.is_a? String
+  def self.call_blast_from_stdin(blastpath, blastcmd, query, db, gapopen=11, gapextend=1, nr_hits=200)
+    # FIXME: This method is meant to be used internally within GV. As such it
+    # can be guaranteed that parameters are of the right type. Type checking
+    # here is redundant.
+    raise TypeError unless blastcmd.is_a? String and query.is_a? String
 
-    evalue = "1e-5"
+    blastcmd = File.join(blastpath, blastcmd) unless blastpath.nil?
+    blastcmd = "#{blastcmd} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+    cmd      = "echo \"#{query}\" | #{blastcmd}"
+    output   = %x[#{cmd} 2>/dev/null]
 
-    #output format = 5 (XML Blast output)
-    blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
-    cmd       = "echo \"#{query}\" | #{blast_cmd}"
-    output    = %x[#{cmd} 2>/dev/null]
+    # FIXME:
+    #   Empty output doesn't necessarily indicate that BLAST+ binaries are not
+    #   in $PATH. GV should guarantee the presence of BLAST+ binaries before
+    #   this method is called.
+    raise ClasspathError if output.empty?
 
-    if output == ""
-      raise ClasspathError.new
-    end
-
-    return output
-
+    output
   rescue TypeError => error
     $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
     "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
