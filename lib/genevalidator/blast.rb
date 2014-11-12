@@ -25,36 +25,34 @@ class BlastUtils
   # Output:
   # String with the blast xml output
   def self.call_blast_from_stdin(blastpath, blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
-    begin
-      if blastpath == nil 
-        command = blast_type
-      else
-        command = File.join(blastpath, blast_type)
-      end
-      raise TypeError unless command.is_a? String and query.is_a? String
-
-      evalue = "1e-5"
-      
-      #output format = 5 (XML Blast output)
-      blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
-      cmd       = "echo \"#{query}\" | #{blast_cmd}"
-      output    = %x[#{cmd} 2>/dev/null]
-
-      if output == ""
-        raise ClasspathError.new
-      end
-
-      return output
-
-    rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
-      exit!
-    rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n" 
-      exit! 
+    if blastpath == nil
+      command = blast_type
+    else
+      command = File.join(blastpath, blast_type)
     end
+    raise TypeError unless command.is_a? String and query.is_a? String
+
+    evalue = "1e-5"
+
+    #output format = 5 (XML Blast output)
+    blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+    cmd       = "echo \"#{query}\" | #{blast_cmd}"
+    output    = %x[#{cmd} 2>/dev/null]
+
+    if output == ""
+      raise ClasspathError.new
+    end
+
+    return output
+
+  rescue TypeError => error
+    $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+    "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
+    exit!
+  rescue ClasspathError => error
+    $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+    "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n"
+    exit!
   end
 
   ##
