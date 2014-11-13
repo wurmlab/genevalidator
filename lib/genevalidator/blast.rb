@@ -24,7 +24,7 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blastpath, blast_type, query, db, cores, gapopen=11, gapextend=1, nr_hits=200)
+  def self.call_blast_from_stdin(blastpath, blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
     begin
       if blastpath == nil 
         command = blast_type
@@ -38,7 +38,7 @@ class BlastUtils
       #output format = 5 (XML Blast output)
       # If BLAST is not run remotely, then utilise the -num_threads argument
       if (db !~ /remote/)
-        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{cores}"
+        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
       else
         blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
       end
