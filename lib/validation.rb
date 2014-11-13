@@ -137,24 +137,10 @@ class Validation
     GC.start
     @tabular_format = tabular_format
 
-    begin
-      if mafft_path == nil
-        @mafft_path = which("mafft")
-      else
-        @mafft_path = mafft_path
-      end
-
-      if blast_path == nil
-        blastp_path = which('blastp')
-        raise ClasspathError if blastp_path == nil
-        @blast_path = File.dirname(blastp_path)
-      else 
-        @blast_path = blast_path
-      end
-    rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-      "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n" 
-      exit! 
+    if mafft_path == nil
+      @mafft_path = which("mafft")
+    else
+      @mafft_path = mafft_path
     end
 
     begin
