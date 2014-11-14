@@ -74,7 +74,7 @@ BANNER
   end
 
   opt[:num_threads] = 1
-  opts.on('-c', '--cores num_of_threads', 'Specify the number of processor',
+  opts.on('-n', '--num_threads num_of_threads', 'Specify the number of processor',
           'threads to utilise when running BLAST and Mafft within', 
           'GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads

@@ -33,9 +33,9 @@ class BlastUtils
       #output format = 5 (XML Blast output)
       # If BLAST is not run remotely, then utilise the -num_threads argument
       if (db !~ /remote/)
-        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+        blast_cmd = "#{blast_type} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
       else
-        blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+        blast_cmd = "#{blast_type} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
       end
       cmd       = "echo \"#{query}\" | #{blast_cmd}"
       output    = %x[#{cmd} 2>/dev/null]
