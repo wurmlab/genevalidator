@@ -111,14 +111,21 @@ end
 
 # Validate BLAST installation
 if options[:blast]
-  GVArgValidation::export_bin_dir(options[:blast])
+  GVArgValidation::Blast.export_bin_dir(options[:blast])
 else 
-  GVArgValidation::assert_blast_installed_and_compatible
+  GVArgValidation::Blast.assert_blast_installed_and_compatible
 end
 
 # Validate BLAST database
 if options[:db] !~ /remote/
-  GVArgValidation::assert_blast_database_exists(options[:db])
+  GVArgValidation::Blast.assert_blast_database_exists(options[:db])
+end
+
+# Validate Mafft installation
+if options[:mafft]
+  GVArgValidation::Mafft.export_bin_dir(options[:mafft])
+else
+  GVArgValidation::Mafft.assert_mafft_installed
 end
 
 start = Time.now
