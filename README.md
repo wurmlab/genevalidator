@@ -9,7 +9,7 @@ The goal of GeneValidator is to identify problems with gene predictions and prov
 ### Citation
 If you use GeneValidator in your work, please cite us as follows:
 
-"Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) 2014 GeneValidator: identify problematic gene predictions"
+"Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
 
 
 ### Validations
@@ -39,7 +39,9 @@ Linux and MacOS are officially supported!
 ## Installation
 1. Type the following command in the terminal
 
-`$ gem install GeneValidator`
+```bash
+$ gem install GeneValidator
+```
 
 
 ## Usage 
