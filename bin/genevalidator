@@ -60,7 +60,7 @@ BANNER
   end
 
   opts.on('-m', '--mafft [MAFFT_PATH]', 'Path to MAFFT bin folder') do |mafft|
-    options[:mafft] = mafft
+    opt[:mafft] = mafft
   end
 
   opts.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
@@ -115,20 +115,20 @@ begin
 end
 
 # Validate BLAST installation
-if options[:blast]
-  GVArgValidation::Blast.export_bin_dir(options[:blast])
+if opt[:blast]
+  GVArgValidation::Blast.export_bin_dir(opt[:blast])
 else 
   GVArgValidation::Blast.assert_blast_installed_and_compatible
 end
 
 # Validate BLAST database
-if options[:db] !~ /remote/
-  GVArgValidation::Blast.assert_blast_database_exists(options[:db])
+if opt[:db] !~ /remote/
+  GVArgValidation::Blast.assert_blast_database_exists(opt[:db])
 end
 
 # Validate Mafft installation
-if options[:mafft]
-  GVArgValidation::Mafft.export_bin_dir(options[:mafft])
+if opt[:mafft]
+  GVArgValidation::Mafft.export_bin_dir(opt[:mafft])
 else
   GVArgValidation::Mafft.assert_mafft_installed
 end
