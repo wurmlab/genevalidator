@@ -132,6 +132,6 @@ start = Time.now
 
 b = Validation.new(ARGV[0], options[:vlist], options[:tabular],
                    options[:skip_blast], options[:db], options[:raw],
-                   options[:mafft], options[:blast], options[:start])
+                   options[:start])
 b.validation
 puts "Total running time: #{(Time.now - start).round(3)}s\n"

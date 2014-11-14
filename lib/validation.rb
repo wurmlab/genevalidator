@@ -26,8 +26,6 @@ class Validation
   attr_reader :fasta_filepath
   attr_reader :html_path
   attr_reader :yaml_path
-  attr_reader :mafft_path
-  attr_reader :blast_path
   attr_reader :filename
   attr_reader :raw_seq_file
   attr_reader :raw_seq_file_index
@@ -71,7 +69,6 @@ class Validation
   # +tabular_format+: list of column names for parsing the tablar blast output
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
   # +db+: comparition BLAST database (in case xml_file is not specified)
-  # +mafft_path+: path of the MAFFT program installation
   # +start_idx+: number of the sequence from the file to start with
   # +overall_evaluation+: boolean variable for printing / not printing overall evaluation
   # +multithreading+: boolean variable for enabling multithreading
@@ -81,8 +78,6 @@ class Validation
                   xml_file = nil,
                   db = "swissprot -remote",
                   raw_seq_file = nil,
-                  mafft_path = nil,
-                  blast_path = nil,
                   start_idx = 1,
                   overall_evaluation = true,
                   multithreading = true)
@@ -136,12 +131,6 @@ class Validation
     fasta_content = nil # free memory for variable fasta_content
     GC.start
     @tabular_format = tabular_format
-
-    if mafft_path == nil
-      @mafft_path = which("mafft")
-    else
-      @mafft_path = mafft_path
-    end
 
     begin
 

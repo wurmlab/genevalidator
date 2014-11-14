@@ -49,7 +49,8 @@ module GVArgValidation
     def self.assert_mafft_installed
       unless GVArgValidation::command?('mafft')
         puts "*** Could not find Mafft binaries."
-        exit!
+        puts "    Ignoring error and continuing - Please note that some validations may be skipped."
+        puts # a blank line
       end
     end
 
@@ -58,8 +59,8 @@ module GVArgValidation
         GVArgValidation::add_to_path(mafft_bin_dir)
       else
         puts "*** The provided Mafft bin directory does not exist."
-        puts "    Please ensure that the provided Mafft bin directory is correct and try again."
-        exit!
+        puts "    Ignoring error and continuing - Please note that some validations may be skipped."
+        puts # a blank line
       end
     end
   end
