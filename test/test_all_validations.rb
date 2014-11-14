@@ -69,7 +69,7 @@ class ValidateOutput < Minitest::Test
                          filename_prot_tab,
                          "swissprot -remote",
                          filename_prot_raw,
-                         nil, nil, 1, false, false)
+                         1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
