@@ -2,6 +2,7 @@
 require 'optparse'
 require 'validation'
 require 'genevalidator/version'
+require 'genevalidator/arg_validation'
 
 opt = {}
 opt_parser = OptionParser.new do |opts|
@@ -58,9 +59,8 @@ BANNER
     opt[:tabular] = lst
   end
 
-  opts.on('-m', '--mafft [MAFFT_PATH]', 
-         'Path to MAFFT program installation') do |mafft|
-    opt[:mafft] = mafft
+  opts.on('-m', '--mafft [MAFFT_PATH]', 'Path to MAFFT bin folder') do |mafft|
+    options[:mafft] = mafft
   end
 
   opts.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
@@ -114,10 +114,28 @@ begin
     exit!
 end
 
-  start = Time.now
+# Validate BLAST installation
+if options[:blast]
+  GVArgValidation::Blast.export_bin_dir(options[:blast])
+else 
+  GVArgValidation::Blast.assert_blast_installed_and_compatible
+end
 
-  b = Validation.new(ARGV[0], opt[:vlist], opt[:tabular], opt[:skip_blast],
-                     opt[:db], opt[:raw], opt[:mafft], opt[:blast], opt[:start],
-                     opt[:cores])
-  b.validation
-  puts "Total running time: #{(Time.now - start).round(3)}s\n"
+# Validate BLAST database
+if options[:db] !~ /remote/
+  GVArgValidation::Blast.assert_blast_database_exists(options[:db])
+end
+
+# Validate Mafft installation
+if options[:mafft]
+  GVArgValidation::Mafft.export_bin_dir(options[:mafft])
+else
+  GVArgValidation::Mafft.assert_mafft_installed
+end
+
+start = Time.now
+
+b = Validation.new(ARGV[0], opt[:vlist], opt[:tabular], opt[:skip_blast],
+                   opt[:db], opt[:raw], opt[:start], opt[:cores])
+b.validation
+puts "Total running time: #{(Time.now - start).round(3)}s\n"

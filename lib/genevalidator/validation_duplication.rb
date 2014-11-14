@@ -63,8 +63,8 @@ class DuplicationValidation < ValidationTest
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
  
-  def initialize(type, prediction, hits, mafft_path, raw_seq_file,
-                 index_file_name, raw_seq_file_load, db, cores)
+  def initialize(type, prediction, hits, raw_seq_file, index_file_name,
+                 raw_seq_file_load, db, cores)
     super
     @short_header      = 'Duplication'
     @header            = 'Duplication'
@@ -72,7 +72,6 @@ class DuplicationValidation < ValidationTest
                          ' the predicted gene by counting the hsp residue' \
                          ' coverage of the prediction, for each hit.' 
     @cli_name          = 'dup'
-    @mafft_path        = mafft_path
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
@@ -170,7 +169,7 @@ class DuplicationValidation < ValidationTest
 
             begin
               options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet',  '--thread', "#{@cores}" ]
-              mafft     = Bio::MAFFT.new(@mafft_path, options)
+              mafft     = Bio::MAFFT.new('mafft', options)
               report    = mafft.query_align(seqs)
               raw_align = report.alignment
               align     = []
