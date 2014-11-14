@@ -60,7 +60,7 @@ BANNER
   end
 
   opt.on('-m', '--mafft [MAFFT_PATH]', 
-         'Path to MAFFT program installation') do |mafft|
+         'Path to MAFFT bin folder') do |mafft|
     options[:mafft] = mafft
   end
 
