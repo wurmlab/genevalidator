@@ -59,5 +59,4 @@ $ genevalidator -x mrna_data.xml -r mrna_data.raw_seq mrna_data.fasta
 
 ## Output
 
-The HTML output can be found within the 
-Yaml 
+The HTML output can be found within an output folder that is created in the directory that the input file lies in. The Yaml output can found in the same directory that input folder lies. 
