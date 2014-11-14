@@ -65,8 +65,7 @@ module GVArgValidation
     end
   end
 
-  ## Check whether dir is in the $PATH and if not, adds the dir to the $PATH. If the
-  #   dir is not a directory, the method returns false, otherwise it returns true. 
+  ## Check whether dir is in the $PATH and if not, adds the dir to the $PATH.
   def self.add_to_path(bin_dir)
     unless ENV['PATH'].split(':').include?(bin_dir)
       ENV['PATH'] = "#{bin_dir}:#{ENV['PATH']}"
