@@ -73,10 +73,11 @@ BANNER
     opt[:raw] = raw
   end
 
-  opt[:cores] = 1
-  opts.on('-c', '--cores num_of_threads', 'Run the resource heavy BLAST (&',
-          ' Mafft) with more than one core.') do |core|
-    opt[:cores] = core
+  opt[:num_threads] = 1
+  opts.on('-c', '--cores num_of_threads', 'Specify the number of processor',
+          'threads to utilise when running BLAST and Mafft within', 
+          'GeneValidator.') do |num_threads|
+    opt[:num_threads] = num_threads
   end
 
   opts.on('--version', 'The version of GeneValidator that you are running.') do
@@ -136,6 +137,6 @@ end
 start = Time.now
 
 b = Validation.new(ARGV[0], opt[:vlist], opt[:tabular], opt[:skip_blast],
-                   opt[:db], opt[:raw], opt[:start], opt[:cores])
+                   opt[:db], opt[:raw], opt[:start], opt[:num_threads])
 b.validation
 puts "Total running time: #{(Time.now - start).round(3)}s\n"

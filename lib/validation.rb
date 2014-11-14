@@ -78,7 +78,7 @@ class Validation
                   db = "swissprot -remote",
                   raw_seq_file = nil,
                   start_idx = 1,
-                  cores = 1,
+                  num_threads = 1,
                   overall_evaluation = true,
                   multithreading = true)
 
@@ -86,15 +86,14 @@ class Validation
            "resources, this may take a while. Please wait..."
 
     # start a worker thread
-    @threads           = []
+    @threads           = [] # used for parallelizing the validations.
     @mutex             = Mutex.new
     @mutex_yaml        = Mutex.new
     @mutex_html        = Mutex.new
     @mutex_array       = Mutex.new
-    @cores             = cores
+    @num_threads       = num_threads # used for BLAST & Mafft
 
-    @fasta_filepath    = fasta_filepath
-   
+    @fasta_filepath    = fasta_filepath   
     @xml_file          = xml_file
     @db                = db
     @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
@@ -221,9 +220,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, @cores, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, @num_threads, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, @cores, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, @num_threads, 11, 1)
             end
 
             parse_output(output, :stream)
@@ -512,10 +511,10 @@ class Validation
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @cores)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @cores)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list
