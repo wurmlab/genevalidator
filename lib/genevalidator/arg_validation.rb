@@ -46,7 +46,6 @@ module GVArgValidation
   end
 
   class Mafft
-
     def self.assert_mafft_installed
       unless GVArgValidation::command?('mafft')
         puts "*** Could not find Mafft binaries."

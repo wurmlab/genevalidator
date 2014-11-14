@@ -24,19 +24,14 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blastpath, blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
+  def self.call_blast_from_stdin(blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
     begin
-      if blastpath == nil 
-        command = blast_type
-      else
-        command = File.join(blastpath, blast_type)
-      end
       raise TypeError unless command.is_a? String and query.is_a? String
 
       evalue = "1e-5"
       
       #output format = 5 (XML Blast output)
-      blast_cmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+      blast_cmd = "#{blast_type} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
       cmd       = "echo \"#{query}\" | #{blast_cmd}"
       output    = %x[#{cmd} 2>/dev/null]
 

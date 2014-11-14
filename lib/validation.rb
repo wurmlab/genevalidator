@@ -231,9 +231,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastp", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, 11, 1)
             end
 
             #parse output
