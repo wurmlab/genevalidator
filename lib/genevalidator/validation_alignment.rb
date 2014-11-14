@@ -53,7 +53,6 @@ class AlignmentValidation < ValidationTest
 
   attr_reader :filename
   attr_reader :multiple_alignment
-  attr_reader :mafft_path
   attr_reader :raw_seq_file
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
@@ -69,10 +68,9 @@ class AlignmentValidation < ValidationTest
   # +raw_seq_file+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +raw_seq_file_load+: String - loaded content of the index file
-  def initialize(type, prediction, hits, filename, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db)
+  def initialize(type, prediction, hits, filename, raw_seq_file, index_file_name, raw_seq_file_load, db)
     super
     @filename          = filename
-    @mafft_path        = mafft_path
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
@@ -218,11 +216,11 @@ class AlignmentValidation < ValidationTest
   # Output:
   # Array of +String+s, corresponding to the multiple aligned sequences
   # the prediction is the last sequence in the vector
-  def multiple_align_mafft(prediction = @prediction, hits = @hits, path = @mafft_path)
+  def multiple_align_mafft(prediction = @prediction, hits = @hits)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
       options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
-      mafft = Bio::MAFFT.new(path, options)
+      mafft = Bio::MAFFT.new('mafft', options)
       sequences = hits.map{|hit| hit.raw_sequence}
       sequences.push(prediction.protein_translation)
 

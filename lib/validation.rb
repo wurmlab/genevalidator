@@ -526,10 +526,10 @@ class Validation
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list

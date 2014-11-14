@@ -26,7 +26,7 @@ class BlastUtils
   # String with the blast xml output
   def self.call_blast_from_stdin(blast_type, query, db, gapopen=11, gapextend=1, nr_hits=200)
     begin
-      raise TypeError unless command.is_a? String and query.is_a? String
+      raise TypeError unless blast_type.is_a? String and query.is_a? String
 
       evalue = "1e-5"
       
