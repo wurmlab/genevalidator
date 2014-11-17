@@ -24,7 +24,7 @@ class LengthClusterValidationOutput < ValidationReport
     @result         = validation
     @plot_files     = []
     if validation   == :yes 
-      @explainpart  = "it's length is similiar to sequences within"
+      @explainpart  = "its length is similar to sequences within"
     elsif validation == :no 
       if @prediction_len > @limits[1]
         @explainpart  = 'it is longer than sequences within'

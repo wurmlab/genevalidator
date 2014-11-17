@@ -42,7 +42,7 @@ class LengthRankValidationOutput < ValidationReport
     if @no_of_hits == 1
     ### Single homologous sequence
       explanation2 = " Here, BLAST produced a single hit that has a sequence" \
-                      " length of #{@median}. "
+                      " length of #{@median} amino-acid residues. "
       explanation3 = " Since the query sequence is #{@predicted_len}" \
                      " amino-acid residues long, it is" \
                      " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
@@ -53,7 +53,12 @@ class LengthRankValidationOutput < ValidationReport
                      " sequences with a median sequence length of" \
                      " #{@median} amino-acid residues. "
     
-      if (@predicted_len < @median) && (@extreme_hits == 0) 
+      if (@predicted_len = @median)
+        # query seq is the same length as median
+        explanation3 = " The query sequence (#{@predicted_len} amino-acid" \
+                        " residues) is the same length as the median of" \
+                        " homologous sequences."
+      elsif (@predicted_len < @median) && (@extreme_hits == 0) 
         # query seq is shorter than median and all homologous sequences are 
         ### longer than the query sequence
         explanation3  = "The query sequence (#{@predicted_len} amino-acid" \
@@ -61,9 +66,9 @@ class LengthRankValidationOutput < ValidationReport
                         " homologous sequences. Furthermore, all homologous"\
                         " sequences are longer than the query sequence."
       elsif (@predicted_len < @median)
-        # prediction is shorter than median
+        # query seq is shorter than median
         explanation3  = "Since the query sequence has a sequence length of" \
-                        " #{@predicted_len} amino-acid residue, it is shorter" \
+                        " #{@predicted_len} amino-acid residues, it is shorter" \
                         " than the median length of homologous" \
                         " sequences. There are #{@extreme_hits} homologous" \
                         " sequences that are shorter than the query sequence."
@@ -75,7 +80,7 @@ class LengthRankValidationOutput < ValidationReport
                         " homologous sequences. Furthermore, all homologous"\
                         " sequences are shorter than the query sequence."
       else (@predicted_len > @median)
-      # prediction is longer than the median
+      # query seq is longer than the median
         explanation3  = "Since the query sequence has a sequence length of" \
                         " #{@predicted_len} amino-acid residue, it is longer" \
                         " than the median length of homologous" \
@@ -83,8 +88,7 @@ class LengthRankValidationOutput < ValidationReport
                         " sequences that are longer than the query sequence."
       end
     end
-    explanation = explanation1 + explanation2 + explanation3
-    explanation
+    explanation1 + explanation2 + explanation3
   end
 
   def print

@@ -456,7 +456,7 @@ class AlignmentValidation < ValidationTest
 
       yAxisValues = 'prediction'
       (1..ma.length-1).each do |i|
-         yAxisValues << ', hit#{i}'
+         yAxisValues << ", hit&nbsp;#{i}"
       end
 
       yAxisValues << ', statistical model'
