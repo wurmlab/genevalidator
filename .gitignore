@@ -3,3 +3,5 @@
 *.gem
 .DS_Store
 Gemfile.lock
+# Gemnasium gem configuration file
+config/gemnasium.yml
