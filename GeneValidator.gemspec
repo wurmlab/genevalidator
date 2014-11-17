@@ -23,7 +23,6 @@ DESC
   s.add_dependency('bio', "~> 1.4")
   s.add_dependency('bio-blastxmlparser', "~>2.0")
   s.add_dependency('minitest', "~> 5.4")
-  s.add_dependency('rack', "~> 1.5")
   s.add_dependency('statsample', "~> 1.4")
 
   s.files         = `git ls-files -z`.split("\x0")
