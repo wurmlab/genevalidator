@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
 [![Gem Version](https://badge.fury.io/rb/GeneValidator.svg)](http://badge.fury.io/rb/GeneValidator)
 [![Dependency Status](https://gemnasium.com/3b0e5081b7f0b8dc4b849d0c35a5f864.svg)](https://gemnasium.com/b7eac83bbd785b15275259cb66babff1)
-
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/badges/quality-score.png?b=alpha)](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/?branch=alpha)
 
 ## Introduction
 The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases. The results produced will make provide evidence on how sequencing curation may be done and will be useful in improving or trying out new approaches for gene prediction tools. The main target of this tool are biologists who wish to validate the data produced in their labs.
