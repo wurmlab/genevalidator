@@ -34,7 +34,7 @@ $(function () {
 
 //Hide empty columns
 $(document).ready(function() { 
-  if (window.chrome) {
+  if (window.chrome && (window.location.protocol === 'file:') )  {
     $('#browseralert').modal()
   }
 

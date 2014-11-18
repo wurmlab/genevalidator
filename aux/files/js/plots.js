@@ -2,7 +2,7 @@
 function show_all_plots(button){
     var expand_children = document.getElementsByName('plot_row');
     if(expand_children.length < 30){
-      if (window.chrome) {
+      if (window.chrome && (window.location.protocol === 'file:') ) {
         if (($('#browser-alert').length) == 0) { 
           $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
           $('#browseralert').modal()
@@ -91,7 +91,7 @@ function getElementByAttributeValue(attribute, value) {
 }
 
 function showDiv(source, target){
-  if (window.chrome) {
+  if (window.chrome && (window.location.protocol === 'file:') ) {
     if (($('#browser-alert').length) == 0) { 
       $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
       $('#browseralert').modal()
