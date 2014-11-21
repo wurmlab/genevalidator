@@ -8,7 +8,6 @@
 ## Introduction
 The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases. The results produced will make provide evidence on how sequencing curation may be done and will be useful in improving or trying out new approaches for gene prediction tools. The main target of this tool are biologists who wish to validate the data produced in their labs.
 
-### Citation
 If you use GeneValidator in your work, please cite us as follows:
 
 "Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
@@ -39,7 +38,7 @@ Linux and MacOS are officially supported!
 
 
 ## Installation
-1. Type the following command in the terminal
+1) Type the following command in the terminal
 
 ```bash
 $ gem install GeneValidator
@@ -47,7 +46,7 @@ $ gem install GeneValidator
 
 
 ## Usage 
-1. After installing, GeneValidator can be run by typing the following command in the terminal
+1) After installing, GeneValidator can be run by typing the following command in the terminal
 
 ```bash
 
