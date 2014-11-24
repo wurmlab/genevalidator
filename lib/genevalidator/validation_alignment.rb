@@ -26,13 +26,20 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @explanation  = "A position specific scoring matrix of the strongest 10" \
-                    " results show that: #{(extra_seq*100).round(0)}% of" \
+    @explanation  = put_together_explanation
+
+    def put_together_explanation
+      approach    = '' # TODO:
+      explanation = "A position specific scoring matrix of the strongest 10" \
+                    " results show that: #{(@extra_seq*100).round(0)}% of" \
                     " residues in the prediction do not appear in profile;" \
-                    " #{(gaps*100).round(0)}% of residues in the profile do" \
+                    " #{(@gaps*100).round(0)}% of residues in the profile do" \
                     " not appear in the prediction and when compared to the" \
-                    " model, #{(consensus*100).round(0)}% of residues are" \
+                    " model, #{(@consensus*100).round(0)}% of residues are" \
                     " conserved in the prediciton."
+      conclusion  = '' # TODO:
+      #approach + explanation + conclusion
+      explanation 
   end
 
   def print

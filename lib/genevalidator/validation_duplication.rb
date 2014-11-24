@@ -18,18 +18,36 @@ class DuplicationValidationOutput < ValidationReport
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    if validation == :yes 
-      @explainpart = 'less than 1. This suggests that each region of' \
-                     ' each homologous hit matches the predicted gene at' \
-                     ' most once.'
-    elsif validation == :no
-      @explainpart = 'greater than 1. This can occur if tandem duplicated' \
-                     ' genes were erroneously included in the same gene model.'
+    @explanation = put_together_explanation
+
+    def put_together_explannation
+      approach  = "If the query sequence is well conserved and homologous" \
+                  " sequences derived from the reference database are" \
+                  " correct, we would expect each region of each homologous" \
+                  " sequence to match the query sequence only once. If a" \
+                  " region of a homologous sequence matches the query" \
+                  " sequence more that one, it would suggest that the region" \
+                  " has be erronously duplicated in the query sequence." \
+                  " That is to say that ... . "
+      # TODO: FINISH the above - explain in one sentence the exact validation
+      ## carried out and the expected result (explain p-value)
+      explanation1 = "Here, a p-value of #{@pvalue.round(2)} suggests that the" \
+                     " average coverage of hit regions is "
+
+      if validation == :yes
+        # i.e. if p value is smaller than the threshold...
+        explanation2 = 'less than 1. This suggests that each region of' \
+                       ' each homologous hit matches the predicted gene at' \
+                       ' most once.'
+        conclusion   = '' # TODO:... 
+      elsif validation == :no
+        # i.e. if p value is smaller than the threshold...
+        explanation2 = 'greater than 1. This can occur if tandem duplicated' \
+                      ' genes were erroneously included in the same gene model.'
+        conclusion   = # TODO:...
+      end
+      approach + explanation1 + explanation2 # + conclusion 
     end
-    @explanation = "We expect each region of each homologous hit gene to" \
-                   " match the predicted gene at most once. Here, a p-value" \
-                   " of #{@pvalue.round(2)} suggests that the average coverage" \
-                   "  of hit regions is #{@explainpart}"
   end
 
   def print
