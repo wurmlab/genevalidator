@@ -23,42 +23,43 @@ class LengthClusterValidationOutput < ValidationReport
     @expected       = expected
     @result         = validation
     @plot_files     = []
+    @explanation    = put_explanation_together
 
-    ## EXPLANATION
-
-    if validation   == :yes 
-      # i.e. if inside the main cluster
-      explainpart  = "it's length is similar to sequences within"
-      conclusion   = "Since the query sequence length belong to the densest" \
-                     " cluster of homologous sequence lengths, we can be" \
-                     " relatively confident about the query sequence"
-    elsif validation == :no 
-      # i.e. if outside the main cluster
-      if @prediction_len > @limits[1] # longer than biggest limit 
-        explainpart  = 'it is longer than sequences within'
-      elsif @prediction_len < @limits[0] # shorter than smaller limit
-        explainpart = 'it is shorter than sequences within'
+    def put_explanation_together
+      if validation   == :yes
+        # i.e. if inside the main cluster
+        explainpart  = "it's length is similar to sequences within"
+        conclusion   = "Since the query sequence length belong to the densest" \
+                       " cluster of homologous sequence lengths, we can be" \
+                       " relatively confident about the query sequence"
+      elsif validation == :no
+        # i.e. if outside the main cluster
+        if @prediction_len > @limits[1] # longer than biggest limit
+          explainpart  = 'it is longer than sequences within'
+        elsif @prediction_len < @limits[0] # shorter than smaller limit
+          explainpart = 'it is shorter than sequences within'
+        end
+        conclusion = "Since the query sequence length does not belong to the" \
+                     " densest cluster of homologous sequence lengths, we are" \
+                     " not as confident about the query sequence."
       end
-      conclusion = "Since the query sequence length does not belong to the" \
-                   " densest cluster of homologous sequence lengths, we are" \
-                   " not as confident about the query sequence."
+
+      approach     = "If the query sequence is well conserved and homologous" \
+                     " sequences derived from the reference database are" \
+                     " correct, we would expect the lengths of query and" \
+                     " homologous sequences to be similar. That is to say," \
+                     " if clustered by their length,we would expect the query" \
+                     " sequence to belong to the densest cluster of" \
+                     " homologous sequences."
+
+      explanation  = "In this case, the densest cluster of homologous" \
+                     " sequences includes lengths between #{limits[0]}" \
+                     " and #{limits[1]} amino-acid residues. As the query" \
+                     " sequence has a length of #{prediction_len} amino-acid" \
+                     " residues, #{explainpart} the densest cluster of" \
+                     " homologous sequences."
+      approach + explanation + conclusion
     end
-
-    approach     = "If the query sequence is well conserved and homologous" \
-                   " sequences derived from the reference database are" \
-                   " correct, we would expect the lengths of query and" \
-                   " homologous sequences to be similar. That is to say," \
-                   " if clustered by their length,we would expect the query" \
-                   " sequence to belong to the densest cluster of homologous" \
-                   " sequences."
-
-    explanation  = "In this case, the densest cluster of homologous sequences" \
-                   " includes lengths between #{limits[0]} and #{limits[1]}" \
-                   " amino-acid residues. As the query sequence has a length" \
-                   " of #{prediction_len} amino-acid residues, #{explainpart}" \
-                   " the densest cluster of homologous sequences."  
-
-    @explanation = "#{approach} #{explanation} #{conclusion}"
   end
 
   def print
@@ -72,12 +73,12 @@ class LengthClusterValidationOutput < ValidationReport
       else
         :no
       end
-    end    
+    end
   end
 end
 
 ##
-# This class contains the methods necessary for 
+# This class contains the methods necessary for
 # length validation by hit length clusterization
 class LengthClusterValidation < ValidationTest
 
@@ -101,12 +102,12 @@ class LengthClusterValidation < ValidationTest
                     ' BLAST hit lengths, by 1D hierarchical clusterization.' \
                     ' Meaning of the output displayed: Prediction_len' \
                     ' [Main Cluster Length Interval]'
-    @cli_name     = 'lenc' 
+    @cli_name     = 'lenc'
   end
 
 
-  ## 
-  # Validates the length of the predicted gene by comparing the length 
+  ##
+  # Validates the length of the predicted gene by comparing the length
   # of the prediction to the most dense cluster
   # The most dense cluster is obtained by hierarchical clusterization
   # Plots are generated if required (see +plot+ variable)
@@ -115,12 +116,12 @@ class LengthClusterValidation < ValidationTest
   def run
     begin
       raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
+      raise Exception unless prediction.is_a? Sequence and
+                             hits[0].is_a? Sequence
 
       start = Time.now
       # get [clusters, max_density_cluster_idx]
-      clusterization = clusterization_by_length 
+      clusterization = clusterization_by_length
 
       @clusters = clusterization[0]
       @max_density_cluster = clusterization[1]
@@ -139,11 +140,11 @@ class LengthClusterValidation < ValidationTest
     rescue  NotEnoughHitsError => error
       @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
       return @validation_report
-    else 
+    else
       @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
       @validation_report.errors.push OtherError
       return @validation_report
-    end       
+    end
   end
 
 
@@ -156,11 +157,11 @@ class LengthClusterValidation < ValidationTest
   # Output
   # output 1:: array of Cluster objects
   # output 2:: the index of the most dense cluster
-  def clusterization_by_length(debug = false, 
-                               lst = @hits, 
+  def clusterization_by_length(debug = false,
+                               lst = @hits,
                                predicted_seq = @prediction)
     begin
-      raise TypeError unless lst[0].is_a? Sequence and 
+      raise TypeError unless lst[0].is_a? Sequence and
                              predicted_seq.is_a? Sequence
 
       contents = lst.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
@@ -196,18 +197,18 @@ class LengthClusterValidation < ValidationTest
   # +prediction+: +Sequence+ object
   # Output:
   # +Plot+ object
-  def plot_histo_clusters(output = "#{@filename}_len_clusters.json", 
-                        clusters = @clusters, 
+  def plot_histo_clusters(output = "#{@filename}_len_clusters.json",
+                        clusters = @clusters,
                         max_density_cluster = @max_density_cluster,
                         prediction = @prediction)
 
       f = File.open(output, "w")
-      f.write(clusters.each_with_index.map{|cluster, i| 
-        cluster.lengths.collect{|k,v| 
+      f.write(clusters.each_with_index.map{|cluster, i|
+        cluster.lengths.collect{|k,v|
           {"key"=>k, "value"=>v, "main"=>(i==max_density_cluster)}
         }}.to_json)
       f.close
-      Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
+      Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
               :bars,
               "[Length Cluster] Distribution of the lengths of the hits",
               "query, black;most dense cluster,red;other hits, blue",
