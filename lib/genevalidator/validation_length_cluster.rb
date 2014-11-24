@@ -29,7 +29,9 @@ class LengthClusterValidationOutput < ValidationReport
     if validation   == :yes 
       # i.e. if inside the main cluster
       explainpart  = "it's length is similar to sequences within"
-      conclusion   = "Since the query sequence length belong to the densest cluster of homologous sequence lengths, we can be relatively confident about the query sequence"
+      conclusion   = "Since the query sequence length belong to the densest" \
+                     " cluster of homologous sequence lengths, we can be" \
+                     " relatively confident about the query sequence"
     elsif validation == :no 
       # i.e. if outside the main cluster
       if @prediction_len > @limits[1] # longer than biggest limit 
@@ -37,23 +39,26 @@ class LengthClusterValidationOutput < ValidationReport
       elsif @prediction_len < @limits[0] # shorter than smaller limit
         explainpart = 'it is shorter than sequences within'
       end
-      conclusion = "Since the query sequence length does not belong to the densest cluster of homologous sequence lengths, we are not as confident about the query sequence."
+      conclusion = "Since the query sequence length does not belong to the" \
+                   " densest cluster of homologous sequence lengths, we are" \
+                   " not as confident about the query sequence."
     end
 
     approach     = "If the query sequence is well conserved and homologous" \
-                   " sequences derived from the reference database are correct," \
-                   " we would expect the lengths of query and homologous sequences" \
-                   " to be similar. That is to say, if clustered by their length," \
-                   " we would expect the query sequence to belong to the densest" \
-                      " cluster of homologous sequences."
+                   " sequences derived from the reference database are" \
+                   " correct, we would expect the lengths of query and" \
+                   " homologous sequences to be similar. That is to say," \
+                   " if clustered by their length,we would expect the query" \
+                   " sequence to belong to the densest cluster of homologous" \
+                   " sequences."
 
-    explaining   = "In this case, the densest cluster of homologous sequences" \
-                   " includes lengths between #{limits[0]} and #{limits[1]} amino-acid" \
-                   " residues. As the query sequence has a length of #{prediction_len}" \
-                   " amino-acid residues, #{explainpart} the densest cluster of" \
-                   " homologous sequences."  
+    explanation  = "In this case, the densest cluster of homologous sequences" \
+                   " includes lengths between #{limits[0]} and #{limits[1]}" \
+                   " amino-acid residues. As the query sequence has a length" \
+                   " of #{prediction_len} amino-acid residues, #{explainpart}" \
+                   " the densest cluster of homologous sequences."  
 
-    @explanation = "#{approach} #{explaining} #{conclusion}"
+    @explanation = "#{approach} #{explanation} #{conclusion}"
   end
 
   def print
