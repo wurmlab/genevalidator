@@ -26,7 +26,7 @@ class LengthClusterValidationOutput < ValidationReport
 
     ## EXPLANATION    
     approach     = "If the query sequence is well conserved and similar sequences (BLAST"\
-                   " hits) are correct, we can expect all query and hit sequences to"\
+                   " hits) are correct, we can expect query and hit sequences to"\
                    " have similar lengths. Here, we cluster the lengths of hit sequences"\
                    " and compare the length of our query sequence to the most dense"\
                    " cluster of hit lengths."
