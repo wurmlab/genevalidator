@@ -24,21 +24,41 @@ class LengthClusterValidationOutput < ValidationReport
     @result         = validation
     @plot_files     = []
 
-    ## EXPLANATION
+    ## EXPLANATION    
+    approach     = "If the query sequence is well conserved and similar sequences (BLAST"\
+                   " hits) are correct, we can expect all query and hit sequences to"\
+                   " have similar lengths. Here, we cluster the lengths of hit sequences"\
+                   " and compare the length of our query sequence to the most dense"\
+                   " cluster of hit lengths."
 
     if validation   == :yes 
       # i.e. if inside the main cluster
+<<<<<<< HEAD
+      explainpart  = "similar"
+      conclusion   = "There is no reason to believe there is any problem with the length of the query sequence."
+=======
       explainpart  = "it's length is similar to sequences within"
       conclusion   = "Since the query sequence length belong to the densest" \
                      " cluster of homologous sequence lengths, we can be" \
                      " relatively confident about the query sequence"
+>>>>>>> a5e648d47b58d2d053f5dcee82f9207cb0da80a5
     elsif validation == :no 
       # i.e. if outside the main cluster
       if @prediction_len > @limits[1] # longer than biggest limit 
-        explainpart  = 'it is longer than sequences within'
+        explainpart = 'long'
       elsif @prediction_len < @limits[0] # shorter than smaller limit
-        explainpart = 'it is shorter than sequences within'
+        explainpart = 'short'=
       end
+<<<<<<< HEAD
+      conclusion = "The query sequence may be too #{explainpart}." 
+    end
+
+    explaining   = "In this case, the most dense length-cluster of BLAST hits" \
+                   " includes sequences from #{limits[0]} to #{limits[1]} amino-acids long" \
+                   " With a lenth of #{prediction_len} amino-acids, the query sequence is #{explainpart}."
+
+    @explanation = "#{approach} #{explaining} #{conclusion}"
+=======
       conclusion = "Since the query sequence length does not belong to the" \
                    " densest cluster of homologous sequence lengths, we are" \
                    " not as confident about the query sequence."
@@ -59,6 +79,7 @@ class LengthClusterValidationOutput < ValidationReport
                    " the densest cluster of homologous sequences."  
 
     @explanation = "#{approach} #{explanation} #{conclusion}"
+>>>>>>> a5e648d47b58d2d053f5dcee82f9207cb0da80a5
   end
 
   def print
