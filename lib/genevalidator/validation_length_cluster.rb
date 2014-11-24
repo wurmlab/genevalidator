@@ -21,31 +21,39 @@ class LengthClusterValidationOutput < ValidationReport
     @limits         = limits
     @prediction_len = prediction_len
     @expected       = expected
-    @result         = validation
+    @result         = validationk
     @plot_files     = []
+
+    ## EXPLANATION
+
     if validation   == :yes 
-      @explainpart  = "its length is similar to sequences within"
+      # i.e. if inside the main cluster
+      explainpart  = "it's length is similar to sequences within"
+      conclusion   = "Since the query sequence length belong to the densest cluster of homologous sequence lengths, we can be relatively confident about the query sequence"
     elsif validation == :no 
-      if @prediction_len > @limits[1]
-        @explainpart  = 'it is longer than sequences within'
-      elsif @prediction_len < @limits[0]
-        @explainpart = 'it is shorter than sequences within'
+      # i.e. if outside the main cluster
+      if @prediction_len > @limits[1] # longer than biggest limit 
+        explainpart  = 'it is longer than sequences within'
+      elsif @prediction_len < @limits[0] # shorter than smaller limit
+        explainpart = 'it is shorter than sequences within'
       end
+      conclusion = "Since the query sequence length does not belong to the densest cluster of homologous sequence lengths, we are not as confident about the query sequence."
     end
-    @explanation    = "If the query sequence is well conserved and homologous" \
-                      " sequences derived from the reference database are" \
-                      " correct, we would expect the lengths of query and" \
-                      " homologous sequences to be similar. That is to say," \
-                      " if the query and homologous sequences were clustered" \
-                      " by their length, the query sequence will belong to" \
-                      " the most dense cluster. In this case, the most dense" \
-                      " cluster of homologous sequences includes lengths" \
-                      " between #{limits[0]} and #{limits[1]} amino-acid" \
-                      " residues. Since the query sequence has a length of" \
-                      " #{prediction_len} amino-acid residues," \
-                      " #{@explainpart} the most dense cluster of homologous." \
-                      " sequences. Please see below for a graphical" \
-                      " representation of this."
+
+    approach     = "If the query sequence is well conserved and homologous" \
+                   " sequences derived from the reference database are correct," \
+                   " we would expect the lengths of query and homologous sequences" \
+                   " to be similar. That is to say, if clustered by their length," \
+                   " we would expect the query sequence to belong to the densest" \
+                      " cluster of homologous sequences."
+
+    explaining   = "In this case, the densest cluster of homologous sequences" \
+                   " includes lengths between #{limits[0]} and #{limits[1]} amino-acid" \
+                   " residues. As the query sequence has a length of #{prediction_len}" \
+                   " amino-acid residues, #{explainpart} the densest cluster of" \
+                   " homologous sequences."  
+
+    @explanation = "#{approach} #{explaining} #{conclusion}"
   end
 
   def print
