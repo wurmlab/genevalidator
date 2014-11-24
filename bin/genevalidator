@@ -122,4 +122,4 @@ end
                      options[:mafft], options[:blast], options[:start], 
                      options[:num_threads])
   b.validation
-  puts "Total running time: #{(Time.now - start).round(3)}s\n'
+  puts "Total running time: #{(Time.now - start).round(3)}s\n"
