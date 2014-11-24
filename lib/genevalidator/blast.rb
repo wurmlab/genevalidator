@@ -27,14 +27,17 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blastpath, blastcmd, query, db, gapopen=11, gapextend=1, nr_hits=200)
-    # FIXME: This method is meant to be used internally within GV. As such it
-    # can be guaranteed that parameters are of the right type. Type checking
-    # here is redundant.
-    raise TypeError unless blastcmd.is_a? String and query.is_a? String
+  def self.call_blast_from_stdin(blastpath, blastcmd, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
 
     blastcmd = File.join(blastpath, blastcmd) unless blastpath.nil?
-    blastcmd = "#{blastcmd} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+
+    # If BLAST is not run remotely, then utilise the -num_threads argument
+    if (db !~ /remote/)
+      blastcmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+    else
+      blastcmd = "#{blastcmd} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+    end
+
     cmd      = "echo \"#{query}\" | #{blastcmd}"
     output   = %x[#{cmd} 2>/dev/null]
 
