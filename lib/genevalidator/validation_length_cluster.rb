@@ -21,7 +21,7 @@ class LengthClusterValidationOutput < ValidationReport
     @limits         = limits
     @prediction_len = prediction_len
     @expected       = expected
-    @result         = validationk
+    @result         = validation
     @plot_files     = []
 
     ## EXPLANATION
