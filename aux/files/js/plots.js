@@ -128,9 +128,13 @@ function showDiv(source, target){
     }
 }
 
-function AddExplanation(source, explanation, target){
+function AddExplanation(source, approach, explanation, conclusion, target){
   var row = '#' + target +'row'
-  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert"><b>Explanation:</b> ' + explanation + '</div>')
+  var approach_html = '<p><b>Approach:</b> ' + approach + '</p>'
+  var explanation_html = '<p><b>Explanation:</b> ' + explanation + '</p>'
+  var conclusion_html = '<p><b>Conclusion:</b> ' + conclusion + '</p>'
+
+  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' + approach_html + explanation_html + conclusion_html + '</div>')
   if (source.status == "pressed") {
     $(row).prepend(explain)
   }
