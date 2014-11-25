@@ -26,7 +26,9 @@ class LengthRankValidationOutput < ValidationReport
     @percentage    = percentage
     @result        = validation
     @expected      = expected
+    @approach      = ''
     @explanation   = put_explanation_together
+    @conclusion    = ''
   end
     
   # A method that simply puts the three parts of the explanation together...
@@ -180,9 +182,9 @@ class LengthRankValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
      rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
      else
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       @validation_report.errors.push OtherError
     end
   end

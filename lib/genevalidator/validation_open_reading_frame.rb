@@ -24,18 +24,20 @@ class ORFValidationOutput < ValidationReport
     @result       = validation
     @plot_files   = []
     @longest_orf_frame = longest_orf_frame
+    @approach     = ''
     @explanation  = put_together_explanation
+    @conclusion   = ''
+  end
 
-    def put_together_explanation
-      approach    = '' # TODO:
-      explanation = "When translating the query sequence in all 6 frame, the" \
-                    " longest open reading frame is in frame #{@longest_orf_frame}" \
-                    " and it covers #{(@ratio*100).round}% of the full sequence." \
-                    " Please see below for a graphic representation of this."
-      conclustion = '' # TODO:
-      # approach + explanation + conclusion 
-      explanation
-    end
+  def put_together_explanation
+    approach    = '' # TODO:
+    explanation = "When translating the query sequence in all 6 frame, the" \
+                  " longest open reading frame is in frame #{@longest_orf_frame}" \
+                  " and it covers #{(@ratio*100).round}% of the full sequence." \
+                  " Please see below for a graphic representation of this."
+    conclusion = '' # TODO:
+    # approach + explanation + conclusion 
+    explanation
   end
 
   def print
@@ -131,11 +133,11 @@ class OpenReadingFrameValidation < ValidationTest
       return @validation_report
 
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push OtherError
-      return ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
+      return ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
     end
   end
 

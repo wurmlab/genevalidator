@@ -21,7 +21,9 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
+    @approach       = ''
     @explanation    = put_explanation_together
+    @conclusion     = ''
 
     def put_explanation_together
       approach    = "This validation test analyses the relationship between" \
@@ -155,12 +157,12 @@ class GeneMergeValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     rescue Exception => error
       puts error.backtrace
       @validation_report.errors.push 'Unexpected Error' 
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     end
   

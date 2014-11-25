@@ -26,10 +26,10 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
+    @approach     = 'TODO'
     @explanation  = put_together_explanation
-
+    @conclusion   = 'TODO'
     def put_together_explanation
-      approach    = '' # TODO:
       explanation = "A position specific scoring matrix of the strongest 10" \
                     " results show that: #{(@extra_seq*100).round(0)}% of" \
                     " residues in the prediction do not appear in profile;" \
@@ -37,8 +37,6 @@ class AlignmentValidationOutput < ValidationReport
                     " not appear in the prediction and when compared to the" \
                     " model, #{(@consensus*100).round(0)}% of residues are" \
                     " conserved in the prediciton."
-      conclusion  = '' # TODO:
-      #approach + explanation + conclusion
       explanation 
   end
 
@@ -192,22 +190,22 @@ class AlignmentValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       @validation_report.errors.push NoMafftInstallationError
       return @validation_report
     rescue NoInternetError
-      @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       @validation_report.errors.push NoInternetError
       return @validation_report
     rescue ReadingFrameError => error
-      @validation_report = ValidationReport.new('Multiple reading frames', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Multiple reading frames', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     rescue Exception => error
       @validation_report.errors.push 'Unexpected Error'
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       @validation_report.errors.push OtherError
       return @validation_report
     end

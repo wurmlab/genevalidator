@@ -23,7 +23,9 @@ class LengthClusterValidationOutput < ValidationReport
     @expected       = expected
     @result         = validation
     @plot_files     = []
+    @approach       = ''
     @explanation    = put_explanation_together
+    @conclusion     = ''
 
     def put_explanation_together  
       approach      = 'If the query sequence is well conserved and homologous' \
@@ -59,9 +61,6 @@ class LengthClusterValidationOutput < ValidationReport
                      ' densest cluster of homologous sequence lengths, we are' \
                      ' not as confident about the query sequence.'
       end
-
-      
-
       approach + explanation1 + explanation2 + conclusion
     end
   end
@@ -142,10 +141,10 @@ class LengthClusterValidation < ValidationTest
 
     # Exception is raised when blast founds no hits
     rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     else
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @explanation)
+      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       @validation_report.errors.push OtherError
       return @validation_report
     end
