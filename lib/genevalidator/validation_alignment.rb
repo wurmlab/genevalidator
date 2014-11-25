@@ -103,114 +103,104 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +AlignmentValidationOutput+ object
   def run(n=10)
-    begin
-      if n > 50
-        n = 50
-      end
-
-      raise NotEnoughHitsError unless hits.length >= n
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
-      start = Time.new
-      # get the first n hits
-      less_hits = @hits[0..[n-1,@hits.length].min]
-      useless_hits = []
-
-      # get raw sequences for less_hits
-      less_hits.map do |hit|
-        #get gene by accession number
-        if hit.raw_sequence == nil
-
-          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
-
-          if hit.raw_sequence == nil or hit.raw_sequence.empty?
-            if hit.type == :protein
-              hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
-            else
-              hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
-            end
-          end
-
-          if hit.raw_sequence == nil
-            useless_hits.push(hit)
-          else
-            if hit.raw_sequence.empty?
-              useless_hits.push(hit)
-            end
-          end
-
-        end
-      end
-
-      useless_hits.each{|hit| less_hits.delete(hit)}
-
-      if less_hits.length == 0
-        raise NoInternetError
-      end
-
-      # in case of nucleotide prediction sequence translate into protein
-      # translate with the reading frame of all hits considered for the alignment
-
-      reading_frames = less_hits.map{|hit| hit.reading_frame}.uniq
-      if reading_frames.length != 1
-        raise ReadingFrameError
-      end
-
-      if @type == :nucleotide
-        s = Bio::Sequence::NA.new(prediction.raw_sequence)
-        prediction.protein_translation = s.translate(reading_frames[0])
-      end
-
-      begin
-        # multiple align sequences from less_hits with the prediction
-        # the prediction is the last sequence in the vector
-        multiple_align_mafft(prediction, less_hits)
-      rescue Exception => error
-        raise NoMafftInstallationError
-      end
-
-      out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
-      sm = out[0]
-      freq = out[1]
-
-      # remove isolated residues from the predicted sequence
-      prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
-      # remove isolated residues from the statistical model
-      sm = remove_isolated_residues(sm)
-
-      a1 = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
-      a2 = get_consensus(@multiple_alignment)
-
-      plot1 = plot_alignment(freq)
-      gaps = gap_validation(prediction_raw, sm)
-      extra_seq = extra_sequence_validation(prediction_raw, sm)
-      consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
-
-      @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)
-      @validation_report.plot_files.push(plot1)
-      @validation_report.running_time = Time.now - start
-      return @validation_report
-
-    # Exception is raised when blast founds no hits
-    rescue NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    rescue NoMafftInstallationError
-      @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push NoMafftInstallationError
-      return @validation_report
-    rescue NoInternetError
-      @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push NoInternetError
-      return @validation_report
-    rescue ReadingFrameError => error
-      @validation_report = ValidationReport.new('Multiple reading frames', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    rescue Exception => error
-      @validation_report.errors.push 'Unexpected Error'
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push OtherError
-      return @validation_report
+    if n > 50
+      n = 50
     end
+
+    raise NotEnoughHitsError unless hits.length >= n
+    raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+    start = Time.new
+    # get the first n hits
+    less_hits = @hits[0..[n-1,@hits.length].min]
+    useless_hits = []
+
+    # get raw sequences for less_hits
+    less_hits.map do |hit|
+      #get gene by accession number
+      if hit.raw_sequence == nil
+
+        hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
+
+        if hit.raw_sequence == nil or hit.raw_sequence.empty?
+          if hit.type == :protein
+            hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
+          else
+            hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
+          end
+        end
+
+        if hit.raw_sequence == nil
+          useless_hits.push(hit)
+        else
+          if hit.raw_sequence.empty?
+            useless_hits.push(hit)
+          end
+        end
+
+      end
+    end
+
+    useless_hits.each{|hit| less_hits.delete(hit)}
+
+    raise NoInternetError if less_hits.length == 0
+
+    # in case of nucleotide prediction sequence translate into protein
+    # translate with the reading frame of all hits considered for the alignment
+
+    reading_frames = less_hits.map{|hit| hit.reading_frame}.uniq
+    raise ReadingFrameError if reading_frames.length != 1
+
+    if @type == :nucleotide
+      s = Bio::Sequence::NA.new(prediction.raw_sequence)
+      prediction.protein_translation = s.translate(reading_frames[0])
+    end
+
+    # multiple align sequences from less_hits with the prediction
+    # the prediction is the last sequence in the vector
+    multiple_align_mafft(prediction, less_hits)
+
+    out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length-2])
+    sm = out[0]
+    freq = out[1]
+
+    # remove isolated residues from the predicted sequence
+    prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length-1])
+    # remove isolated residues from the statistical model
+    sm = remove_isolated_residues(sm)
+
+    a1 = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
+    a2 = get_consensus(@multiple_alignment)
+
+    plot1 = plot_alignment(freq)
+    gaps = gap_validation(prediction_raw, sm)
+    extra_seq = extra_sequence_validation(prediction_raw, sm)
+    consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
+
+    @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)
+    @validation_report.plot_files.push(plot1)
+    @validation_report.running_time = Time.now - start
+    return @validation_report
+
+  # Exception is raised when blast founds no hits
+  rescue NotEnoughHitsError => error
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
+  rescue NoMafftInstallationError
+    @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push NoMafftInstallationError
+    return @validation_report
+  rescue NoInternetError
+    @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push NoInternetError
+    return @validation_report
+  rescue ReadingFrameError => error
+    @validation_report = ValidationReport.new('Multiple reading frames', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
+  rescue Exception => error
+    @validation_report.errors.push 'Unexpected Error'
+    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push OtherError
+    return @validation_report
   end
 
   ##
@@ -228,20 +218,22 @@ class AlignmentValidation < ValidationTest
   def multiple_align_mafft(prediction = @prediction, hits = @hits)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet', '--thread', "#{@num_threads}" ]
-      mafft = Bio::MAFFT.new('mafft', options)
-      sequences = hits.map{|hit| hit.raw_sequence}
-      sequences.push(prediction.protein_translation)
+    options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet', '--thread', "#{@num_threads}" ]
+    mafft = Bio::MAFFT.new('mafft', options)
+    sequences = hits.map{|hit| hit.raw_sequence}
+    sequences.push(prediction.protein_translation)
 
-      report = mafft.query_align(sequences)
-      # Accesses the actual alignment.
-      align = report.alignment
+    report = mafft.query_align(sequences)
+    # Accesses the actual alignment.
+    align = report.alignment
 
-      align.each_with_index do |s,i|
-         @multiple_alignment.push(s.to_s)
-      end
+    align.each_with_index do |s,i|
+       @multiple_alignment.push(s.to_s)
+    end
 
-      return @multiple_alignment
+    return @multiple_alignment
+  rescue Exception => error
+    raise NoMafftInstallationError
   end
 
   ##

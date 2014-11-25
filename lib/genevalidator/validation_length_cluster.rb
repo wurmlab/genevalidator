@@ -101,37 +101,35 @@ class LengthClusterValidation < ValidationTest
   # Output:
   # +LengthClusterValidationOutput+ object
   def run
-    begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and
-                             hits[0].is_a? Sequence
+    raise NotEnoughHitsError unless hits.length >= 5
+    raise Exception unless prediction.is_a? Sequence and
+                           hits[0].is_a? Sequence
 
-      start = Time.now
-      # get [clusters, max_density_cluster_idx]
-      clusterization = clusterization_by_length
+    start = Time.now
+    # get [clusters, max_density_cluster_idx]
+    clusterization = clusterization_by_length
 
-      @clusters = clusterization[0]
-      @max_density_cluster = clusterization[1]
-      limits = @clusters[@max_density_cluster].get_limits
-      prediction_len = @prediction.length_protein
+    @clusters = clusterization[0]
+    @max_density_cluster = clusterization[1]
+    limits = @clusters[@max_density_cluster].get_limits
+    prediction_len = @prediction.length_protein
 
-      @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
-      plot1 = plot_histo_clusters
-      @validation_report.plot_files.push(plot1)
+    @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
+    plot1 = plot_histo_clusters
+    @validation_report.plot_files.push(plot1)
 
-      @validation_report.running_time = Time.now - start
+    @validation_report.running_time = Time.now - start
 
-      return @validation_report
+    return @validation_report
 
-    # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    else
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push OtherError
-      return @validation_report
-    end
+  # Exception is raised when blast founds no hits
+  rescue  NotEnoughHitsError => error
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
+  else
+    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push OtherError
+    return @validation_report
   end
 
 
@@ -147,32 +145,30 @@ class LengthClusterValidation < ValidationTest
   def clusterization_by_length(debug = false,
                                lst = @hits,
                                predicted_seq = @prediction)
-    begin
-      raise TypeError unless lst[0].is_a? Sequence and
-                             predicted_seq.is_a? Sequence
+    raise TypeError unless lst[0].is_a? Sequence and
+                           predicted_seq.is_a? Sequence
 
-      contents = lst.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+    contents = lst.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
 
-      hc = HierarchicalClusterization.new(contents)
-      clusters = hc.hierarchical_clusterization
+    hc = HierarchicalClusterization.new(contents)
+    clusters = hc.hierarchical_clusterization
 
-      max_density = 0;
-      max_density_cluster_idx = 0;
-      clusters.each_with_index do |item, i|
-        if item.density > max_density
-          max_density = item.density
-          max_density_cluster_idx = i;
-        end
+    max_density = 0;
+    max_density_cluster_idx = 0;
+    clusters.each_with_index do |item, i|
+      if item.density > max_density
+        max_density = item.density
+        max_density_cluster_idx = i;
       end
-
-      return [clusters, max_density_cluster_idx]
-
-    rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
-       " Possible cause: one of the arguments of 'clusterization_by_length'"<<
-       " method has not the proper type.\n"
-      exit
     end
+
+    return [clusters, max_density_cluster_idx]
+
+  rescue TypeError => error
+    $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
+     " Possible cause: one of the arguments of 'clusterization_by_length'"<<
+     " method has not the proper type.\n"
+    exit
   end
 
   ##

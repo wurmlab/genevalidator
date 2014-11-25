@@ -95,50 +95,48 @@ class OpenReadingFrameValidation < ValidationTest
   # Output:
   # +ORFValidationOutput+ object
   def run
-    begin
-      if type.to_s != "nucleotide"
-        @validation_report = ValidationReport.new("", :unapplicable)
-        return @validation_report
-      end
-
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and
-                             hits[0].is_a? Sequence
-
-      start = Time.new
-      orfs = get_orfs
-
-      # check if longest ORF / prediction > 0.8 (ok)
-      prediction_len = prediction.raw_sequence.length
-      data = {}
-      orfs.each do |frame, all_orfs|
-        maxORF =[]
-        all_orfs.each do |orf|
-          maxORF << orf[1] - orf[0]
-        end
-        data[frame] = maxORF.max
-      end
-
-      longest_orf = data.values.max
-      longest_orf_frame = data.key(longest_orf)
-
-      ratio =  longest_orf/(prediction_len + 0.0)
-
-      plot1 = plot_orfs(orfs)
-
-      @validation_report = ORFValidationOutput.new(orfs, ratio, longest_orf_frame)
-      @validation_report.running_time = Time.now - start
-
-      @validation_report.plot_files.push(plot1)
+    if type.to_s != "nucleotide"
+      @validation_report = ValidationReport.new("", :unapplicable)
       return @validation_report
-
-    rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    rescue Exception => error
-      @validation_report.errors.push OtherError
-      return ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
     end
+
+    raise NotEnoughHitsError unless hits.length >= 5
+    raise Exception unless prediction.is_a? Sequence and
+                           hits[0].is_a? Sequence
+
+    start = Time.new
+    orfs = get_orfs
+
+    # check if longest ORF / prediction > 0.8 (ok)
+    prediction_len = prediction.raw_sequence.length
+    data = {}
+    orfs.each do |frame, all_orfs|
+      maxORF =[]
+      all_orfs.each do |orf|
+        maxORF << orf[1] - orf[0]
+      end
+      data[frame] = maxORF.max
+    end
+
+    longest_orf = data.values.max
+    longest_orf_frame = data.key(longest_orf)
+
+    ratio =  longest_orf/(prediction_len + 0.0)
+
+    plot1 = plot_orfs(orfs)
+
+    @validation_report = ORFValidationOutput.new(orfs, ratio, longest_orf_frame)
+    @validation_report.running_time = Time.now - start
+
+    @validation_report.plot_files.push(plot1)
+    return @validation_report
+
+  rescue  NotEnoughHitsError => error
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
+  rescue Exception => error
+    @validation_report.errors.push OtherError
+    return ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
   end
 
   ##

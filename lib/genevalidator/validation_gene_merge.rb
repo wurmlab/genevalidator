@@ -38,29 +38,16 @@ class GeneMergeValidationOutput < ValidationReport
   end
 
   def print
-    if @slope.nan?
-      "Inf"
-    else
-      "#{@slope.round(2)}"
-    end
+    (@slope.nan?) ? "Inf" : "#{@slope.round(2)}"
   end
 
   def validation
-
     # color gene merge validation
-    if @slope > threshold_down and @slope < threshold_up
-      :yes
-    else
-      :no
-    end
+    (@slope > threshold_down and @slope < threshold_up) ? :yes : :no
   end
 
   def color
-    if validation == :no
-      "success"
-    else
-      "danger"
-    end
+    (validation == :no) ? "success" : "danger"
   end
 
 end
@@ -101,71 +88,68 @@ class GeneMergeValidation < ValidationTest
   # Output:
   # +GeneMergeValidationOutput+ object
   def run
-    begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+    raise NotEnoughHitsError unless hits.length >= 5
+    raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      start = Time.now
+    start = Time.now
 
-      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
-      xx_0 = pairs.map{|pair| pair.x}
-      yy_0 = pairs.map{|pair| pair.y}
+    pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+    xx_0 = pairs.map{|pair| pair.x}
+    yy_0 = pairs.map{|pair| pair.y}
 
-      # minimum start shoud be at 'boundary' residues
-      xx = xx_0.map do |x|
-        if x < @boundary
-          x = @boundary
-        else
-          x = x
-        end
-      end
-
-      # maximum end should be at length - 'boundary' residues
-      yy = yy_0.map do |y|
-        if y > @prediction.raw_sequence.length - @boundary
-          y = @prediction.raw_sequence.length - @boundary
-        else
-          y = y
-        end
-      end
-
-      line_slope = slope(xx, yy, (1..hits.length).map{|x| 1 / (x + 0.0)})
-
-      unimodality = false
-      if unimodality_test(xx, yy)
-        unimodality = true
-        lm_slope = 0.0
+    # minimum start shoud be at 'boundary' residues
+    xx = xx_0.map do |x|
+      if x < @boundary
+        x = @boundary
       else
-        lm_slope = line_slope[1]
+        x = x
       end
-
-      y_intercept = line_slope[0]
-
-      @validation_report = GeneMergeValidationOutput.new(lm_slope)
-
-      unless unimodality
-        plot1 = plot_2d_start_from(lm_slope, y_intercept)
-      else
-        plot1 = plot_2d_start_from
-      end
-
-      @validation_report.plot_files.push(plot1)
-      plot2 = plot_matched_regions
-      @validation_report.plot_files.push(plot2)
-      @validation_report.running_time = Time.now - start
-      return @validation_report
-
-    # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    rescue Exception => error
-      puts error.backtrace
-      @validation_report.errors.push 'Unexpected Error'
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
     end
 
+    # maximum end should be at length - 'boundary' residues
+    yy = yy_0.map do |y|
+      if y > @prediction.raw_sequence.length - @boundary
+        y = @prediction.raw_sequence.length - @boundary
+      else
+        y = y
+      end
+    end
+
+    line_slope = slope(xx, yy, (1..hits.length).map{|x| 1 / (x + 0.0)})
+
+    unimodality = false
+    if unimodality_test(xx, yy)
+      unimodality = true
+      lm_slope = 0.0
+    else
+      lm_slope = line_slope[1]
+    end
+
+    y_intercept = line_slope[0]
+
+    @validation_report = GeneMergeValidationOutput.new(lm_slope)
+
+    unless unimodality
+      plot1 = plot_2d_start_from(lm_slope, y_intercept)
+    else
+      plot1 = plot_2d_start_from
+    end
+
+    @validation_report.plot_files.push(plot1)
+    plot2 = plot_matched_regions
+    @validation_report.plot_files.push(plot2)
+    @validation_report.running_time = Time.now - start
+    return @validation_report
+
+  # Exception is raised when blast founds no hits
+  rescue  NotEnoughHitsError => error
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
+  rescue Exception => error
+    puts error.backtrace
+    @validation_report.errors.push 'Unexpected Error'
+    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    return @validation_report
   end
 
   ##
@@ -177,28 +161,26 @@ class GeneMergeValidation < ValidationTest
   # +prediction+: Sequence objects
   def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
 
-      colors   = ['orange', 'blue']  ##{colors[i%2]
-      f        = File.open(output , 'w')
-      no_lines = hits.length
+    colors   = ['orange', 'blue']  ##{colors[i%2]
+    f        = File.open(output , 'w')
+    no_lines = hits.length
 
-      hits_less = hits[0..[no_lines, hits.length-1].min]
+    hits_less = hits[0..[no_lines, hits.length-1].min]
 
+    f.write((hits_less.each_with_index.map{|hit, i|{'y'=>i, 'start'=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
+             'stop'=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 'color'=>'black', 'dotted'=>'true'}}.flatten +
+             hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
+             {'y'=>i, 'start'=>hsp.match_query_from, 'stop'=>hsp.match_query_to, 'color'=>'orange'}}}.flatten).to_json)
 
-      f.write((hits_less.each_with_index.map{|hit, i|{'y'=>i, 'start'=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-               'stop'=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 'color'=>'black', 'dotted'=>'true'}}.flatten +
-               hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
-               {'y'=>i, 'start'=>hsp.match_query_from, 'stop'=>hsp.match_query_to, 'color'=>'orange'}}}.flatten).to_json)
+    f.close
 
-      f.close
-
-      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
-                       :lines,
-                       "[Gene Merge] Query coord covered by blast hit (1 line/hit)",
-                       "",
-                       "offset in the prediction",
-                       "number of the hit",
-                       hits_less.length)
-
+    return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+                     :lines,
+                     "[Gene Merge] Query coord covered by blast hit (1 line/hit)",
+                     "",
+                     "offset in the prediction",
+                     "number of the hit",
+                     hits_less.length)
   end
 
   ##
@@ -358,70 +340,5 @@ class GeneMergeValidation < ValidationTest
     else
       return false
     end
-
   end
-
-  ##
-  # FUNCTION NOT USED
-  # v1 and v2 are two ClusterClass objects
-  def modality_test(c1, c2)
-
-    clusters = [c1, c2]
-
-    no_elem_cluster0 = 0
-    clusters[0].objects.each{|elem| no_elem_cluster0 += elem[1]}
-
-    no_elem_cluster1 = 0
-    clusters[1].objects.each{|elem| no_elem_cluster1 += elem[1]}
-
-    no_points = no_elem_cluster0 + no_elem_cluster1
-
-    # within cluster sum of squares
-    wss0 = 0
-    mean0 = clusters[0].mean
-    clusters[0].objects.each{|elem| wss0 += elem[1] * (elem[0]-mean0) * (elem[0]-mean0) }
-
-    wss1 = 0
-    mean1 = clusters[1].mean
-    clusters[1].objects.each{|elem| wss1 += elem[1] * (elem[0]-mean1) * (elem[0]-mean1) }
-
-    wss = wss0 + wss1
-
-    # total sum of squares
-    sum_all_x = 0
-    clusters[0].objects.each{|elem| sum_all_x += elem[1] * elem[0].x}
-    clusters[1].objects.each{|elem| sum_all_x += elem[1] * elem[0].x}
-
-    sum_all_y = 0
-    clusters[0].objects.each{|elem| sum_all_y += elem[1] * elem[0].y}
-    clusters[1].objects.each{|elem| sum_all_y += elem[1] * elem[0].y}
-
-    mean_x = sum_all_x / (no_points + 0.0)
-    mean_y = sum_all_y / (no_points + 0.0)
-
-    global_mean = Pair.new(mean_x, mean_y)
-
-    tss = 0
-    clusters[0].objects.each{|elem| tss += elem[1] * (elem[0]-global_mean) * (elem[0]-global_mean) }
-    clusters[1].objects.each{|elem| tss += elem[1] * (elem[0]-global_mean) * (elem[0]-global_mean) }
-
-    # between clusters sum of squares
-
-    diff0 = mean0 - global_mean
-    diff1 = mean1 - global_mean
-
-    bss = no_elem_cluster0 * diff0 * diff0 + no_elem_cluster1 * diff1 * diff1
-
-    puts ""
-    puts "#{no_elem_cluster0} #{no_elem_cluster1}"
-    puts "bss = #{bss}; wss = #{wss}; tss = #{tss} -- #{bss + wss}"
-
-    # a low ratio indicates a potential bimodal distribution of the clusters
-    ratio1 = wss / (tss + 0.0)
-    return ratio1
-    #ratio2 = bss * (no_points - 2)/(wss + 0.0)
-    #puts "#{ratio1} f = #{ratio2}"
-
-  end
-
 end
