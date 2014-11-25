@@ -93,19 +93,11 @@ class LengthRankValidationOutput < ValidationReport
   end
 
   def print
-    if msg != ""
-      return "#{@percentage}%&nbsp;(#{@msg})"
-    else
-      return "#{@percentage}%"
-    end
+    (msg.empty?) ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
   end
 
   def validation
-    if msg == ""
-      :yes
-    else
-      :no
-    end
+    (msg.empty?) ? :yes : :no
   end
 end
 
@@ -129,7 +121,7 @@ class LengthRankValidation < ValidationTest
     @threshold    = threshold
     @short_header = 'LengthRank'
     @header       = 'Length Rank'
-    @description  = 'Check whether the rank of the prediction length lies ' \
+    @description  = 'Check whether the rank of the prediction length lies' \
                     ' among 80% of all the BLAST hit lengths.'
     @cli_name     = 'lenr'
   end
@@ -142,50 +134,47 @@ class LengthRankValidation < ValidationTest
   # Output:
   # +LengthRankValidationOutput+ object
   def run(hits = @hits, prediction = @prediction)
-    begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and
-                             hits[0].is_a? Sequence
+    raise NotEnoughHitsError unless hits.length >= 5
+    raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      start = Time.now
+    start = Time.now
 
-      hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+    hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
 
-      no_of_hits = hits_lengths.length
-      median = hits_lengths.median.round
-      predicted_len = prediction.length_protein
+    no_of_hits    = hits_lengths.length
+    median        = hits_lengths.median.round
+    predicted_len = prediction.length_protein
 
-      if hits.length == 1 || hits_lengths.standard_deviation <= 5
-        msg = ""
-        percentage = 1
+    if hits.length == 1 || hits_lengths.standard_deviation <= 5
+      msg = ""
+      percentage = 1
+    else
+      # extreme_hits are hits that further away from the median than the
+      #   predicted...
+      if predicted_len < median
+        extreme_hits = hits_lengths.find_all{|x| x < predicted_len}.length
+        percentage   = ((extreme_hits.to_f / no_of_hits)*100).round
+        msg          = 'too&nbsp;short'
       else
-        # extreme_hits are hits that further away from the median than the
-        #   predicted...
-        if predicted_len < median
-          extreme_hits = hits_lengths.find_all{|x| x < predicted_len}.length
-          percentage = ((extreme_hits.to_f / no_of_hits)*100).round
-          msg = 'too&nbsp;short'
-        else
-          extreme_hits = hits_lengths.find_all{|x| x > predicted_len}.length
-          percentage = ((extreme_hits.to_f / no_of_hits)*100).round
-          msg = 'too&nbsp;long'
-        end
+        extreme_hits = hits_lengths.find_all{|x| x > predicted_len}.length
+        percentage   = ((extreme_hits.to_f / no_of_hits)*100).round
+        msg          = 'too&nbsp;long'
       end
-
-      if percentage >= threshold
-        msg = ""
-      end
-
-      @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, predicted_len, extreme_hits, percentage)
-      @validation_report.running_time = Time.now - start
-      return @validation_report
-
-    # Exception is raised when blast founds no hits
-     rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-     else
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push OtherError
     end
+
+    if percentage >= threshold
+      msg = ""
+    end
+
+    @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, predicted_len, extreme_hits, percentage)
+    @validation_report.running_time = Time.now - start
+    return @validation_report
+
+  # Exception is raised when blast founds no hits
+  rescue NotEnoughHitsError
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+  else
+    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push OtherError
   end
 end
