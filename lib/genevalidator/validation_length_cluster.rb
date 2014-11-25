@@ -29,40 +29,24 @@ class LengthClusterValidationOutput < ValidationReport
   end
 
   def put_explanation_together
-    approach      = 'If the query sequence is well conserved and homologous' \
-                    ' sequences derived from the reference database are' \
-                    ' correct, we would expect the lengths of query and' \
-                    ' homologous sequences to be similar. That is to say,' \
-                    ' if clustered by their length,we would expect the' \
-                    ' query sequence to belong to the densest cluster of' \
-                    ' homologous sequences.'
-    explanation1  = "In this case, the densest cluster of homologous" \
-                    " sequences includes lengths between #{@limits[0]}" \
-                    " and #{@limits[1]} amino-acid residues. As the query" \
-                    " sequence has a length of #{@prediction_len} amino-acid" \
-                    " residues, "
-
+    approach     = "If the query sequence is well conserved and similar sequences (BLAST" \
+                   " hits) are correct, we can expect query and hit sequences to" \
+                   " have similar lengths. Here, we cluster the lengths of hit sequences" \
+                   " and compare the length of our query sequence to the most dense" \
+                   " cluster of hit lengths. "
     if @result == :yes
       # i.e. if inside the main cluster
-      explanation2  = "it's length is similar to sequences within the" \
-                      " densest cluster of homologous sequences. "
-      conclusion   = 'Since the query sequence length belong to the densest' \
-                     ' cluster of homologous sequence lengths, we can be' \
-                     ' relatively confident about the query sequence'
-    elsif @result == :no
-      # i.e. if outside the main cluster
-      if @prediction_len > @limits[1] # longer than biggest limit
-        explanation2  = 'it is longer than sequences within the densest' \
-                        ' cluster of homologous sequences. '
-      elsif @prediction_len < @limits[0] # shorter than smaller limit
-        explanation2 = 'it is shorter than sequences within the densest' \
-                       ' cluster of homologous sequences.'
-      end
-      conclusion = 'Since the query sequence length does not belong to the' \
-                   ' densest cluster of homologous sequence lengths, we are' \
-                   ' not as confident about the query sequence.'
+      size_diff  = 'similar'
+      conclusion = "There is no reason to believe there is any problem with the length of the query sequence."
+    else 
+      size_diff  = (@prediction_len > @limits[1]) ? 'long': 'short'
+      conclusion = "The query sequence may be too #{size_diff}."
     end
-    approach + explanation1 + explanation2 + conclusion
+
+    explanation  = "In this case, the most dense length-cluster of BLAST hits" \
+                   " includes sequences from #{limits[0]} to #{limits[1]} amino-acids long." \
+                   " With a length of #{prediction_len} amino-acids, the query sequence is #{size_diff}. "
+    approach + explanation + conclusion
   end
 
   def print
