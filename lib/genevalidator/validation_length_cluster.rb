@@ -23,30 +23,36 @@ class LengthClusterValidationOutput < ValidationReport
     @expected       = expected
     @result         = validation
     @plot_files     = []
-    @approach       = ''
-    @explanation    = put_explanation_together
-    @conclusion     = ''
+    @approach       = "If the query sequence is well conserved and similar" \
+                      " sequences (BLAST hits) are correct, we can expect" \
+                      " query and hit sequences to have similar lengths." \
+                      " Here, we cluster the lengths of hit sequences and" \
+                      " compare the length of our query sequence to the" \
+                      " most dense cluster of hit lengths. "
+    @explanation    = explain
+    @conclusion     = conclude
   end
 
-  def put_explanation_together
-    approach     = "If the query sequence is well conserved and similar sequences (BLAST" \
-                   " hits) are correct, we can expect query and hit sequences to" \
-                   " have similar lengths. Here, we cluster the lengths of hit sequences" \
-                   " and compare the length of our query sequence to the most dense" \
-                   " cluster of hit lengths. "
-    if @result == :yes
-      # i.e. if inside the main cluster
+  def explain
+    if @result == :yes # i.e. if inside the main cluster
       size_diff  = 'similar'
-      conclusion = "There is no reason to believe there is any problem with the length of the query sequence."
     else 
       size_diff  = (@prediction_len > @limits[1]) ? 'long': 'short'
-      conclusion = "The query sequence may be too #{size_diff}."
     end
+    return "In this case, the most dense length-cluster of BLAST hits" \
+           " includes sequences from #{limits[0]} to #{limits[1]} amino-acids" \
+           " long. With a length of #{prediction_len} amino-acids, the query" \
+           " sequence is #{size_diff}. "
+  end
 
-    explanation  = "In this case, the most dense length-cluster of BLAST hits" \
-                   " includes sequences from #{limits[0]} to #{limits[1]} amino-acids long." \
-                   " With a length of #{prediction_len} amino-acids, the query sequence is #{size_diff}. "
-    approach + explanation + conclusion
+  def conclude
+    if @result == :yes # i.e. if inside the main cluster
+      return "There is no reason to believe there is any problem with the" \
+             " length of the query sequence."
+    else
+      size_diff  = (@prediction_len > @limits[1]) ? 'long': 'short'
+      return "The query sequence may be too #{size_diff}."
+    end
   end
 
   def print
