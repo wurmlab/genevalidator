@@ -2,7 +2,7 @@
 
 Pair = Struct.new(:x, :y) do
 
-  include Comparable  
+  include Comparable
 
   ##
   # Overload '-' operator
@@ -28,7 +28,7 @@ Pair = Struct.new(:x, :y) do
   ##
   # Overload '*' operator
   # This will modify the current object
-  def *(val)  
+  def *(val)
     self.x *= val
     self.y *= val
   end
@@ -50,7 +50,7 @@ Pair = Struct.new(:x, :y) do
     else
       false
     end
-  end  
+  end
 
   def eql?(p)
     self == p
@@ -66,7 +66,7 @@ class PairCluster
 
   #a hash map containing the pair (object, no_occurences)
   attr_accessor :objects
-  
+
   def initialize(objects)
     @objects = objects
   end
@@ -85,11 +85,11 @@ class PairCluster
     weight = 0
 
     objects.each do |object, n|
-      (1..n).each do |i| 
+      (1..n).each do |i|
         mean + object
         weight += 1
       end
-    end    
+    end
     mean / weight
     return mean
 
@@ -181,9 +181,9 @@ class Cluster
     lengths.each do |length, n|
       mean_len += length * n
       weight += n
-    end		
+    end
     mean_len /= weight
-    
+
   end
 
   ##
@@ -214,7 +214,7 @@ class Cluster
           norm += elem1[1] * elem2[1]
         else
           d += (elem1[0] - elem2[0]).abs
-          norm = cluster.lengths.length * lengths.length             
+          norm = cluster.lengths.length * lengths.length
         end
       end
     end
@@ -326,7 +326,7 @@ class Cluster
       :longer
     end
   end
- 
+
 end
 
 class HierarchicalClusterization
@@ -401,7 +401,7 @@ class HierarchicalClusterization
       density = 0
 
       [*(0..(clusters.length-2))].each do |i|
-        [*((i+1)..(clusters.length-1))].each do |j|          
+        [*((i+1)..(clusters.length-1))].each do |j|
           dist = clusters[i].distance(clusters[j], distance_method)
           if debug
             puts "distance between clusters #{i} and #{j} is #{dist}"
@@ -417,7 +417,7 @@ class HierarchicalClusterization
               cluster1 = i
               cluster2 = j
               density = current_density
-            end            
+            end
           end
         end
       end
@@ -449,7 +449,7 @@ class HierarchicalClusterization
   end
 
   ##
-  # Makes an hierarchical clusterization until the most dense cluster is obtained 
+  # Makes an hierarchical clusterization until the most dense cluster is obtained
   # or the distance between clusters is sufficintly big
   # or the desired number of clusters is obtained
   # Params:
@@ -491,7 +491,7 @@ class HierarchicalClusterization
     if debug
       clusters.each do |elem|
         elem.print
-      end	
+      end
     end
 
     if clusters.length == 1
@@ -517,24 +517,24 @@ class HierarchicalClusterization
       cluster = 0
       density = 0
 
-      clusters[0..clusters.length-2].each_with_index do |item, i|        
+      clusters[0..clusters.length-2].each_with_index do |item, i|
         dist = clusters[i].distance(clusters[i+1], distance_method)
         if debug
-          puts "distance between clusters #{i} and #{i+1} is #{dist}"	
+          puts "distance between clusters #{i} and #{i+1} is #{dist}"
         end
         current_density = clusters[i].density + clusters[i+1].density
         if dist < min_distance
           min_distance = dist
           cluster = i
         density = current_density
-	else 
+	else
 	  if dist == min_distance and density < current_density
 	    cluster = i
             density = current_density
           end
         end
-      end	
-      
+      end
+
 
       #stop condition 2
       #the distance between the closest clusters exceeds the threshold
@@ -544,7 +544,7 @@ class HierarchicalClusterization
 
       #merge clusters 'cluster' and 'cluster'+1
       if debug
-        puts "clusters to merge #{cluster} and #{cluster+1}"	
+        puts "clusters to merge #{cluster} and #{cluster+1}"
       end
 
       clusters[cluster].add(clusters[cluster+1])

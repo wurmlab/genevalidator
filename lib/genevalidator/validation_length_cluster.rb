@@ -28,7 +28,7 @@ class LengthClusterValidationOutput < ValidationReport
     @conclusion     = ''
   end
 
-  def put_explanation_together  
+  def put_explanation_together
     approach      = 'If the query sequence is well conserved and homologous' \
                     ' sequences derived from the reference database are' \
                     ' correct, we would expect the lengths of query and' \

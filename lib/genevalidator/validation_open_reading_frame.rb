@@ -36,7 +36,7 @@ class ORFValidationOutput < ValidationReport
                   " and it covers #{(@ratio*100).round}% of the full sequence." \
                   " Please see below for a graphic representation of this."
     conclusion = '' # TODO:
-    # approach + explanation + conclusion 
+    # approach + explanation + conclusion
     explanation
   end
 
@@ -52,7 +52,7 @@ class ORFValidationOutput < ValidationReport
     if @ratio > @threshold
       :yes
     else
-      :no    
+      :no
     end
   end
 end
@@ -94,7 +94,7 @@ class OpenReadingFrameValidation < ValidationTest
   # Check whether there is a main reading frame
   # Output:
   # +ORFValidationOutput+ object
-  def run    
+  def run
     begin
       if type.to_s != "nucleotide"
         @validation_report = ValidationReport.new("", :unapplicable)
@@ -102,8 +102,8 @@ class OpenReadingFrameValidation < ValidationTest
       end
 
       raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
+      raise Exception unless prediction.is_a? Sequence and
+                             hits[0].is_a? Sequence
 
       start = Time.new
       orfs = get_orfs
@@ -150,7 +150,7 @@ class OpenReadingFrameValidation < ValidationTest
   # +start_codons+: Array of +String+
   # +stop_codon+: Array of +String+
   # Output:
-  # +Hash+ containing the reading frame (the key) and a list of intervals (the values) 
+  # +Hash+ containing the reading frame (the key) and a list of intervals (the values)
   def get_orfs(orf_length = 100, prediction = @prediction, start_codons = @start_codons, stop_codons = @stop_codons)
 
     if prediction.type != 'nucleotide'
@@ -166,7 +166,7 @@ class OpenReadingFrameValidation < ValidationTest
       occurences.each do |occ|
         stops[occ + 3] = codon
       end
-    end        
+    end
 
     result = {}
     result[1] = []
@@ -190,16 +190,16 @@ class OpenReadingFrameValidation < ValidationTest
         start_codons.each do |scd|
 #          start_offset = 0
 #          unless i == 1
-            #find the first occurence of the start codon in the prospective orf            
+            #find the first occurence of the start codon in the prospective orf
             start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
-#          end      
+#          end
           if start_offset != nil and m3[i] - start_offset > orf_length
             result[1].push([start_offset, m3[i]])
           end
         end
       end
     end
- 
+
     #reading frame 2, direct strand
     m3_1 = stops.map{|x| x[0]}.select{|y| y % 3 == 1}.sort
     m3_1 = [2, m3_1, prediction.raw_sequence.length].flatten
@@ -238,7 +238,7 @@ class OpenReadingFrameValidation < ValidationTest
 
     #reverse strand
     stops_reverse = {}
-    
+
     seq_reverse = Bio::Sequence::NA.new(seq).reverse_complement
     stop_codons.each do |codon|
       occurences = (0 .. seq_reverse.length - 1).find_all { |i| seq_reverse[i,3].downcase == codon.downcase }
@@ -299,10 +299,10 @@ class OpenReadingFrameValidation < ValidationTest
       end
     end
 
-    result 
-  end  
+    result
+  end
 
-  ##  
+  ##
   # Plots the resions corresponding to open reading frames
   # Param
   # +orfs+: +Hash+ containing the reading frame (the key) and a list of intervals (the values)
@@ -328,7 +328,7 @@ class OpenReadingFrameValidation < ValidationTest
       end
     end
 
-    f = File.open(output, "w")    
+    f = File.open(output, "w")
     f.write((results).to_json)
     f.close
 

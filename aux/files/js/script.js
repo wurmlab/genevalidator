@@ -11,7 +11,7 @@ $(function(){
       var $cell = $(cell);
       if (cellIndex === 1) {
         return $cell.attr('data-score') || s;
-      } 
+      }
       return s;
     },
     parsed: false,
@@ -28,12 +28,12 @@ $(function(){
 
 
 //ToolTip
-$(function () { 
+$(function () {
   $("[data-toggle='tooltip']").tooltip();
 });
 
 //Hide empty columns
-$(document).ready(function() { 
+$(document).ready(function() {
   if (window.chrome && (window.location.protocol === 'file:') )  {
     $('#browseralert').modal()
   }
@@ -44,10 +44,10 @@ $(document).ready(function() {
     var tds = $(this).parents('table')
     .find('tr td:nth-child(' + (i + 1) + ')');
     //check if all the cells in this column are empty
-    // 
+    //
     if ($(this).hasClass( "chart-column" )) {
     } else {
-      if ($(this).text().trim() == '') { 
+      if ($(this).text().trim() == '') {
         //hide header
         $(this).hide();
         //hide cells

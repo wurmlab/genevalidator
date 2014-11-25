@@ -1,5 +1,5 @@
 
-# This is an abstract class extended  
+# This is an abstract class extended
 # by all validation classes
 class ValidationTest
 
@@ -15,7 +15,7 @@ class ValidationTest
 
   ##
   # Initilizes the object
-  # Params:  
+  # Params:
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
@@ -34,5 +34,5 @@ class ValidationTest
 
   def run
    raise 'run method should be implemented by all classes that extend ValidationTest'
-  end  
+  end
 end

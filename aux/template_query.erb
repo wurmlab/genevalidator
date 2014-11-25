@@ -9,7 +9,7 @@
     <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
     <% item.plot_files.each do |plot| %>
       addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-    <% end %> 
+    <% end %>
     <% if item.color == 'warning' %>
       ">
     <% else %>
@@ -17,7 +17,7 @@
     <% end %>
       <%= item.print%></td>
   <% else %>
-      <td title="<%=item.header%>" class="<%=item.color%>" 
+      <td title="<%=item.header%>" class="<%=item.color%>"
       <% if item.color == 'warning' %>
         >
       <% else %>

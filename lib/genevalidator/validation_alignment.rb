@@ -30,7 +30,7 @@ class AlignmentValidationOutput < ValidationReport
     @explanation  = put_together_explanation
     @conclusion   = 'TODO'
   end
-  
+
   def put_together_explanation
     explanation = "A position specific scoring matrix of the strongest 10" \
                   " results show that: #{(@extra_seq*100).round(0)}% of" \
@@ -69,7 +69,7 @@ class AlignmentValidation < ValidationTest
 
   ##
   # Initilizes the object
-  # Params:  
+  # Params:
   # +type+: type of the predicted sequence (:nucleotide or :protein)
   # +prediction+: a +Sequence+ object representing the blast query
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
@@ -119,7 +119,7 @@ class AlignmentValidation < ValidationTest
       less_hits.map do |hit|
         #get gene by accession number
         if hit.raw_sequence == nil
-          
+
           hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
@@ -140,7 +140,7 @@ class AlignmentValidation < ValidationTest
 
         end
       end
-      
+
       useless_hits.each{|hit| less_hits.delete(hit)}
 
       if less_hits.length == 0
@@ -179,7 +179,7 @@ class AlignmentValidation < ValidationTest
 
       a1 = get_consensus(@multiple_alignment[0..@multiple_alignment.length-2])
       a2 = get_consensus(@multiple_alignment)
-  
+
       plot1 = plot_alignment(freq)
       gaps = gap_validation(prediction_raw, sm)
       extra_seq = extra_sequence_validation(prediction_raw, sm)
@@ -302,7 +302,7 @@ class AlignmentValidation < ValidationTest
       end
     end
     no_insertions/(sm.length+0.0)
-    
+
   end
 
   ##
@@ -471,7 +471,7 @@ class AlignmentValidation < ValidationTest
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :align,
                                 "[Missing/Extra sequences] Multiple Align. & Statistical model of hits",
-                                "conserved region, yellow", 
+                                "conserved region, yellow",
                                 "offset in the alignment",
                                 "",
                                 ma.length+1,

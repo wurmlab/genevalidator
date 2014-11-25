@@ -3,11 +3,11 @@ function show_all_plots(button){
     var expand_children = document.getElementsByName('plot_row');
     if(expand_children.length < 30){
       if (window.chrome && (window.location.protocol === 'file:') ) {
-        if (($('#browser-alert').length) == 0) { 
+        if (($('#browser-alert').length) == 0) {
           $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
           $('#browseralert').modal()
         }
-      } 
+      }
       else {
         // show activity spinner
         $('#spinner1').modal({
@@ -59,23 +59,23 @@ function remove_all_plots(expand_children){
             d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
         }
     }
-    
+
     for (var i = 0; i < expand_children.length; i++) {
       expand_child_div = expand_children[i].getElementsByTagName('div')[0];
       $(expand_child_div).parent().parent().hide()
-    } 
-    
+    }
+
     var buttons = document.getElementsByTagName('button');
     for (var i = 0; i < buttons.length; i++) {
-        buttons[i].status = "released"; 
+        buttons[i].status = "released";
     }
 }
 
 function hide_all_plots(button, expand_children){
     button.status = "released";
     button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts'
-    button.onclick = function() { 
-            show_all_plots(button) 
+    button.onclick = function() {
+            show_all_plots(button)
         };
     remove_all_plots(expand_children);
 }
@@ -92,12 +92,12 @@ function getElementByAttributeValue(attribute, value) {
 
 function showDiv(source, target){
   if (window.chrome && (window.location.protocol === 'file:') ) {
-    if (($('#browser-alert').length) == 0) { 
+    if (($('#browser-alert').length) == 0) {
       $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
       $('#browseralert').modal()
     }
     return;
-  } 
+  }
     var explanationId = '#' + target + 'explanation'
 
     if( $(explanationId).length) {
@@ -110,7 +110,7 @@ function showDiv(source, target){
         $(button).parent().parent().hide();
     }
     else {
-        d3.select("#".concat(target)).selectAll("svg").remove();    
+        d3.select("#".concat(target)).selectAll("svg").remove();
         button.style.display = "block";
         $(button).parent().parent().show()
         var pressedButtons = document.querySelectorAll('td')
@@ -150,7 +150,7 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
             plot_bars(filename, target, title, legend, xtitle, ytitle, aux1)
             break;
         case "simplebars":
-            plot_simple_bars(filename, target, title, legend, xtitle, ytitle) 
+            plot_simple_bars(filename, target, title, legend, xtitle, ytitle)
             break;
         case "lines":
             if(aux2 != "")
@@ -194,7 +194,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
     var margin = {top: 70, right: 50, bottom: 75, left: 50},
         width = 600 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;      
+        height = 500 - margin.top - margin.bottom;
     var legend_width = 15
 
     var svg = d3.select("#".concat(target)).append("svg")
@@ -202,22 +202,22 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
+
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
         .attr("y", -45)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .text(title);   
-        
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
+
     var colors = new Array("orange", "blue", "green", "yellow", "brown");
     var no_colors = colors.length
 
         var padding = 100
 
     d3.json(filename, function(error, alldata) {
-        
-        flattened_data = [].concat.apply([], alldata)           
+
+        flattened_data = [].concat.apply([], alldata)
         var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3
         var y = d3.scale.linear()
             .domain([0, yMax + yMax/10])
@@ -225,12 +225,12 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
         var xMin = d3.min(flattened_data, function(d) { return d.key; })
         if(bar!=undefined){
-            var xMin = Math.min(xMin, bar); 
+            var xMin = Math.min(xMin, bar);
         }
- 
+
         var xMax = d3.max(flattened_data, function(d) { return d.key; })
         if(bar!=undefined){
-            var xMax = Math.max(xMax, bar); 
+            var xMax = Math.max(xMax, bar);
         }
 
         var x = d3.scale.linear()
@@ -269,9 +269,9 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
               .attr("y", -40)
               .style("text-anchor", "start")
               .text(yTitle)
-              
+
         alldata.map( function(data, i) {
-         
+
             color = colors[i % (no_colors - 1)];
             svg.selectAll(".bar")
                 .data(data)
@@ -281,7 +281,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
                   .attr("y", function(d) { return y(d.value); })
                   .attr("height", function(d) { return height - y(d.value); })
                   .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
-        }); 
+        });
 
         if(bar!=undefined){
             svg.append("rect")
@@ -298,30 +298,30 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
                 .attr("y", x(bar) - 5)
                     .text("query");
 
-                }   
+                }
     });
 
-   
-      
+
+
     var offset = 0
     var total_len = 0
     for (var i = 0; i < footer.length; i++) {
-    var array = footer[i].split(","); 
+    var array = footer[i].split(",");
     total_len = total_len + array[0].length*8 + 15;
     }
 
     for (var i = 0; i < footer.length; i++) {
 
-    var array = footer[i].split(","); 
+    var array = footer[i].split(",");
     svg.append("rect")
-          .attr("x", (width-total_len)/2 + offset)             
+          .attr("x", (width-total_len)/2 + offset)
           .attr("y", -30)
           .attr("width", 10)
           .attr("height", 10)
           .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
-        
+
     svg.append("text")
-          .attr("x", (width-total_len)/2 + offset + 15)             
+          .attr("x", (width-total_len)/2 + offset + 15)
           .attr("y", -20)
           .text(array[0]);
         offset = offset + array[0].length*8 + 15
@@ -330,14 +330,14 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
 
 
 
-}   
+}
 
 // bars plot
 function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
 
     var margin = {top: 70, right: 50, bottom: 75, left: 50},
         width = 600 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;      
+        height = 500 - margin.top - margin.bottom;
     var legend_width = 15
 
     var svg = d3.select("#".concat(target)).append("svg")
@@ -345,22 +345,22 @@ function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
+
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
         .attr("y", -45)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .text(title);   
-        
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
+
     var colors = new Array("orange", "blue", "green", "yellow", "brown");
     var no_colors = colors.length
 
         var padding = 0
 
     d3.json(filename, function(error, alldata) {
-        
-        flattened_data = [].concat.apply([], alldata)           
+
+        flattened_data = [].concat.apply([], alldata)
         var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3
         var y = d3.scale.linear()
                      .domain([0, yMax])
@@ -405,9 +405,9 @@ function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
               .attr("y", -40)
               .style("text-anchor", "start")
               .text(yTitle)
-              
+
         alldata.map( function(data, i) {
-         
+
             color = colors[i % (no_colors - 1)];
             svg.selectAll(".bar")
                 .data(data)
@@ -417,7 +417,7 @@ function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
                   .attr("y", function(d) { return y(d.value); })
                   .attr("height", function(d) { return height - y(d.value); })
                   .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
-        }); 
+        });
 
     });
 
@@ -430,7 +430,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 
     var margin = {top: 50, right: 30, bottom: 75, left: 50},
         width = 500 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;      
+        height = 500 - margin.top - margin.bottom;
 
     var x = d3.scale.linear()
         .range([0, width]);
@@ -454,20 +454,20 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
-    svg.append("text")
-        .attr("x", (width / 2))             
-        .attr("y", -25)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .text(title);   
 
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
+        .attr("y", -25)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
+
+    svg.append("text")
+        .attr("x", (width / 2))
         .attr("y", height+ 55)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "12px") 
-        .text(footer);  
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .text(footer);
 
     d3.json(filename, function(error, data) {
 
@@ -555,8 +555,8 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
     var margin = {top: 50, right: 50, bottom: 75, left: 50},
         width = 600 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;      
-        var legend_width = 17   
+        height = 500 - margin.top - margin.bottom;
+        var legend_width = 17
 
     var x = d3.scale.linear()
         .range([0, width]);
@@ -565,11 +565,11 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
     var color = d3.scale.category10();
 
-    if (title === 'Open reading frame with STOP codon') {  
+    if (title === 'Open reading frame with STOP codon') {
       var xAxis = d3.svg.axis()
           .scale(x)
           .orient("bottom")
-          .ticks(0); 
+          .ticks(0);
     } else {
       var xAxis = d3.svg.axis()
           .scale(x)
@@ -587,13 +587,13 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
+
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
         .attr("y", -35)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .text(title);   
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
 
     d3.json(filename, function(error, data) {
 
@@ -612,13 +612,13 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .attr("y", 35)
           .style("text-anchor", "start")
           .text(xTitle)
-          
+
           if(yValues != ""){
           svg.append("g")
               .attr("class", "y axis")
               .call(yAxis
                         .ticks(yValues.length)
-                .tickFormat(function (d) {                     
+                .tickFormat(function (d) {
                            idx = idx + 1;
                    return yValues[idx];
                     }))
@@ -647,10 +647,10 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .data(data)
         .enter().append("line")
                   .attr("x1", function(d) { return x(d.start); })
-                  .attr("y1", function(d) { return y(d.y); })                 
+                  .attr("y1", function(d) { return y(d.y); })
                   .attr("x2", function(d) { return x(d.stop); })
                   .attr("x2", function(d) { return x(d.stop); })
-                  .attr("y2", function(d) { return y(d.y); })                 
+                  .attr("y2", function(d) { return y(d.y); })
                   .attr("stroke-width", function(d) {
                     if (d.dotted == undefined) {
                         if (d.color == "red" ) {
@@ -662,22 +662,22 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
                       return height/no_lines/5
                     }
                   })
-                  .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");}) 
+                  .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");})
                   .attr("stroke", function(d) { return color_beautification(d.color); })
     });
 
-    // add legend   
+    // add legend
     var legend = svg.append("g")
       .attr("class", "legend")
       .attr("height", 100)
       .attr("width", 100)
-          .attr('transform', 'translate(-20,50)')    
-      
+          .attr('transform', 'translate(-20,50)')
+
     var h = 0
 
     for (var i = 0; i < footer.length; i++) {
-        
-    var array = footer[i].split(","); 
+
+    var array = footer[i].split(",");
     legend
           .append("rect")
           .attr("x", width + margin.left)
@@ -687,8 +687,8 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
 
     var chunkSize = legend_width
-    var length = array[0].length 
-        
+    var length = array[0].length
+
     for (var j = 0; j < length; j += chunkSize) {
            var substr = array[0].substring(j, Math.min(length, j + chunkSize));
        legend
@@ -707,8 +707,8 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
     var margin = {top: 75, right: 50, bottom: 75, left: 150},
         width = 600 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;      
-        var legend_width = 17   
+        height = 300 - margin.top - margin.bottom;
+        var legend_width = 17
 
     var x = d3.scale.linear()
         .range([0, width]);
@@ -728,18 +728,18 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
         .ticks(5)
 
     var svg = d3.select("#".concat(target)).append("svg")
-        .style("vertical-align", "top") 
+        .style("vertical-align", "top")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
+
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
         .attr("y", -35)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .text(title);   
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
 
     d3.json(filename, function(error, data) {
 
@@ -758,13 +758,13 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .attr("y", 35)
           .style("text-anchor", "start")
           .text(xTitle)
-          
+
           if(yValues != ""){
           svg.append("g")
               .attr("class", "y axis")
               .call(yAxis
                         .ticks(yValues.length)
-                .tickFormat(function (d) {                     
+                .tickFormat(function (d) {
                            idx = idx + 1;
                    return yValues[idx];
                     }))
@@ -793,9 +793,9 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .data(data)
         .enter().append("line")
                   .attr("x1", function(d) { return x(d.start); })
-                  .attr("y1", function(d) { return y(d.y); })                 
+                  .attr("y1", function(d) { return y(d.y); })
                   .attr("x2", function(d) { return x(d.stop); })
-                  .attr("y2", function(d) { return y(d.y); })                 
+                  .attr("y2", function(d) { return y(d.y); })
                   .attr("stroke-width", function(d) { if(d.height == -1) return height/no_lines; return (height/no_lines * d.height) ; })
                   .attr("stroke", function(d) { return color_beautification(d.color); })
     });
@@ -803,22 +803,22 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
     var offset = 0
     var total_len = 0
     for (var i = 0; i < footer.length; i++) {
-    var array = footer[i].split(","); 
+    var array = footer[i].split(",");
     total_len = total_len + array[0].length*8 + 15;
     }
 
     for (var i = 0; i < footer.length; i++) {
 
-    var array = footer[i].split(","); 
+    var array = footer[i].split(",");
     svg.append("rect")
-          .attr("x", (width-total_len)/2 + offset)             
+          .attr("x", (width-total_len)/2 + offset)
           .attr("y", -30)
           .attr("width", 10)
           .attr("height", 10)
           .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
-        
+
     svg.append("text")
-          .attr("x", (width-total_len)/2 + offset + 15)             
+          .attr("x", (width-total_len)/2 + offset + 15)
           .attr("y", -20)
           .text(array[0]);
         offset = offset + array[0].length*8 + 15

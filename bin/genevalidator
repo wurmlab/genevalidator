@@ -19,7 +19,7 @@ OPTIONAL ARGUMENTS:
 BANNER
 
   opt[:vlist] = ['all']
-  opts.on( '-v', '--validations <String>', Array, 
+  opts.on( '-v', '--validations <String>', Array,
           'The Validations to be applied.',
           'Validation Options Available (separated by coma):',
           '  all    = run all validations (default)',
@@ -38,10 +38,10 @@ BANNER
          'e.g. "swissprot -remote" or a local BLAST database') do |db|
     opt[:db] = db
   end
-    
+
   opt[:skip_blast] = nil
-  opts.on('-x', '--skip_blast [FILENAME]', 
-         'Skip blast-ing part and provide a blast xml or tabular output', 
+  opts.on('-x', '--skip_blast [FILENAME]',
+         'Skip blast-ing part and provide a blast xml or tabular output',
          'as input to this script.',
          'Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6',
          'or 7) outputs accepted') do |skip|
@@ -49,7 +49,7 @@ BANNER
   end
 
   # default blast tabular columns
-  opts.on('-t', '--tabular [BLAST OUTFMT STRING]', 
+  opts.on('-t', '--tabular [BLAST OUTFMT STRING]',
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
          '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
@@ -66,7 +66,7 @@ BANNER
     opt[:blast] = blast
   end
 
-  opts.on('-r', '--raw_seq [FASTA_FILE]', 
+  opts.on('-r', '--raw_seq [FASTA_FILE]',
          'Fasta file containing the raw sequences of each of the BLAST hits in',
          'BLAST XML output file.') do |raw|
     opt[:raw] = raw
@@ -74,7 +74,7 @@ BANNER
 
   opt[:num_threads] = 1
   opts.on('-n', '--num_threads num_of_threads', 'Specify the number of processor',
-          'threads to utilise when running BLAST and Mafft within', 
+          'threads to utilise when running BLAST and Mafft within',
           'GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
@@ -117,7 +117,7 @@ end
 # Validate BLAST installation
 if opt[:blast]
   GVArgValidation::Blast.export_bin_dir(opt[:blast])
-else 
+else
   GVArgValidation::Blast.assert_blast_installed_and_compatible
 end
 

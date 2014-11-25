@@ -29,7 +29,7 @@ class BlastUtils
       raise TypeError unless blast_type.is_a? String and query.is_a? String
 
       evalue = "1e-5"
-      
+
       #output format = 5 (XML Blast output)
       # If BLAST is not run remotely, then utilise the -num_threads argument
       if (db !~ /remote/)
@@ -52,8 +52,8 @@ class BlastUtils
       exit!
     rescue ClasspathError => error
       $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n" 
-      exit! 
+        "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n"
+      exit!
     end
   end
 
@@ -71,7 +71,7 @@ class BlastUtils
   # Output:
   # String with the blast xml output
   def self.call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
-    begin  
+    begin
       raise TypeError unless command.is_a? String and filename.is_a? String
 
       evalue = "1e-5"
@@ -86,18 +86,18 @@ class BlastUtils
           end 2>/dev/null]
 
       if output.empty?
-        raise ClasspathError.new      
+        raise ClasspathError.new
       end
 
       return output
 
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"      
+        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
       exit
     rescue ClasspathError =>error
       $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Did you add BLAST path to LOADPATH?\n"      
+        "Did you add BLAST path to LOADPATH?\n"
       exit
     end
   end
@@ -119,11 +119,11 @@ class BlastUtils
 
       # parse blast the xml output and get the hits
       # hits obtained are proteins! (we use only blastp and blastx)
-      iter.each do | hit | 
-        
+      iter.each do | hit |
+
         seq = Sequence.new
 
-        seq.length_protein = hit.len.to_i        
+        seq.length_protein = hit.len.to_i
         seq.type           = :protein
         seq.identifier     = hit.hit_id
         seq.definition     = hit.hit_def
@@ -136,15 +136,15 @@ class BlastUtils
         hit.hsps.each do |hsp|
           current_hsp            = Hsp.new
           current_hsp.hsp_evalue = hsp.evalue.to_i
-          
+
           current_hsp.hit_from         = hsp.hit_from.to_i
           current_hsp.hit_to           = hsp.hit_to.to_i
           current_hsp.match_query_from = hsp.query_from.to_i
           current_hsp.match_query_to   = hsp.query_to.to_i
 
           if type == :nucleotide
-            current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1 
-            current_hsp.match_query_to   =  (current_hsp.match_query_to / 3) + 1             
+            current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1
+            current_hsp.match_query_to   =  (current_hsp.match_query_to / 3) + 1
           end
 
           current_hsp.query_reading_frame = hsp.query_frame.to_i
@@ -159,21 +159,21 @@ class BlastUtils
             raise SequenceTypeError
           end
           current_hsp.align_len = hsp.align_len.to_i
-          current_hsp.identity  = hsp.identity.to_i          
-          current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  
+          current_hsp.identity  = hsp.identity.to_i
+          current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)
 
           hsps.push(current_hsp)
         end
 
         seq.hsp_list = hsps
         hits.push(seq)
-      end     
-    
+      end
+
       return hits
 
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: you didn't call parse method first!\n"       
+        "Possible cause: you didn't call parse method first!\n"
       exit!
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<

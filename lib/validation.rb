@@ -51,7 +51,7 @@ class Validation
   attr_reader :no_mafft
   attr_reader :no_internet
   attr_reader :map_errors
-  attr_reader :map_running_times 
+  attr_reader :map_running_times
 
   attr_reader :wq
   attr_reader :threads
@@ -93,11 +93,14 @@ class Validation
     @mutex_array       = Mutex.new
     @num_threads       = num_threads # used for BLAST & Mafft
 
-    @fasta_filepath    = fasta_filepath   
+    @fasta_filepath    = fasta_filepath
     @xml_file          = xml_file
     @db                = db
-    @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
 
+    @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
+    if vlist.map{|v| v.strip.downcase}.include? "all"
+      @vlist           = ['lenc', 'lenr', 'frame', 'merge', 'dup', 'orf', 'align']
+    end
 
     @idx               = 0
     @start_idx         = 1
@@ -120,7 +123,7 @@ class Validation
 
     # the expected type for the sequences is the
     # type of the first query
-       
+
     # autodetect the type of the sequence in the FASTA
     # also check if the fasta file contains a single type of queries
     @type = BlastUtils.type_of_sequences(fasta_content)
@@ -182,7 +185,7 @@ class Validation
         $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
           "Possible cause: your file with raw sequences is not FASTA. Please use get_raw_sequences executable to create a correct one.\n"
     end
-   
+
     # build the path of html folder output
     path = File.dirname(@fasta_filepath)
     @html_path = "#{fasta_filepath}.html"
@@ -194,8 +197,8 @@ class Validation
     if File.exists? @html_path
       $stderr.print "The output directory already exists for this fasta file.\n"
       $stderr.print "For a new validation please remove the following directory: #{@html_path}\n"
-      $stderr.print "You can run the following command to remove the folder.\n" 
-      $stderr.print "   $ rm -r #{@html_path} \n" 
+      $stderr.print "You can run the following command to remove the folder.\n"
+      $stderr.print "   $ rm -r #{@html_path} \n"
       exit
     end
     Dir.mkdir(@html_path)
@@ -288,7 +291,7 @@ class Validation
 
           # the following instruction will raise exception if the file is not tabular
           hits = iterator_tab.next(identifier)
- 
+
           input_file_type = :tabular
           iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
 
@@ -335,7 +338,7 @@ class Validation
       end
 
       @idx = @idx + 1
- 
+
       if input_file_type == :tabular
         if @idx < @start_idx
           iterator_tab.jump_next
@@ -398,24 +401,24 @@ class Validation
     no_mafft = 0
     no_internet = 0
     errors = []
-    validations.each do |v| 
+    validations.each do |v|
       if v.errors != nil
         no_mafft += v.errors.select{|e| e == NoMafftInstallationError}.length
         no_internet += v.errors.select{|e| e == NoInternetError}.length
       end
       if v.validation == :error
         errors.push(v.short_header)
-      end 
+      end
     end
 
-    no_evidence = validations.count{|v| v.result == :unapplicable or v.result == :warning} == validations.length 
-    if no_evidence 
+    no_evidence = validations.count{|v| v.result == :unapplicable or v.result == :warning} == validations.length
+    if no_evidence
       nee = 1
     else
       nee = 0
     end
 
-    #report = ValidationReportStat.new(query_output.overall_score, no_evidence, no_mafft, no_internet, errors) 
+    #report = ValidationReportStat.new(query_output.overall_score, no_evidence, no_mafft, no_internet, errors)
 
     good_predictions = 0
     bad_predictions = 0
@@ -433,16 +436,16 @@ class Validation
 
       @no_queries += 1
       @scores.push(query_output.overall_score)
-      @good_predictions += good_predictions 
-      @bad_predictions += bad_predictions 
+      @good_predictions += good_predictions
+      @bad_predictions += bad_predictions
       @nee += nee
       @no_mafft += no_mafft
       @no_internet += no_internet
-      errors.each{|err| @map_errors[err] += 1} 
-      
+      errors.each{|err| @map_errors[err] += 1}
+
       validations.each do |v|
-        if v.running_time != 0 and 
-          v.running_time != nil and 
+        if v.running_time != 0 and
+          v.running_time != nil and
           v.validation != :unapplicable and
           v.validation != :error
             p = Pair1.new(@map_running_times[v.short_header].x + v.running_time, @map_running_times[v.short_header].y + 1)
@@ -451,7 +454,7 @@ class Validation
       end
 
     }
-  
+
     return query_output
 
   end
@@ -486,7 +489,7 @@ class Validation
     identical_hits.each {|hit| hits.delete(hit)}
     return hits
   end
-  
+
   ##
   # Runs all the validations and prints the outputs given the current
   # prediction query and the corresponding hits
@@ -531,32 +534,17 @@ class Validation
       raise AliasDuplicationError
     end
 
-    if vlist.map{|v| v.strip.downcase}.include? "all"
-
-      validations.map{|v| v.run}
-      # check the class type of the validation reports
-
-      validations.each do |v|
-        raise ReportClassError unless v.validation_report.is_a? ValidationReport
-      end
-
-      query_output.validations = validations.map{|v| v.validation_report}
-
-    else
-
-      desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
-      desired_validations.each do |v|
-        v.run
-        raise ReportClassError unless v.validation_report.is_a? ValidationReport
-      end
-      query_output.validations = desired_validations.map{|v| v.validation_report}
- 
-      if query_output.validations.length == 0
-        raise NoValidationError
-      end
-
+    desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
+    desired_validations.each do |v|
+      v.run
+      raise ReportClassError unless v.validation_report.is_a? ValidationReport
     end
-   
+    query_output.validations = desired_validations.map{|v| v.validation_report}
+
+    if query_output.validations.length == 0
+      raise NoValidationError
+    end
+
     # compute validation score
     validations = query_output.validations
     successes = validations.map{|v| v.result ==
@@ -614,7 +602,7 @@ puts counts.to_s
       $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: At least two validations have the same CLI alias\n"
       exit!
-  rescue Exception => error 
+  rescue Exception => error
       puts error.backtrace
       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit!

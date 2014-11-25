@@ -60,7 +60,7 @@ class BlastRFValidationOutput < ValidationReport
   end
 
   def validation
-    # chack if there are different reading frames 
+    # chack if there are different reading frames
     count_p = 0
     count_n = 0
     frames_histo.each do |x, y|
@@ -83,7 +83,7 @@ class BlastRFValidationOutput < ValidationReport
 end
 
 ##
-# This class contains the methods necessary for 
+# This class contains the methods necessary for
 # reading frame validation based on BLAST output
 class BlastReadingFrameValidation < ValidationTest
 
@@ -97,7 +97,7 @@ class BlastReadingFrameValidation < ValidationTest
     @cli_name     = 'frame'
   end
 
-  ## 
+  ##
   # Check reading frame inconsistency
   # Params:
   # +lst+: vector of +Sequence+ objects
@@ -118,7 +118,7 @@ class BlastReadingFrameValidation < ValidationTest
       rfs =  lst.map{ |x| x.hsp_list.map{ |y| y.query_reading_frame}}.flatten
       frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
 
-      # get the main reading frame 
+      # get the main reading frame
       main_rf = frames_histo.map{|k,v| v}.max
       @prediction.nucleotide_rf = frames_histo.select{|k,v| v==main_rf}.first.first
 

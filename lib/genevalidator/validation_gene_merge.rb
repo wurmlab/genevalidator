@@ -25,7 +25,7 @@ class GeneMergeValidationOutput < ValidationReport
     @explanation    = put_explanation_together
     @conclusion     = ''
   end
-  
+
   def put_explanation_together
     approach    = "This validation test analyses the relationship between" \
                   " the start and stop offsets of the High-scoring Segment" \
@@ -38,7 +38,7 @@ class GeneMergeValidationOutput < ValidationReport
   end
 
   def print
-    if @slope.nan?  
+    if @slope.nan?
       "Inf"
     else
       "#{@slope.round(2)}"
@@ -138,12 +138,12 @@ class GeneMergeValidation < ValidationTest
       else
         lm_slope = line_slope[1]
       end
-        
+
       y_intercept = line_slope[0]
 
       @validation_report = GeneMergeValidationOutput.new(lm_slope)
 
-      unless unimodality  
+      unless unimodality
         plot1 = plot_2d_start_from(lm_slope, y_intercept)
       else
         plot1 = plot_2d_start_from
@@ -161,14 +161,14 @@ class GeneMergeValidation < ValidationTest
       return @validation_report
     rescue Exception => error
       puts error.backtrace
-      @validation_report.errors.push 'Unexpected Error' 
+      @validation_report.errors.push 'Unexpected Error'
       @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
       return @validation_report
     end
-  
+
   end
 
-  ##  
+  ##
   # Generates a json file containing data used for
   # plotting the matched region of the prediction for each hit
   # Param
@@ -191,17 +191,17 @@ class GeneMergeValidation < ValidationTest
 
       f.close
 
-      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0], 
-                       :lines,  
-                       "[Gene Merge] Query coord covered by blast hit (1 line/hit)", 
-                       "", 
-                       "offset in the prediction", 
+      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+                       :lines,
+                       "[Gene Merge] Query coord covered by blast hit (1 line/hit)",
+                       "",
+                       "offset in the prediction",
                        "number of the hit",
                        hits_less.length)
 
   end
 
-  ##  
+  ##
   # Generates a json file containing data used for
   # plotting the start/end of the matched region offsets in the prediction
   # Param
@@ -209,7 +209,7 @@ class GeneMergeValidation < ValidationTest
   # +y_intercept+: the ecuation of the line is y= slope*x + y_intercept
   # +output+: location where the plot will be saved in jped file format
   # +hits+: array of Sequence objects
-  def plot_2d_start_from(slope = nil, y_intercept = nil, output = "#{filename}_match_2d.json", hits = @hits)    
+  def plot_2d_start_from(slope = nil, y_intercept = nil, output = "#{filename}_match_2d.json", hits = @hits)
 
       pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
@@ -248,7 +248,7 @@ class GeneMergeValidation < ValidationTest
 
     f = File.open(output , "w")
     f.write(hits.map{|hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-                            "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 
+                            "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max,
                             "color"=>"red"}}.to_json)
     f.close
 
@@ -262,7 +262,7 @@ class GeneMergeValidation < ValidationTest
                                  slope)
   end
 
-  ##  
+  ##
   # Caclulates the slope of the regression line
   # give a set of 2d coordonates of the start/stop offests of the hits
   # Param
@@ -285,11 +285,11 @@ class GeneMergeValidation < ValidationTest
 
     x_mean = xx_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
     y_mean = yy_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
- 
+
     numerator = (0...xx.length).reduce(0) do |sum, i|
       sum + (weights[i] * (xx[i] - x_mean) * (yy[i] - y_mean))
     end
- 
+
     denominator = (0...xx.length).reduce(0) do |sum, i|
       sum + (weights[i] * ((xx[i] - x_mean) ** 2))
     end
@@ -301,7 +301,7 @@ class GeneMergeValidation < ValidationTest
 
   end
 
-  ##  
+  ##
   # Caclulates the slope of the regression line
   # give a set of 2d coordonates of the start/stop offests of the hits
   # Param
@@ -312,11 +312,11 @@ class GeneMergeValidation < ValidationTest
   def slope_statsample(xx, yy)
 
     require 'statsample'
-  
+
     sr=Statsample::Regression.simple(xx.to_scale,yy.to_scale)
 
     return [sr.a, sr.b]
-    
+
   end
 
   ##
@@ -364,7 +364,7 @@ class GeneMergeValidation < ValidationTest
   ##
   # FUNCTION NOT USED
   # v1 and v2 are two ClusterClass objects
-  def modality_test(c1, c2) 
+  def modality_test(c1, c2)
 
     clusters = [c1, c2]
 
@@ -373,7 +373,7 @@ class GeneMergeValidation < ValidationTest
 
     no_elem_cluster1 = 0
     clusters[1].objects.each{|elem| no_elem_cluster1 += elem[1]}
-    
+
     no_points = no_elem_cluster0 + no_elem_cluster1
 
     # within cluster sum of squares

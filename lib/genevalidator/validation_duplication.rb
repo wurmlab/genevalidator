@@ -42,14 +42,14 @@ class DuplicationValidationOutput < ValidationReport
       explanation2 = 'less than 1. This suggests that each region of' \
                      ' each homologous hit matches the predicted gene at' \
                      ' most once.'
-      conclusion   = '' # TODO:... 
+      conclusion   = '' # TODO:...
     elsif @result == :no
       # i.e. if p value is smaller than the threshold...
       explanation2 = 'greater than 1. This can occur if tandem duplicated' \
                      ' genes were erroneously included in the same gene model.'
       conclusion   = '' # TODO:...
     end
-    approach + explanation1 + explanation2 # + conclusion 
+    approach + explanation1 + explanation2 # + conclusion
   end
 
   def print
@@ -82,7 +82,7 @@ class DuplicationValidation < ValidationTest
   attr_reader :raw_seq_file
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
- 
+
   def initialize(type, prediction, hits, raw_seq_file, index_file_name,
                  raw_seq_file_load, db, num_threads)
     super
@@ -90,7 +90,7 @@ class DuplicationValidation < ValidationTest
     @header            = 'Duplication'
     @description       = 'Check whether there is a duplicated subsequence in' \
                          ' the predicted gene by counting the hsp residue' \
-                         ' coverage of the prediction, for each hit.' 
+                         ' coverage of the prediction, for each hit.'
     @cli_name          = 'dup'
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
@@ -100,7 +100,7 @@ class DuplicationValidation < ValidationTest
   end
 
   def is_in_range(ranges, idx)
-    ranges.each do |range|      
+    ranges.each do |range|
       if range.member?(idx)
         return true
       else
@@ -114,12 +114,12 @@ class DuplicationValidation < ValidationTest
   # Check duplication in the first n hits
   # Output:
   # +DuplicationValidationOutput+ object
-  def run(n=10)    
+  def run(n=10)
     begin
       raise NotEnoughHitsError unless hits.length >= 5
       raise Exception unless prediction.is_a? Sequence and
-                             prediction.raw_sequence != nil and 
-                             hits[0].is_a? Sequence 
+                             prediction.raw_sequence != nil and
+                             hits[0].is_a? Sequence
 
       start = Time.new
       # get the first n hits
@@ -132,7 +132,7 @@ class DuplicationValidation < ValidationTest
         if hit.raw_sequence == nil
 
           hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
-  
+
           if hit.raw_sequence == nil or hit.raw_sequence.empty?
             if hit.type == :protein
               hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
@@ -154,12 +154,12 @@ class DuplicationValidation < ValidationTest
 
       useless_hits.each{|hit| less_hits.delete(hit)}
 
-      if less_hits.length == 0 
+      if less_hits.length == 0
         raise NoInternetError
       end
 
       averages = []
-      
+
       less_hits.each do |hit|
         coverage = Array.new(hit.length_protein,0)
         # each residue of the protein should be evluated once only
@@ -176,9 +176,9 @@ class DuplicationValidation < ValidationTest
             query_local = prediction.raw_sequence[hsp.match_query_from-1..hsp.match_query_to-1]
 
             # in case of nucleotide prediction sequence translate into protein
-            # use translate with reading frame 1 because 
-            # to/from coordinates of the hsp already correspond to the 
-            # reading frame in which the prediction was read to match this hsp 
+            # use translate with reading frame 1 because
+            # to/from coordinates of the hsp already correspond to the
+            # reading frame in which the prediction was read to match this hsp
             if @type == :nucleotide
               s = Bio::Sequence::NA.new(query_local)
               query_local = s.translate
@@ -198,12 +198,12 @@ class DuplicationValidation < ValidationTest
               raw_align.each { |s| align.push(s.to_s) }
               hit_alignment   = align[0]
               query_alignment = align[1]
-            rescue Exception => error                
+            rescue Exception => error
               raise NoMafftInstallationError
             end
-          end 
+          end
 
-          
+
           # check multiple coverage
 
           # for each hsp of the curent hit
@@ -212,9 +212,9 @@ class DuplicationValidation < ValidationTest
             residue_hit = hit_alignment[i]
             residue_query = query_alignment[i]
             if residue_hit != ' ' and residue_hit != '+' and residue_hit != '-'
-              if residue_hit == residue_query             
+              if residue_hit == residue_query
                 # indexing in blast starts from 1
-                idx_hit = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length 
+                idx_hit = i + (hsp.hit_from-1) - hit_alignment[0..i].scan(/-/).length
                 idx_query = i + (hsp.match_query_from-1) - query_alignment[0..i].scan(/-/).length
                 unless is_in_range(ranges_prediction, idx_query)
                   coverage[idx_hit] += 1
@@ -238,10 +238,10 @@ class DuplicationValidation < ValidationTest
         @validation_report.running_time = Time.now - start
         return @validation_report
       end
-      
+
       pval = wilcox_test(averages)
 
-      @validation_report = DuplicationValidationOutput.new(pval)        
+      @validation_report = DuplicationValidationOutput.new(pval)
       @running_time = Time.now - start
       return @validation_report
 
@@ -250,9 +250,9 @@ class DuplicationValidation < ValidationTest
       return @validation_report
     rescue NoMafftInstallationError
       @validation_report = ValidationReport.new('Mafft error', :error, @short_header, @header, @description, @explanation, @conclusion)
-      @validation_report.errors.push NoMafftInstallationError                          
+      @validation_report.errors.push NoMafftInstallationError
       return @validation_report
-    rescue NoInternetError 
+    rescue NoInternetError
       @validation_report = ValidationReport.new('Internet error', :error, @short_header, @header, @description, @explanation, @conclusion)
       @validation_report.errors.push NoInternetError
       return @validation_report

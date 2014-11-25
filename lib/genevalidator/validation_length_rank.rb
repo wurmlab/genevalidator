@@ -9,8 +9,8 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize (msg, no_of_hits, median, predicted_len, extreme_hits, 
-                  percentage, expected = :yes)       
+  def initialize (msg, no_of_hits, median, predicted_len, extreme_hits,
+                  percentage, expected = :yes)
 
     @short_header  = 'LengthRank'
     @header        = 'Length Rank'
@@ -30,7 +30,7 @@ class LengthRankValidationOutput < ValidationReport
     @explanation   = put_explanation_together
     @conclusion    = ''
   end
-    
+
   # A method that simply puts the three parts of the explanation together...
   def put_explanation_together
     approach = "If the query sequence is well conserved and homologous" \
@@ -48,19 +48,19 @@ class LengthRankValidationOutput < ValidationReport
                      " amino-acid residues long, it is" \
                      " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
                      " than the homologous sequence."
-    else 
+    else
     ### If more than 1 homologous sequence
       explanation1 = "Here, BLAST produced #{@no_of_hits} homologous" \
                      " sequences with a median sequence length of" \
                      " #{@median} amino-acid residues. "
-    
+
       if (@predicted_len = @median)
         # query seq is the same length as median
         explanation2 = " The query sequence (#{@predicted_len} amino-acid" \
                         " residues) is the same length as the median of" \
                         " homologous sequences."
-      elsif (@predicted_len < @median) && (@extreme_hits == 0) 
-        # query seq is shorter than median and all homologous sequences are 
+      elsif (@predicted_len < @median) && (@extreme_hits == 0)
+        # query seq is shorter than median and all homologous sequences are
         ### longer than the query sequence
         explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
                         " residues) is shorter than the median length of" \
@@ -73,8 +73,8 @@ class LengthRankValidationOutput < ValidationReport
                         " than the median length of homologous" \
                         " sequences. There are #{@extreme_hits} homologous" \
                         " sequences that are shorter than the query sequence."
-      elsif (@predicted_len > @median) && (@extreme_hits == 0) 
-        # query seq is LONGER than median and all homologous sequences are 
+      elsif (@predicted_len > @median) && (@extreme_hits == 0)
+        # query seq is LONGER than median and all homologous sequences are
         ### shorter than the query sequence
         explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
                         " residues) is longer than the median length of" \
@@ -95,7 +95,7 @@ class LengthRankValidationOutput < ValidationReport
   def print
     if msg != ""
       return "#{@percentage}%&nbsp;(#{@msg})"
-    else 
+    else
       return "#{@percentage}%"
     end
   end
@@ -110,7 +110,7 @@ class LengthRankValidationOutput < ValidationReport
 end
 
 ##
-# This class contains the methods necessary for 
+# This class contains the methods necessary for
 # length validation by ranking the hit lengths
 class LengthRankValidation < ValidationTest
 
@@ -123,7 +123,7 @@ class LengthRankValidation < ValidationTest
   # Params:
   # +hits+: a vector of +Sequence+ objects (usually representing the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +threshold+: threshold below which the prediction length rank is considered to be inadequate 
+  # +threshold+: threshold below which the prediction length rank is considered to be inadequate
   def initialize(type, prediction, hits, threshold = 20)
     super
     @threshold    = threshold
@@ -144,8 +144,8 @@ class LengthRankValidation < ValidationTest
   def run(hits = @hits, prediction = @prediction)
     begin
       raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
+      raise Exception unless prediction.is_a? Sequence and
+                             hits[0].is_a? Sequence
 
       start = Time.now
 

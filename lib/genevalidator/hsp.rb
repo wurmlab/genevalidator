@@ -10,7 +10,7 @@ class Hsp
   attr_accessor :query_reading_frame
   attr_accessor :hit_alignment
   attr_accessor :query_alignment
-  attr_accessor :middles # conserved residues are with letters, 
+  attr_accessor :middles # conserved residues are with letters,
   #positive (mis)matches with +, mismatches and gaps are with space
 
   attr_accessor :bit_score
@@ -37,12 +37,12 @@ class Hsp
   def init_tabular_attribute(column, value, type=:protein)
     case column
       when "qstart"
-        # this value is relative to the original sequence 
+        # this value is relative to the original sequence
         #(i.e nucleotide sequence is not translated to protein)
         @match_query_from = value.to_i
 
       when "qend"
-        # this value is relative to the original sequence 
+        # this value is relative to the original sequence
         #(i.e nucleotide sequence is not translated to protein)
         @match_query_to = value.to_i
 
