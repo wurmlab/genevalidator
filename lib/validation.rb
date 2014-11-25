@@ -577,13 +577,6 @@ class Validation
     query_output.fails = fails
     query_output.overall_score = (successes*100/(successes + fails + 0.0)).round(0)
 
-=begin
-counts = Hash.new{ 0 }
-ObjectSpace.each_object do |o|
-  counts[o.class] += 1
-end
-puts counts.to_s
-=end
     return query_output
 
   rescue ValidationClassError => error
