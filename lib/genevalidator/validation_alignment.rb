@@ -29,15 +29,17 @@ class AlignmentValidationOutput < ValidationReport
     @approach     = 'TODO'
     @explanation  = put_together_explanation
     @conclusion   = 'TODO'
-    def put_together_explanation
-      explanation = "A position specific scoring matrix of the strongest 10" \
-                    " results show that: #{(@extra_seq*100).round(0)}% of" \
-                    " residues in the prediction do not appear in profile;" \
-                    " #{(@gaps*100).round(0)}% of residues in the profile do" \
-                    " not appear in the prediction and when compared to the" \
-                    " model, #{(@consensus*100).round(0)}% of residues are" \
-                    " conserved in the prediciton."
-      explanation 
+  end
+  
+  def put_together_explanation
+    explanation = "A position specific scoring matrix of the strongest 10" \
+                  " results show that: #{(@extra_seq*100).round(0)}% of" \
+                  " residues in the prediction do not appear in profile;" \
+                  " #{(@gaps*100).round(0)}% of residues in the profile do" \
+                  " not appear in the prediction and when compared to the" \
+                  " model, #{(@consensus*100).round(0)}% of residues are" \
+                  " conserved in the prediciton."
+    explanation
   end
 
   def print

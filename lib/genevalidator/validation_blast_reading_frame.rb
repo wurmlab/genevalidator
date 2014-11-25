@@ -30,29 +30,29 @@ class BlastRFValidationOutput < ValidationReport
 
       @totalHSP += y.to_i
     end
+  end
 
-    def put_together_explanation
-      approach      = "If the query sequence is well conserved and homologous" \
-                      " sequences derived from the reference database are" \
-                      " correct, we would expect that the main open reading" \
-                      " frame (ORF) of each homologous sequence to match the" \
-                      " main open reading frame of the query sequence. "
-      explanation1  = "BLAST Analysis of the query sequence produced" \
-                      " #{@totalHSP} High-scoring Segment Pairs (HSPs), "
-      if @result == :yes
-        # i.e. there is only one ORF...
-        explanation2 = "of which, all had a main open reading frame of" \
-                       " frame #{@frames_histo.keys[0].to_s}. "
-        conclusion   = "Since all of the HSPs are in a single open reading" \
-                       " frame, we can be relatively confident about the query"
-      else
-        explanation2 = "of which: #{@explaination_part}. "
-        conclusion   = "Since all of the HSPs are not all in a single ORF," \
-                       " we are not as confident about the query. This may" \
-                       " suggest a frame shift in the query."
-      end
-      approach + explanation1 + explanation2 + conclusion
+  def put_together_explanation
+    approach      = "If the query sequence is well conserved and homologous" \
+                    " sequences derived from the reference database are" \
+                    " correct, we would expect that the main open reading" \
+                    " frame (ORF) of each homologous sequence to match the" \
+                    " main open reading frame of the query sequence. "
+    explanation1  = "BLAST Analysis of the query sequence produced" \
+                    " #{@totalHSP} High-scoring Segment Pairs (HSPs), "
+    if @result == :yes
+      # i.e. there is only one ORF...
+      explanation2 = "of which, all had a main open reading frame of" \
+                     " frame #{@frames_histo.keys[0].to_s}. "
+      conclusion   = "Since all of the HSPs are in a single open reading" \
+                     " frame, we can be relatively confident about the query"
+    else
+      explanation2 = "of which: #{@explaination_part}. "
+      conclusion   = "Since all of the HSPs are not all in a single ORF," \
+                     " we are not as confident about the query. This may" \
+                     " suggest a frame shift in the query."
     end
+    approach + explanation1 + explanation2 + conclusion
   end
 
   def print

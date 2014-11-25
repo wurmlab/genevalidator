@@ -24,17 +24,17 @@ class GeneMergeValidationOutput < ValidationReport
     @approach       = ''
     @explanation    = put_explanation_together
     @conclusion     = ''
-
-    def put_explanation_together
-      approach    = "This validation test analyses the relationship between" \
-                    " the start and stop offsets of the High-scoring Segment" \
-                    " Pairs."
-      explanation = "A linear regression analysis produced a result of" \
-                    " #{@slope.round(2)}. Please see below for a graphical" \
-                    " representation of this."
-      conclusion  = ''
-      approach + explanation # + conclusion
-    end
+  end
+  
+  def put_explanation_together
+    approach    = "This validation test analyses the relationship between" \
+                  " the start and stop offsets of the High-scoring Segment" \
+                  " Pairs."
+    explanation = "A linear regression analysis produced a result of" \
+                  " #{@slope.round(2)}. Please see below for a graphical" \
+                  " representation of this."
+    conclusion  = ''
+    approach + explanation # + conclusion
   end
 
   def print

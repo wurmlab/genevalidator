@@ -30,7 +30,7 @@ class ValidationReport
   # +header+: String
   # +description+: String
   # +bg_color+: background color of the table cell for the html output (nil by default)
-  def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="", approach="" explanation="", conclusion="")
+  def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="", approach="", explanation="", conclusion="")
     @message = message
     @errors = []
     @result = validation_result
