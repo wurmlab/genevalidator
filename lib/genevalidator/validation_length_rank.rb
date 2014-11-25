@@ -64,28 +64,28 @@ class LengthRankValidationOutput < ValidationReport
         ### longer than the query sequence
         explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
                         " residues) is shorter than the median length of" \
-                        " homologous sequences. Furthermore, all homologous"\
+                        " similar sequences. Furthermore, all similar"\
                         " sequences are longer than the query sequence."
       elsif (@predicted_len < @median)
         # query seq is shorter than median
         explanation2  = "Since the query sequence has a sequence length of" \
                         " #{@predicted_len} amino-acid residues, it is shorter" \
-                        " than the median length of homologous" \
-                        " sequences. There are #{@extreme_hits} homologous" \
+                        " than the median length of similar" \
+                        " sequences. There are #{@extreme_hits} similar" \
                         " sequences that are shorter than the query sequence."
       elsif (@predicted_len > @median) && (@extreme_hits == 0)
         # query seq is LONGER than median and all homologous sequences are
         ### shorter than the query sequence
         explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
                         " residues) is longer than the median length of" \
-                        " homologous sequences. Furthermore, all homologous"\
+                        " similar sequences. Furthermore, all similar"\
                         " sequences are shorter than the query sequence."
       else (@predicted_len > @median)
       # query seq is longer than the median
         explanation2  = "Since the query sequence has a sequence length of" \
                         " #{@predicted_len} amino-acid residue, it is longer" \
-                        " than the median length of homologous" \
-                        " sequences. There are #{@extreme_hits} homologous" \
+                        " than the median length of similar" \
+                        " sequences. There are #{@extreme_hits} similar" \
                         " sequences that are longer than the query sequence."
       end
     end
