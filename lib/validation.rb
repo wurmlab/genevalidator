@@ -98,6 +98,7 @@ class Validation
     @db                = db
     @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
 
+
     @idx               = 0
     @start_idx         = 1
 
@@ -518,7 +519,6 @@ class Validation
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
     validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
-    #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list
     validations.each do |v|

@@ -29,8 +29,7 @@ BANNER
           '  merge  = check gene merge',
           '  dup    = check duplications',
           '  orf    = main ORF validation (applicable for nucleotides)',
-          '  align  = validation based on multiple alignment',
-          '  codons = codon coverage ~ under development') do |lst|
+          '  align  = validation based on multiple alignment') do |lst|
     opt[:vlist] = lst
   end
 
