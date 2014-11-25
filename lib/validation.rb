@@ -418,8 +418,6 @@ class Validation
       nee = 0
     end
 
-    #report = ValidationReportStat.new(query_output.overall_score, no_evidence, no_mafft, no_internet, errors)
-
     good_predictions = 0
     bad_predictions = 0
     if query_output.overall_score >= 75
@@ -428,11 +426,7 @@ class Validation
       bad_predictions = 1
     end
 
-    #@map_running_times = Hash.new(0)
-
     @mutex_array.synchronize {
-#      @all_query_outputs.push(query_output)
-      #@all_query_outputs.push(report)
 
       @no_queries += 1
       @scores.push(query_output.overall_score)
@@ -600,19 +594,4 @@ class Validation
       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
       exit!
   end
-
-  ##
-  # The ruby equivalent for 'which' command in unix
-  def which(cmd)
-    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-      exts.each { |ext|
-        exe = File.join(path, "#{cmd}#{ext}")
-        return exe if File.executable? exe
-      }
-    end
-    return nil
-  end
-
 end
-
