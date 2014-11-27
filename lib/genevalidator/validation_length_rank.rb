@@ -104,7 +104,7 @@ class LengthRankValidation < ValidationTest
     median        = hits_lengths.median.round
     predicted_len = prediction.length_protein
 
-    if hits.length == 1 || hits_lengths.standard_deviation <= 5
+    if hits_lengths.standard_deviation <= 5
       msg = ''
       percentage = 100
     else
