@@ -47,7 +47,6 @@ class LengthRankValidationOutput < ValidationReport
   end
 
   def conclude
-    hits.length == 1 || hits_lengths.standard_deviation <= 5
     ""
   end
 
