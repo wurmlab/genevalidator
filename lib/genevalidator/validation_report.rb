@@ -31,17 +31,17 @@ class ValidationReport
   # +description+: String
   # +bg_color+: background color of the table cell for the html output (nil by default)
   def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="", approach="", explanation="", conclusion="")
-    @message = message
-    @errors = []
-    @result = validation_result
-    @expected = :yes
+    @message           = message
+    @errors            = []
+    @result            = validation_result
+    @expected          = :yes
     @validation_result = validation_result
-    @short_header = short_header
-    @header = header
-    @description = description
-    @approach = approach
-    @explanation = explanation
-    @conclusion = conclusion
+    @short_header      = short_header
+    @header            = header
+    @description       = description
+    @approach          = approach
+    @explanation       = explanation
+    @conclusion        = conclusion
   end
 
   def print

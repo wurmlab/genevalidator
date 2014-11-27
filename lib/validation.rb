@@ -316,9 +316,7 @@ class Validation
 
     begin
 
-      if @idx + 1 == @query_offset_lst.length
-        break
-      end
+      break if @idx + 1 == @query_offset_lst.length
 
       # get info about the query
       # get the @idx-th sequence from the fasta file
@@ -333,9 +331,7 @@ class Validation
       prediction.raw_sequence = parse_query[1].gsub("\n","")
       prediction.length_protein = prediction.raw_sequence.length
 
-      if @type == :nucleotide
-        prediction.length_protein /= 3
-      end
+      prediction.length_protein /= 3 if @type == :nucleotide
 
       @idx = @idx + 1
 
@@ -496,7 +492,7 @@ class Validation
   def do_validations(prediction, hits, idx)
 
     begin
-      hits = remove_identical_hits(prediction, hits)
+      hits = remove_identical_hits(prediction, hits) 
       rescue Exception => error #NoPIdentError
     end
 
@@ -534,10 +530,8 @@ class Validation
       raise ReportClassError unless v.validation_report.is_a? ValidationReport
     end
     query_output.validations = desired_validations.map{|v| v.validation_report}
-
-    if query_output.validations.length == 0
-      raise NoValidationError
-    end
+    
+    raise NoValidationError if query_output.validations.length == 0
 
     # compute validation score
     validations = query_output.validations

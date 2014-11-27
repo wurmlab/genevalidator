@@ -26,70 +26,70 @@ class LengthRankValidationOutput < ValidationReport
     @percentage    = percentage
     @result        = validation
     @expected      = expected
-    @approach      = ''
-    @explanation   = put_explanation_together
+    @approach      = "If the query sequence is well conserved and similar" \
+                     " sequences (BLAST hits) are correct, we can expect" \
+                     " query sequence to be of a similiar length to the " \
+                     " majority of hit sequences lengths. That is to say," \
+                     " if ranked by length, we would expect the query" \
+                     " sequence to be ranked within 80% of all hit sequence" \
+                     " lengths (and not in the extreme 20% of hit sequence lengths)."
+    @explanation   = explain
     @conclusion    = ''
   end
 
   # A method that simply puts the three parts of the explanation together...
-  def put_explanation_together
-    approach = "If the query sequence is well conserved and homologous" \
-               " sequences derived from the reference database are correct," \
-               " we would expect the lengths of query and homologous" \
-               " sequences to be similar. That is to say, if ranked by" \
-               " length, we would expect the query sequence to be close" \
-               " to the median length of homologous sequences. "
-
+  def explain
     if @no_of_hits == 1
-    ### Single homologous sequence
-      explanation1 = " Here, BLAST produced a single hit that has a sequence" \
-                      " length of #{@median} amino-acid residues. "
-      explanation2 = " Since the query sequence is #{@predicted_len}" \
-                     " amino-acid residues long, it is" \
-                     " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
-                     " than the homologous sequence."
+    ### Single BLAST hits
+      exp1 = "Here, BLAST produced a single hit that has a sequence" \
+             " length of #{@median} amino-acid residues. "
+      exp2 = " Since the query sequence is #{@predicted_len}" \
+             " amino-acid residues long, it is" \
+             " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
+             " than the BLAST hit sequence."
     else
-    ### If more than 1 homologous sequence
-      explanation1 = "Here, BLAST produced #{@no_of_hits} homologous" \
-                     " sequences with a median sequence length of" \
-                     " #{@median} amino-acid residues. "
+    ### If more than 1 BLAST hits
+      exp1 = "Here, BLAST produced #{@no_of_hits} hit sequences" \
+             " with a median sequence length of #{@median}" \
+             " amino-acid residues. "
+
 
       if (@predicted_len = @median)
         # query seq is the same length as median
-        explanation2 = " The query sequence (#{@predicted_len} amino-acid" \
-                        " residues) is the same length as the median of" \
-                        " homologous sequences."
+        exp2 = " The query sequence (#{@predicted_len} amino-acid" \
+                " residues) is the same length as the median of" \
+                " BLAST sequences."
       elsif (@predicted_len < @median) && (@extreme_hits == 0)
-        # query seq is shorter than median and all homologous sequences are
+        # query seq is shorter than median and all BLAST sequences are
         ### longer than the query sequence
-        explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
-                        " residues) is shorter than the median length of" \
-                        " similar sequences. Furthermore, all similar"\
-                        " sequences are longer than the query sequence."
+        exp2  = "The query sequence (#{@predicted_len} amino-acid" \
+                " residues) is shorter than the median length of" \
+                " similar sequences. Furthermore, all similar"\
+                " sequences are longer than the query sequence."
       elsif (@predicted_len < @median)
         # query seq is shorter than median
-        explanation2  = "Since the query sequence has a sequence length of" \
-                        " #{@predicted_len} amino-acid residues, it is shorter" \
-                        " than the median length of similar" \
-                        " sequences. There are #{@extreme_hits} similar" \
-                        " sequences that are shorter than the query sequence."
+        exp2  = "Since the query sequence has a sequence length of" \
+                " #{@predicted_len} amino-acid residues, it is shorter" \
+                " than the median length of similar" \
+                " sequences. There are #{@extreme_hits} similar" \
+                " sequences that are shorter than the query sequence."
       elsif (@predicted_len > @median) && (@extreme_hits == 0)
-        # query seq is LONGER than median and all homologous sequences are
+        # query seq is LONGER than median and all BLAST sequences are
         ### shorter than the query sequence
-        explanation2  = "The query sequence (#{@predicted_len} amino-acid" \
-                        " residues) is longer than the median length of" \
-                        " similar sequences. Furthermore, all similar"\
-                        " sequences are shorter than the query sequence."
+        exp2  = "The query sequence (#{@predicted_len} amino-acid" \
+                " residues) is longer than the median length of" \
+                " similar sequences. Furthermore, all similar"\
+                " sequences are shorter than the query sequence."
       else (@predicted_len > @median)
       # query seq is longer than the median
-        explanation2  = "Since the query sequence has a sequence length of" \
-                        " #{@predicted_len} amino-acid residue, it is longer" \
-                        " than the median length of similar" \
-                        " sequences. There are #{@extreme_hits} similar" \
-                        " sequences that are longer than the query sequence."
+        exp2  = "Since the query sequence has a sequence length of" \
+                " #{@predicted_len} amino-acid residue, it is longer" \
+                " than the median length of similar" \
+                " sequences. There are #{@extreme_hits} similar" \
+                " sequences that are longer than the query sequence."
       end
     end
-    approach + explanation1 + explanation2
+    exp1 + exp2
   end
 
   def print
@@ -139,31 +139,31 @@ class LengthRankValidation < ValidationTest
 
     start = Time.now
 
-    hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+    hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{ |a, b| a <=> b }
 
     no_of_hits    = hits_lengths.length
     median        = hits_lengths.median.round
     predicted_len = prediction.length_protein
 
     if hits.length == 1 || hits_lengths.standard_deviation <= 5
-      msg = ""
+      msg = ''
       percentage = 1
     else
       # extreme_hits are hits that further away from the median than the
       #   predicted...
       if predicted_len < median
-        extreme_hits = hits_lengths.find_all{|x| x < predicted_len}.length
-        percentage   = ((extreme_hits.to_f / no_of_hits)*100).round
+        extreme_hits = hits_lengths.find_all{ |x| x < predicted_len }.length
+        percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;short'
       else
-        extreme_hits = hits_lengths.find_all{|x| x > predicted_len}.length
-        percentage   = ((extreme_hits.to_f / no_of_hits)*100).round
+        extreme_hits = hits_lengths.find_all{ |x| x > predicted_len }.length
+        percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;long'
       end
     end
 
     if percentage >= threshold
-      msg = ""
+      msg = ''
     end
 
     @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, predicted_len, extreme_hits, percentage)

@@ -6,11 +6,11 @@ require 'bio'
 class ORFValidationOutput < ValidationReport
 
   attr_reader :orfs
-  attr_reader :ratio
+  attr_reader :coverage
   attr_reader :threshold
 
-  def initialize (orfs, ratio, longest_orf_frame, threshold = 0.8, expected = :yes)
-
+  def initialize (orfs, coverage, longest_orf_frame, threshold = 0.8, expected = :yes)
+    @hey          = "jef"
     @short_header = 'ORF'
     @header       = 'Main ORF'
     @description  = 'Check whether there is a single main Open Reading Frame' \
@@ -18,42 +18,43 @@ class ORFValidationOutput < ValidationReport
                     ' queries.'
 
     @orfs         = orfs
-    @ratio        = ratio
+    @coverage     = coverage
     @threshold    = threshold
     @expected     = expected
     @result       = validation
     @plot_files   = []
-    @longest_orf_frame = longest_orf_frame
-    @approach     = ''
-    @explanation  = put_together_explanation
-    @conclusion   = ''
+    @mainORFFrame = longest_orf_frame
+    @approach     = "If the query sequence encodes a single gene, we expect" \
+                    " it to contain a single Open Reading Frame (ORF) that" \
+                    " occupies most of the query sequence."
+    @explanation  = "When translating the query sequence in all 6 frames, the" \
+                    " longest ORF is in frame #{@mainORFFrame}, where it " \
+                    " occupies #{(@coverage * 100).round}% of the query sequence." \
+                    " Please see below for a graphic representation of this."
+    @conclusion   = conclude
   end
 
-  def put_together_explanation
-    approach    = '' # TODO:
-    explanation = "When translating the query sequence in all 6 frame, the" \
-                  " longest open reading frame is in frame #{@longest_orf_frame}" \
-                  " and it covers #{(@ratio*100).round}% of the full sequence." \
-                  " Please see below for a graphic representation of this."
-    conclusion = '' # TODO:
-    # approach + explanation + conclusion
-    explanation
+  def conclude
+    if @result == :yes
+      "The longest ORF occupies more than 80% of the query sequence. Thus," \
+      " there is no evidence to believe that there is any problem with the" \
+      " ORF of the query sequence."
+    else
+      "The longest ORF occupies less than 80% of the query sequence. This" \
+      " could suggest a frame shift in the query sequence."
+    end
   end
 
   def print
-    no_orfs = @orfs.map{|elem| elem[1].length}.reduce(:+)
+    no_orfs = @orfs.map{ |elem| elem[1].length }.reduce(:+)
     orf_list = ""
-    @orfs.map{|elem| orf_list<<"#{elem[0]}:#{elem[1].to_s},"}
+    @orfs.map{ |elem| orf_list << "#{elem[0]}:#{elem[1].to_s}," }
 
-    "#{(@ratio*100).round}%&nbsp;(frame&nbsp;#{@longest_orf_frame})"
+    "#{(@coverage * 100).round}%&nbsp;(frame&nbsp;#{@mainORFFrame})"
   end
 
   def validation
-    if @ratio > @threshold
-      :yes
-    else
-      :no
-    end
+    (@coverage > @threshold) ? :yes : :no
   end
 end
 
@@ -121,11 +122,11 @@ class OpenReadingFrameValidation < ValidationTest
     longest_orf = data.values.max
     longest_orf_frame = data.key(longest_orf)
 
-    ratio =  longest_orf/(prediction_len + 0.0)
+    coverage =  longest_orf/(prediction_len + 0.0)
 
     plot1 = plot_orfs(orfs)
 
-    @validation_report = ORFValidationOutput.new(orfs, ratio, longest_orf_frame)
+    @validation_report = ORFValidationOutput.new(orfs, coverage, longest_orf_frame)
     @validation_report.running_time = Time.now - start
 
     @validation_report.plot_files.push(plot1)

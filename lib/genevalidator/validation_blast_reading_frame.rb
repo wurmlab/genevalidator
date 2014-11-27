@@ -15,44 +15,46 @@ class BlastRFValidationOutput < ValidationReport
                     ' BLAST hits. Otherwise there might be a reading frame' \
                     ' shift in the query sequence.'
     @frames_histo = frames_histo
-    @msg          = ''
     @expected     = expected
     @result       = validation
-    @totalHSP     = 0
-    @approach     = ''
-    @explanation  = put_together_explanation
-    @conclusion   = ''
-
+    
+    @msg          = ''
     @explaination_part = ''
+    @totalHSP     = 0
     @frames_histo.each do |x, y|
       @msg               << "#{y}&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;#{x}; "
-      @explaination_part << "#{y} HSPs had a main ORF of frame #{x}; "
-
+      @explaination_part << "#{y} HSPs were found to align within frame #{x}; "
       @totalHSP += y.to_i
     end
+
+    @approach     = "If the query sequence encodes a single gene, we expect" \
+                    " it to contain a single Open Reading Frame (ORF). Thus" \
+                    " all BLAST hits are expected to align within a single ORF."
+    @explanation  = explain
+    @conclusion   = conclude
+
   end
 
-  def put_together_explanation
-    approach      = "If the query sequence is well conserved and homologous" \
-                    " sequences derived from the reference database are" \
-                    " correct, we would expect that the main open reading" \
-                    " frame (ORF) of each homologous sequence to match the" \
-                    " main open reading frame of the query sequence. "
-    explanation1  = "BLAST Analysis of the query sequence produced" \
-                    " #{@totalHSP} High-scoring Segment Pairs (HSPs), "
-    if @result == :yes
-      # i.e. there is only one ORF...
-      explanation2 = "of which, all had a main open reading frame of" \
-                     " frame #{@frames_histo.keys[0].to_s}. "
-      conclusion   = "Since all of the HSPs are in a single open reading" \
-                     " frame, we can be relatively confident about the query"
+  def explain 
+    exp1 = "Of the #{@totalHSP} High-scoring Segment Pairs (HSPs) produced" \
+           " by BLAST, "
+    if @result == :yes # i.e. if there is only one ORF...
+      exp2 = "all HSPs were found to align within frame" \
+             "#{@frames_histo.keys[0].to_s}."
     else
-      explanation2 = "of which: #{@explaination_part}. "
-      conclusion   = "Since all of the HSPs are not all in a single ORF," \
-                     " we are not as confident about the query. This may" \
-                     " suggest a frame shift in the query."
+      exp2 = "#{@explaination_part}."
     end
-    approach + explanation1 + explanation2 + conclusion
+    exp1 + exp2
+  end
+
+  def conclude
+    if @result == :yes # i.e. if there is only one ORF...
+      "As all of HSPs align within a single ORF, there is no reason to" \
+      " believe there is any problem with the ORF of the query sequence."
+    else
+      "As not all HSPs align within a single ORF, there may be a frame shift" \
+      " in the query sequence."
+    end
   end
 
   def print
@@ -64,20 +66,11 @@ class BlastRFValidationOutput < ValidationReport
     count_p = 0
     count_n = 0
     frames_histo.each do |x, y|
-      if x > 0
-        count_p += 1
-      else
-        if x < 0
-          count_n += 1
-        end
-      end
+      count_p += 1 if x > 0
+      count_n += 1 if x < 0
     end
 
-    if count_p > 1 or count_n > 1
-      :no
-    else
-      :yes
-    end
+    (count_p > 1 or count_n > 1) ? :no : :yes 
 
   end
 end

@@ -35,14 +35,13 @@ class LengthClusterValidationOutput < ValidationReport
 
   def explain
     if @result == :yes # i.e. if inside the main cluster
-      size_diff  = 'similar'
+      size_diff = 'similar'
     else 
-      size_diff  = (@prediction_len > @limits[1]) ? 'long': 'short'
+      size_diff = (@prediction_len > @limits[1]) ? 'long': 'short'
     end
-    return "In this case, the most dense length-cluster of BLAST hits" \
-           " includes sequences from #{limits[0]} to #{limits[1]} amino-acids" \
-           " long. With a length of #{prediction_len} amino-acids, the query" \
-           " sequence is #{size_diff}. "
+    "In this case, the query sequence is #{@prediction_len} amino-acids long" \
+    " and the most dense length-cluster of BLAST hits includes sequences" \
+    " from #{@limits[0]} to #{@limits[1]} amino-acids long."
   end
 
   def conclude
@@ -60,7 +59,7 @@ class LengthClusterValidationOutput < ValidationReport
   end
 
   def validation
-    if @limits != nil
+    unless @limits.nil?
       if @prediction_len >= @limits[0] and @prediction_len <= @limits[1]
         :yes
       else

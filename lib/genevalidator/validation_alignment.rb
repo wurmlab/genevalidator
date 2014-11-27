@@ -27,23 +27,24 @@ class AlignmentValidationOutput < ValidationReport
     @expected     = expected
     @plot_files   = []
     @approach     = 'TODO'
-    @explanation  = put_together_explanation
+    @explanation  = explain
     @conclusion   = 'TODO'
   end
 
-  def put_together_explanation
-    explanation = "A position specific scoring matrix of the strongest 10" \
-                  " results show that: #{(@extra_seq*100).round(0)}% of" \
-                  " residues in the prediction do not appear in profile;" \
-                  " #{(@gaps*100).round(0)}% of residues in the profile do" \
-                  " not appear in the prediction and when compared to the" \
-                  " model, #{(@consensus*100).round(0)}% of residues are" \
-                  " conserved in the prediciton."
-    explanation
+  def explain
+    "A position specific scoring matrix of the strongest 10" \
+    " results show that: #{(@extra_seq*100).round(0)}% of" \
+    " residues in the prediction do not appear in profile;" \
+    " #{(@gaps*100).round(0)}% of residues in the profile do" \
+    " not appear in the prediction and when compared to the" \
+    " model, #{(@consensus*100).round(0)}% of residues are" \
+    " conserved in the prediciton."
   end
 
   def print
-    "#{(consensus*100).round(0)}%&nbsp;conserved; #{(extra_seq*100).round(0)}%&nbsp;extra; #{(gaps*100).round(0)}%&nbsp;missing."
+    "#{(consensus*100).round(0)}%&nbsp;conserved;" \
+    " #{(extra_seq*100).round(0)}%&nbsp;extra;" \
+    " #{(gaps*100).round(0)}%&nbsp;missing."
   end
 
   def validation
@@ -117,11 +118,11 @@ class AlignmentValidation < ValidationTest
     # get raw sequences for less_hits
     less_hits.map do |hit|
       #get gene by accession number
-      if hit.raw_sequence == nil
+      if hit.raw_sequence.nil?
 
         hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
-        if hit.raw_sequence == nil or hit.raw_sequence.empty?
+        if hit.raw_sequence.nil? or hit.raw_sequence.empty?
           if hit.type == :protein
             hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
           else
@@ -129,7 +130,7 @@ class AlignmentValidation < ValidationTest
           end
         end
 
-        if hit.raw_sequence == nil
+        if hit.raw_sequence.nil?
           useless_hits.push(hit)
         else
           if hit.raw_sequence.empty?

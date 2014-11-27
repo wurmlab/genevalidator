@@ -21,20 +21,21 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @approach       = ''
-    @explanation    = put_explanation_together
-    @conclusion     = ''
+    @approach       = "This validation test analyses the relationship between" \
+                      " the start and stop offsets of the High-scoring Segment" \
+                      " Pairs."
+    @explanation    = explain
+    @conclusion     = conclude
   end
 
-  def put_explanation_together
-    approach    = "This validation test analyses the relationship between" \
-                  " the start and stop offsets of the High-scoring Segment" \
-                  " Pairs."
-    explanation = "A linear regression analysis produced a result of" \
-                  " #{@slope.round(2)}. Please see below for a graphical" \
-                  " representation of this."
-    conclusion  = ''
-    approach + explanation # + conclusion
+  def explain
+    "A linear regression analysis produced a result of" \
+    " #{@slope.round(2)}. Please see below for a graphical" \
+    " representation of this."
+  end
+
+  def conclude
+    ''
   end
 
   def print
@@ -255,9 +256,7 @@ class GeneMergeValidation < ValidationTest
   # The ecuation of the regression line: [y slope]
   def slope(xx, yy, weights = nil)
 
-    if weights == nil
-      weights = Array.new(hits.length, 1)
-    end
+    weights = Array.new(hits.length, 1) if weights.nil?
 
     # calculate the slope
     xx_weighted = xx.each_with_index.map{|x, i| x * weights[i]}

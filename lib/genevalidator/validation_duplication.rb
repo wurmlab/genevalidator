@@ -18,22 +18,19 @@ class DuplicationValidationOutput < ValidationReport
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @approach    = ''
-    @explanation = put_together_explanation
-    @conclusion  = ''
+    @approach    = "If the query sequence is well conserved and similar" \
+                   " sequences (BLAST hits) are correct, we can expect" \
+                   " that each region of each BLAST hit to match the" \
+                   " query sequence only once. If a region of a BLAST" \
+                   " hit sequence matches the query sequence more than" \
+                   " once, it would suggest that the region has been" \
+                   " erronously duplicated in the query sequence." \
+                   " That is to say that ... . "
+    @explanation = explain
+    @conclusion  = conclude
   end
 
-  def put_together_explanation
-    approach  = "If the query sequence is well conserved and homologous" \
-                " sequences derived from the reference database are" \
-                " correct, we would expect each region of each homologous" \
-                " sequence to match the query sequence only once. If a" \
-                " region of a homologous sequence matches the query" \
-                " sequence more that one, it would suggest that the region" \
-                " has be erronously duplicated in the query sequence." \
-                " That is to say that ... . "
-    # TODO: FINISH the above - explain in one sentence the exact validation
-    ## carried out and the expected result (explain p-value)
+  def explain
     explanation1 = "Here, a p-value of #{@pvalue.round(2)} suggests that the" \
                    " average coverage of hit regions is "
 
@@ -42,14 +39,20 @@ class DuplicationValidationOutput < ValidationReport
       explanation2 = 'less than 1. This suggests that each region of' \
                      ' each homologous hit matches the predicted gene at' \
                      ' most once.'
-      conclusion   = '' # TODO:...
     elsif @result == :no
       # i.e. if p value is smaller than the threshold...
       explanation2 = 'greater than 1. This can occur if tandem duplicated' \
                      ' genes were erroneously included in the same gene model.'
-      conclusion   = '' # TODO:...
     end
-    approach + explanation1 + explanation2 # + conclusion
+    explanation1 + explanation2
+  end
+
+  def conclude
+    if @result == :yes
+      return ''
+    else
+      return ''
+    end
   end
 
   def print
@@ -120,11 +123,11 @@ class DuplicationValidation < ValidationTest
     # get raw sequences for less_hits
     less_hits.map do |hit|
       #get gene by accession number
-      if hit.raw_sequence == nil
+      if hit.raw_sequence.nil?
 
         hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
-        if hit.raw_sequence == nil or hit.raw_sequence.empty?
+        if hit.raw_sequence.nil? or hit.raw_sequence.empty?
           if hit.type == :protein
             hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
           else
@@ -132,7 +135,7 @@ class DuplicationValidation < ValidationTest
           end
         end
 
-        if hit.raw_sequence == nil
+        if hit.raw_sequence.nil?
           useless_hits.push(hit)
         else
           if hit.raw_sequence.empty?
@@ -193,8 +196,7 @@ class DuplicationValidation < ValidationTest
             raise NoMafftInstallationError
           end
         end
-
-
+        
         # check multiple coverage
 
         # for each hsp of the curent hit

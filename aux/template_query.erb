@@ -13,7 +13,7 @@
     <% if item.color == 'warning' %>
       ">
     <% else %>
-      AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<% item.conclusion%>', '<%=toggle%>');">
+      AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<%= item.conclusion%>', '<%=toggle%>');">
     <% end %>
       <%= item.print%></td>
   <% else %>
@@ -21,7 +21,7 @@
       <% if item.color == 'warning' %>
         >
       <% else %>
-        onclick="showDiv(this, '<%= toggle %>'); AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<% item.conclusion%>', '<%=toggle%>');">
+        onclick="showDiv(this, '<%= toggle %>'); AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<%= item.conclusion%>', '<%=toggle%>');">
       <% end %>
       <%= item.print%></td>
   <% end %>
