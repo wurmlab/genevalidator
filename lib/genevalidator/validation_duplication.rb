@@ -31,20 +31,20 @@ class DuplicationValidationOutput < ValidationReport
   end
 
   def explain
-    explanation1 = "Here, a p-value of #{@pvalue.round(2)} suggests that the" \
-                   " average coverage of hit regions is "
+    exp1 = "Here, a p-value of #{@pvalue.round(2)} suggests that the" \
+           " average coverage of hit regions is "
 
     if @result == :yes
       # i.e. if p value is smaller than the threshold...
-      explanation2 = 'less than 1. This suggests that each region of' \
-                     ' each homologous hit matches the predicted gene at' \
-                     ' most once.'
-    elsif @result == :no
+      exp2 = 'less than 1. This suggests that each region of' \
+             ' each homologous hit matches the predicted gene at' \
+             ' most once.'
+    else
       # i.e. if p value is smaller than the threshold...
-      explanation2 = 'greater than 1. This can occur if tandem duplicated' \
-                     ' genes were erroneously included in the same gene model.'
+      exp2 = 'greater than 1. This can occur if tandem duplicated' \
+             ' genes were erroneously included in the same gene model.'
     end
-    explanation1 + explanation2
+    exp1 + exp2
   end
 
   def conclude
@@ -196,7 +196,7 @@ class DuplicationValidation < ValidationTest
             raise NoMafftInstallationError
           end
         end
-        
+
         # check multiple coverage
 
         # for each hsp of the curent hit

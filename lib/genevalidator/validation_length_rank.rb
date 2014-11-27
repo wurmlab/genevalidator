@@ -32,64 +32,23 @@ class LengthRankValidationOutput < ValidationReport
                      " majority of hit sequences lengths. That is to say," \
                      " if ranked by length, we would expect the query" \
                      " sequence to be ranked within 80% of all hit sequence" \
-                     " lengths (and not in the extreme 20% of hit sequence lengths)."
+                     " lengths. Here, the query length is analysed to see if" \
+                     " it falls in the extreme 20% of hit sequence lengths."
     @explanation   = explain
-    @conclusion    = ''
+    @conclusion    = conclude
   end
 
   # A method that simply puts the three parts of the explanation together...
   def explain
-    if @no_of_hits == 1
-    ### Single BLAST hits
-      exp1 = "Here, BLAST produced a single hit that has a sequence" \
-             " length of #{@median} amino-acid residues. "
-      exp2 = " Since the query sequence is #{@predicted_len}" \
-             " amino-acid residues long, it is" \
-             " #{(@predicted_len < @median) ? 'shorter' : 'longer'}" \
-             " than the BLAST hit sequence."
-    else
-    ### If more than 1 BLAST hits
-      exp1 = "Here, BLAST produced #{@no_of_hits} hit sequences" \
-             " with a median sequence length of #{@median}" \
-             " amino-acid residues. "
+    "Here, BLAST produced #{@no_of_hits} hit sequences with a median" \
+    " sequence length of #{@median} amino-acid residues. After ranking" \
+    " by length, there are #{@extreme_hits} extreme hits (BLAST hits" \
+    " that are further away from the median than the query sequence)"
+  end
 
-
-      if (@predicted_len = @median)
-        # query seq is the same length as median
-        exp2 = " The query sequence (#{@predicted_len} amino-acid" \
-                " residues) is the same length as the median of" \
-                " BLAST sequences."
-      elsif (@predicted_len < @median) && (@extreme_hits == 0)
-        # query seq is shorter than median and all BLAST sequences are
-        ### longer than the query sequence
-        exp2  = "The query sequence (#{@predicted_len} amino-acid" \
-                " residues) is shorter than the median length of" \
-                " similar sequences. Furthermore, all similar"\
-                " sequences are longer than the query sequence."
-      elsif (@predicted_len < @median)
-        # query seq is shorter than median
-        exp2  = "Since the query sequence has a sequence length of" \
-                " #{@predicted_len} amino-acid residues, it is shorter" \
-                " than the median length of similar" \
-                " sequences. There are #{@extreme_hits} similar" \
-                " sequences that are shorter than the query sequence."
-      elsif (@predicted_len > @median) && (@extreme_hits == 0)
-        # query seq is LONGER than median and all BLAST sequences are
-        ### shorter than the query sequence
-        exp2  = "The query sequence (#{@predicted_len} amino-acid" \
-                " residues) is longer than the median length of" \
-                " similar sequences. Furthermore, all similar"\
-                " sequences are shorter than the query sequence."
-      else (@predicted_len > @median)
-      # query seq is longer than the median
-        exp2  = "Since the query sequence has a sequence length of" \
-                " #{@predicted_len} amino-acid residue, it is longer" \
-                " than the median length of similar" \
-                " sequences. There are #{@extreme_hits} similar" \
-                " sequences that are longer than the query sequence."
-      end
-    end
-    exp1 + exp2
+  def conclude
+    hits.length == 1 || hits_lengths.standard_deviation <= 5
+    ""
   end
 
   def print
@@ -147,7 +106,7 @@ class LengthRankValidation < ValidationTest
 
     if hits.length == 1 || hits_lengths.standard_deviation <= 5
       msg = ''
-      percentage = 1
+      percentage = 100
     else
       # extreme_hits are hits that further away from the median than the
       #   predicted...

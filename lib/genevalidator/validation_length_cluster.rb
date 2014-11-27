@@ -8,59 +8,54 @@ require 'genevalidator/exceptions'
 # Class that stores the validation output information
 class LengthClusterValidationOutput < ValidationReport
 
-  attr_reader :prediction_len
+  attr_reader :query_length
   attr_reader :limits
 
-  def initialize (prediction_len, limits, expected = :yes)
-    @short_header   = 'LengthCluster'
-    @header         = 'Length Cluster'
-    @description    = 'Check whether the prediction length fits most of the' \
-                      ' BLAST hit lengths, by 1D hierarchical clusterization.' \
-                      ' Meaning of the output displayed: Prediction_len' \
-                      ' [Main Cluster Length Interval]'
-    @limits         = limits
-    @prediction_len = prediction_len
-    @expected       = expected
-    @result         = validation
-    @plot_files     = []
-    @approach       = "If the query sequence is well conserved and similar" \
-                      " sequences (BLAST hits) are correct, we can expect" \
-                      " query and hit sequences to have similar lengths." \
-                      " Here, we cluster the lengths of hit sequences and" \
-                      " compare the length of our query sequence to the" \
-                      " most dense cluster of hit lengths. "
-    @explanation    = explain
-    @conclusion     = conclude
-  end
-
-  def explain
-    if @result == :yes # i.e. if inside the main cluster
-      size_diff = 'similar'
-    else 
-      size_diff = (@prediction_len > @limits[1]) ? 'long': 'short'
-    end
-    "In this case, the query sequence is #{@prediction_len} amino-acids long" \
-    " and the most dense length-cluster of BLAST hits includes sequences" \
-    " from #{@limits[0]} to #{@limits[1]} amino-acids long."
+  def initialize (query_length, limits, expected = :yes)
+    @short_header = 'LengthCluster'
+    @header       = 'Length Cluster'
+    @description  = 'Check whether the prediction length fits most of the' \
+                    ' BLAST hit lengths, by 1D hierarchical clusterization.' \
+                    ' Meaning of the output displayed: Query_length' \
+                    ' [Main Cluster Length Interval]'
+    @limits       = limits
+    @query_length = query_length
+    @expected     = expected
+    @result       = validation
+    @plot_files   = []
+    @approach     = "If the query sequence is well conserved and similar" \
+                    " sequences (BLAST hits) are correct, we can expect" \
+                    " query and hit sequences to have similar lengths. Here," \
+                    " we cluster the lengths of hit sequences and compare the" \
+                    " length of our query sequence to the most dense cluster" \
+                    " of hit lengths. "
+    @explanation  = "In this case, the query sequence is #{@query_length}" \
+                    " amino-acids long and the most dense length-cluster"\
+                    " of BLAST hits includes sequences that are from" \
+                    " #{@limits[0]} to #{@limits[1]} amino-acids long."
+    @conclusion   = conclude
   end
 
   def conclude
     if @result == :yes # i.e. if inside the main cluster
-      return "There is no reason to believe there is any problem with the" \
-             " length of the query sequence."
+      "There is no reason to believe there is any problem with the length of" \
+      " the query sequence."
     else
-      size_diff  = (@prediction_len > @limits[1]) ? 'long': 'short'
-      return "The query sequence may be too #{size_diff}."
+      size_diff  = (@query_length > @limits[1]) ? 'long': 'short'
+      "The query sequence may be too #{size_diff}. Potential errors include" \
+      " sequencing errors (e.g. parts of the gene being lost/added or" \
+      " inaccurate gene bounds), a low expression level of the gene or" \
+      " the sequenced mRNA inaccurately containing introns."
     end
   end
 
   def print
-    "#{@prediction_len}&nbsp;#{@limits.to_s.gsub(' ', '&nbsp;')}"
+    "#{@query_length}&nbsp;#{@limits.to_s.gsub(' ', '&nbsp;')}"
   end
 
   def validation
     unless @limits.nil?
-      if @prediction_len >= @limits[0] and @prediction_len <= @limits[1]
+      if @query_length >= @limits[0] and @query_length <= @limits[1]
         :yes
       else
         :no
@@ -92,7 +87,7 @@ class LengthClusterValidation < ValidationTest
     @header       = 'Length Cluster'
     @description  = 'Check whether the prediction length fits most of the' \
                     ' BLAST hit lengths, by 1D hierarchical clusterization.' \
-                    ' Meaning of the output displayed: Prediction_len' \
+                    ' Meaning of the output displayed: Query_length' \
                     ' [Main Cluster Length Interval]'
     @cli_name     = 'lenc'
   end
@@ -117,9 +112,9 @@ class LengthClusterValidation < ValidationTest
     @clusters = clusterization[0]
     @max_density_cluster = clusterization[1]
     limits = @clusters[@max_density_cluster].get_limits
-    prediction_len = @prediction.length_protein
+    query_length = @prediction.length_protein
 
-    @validation_report = LengthClusterValidationOutput.new(prediction_len, limits)
+    @validation_report = LengthClusterValidationOutput.new(query_length, limits)
     plot1 = plot_histo_clusters
     @validation_report.plot_files.push(plot1)
 
@@ -129,10 +124,16 @@ class LengthClusterValidation < ValidationTest
 
   # Exception is raised when blast founds no hits
   rescue  NotEnoughHitsError => error
-    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report = ValidationReport.new('Not enough evidence', :warning,
+                                              @short_header, @header,
+                                              @description, @approach,
+                                              @explanation, @conclusion)
     return @validation_report
   else
-    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report = ValidationReport.new('Unexpected error', :error,
+                                              @short_header, @header,
+                                              @description, @approach,
+                                              @explanation, @conclusion)
     @validation_report.errors.push OtherError
     return @validation_report
   end
@@ -141,7 +142,7 @@ class LengthClusterValidation < ValidationTest
   ##
   # Clusterization by length from a list of sequences
   # Params:
-  # +debug+ (optional):: true to display debug information, false by default (optional argument)
+  # +debug+ (optional):: true to display debug information, false by default
   # +lst+:: array of +Sequence+ objects
   # +predicted_seq+:: +Sequence+ objetc
   # Output
@@ -170,9 +171,10 @@ class LengthClusterValidation < ValidationTest
     return [clusters, max_density_cluster_idx]
 
   rescue TypeError => error
-    $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
-     " Possible cause: one of the arguments of 'clusterization_by_length'"<<
-     " method has not the proper type.\n"
+    error_location = error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]
+    $stderr.puts "Type error at #{error_location}."
+    $stderr.puts " Possible cause: one of the arguments of the" \
+                 " 'clusterization_by_length' method has not the proper type."
     exit
   end
 
