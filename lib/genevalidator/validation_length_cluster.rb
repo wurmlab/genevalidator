@@ -29,11 +29,16 @@ class LengthClusterValidationOutput < ValidationReport
                     " we cluster the lengths of hit sequences and compare the" \
                     " length of our query sequence to the most dense cluster" \
                     " of hit lengths. "
-    @explanation  = "In this case, the query sequence is #{@query_length}" \
-                    " amino-acids long and the most dense length-cluster"\
-                    " of BLAST hits includes sequences that are from" \
-                    " #{@limits[0]} to #{@limits[1]} amino-acids long."
+    @explanation  = explain
     @conclusion   = conclude
+  end
+
+  def explain
+    diff = (@result == :yes) ? "inside" : "outside"
+    "In this case, the most dense length-cluster of BLAST hits includes" \
+    " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" \
+    " long. The query sequence is #{@query_length} amino-acids long and" \
+    " is thus #{diff} the most dense length-cluster of BLAST hits."
   end
 
   def conclude

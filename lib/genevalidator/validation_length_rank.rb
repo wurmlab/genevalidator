@@ -9,53 +9,62 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize (msg, no_of_hits, median, predicted_len, extreme_hits,
+  def initialize (msg, no_of_hits, median, query_length, extreme_hits,
                   percentage, expected = :yes)
 
-    @short_header  = 'LengthRank'
-    @header        = 'Length Rank'
-    @description   = 'Check whether the rank of the prediction length lies ' \
+    @short_header = 'LengthRank'
+    @header       = 'Length Rank'
+    @description  = 'Check whether the rank of the prediction length lies ' \
                      ' among 80% of all the BLAST hit lengths.'
 
-    @msg           = msg
-    @no_of_hits    = no_of_hits
+    @msg          = msg
+    @no_of_hits   = no_of_hits
 
-    @median        = median
-    @predicted_len = predicted_len
-    @extreme_hits  = extreme_hits
-    @percentage    = percentage
-    @result        = validation
-    @expected      = expected
-    @approach      = "If the query sequence is well conserved and similar" \
-                     " sequences (BLAST hits) are correct, we can expect" \
-                     " query sequence to be of a similiar length to the " \
-                     " majority of hit sequences lengths. That is to say," \
-                     " if ranked by length, we would expect the query" \
-                     " sequence to be ranked within 80% of all hit sequence" \
-                     " lengths. Here, the query length is analysed to see if" \
-                     " it falls in the extreme 20% of hit sequence lengths."
-    @explanation   = explain
-    @conclusion    = conclude
+    @median       = median
+    @query_length = query_length
+    @extreme_hits = extreme_hits
+    @percentage   = percentage
+    @result       = validation
+    @expected     = expected
+    @approach     = "If the query sequence is well conserved and similar" \
+                    " sequences (BLAST hits) are correct, we can expect" \
+                    " query sequence to be of a similar length to the " \
+                    " majority of hit sequences lengths. That is to say," \
+                    " if ranked by length, we would expect the query" \
+                    " sequence to be ranked within 80% of all hit sequence" \
+                    " lengths. Here, the query is analysed to see if its" \
+                    " length falls in the extreme 20% of hit sequence lengths."
+    @explanation  = explain
+    @conclusion   = conclude
   end
 
   # A method that simply puts the three parts of the explanation together...
   def explain
-    "Here, BLAST produced #{@no_of_hits} hit sequences with a median" \
-    " sequence length of #{@median} amino-acid residues. After ranking" \
-    " by length, there are #{@extreme_hits} extreme hits (BLAST hits" \
-    " that are further away from the median than the query sequence)"
+    "Here, BLAST produced #{@no_of_hits} hit sequences with a median sequence" \
+    " length of #{@median} amino-acid residues. After ranking by length," \
+    " there are #{@extreme_hits} BLAST hits that are more extreme (i.e" \
+    " further away from median) than the query sequence. This refers to a" \
+    " rank of #{@percentage}% (cutoff = 20%)." 
   end
 
   def conclude
-    ""
+    if @result == :yes
+      "There is no reason to believe there is any problem with the length of" \
+      " the query sequence."
+    else
+      "The sequence may be #{@msg.gsub('&nbsp;', ' ')}. Potential errors" \
+      " include sequencing errors (e.g. parts of the gene being lost/added or" \
+      " inaccurate gene bounds), a low expression level of the gene or" \
+      " the sequenced mRNA inaccurately containing introns."
+    end
   end
 
   def print
-    (msg.empty?) ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
+    (@msg.empty?) ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
   end
 
   def validation
-    (msg.empty?) ? :yes : :no
+    (@msg.empty?) ? :yes : :no
   end
 end
 
@@ -101,7 +110,7 @@ class LengthRankValidation < ValidationTest
 
     no_of_hits    = hits_lengths.length
     median        = hits_lengths.median.round
-    predicted_len = prediction.length_protein
+    query_length = prediction.length_protein
 
     if hits_lengths.standard_deviation <= 5
       msg = ''
@@ -109,12 +118,12 @@ class LengthRankValidation < ValidationTest
     else
       # extreme_hits are hits that further away from the median than the
       #   predicted...
-      if predicted_len < median
-        extreme_hits = hits_lengths.find_all{ |x| x < predicted_len }.length
+      if query_length < median
+        extreme_hits = hits_lengths.find_all{ |x| x < query_length }.length
         percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;short'
       else
-        extreme_hits = hits_lengths.find_all{ |x| x > predicted_len }.length
+        extreme_hits = hits_lengths.find_all{ |x| x > query_length }.length
         percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;long'
       end
@@ -124,7 +133,7 @@ class LengthRankValidation < ValidationTest
       msg = ''
     end
 
-    @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, predicted_len, extreme_hits, percentage)
+    @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, query_length, extreme_hits, percentage)
     @validation_report.running_time = Time.now - start
     return @validation_report
 

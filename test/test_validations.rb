@@ -49,7 +49,7 @@ class ValidateOutput < Minitest::Test
     it "should validate length by clusterization" do
        lcv = validations.select{|v| v.class == LengthClusterValidationOutput}[0]
        assert_equal([23,135], lcv.limits)
-       assert_equal(108, lcv.prediction_len)
+       assert_equal(108, lcv.query_length)
     end
 
     it "should validate length by rank" do
