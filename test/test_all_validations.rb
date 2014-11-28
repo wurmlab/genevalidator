@@ -53,7 +53,7 @@ class ValidateOutput < Minitest::Test
         rescue Error
       end
 
-      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, false, false)
+      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
@@ -69,7 +69,7 @@ class ValidateOutput < Minitest::Test
                          filename_prot_tab,
                          "swissprot -remote",
                          filename_prot_raw,
-                         1, false, false)
+                         1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -98,7 +98,7 @@ class ValidateOutput < Minitest::Test
         rescue Error
       end
 
-      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, false, false)
+      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, 1, false, false)
 
 
       b.validation
@@ -116,7 +116,7 @@ class ValidateOutput < Minitest::Test
                          filename_mrna_tab,
                          "swissprot -remote",
                          filename_mrna_raw,
-                         1, false, false)
+                         1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
