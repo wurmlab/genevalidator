@@ -1,5 +1,7 @@
 # GeneValidator - Identify problems with predicted genes
 
+[![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
+
  
 Thanks for looking at GeneValidator!
 
