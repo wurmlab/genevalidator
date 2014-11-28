@@ -13,93 +13,31 @@ require 'yaml'
 
 class BlastUtils
 
+  EVALUE = 1e-5
+
   ##
   # Calls blast from standard input with specific parameters
   # Params:
-  # +command+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
   # +query+: String containing the the query in fasta format
+  # +db+: database
+  # +num_threads+: The number of threads to run BLAST with. 
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
-  # +db+: database
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
   def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
-    begin
-      raise TypeError unless blast_type.is_a? String and query.is_a? String
 
-      evalue = "1e-5"
-
-      #output format = 5 (XML Blast output)
-      # If BLAST is not run remotely, then utilise the -num_threads argument
-      if (db !~ /remote/)
-        blast_cmd = "#{blast_type} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
-      else
-        blast_cmd = "#{blast_type} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
-      end
-      cmd       = "echo \"#{query}\" | #{blast_cmd}"
-      output    = %x[#{cmd} 2>/dev/null]
-
-      if output == ""
-        raise ClasspathError.new
-      end
-
-      return output
-
-    rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
-      exit!
-    rescue ClasspathError => error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n"
-      exit!
+    # If BLAST is not run remotely, then utilise the -num_threads argument (-num_threads is not supported on remote databases)
+    if (db !~ /remote/)
+      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+    else
+      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
     end
-  end
 
-  # NOTE: The below method isn't currently being used...
-
-  ##
-  # Calls blast from file with specific parameters
-  # Param:
-  # +command+: blast command in String format (e.g 'blastx' or 'blastp')
-  # +filename+: name of the FAST file
-  # +query+: +String+ containing the the query in fasta format
-  # +gapopen+: gapopen blast parameter
-  # +gapextend+: gapextend blast parameter
-  # +db+: database
-  # Output:
-  # String with the blast xml output
-  def self.call_blast_from_file(command, filename, gapopen, gapextend, db="nr -remote")
-    begin
-      raise TypeError unless command.is_a? String and filename.is_a? String
-
-      evalue = "1e-5"
-
-      #output = 5 (XML Blast output)
-      cmd = "#{command} -query #{filename} -db #{db} -evalue #{evalue} -outfmt 5 -gapopen #{gapopen} -gapextend #{gapextend} "
-      puts "Executing \"#{cmd}\"..."
-      puts "This may take a while..."
-      output = %x[#{cmd}          if xml_file == nil
-            file = File.open(xml_file, "rb").read
-            b.parse_xml_output(file)
-          end 2>/dev/null]
-
-      if output.empty?
-        raise ClasspathError.new
-      end
-
-      return output
-
-    rescue TypeError => error
-      $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: one of the arguments of 'call_blast_from_file' method has not the proper type\n"
-      exit
-    rescue ClasspathError =>error
-      $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Did you add BLAST path to LOADPATH?\n"
-      exit
-    end
+    cmd = "echo \"#{query}\" | #{blastcmd}"
+    %x[#{cmd} 2>/dev/null]
   end
 
   ##
@@ -114,7 +52,6 @@ class BlastUtils
       raise TypeError unless iterator.is_a? Enumerator
 
       hits = Array.new
-      predicted_seq = Sequence.new
       iter = iterator.next
 
       # parse blast the xml output and get the hits
@@ -252,7 +189,4 @@ class BlastUtils
       raise SequenceTypeError
     end
   end
-
 end
-
-

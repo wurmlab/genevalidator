@@ -109,7 +109,7 @@ class DuplicationValidation < ValidationTest
   # Check duplication in the first n hits
   # Output:
   # +DuplicationValidationOutput+ object
-  def run(n=10)    
+  def run(n=10)
     raise NotEnoughHitsError unless hits.length >= 5
     raise Exception unless prediction.is_a? Sequence and
                            prediction.raw_sequence != nil and
@@ -182,7 +182,7 @@ class DuplicationValidation < ValidationTest
           seqs = [hit_local, query_local]
 
           begin
-            options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet',  '--thread', "#{@num_threads}" ]
+            options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet', '--thread', "#{@num_threads}" ]
             mafft     = Bio::MAFFT.new('mafft', options)
 
             report    = mafft.query_align(seqs)
@@ -275,7 +275,7 @@ class DuplicationValidation < ValidationTest
   # +vector+ Array of values with nonparametric distribution
   def wilcox_test_R (averages)
     require 'rinruby'
-    
+
     original_stdout = $stdout
     original_stderr = $stderr
 

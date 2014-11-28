@@ -228,7 +228,7 @@ class AlignmentValidation < ValidationTest
     # Accesses the actual alignment.
     align = report.alignment
 
-    align.each_with_index do |s,i|
+    align.each_with_index do |s, i|
        @multiple_alignment.push(s.to_s)
     end
 
