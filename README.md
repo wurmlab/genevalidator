@@ -68,8 +68,7 @@ OPTIONAL ARGUMENTS:
                                        dup    = check duplications
                                        orf    = main ORF validation (applicable for nucleotides)
                                        align  = validation based on multiple alignment
-                                       codons = codon coverage ~ under development
-    -d, --db [BLAST_DATABASE]        base where to look up the sequences
+    -d, --db [BLAST_DATABASE]        Name of the BLAST database
                                      e.g. "swissprot -remote" or a local BLAST database
     -x, --skip_blast [FILENAME]      Skip blast-ing part and provide a blast xml or tabular output
                                      as input to this script.
@@ -78,11 +77,14 @@ OPTIONAL ARGUMENTS:
     -t [BLAST OUTFMT STRING],        Custom format used in BLAST -outfmt argument
         --tabular                    Usage:
                                         $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE
-                                      See the manual pages of BLAST for more details
-    -m, --mafft [MAFFT_PATH]         Path to MAFFT program installation
+                                      See BLAST+ manual pages for more details
+    -m, --mafft [MAFFT_PATH]         Path to MAFFT bin folder
     -b, --blast [BLAST_PATH]         Path to BLAST+ bin folder
     -r, --raw_seq [FASTA_FILE]       Fasta file containing the raw sequences of each of the BLAST hits in
                                      BLAST XML output file.
+    -n, --num_threads num_of_threads Specify the number of processor
+                                     threads to utilise when running BLAST and Mafft within
+                                     GeneValidator.
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
 
