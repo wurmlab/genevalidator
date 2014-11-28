@@ -68,13 +68,14 @@ class AlignmentValidation < ValidationTest
   # +raw_seq_file+: name of the fasta file with raw sequences
   # +index_file_name+: name of the fasta index file
   # +raw_seq_file_load+: String - loaded content of the index file
-  def initialize(type, prediction, hits, filename, raw_seq_file, index_file_name, raw_seq_file_load, db)
+  def initialize(type, prediction, hits, filename, raw_seq_file, index_file_name, raw_seq_file_load, db, num_threads)
     super
     @filename          = filename
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
     @db                = db
+    @num_threads       = num_threads
 
     @short_header = "MA"
     @header = "Missing/Extra sequences"
@@ -219,7 +220,7 @@ class AlignmentValidation < ValidationTest
   def multiple_align_mafft(prediction = @prediction, hits = @hits)
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+      options = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet', '--thread', "#{@num_threads}" ]
       mafft = Bio::MAFFT.new('mafft', options)
       sequences = hits.map{|hit| hit.raw_sequence}
       sequences.push(prediction.protein_translation)
