@@ -34,7 +34,7 @@ BANNER
   end
 
   opt[:db] = 'swissprot -remote'
-  opts.on('-d', '--db [BLAST_DATABASE]', 'base where to look up the sequences',
+  opts.on('-d', '--db [BLAST_DATABASE]', 'Name of the BLAST database',
          'e.g. "swissprot -remote" or a local BLAST database') do |db|
     opt[:db] = db
   end
@@ -53,7 +53,7 @@ BANNER
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
          '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
-         ' See the manual pages of BLAST for more details'
+         ' See BLAST+ manual pages for more details'
     ) do |lst|
     opt[:tabular] = lst
   end
