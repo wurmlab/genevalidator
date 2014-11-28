@@ -1,4 +1,4 @@
-# GeneValidator - <small> Identify problems with predicted genes </small>
+# GeneValidator - <span style="color:rgb(119, 119, 119); font-size: 70%;"> Identify problems with predicted genes </span>
 
 [![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
 
