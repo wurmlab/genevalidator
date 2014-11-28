@@ -18,12 +18,12 @@ class BlastUtils
   ##
   # Calls blast from standard input with specific parameters
   # Params:
-  # +blastpath+: location of blast binaries
-  # +blastcmd+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
   # +query+: String containing the the query in fasta format
+  # +db+: database
+  # +num_threads+: The number of threads to run BLAST with. 
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
-  # +db+: database
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
