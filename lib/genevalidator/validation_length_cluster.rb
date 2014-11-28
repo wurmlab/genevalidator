@@ -23,18 +23,18 @@ class LengthClusterValidationOutput < ValidationReport
     @expected     = expected
     @result       = validation
     @plot_files   = []
-    @approach     = "If the query sequence is well conserved and similar" \
-                    " sequences (BLAST hits) are correct, we can expect" \
-                    " query and hit sequences to have similar lengths. Here," \
-                    " we cluster the lengths of hit sequences and compare the" \
-                    " length of our query sequence to the most dense cluster" \
-                    " of hit lengths. "
+    @approach     = 'If the query sequence is well conserved and similar' \
+                    ' sequences (BLAST hits) are correct, we can expect' \
+                    ' query and hit sequences to have similar lengths. Here,' \
+                    ' we cluster the lengths of hit sequences and compare the' \
+                    ' length of our query sequence to the most dense cluster' \
+                    ' of hit lengths. '
     @explanation  = explain
     @conclusion   = conclude
   end
 
   def explain
-    diff = (@result == :yes) ? "inside" : "outside"
+    diff = (@result == :yes) ? 'inside' : 'outside'
     "In this case, the most dense length-cluster of BLAST hits includes" \
     " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" \
     " long. The query sequence is #{@query_length} amino-acids long and" \

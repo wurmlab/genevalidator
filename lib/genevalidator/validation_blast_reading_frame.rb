@@ -37,12 +37,12 @@ class BlastRFValidationOutput < ValidationReport
 
   def explain 
     exp1 = "Of the #{@totalHSP} High-scoring Segment Pairs (HSPs) produced" \
-           " by BLAST, "
+           " by BLAST"
     if @result == :yes # i.e. if there is only one ORF...
-      exp2 = "all HSPs were found to align within frame" \
+      exp2 = ", all HSPs were found to align within frame" \
              "#{@frames_histo.keys[0].to_s}."
     else
-      exp2 = "#{@explaination_part}."
+      exp2 = ": #{@explaination_part}."
     end
     exp1 + exp2
   end

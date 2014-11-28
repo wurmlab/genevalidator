@@ -15,7 +15,7 @@ class LengthRankValidationOutput < ValidationReport
     @short_header = 'LengthRank'
     @header       = 'Length Rank'
     @description  = 'Check whether the rank of the prediction length lies ' \
-                     ' among 80% of all the BLAST hit lengths.'
+                    ' among 80% of all the BLAST hit lengths.'
 
     @msg          = msg
     @no_of_hits   = no_of_hits
@@ -26,25 +26,25 @@ class LengthRankValidationOutput < ValidationReport
     @percentage   = percentage
     @result       = validation
     @expected     = expected
-    @approach     = "If the query sequence is well conserved and similar" \
-                    " sequences (BLAST hits) are correct, we can expect" \
-                    " query sequence to be of a similar length to the " \
-                    " majority of hit sequences lengths. That is to say," \
-                    " if ranked by length, we would expect the query" \
-                    " sequence to be ranked within 80% of all hit sequence" \
-                    " lengths. Here, the query is analysed to see if its" \
-                    " length falls in the extreme 20% of hit sequence lengths."
+    @approach     = 'If the query sequence is well conserved and similar' \
+                    ' sequences (BLAST hits) are correct, we can expect' \
+                    ' query sequence to be of a similar length to the ' \
+                    ' majority of hit sequences lengths. That is to say,' \
+                    ' if ranked by length, we would expect the query' \
+                    ' sequence to be ranked within 80% of all hit sequence' \
+                    ' lengths. Here, the query is analysed to see if its' \
+                    ' length falls in the extreme 20% of hit sequence lengths.'
     @explanation  = explain
     @conclusion   = conclude
   end
 
   # A method that simply puts the three parts of the explanation together...
   def explain
-    "Here, BLAST produced #{@no_of_hits} hit sequences with a median sequence" \
-    " length of #{@median} amino-acid residues. After ranking by length," \
-    " there are #{@extreme_hits} BLAST hits that are more extreme (i.e" \
-    " further away from median) than the query sequence. This refers to a" \
-    " rank of #{@percentage}% (cutoff = 20%)." 
+    "BLAST Analysis produced #{@no_of_hits} hit sequences with a median" \
+    " sequence length of #{@median} amino-acid residues. After ranking by" \
+    " length, there are #{@extreme_hits} BLAST hits that are more extreme" \
+    " (i.e. further away from median) than the query sequence. This refers to" \
+    " a rank of #{@percentage}% (cutoff = 20%)." 
   end
 
   def conclude
