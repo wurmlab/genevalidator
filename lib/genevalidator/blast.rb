@@ -18,44 +18,26 @@ class BlastUtils
   ##
   # Calls blast from standard input with specific parameters
   # Params:
-  # +blastpath+: location of blast binaries
-  # +blastcmd+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
   # +query+: String containing the the query in fasta format
+  # +db+: database
+  # +num_threads+: The number of threads to run BLAST with. 
   # +gapopen+: gapopen blast parameter
   # +gapextend+: gapextend blast parameter
-  # +db+: database
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blastpath, blastcmd, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
+  def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
 
-    blastcmd = File.join(blastpath, blastcmd) unless blastpath.nil?
-
-    # If BLAST is not run remotely, then utilise the -num_threads argument
+    # If BLAST is not run remotely, then utilise the -num_threads argument (-num_threads is not supported on remote databases)
     if (db !~ /remote/)
-      blastcmd = "#{command} -db #{db} -evalue #{evalue} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
     else
-      blastcmd = "#{blastcmd} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
     end
 
-    cmd      = "echo \"#{query}\" | #{blastcmd}"
-    output   = %x[#{cmd} 2>/dev/null]
-
-    # FIXME:
-    #   Empty output doesn't necessarily indicate that BLAST+ binaries are not
-    #   in $PATH. GV should guarantee the presence of BLAST+ binaries before
-    #   this method is called.
-    raise ClasspathError if output.empty?
-
-    output
-  rescue TypeError => error
-    $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-    "Possible cause: one of the arguments of 'call_blast_from_stdin' method has not the proper type\n"
-    exit!
-  rescue ClasspathError => error
-    $stderr.print "BLAST error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-    "Possible cause: BLAST installation path is not in the LOAD PATH or BLAST database is not accessible.\n"
-    exit!
+    cmd = "echo \"#{query}\" | #{blastcmd}"
+    %x[#{cmd} 2>/dev/null]
   end
 
   ##

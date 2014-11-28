@@ -26,8 +26,6 @@ class Validation
   attr_reader :fasta_filepath
   attr_reader :html_path
   attr_reader :yaml_path
-  attr_reader :mafft_path
-  attr_reader :blast_path
   attr_reader :filename
   attr_reader :raw_seq_file
   attr_reader :raw_seq_file_index
@@ -71,7 +69,6 @@ class Validation
   # +tabular_format+: list of column names for parsing the tablar blast output
   # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
   # +db+: comparition BLAST database (in case xml_file is not specified)
-  # +mafft_path+: path of the MAFFT program installation
   # +start_idx+: number of the sequence from the file to start with
   # +overall_evaluation+: boolean variable for printing / not printing overall evaluation
   # +multithreading+: boolean variable for enabling multithreading
@@ -81,8 +78,6 @@ class Validation
                   xml_file = nil,
                   db = "swissprot -remote",
                   raw_seq_file = nil,
-                  mafft_path = nil,
-                  blast_path = nil,
                   start_idx = 1,
                   num_threads = 1,
                   overall_evaluation = true,
@@ -118,7 +113,6 @@ class Validation
     @no_internet = 0
     @map_errors = Hash.new(0)
     @map_running_times = Hash.new(Pair1.new(0,0))
-    @blast_path = blast_path
 
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
@@ -139,12 +133,6 @@ class Validation
     fasta_content = nil # free memory for variable fasta_content
     GC.start
     @tabular_format = tabular_format
-
-    if mafft_path == nil
-      @mafft_path = which("mafft")
-    else
-      @mafft_path = mafft_path
-    end
 
     begin
 
@@ -234,9 +222,9 @@ class Validation
 
             #call blast with the default parameters
             if type == :protein
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastp", query, @db, @num_threads, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, @num_threads, 11, 1)
             else
-              output = BlastUtils.call_blast_from_stdin(@blast_path, "blastx", query, @db, @num_threads, 11, 1)
+              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, @num_threads, 11, 1)
             end
 
             #parse output
@@ -529,10 +517,10 @@ class Validation
     validations.push LengthClusterValidation.new(@type, prediction, hits, plot_path)
     validations.push LengthRankValidation.new(@type, prediction, hits)
     validations.push GeneMergeValidation.new(@type, prediction, hits, plot_path)
-    validations.push DuplicationValidation.new(@type, prediction, hits, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
+    validations.push DuplicationValidation.new(@type, prediction, hits, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
     validations.push BlastReadingFrameValidation.new(@type, prediction, hits)
     validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path, [], ["UAG", "UAA", "UGA", "TAG", "TAA", "TGA"])
-    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @mafft_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
+    validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @raw_seq_file, @raw_seq_file_index, @raw_seq_file_load, @db, @num_threads)
     #validations.push CodonBiasValidation.new(@type, prediction, hits)
 
     # check the class type of the elements in the list

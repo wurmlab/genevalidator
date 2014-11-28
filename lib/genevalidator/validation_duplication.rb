@@ -56,9 +56,8 @@ class DuplicationValidation < ValidationTest
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
  
-  def initialize(type, prediction, hits, mafft_path, raw_seq_file, index_file_name, raw_seq_file_load, db, num_threads)
+  def initialize(type, prediction, hits, raw_seq_file, index_file_name, raw_seq_file_load, db, num_threads)
     super
-    @mafft_path        = mafft_path
     @raw_seq_file      = raw_seq_file
     @index_file_name   = index_file_name
     @raw_seq_file_load = raw_seq_file_load
@@ -166,7 +165,7 @@ class DuplicationValidation < ValidationTest
 
             begin
               options   = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet', '--thread', "#{@num_threads}" ]
-              mafft     = Bio::MAFFT.new(@mafft_path, options)
+              mafft     = Bio::MAFFT.new('mafft', options)
               report    = mafft.query_align(seqs)
               raw_align = report.alignment
               align     = []
