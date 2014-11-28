@@ -1,4 +1,4 @@
-# GeneValidator - Identify problems with predicted genes
+# GeneValidator - <small> Identify problems with predicted genes </small>
 
 [![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
 
