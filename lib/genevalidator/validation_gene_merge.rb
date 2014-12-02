@@ -10,7 +10,7 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_down
   attr_reader :threshold_up
 
-  def initialize (slope, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
+  def initialize (slope, unimodality, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
     @short_header   = "Gene_Merge"
     @header         = "Gene Merge"
     @description    = "Check whether BLAST hits make evidence about a merge" \
@@ -21,21 +21,47 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @approach       = "This validation test analyses the relationship between" \
-                      " the start and stop offsets of the High-scoring Segment" \
-                      " Pairs."
+    @approach       = "If the query sequence is well conserved and similar" \
+                      " sequences (BLAST hits) are correct, we expect that" \
+                      " the query sequence encodes a single gene. Here, we" \
+                      " analyse the High-scoring Segment Pairs (HSPs)" \ 
+                      " prodcued by BLAST for evidence that suggests that the" \
+                      " query sequence contains sequences from two or more genes."
     @explanation    = explain
     @conclusion     = conclude
   end
 
   def explain
-    "A linear regression analysis produced a result of" \
-    " #{@slope.round(2)}. Please see below for a graphical" \
-    " representation of this."
+    if unimodality
+      "Analysing the relationship between the start and stop offsets of the" \
+      " HSPs produces a unimodal distribution (see graph below)."
+    else
+      "Analysing the relationship between the start and stop offsets of the" \
+      " HSPs does not produces a unimodal distribution (see graphs below)." \
+      " Being inconclusive, a weighted linear regression analysis is" \
+      " necessary, where the start and stop offset points are weighted" \
+      " inversely proportionally to the strength of the hit. Here, the linear" \
+      " regression analysis produced a result of #{@slope.round(2)}."
+    end
   end
 
   def conclude
-    ''
+    if unimodality
+      "A unimodal distribution suggests that the query sequence does not" \
+      " contain a gene merge."
+    else
+      if @result == :yes 
+        "Since the result of the weighted linear regression analysis was" \
+        " within the emperically calculated thresholds (0.4 and 1.2), there" \ 
+        " is evidence of the query sequence containing a gene merge. Possible" \
+        " errors include a gene prediction error, where 2 or more genes were" \
+        " merged together."
+      else
+        "Since the result of the weighted linear regression analysis was" \
+        " outside the emperically calculated thresholds (0.4 and 1.2)," \
+        " there is no evidence that the query sequence contains a gene merge."
+      end
+    end
   end
 
   def print
@@ -43,14 +69,12 @@ class GeneMergeValidationOutput < ValidationReport
   end
 
   def validation
-    # color gene merge validation
     (@slope > threshold_down and @slope < threshold_up) ? :yes : :no
   end
 
   def color
     (validation == :no) ? "success" : "danger"
   end
-
 end
 
 ##
@@ -100,11 +124,7 @@ class GeneMergeValidation < ValidationTest
 
     # minimum start shoud be at 'boundary' residues
     xx = xx_0.map do |x|
-      if x < @boundary
-        x = @boundary
-      else
-        x = x
-      end
+      x = (x < @boundary) ? @boundary : x
     end
 
     # maximum end should be at length - 'boundary' residues
@@ -128,7 +148,7 @@ class GeneMergeValidation < ValidationTest
 
     y_intercept = line_slope[0]
 
-    @validation_report = GeneMergeValidationOutput.new(lm_slope)
+    @validation_report = GeneMergeValidationOutput.new(lm_slope, unimodality)
 
     unless unimodality
       plot1 = plot_2d_start_from(lm_slope, y_intercept)
