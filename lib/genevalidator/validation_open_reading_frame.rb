@@ -36,7 +36,7 @@ class ORFValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes
-      "The longest ORF occupies more than 80% of the query sequence. Thus," \
+      "The longest ORF occupies more than 80% of the query sequence and therefore," \
       " there is no evidence to believe that there is any problem with the" \
       " ORF of the query sequence."
     else

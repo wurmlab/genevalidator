@@ -19,39 +19,26 @@ class DuplicationValidationOutput < ValidationReport
     @result      = validation
     @expected    = expected
     @approach    = "If the query sequence is well conserved and similar" \
-                   " sequences (BLAST hits) are correct, we can expect" \
-                   " that each region of each BLAST hit to match the" \
-                   " query sequence only once. If a region of a BLAST" \
-                   " hit sequence matches the query sequence more than" \
-                   " once, it would suggest that the region has been" \
-                   " erronously duplicated in the query sequence." \
-                   " That is to say that ... . "
-    @explanation = explain
+                   " sequences (BLAST hits) are correct, we can expect that" \
+                   " the query sequence would not contain any duplicated" \
+                   " sequence data (that is not seen in similar BLAST hits)." \
+                   " That is to say that each region of each BLAST hit should" \
+                   " only match the query sequence at most once."
+    @explanation = "The wilcoxon test (analyses the distribution of the" \
+                   " average hit coverage against 1) produced a p-value of" \
+                   " #{@pvalue.round(2)}."
     @conclusion  = conclude
-  end
-
-  def explain
-    exp1 = "Here, a p-value of #{@pvalue.round(2)} suggests that the" \
-           " average coverage of hit regions is "
-
-    if @result == :yes
-      # i.e. if p value is smaller than the threshold...
-      exp2 = 'less than 1. This suggests that each region of' \
-             ' each homologous hit matches the predicted gene at' \
-             ' most once.'
-    else
-      # i.e. if p value is smaller than the threshold...
-      exp2 = 'greater than 1. This can occur if tandem duplicated' \
-             ' genes were erroneously included in the same gene model.'
-    end
-    exp1 + exp2
   end
 
   def conclude
     if @result == :yes
-      return ''
+      "Since the p-value is higher than 0.05, we accept the null hypothesis" \
+      " - i.e. the query sequence does not contain any erroneous duplications."
     else
-      return ''
+      "Since the p-value is lower than 0.05, we accept the alternative" \
+      " hypothesis - i.e. the query sequence does contain erroneous" \
+      " duplications. Possible errors include a sequencing errors or errors" \
+      " in the replication mechanism of the cell."
     end
   end
 

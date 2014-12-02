@@ -36,13 +36,13 @@ class BlastRFValidationOutput < ValidationReport
   end
 
   def explain 
-    exp1 = "Of the #{@totalHSP} High-scoring Segment Pairs (HSPs) produced" \
-           " by BLAST"
+    exp1 = "BLAST analysis produced #{@totalHSP} High-scoring Segment Pairs" \
+           " (HSPs), of which"
     if @result == :yes # i.e. if there is only one ORF...
-      exp2 = ", all HSPs were found to align within frame" \
-             "#{@frames_histo.keys[0].to_s}."
+      frame = @frames_histo.keys[0].to_s
+      exp2  = ", all were found to align within frame #{frame}."
     else
-      exp2 = ": #{@explaination_part}."
+      exp2 = ": #{@explaination_part.gsub(/;$/, '')}."
     end
     exp1 + exp2
   end
