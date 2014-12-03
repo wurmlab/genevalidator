@@ -40,7 +40,8 @@ class LengthRankValidationOutput < ValidationReport
                     " residues. After ranking by length, there are" \
                     " #{@extreme_hits} BLAST hits that are more extreme (i.e" \
                     " further away from median) than the query sequence. This" \
-                    " refers to a rank of #{@percentage}% (cutoff = 20%)."
+                    " refers to a rank of #{@percentage}% (where the cutoff" \
+                    " is 20%)."
     @conclusion   = conclude
   end
 

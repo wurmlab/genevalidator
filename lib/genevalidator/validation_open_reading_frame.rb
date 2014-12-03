@@ -24,9 +24,9 @@ class ORFValidationOutput < ValidationReport
     @result       = validation
     @plot_files   = []
     @mainORFFrame = longest_orf_frame
-    @approach     = "If the query sequence encodes a single gene, we expect" \
-                    " it to contain a single Open Reading Frame (ORF) that" \
-                    " occupies most of the query sequence."
+    @approach     = 'If the query sequence encodes a single gene, we expect' \
+                    ' it to contain a single Open Reading Frame (ORF) that' \
+                    ' occupies most of the query sequence.'
     @explanation  = "When translating the query sequence in all 6 frames, the" \
                     " longest ORF is in frame #{@mainORFFrame}, where it " \
                     " occupies #{(@coverage * 100).round}% of the query sequence." \
@@ -36,12 +36,12 @@ class ORFValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes
-      "The longest ORF occupies more than 80% of the query sequence and therefore," \
-      " there is no evidence to believe that there is any problem with the" \
-      " ORF of the query sequence."
+      'The longest ORF occupies more than 80% of the query sequence and therefore,' \
+      ' there is no evidence to believe that there is any problem with the' \
+      ' ORF of the query sequence.'
     else
-      "The longest ORF occupies less than 80% of the query sequence. This" \
-      " could suggest a frame shift in the query sequence."
+      'The longest ORF occupies less than 80% of the query sequence. This' \
+      ' could suggest a frame shift in the query sequence.'
     end
   end
 

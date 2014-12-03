@@ -16,25 +16,26 @@ class GeneMergeValidationOutput < ValidationReport
     @description    = "Check whether BLAST hits make evidence about a merge" \
                       " of two genes that match the predicted gene."
     @slope          = slope
+    @unimodality    = unimodality
     @threshold_down = threshold_down
     @threshold_up   = threshold_up
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @approach       = "If the query sequence is well conserved and similar" \
-                      " sequences (BLAST hits) are correct, we expect that" \
-                      " the query sequence encodes a single gene. Here, we" \
-                      " analyse the High-scoring Segment Pairs (HSPs)" \ 
-                      " prodcued by BLAST for evidence that suggests that the" \
-                      " query sequence contains sequences from two or more genes."
+    @approach       = 'If the query sequence is well conserved and similar' \
+                      ' sequences (BLAST hits) are correct, we expect that' \
+                      ' the query sequence encodes a single gene. Here, we' \
+                      ' analyse the High-scoring Segment Pairs (HSPs)' \
+                      ' produced by BLAST for evidence that suggests that the' \
+                      ' query sequence contains sequences from two or more genes.'
     @explanation    = explain
     @conclusion     = conclude
   end
 
   def explain
-    if unimodality
-      "Analysing the relationship between the start and stop offsets of the" \
-      " HSPs produces a unimodal distribution (see graph below)."
+    if @unimodality
+      'Analysing the relationship between the start and stop offsets of the' \
+      ' HSPs produces a unimodal distribution (see graph below).'
     else
       "Analysing the relationship between the start and stop offsets of the" \
       " HSPs does not produces a unimodal distribution (see graphs below)." \
@@ -46,20 +47,20 @@ class GeneMergeValidationOutput < ValidationReport
   end
 
   def conclude
-    if unimodality
-      "A unimodal distribution suggests that the query sequence does not" \
-      " contain a gene merge."
+    if @unimodality
+      'A unimodal distribution suggests that the query sequence does not' \
+      ' contain a gene merge.'
     else
-      if @result == :yes 
-        "Since the result of the weighted linear regression analysis was" \
-        " within the emperically calculated thresholds (0.4 and 1.2), there" \ 
-        " is evidence of the query sequence containing a gene merge. Possible" \
-        " errors include a gene prediction error, where 2 or more genes were" \
-        " merged together."
+      if @result == :yes
+        'Since the result of the weighted linear regression analysis was' \
+        ' within the emperically calculated thresholds (0.4 and 1.2), there' \
+        ' is evidence of the query sequence containing a gene merge. Possible' \
+        ' errors include a gene prediction error, where 2 or more genes were' \
+        ' merged together.'
       else
-        "Since the result of the weighted linear regression analysis was" \
-        " outside the emperically calculated thresholds (0.4 and 1.2)," \
-        " there is no evidence that the query sequence contains a gene merge."
+        'Since the result of the weighted linear regression analysis was' \
+        ' outside the emperically calculated thresholds (0.4 and 1.2),' \
+        ' there is no evidence that the query sequence contains a gene merge.'
       end
     end
   end

@@ -27,9 +27,9 @@ class BlastRFValidationOutput < ValidationReport
       @totalHSP += y.to_i
     end
 
-    @approach     = "If the query sequence encodes a single gene, we expect" \
-                    " it to contain a single Open Reading Frame (ORF). Thus" \
-                    " all BLAST hits are expected to align within a single ORF."
+    @approach     = 'If the query sequence encodes a single gene, we expect' \
+                    ' it to contain a single Open Reading Frame (ORF). Thus' \
+                    ' all BLAST hits are expected to align within a single ORF.'
     @explanation  = explain
     @conclusion   = conclude
 
@@ -49,11 +49,11 @@ class BlastRFValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes # i.e. if there is only one ORF...
-      "As all of HSPs align within a single ORF, there is no reason to" \
-      " believe there is any problem with the ORF of the query sequence."
+      'As all of HSPs align within a single ORF, there is no reason to' \
+      ' believe there is any problem with the ORF of the query sequence.'
     else
-      "As not all HSPs align within a single ORF, there may be a frame shift" \
-      " in the query sequence."
+      'As not all HSPs align within a single ORF, there may be a frame shift' \
+      ' in the query sequence.'
     end
   end
 

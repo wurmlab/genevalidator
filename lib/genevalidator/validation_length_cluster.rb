@@ -43,8 +43,8 @@ class LengthClusterValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes # i.e. if inside the main cluster
-      "There is no reason to believe there is any problem with the length of" \
-      " the query sequence."
+      'There is no reason to believe there is any problem with the length of' \
+      ' the query sequence.'
     else
       size_diff  = (@query_length > @limits[1]) ? 'long': 'short'
       "The query sequence may be too #{size_diff}. Potential errors include" \

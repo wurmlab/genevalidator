@@ -18,12 +18,12 @@ class DuplicationValidationOutput < ValidationReport
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @approach    = "If the query sequence is well conserved and similar" \
-                   " sequences (BLAST hits) are correct, we can expect that" \
-                   " the query sequence would not contain any duplicated" \
-                   " sequence data (that is not seen in similar BLAST hits)." \
-                   " That is to say that each region of each BLAST hit should" \
-                   " only match the query sequence at most once."
+    @approach    = 'If the query sequence is well conserved and similar' \
+                   ' sequences (BLAST hits) are correct, we can expect that' \
+                   ' the query sequence would not contain any duplicated' \
+                   ' sequence data (that is not seen in similar BLAST hits).' \
+                   ' That is to say that each region of each BLAST hit should' \
+                   ' only match the query sequence at most once.'
     @explanation = "The wilcoxon test (analyses the distribution of the" \
                    " average hit coverage against 1) produced a p-value of" \
                    " #{@pvalue.round(2)}."
@@ -32,13 +32,13 @@ class DuplicationValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes
-      "Since the p-value is higher than 0.05, we accept the null hypothesis" \
-      " - i.e. the query sequence does not contain any erroneous duplications."
+      'Since the p-value is higher than 0.05, we accept the null hypothesis' \
+      ' - i.e. the query sequence does not contain any erroneous duplications.'
     else
-      "Since the p-value is lower than 0.05, we accept the alternative" \
-      " hypothesis - i.e. the query sequence does contain erroneous" \
-      " duplications. Possible errors include a sequencing errors or errors" \
-      " in the replication mechanism of the cell."
+      'Since the p-value is lower than 0.05, we accept the alternative' \
+      ' hypothesis - i.e. the query sequence does contain erroneous' \
+      ' duplications. Possible errors include a sequencing errors or errors' \
+      ' in the replication mechanism of the cell.'
     end
   end
 
@@ -60,7 +60,6 @@ end
 # finding duplicated subsequences in the predicted gene
 class DuplicationValidation < ValidationTest
 
-  attr_reader :mafft_path
   attr_reader :raw_seq_file
   attr_reader :index_file_name
   attr_reader :raw_seq_file_load
