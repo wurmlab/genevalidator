@@ -10,7 +10,7 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :consensus
   attr_reader :threshold
 
-  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 0.2,
+  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 20,
                   expected = :yes)
 
     @short_header = 'MA'
@@ -19,9 +19,9 @@ class AlignmentValidationOutput < ValidationReport
                     ' based on the multiple alignment of the best hits. Also' \
                     ' counts the percentahe of the conserved regions that' \
                     ' appear in the prediction.'
-    @gaps         = gaps
-    @extra_seq    = extra_seq
-    @consensus    = consensus
+    @gaps         = (gaps * 100).round(0).to_s + '%'
+    @extra_seq    = (extra_seq * 100).round(0).to_s + '%'
+    @consensus    = (consensus * 100).round(0).to_s + '%'
     @threshold    = threshold
     @result       = validation
     @expected     = expected
@@ -36,11 +36,11 @@ class AlignmentValidationOutput < ValidationReport
                     ' from a position specific scoring matrix profile' \
                     ' (using Mafft).'
     @explanation  = "When compared to a statistical model of the top ten" \
-                    " BLAST hit, #{(@consensus*100).round(0)}% of residues" \
+                    " BLAST hit, #{@consensus} of residues" \
                     " are conserved in the query sequence." \
-                    " #{(@extra_seq*100).round(0)}% of residues in query" \
+                    " #{@extra_seq} of residues in query" \
                     " sequence are not present in the profile. Moreover," \
-                    " #{(@gaps*100).round(0)}% of residues in the profile" \
+                    " #{@gaps} of residues in the profile" \
                     " are not present in the query sequence."
     @conclusion   = conclude
   end
@@ -53,30 +53,32 @@ class AlignmentValidationOutput < ValidationReport
       con = 'These results suggest that there may be some problems with the' \
             ' query sequence.'
       con1, con2, con3 = '', '', '' # Create empty string variables
-      if (1-consensus) > @threshold
-        con1 = " There is a low conservation of residues between the profile" \
-               " and the query sequence (the cut-off is 80%)." 
+      if (1-consensus.to_i) > @threshold
+        con1 = " There is a low conservation of residues between the" \
+               " statistical profile and the query sequence (the cut-off is" \
+               " 80%)." 
       end
-      if gaps > @threshold
-        con2 = " The query has too many missing residues when compared to the" \
+      if extra_seq.to_i > @threshold
+        con2 = " The query sequence has a high percentage (#{@extra_seq}) of" \
+               " extra residues that are not present in the statistical" \
                " profile (the cut-off is 20%)."
       end
-      if extra_seq > @threshold
-        con3 = " A high percentage of residues in the profile are not present" \
-               " in the query sequence (the cut-off is 20%)."
+      if gaps.to_i > @threshold
+        con3 = " The query sequence has a high percentage (#{@gaps}) of" \
+               " missing residues when compared to the statistical profile" \
+               " (the cut-off is 20%)."
       end
       con + con1 + con2 + con3 
     end
   end
 
   def print
-    "#{(consensus*100).round(0)}%&nbsp;conserved;" \
-    " #{(extra_seq*100).round(0)}%&nbsp;extra;" \
-    " #{(gaps*100).round(0)}%&nbsp;missing."
+    "#{@consensus}&nbsp;conserved; #{@extra_seq}&nbsp;extra;" \
+    " #{@gaps}&nbsp;missing."
   end
 
   def validation
-    if gaps < @threshold && extra_seq < @threshold && (1-consensus) < @threshold
+    if gaps.to_i < @threshold && extra_seq.to_i < @threshold && (1-consensus.to_i) < @threshold
       :yes
     else
       :no
