@@ -26,19 +26,47 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @approach     = 'TODO'
-    @explanation  = explain
-    @conclusion   = 'TODO'
+    @approach     = 'If the query sequence is well conserved and similar' \
+                    ' sequences (BLAST hits) are correct, we can expect' \
+                    ' that the query sequence would be highly similar to' \
+                    ' the top BLAST hits, with the query having very few' \
+                    ' extra (or missing) amino acid residues. That is to' \
+                    ' say that the query sequence would be highly similiar' \
+                    ' to the consenses of the top ten BLAST hits produced' \
+                    ' from a position specific scoring matrix profile' \
+                    ' (using Mafft).'
+    @explanation  = "When compared to a statistical model of the top ten" \
+                    " BLAST hit, #{(@consensus*100).round(0)}% of residues" \
+                    " are conserved in the query sequence." \
+                    " #{(@extra_seq*100).round(0)}% of residues in query" \
+                    " sequence are not present in the profile. Moreover," \
+                    " #{(@gaps*100).round(0)}% of residues in the profile" \
+                    " are not present in the query sequence."
+    @conclusion   = conclude
   end
 
-  def explain
-    "A position specific scoring matrix of the strongest 10" \
-    " results show that: #{(@extra_seq*100).round(0)}% of" \
-    " residues in the prediction do not appear in profile;" \
-    " #{(@gaps*100).round(0)}% of residues in the profile do" \
-    " not appear in the prediction and when compared to the" \
-    " model, #{(@consensus*100).round(0)}% of residues are" \
-    " conserved in the prediciton."
+  def conclude
+    if @result == :yes
+      "There is no evidence based on the top 10 BLAST hits to suggest any" \
+      " problems with the query sequence."
+    else
+      con = 'These results suggest that there may be some problems with the' \
+            ' query sequence.'
+      con1, con2, con3 = '', '', '' # Create empty string variables
+      if (1-consensus) > @threshold
+        con1 = " There is a low conservation of residues between the profile" \
+               " and the query sequence (the cut-off is 80%)." 
+      end
+      if gaps > @threshold
+        con2 = " The query has too many missing residues when compared to the" \
+               " profile (the cut-off is 20%)."
+      end
+      if extra_seq > @threshold
+        con3 = " A high percentage of residues in the profile are not present" \
+               " in the query sequence (the cut-off is 20%)."
+      end
+      con + con1 + con2 + con3 
+    end
   end
 
   def print
@@ -48,13 +76,12 @@ class AlignmentValidationOutput < ValidationReport
   end
 
   def validation
-    if gaps < @threshold and extra_seq < @threshold and (1-consensus) < @threshold
+    if gaps < @threshold && extra_seq < @threshold && (1-consensus) < @threshold
       :yes
     else
       :no
     end
   end
-
 end
 
 ##
@@ -372,18 +399,14 @@ class AlignmentValidation < ValidationTest
     # remove isolated residues
     gap_starts.each do |i|
       (i..i+len-1).each do |j|
-        if isalpha(seq[j])
-          seq[j] = '-'
-        end
+        seq[j] = '-' if isalpha(seq[j])
       end
     end
     #remove isolated gaps
     res_starts = seq.to_enum(:scan,/([?\w]-{1,2}[?\w])/i).map{|m| $`.size + 1}
     res_starts.each do |i|
       (i..i+len-1).each do |j|
-        if seq[j] == '-'
-          seq[j] = '?'
-        end
+        seq[j] = '?' if seq[j] == '-'
       end
     end
     seq
