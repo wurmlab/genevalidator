@@ -32,7 +32,7 @@ GeneValidator currently carries out a number of validations which include:
 ## Installation Requirements
 * Ruby (>= 1.9.3)
 * NCBI BLAST+ (>= 2.2.25+)
-* MAFFT installation (download it from : http://mafft.cbrc.jp/alignment/software/ ).<br>
+* MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).<br>
 Linux and MacOS are officially supported!
 * Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox.
 
@@ -60,14 +60,14 @@ OPTIONAL ARGUMENTS:
 
     -v, --validations <String>       The Validations to be applied.
                                      Validation Options Available (separated by coma):
-                                       all    = run all validations (default)
-                                       lenc   = length validation by clusterization
-                                       lenr   = length validation by ranking
-                                       frame  = reading frame validation
-                                       merge  = check gene merge
-                                       dup    = check duplications
-                                       orf    = main ORF validation (applicable for nucleotides)
-                                       align  = validation based on multiple alignment
+                                       all   = All validations (default),
+                                       lenc  = Length validation by clusterization,
+                                       lenr  = Length validation by ranking,
+                                       merge = Analyse gene merge,
+                                       dup   = Check for duplications,
+                                       frame = Open reading frame (ORF) validation,
+                                       orf   = Main ORF validation,
+                                       align = Validating based on multiple alignment
     -d, --db [BLAST_DATABASE]        Name of the BLAST database
                                      e.g. "swissprot -remote" or a local BLAST database
     -x, --skip_blast [FILENAME]      Skip blast-ing part and provide a blast xml or tabular output
@@ -93,7 +93,7 @@ OPTIONAL ARGUMENTS:
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
 ## Output
-The output produced by GeneValidator is presented in three manners
+The output produced by GeneValidator is presented in three manners.
 
 ### HTML Output
 Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations 

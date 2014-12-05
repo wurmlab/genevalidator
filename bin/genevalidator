@@ -22,14 +22,14 @@ BANNER
   opts.on( '-v', '--validations <String>', Array,
           'The Validations to be applied.',
           'Validation Options Available (separated by coma):',
-          '  all    = run all validations (default)',
-          '  lenc   = length validation by clusterization',
-          '  lenr   = length validation by ranking',
-          '  frame  = reading frame validation',
-          '  merge  = check gene merge',
-          '  dup    = check duplications',
-          '  orf    = main ORF validation (applicable for nucleotides)',
-          '  align  = validation based on multiple alignment') do |lst|
+          '  all   = All validations (default),',
+          '  lenc  = Length validation by clusterization,',
+          '  lenr  = Length validation by ranking,',
+          '  merge = Analyse gene merge,',
+          '  dup   = Check for duplications,',
+          '  frame = Open reading frame (ORF) validation,',
+          '  orf   = Main ORF validation,',
+          '  align = Validating based on multiple alignment') do |lst|
     opt[:vlist] = lst
   end
 
