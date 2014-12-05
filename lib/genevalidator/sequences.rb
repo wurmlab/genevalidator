@@ -17,18 +17,14 @@ class Sequence
   attr_accessor :nucleotide_rf #used only for nucleotides
 
   def initialize
-    @hsp_list = []
-    @raw_sequence = nil
+    @hsp_list            = []
+    @raw_sequence        = nil
     @protein_translation = nil
-    @nucleotide_rf = nil
+    @nucleotide_rf       = nil
   end
 
   def protein_translation
-    if @type == :protein
-      return raw_sequence
-    else
-      return @protein_translation
-    end
+    (@type == :protein) ? raw_sequence : @protein_translation
   end
 
   ##

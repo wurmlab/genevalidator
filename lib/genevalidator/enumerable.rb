@@ -3,17 +3,17 @@
 module Enumerable
 
   def sum
-    return self.inject(0){|accum, i| accum + i }
+    self.inject(0){|accum, i| accum + i }
   end
 
   def mean
-    return self.sum / self.length.to_f
+    self.sum / self.length.to_f
   end
 
   def median
     sorted = self.sort
     len = sorted.length
-    return (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+    (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
   end
 
   def mode
@@ -24,11 +24,11 @@ module Enumerable
   def sample_variance
     m = self.mean
     sum = self.inject(0){|accum, i| accum + (i - m) ** 2 }
-    return sum / (self.length - 1).to_f
+    sum / (self.length - 1).to_f
   end
 
   def standard_deviation
-    return Math.sqrt(self.sample_variance)
+    Math.sqrt(self.sample_variance)
   end
 
 end

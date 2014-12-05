@@ -28,7 +28,6 @@ class BlastUtils
   # Output:
   # String with the blast xml output
   def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
-
     # If BLAST is not run remotely, then utilise the -num_threads argument (-num_threads is not supported on remote databases)
     if (db !~ /remote/)
       blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
@@ -158,9 +157,9 @@ class BlastUtils
 
 
     if putative_NA_sum > (0.9 * cleaned_sequence.length)
-      return :nucleotide
+      :nucleotide
     else
-      return :protein
+      :protein
     end
   end
 

@@ -29,7 +29,7 @@ class TabularParser
       @lines.next
     end
 
-    if format == nil
+    if format.nil?
       @format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
     else
       @format = format.gsub(/[-\d]/,"")

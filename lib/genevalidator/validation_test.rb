@@ -21,14 +21,14 @@ class ValidationTest
   # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
   # +argv+: aditional arguments if needed
   def initialize(type, prediction, hits = nil, *argv)
-    @type = type
-    @prediction = prediction
-    @hits = hits
-    @short_header = "NewVal"
-    @header = "New Validation"
-    @running_time = 0
-    @cli_name = "all"
-    @description = "No description available."
+    @type              = type
+    @prediction        = prediction
+    @hits              = hits
+    @short_header      = "NewVal"
+    @header            = "New Validation"
+    @running_time      = 0
+    @cli_name          = "all"
+    @description       = "No description available."
     @validation_report = ValidationReport.new("Not enough evidence")
   end
 

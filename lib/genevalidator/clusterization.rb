@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 
 Pair = Struct.new(:x, :y) do
 
@@ -43,13 +42,9 @@ Pair = Struct.new(:x, :y) do
 
   ##
   # Overload quality operator
-  # Returns true if the pairs are equal, falsei otherwise
+  # Returns true if the pairs are equal, false otherwise
   def ==(p)
-    if p.x == x and p.y == y
-      true
-    else
-      false
-    end
+    (p.x == x and p.y == y) ? true : false
   end
 
   def eql?(p)
@@ -75,7 +70,6 @@ class PairCluster
     objects.each do |elem|
       puts "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
     end
-
   end
 
   ##
@@ -92,7 +86,6 @@ class PairCluster
     end
     mean / weight
     return mean
-
   end
 
   ##
@@ -103,7 +96,6 @@ class PairCluster
       d += elem[1]
     end
     d
-
   end
 
   # Returns the euclidian distance between the current cluster and the one given as parameter
@@ -157,8 +149,6 @@ class PairCluster
       objects[elem[0]] = elem[1]
     end
   end
-
-
 end
 
 ##
@@ -183,7 +173,6 @@ class Cluster
       weight += n
     end
     mean_len /= weight
-
   end
 
   ##
@@ -194,7 +183,6 @@ class Cluster
       d += elem[1]
     end
     d
-
   end
 
   # Returns the euclidian distance between the current cluster and the one given as parameter
@@ -222,7 +210,6 @@ class Cluster
     #group average distance
     d /= (norm + 0.0)
     return d.round(4)
-
   end
 
   ##
@@ -238,7 +225,6 @@ class Cluster
       ss += (cluster_mean - len) * (cluster_mean - len)
     end
     ss
-
   end
 
   ##
@@ -258,7 +244,6 @@ class Cluster
       std_deviation += (cluster_mean - len) * (cluster_mean - len)
     end
     std_deviation = Math.sqrt(std_deviation.to_f / (lengths.length - 1))
-
   end
 
   ##
@@ -275,7 +260,6 @@ class Cluster
     sd = R.pull("sd")
     sd = standard_deviation(hits)
     (queryLength - mean).abs / sd
-
   end
 
   ##
@@ -377,9 +361,7 @@ class HierarchicalClusterization
       end
     end
 
-    if clusters.length == 1
-      return clusters
-    end
+    return clusters if clusters.length == 1
 
     # each iteration merge the closest two adiacent cluster
     # the loop stops according to the stop conditions
@@ -391,9 +373,7 @@ class HierarchicalClusterization
       end
 
       iteration = iteration + 1
-      if debug
-        puts "\nIteration #{iteration}"
-      end
+      puts "\nIteration #{iteration}" if debug
 
       min_distance = 100000000
       cluster1 = 0
@@ -494,9 +474,7 @@ class HierarchicalClusterization
       end
     end
 
-    if clusters.length == 1
-      return clusters
-    end
+    return clusters if clusters.length == 1
 
     # each iteration merge the closest two adiacent cluster
     # the loop stops according to the stop conditions

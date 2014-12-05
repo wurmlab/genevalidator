@@ -133,9 +133,7 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +AlignmentValidationOutput+ object
   def run(n=10)
-    if n > 50
-      n = 50
-    end
+    n = 50 if n > 50
 
     raise NotEnoughHitsError unless hits.length >= n
     raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
@@ -152,19 +150,14 @@ class AlignmentValidation < ValidationTest
         hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
         if hit.raw_sequence.nil? or hit.raw_sequence.empty?
-          if hit.type == :protein
-            hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
-          else
-            hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
-          end
+          seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
+          hit.get_sequence_by_accession_no(hit.accession_no, seq_type, @db)
         end
 
         if hit.raw_sequence.nil?
           useless_hits.push(hit)
         else
-          if hit.raw_sequence.empty?
-            useless_hits.push(hit)
-          end
+          useless_hits.push(hit) if hit.raw_sequence.empty?
         end
 
       end
@@ -289,16 +282,12 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +Fixnum+ with the score
   def gap_validation(prediction_raw, sm)
+    return 1 if prediction_raw.length != sm.length
     # find gaps in the prediction and
     # not in the statistical model
-    if prediction_raw.length != sm.length
-      return 1
-    end
     no_gaps = 0
     (0..sm.length-1).each do |i|
-      if prediction_raw[i] == '-' and sm[i]!='-'
-        no_gaps += 1
-      end
+      no_gaps += 1 if prediction_raw[i] == '-' && sm[i] != '-'
     end
     no_gaps/(sm.length+0.0)
   end
@@ -312,19 +301,14 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +Fixnum+ with the score
   def extra_sequence_validation(prediction_raw, sm)
-    if prediction_raw.length != sm.length
-      return 1
-    end
+    return 1 if prediction_raw.length != sm.length
     # find residues that are in the prediction
     # but not in the statistical model
     no_insertions = 0
     (0..sm.length-1).each do |i|
-      if prediction_raw[i] != '-' and sm[i]=='-'
-        no_insertions += 1
-      end
+      no_insertions += 1 if prediction_raw[i] != '-' and sm[i]=='-'
     end
     no_insertions/(sm.length+0.0)
-
   end
 
   ##
@@ -336,22 +320,16 @@ class AlignmentValidation < ValidationTest
   # Output:
   # +Fixnum+ with the score
   def consensus_validation(prediction_raw, consensus)
-
-    if prediction_raw.length != consensus.length
-      return 1
-    end
+    return 1 if prediction_raw.length != consensus.length
     # no of conserved residues among the hits
     no_conserved_residues = consensus.length - consensus.scan(/[\?-]/).length
 
-    if no_conserved_residues == 0
-      return 1
-    end
+    return 1 if no_conserved_residues == 0
 
     # no of conserved residues from the hita that appear in the prediction
     no_conserved_pred = consensus.split(//).each_index.select{|j| consensus[j] != '-' and consensus[j]!='?' and consensus[j] == prediction_raw[j]}.length
 
-    return no_conserved_pred/(no_conserved_residues + 0.0)
-
+    no_conserved_pred / (no_conserved_residues + 0.0)
   end
 
   ##
@@ -365,7 +343,7 @@ class AlignmentValidation < ValidationTest
   # +String+ representing the statistical model
   # +Array+ with the maximum frequeny of the majoritary residue for each position
   def get_sm_pssm(ma = @multiple_alignment, threshold = 0.7)
-    sm = ""
+    sm = ''
     freq = []
     (0..ma[0].length-1).each do |i|
       freqs = Hash.new(0)
@@ -373,6 +351,7 @@ class AlignmentValidation < ValidationTest
       # get the residue with the highest frequency
       max_freq = freqs.map{|res, n| n}.max
       residue = (freqs.map{|res, n| n == max_freq ? res : []}.flatten)[0]
+      
       if residue == '-'
         freq.push(0)
       else
@@ -424,7 +403,6 @@ class AlignmentValidation < ValidationTest
   ##
   # converts an array of integers into array of ranges
   def array_to_ranges(ar)
-
     prev = ar[0]
 
     ranges = ar.slice_before { |e|
@@ -432,8 +410,7 @@ class AlignmentValidation < ValidationTest
       prev2 + 1 != e
     }.map{|a| a[0]..a[-1]}
 
-    return ranges
-
+    ranges
   end
 
   # Generates a json file cotaining data used for plotting

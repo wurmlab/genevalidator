@@ -56,12 +56,12 @@ class ValidationReport
   # May return "success" or "error"
   def color
     unless bg_color.nil?
-      return bg_color
+      bg_color
     end
     if validation == @expected
-      return "success"
+     "success"
     else
-      return (validation == :warning) ? "warning" : "danger"
+      (validation == :warning) ? "warning" : "danger"
     end
   end
 end

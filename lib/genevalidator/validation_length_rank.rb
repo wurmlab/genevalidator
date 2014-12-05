@@ -5,27 +5,15 @@ require 'genevalidator/enumerable'
 ##
 # Class that stores the validation output information
 class LengthRankValidationOutput < ValidationReport
-
-  attr_reader :percentage
-  attr_reader :msg
-
-  def initialize (msg, no_of_hits, median, query_length, extreme_hits,
-                  percentage, expected = :yes)
-
-    @short_header = 'LengthRank'
-    @header       = 'Length Rank'
-    @description  = 'Check whether the rank of the prediction length lies ' \
-                    ' among 80% of all the BLAST hit lengths.'
-
+  def initialize(short_header, header, description, msg, no_of_hits, median,
+                 extreme_hits, percentage)
     @msg          = msg
     @no_of_hits   = no_of_hits
-
-    @median       = median
-    @query_length = query_length
-    @extreme_hits = extreme_hits
     @percentage   = percentage
+
+    @short_header, @header, @description = short_header, header, description
     @result       = validation
-    @expected     = expected
+    @expected     = :yes
     @approach     = 'If the query sequence is well conserved and similar' \
                     ' sequences (BLAST hits) are correct, we can expect' \
                     ' query sequence to be of a similar length to the ' \
@@ -36,9 +24,9 @@ class LengthRankValidationOutput < ValidationReport
                     ' its length falls in the extreme 20% of hit sequence' \
                     ' lengths.'
     @explanation  = "BLAST Analysis produced #{@no_of_hits} hit sequences" \
-                    " with a median sequence length of #{@median} amino-acid" \
+                    " with a median sequence length of #{median} amino-acid" \
                     " residues. After ranking by length, there are" \
-                    " #{@extreme_hits} BLAST hits that are more extreme (i.e" \
+                    " #{extreme_hits} BLAST hits that are more extreme (i.e" \
                     " further away from median) than the query sequence. This" \
                     " refers to a rank of #{@percentage}% (where the cutoff" \
                     " is 20%)."
@@ -70,20 +58,17 @@ end
 # This class contains the methods necessary for
 # length validation by ranking the hit lengths
 class LengthRankValidation < ValidationTest
-
   include Enumerable
 
-  attr_reader :threshold
-
+  THRESHOLD = 20
   ##
   # Initializes the object
   # Params:
   # +hits+: a vector of +Sequence+ objects (usually representing the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
   # +threshold+: threshold below which the prediction length rank is considered to be inadequate
-  def initialize(type, prediction, hits, threshold = 20)
+  def initialize(type, prediction, hits)
     super
-    @threshold    = threshold
     @short_header = 'LengthRank'
     @header       = 'Length Rank'
     @description  = 'Check whether the rank of the prediction length lies' \
@@ -104,32 +89,30 @@ class LengthRankValidation < ValidationTest
 
     start = Time.now
 
-    hits_lengths = hits.map{ |x| x.length_protein.to_i }.sort{ |a, b| a <=> b }
+    hits_lengths = hits.map { |x| x.length_protein.to_i }.sort { |a, b| a <=> b }
 
-    no_of_hits    = hits_lengths.length
-    median        = hits_lengths.median.round
+    no_of_hits   = hits_lengths.length
+    median       = hits_lengths.median.round
     query_length = prediction.length_protein
 
     if hits_lengths.standard_deviation <= 5
       msg = ''
       percentage = 100
     else
-      # extreme_hits are hits that further away from the median than the
-      #   predicted...
       if query_length < median
-        extreme_hits = hits_lengths.find_all{ |x| x < query_length }.length
+        extreme_hits = hits_lengths.find_all { |x| x < query_length }.length
         percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;short'
       else
-        extreme_hits = hits_lengths.find_all{ |x| x > query_length }.length
+        extreme_hits = hits_lengths.find_all { |x| x > query_length }.length
         percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
         msg          = 'too&nbsp;long'
       end
     end
 
-    msg = '' if percentage >= threshold
+    msg = '' if percentage >= THRESHOLD
 
-    @validation_report = LengthRankValidationOutput.new(msg, no_of_hits, median, query_length, extreme_hits, percentage)
+    @validation_report = LengthRankValidationOutput.new(@short_header, @header, @description, msg, no_of_hits, median, extreme_hits, percentage)
     @validation_report.running_time = Time.now - start
     return @validation_report
 

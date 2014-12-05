@@ -41,17 +41,17 @@ class Output
   def initialize(mutex, mutex_yaml, mutex_html, filename, html_path, yaml_path, idx = 0, start_idx = 0)
     @prediction_len = 0
     @prediction_def = "no_definition"
-    @nr_hits = 0
+    @nr_hits        = 0
 
-    @filename = filename
-    @html_path = html_path
-    @yaml_path = yaml_path
-    @idx = idx
-    @start_idx = start_idx
+    @filename       = filename
+    @html_path      = html_path
+    @yaml_path      = yaml_path
+    @idx            = idx
+    @start_idx      = start_idx
 
-    @mutex = mutex
-    @mutex_yaml = mutex_yaml
-    @mutex_html = mutex_html
+    @mutex          = mutex
+    @mutex_yaml     = mutex_yaml
+    @mutex_html     = mutex_html
   end
 
   def print_output_console
