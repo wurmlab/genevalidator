@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
 [![Gem Version](https://badge.fury.io/rb/GeneValidator.svg)](http://badge.fury.io/rb/GeneValidator)
-[![Dependency Status](https://gemnasium.com/3b0e5081b7f0b8dc4b849d0c35a5f864.svg)](https://gemnasium.com/b7eac83bbd785b15275259cb66babff1)
+[![Dependency Status](https://gemnasium.com/IsmailM/GeneValidator.svg)](https://gemnasium.com/IsmailM/GeneValidator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/badges/quality-score.png?b=alpha)](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/?branch=alpha)
 
 ## Introduction
