@@ -5,6 +5,10 @@ require 'genevalidator/enumerable'
 ##
 # Class that stores the validation output information
 class LengthRankValidationOutput < ValidationReport
+
+  attr_reader :percentage
+  attr_reader :msg
+
   def initialize(short_header, header, description, msg, no_of_hits, median,
                  extreme_hits, percentage)
     @msg          = msg
