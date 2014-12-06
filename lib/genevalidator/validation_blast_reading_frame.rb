@@ -7,13 +7,9 @@ class BlastRFValidationOutput < ValidationReport
   attr_reader :frames_histo
   attr_reader :msg
 
-  def initialize (frames_histo, expected = :yes)
+  def initialize(short_header, header, description, frames_histo, expected = :yes)
 
-    @short_header = 'Frame'
-    @header       = 'Reading Frame'
-    @description  = 'Check whether there is a single reading frame among' \
-                    ' BLAST hits. Otherwise there might be a reading frame' \
-                    ' shift in the query sequence.'
+    @short_header, @header, @description = short_header, header, description
     @frames_histo = frames_histo
     @expected     = expected
     @result       = validation
@@ -114,7 +110,7 @@ class BlastReadingFrameValidation < ValidationTest
     main_rf = frames_histo.map{|k,v| v}.max
     @prediction.nucleotide_rf = frames_histo.select{|k,v| v==main_rf}.first.first
 
-    @validation_report = BlastRFValidationOutput.new(frames_histo)
+    @validation_report = BlastRFValidationOutput.new(@short_header, @header, @description, frames_histo)
     @validation_report.running_time = Time.now - start
     return @validation_report
 

@@ -8,12 +8,8 @@ class DuplicationValidationOutput < ValidationReport
   attr_reader :pvalue
   attr_reader :threshold
 
-  def initialize (pvalue, threshold = 0.05, expected = :no)
-    @short_header = 'Duplication'
-    @header       = 'Duplication'
-    @description  = 'Check whether there is a duplicated subsequence in the' \
-                    ' predicted gene by counting the hsp residue coverage of' \
-                    ' the prediction, for each hit.'
+  def initialize(short_header, header, description, pvalue, threshold = 0.05, expected = :no)
+    @short_header, @header, @description = short_header, header, description
     @pvalue      = pvalue
     @threshold   = threshold
     @result      = validation
@@ -82,13 +78,9 @@ class DuplicationValidation < ValidationTest
 
   def is_in_range(ranges, idx)
     ranges.each do |range|
-      if range.member?(idx)
-        return true
-      else
-        return false
-      end
+      return (range.member?(idx)) ? true : false
     end
-    return false
+    false
   end
 
   ##
@@ -114,29 +106,21 @@ class DuplicationValidation < ValidationTest
         hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name, hit.identifier, @raw_seq_file_load)
 
         if hit.raw_sequence.nil? or hit.raw_sequence.empty?
-          if hit.type == :protein
-            hit.get_sequence_by_accession_no(hit.accession_no, 'protein', @db)
-          else
-            hit.get_sequence_by_accession_no(hit.accession_no, 'nucleotide', @db)
-          end
+          seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
+          hit.get_sequence_by_accession_no(hit.accession_no, 'seq_type', @db)
         end
 
         if hit.raw_sequence.nil?
           useless_hits.push(hit)
         else
-          if hit.raw_sequence.empty?
-            useless_hits.push(hit)
-          end
+          useless_hits.push(hit) if hit.raw_sequence.empty?
         end
-
       end
     end
 
     useless_hits.each{|hit| less_hits.delete(hit)}
 
-    if less_hits.length == 0
-      raise NoInternetError
-    end
+    raise NoInternetError if less_hits.length.nil?
 
     averages = []
 
@@ -213,14 +197,14 @@ class DuplicationValidation < ValidationTest
 
     # if all hsps match only one time
     if averages.reject{|x| x==1} == []
-      @validation_report = DuplicationValidationOutput.new(1)
+      @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, 1)
       @validation_report.running_time = Time.now - start
       return @validation_report
     end
 
     pval = wilcox_test(averages)
 
-    @validation_report = DuplicationValidationOutput.new(pval)
+    @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, pval)
     @running_time = Time.now - start
     return @validation_report
 

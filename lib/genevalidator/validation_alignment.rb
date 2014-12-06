@@ -10,15 +10,10 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :consensus
   attr_reader :threshold
 
-  def initialize (gaps = 0, extra_seq = 0, consensus = 1, threshold = 20,
-                  expected = :yes)
+  def initialize(short_header, header, description, gaps = 0, extra_seq = 0,
+                  consensus = 1, threshold = 20, expected = :yes)
 
-    @short_header = 'MA'
-    @header       = 'Missing/Extra sequences'
-    @description  = 'Finds missing and extra sequences in the prediction,' \
-                    ' based on the multiple alignment of the best hits. Also' \
-                    ' counts the percentahe of the conserved regions that' \
-                    ' appear in the prediction.'
+    @short_header, @header, @description = short_header, header, description
     @gaps         = (gaps * 100).round(0).to_s + '%'
     @extra_seq    = (extra_seq * 100).round(0).to_s + '%'
     @consensus    = (consensus * 100).round(0).to_s + '%'
@@ -199,7 +194,7 @@ class AlignmentValidation < ValidationTest
     extra_seq = extra_sequence_validation(prediction_raw, sm)
     consensus = consensus_validation(prediction_raw, get_consensus(@multiple_alignment[0..@multiple_alignment.length-2]))
 
-    @validation_report = AlignmentValidationOutput.new(gaps, extra_seq, consensus)
+    @validation_report = AlignmentValidationOutput.new(@short_header, @header, @description, gaps, extra_seq, consensus)
     @validation_report.plot_files.push(plot1)
     @validation_report.running_time = Time.now - start
     return @validation_report

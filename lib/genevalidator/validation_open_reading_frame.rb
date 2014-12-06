@@ -9,13 +9,8 @@ class ORFValidationOutput < ValidationReport
   attr_reader :coverage
   attr_reader :threshold
 
-  def initialize (orfs, coverage, longest_orf_frame, threshold = 0.8, expected = :yes)
-    @hey          = "jef"
-    @short_header = 'ORF'
-    @header       = 'Main ORF'
-    @description  = 'Check whether there is a single main Open Reading Frame' \
-                    ' in the predicted gene. Aplicable only for nucleotide' \
-                    ' queries.'
+  def initialize(short_header, header, description, orfs, coverage, longest_orf_frame, threshold = 0.8, expected = :yes)
+    @short_header, @header, @description = short_header, header, description
 
     @orfs         = orfs
     @coverage     = coverage
@@ -82,7 +77,7 @@ class OpenReadingFrameValidation < ValidationTest
     @short_header = 'ORF'
     @header       = 'Main ORF'
     @description  = 'Check whether there is a single main Open Reading Frame' \
-                    ' in the predicted gene. Aplicable only for nucleotide' \
+                    ' in the predicted gene. Applicable only for nucleotide' \
                     ' queries.'
     @cli_name     = "orf"
     @filename     = filename
@@ -126,7 +121,7 @@ class OpenReadingFrameValidation < ValidationTest
 
     plot1 = plot_orfs(orfs)
 
-    @validation_report = ORFValidationOutput.new(orfs, coverage, longest_orf_frame)
+    @validation_report = ORFValidationOutput.new(@short_header, @header, @description, orfs, coverage, longest_orf_frame)
     @validation_report.running_time = Time.now - start
 
     @validation_report.plot_files.push(plot1)
@@ -297,7 +292,6 @@ class OpenReadingFrameValidation < ValidationTest
         end
       end
     end
-
     result
   end
 

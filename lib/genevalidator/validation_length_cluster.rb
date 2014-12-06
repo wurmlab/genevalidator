@@ -11,13 +11,8 @@ class LengthClusterValidationOutput < ValidationReport
   attr_reader :query_length
   attr_reader :limits
 
-  def initialize (query_length, limits, expected = :yes)
-    @short_header = 'LengthCluster'
-    @header       = 'Length Cluster'
-    @description  = 'Check whether the prediction length fits most of the' \
-                    ' BLAST hit lengths, by 1D hierarchical clusterization.' \
-                    ' Meaning of the output displayed: Query_length' \
-                    ' [Main Cluster Length Interval]'
+  def initialize(short_header, header, description, query_length, limits, expected = :yes)
+    @short_header, @header, @description = short_header, header, description
     @limits       = limits
     @query_length = query_length
     @expected     = expected
@@ -119,7 +114,7 @@ class LengthClusterValidation < ValidationTest
     limits = @clusters[@max_density_cluster].get_limits
     query_length = @prediction.length_protein
 
-    @validation_report = LengthClusterValidationOutput.new(query_length, limits)
+    @validation_report = LengthClusterValidationOutput.new(@short_header, @header, @description, query_length, limits)
     plot1 = plot_histo_clusters
     @validation_report.plot_files.push(plot1)
 
