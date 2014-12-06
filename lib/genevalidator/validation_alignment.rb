@@ -17,7 +17,7 @@ class AlignmentValidationOutput < ValidationReport
     @header       = 'Missing/Extra sequences'
     @description  = 'Finds missing and extra sequences in the prediction,' \
                     ' based on the multiple alignment of the best hits. Also' \
-                    ' counts the percentahe of the conserved regions that' \
+                    ' counts the percentage of the conserved regions that' \
                     ' appear in the prediction.'
     @gaps         = (gaps * 100).round(0).to_s + '%'
     @extra_seq    = (extra_seq * 100).round(0).to_s + '%'
@@ -26,22 +26,16 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @approach     = 'If the query sequence is well conserved and similar' \
-                    ' sequences (BLAST hits) are correct, we can expect' \
-                    ' that the query sequence would be highly similar to' \
-                    ' the top BLAST hits, with the query having very few' \
-                    ' extra (or missing) amino acid residues. That is to' \
-                    ' say that the query sequence would be highly similiar' \
-                    ' to the consenses of the top ten BLAST hits produced' \
-                    ' from a position specific scoring matrix profile' \
-                    ' (using Mafft).'
-    @explanation  = "When compared to a statistical model of the top ten" \
-                    " BLAST hit, #{@consensus} of residues" \
-                    " are conserved in the query sequence." \
-                    " #{@extra_seq} of residues in query" \
-                    " sequence are not present in the profile. Moreover," \
-                    " #{@gaps} of residues in the profile" \
-                    " are not present in the query sequence."
+    @approach     = 'We expect the query sequence to be similar to the top' \
+                    ' ten BLAST hits. Here, we create a statistical consensus' \
+                    ' model of those top hits and compare the query to this ' \
+                    ' model.'
+    @explanation  = "The query sequence includes #{@consensus} amino-acid residues" \
+                    " present in the consensus model." \
+                    " #{@extra_seq} of residues in the query" \
+                    " sequence are absent from the consensus profile. " \
+                    " #{@gaps} of residues in the consensus profile" \
+                    " are absent from the query sequence."
     @conclusion   = conclude
   end
 
@@ -54,13 +48,13 @@ class AlignmentValidationOutput < ValidationReport
             ' query sequence.'
       con1, con2, con3 = '', '', '' # Create empty string variables
       if (1-consensus.to_i) > @threshold
-        con1 = " There is a low conservation of residues between the" \
+        con1 = " There is low conservation of residues between the" \
                " statistical profile and the query sequence (the cut-off is" \
                " 80%)." 
       end
       if extra_seq.to_i > @threshold
         con2 = " The query sequence has a high percentage (#{@extra_seq}) of" \
-               " extra residues that are not present in the statistical" \
+               " extra residues absent from the statistical" \
                " profile (the cut-off is 20%)."
       end
       if gaps.to_i > @threshold
