@@ -22,25 +22,25 @@ class BlastRFValidationOutput < ValidationReport
     @explaination_part = ''
     @totalHSP     = 0
     @frames_histo.each do |x, y|
-      @msg               << "#{y}&nbsp;HSPs&nbsp;in&nbsp;frame&nbsp;#{x}; "
-      @explaination_part << "#{y} HSPs were found to align within frame #{x}; "
+      @msg               << "#{y}&nbsp;HSPs&nbsp;align&nbsp;in&nbsp;frame&nbsp;#{x}; "
+      @explaination_part << "#{y} HSPs align in frame #{x}; "
       @totalHSP += y.to_i
     end
 
-    @approach     = 'If the query sequence encodes a single gene, we expect' \
-                    ' it to contain a single Open Reading Frame (ORF). Thus' \
-                    ' all BLAST hits are expected to align within a single ORF.'
+    @approach     = 'We expect the query sequence to encode a single gene, thus' \
+                    ' it should contain one main Open Reading Frame (ORF). All' \
+                    ' all BLAST hits are thus expected to align within this ORF.'
     @explanation  = explain
     @conclusion   = conclude
 
   end
 
   def explain 
-    exp1 = "BLAST analysis produced #{@totalHSP} High-scoring Segment Pairs" \
-           " (HSPs), of which"
+    exp1 = "BLAST identified #{@totalHSP} High-scoring Segment Pairs" \
+           " (HSPs)"
     if @result == :yes # i.e. if there is only one ORF...
       frame = @frames_histo.keys[0].to_s
-      exp2  = ", all were found to align within frame #{frame}."
+      exp2  = "; all of these align in frame #{frame}."
     else
       exp2 = ": #{@explaination_part.gsub(/;$/, '')}."
     end
@@ -49,10 +49,9 @@ class BlastRFValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes # i.e. if there is only one ORF...
-      'As all of HSPs align within a single ORF, there is no reason to' \
-      ' believe there is any problem with the ORF of the query sequence.'
+      'This is as expected.'
     else
-      'As not all HSPs align within a single ORF, there may be a frame shift' \
+      'The HSPs align in mulitple reading frames, this suggests there may be a frame shift' \
       ' in the query sequence.'
     end
   end

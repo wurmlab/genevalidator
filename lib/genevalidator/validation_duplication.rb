@@ -18,27 +18,20 @@ class DuplicationValidationOutput < ValidationReport
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @approach    = 'If the query sequence is well conserved and similar' \
-                   ' sequences (BLAST hits) are correct, we can expect that' \
-                   ' the query sequence would not contain any duplicated' \
-                   ' sequence data (that is not seen in similar BLAST hits).' \
-                   ' That is to say that each region of each BLAST hit should' \
-                   ' only match the query sequence at most once.'
-    @explanation = "The wilcoxon test (analyses the distribution of the" \
-                   " average hit coverage against 1) produced a p-value of" \
-                   " #{@pvalue.round(2)}."
+    @approach    = 'We expect each BLAST his to match each region of the query' \
+                   ' at most once. Here, we calculate the distribution of hit' \
+                   ' coverage against the query sequence and use a Wilcoxon'\
+                   ' to determine if it is higher than 1.'
+    @explanation = "The Wilcoxon test produced a p-value of #{@pvalue.round(2)}."
     @conclusion  = conclude
   end
 
   def conclude
     if @result == :yes
-      'Since the p-value is higher than 0.05, we accept the null hypothesis' \
-      ' - i.e. the query sequence does not contain any erroneous duplications.'
+      'This suggests that the query sequence contains no erroneous duplications.'
     else
-      'Since the p-value is lower than 0.05, we accept the alternative' \
-      ' hypothesis - i.e. the query sequence does contain erroneous' \
-      ' duplications. Possible errors include a sequencing errors or errors' \
-      ' in the replication mechanism of the cell.'
+      'The null hypothesis is rejected - thus a region of the query sequence' \
+      ' is likely repeated more than once.'
     end
   end
 
