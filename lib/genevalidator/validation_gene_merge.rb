@@ -10,7 +10,8 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_down
   attr_reader :threshold_up
 
-  def initialize(short_header, header, description, slope, unimodality, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
+  def initialize(short_header, header, description, slope, unimodality,
+                 threshold_down = 0.4, threshold_up = 1.2, expected = :no)
     @short_header, @header, @description = short_header, header, description
     @slope          = slope
     @unimodality    = unimodality
@@ -19,46 +20,42 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @approach       = 'If the query sequence is well conserved and similar' \
-                      ' sequences (BLAST hits) are correct, we expect that' \
-                      ' the query sequence encodes a single gene. Here, we' \
-                      ' analyse the High-scoring Segment Pairs (HSPs)' \
-                      ' produced by BLAST for evidence that suggests that the' \
-                      ' query sequence contains sequences from two or more genes.'
+    @approach       = 'We expect the query sequence to encode a single' \
+                      ' protein-coding gene. Here, we analyse the' \
+                      ' High-scoring Segment Pairs (HSPs) identified by BLAST' \
+                      ' to determine whether the query includes sequence from' \
+                      ' two or more genes.'
     @explanation    = explain
     @conclusion     = conclude
   end
 
   def explain
     if @unimodality
-      'Analysing the relationship between the start and stop offsets of the' \
-      ' HSPs produces a unimodal distribution (see graph below).'
+      'The start coordinates and the end coordinates of HSPs are unimodally'\
+      ' distributed.'
     else
-      "Analysing the relationship between the start and stop offsets of the" \
-      " HSPs does not produces a unimodal distribution (see graphs below)." \
-      " Being inconclusive, a weighted linear regression analysis is" \
-      " necessary, where the start and stop offset points are weighted" \
-      " inversely proportionally to the strength of the hit. Here, the linear" \
-      " regression analysis produced a result of #{@slope.round(2)}."
+      'The distribution of start and/or end-coordinates of HSPs are'\
+      ' multi-modal. To detect potential problems we performed a linear'\
+      ' regression (with coordinates weighted inversely proportionally to '\
+      " hit strength). The resulting slope is #{@slope.round(2)}."
     end
   end
 
   def conclude
     if @unimodality
-      'A unimodal distribution suggests that the query sequence does not' \
-      ' contain a gene merge.'
+      'This suggest that the query sequence represents a single gene.'
     else
+      diff = (@result == :yes) ? ' within' : ' outside' 
+      output_text = "This slope is #{diff} our empirically calculated" \
+                    " thresholds (0.4 and 1.2)."
       if @result == :yes
-        'Since the result of the weighted linear regression analysis was' \
-        ' within the emperically calculated thresholds (0.4 and 1.2), there' \
-        ' is evidence of the query sequence containing a gene merge. Possible' \
-        ' errors include a gene prediction error, where 2 or more genes were' \
-        ' merged together.'
+        output_text << 'This suggests the query contains sequence from two'\
+                       ' or more different genes.'
       else
-        'Since the result of the weighted linear regression analysis was' \
-        ' outside the emperically calculated thresholds (0.4 and 1.2),' \
-        ' there is no evidence that the query sequence contains a gene merge.'
-      end
+        output_text << 'There is no evidence that the query contains sequence'\
+                       'from multiple genes.'
+      end 
+      output_text
     end
   end
 
@@ -135,6 +132,7 @@ class GeneMergeValidation < ValidationTest
     end
 
     line_slope = slope(xx, yy, (1..hits.length).map{|x| 1 / (x + 0.0)})
+    ## YW - what is this weighting?
 
     unimodality = false
     if unimodality_test(xx, yy)
