@@ -20,21 +20,21 @@ class LengthRankValidationOutput < ValidationReport
     @expected     = :yes
     @approach     = 'If the query sequence is well conserved and similar' \
                     ' sequences (BLAST hits) are correct, we can expect' \
-                    ' query sequence to be of a similar length to the ' \
-                    ' majority of hit sequences lengths. That is to say,' \
-                    ' if ranked by length, we would expect the query' \
-                    ' sequence to be ranked within 80% of all hit sequence' \
-                    ' lengths. Here, the query sequence is analysed to see if' \
-                    ' its length falls in the extreme 20% of hit sequence' \
-                    ' lengths.'
-    @explanation  = "BLAST Analysis produced #{@no_of_hits} hit sequences" \
-                    " with a median sequence length of #{median} amino-acid" \
-                    " residues. After ranking by length, there are" \
-                    " #{extreme_hits} BLAST hits that are more extreme (i.e" \
-                    " further away from median) than the query sequence. This" \
-                    " refers to a rank of #{@percentage}% (where the cutoff" \
-                    " is 20%)."
+                    ' query and hit sequences to have similar lengths. '
+
+    percent_extreme_hits = (100*extreme_hits/ no_of_hits).round(1)
+    @explanation  = 
     @conclusion   = conclude
+  end
+
+  def explain
+    "The query sequence is  #{@query_length} amino-acids long." \
+    " BLAST identified #{@no_of_hits} hit sequences" \
+    " with lengths from XXX to YYY (median: #{@median}; mean: XXXX)." \
+    " #{@extreme_hits} of these hit sequences (i.e., #{@percentage}%)" \
+    " are LONGER/SHORTER than the query sequence."
+
+
   end
 
   def conclude
@@ -42,10 +42,7 @@ class LengthRankValidationOutput < ValidationReport
       "There is no reason to believe there is any problem with the length of" \
       " the query sequence."
     else
-      "The sequence may be #{@msg.gsub('&nbsp;', ' ')}. Potential errors" \
-      " include sequencing errors (e.g. parts of the gene being lost/added or" \
-      " inaccurate gene bounds), a low expression level of the gene or" \
-      " the sequenced mRNA inaccurately containing introns."
+      "The sequence may be #{@msg.gsub('&nbsp;', ' ')}."
     end
   end
 

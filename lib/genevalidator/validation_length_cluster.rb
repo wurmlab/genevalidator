@@ -11,7 +11,8 @@ class LengthClusterValidationOutput < ValidationReport
   attr_reader :query_length
   attr_reader :limits
 
-  def initialize(short_header, header, description, query_length, limits, expected = :yes)
+  def initialize(short_header, header, description, query_length, limits,
+                 expected = :yes)
     @short_header, @header, @description = short_header, header, description
     @limits       = limits
     @query_length = query_length
@@ -30,7 +31,7 @@ class LengthClusterValidationOutput < ValidationReport
 
   def explain
     diff = (@result == :yes) ? 'inside' : 'outside'
-    "In this case, the most dense length-cluster of BLAST hits includes" \
+    "The most dense length-cluster of BLAST hits includes" \
     " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" \
     " long. The query sequence is #{@query_length} amino-acids long and" \
     " is thus #{diff} the most dense length-cluster of BLAST hits."
@@ -42,10 +43,7 @@ class LengthClusterValidationOutput < ValidationReport
       ' the query sequence.'
     else
       size_diff  = (@query_length > @limits[1]) ? 'long': 'short'
-      "The query sequence may be too #{size_diff}. Potential errors include" \
-      " sequencing errors (e.g. parts of the gene being lost/added or" \
-      " inaccurate gene bounds), a low expression level of the gene or" \
-      " the sequenced mRNA inaccurately containing introns."
+      "This suggests that the query sequence may be too #{size_diff}."
     end
   end
 
