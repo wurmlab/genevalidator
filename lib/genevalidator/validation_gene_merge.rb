@@ -10,11 +10,8 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :threshold_down
   attr_reader :threshold_up
 
-  def initialize (slope, unimodality, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
-    @short_header   = "Gene_Merge"
-    @header         = "Gene Merge"
-    @description    = "Check whether BLAST hits make evidence about a merge" \
-                      " of two genes that match the predicted gene."
+  def initialize(short_header, header, description, slope, unimodality, threshold_down = 0.4, threshold_up = 1.2, expected = :no)
+    @short_header, @header, @description = short_header, header, description
     @slope          = slope
     @unimodality    = unimodality
     @threshold_down = threshold_down
@@ -53,7 +50,7 @@ class GeneMergeValidationOutput < ValidationReport
       else
         output_text << ' outside'
       end
-      output_text   << ' our emperically calculated thresholds (0.4 and 1.2).'
+      output_text   << ' our empirically calculated thresholds (0.4 and 1.2).'
       if @result == :yes
         output_text << 'This suggests the query contains sequence from two'\
                        ' or more different genes.'
@@ -150,7 +147,7 @@ class GeneMergeValidation < ValidationTest
 
     y_intercept = line_slope[0]
 
-    @validation_report = GeneMergeValidationOutput.new(lm_slope, unimodality)
+    @validation_report = GeneMergeValidationOutput.new(@short_header, @header, @description, lm_slope, unimodality)
 
     unless unimodality
       plot1 = plot_2d_start_from(lm_slope, y_intercept)
@@ -300,8 +297,7 @@ class GeneMergeValidation < ValidationTest
     slope = numerator / (denominator + 0.0)
     y_intercept = y_mean - (slope * x_mean)
 
-    return [y_intercept, slope]
-
+    [y_intercept, slope]
   end
 
   ##
@@ -313,13 +309,9 @@ class GeneMergeValidation < ValidationTest
   # Output:
   # The ecuation of the regression line: [y slope]
   def slope_statsample(xx, yy)
-
     require 'statsample'
-
     sr=Statsample::Regression.simple(xx.to_scale,yy.to_scale)
-
-    return [sr.a, sr.b]
-
+    [sr.a, sr.b]
   end
 
   ##
