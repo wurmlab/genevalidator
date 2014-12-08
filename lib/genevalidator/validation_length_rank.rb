@@ -9,32 +9,36 @@ class LengthRankValidationOutput < ValidationReport
   attr_reader :percentage
   attr_reader :msg
 
-  def initialize(short_header, header, description, msg, no_of_hits, median,
+  def initialize(short_header, header, description, msg, query_length,
+                 no_of_hits, median, mean, smallest_hit, largest_hit,
                  extreme_hits, percentage)
-    @msg          = msg
-    @no_of_hits   = no_of_hits
-    @percentage   = percentage
-
     @short_header, @header, @description = short_header, header, description
+    @msg          = msg
+    @query_length = query_length
+    @no_of_hits   = no_of_hits
+    @median       = median
+    @mean         = mean
+    @smallest_hit = smallest_hit
+    @largest_hit  = largest_hit
+    @extreme_hits = extreme_hits
+    @percentage   = percentage
+    
     @result       = validation
     @expected     = :yes
     @approach     = 'If the query sequence is well conserved and similar' \
                     ' sequences (BLAST hits) are correct, we can expect' \
                     ' query and hit sequences to have similar lengths. '
-
-    percent_extreme_hits = (100*extreme_hits/ no_of_hits).round(1)
-    @explanation  = 
+    @explanation  = explain
     @conclusion   = conclude
   end
 
   def explain
-    "The query sequence is  #{@query_length} amino-acids long." \
-    " BLAST identified #{@no_of_hits} hit sequences" \
-    " with lengths from XXX to YYY (median: #{@median}; mean: XXXX)." \
-    " #{@extreme_hits} of these hit sequences (i.e., #{@percentage}%)" \
-    " are LONGER/SHORTER than the query sequence."
-
-
+    diff = (@query_length < @median) ? 'longer' : 'shorter'
+    "The query sequence is  #{@query_length} amino-acids long. BLAST" \
+    " identified #{@no_of_hits} hit sequences with lengths from" \
+    " #{@smallest_hit} to #{@largest_hit} amino-acids (median: #{@median};" \
+    "  mean: #{@mean}). #{@extreme_hits} of these hit sequences (i.e." \
+    " #{@percentage}%) are #{diff} than the query sequence."
   end
 
   def conclude
@@ -95,6 +99,10 @@ class LengthRankValidation < ValidationTest
     no_of_hits   = hits_lengths.length
     median       = hits_lengths.median.round
     query_length = prediction.length_protein
+    mean         = hits_lengths.mean.round
+
+    smallest_hit = hits_lengths[0]
+    largest_hit  = hits_lengths[-1]
 
     if hits_lengths.standard_deviation <= 5
       msg = ''
@@ -113,7 +121,7 @@ class LengthRankValidation < ValidationTest
 
     msg = '' if percentage >= THRESHOLD
 
-    @validation_report = LengthRankValidationOutput.new(@short_header, @header, @description, msg, no_of_hits, median, extreme_hits, percentage)
+    @validation_report = LengthRankValidationOutput.new(@short_header, @header, @description, msg, query_length, no_of_hits, median, mean, smallest_hit, largest_hit, extreme_hits, percentage)
     @validation_report.running_time = Time.now - start
     return @validation_report
 
