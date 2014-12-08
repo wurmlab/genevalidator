@@ -45,9 +45,9 @@ class GeneMergeValidationOutput < ValidationReport
     if @unimodality
       'This suggest that the query sequence represents a single gene.'
     else
-      output_text = 'This slope is'
-      output_text << (@result == :yes) ? ' within' : ' outside' 
-      output_text   << ' our empirically calculated thresholds (0.4 and 1.2).'
+      diff = (@result == :yes) ? ' within' : ' outside' 
+      output_text = "This slope is #{diff} our empirically calculated" \
+                    " thresholds (0.4 and 1.2)."
       if @result == :yes
         output_text << 'This suggests the query contains sequence from two'\
                        ' or more different genes.'
