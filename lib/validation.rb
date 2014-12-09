@@ -226,12 +226,8 @@ class Validation
             query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
 
             #call blast with the default parameters
-            if type == :protein
-              output = BlastUtils.call_blast_from_stdin("blastp", query, @db, @num_threads, 11, 1)
-            else
-              output = BlastUtils.call_blast_from_stdin("blastx", query, @db, @num_threads, 11, 1)
-            end
-
+            blast_type = (type == :protein) ? 'blastp' : 'blastx'
+            output = BlastUtils.call_blast_from_stdin(blast_type, query, @db, @num_threads, 11, 1)
             parse_output(output, :stream)
           else
             @idx = @idx + 1
@@ -333,7 +329,7 @@ class Validation
 
       prediction.length_protein /= 3 if @type == :nucleotide
 
-      @idx = @idx + 1
+      @idx += 1
 
       if input_file_type == :tabular
         if @idx < @start_idx
@@ -352,7 +348,7 @@ class Validation
       end
 
       if hits == nil
-        @idx = @idx -1
+        @idx -= 1
         break
       end
 
@@ -374,9 +370,7 @@ class Validation
       GC.start # force garbage collector
 
     end while 1
-
     @threads.each {|t| t.join}
-
   end
 
   ##
@@ -402,17 +396,11 @@ class Validation
         no_mafft += v.errors.select{|e| e == NoMafftInstallationError}.length
         no_internet += v.errors.select{|e| e == NoInternetError}.length
       end
-      if v.validation == :error
-        errors.push(v.short_header)
-      end
+      errors.push(v.short_header) if v.validation == :error
     end
 
     no_evidence = validations.count{|v| v.result == :unapplicable or v.result == :warning} == validations.length
-    if no_evidence
-      nee = 1
-    else
-      nee = 0
-    end
+    nee = (no_evidence) ? 1 : 0
 
     good_predictions = 0
     bad_predictions = 0
@@ -423,7 +411,6 @@ class Validation
     end
 
     @mutex_array.synchronize {
-
       @no_queries += 1
       @scores.push(query_output.overall_score)
       @good_predictions += good_predictions
@@ -442,11 +429,8 @@ class Validation
             @map_running_times[v.short_header] = p
         end
       end
-
     }
-
-    return query_output
-
+    query_output
   end
 
   ##
@@ -477,7 +461,7 @@ class Validation
     end
 
     identical_hits.each {|hit| hits.delete(hit)}
-    return hits
+    hits
   end
 
   ##
@@ -520,9 +504,7 @@ class Validation
 
     # check alias duplication
     aliases = validations.map(&:cli_name)
-    unless aliases.length == aliases.uniq.length
-      raise AliasDuplicationError
-    end
+    raise AliasDuplicationError unless aliases.length == aliases.uniq.length
 
     desired_validations = validations.select {|v| vlist.map{|vv| vv.strip.downcase}.include? v.cli_name.downcase }
     desired_validations.each do |v|
