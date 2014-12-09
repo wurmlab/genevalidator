@@ -4,7 +4,7 @@ $(function(){
   // add custom parser to make the stars column to sort according to attr.
   $.tablesorter.addParser({
     id: 'star_scores', // called later when init the tablesorter
-    is: function(s) {
+    is: function() {
       return false; // return false so this parser is not auto detected
     },
     format: function(s, table, cell, cellIndex) {
@@ -35,7 +35,7 @@ $(function () {
 //Hide empty columns
 $(document).ready(function() {
   if (window.chrome && (window.location.protocol === 'file:') )  {
-    $('#browseralert').modal()
+    $('#browseralert').modal();
   }
 
 
@@ -45,9 +45,9 @@ $(document).ready(function() {
     .find('tr td:nth-child(' + (i + 1) + ')');
     //check if all the cells in this column are empty
     //
-    if ($(this).hasClass( "chart-column" )) {
+    if ($(this).hasClass('chart-column')) {
     } else {
-      if ($(this).text().trim() == '') {
+      if ($(this).text().trim() === '') {
         //hide header
         $(this).hide();
         //hide cells

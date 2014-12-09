@@ -4,14 +4,14 @@ $(function(){
   // add custom parser to make the stars column to sort according to attr.
   $.tablesorter.addParser({
     id: 'star_scores', // called later when init the tablesorter
-    is: function(s) {
+    is: function() {
       return false; // return false so this parser is not auto detected
     },
     format: function(s, table, cell, cellIndex) {
       var $cell = $(cell);
       if (cellIndex === 1) {
         return $cell.attr('data-score') || s;
-      } 
+      }
       return s;
     },
     parsed: false,
@@ -22,20 +22,20 @@ $(function(){
     headers: {
       1 : { sorter: 'star_scores' } // Telling it to use custom parser...
     },
-    sortList: [[0,0]]
+    sortList: [[0,0]],
   });
 });
 
 
 //ToolTip
-$(function () { 
+$(function () {
   $("[data-toggle='tooltip']").tooltip();
 });
 
 //Hide empty columns
-$(document).ready(function() { 
-  if (window.chrome) {
-    $('#browseralert').modal()
+$(document).ready(function() {
+  if (window.chrome && (window.location.protocol === 'file:') )  {
+    $('#browseralert').modal();
   }
 
 
@@ -44,10 +44,10 @@ $(document).ready(function() {
     var tds = $(this).parents('table')
     .find('tr td:nth-child(' + (i + 1) + ')');
     //check if all the cells in this column are empty
-    // 
-    if ($(this).hasClass( "chart-column" )) {
+    //
+    if ($(this).hasClass('chart-column')) {
     } else {
-      if ($(this).text().trim() == '') { 
+      if ($(this).text().trim() === '') {
         //hide header
         $(this).hide();
         //hide cells

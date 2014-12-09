@@ -3,9 +3,9 @@ function show_all_plots(button){
     var expand_children = document.getElementsByName('plot_row');
     if(expand_children.length < 30){
       if (window.chrome && (window.location.protocol === 'file:') ) {
-        if (($('#browser-alert').length) == 0) {
-          $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
-          $('#browseralert').modal()
+        if (($('#browser-alert').length) === 0) {
+          $('#browseralertText').html('<stong>Sorry, this feature is not supported in your browser.');
+          $('#browseralert').modal();
         }
       }
       else {
@@ -15,16 +15,16 @@ function show_all_plots(button){
             keyboard: 'false'
           });
 
-        if(button.status != "pressed"){
-            button.status = "pressed";
-            button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Hide All Charts'
+        if(button.status != 'pressed'){
+            button.status = 'pressed';
+            button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Hide All Charts';
             button.onclick = function() {
-                hide_all_plots(button, expand_children)
+                hide_all_plots(button, expand_children);
             };
         }
 
         //display plots in the dom
-        var buttons_dom = document.getElementsByName('plot_btn')
+        var buttons_dom = document.getElementsByName('plot_btn');
         // remove all plots
         remove_all_plots(expand_children);
 
@@ -42,40 +42,40 @@ function show_all_plots(button){
 }
 
 function show_plot(pressedButton, expand_child_div){
-    if(pressedButton.status != "pressed"){
-        var eachPlotBtn = pressedButton.getAttribute('onclick')
-        var tmpFunc = new Function(eachPlotBtn)
-        tmpFunc()
-        pressedButton.status="pressed";
-        $(expand_child_div).parent().parent().show()
-        expand_child_div.style.display = "block";
+    if(pressedButton.status != 'pressed'){
+        var eachPlotBtn = pressedButton.getAttribute('onclick');
+        var tmpFunc = new Function(eachPlotBtn);
+        tmpFunc();
+        pressedButton.status='pressed';
+        $(expand_child_div).parent().parent().show();
+        expand_child_div.style.display = 'block';
     }
 }
 
 function remove_all_plots(expand_children){
-    var extensions = document.querySelectorAll('div')
+    var extensions = document.querySelectorAll('div');
     for (var i = 0; i < extensions.length; i++) {
-        if(extensions[i].id.search(/toggle*/) == 0){
-            d3.select("#".concat(extensions[i].id)).selectAll("svg").remove();
+        if(extensions[i].id.search(/toggle*/) === 0){
+            d3.select('#'.concat(extensions[i].id)).selectAll('svg').remove();
         }
     }
 
-    for (var i = 0; i < expand_children.length; i++) {
-      expand_child_div = expand_children[i].getElementsByTagName('div')[0];
-      $(expand_child_div).parent().parent().hide()
+    for (var j = 0; j < expand_children.length; j++) {
+      expand_child_div = expand_children[j].getElementsByTagName('div')[0];
+      $(expand_child_div).parent().parent().hide();
     }
 
     var buttons = document.getElementsByTagName('button');
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].status = "released";
+    for (var k = 0; k < buttons.length; k++) {
+        buttons[k].status = 'released';
     }
 }
 
 function hide_all_plots(button, expand_children){
-    button.status = "released";
-    button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts'
+    button.status = 'released';
+    button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts';
     button.onclick = function() {
-            show_all_plots(button)
+            show_all_plots(button);
         };
     remove_all_plots(expand_children);
 }
@@ -92,59 +92,59 @@ function getElementByAttributeValue(attribute, value) {
 
 function showDiv(source, target){
   if (window.chrome && (window.location.protocol === 'file:') ) {
-    if (($('#browser-alert').length) == 0) {
-      $('#browseralertText').html("<stong>Sorry, this feature is not supported in your browser.")
-      $('#browseralert').modal()
+    if (($('#browser-alert').length) === 0) {
+      $('#browseralertText').html('<stong>Sorry, this feature is not supported in your browser.');
+      $('#browseralert').modal();
     }
     return;
   }
-    var explanationId = '#' + target + 'explanation'
+    var explanationId = '#' + target + 'explanation';
 
     if( $(explanationId).length) {
-      $(explanationId).remove()
+      $(explanationId).remove();
     }
 
-    var button = document.getElementById(target)
-    if(source.status == "pressed"){
-        button.style.display = "none";
-        $(button).parent().parent().hide();
+    var button = document.getElementById(target);
+    if(source.status == 'pressed'){
+      button.style.display = 'none';
+      $(button).parent().parent().hide();
     }
     else {
-        d3.select("#".concat(target)).selectAll("svg").remove();
-        button.style.display = "block";
-        $(button).parent().parent().show()
-        var pressedButtons = document.querySelectorAll('td')
-        for (var i = 0; i < pressedButtons.length; i++) {
-            if(pressedButtons[i].status == "pressed") {
-                pressedButtons[i].status = "released"
-            }
+      d3.select('#'.concat(target)).selectAll('svg').remove();
+      button.style.display = 'block';
+      $(button).parent().parent().show();
+      var pressedButtons = document.querySelectorAll('td');
+      for (var i = 0; i < pressedButtons.length; i++) {
+        if(pressedButtons[i].status == 'pressed') {
+          pressedButtons[i].status = 'released';
         }
+      }
     }
 
-    if(source.status=="pressed")
-        source.status="released"
+    if(source.status=='pressed')
+      source.status='released';
     else {
-        source.status="pressed"
+      source.status='pressed';
     }
 }
 
 function AddExplanation(source, approach, explanation, conclusion, target){
-  var row = '#' + target +'row'
-  var approach_html = '<p><b>Approach:</b> ' + approach + '</p>'
-  var explanation_html = '<p><b>Explanation:</b> ' + explanation + '</p>'
-  var conclusion_html = '<p><b>Conclusion:</b> ' + conclusion + '</p>'
+  var row = '#' + target +'row';
+  var approach_html = '<p><b>Approach:</b> ' + approach + '</p>';
+  var explanation_html = '<p><b>Explanation:</b> ' + explanation + '</p>';
+  var conclusion_html = '<p><b>Conclusion:</b> ' + conclusion + '</p>';
 
-  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' + approach_html + explanation_html + conclusion_html + '</div>')
-  if (source.status == "pressed") {
-    $(row).prepend(explain)
+  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' + approach_html + explanation_html + conclusion_html + '</div>');
+  if (source.status == 'pressed') {
+    $(row).prepend(explain);
   }
 }
 
 function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, aux2){
-    if (footer == '')
-        var legend = []
+    if (footer === '')
+        var legend = [];
     else
-        var legend = footer.split(";");
+        var legend = footer.split(';');
 
     switch(type){
         case "scatter":
