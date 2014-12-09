@@ -13,6 +13,7 @@ end
 
 desc "Unit tests for the majority of class methods"
 task :test do
+  CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
     t.libs << 'test'
   end
@@ -20,7 +21,6 @@ end
 
 desc "GeneValidationValidator"
 task :test_output do
-  CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
     t.libs << "test/big_test"
     t.test_files = FileList['test/big_test/*.rb']
