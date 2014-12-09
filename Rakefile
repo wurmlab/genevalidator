@@ -15,7 +15,9 @@ desc "Unit tests for the majority of class methods"
 task :test do
   CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
-    t.libs << 'test'
+    t.libs.push 'lib'
+    t.test_files = FileList['test/*.rb']
+    t.verbose = true
   end
 end
 
