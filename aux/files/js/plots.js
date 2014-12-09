@@ -15,7 +15,7 @@ function show_all_plots(button){
             keyboard: 'false'
           });
 
-        if(button.status != 'pressed'){
+        if(button.status !== 'pressed'){
             button.status = 'pressed';
             button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Hide All Charts';
             button.onclick = function() {
@@ -42,7 +42,7 @@ function show_all_plots(button){
 }
 
 function show_plot(pressedButton, expand_child_div){
-    if(pressedButton.status != 'pressed'){
+    if(pressedButton.status !== 'pressed'){
         var eachPlotBtn = pressedButton.getAttribute('onclick');
         var tmpFunc = new Function(eachPlotBtn);
         tmpFunc();
@@ -83,7 +83,7 @@ function hide_all_plots(button, expand_children){
 function getElementByAttributeValue(attribute, value) {
   var allElements = document.getElementsByTagName('*');
   for (var i = 0; i < allElements.length; i++) {
-    if (allElements[i].getAttribute(attribute) == value) {
+    if (allElements[i].getAttribute(attribute) === value) {
       return allElements[i];
     }
   }
@@ -105,7 +105,7 @@ function showDiv(source, target){
     }
 
     var button = document.getElementById(target);
-    if(source.status == 'pressed'){
+    if (source.status === 'pressed'){
       button.style.display = 'none';
       $(button).parent().parent().hide();
     }
@@ -115,16 +115,16 @@ function showDiv(source, target){
       $(button).parent().parent().show();
       var pressedButtons = document.querySelectorAll('td');
       for (var i = 0; i < pressedButtons.length; i++) {
-        if(pressedButtons[i].status == 'pressed') {
+        if(pressedButtons[i].status === 'pressed') {
           pressedButtons[i].status = 'released';
         }
       }
     }
 
-    if(source.status=='pressed')
-      source.status='released';
-    else {
-      source.status='pressed';
+    if (source.status === 'pressed') {
+      source.status = 'released';
+    } else {
+      source.status = 'pressed';
     }
 }
 
@@ -135,62 +135,65 @@ function AddExplanation(source, approach, explanation, conclusion, target){
   var conclusion_html = '<p><b>Conclusion:</b> ' + conclusion + '</p>';
 
   var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' + approach_html + explanation_html + conclusion_html + '</div>');
-  if (source.status == 'pressed') {
+  if (source.status === 'pressed') {
     $(row).prepend(explain);
   }
 }
 
 function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, aux2){
-    if (footer === '')
-        var legend = [];
-    else
-        var legend = footer.split(';');
+  var legend;
+  if (footer === ''){
+    legend = [];
+  } else {
+    legend = footer.split(';');
 
     switch(type){
-        case "scatter":
-            plot_scatter(filename, target, title, footer, xtitle, ytitle, aux1, aux2)
-            break;
-        case "bars":
-            plot_bars(filename, target, title, legend, xtitle, ytitle, aux1)
-            break;
-        case "simplebars":
-            plot_simple_bars(filename, target, title, legend, xtitle, ytitle)
-            break;
-        case "lines":
-            if(aux2 != "")
-            aux2 = aux2.split(",");
-            plot_lines(filename, target, title, legend, xtitle, ytitle, aux1, aux2)
-            break;
-        case "align":
-            if(aux2 != "")
-            aux2 = aux2.split(",");
-            plot_align(filename, target, title, legend, xtitle, ytitle, aux1, aux2)
-            break;
-        default:
-            break;
+      case "scatter":
+        plot_scatter(filename, target, title, footer, xtitle, ytitle, aux1, aux2);
+        break;
+      case "bars":
+        plot_bars(filename, target, title, legend, xtitle, ytitle, aux1);
+        break;
+      case "simplebars":
+        plot_simple_bars(filename, target, title, legend, xtitle, ytitle);
+        break;
+      case "lines":
+        if (aux2 !== "") {
+          aux2 = aux2.split(",");
+          plot_lines(filename, target, title, legend, xtitle, ytitle, aux1, aux2);
+          break;
+        }
+      case "align":
+        if (aux2 !== "") {
+          aux2 = aux2.split(",");
+          plot_align(filename, target, title, legend, xtitle, ytitle, aux1, aux2);
+          break;
+        }
+      default:
+          break;
     }
+  }
 }
 
-
 function color_beautification(color){
-    switch(color){
-        case "red":
-            return d3.rgb(189,54,47);
-            case "blue":
-            return d3.rgb(58,135,173);
-        case "green":
-            return d3.rgb(70,136,71);
-        case "yellow":
-            return d3.rgb(255,255,51);
-        case "orange":
-            return d3.rgb(248,148,6);
-        case "violet":
-            return d3.rgb(153,0,153);
-        case "gray":
-            return d3.rgb(160,160,160);
-        default:
-            return color;
-    }
+  switch(color){
+      case "red":
+          return d3.rgb(189,54,47);
+          case "blue":
+          return d3.rgb(58,135,173);
+      case "green":
+          return d3.rgb(70,136,71);
+      case "yellow":
+          return d3.rgb(255,255,51);
+      case "orange":
+          return d3.rgb(248,148,6);
+      case "violet":
+          return d3.rgb(153,0,153);
+      case "gray":
+          return d3.rgb(160,160,160);
+      default:
+          return color;
+    }å
 }
 
 // bars plot
@@ -199,7 +202,7 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
     var margin = {top: 70, right: 50, bottom: 75, left: 50},
         width = 600 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
-    var legend_width = 15
+    var legend_width = 15;
 
     var svg = d3.select("#".concat(target)).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -215,25 +218,25 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
         .text(title);
 
     var colors = new Array("orange", "blue", "green", "yellow", "brown");
-    var no_colors = colors.length
+    var no_colors = colors.length;
 
-        var padding = 100
+        var padding = 100;
 
     d3.json(filename, function(error, alldata) {
 
-        flattened_data = [].concat.apply([], alldata)
-        var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3
+        flattened_data = [].concat.apply([], alldata);
+        var yMax = d3.max(flattened_data, function(d) { return d.value; }) + 3;
         var y = d3.scale.linear()
             .domain([0, yMax + yMax/10])
             .range([height, 0]);
 
-        var xMin = d3.min(flattened_data, function(d) { return d.key; })
-        if(bar!=undefined){
+        var xMin = d3.min(flattened_data, function(d) { return d.key; });
+        if(bar!==undefined){
             var xMin = Math.min(xMin, bar);
         }
 
         var xMax = d3.max(flattened_data, function(d) { return d.key; })
-        if(bar!=undefined){
+        if(bar !== undefined){
             var xMax = Math.max(xMax, bar);
         }
 
@@ -284,10 +287,10 @@ function plot_bars(filename, target, title, footer, xTitle, yTitle, bar){
                   .attr("width", 6)
                   .attr("y", function(d) { return y(d.value); })
                   .attr("height", function(d) { return height - y(d.value); })
-                  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
+                  .attr("fill", function(d) { if (d.main === true) return color_beautification("red"); return color_beautification("blue");});
         });
 
-        if(bar!=undefined){
+        if(bar!==undefined){
             svg.append("rect")
                 .attr("x", x(bar))
                 .attr("width", 4)
@@ -420,7 +423,7 @@ function plot_simple_bars(filename, target, title, footer, xTitle, yTitle){
                   .attr("width", 6)
                   .attr("y", function(d) { return y(d.value); })
                   .attr("height", function(d) { return height - y(d.value); })
-                  .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
+                  .attr("fill", function(d) { if (d.main === true) return color_beautification("red"); return color_beautification("blue");});
         });
 
     });
@@ -514,7 +517,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
           .style("fill", function(d) { return color_beautification("red"); })
           .style("opacity",0.6);
 
-           if((slope!=undefined && slope != "") && (yLine!=undefined && yLine != "")){
+           if((slope!==undefined && slope !== "") && (yLine!==undefined && yLine !== "")){
 
                 yLine = parseFloat(yLine.replace(",", "."));
                 var xMaxValue = xMax
@@ -617,7 +620,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .style("text-anchor", "start")
           .text(xTitle)
 
-          if(yValues != ""){
+          if(yValues !== ""){
           svg.append("g")
               .attr("class", "y axis")
               .call(yAxis
@@ -656,8 +659,8 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
                   .attr("x2", function(d) { return x(d.stop); })
                   .attr("y2", function(d) { return y(d.y); })
                   .attr("stroke-width", function(d) {
-                    if (d.dotted == undefined) {
-                        if (d.color == "red" ) {
+                    if (d.dotted === undefined) {
+                        if (d.color === "red" ) {
                           return height/no_lines/2.5
                         } else {
                           return height/no_lines
@@ -666,7 +669,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
                       return height/no_lines/5
                     }
                   })
-                  .style("stroke-dasharray", function(d) { if(d.dotted == undefined) return ("0, 0"); return ("2, 6");})
+                  .style("stroke-dasharray", function(d) { if(d.dotted === undefined) return ("0, 0"); return ("2, 6");})
                   .attr("stroke", function(d) { return color_beautification(d.color); })
     });
 
@@ -763,7 +766,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
           .style("text-anchor", "start")
           .text(xTitle)
 
-          if(yValues != ""){
+          if(yValues !== ""){
           svg.append("g")
               .attr("class", "y axis")
               .call(yAxis
@@ -800,7 +803,7 @@ function plot_align(filename, target, title, footer, xTitle, yTitle, no_lines, y
                   .attr("y1", function(d) { return y(d.y); })
                   .attr("x2", function(d) { return x(d.stop); })
                   .attr("y2", function(d) { return y(d.y); })
-                  .attr("stroke-width", function(d) { if(d.height == -1) return height/no_lines; return (height/no_lines * d.height) ; })
+                  .attr("stroke-width", function(d) { if(d.height === -1) return height/no_lines; return (height/no_lines * d.height) ; })
                   .attr("stroke", function(d) { return color_beautification(d.color); })
     });
 
