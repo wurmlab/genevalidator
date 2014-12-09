@@ -1,6 +1,6 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
+require "codeclimate-test-reporter"
 require 'genevalidator/version'
 require 'rake/testtask'
 
@@ -20,6 +20,7 @@ end
 
 desc "GeneValidationValidator"
 task :test_output do
+  CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
     t.libs << "test/big_test"
     t.test_files = FileList['test/big_test/*.rb']

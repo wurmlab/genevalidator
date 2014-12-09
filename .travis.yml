@@ -10,3 +10,6 @@ before_install:
   - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && sudo make install)
   - which mafft
 script: rake test
+addons:
+  code_climate:
+    repo_token:53b568ce70cefc91f4ee27f1ee901136d863d90ef6f8155cee2ba9b1248dc502 
