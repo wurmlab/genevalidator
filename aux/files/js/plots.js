@@ -158,17 +158,15 @@ function addPlot(target, filename, type, title, footer, xtitle, ytitle, aux1, au
         plot_simple_bars(filename, target, title, legend, xtitle, ytitle);
         break;
       case "lines":
-        if (aux2 !== "") {
+        if (aux2 !== "")
           aux2 = aux2.split(",");
           plot_lines(filename, target, title, legend, xtitle, ytitle, aux1, aux2);
           break;
-        }
       case "align":
-        if (aux2 !== "") {
+        if (aux2 !== "")
           aux2 = aux2.split(",");
           plot_align(filename, target, title, legend, xtitle, ytitle, aux1, aux2);
           break;
-        }
       default:
           break;
     }
@@ -193,7 +191,7 @@ function color_beautification(color){
           return d3.rgb(160,160,160);
       default:
           return color;
-    }å
+    }
 }
 
 // bars plot
