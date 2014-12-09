@@ -12,4 +12,4 @@ before_install:
 script: rake test
 addons:
   code_climate:
-    repo_token:53b568ce70cefc91f4ee27f1ee901136d863d90ef6f8155cee2ba9b1248dc502 
+    repo_token: 53b568ce70cefc91f4ee27f1ee901136d863d90ef6f8155cee2ba9b1248dc502
