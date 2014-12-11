@@ -53,7 +53,7 @@ class GeneMergeValidationOutput < ValidationReport
                        ' or more different genes.'
       else
         output_text << 'There is no evidence that the query contains sequence'\
-                       'from multiple genes.'
+                       ' from multiple genes.'
       end 
       output_text
     end
