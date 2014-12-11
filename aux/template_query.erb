@@ -5,36 +5,26 @@
   <td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
 <% @validations.each do |item| %>
-  <% if item.plot_files != nil %>
-    <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="showDiv(this, '<%= toggle %>');
+  <% if item.color == 'warning' %>
+    <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
+  <% elsif item.plot_files != nil %>
+    <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" data-approach="<%= item.approach%>" data-explanation="<%= item.explanation%>" data-conclusion="<%= item.conclusion%>" onclick="showDiv(this, '<%= toggle %>');
     <% item.plot_files.each do |plot| %>
       addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-    <% end %>
-    <% if item.color == 'warning' %>
-      ">
-    <% else %>
-      AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<%= item.conclusion%>', '<%=toggle%>');">
-    <% end %>
-      <%= item.print%></td>
-  <% else %>
-      <td title="<%=item.header%>" class="<%=item.color%>"
-      <% if item.color == 'warning' %>
-        >
-      <% else %>
-        onclick="showDiv(this, '<%= toggle %>'); AddExplanation(this, '<%= item.approach%>', '<%= item.explanation%>', '<%= item.conclusion%>', '<%=toggle%>');">
-      <% end %>
-      <%= item.print%></td>
+    <% end %>AddExplanation(this, '<%=toggle%>');"><%= item.print%></td>
+  <% elsif item.plot_files == nil %>
+    <td title="<%=item.header%>" class="<%=item.color%>" data-approach="<%= item.approach%>" data-explanation="<%= item.explanation%>" data-conclusion="<%= item.conclusion%>" onclick="showDiv(this, '<%= toggle %>'); AddExplanation(this,'<%=toggle%>');"><%= item.print%></td>
   <% end %>
 <% end %>
 
 <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
   <td>
-      <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, '<%= toggle %>');
-      <% @validations.each do |item| %>
-        <% if item.plot_files != nil %>
-          <% item.plot_files.each do |plot| %> addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');<% end %>
-        <% end %>
-      <% end %>"><i class="fa fa-bar-chart-o"></i></button>
+    <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="showDiv(this, '<%= toggle %>');
+    <% @validations.each do |item| %>
+      <% if item.plot_files != nil %>
+        <% item.plot_files.each do |plot| %> addPlot('<%= toggle %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');<% end %>
+      <% end %>
+    <% end %>"><i class="fa fa-bar-chart-o"></i></button>
   </td>
 </tr>
 <tr class="tablesorter-childRow" name="plot_row" style="display:none;">
@@ -47,7 +37,7 @@
 </tr>
 <tr class="tablesorter-childRow" style="display:none;">
   <td colspan="<%=validations.length + 7%>">
-      <div></div>
+    <div></div>
   </td>
 </tr>
 <% end %>
