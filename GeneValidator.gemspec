@@ -37,7 +37,7 @@ DESC
 
   To launch GeneValidator execute 'genevalidator' from command line.
 
-    $ genevalidator [validations] [skip_blast] [start] [tabular] [mafft] [raw_seq] FASTA_FILE
+    $ genevalidator [options] FASTA_FILE
 
   Visit https://github.com/monicadragan/GeneValidator for more information.
 ------------------------------------------------------------------------
