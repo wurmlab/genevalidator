@@ -49,10 +49,10 @@ class GeneMergeValidationOutput < ValidationReport
       output_text = "This slope is #{diff} our empirically calculated" \
                     " thresholds (0.4 and 1.2)."
       if @result == :yes
-        output_text << 'This suggests the query contains sequence from two'\
+        output_text << ' This suggests the query contains sequence from two'\
                        ' or more different genes.'
       else
-        output_text << 'There is no evidence that the query contains sequence'\
+        output_text << ' There is no evidence that the query contains sequence'\
                        ' from multiple genes.'
       end 
       output_text
