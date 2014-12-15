@@ -1,5 +1,6 @@
 //sort table
 $(function(){
+  'use strict';
 
   // add custom parser to make the stars column to sort according to attr.
   $.tablesorter.addParser({
@@ -29,11 +30,13 @@ $(function(){
 
 //ToolTip
 $(function () {
+  'use strict';
   $("[data-toggle='tooltip']").tooltip();
 });
 
 //Hide empty columns
 $(document).ready(function() {
+  'use strict';
   if (window.chrome && (window.location.protocol === 'file:') )  {
     $('#browseralert').modal();
   }
