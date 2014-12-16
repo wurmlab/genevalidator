@@ -13,6 +13,11 @@ If you use GeneValidator in your work, please cite us as follows:
 "Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
 
 
+#### Related projects 
+[GeneValidatorApp](https://github.com/IsmailM/GeneValidatorApp) - A Web App wrapper for GeneValidator. 
+[GeneValidatorApp-API](https://github.com/IsmailM/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use the power of GeneValidator within your web applications.
+
+
 ### Validations
 GeneValidator currently carries out a number of validations which include:
 * Length validation by clusterization (a graph is dynamically produced)
@@ -23,11 +28,6 @@ GeneValidator currently carries out a number of validations which include:
 * Main ORF validation (for nucleotides) (a graph is dynamically produced)
 * Validation based on multiple alignment (a graph is dynamically produced)
 
-### Resources
-
-* [Full Documentation](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/all_validations_prot.fasta.html/doc/about.html)
-* [Blog](http://gene-prediction.blogspot.ro/)
-* [Output](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/)
 
 ## Installation Requirements
 * Ruby (>= 1.9.3)
@@ -93,13 +93,18 @@ OPTIONAL ARGUMENTS:
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
 ## Output
-The output produced by GeneValidator is presented in three manners.
+The output produced by GeneValidator is presented in three manners. See the examplar output [here]() 
 
-### HTML Output
-Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations 
+### HTML Output 
+Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See examplar html output [here]() (protein input data) and [here]() (genetic input data).
 
 ### Yaml Output
 The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
 
 ### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
+
+### Extra Resources
+
+* [Full Documentation](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/all_validations_prot.fasta.html/doc/about.html)
+* [Blog](http://gene-prediction.blogspot.ro/)
