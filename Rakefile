@@ -1,19 +1,17 @@
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "codeclimate-test-reporter"
-require 'genevalidator/version'
 require 'rake/testtask'
 
 task :default => [:build]
 
 desc "Installs the ruby gem"
 task :build do
+  require 'genevalidator/version'
+  lib = File.expand_path('../lib', __FILE__)
+  $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
   exec("gem build GeneValidator.gemspec && gem install ./GeneValidator-#{GeneValidator::VERSION}.gem")
 end
 
 desc "Unit tests for the majority of class methods"
 task :test do
-  CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
     t.libs.push 'lib'
     t.test_files = FileList['test/*.rb']
