@@ -20,11 +20,11 @@ class ORFValidationOutput < ValidationReport
     @result       = validation
     @plot_files   = []
     @mainORFFrame = longest_orf_frame
-    @approach     = 'We expect the query sequence to encode a single gene,' \
-                    ' thus it should contain one main Open Reading Frame' \
+    @approach     = 'We expect the query sequence to encode a single gene,' +
+                    ' thus it should contain one main Open Reading Frame' +
                     ' (ORF) that occupies most of the query sequence.'
-    @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where it " \
-                    " occupies #{(@coverage * 100).round}% of the query" \
+    @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where it " +
+                    " occupies #{(@coverage * 100).round}% of the query" +
                     " sequence."
 
     @conclusion   = conclude
@@ -32,10 +32,10 @@ class ORFValidationOutput < ValidationReport
 
   def conclude
     if @result == :yes
-      'There is no evidence to believe that there is any problem with the' \
+      'There is no evidence to believe that there is any problem with the' +
       ' ORF of the query sequence.'
     else
-      'This only represents a portion of the query sequence. In some cases' \
+      'This only represents a portion of the query sequence. In some cases' +
       ' this indicates that a frame shift exists in the query sequence.'
     end
   end
@@ -76,8 +76,8 @@ class OpenReadingFrameValidation < ValidationTest
     super
     @short_header = 'ORF'
     @header       = 'Main ORF'
-    @description  = 'Check whether there is a single main Open Reading Frame' \
-                    ' in the predicted gene. Applicable only for nucleotide' \
+    @description  = 'Check whether there is a single main Open Reading Frame' +
+                    ' in the predicted gene. Applicable only for nucleotide' +
                     ' queries.'
     @cli_name     = "orf"
     @filename     = filename

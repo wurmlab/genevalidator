@@ -20,10 +20,10 @@ class GeneMergeValidationOutput < ValidationReport
     @result         = validation
     @expected       = expected
     @plot_files     = []
-    @approach       = 'We expect the query sequence to encode a single' \
-                      ' protein-coding gene. Here, we analyse the' \
-                      ' High-scoring Segment Pairs (HSPs) identified by BLAST' \
-                      ' to determine whether the query includes sequence from' \
+    @approach       = 'We expect the query sequence to encode a single' +
+                      ' protein-coding gene. Here, we analyse the' +
+                      ' High-scoring Segment Pairs (HSPs) identified by BLAST' +
+                      ' to determine whether the query includes sequence from' +
                       ' two or more genes.'
     @explanation    = explain
     @conclusion     = conclude
@@ -31,10 +31,10 @@ class GeneMergeValidationOutput < ValidationReport
 
   def explain
     if @unimodality
-      'The start coordinates and the end coordinates of HSPs are unimodally'\
+      'The start coordinates and the end coordinates of HSPs are unimodally' \
       ' distributed.'
     else
-      'The distribution of start and/or end-coordinates of HSPs are'\
+      'The distribution of start and/or end-coordinates of HSPs are' \
       ' multi-modal. To detect potential problems we performed a linear'\
       ' regression (with coordinates weighted inversely proportionally to '\
       " hit strength). The resulting slope is #{@slope.round(2)}."
@@ -46,13 +46,13 @@ class GeneMergeValidationOutput < ValidationReport
       'This suggest that the query sequence represents a single gene.'
     else
       diff = (@result == :yes) ? ' within' : ' outside' 
-      output_text = "This slope is #{diff} our empirically calculated" \
+      output_text = "This slope is #{diff} our empirically calculated" +
                     " thresholds (0.4 and 1.2)."
       if @result == :yes
-        output_text << ' This suggests the query contains sequence from two'\
+        output_text << ' This suggests the query contains sequence from two' +
                        ' or more different genes.'
       else
-        output_text << ' There is no evidence that the query contains sequence'\
+        output_text << ' There is no evidence that the query contains sequence' +
                        ' from multiple genes.'
       end 
       output_text
@@ -96,7 +96,7 @@ class GeneMergeValidation < ValidationTest
     super
     @short_header = 'Gene_Merge'
     @header       = 'Gene Merge'
-    @description  = 'Check whether BLAST hits make evidence about a merge of' \
+    @description  = 'Check whether BLAST hits make evidence about a merge of' +
                     ' two genes that match the predicted gene.'
     @cli_name     = 'merge'
     @filename     = filename

@@ -19,11 +19,11 @@ class LengthClusterValidationOutput < ValidationReport
     @expected     = expected
     @result       = validation
     @plot_files   = []
-    @approach     = 'If the query sequence is well conserved and similar' \
-                    ' sequences (BLAST hits) are correct, we can expect' \
-                    ' query and hit sequences to have similar lengths. Here,' \
-                    ' we cluster the lengths of hit sequences and compare the' \
-                    ' length of our query sequence to the most dense cluster' \
+    @approach     = 'If the query sequence is well conserved and similar' +
+                    ' sequences (BLAST hits) are correct, we can expect' +
+                    ' query and hit sequences to have similar lengths. Here,' +
+                    ' we cluster the lengths of hit sequences and compare the' +
+                    ' length of our query sequence to the most dense cluster' +
                     ' of hit lengths. '
     @explanation  = explain
     @conclusion   = conclude
@@ -31,15 +31,15 @@ class LengthClusterValidationOutput < ValidationReport
 
   def explain
     diff = (@result == :yes) ? 'inside' : 'outside'
-    "The most dense length-cluster of BLAST hits includes" \
-    " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" \
-    " long. The query sequence is #{@query_length} amino-acids long and" \
+    "The most dense length-cluster of BLAST hits includes" +
+    " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" +
+    " long. The query sequence is #{@query_length} amino-acids long and" +
     " is thus #{diff} the most dense length-cluster of BLAST hits."
   end
 
   def conclude
     if @result == :yes # i.e. if inside the main cluster
-      'There is no reason to believe there is any problem with the length of' \
+      'There is no reason to believe there is any problem with the length of' +
       ' the query sequence.'
     else
       size_diff  = (@query_length > @limits[1]) ? 'long': 'short'
@@ -83,9 +83,9 @@ class LengthClusterValidation < ValidationTest
     @filename     = filename
     @short_header = 'LengthCluster'
     @header       = 'Length Cluster'
-    @description  = 'Check whether the prediction length fits most of the' \
-                    ' BLAST hit lengths, by 1D hierarchical clusterization.' \
-                    ' Meaning of the output displayed: Query_length' \
+    @description  = 'Check whether the prediction length fits most of the' +
+                    ' BLAST hit lengths, by 1D hierarchical clusterization.' +
+                    ' Meaning of the output displayed: Query_length' +
                     ' [Main Cluster Length Interval]'
     @cli_name     = 'lenc'
   end
@@ -171,7 +171,7 @@ class LengthClusterValidation < ValidationTest
   rescue TypeError => error
     error_location = error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]
     $stderr.puts "Type error at #{error_location}."
-    $stderr.puts " Possible cause: one of the arguments of the" \
+    $stderr.puts " Possible cause: one of the arguments of the" +
                  " 'clusterization_by_length' method has not the proper type."
     exit
   end

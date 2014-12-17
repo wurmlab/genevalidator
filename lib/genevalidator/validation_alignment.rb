@@ -21,40 +21,40 @@ class AlignmentValidationOutput < ValidationReport
     @result       = validation
     @expected     = expected
     @plot_files   = []
-    @approach     = 'We expect the query sequence to be similar to the top' \
-                    ' ten BLAST hits. Here, we create a statistical consensus' \
-                    ' model of those top hits and compare the query to this ' \
+    @approach     = 'We expect the query sequence to be similar to the top' +
+                    ' ten BLAST hits. Here, we create a statistical consensus' +
+                    ' model of those top hits and compare the query to this ' +
                     ' model.'
-    @explanation  = "The query sequence includes #{@consensus} amino-acid" \
-                    " residues present in the consensus model." \
-                    " #{@extra_seq} of residues in the query" \
-                    " sequence are absent from the consensus profile. " \
-                    " #{@gaps} of residues in the consensus profile" \
-                    " are absent from the query sequence."
+    @explanation  = "The query sequence includes #{@consensus} amino-acid" +
+                    " residues present in the consensus model." +
+                    " #{@extra_seq} of residues in the query sequence are" +
+                    " absent from the consensus profile. " +
+                    " #{@gaps} of residues in the consensus profile are" +
+                    " absent from the query sequence."
     @conclusion   = conclude
   end
 
   def conclude
     if @result == :yes
-      "There is no evidence based on the top 10 BLAST hits to suggest any" \
+      "There is no evidence based on the top 10 BLAST hits to suggest any" +
       " problems with the query sequence."
     else
-      con = 'These results suggest that there may be some problems with the' \
+      con = 'These results suggest that there may be some problems with the' +
             ' query sequence.'
       con1, con2, con3 = '', '', '' # Create empty string variables
       if (1-consensus.to_i) > @threshold
-        con1 = " There is low conservation of residues between the" \
-               " statistical profile and the query sequence (the cut-off is" \
+        con1 = " There is low conservation of residues between the" +
+               " statistical profile and the query sequence (the cut-off is" +
                " 80%)." 
       end
       if extra_seq.to_i > @threshold
-        con2 = " The query sequence has a high percentage (#{@extra_seq}) of" \
-               " extra residues absent from the statistical" \
+        con2 = " The query sequence has a high percentage (#{@extra_seq}) of" +
+               " extra residues absent from the statistical" +
                " profile (the cut-off is 20%)."
       end
       if gaps.to_i > @threshold
-        con3 = " The query sequence has a high percentage (#{@gaps}) of" \
-               " missing residues when compared to the statistical profile" \
+        con3 = " The query sequence has a high percentage (#{@gaps}) of" +
+               " missing residues when compared to the statistical profile" +
                " (the cut-off is 20%)."
       end
       con + con1 + con2 + con3 
@@ -62,7 +62,7 @@ class AlignmentValidationOutput < ValidationReport
   end
 
   def print
-    "#{@consensus}&nbsp;conserved; #{@extra_seq}&nbsp;extra;" \
+    "#{@consensus}&nbsp;conserved; #{@extra_seq}&nbsp;extra;" +
     " #{@gaps}&nbsp;missing."
   end
 
@@ -102,9 +102,9 @@ class AlignmentValidation < ValidationTest
     super
     @short_header       = 'MA'
     @header             = 'Missing/Extra sequences'
-    @description        = 'Finds missing and extra sequences in the' \
-                          ' prediction, based on the multiple alignment of' \
-                          ' the best hits. Also counts the percentage of the' \
+    @description        = 'Finds missing and extra sequences in the' +
+                          ' prediction, based on the multiple alignment of' +
+                          ' the best hits. Also counts the percentage of the' +
                           '  conserved regions that appear in the prediction.'
     @filename           = filename
     @raw_seq_file       = raw_seq_file

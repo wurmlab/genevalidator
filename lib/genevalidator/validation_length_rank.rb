@@ -25,8 +25,8 @@ class LengthRankValidationOutput < ValidationReport
     
     @result       = validation
     @expected     = :yes
-    @approach     = 'If the query sequence is well conserved and similar' \
-                    ' sequences (BLAST hits) are correct, we can expect' \
+    @approach     = 'If the query sequence is well conserved and similar' +
+                    ' sequences (BLAST hits) are correct, we can expect' +
                     ' query and hit sequences to have similar lengths. '
     @explanation  = explain
     @conclusion   = conclude
@@ -34,16 +34,22 @@ class LengthRankValidationOutput < ValidationReport
 
   def explain
     diff = (@query_length < @median) ? 'longer' : 'shorter'
-    "The query sequence is  #{@query_length} amino-acids long. BLAST" \
-    " identified #{@no_of_hits} hit sequences with lengths from" \
-    " #{@smallest_hit} to #{@largest_hit} amino-acids (median: #{@median};" \
-    "  mean: #{@mean}). #{@extreme_hits} of these hit sequences (i.e." \
-    " #{@percentage}%) are #{diff} than the query sequence."
+    exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" +
+           " identified #{@no_of_hits} hit sequences with lengths from" +
+           " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" +
+           " #{@median}; mean: #{@mean})."
+    if @extreme_hits != 0
+      exp2 = " #{@extreme_hits} of these hit sequences (i.e. #{@percentage}%)" +
+             " are #{diff} than the query sequence."
+    else
+      exp2 = " All hit sequences are #{diff} than the query sequence."
+    end
+    exp1 + exp2
   end
 
   def conclude
     if @result == :yes
-      "There is no reason to believe there is any problem with the length of" \
+      "There is no reason to believe there is any problem with the length of" +
       " the query sequence."
     else
       "The sequence may be #{@msg.gsub('&nbsp;', ' ')}."
@@ -76,7 +82,7 @@ class LengthRankValidation < ValidationTest
     super
     @short_header = 'LengthRank'
     @header       = 'Length Rank'
-    @description  = 'Check whether the rank of the prediction length lies' \
+    @description  = 'Check whether the rank of the prediction length lies' +
                     ' among 80% of all the BLAST hit lengths.'
     @cli_name     = 'lenr'
   end

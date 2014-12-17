@@ -1,5 +1,6 @@
 require 'genevalidator/validation_report'
 require 'genevalidator/exceptions'
+require 'genevalidator/enumerable'
 
 ##
 # Class that stores the validation output information
@@ -8,26 +9,32 @@ class DuplicationValidationOutput < ValidationReport
   attr_reader :pvalue
   attr_reader :threshold
 
-  def initialize(short_header, header, description, pvalue, threshold = 0.05,
-                 expected = :no)
+  def initialize(short_header, header, description, pvalue, averages,
+                 threshold = 0.05, expected = :no)
     @short_header, @header, @description = short_header, header, description
     @pvalue      = pvalue
     @threshold   = threshold
     @result      = validation
     @expected    = expected
-    @approach    = 'We expect each BLAST his to match each region of the' \
-                   ' query at most once. Here, we calculate the distribution' \
-                   ' of hit coverage against the query sequence and use the'\
+    @average     = averages.mean
+    @approach    = 'We expect each BLAST hit to match each region of the' +
+                   ' query at most once. Here, we calculate the distribution' +
+                   ' of hit coverage against the query sequence and use the' +
                    ' Wilcoxon test to determine if it is higher than 1.'
-    @explanation = "The Wilcoxon test produced a p-value of #{@pvalue.round(2)}."
+    @explanation = explain
     @conclusion  = conclude
+  end
+
+  def explain
+    "The Wilcoxon test produced a p-value of #{@pvalue.to_scientific_notation} " +
+    "#{(@result == :yes) ? "(average = #{@average.round(2)})." : "."}"
   end
 
   def conclude
     if @result == :yes
       'This suggests that the query sequence contains no erroneous duplications.'
     else
-      'The null hypothesis is rejected - thus a region of the query sequence' \
+      'The null hypothesis is rejected - thus a region of the query sequence' +
       ' is likely repeated more than once.'
     end
   end
@@ -41,7 +48,7 @@ class DuplicationValidationOutput < ValidationReport
   end
 
   def color
-    (validation == :no) ? 'success' : 'danger'
+    (validation == :yes) ? 'success' : 'danger'
   end
 end
 
@@ -59,8 +66,8 @@ class DuplicationValidation < ValidationTest
     super
     @short_header      = 'Duplication'
     @header            = 'Duplication'
-    @description       = 'Check whether there is a duplicated subsequence in' \
-                         ' the predicted gene by counting the hsp residue' \
+    @description       = 'Check whether there is a duplicated subsequence in' +
+                         ' the predicted gene by counting the hsp residue' +
                          ' coverage of the prediction, for each hit.'
     @cli_name          = 'dup'
     @raw_seq_file      = raw_seq_file
@@ -191,14 +198,14 @@ class DuplicationValidation < ValidationTest
 
     # if all hsps match only one time
     if averages.reject{|x| x==1} == []
-      @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, 1)
+      @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, 1, averages)
       @validation_report.running_time = Time.now - start
       return @validation_report
     end
 
     pval = wilcox_test(averages)
 
-    @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, pval)
+    @validation_report = DuplicationValidationOutput.new(@short_header, @header, @description, pval, averages)
     @running_time = Time.now - start
     return @validation_report
 

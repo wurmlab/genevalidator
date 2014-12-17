@@ -8,7 +8,6 @@ class BlastRFValidationOutput < ValidationReport
   attr_reader :msg
 
   def initialize(short_header, header, description, frames_histo, expected = :yes)
-
     @short_header, @header, @description = short_header, header, description
     @frames_histo = frames_histo
     @expected     = expected
@@ -23,17 +22,16 @@ class BlastRFValidationOutput < ValidationReport
       @totalHSP += y.to_i
     end
 
-    @approach     = 'We expect the query sequence to encode a single gene,' \
-                    ' thus it should contain one main Open Reading Frame' \
-                    '  (ORF). All all BLAST hits are thus expected to align' \
+    @approach     = 'We expect the query sequence to encode a single gene,' +
+                    ' thus it should contain one main Open Reading Frame' +
+                    ' (ORF). All all BLAST hits are thus expected to align' +
                     ' within this ORF.'
     @explanation  = explain
     @conclusion   = conclude
-
   end
 
   def explain 
-    exp1 = "BLAST identified #{@totalHSP} High-scoring Segment Pairs" \
+    exp1 = "BLAST identified #{@totalHSP} High-scoring Segment Pairs" +
            " (HSPs)"
     if @result == :yes # i.e. if there is only one ORF...
       frame = @frames_histo.keys[0].to_s
@@ -48,7 +46,7 @@ class BlastRFValidationOutput < ValidationReport
     if @result == :yes # i.e. if there is only one ORF...
       'This is as expected.'
     else
-      'The HSPs align in mulitple reading frames, this suggests there may be' \
+      'The HSPs align in mulitple reading frames, this suggests there may be' +
       ' a frame shift in the query sequence.'
     end
   end
@@ -66,7 +64,7 @@ class BlastRFValidationOutput < ValidationReport
       count_n += 1 if x < 0
     end
 
-    (count_p > 1 or count_n > 1) ? :no : :yes 
+    (count_p > 1 or count_n > 1) ? :no : :yes
 
   end
 end
@@ -80,8 +78,8 @@ class BlastReadingFrameValidation < ValidationTest
     super
     @short_header = 'Frame'
     @header       = 'Reading Frame'
-    @description  = 'Check whether there is a single reading frame among' \
-                    ' BLAST hits. Otherwise there might be a reading frame' \
+    @description  = 'Check whether there is a single reading frame among' +
+                    ' BLAST hits. Otherwise there might be a reading frame' +
                     ' shift in the query sequence.'
     @cli_name     = 'frame'
   end
