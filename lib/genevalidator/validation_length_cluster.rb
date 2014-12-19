@@ -161,9 +161,7 @@ class LengthClusterValidation < ValidationTest
     max_density_cluster_idx = 0;
     clusters.each_with_index do |item, i|
       if item.density > max_density
-        max_density = item.density
-        max_density_cluster_idx = i;
-      end
+               end
     end
 
     return [clusters, max_density_cluster_idx]

@@ -10,6 +10,7 @@ require 'open-uri'
 require 'uri'
 require 'io/console'
 require 'yaml'
+require 'bio'
 
 class BlastUtils
 
@@ -28,7 +29,7 @@ class BlastUtils
   # Output:
   # String with the blast xml output
   def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
-    # If BLAST is not run remotely, then utilise the -num_threads argument (-num_threads is not supported on remote databases)
+    # -num_threads is not supported on remote databases, so check if running blast against local db or not 
     if (db !~ /remote/)
       blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
     else
@@ -122,20 +123,6 @@ class BlastUtils
 
   ##
   # Method copied from sequenceserver/sequencehelpers.rb
-  # Params:
-  # sequence_string: String of which we mfind the composition
-  # Output:
-  # a Hash
-  def self.composition(sequence_string)
-    count = Hash.new(0)
-    sequence_string.scan(/./) do |x|
-      count[x] += 1
-    end
-    count
-  end
-
-  ##
-  # Method copied from sequenceserver/sequencehelpers.rb
   # Strips all non-letter characters. guestimates sequence based on that.
   # If less than 10 useable characters... returns nil
   # If more than 90% ACGTU returns :nucleotide. else returns :protein
@@ -149,18 +136,8 @@ class BlastUtils
 
     return nil if cleaned_sequence.length < 10 # conservative
 
-    composition = BlastUtils.composition(cleaned_sequence)
-    composition_NAs = composition.select { |character, count|character.match(/[ACGTU]/i) } # only putative NAs
-    putative_NA_counts = composition_NAs.collect { |key_value_array| key_value_array[1] } # only count, not char
-    putative_NA_sum = putative_NA_counts.inject { |sum, n| sum + n } # count of all putative NA
-    putative_NA_sum = 0 if putative_NA_sum.nil?
-
-
-    if putative_NA_sum > (0.9 * cleaned_sequence.length)
-      :nucleotide
-    else
-      :protein
-    end
+    type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
+    (type == Bio::Sequence::NA) ? :nucleotide : :protein
   end
 
   ##
@@ -176,16 +153,13 @@ class BlastUtils
   def self.type_of_sequences(fasta_format_string)
     # the first sequence does not need to have a fasta definition line
     sequences = fasta_format_string.split(/^>.*$/).delete_if { |seq| seq.empty? }
-
     # get all sequence types
     sequence_types = sequences.collect { |seq| BlastUtils.guess_sequence_type(seq) }.uniq.compact
 
     return nil if sequence_types.empty?
+    return sequence_types.first if sequence_types.length == 1
 
-    if sequence_types.length == 1
-      return sequence_types.first # there is only one (but yes its an array)
-    else
-      raise SequenceTypeError
-    end
+    # if hasn't returned yet, this means that input contains more than one type of sequence 
+    raise SequenceTypeError
   end
 end

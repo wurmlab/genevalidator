@@ -460,6 +460,5 @@ class AlignmentValidation < ValidationTest
                                 "",
                                 ma.length+1,
                                 yAxisValues)
-
   end
 end

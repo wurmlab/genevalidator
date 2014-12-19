@@ -26,7 +26,6 @@ class ORFValidationOutput < ValidationReport
     @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where it " +
                     " occupies #{(@coverage * 100).round}% of the query" +
                     " sequence."
-
     @conclusion   = conclude
   end
 
@@ -41,7 +40,7 @@ class ORFValidationOutput < ValidationReport
   end
 
   def print
-    no_orfs = @orfs.map{ |elem| elem[1].length }.reduce(:+)
+    no_orfs  = @orfs.map{ |elem| elem[1].length }.reduce(:+)
     orf_list = ""
     @orfs.map{ |elem| orf_list << "#{elem[0]}:#{elem[1].to_s}," }
 
@@ -114,12 +113,11 @@ class OpenReadingFrameValidation < ValidationTest
       data[frame] = maxORF.max
     end
 
-    longest_orf = data.values.max
+    longest_orf       = data.values.max
     longest_orf_frame = data.key(longest_orf)
-
-    coverage =  longest_orf/(prediction_len + 0.0)
-
-    plot1 = plot_orfs(orfs)
+    
+    coverage          = longest_orf/(prediction_len + 0.0)
+    plot1             = plot_orfs(orfs)
 
     @validation_report = ORFValidationOutput.new(@short_header, @header, @description, orfs, coverage, longest_orf_frame)
     @validation_report.running_time = Time.now - start

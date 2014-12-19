@@ -158,27 +158,22 @@ class Validation
         index_hash = Hash.new
         keys.each_with_index do |k, i|
           start = values[i]
-          if i == values.length - 1
-            endf = content.length - 1
-          else
-            endf = values[i+1]
-          end
+          endf  = (i == values.length - 1) ? content.length - 1 : values[i+1]
           index_hash[k] = [start, endf]
         end
 
         # create FASTA index
         @raw_seq_file_index = "#{raw_seq_file}.idx"
-        @raw_seq_file_load = index_hash
+        @raw_seq_file_load  = index_hash
 
         File.open(@raw_seq_file_index, "w") do |f|
           YAML.dump(index_hash, f)
         end
 
         content = nil
-
       end
 
-      @multithreading = multithreading
+      @multithreading     = multithreading
       @overall_evaluation = overall_evaluation
 
       rescue Exception => error
@@ -187,10 +182,10 @@ class Validation
     end
 
     # build the path of html folder output
-    path = File.dirname(@fasta_filepath)
-    @html_path = "#{fasta_filepath}.html"
-    @yaml_path = path
-    @filename = File.basename(@fasta_filepath)
+    path               = File.dirname(@fasta_filepath)
+    @html_path         = "#{fasta_filepath}.html"
+    @yaml_path         = path
+    @filename          = File.basename(@fasta_filepath)
     @all_query_outputs = []
 
     # create 'html' directory
@@ -209,17 +204,17 @@ class Validation
   rescue SequenceTypeError => error
     $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
      "Possible cause: input file containes mixed sequence types.\n"
-    exit
+    exit!
   rescue FileNotFoundException => error
     $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
      "Possible cause: input file does not exist.\n"
-    exit
+    exit!
   end
 
   ##
   # Parse the blast output and run validations
   def validation
-      if @xml_file == nil
+      if @xml_file.nil?
         #file seek for each query
         @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
           if (i+1) >= @start_idx
@@ -227,14 +222,13 @@ class Validation
 
             #call blast with the default parameters
             blast_type = (type == :protein) ? 'blastp' : 'blastx'
-            output = BlastUtils.call_blast_from_stdin(blast_type, query, @db, @num_threads, 11, 1)
+            output     = BlastUtils.call_blast_from_stdin(blast_type, query, @db, @num_threads, 11, 1)
             parse_output(output, :stream)
           else
-            @idx = @idx + 1
+            @idx += 1
           end
         end
       else
-
         #check the format of the input file
         parse_output(@xml_file)
       end
@@ -245,7 +239,7 @@ class Validation
     rescue SystemCallError => error
       $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: input file is not valid\n"
-      exit
+      exit!
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: the blast output was not obtained against a protein database.\n"
@@ -270,7 +264,7 @@ class Validation
         hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
 
         input_file_type = :xml
-        iterator_xml = Bio::BlastXMLParser::XmlIterator.new(output).to_enum
+        iterator_xml    = Bio::BlastXMLParser::XmlIterator.new(output).to_enum
 
       rescue SequenceTypeError => error
         $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
@@ -278,10 +272,10 @@ class Validation
         exit!
       rescue Exception => error
         begin
-          query = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
-          parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-          definition = parse_query[0].gsub("\n","")
-          identifier = definition.gsub(/ .*/,"")
+          query        = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
+          parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+          definition   = parse_query[0].gsub("\n","")
+          identifier   = definition.gsub(/ .*/,"")
 
           iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
 
@@ -289,7 +283,7 @@ class Validation
           hits = iterator_tab.next(identifier)
 
           input_file_type = :tabular
-          iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
+          iterator_tab    = TabularParser.new(@xml_file, tabular_format, @type)
 
           if @tabular_format == nil
             puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"
@@ -316,54 +310,41 @@ class Validation
 
       # get info about the query
       # get the @idx-th sequence from the fasta file
-      prediction = Sequence.new
-
-      query = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
+      prediction  = Sequence.new
+      query       = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
       parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
-      prediction.definition = parse_query[0].gsub("\n","")
-      prediction.identifier = prediction.definition.gsub(/ .*/,"")
-      prediction.type = @type
-      prediction.raw_sequence = parse_query[1].gsub("\n","")
+      prediction.definition     = parse_query[0].gsub("\n","")
+      prediction.identifier     = prediction.definition.gsub(/ .*/,"")
+      prediction.type           = @type
+      prediction.raw_sequence   = parse_query[1].gsub("\n","")
       prediction.length_protein = prediction.raw_sequence.length
 
       prediction.length_protein /= 3 if @type == :nucleotide
 
       @idx += 1
-
-      if input_file_type == :tabular
-        if @idx < @start_idx
-          iterator_tab.jump_next
-        else
-          hits = iterator_tab.next(prediction.identifier)
-        end
+        
+      if @idx < @start_idx
+        iterator_tab.jump_next if input_file_type == :tabular
+        iter = iterator_xml.next if input_file_type == :xml
       else
-        if input_file_type == :xml
-          if @idx < @start_idx
-            iter = iterator_xml.next
-          else
-            hits = BlastUtils.parse_next_query_xml(iterator_xml, @type)
-          end
-        end
+        hits = iterator_tab.next(prediction.identifier) if input_file_type == :tabular
+        hits = BlastUtils.parse_next_query_xml(iterator_xml, @type) if input_file_type == :xml
       end
 
-      if hits == nil
+      if hits.nil?
         @idx -= 1
         break
       end
 
       # the first validation should be treated separately
-      if @idx == @start_idx
+      if @idx == @start_idx || @multithreading == false
         validate(prediction, hits, idx)
       else
-        if @multithreading
-          @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local|
-            validate(prediction_local, hits_local, idx_local)
-            GC.start
-          }
-        else
-          validate(prediction, hits, idx)
-        end
+        @threads << Thread.new(prediction, hits, @idx){ |prediction_local, hits_local, idx_local|
+          validate(prediction_local, hits_local, idx_local)
+          GC.start
+        }
       end
 
       hits = nil # free memory
@@ -422,9 +403,9 @@ class Validation
 
       validations.each do |v|
         if v.running_time != 0 and
-          v.running_time != nil and
-          v.validation != :unapplicable and
-          v.validation != :error
+          v.running_time  != nil and
+          v.validation    != :unapplicable and
+          v.validation    != :error
             p = Pair1.new(@map_running_times[v.short_header].x + v.running_time, @map_running_times[v.short_header].y + 1)
             @map_running_times[v.short_header] = p
         end
@@ -481,10 +462,10 @@ class Validation
     end
 
     # do validations
-    query_output = Output.new(@mutex, @mutex_yaml, @mutex_html, @filename, @html_path, @yaml_path, idx, @start_idx)
+    query_output                = Output.new(@mutex, @mutex_yaml, @mutex_html, @filename, @html_path, @yaml_path, idx, @start_idx)
     query_output.prediction_len = prediction.length_protein
     query_output.prediction_def = prediction.definition
-    query_output.nr_hits = hits.length
+    query_output.nr_hits        = hits.length
 
     plot_path = "#{html_path}/files/json/#{filename}_#{idx}"
 
@@ -517,8 +498,7 @@ class Validation
 
     # compute validation score
     validations = query_output.validations
-    successes = validations.map{|v| v.result ==
-      v.expected}.count(true)
+    successes = validations.map{|v| v.result == v.expected}.count(true)
 
     fails = validations.map{|v| v.validation != :unapplicable and
       v.validation != :error and
@@ -532,14 +512,12 @@ class Validation
       # if both are true this should be counted as a single success
       if score_lcv == true and score_lrv == true
         successes = successes - 1
-      else
+      elsif score_lcv == false and score_lrv == false
       # if both are false this will be a fail
-        if score_lcv == false and score_lrv == false
-          fails = fails - 1
-        else
-          successes = successes - 0.5
-          fails = fails - 0.5
-        end
+        fails = fails - 1
+      else
+        successes = successes - 0.5
+        fails     = fails - 0.5
       end
     end
 

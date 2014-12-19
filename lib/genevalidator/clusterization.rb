@@ -122,7 +122,6 @@ class PairCluster
 
     #group average distance
     d /= (norm + 0.0)
-
   end
 
   ##
@@ -138,7 +137,6 @@ class PairCluster
       ss += (cluster_mean - object) * (cluster_mean - object)
     end
     ss
-
   end
 
   ##
@@ -209,13 +207,13 @@ class Cluster
 
     #group average distance
     d /= (norm + 0.0)
-    return d.round(4)
+    d.round(4)
   end
 
   ##
   # Returns within cluster sum of squares
   def wss(lengths = nil)
-    if lengths == nil
+    if lengths.nil?
       lengths = @lengths.map{|x| a = Array.new(x[1],x[0])}.flatten
     end
 
@@ -234,7 +232,7 @@ class Cluster
   # Output:
   # Real number
   def standard_deviation(lengths = nil)
-    if lengths == nil
+    if lengths.nil?
       lengths = @lengths.map{|x| a = Array.new(x[1],x[0])}.flatten
     end
 
@@ -298,17 +296,9 @@ class Cluster
     left = limits[0]
     right = limits[1]
 
-    if left <= value and right >= value
-      :ok
-    end
-
-    if left >= value
-      :shorter
-    end
-
-    if right <= value
-      :longer
-    end
+    :ok if left <= value and right >= value
+    :shorter if left >= value
+    :longer if right <= value
   end
 
 end
@@ -376,9 +366,9 @@ class HierarchicalClusterization
       puts "\nIteration #{iteration}" if debug
 
       min_distance = 100000000
-      cluster1 = 0
-      cluster2 = 0
-      density = 0
+      cluster1     = 0
+      cluster2     = 0
+      density      = 0
 
       [*(0..(clusters.length-2))].each do |i|
         [*((i+1)..(clusters.length-1))].each do |j|
@@ -403,9 +393,8 @@ class HierarchicalClusterization
       end
 
       # merge clusters 'cluster1' and 'cluster2'
-      if debug
-        puts "clusters to merge #{cluster1} and #{cluster2}"
-      end
+      puts "clusters to merge #{cluster1} and #{cluster2}" if debug
+
       clusters[cluster1].add(clusters[cluster2])
       clusters.delete_at(cluster2)
 
@@ -424,8 +413,6 @@ class HierarchicalClusterization
     end
 
     @clusters = clusters
-    clusters
-
   end
 
   ##
@@ -460,9 +447,7 @@ class HierarchicalClusterization
     # clusters = array of clusters
     #initially each length belongs to a different cluster
     histogram.sort {|a,b| a[0]<=>b[0]}.each do |elem|
-      if debug
-        puts "len #{elem[0]} appears #{elem[1]} times"
-      end
+      puts "len #{elem[0]} appears #{elem[1]} times" if debug
       hash = {elem[0] => elem[1]}
       cluster = Cluster.new(hash)
       clusters.push(cluster)
@@ -487,13 +472,11 @@ class HierarchicalClusterization
       end
 
       iteration = iteration + 1
-      if debug
-        puts "\nIteration #{iteration}"
-      end
+      puts "\nIteration #{iteration}" if debug
 
       min_distance = 100000000
-      cluster = 0
-      density = 0
+      cluster      = 0
+      density      = 0
 
       clusters[0..clusters.length-2].each_with_index do |item, i|
         dist = clusters[i].distance(clusters[i+1], distance_method)
@@ -504,10 +487,10 @@ class HierarchicalClusterization
         if dist < min_distance
           min_distance = dist
           cluster = i
-        density = current_density
-	else
-	  if dist == min_distance and density < current_density
-	    cluster = i
+          density = current_density
+      	else
+      	  if dist == min_distance and density < current_density
+      	    cluster = i
             density = current_density
           end
         end
@@ -543,7 +526,6 @@ class HierarchicalClusterization
     end
 
     @clusters = clusters
-    clusters
   end
 
   ##

@@ -63,14 +63,14 @@ class Output
       puts header
     end
 
-    short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
+    short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
     validation_outputs = validations.map{|v| v.print}
 
-    output = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
+    output             = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
     validation_outputs.each do |item|
       item_padd = sprintf("%17s", item);
-      output << item
-      output << "|"
+      output    << item
+      output    << "|"
     end
 
     @mutex.synchronize {
@@ -244,8 +244,7 @@ class Output
     end
 
     overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
-    overall_evaluation = overall_evaluation.select{|e| e!=""}
-    return overall_evaluation
+    overall_evaluation.select{|e| e!=""}
   end
 
 end

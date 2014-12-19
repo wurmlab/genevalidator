@@ -36,9 +36,9 @@ class TabularParser
     end
 
     @column_names = @format.split(/[ ,]/)
-    @type = type
+    @type         = type
     @query_id_idx = @column_names.index("qseqid")
-    @hit_id_idx = @column_names.index("sseqid")
+    @hit_id_idx   = @column_names.index("sseqid")
   end
 
   ##
@@ -87,7 +87,7 @@ class TabularParser
       hit_seq.type = :protein
       hit_list.push(hit_seq)
     end
-    return hit_list
+    hit_list
   end
 
   # Returns the next query output
@@ -109,9 +109,7 @@ class TabularParser
     end
 
     query_id = entry[query_id_idx]
-    if (identifier != nil and query_id != identifier)
-      return []
-    end
+    return [] if (identifier != nil and query_id != identifier)
 
     hits = []
 
@@ -139,6 +137,6 @@ class TabularParser
     exit!
   rescue Exception => error
     $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-    exit
+    exit!
   end
 end

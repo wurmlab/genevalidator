@@ -21,7 +21,8 @@ module GVArgValidation
       version = %x|blastdbcmd -version|.split[1]
       unless version >= MINIMUM_BLAST_VERSION
         puts "*** Your BLAST+ version #{version} is outdated."
-        puts "    GeneValidator needs NCBI BLAST+ version #{MINIMUM_BLAST_VERSION} or higher."
+        puts "    GeneValidator needs NCBI BLAST+ version" +
+             " #{MINIMUM_BLAST_VERSION} or higher."
         exit EXIT_BLAST_NOT_COMPATIBLE
       end
     end
@@ -31,7 +32,8 @@ module GVArgValidation
         GVArgValidation::add_to_path(blast_bin_dir)
       else
         puts "*** The provided BLAST bin directory does not exist."
-        puts "    Please ensure that the provided BLAST bin directory is correct and try again."
+        puts "    Please ensure that the provided BLAST bin directory is" +
+             " correct and try again."
         exit EXIT_BLAST_NOT_INSTALLED
       end
     end
@@ -39,7 +41,8 @@ module GVArgValidation
     def self.assert_blast_database_exists(blast_db_path)
       unless system("blastdbcmd -db #{blast_db_path} -info > /dev/null 2>&1")
         puts "*** No BLAST database found at the provided path."
-        puts "    Please ensure that the provided path is correct and then try again."
+        puts "    Please ensure that the provided path is correct and then" +
+             " try again."
         exit EXIT_NO_BLAST_DATABASE
       end
     end
@@ -49,7 +52,8 @@ module GVArgValidation
     def self.assert_mafft_installed
       unless GVArgValidation::command?('mafft')
         puts "*** Could not find Mafft binaries."
-        puts "    Ignoring error and continuing - Please note that some validations may be skipped."
+        puts "    Ignoring error and continuing - Please note that some" +
+             " validations may be skipped."
         puts # a blank line
       end
     end
@@ -59,7 +63,8 @@ module GVArgValidation
         GVArgValidation::add_to_path(mafft_bin_dir)
       else
         puts "*** The provided Mafft bin directory does not exist."
-        puts "    Ignoring error and continuing - Please note that some validations may be skipped."
+        puts "    Ignoring error and continuing - Please note that some" +
+             " validations may be skipped."
         puts # a blank line
       end
     end

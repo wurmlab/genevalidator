@@ -12,7 +12,7 @@ module Enumerable
 
   def median
     sorted = self.sort
-    len = sorted.length
+    len    = sorted.length
     (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
   end
 
@@ -22,7 +22,7 @@ module Enumerable
   end
 
   def sample_variance
-    m = self.mean
+    m   = self.mean
     sum = self.inject(0){|accum, i| accum + (i - m) ** 2 }
     sum / (self.length - 1).to_f
   end

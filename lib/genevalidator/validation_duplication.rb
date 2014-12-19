@@ -111,11 +111,8 @@ class DuplicationValidation < ValidationTest
           hit.get_sequence_by_accession_no(hit.accession_no, 'seq_type', @db)
         end
 
-        if hit.raw_sequence.nil?
-          useless_hits.push(hit)
-        else
-          useless_hits.push(hit) if hit.raw_sequence.empty?
-        end
+        useless_hits.push(hit) if hit.raw_sequence.nil?
+        useless_hits.push(hit) if hit.raw_sequence.empty?
       end
     end
 

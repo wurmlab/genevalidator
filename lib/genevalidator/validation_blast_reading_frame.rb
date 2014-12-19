@@ -63,9 +63,7 @@ class BlastRFValidationOutput < ValidationReport
       count_p += 1 if x > 0
       count_n += 1 if x < 0
     end
-
     (count_p > 1 or count_n > 1) ? :no : :yes
-
   end
 end
 

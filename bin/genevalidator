@@ -35,17 +35,17 @@ BANNER
 
   opt[:db] = 'swissprot -remote'
   opts.on('-d', '--db [BLAST_DATABASE]', 'Name of the BLAST database',
-         'e.g. "swissprot -remote" or a local BLAST database') do |db|
+         'e.g. "swissprot -remote" or a local BLAST database',
+         'Default is "swissprot -remote') do |db|
     opt[:db] = db
   end
 
-  opt[:skip_blast] = nil
-  opts.on('-x', '--skip_blast [FILENAME]',
-         'Skip blast-ing part and provide a blast xml or tabular output',
-         'as input to this script.',
-         'Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6',
-         'or 7) outputs accepted') do |skip|
-    opt[:skip_blast] = skip
+  opt[:blast_out_file] = nil
+  opts.on('-x', '--blast_out_file [FILENAME]',
+         'Provide GeneValidator with a pre-computed BLAST output file',
+         'GeneValidator only supports xml and basic tabular outputs',
+         '(BLAST -outfmt options 5-7)') do |blast_file|
+    opt[:blast_out_file] = blast_file
   end
 
   # default blast tabular columns
@@ -53,28 +53,31 @@ BANNER
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
          '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
-         ' See BLAST+ manual pages for more details'
+         'See BLAST+ manual pages for more details'
     ) do |lst|
     opt[:tabular] = lst
   end
 
-  opts.on('-m', '--mafft [MAFFT_PATH]', 'Path to MAFFT bin folder') do |mafft|
-    opt[:mafft] = mafft
+  opts.on('-m', '--mafft_bin [MAFFT_PATH]',
+          'Path to MAFFT bin folder') do |mafft|
+    opt[:mafft_bin] = mafft
   end
 
-  opts.on('-b', '--blast [BLAST_PATH]', 'Path to BLAST+ bin folder') do |blast|
-    opt[:blast] = blast
+  opts.on('-b', '--blast_bin [BLAST_PATH]',
+          'Path to BLAST+ bin folder') do |blast|
+    opt[:blast_bin] = blast
   end
 
   opts.on('-r', '--raw_seq [FASTA_FILE]',
          'Fasta file containing the raw sequences of each of the BLAST hits in',
-         'BLAST XML output file.') do |raw|
+         'BLAST XML output file.',
+         'This option is required when using the -x option ') do |raw|
     opt[:raw] = raw
   end
 
   opt[:num_threads] = 1
-  opts.on('-n', '--num_threads num_of_threads', 'Specify the number of processor',
-          'threads to utilise when running BLAST and Mafft within',
+  opts.on('-n', '--num_threads num_of_threads', 'Specify the number of',
+          'processor threads to utilise when running BLAST and Mafft within',
           'GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
@@ -93,15 +96,13 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  if opt[:skip_blast] != nil && opt[:db] != 'swissprot -remote'
-    $stderr.puts 'The skip_blast ("-x") and database (-d) arguments cannot' \
-                 ' both be set in the same run.'\
-                 ' Please specify only skip_blast argument if you have' \
-                 ' already precomputed the BLAST output.'
+  if opt[:blast_out_file] != nil && opt[:db] != 'swissprot -remote'
+    $stderr.puts 'There is no need to specify the db argument if you use the' +
+                 ' blast_out_file argument ("-x").'
   end
 
   if ARGV.length > 1
-    $stderr.puts 'Error: you must specify a single fasta input file instead' \
+    $stderr.puts 'Error: you must specify a single fasta input file instead' +
                  ' of #{ARGV.length}.' + '\n'
     exit!
   elsif ARGV.length == 0
@@ -116,7 +117,7 @@ end
 
 # Validate BLAST installation
 if opt[:blast]
-  GVArgValidation::Blast.export_bin_dir(opt[:blast])
+  GVArgValidation::Blast.export_bin_dir(opt[:blast_bin])
 else
   GVArgValidation::Blast.assert_blast_installed_and_compatible
 end
@@ -128,7 +129,7 @@ end
 
 # Validate Mafft installation
 if opt[:mafft]
-  GVArgValidation::Mafft.export_bin_dir(opt[:mafft])
+  GVArgValidation::Mafft.export_bin_dir(opt[:mafft_bin])
 else
   GVArgValidation::Mafft.assert_mafft_installed
 end
