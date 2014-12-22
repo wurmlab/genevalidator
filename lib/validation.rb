@@ -459,7 +459,7 @@ class Validation
   # +Output+ object
   def do_validations(prediction, hits, idx)
 
-    hits = remove_identical_hits(prediction, hits) rescue Exception => error #NoPIdentError
+    hits = remove_identical_hits(prediction, hits) rescue Exception #=> error #NoPIdentError
 
     # do validations
     query_output                = Output.new(@mutex, @mutex_yaml, @mutex_html, @filename, @html_path, @yaml_path, idx, @start_idx)
