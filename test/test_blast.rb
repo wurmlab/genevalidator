@@ -24,10 +24,7 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
       file_mrna.puts(query_mrna)
       file_mrna.close
 
-      begin
-        FileUtils.rm_rf("#{filename_mrna}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_mrna}.html") rescue Error
 
       b = Validation.new(filename_mrna)
 
@@ -51,10 +48,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       file_prot.puts(query_prot)
       file_prot.close
 
-      begin
-        FileUtils.rm_rf("#{filename_prot}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_prot}.html") rescue Error
 
       b = Validation.new(filename_prot)
 
@@ -71,10 +65,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
         original_stderr = $stderr
         $stderr.reopen("/dev/null", "w")
 
-        begin
-          FileUtils.rm_rf("#{filename_prot}.html")
-        rescue Error
-        end
+        FileUtils.rm_rf("#{filename_prot}.html") rescue Error
 
         b = Validation.new(filename_prot)
       rescue SystemExit => e
@@ -154,10 +145,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
       prediction = Sequence.new
@@ -186,10 +174,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
@@ -214,10 +199,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
       b = Validation.new(filename_fasta) # just use a valida filename to create the object
 
@@ -250,7 +232,6 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       end
       $stderr = original_stderr
       assert_equal(true, error)
-
     end
   end
 end

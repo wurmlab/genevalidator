@@ -19,10 +19,7 @@ class ValidateOutput < Minitest::Test
     filename_fasta = "#{filename}.fasta"
     filename_xml = "#{filename}.xml"
 
-    begin
-      FileUtils.rm_rf("#{filename_fasta}.html")
-    rescue Error
-    end
+    FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
     b = Validation.new(filename_fasta, ["all"], nil, filename_xml)
     output = File.open(filename_xml, "rb").read
