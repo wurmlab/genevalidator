@@ -122,7 +122,6 @@ class BlastUtils
   end
 
   ##
-  # Method copied from sequenceserver/sequencehelpers.rb
   # Strips all non-letter characters. guestimates sequence based on that.
   # If less than 10 useable characters... returns nil
   # If more than 90% ACGTU returns :nucleotide. else returns :protein
@@ -131,9 +130,8 @@ class BlastUtils
   # Output:
   # nil, :nucleotide or :protein
   def self.guess_sequence_type(sequence_string)
-    cleaned_sequence = sequence_string.gsub(/[^A-Z]/i, '') # removing non-letter characters
-    cleaned_sequence.gsub!(/[NX]/i, '') # removing ambiguous characters
-
+    # removing non-letter and ambiguous characters
+    cleaned_sequence = sequence_string.gsub(/[^A-Z]|[NX]/i, '')
     return nil if cleaned_sequence.length < 10 # conservative
 
     type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
@@ -158,8 +156,6 @@ class BlastUtils
 
     return nil if sequence_types.empty?
     return sequence_types.first if sequence_types.length == 1
-
-    # if hasn't returned yet, this means that input contains more than one type of sequence 
     raise SequenceTypeError
   end
 end

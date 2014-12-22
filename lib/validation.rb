@@ -193,7 +193,7 @@ class Validation
       $stderr.print "The output directory already exists for this fasta file.\n"
       $stderr.print "For a new validation please remove the following directory: #{@html_path}\n"
       $stderr.print "You can run the following command to remove the folder.\n"
-      $stderr.print "   $ rm -r #{@html_path} \n"
+      $stderr.print "\n   $ rm -r #{@html_path} \n"
       exit
     end
     Dir.mkdir(@html_path)
@@ -233,7 +233,10 @@ class Validation
         parse_output(@xml_file)
       end
       if @overall_evaluation
-         Output.print_footer(@no_queries, @scores, @good_predictions, @bad_predictions, @nee, @no_mafft, @no_internet, @map_errors, @map_running_times, @html_path, @filename)
+         Output.print_footer(@no_queries, @scores, @good_predictions,
+                             @bad_predictions, @nee, @no_mafft, @no_internet,
+                             @map_errors, @map_running_times, @html_path,
+                             @filename)
       end
 
     rescue SystemCallError => error
@@ -456,10 +459,7 @@ class Validation
   # +Output+ object
   def do_validations(prediction, hits, idx)
 
-    begin
-      hits = remove_identical_hits(prediction, hits) 
-      rescue Exception => error #NoPIdentError
-    end
+    hits = remove_identical_hits(prediction, hits) rescue Exception => error #NoPIdentError
 
     # do validations
     query_output                = Output.new(@mutex, @mutex_yaml, @mutex_html, @filename, @html_path, @yaml_path, idx, @start_idx)
