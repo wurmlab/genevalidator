@@ -204,11 +204,11 @@ class Validation
   rescue SequenceTypeError => error
     $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
      "Possible cause: input file containes mixed sequence types.\n"
-    exit!
+    exit 1
   rescue FileNotFoundException => error
     $stderr.print "File not found error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}."<<
      "Possible cause: input file does not exist.\n"
-    exit!
+    exit 1
   end
 
   ##
@@ -239,14 +239,14 @@ class Validation
     rescue SystemCallError => error
       $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: input file is not valid\n"
-      exit!
+      exit 1
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: the blast output was not obtained against a protein database.\n"
-      exit!
+      exit 1
     rescue Exception => error
        $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-       exit!
+       exit 1
   end
 
   ##
@@ -269,7 +269,7 @@ class Validation
       rescue SequenceTypeError => error
         $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
           "Possible cause: the blast output was not obtained against a protein database.\n"
-        exit!
+        exit 1
       rescue Exception => error
         begin
           query        = IO.binread(@fasta_filepath, @query_offset_lst[idx+1] - @query_offset_lst[idx], @query_offset_lst[idx])
@@ -292,11 +292,11 @@ class Validation
         rescue SequenceTypeError => error
           $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
             "Possible cause: the blast output was not obtained against a protein database.\n"
-          exit!
+          exit 1
         rescue Exception => error
           $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
              "Possible cause: blast output file format is neihter xml nor tabular.\n"
-          exit!
+          exit 1
         end
       end
     else
@@ -530,22 +530,22 @@ class Validation
   rescue ValidationClassError => error
      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: type of one of the validations is not ValidationTest\n"
-    exit!
+    exit 1
   rescue NoValidationError => error
      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: your -v arguments are not valid aliases\n"
-     exit!
+     exit 1
   rescue ReportClassError => error
       $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
-      exit!
+      exit 1
   rescue AliasDuplicationError => error
       $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: At least two validations have the same CLI alias\n"
-      exit!
+      exit 1
   rescue Exception => error
       puts error.backtrace
       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-      exit!
+      exit 1
   end
 end

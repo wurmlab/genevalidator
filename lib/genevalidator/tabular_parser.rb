@@ -134,9 +134,9 @@ class TabularParser
     $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
       "Possible cause: The tabular file and the tabular header do not correspond. "<<
       "Please provide -tabular argument with the correct format of the columns\n"
-    exit!
+    exit 1
   rescue Exception => error
     $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-    exit!
+    exit 1
   end
 end

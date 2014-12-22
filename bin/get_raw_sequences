@@ -54,13 +54,13 @@ opt_parser.parse!(ARGV)
 
 if ARGV.length != 1
   puts opt_parser
-  exit!
+  exit 1
 end
 
 if options[:db] == nil
   $stderr.print "Error: db argument is mandatory\n."
   puts opt_parser
-  exit!
+  exit 1
 end
 
 output_file = options[:out]
@@ -241,9 +241,9 @@ rescue Exception => error
     $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
       "Possible cause: The tabular file and the tabular header do not correspond. "<<
       "Please provide -tabular argument with the correct format of the columns\n"
-    exit!
+    exit 1
   rescue Exception => error
     $stderr.print "Blast file error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. Possible cause: blast output file format is neihter xml nor tabular.\n"
-    exit!
+    exit 1
   end
 end

@@ -111,11 +111,11 @@ class BlastUtils
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: you didn't call parse method first!\n"
-      exit!
+      exit 1
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: the blast output was not obtained against a protein database.\n"
-      exit!
+      exit 1
     rescue StopIteration
       nil
     end

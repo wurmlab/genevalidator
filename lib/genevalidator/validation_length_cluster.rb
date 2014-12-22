@@ -171,7 +171,7 @@ class LengthClusterValidation < ValidationTest
     $stderr.puts "Type error at #{error_location}."
     $stderr.puts " Possible cause: one of the arguments of the" +
                  " 'clusterization_by_length' method has not the proper type."
-    exit
+    exit 1
   end
 
   ##

@@ -104,15 +104,15 @@ begin
   if ARGV.length > 1
     $stderr.puts 'Error: you must specify a single fasta input file instead' +
                  ' of #{ARGV.length}.' + '\n'
-    exit!
+    exit 1
   elsif ARGV.length == 0
     puts opt_parser
-    exit!
+    exit 1
   end
 
   rescue OptionParser::ParseError
     $stderr.print 'Error: ' + $! + '\n'
-    exit!
+    exit 1
 end
 
 # Validate BLAST installation
