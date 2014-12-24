@@ -95,6 +95,7 @@ class Validation
 
     @fasta_filepath    = fasta_filepath
     @xml_file          = xml_file
+    @tabular_format    = tabular_format
     @db                = db
 
     @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
@@ -119,7 +120,7 @@ class Validation
     raise FileNotFoundException.new unless File.exists?(@fasta_filepath)
     raise FileNotFoundException.new unless File.file?(@fasta_filepath)
 
-    fasta_content = IO.binread(@fasta_filepath);
+    fasta_content = IO.binread(@fasta_filepath)
 
     # the expected type for the sequences is the
     # type of the first query
@@ -129,12 +130,11 @@ class Validation
     @type = BlastUtils.type_of_sequences(fasta_content)
 
     # create a list of index of the queries in the FASTA
-    @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0)}
+    @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map{ Regexp.last_match.begin(0) }
     raise FileNotFoundException.new unless @query_offset_lst != []
     @query_offset_lst.push(fasta_content.length)
     fasta_content = nil # free memory for variable fasta_content
     GC.start
-    @tabular_format = tabular_format
 
     begin
 
