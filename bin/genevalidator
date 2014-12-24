@@ -40,22 +40,22 @@ BANNER
     opt[:db] = db
   end
 
-  opt[:blast_out_file] = nil
-  opts.on('-x', '--blast_out_file [FILENAME]',
+  opt[:blast_xml_file] = nil
+  opts.on('-x', '--blast_xml_file [FILENAME]',
          'Provide GeneValidator with a pre-computed BLAST output file',
          'GeneValidator only supports xml and basic tabular outputs',
-         '(BLAST -outfmt options 5-7)') do |blast_file|
-    opt[:blast_out_file] = blast_file
+         '(BLAST -outfmt options 5-7)') do |blast_xml_file|
+    opt[:blast_xml_file] = blast_xml_file
   end
 
   # default blast tabular columns
-  opts.on('-t', '--tabular [BLAST OUTFMT STRING]',
+  opts.on('-t', '--blast_tabular_file [BLAST OUTFMT STRING]',
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
-         '   $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE',
+         '   $ genevalidator -x blast_tabular_file -t "slen qstart qend" INPUT_FILE',
          'See BLAST+ manual pages for more details'
-    ) do |lst|
-    opt[:tabular] = lst
+    ) do |blast_table_file|
+    opt[:blast_tabular_file] = blast_table_file
   end
 
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
@@ -96,9 +96,11 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  if opt[:blast_out_file] != nil && opt[:db] != 'swissprot -remote'
+  if (opt[:blast_xml_file] != nil || opt[:blast_tabular_file] != nil) &&
+     opt[:db] != 'swissprot -remote'
     $stderr.puts 'There is no need to specify the db argument if you use the' +
-                 ' blast_out_file argument ("-x").'
+                 ' blast_xml_file ("-x") or the blast_tabular_file ("-t")' +
+                 ' arguments.'
   end
 
   if ARGV.length > 1
@@ -115,8 +117,9 @@ begin
     exit 1
 end
 
+
 # Validate BLAST installation
-if opt[:blast]
+if opt[:blast_bin]
   GVArgValidation::Blast.export_bin_dir(opt[:blast_bin])
 else
   GVArgValidation::Blast.assert_blast_installed_and_compatible
@@ -128,7 +131,7 @@ if opt[:db] !~ /remote/
 end
 
 # Validate Mafft installation
-if opt[:mafft]
+if opt[:mafft_bin]
   GVArgValidation::Mafft.export_bin_dir(opt[:mafft_bin])
 else
   GVArgValidation::Mafft.assert_mafft_installed
@@ -136,7 +139,9 @@ end
 
 start = Time.now
 
-b = Validation.new(ARGV[0], opt[:vlist], opt[:tabular], opt[:skip_blast],
-                   opt[:db], opt[:raw], opt[:start], opt[:num_threads])
+b = Validation.new(ARGV[0], opt[:vlist], opt[:blast_tabular_file],
+                   opt[:blast_xml_file], opt[:db], opt[:raw], opt[:start],
+                   opt[:num_threads])
 b.validation
-puts "Total running time: #{(Time.now - start).round(3)}s\n"
+puts "Total running time: #{(Time.now - start).round(3)}s"
+puts # a blank line
