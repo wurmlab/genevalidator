@@ -1,8 +1,7 @@
 <tr>
   <td><%= @idx %></td>
   <td data-score="<%= overall_score %>"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:<%= overall_score * 0.85 %>%;"></div></div></td>
-  <td title="Identifier"><%= @prediction_def.scan(/([^ ]+)/)[0][0] %></td>
-  <td title="Description"><%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
+  <td title="Definition" class="seq_definition"><%= @prediction_def.scan(/([^ ]+)/)[0][0] %> <%= @prediction_def.scan(/([^ ]+)(.*)/)[0][1] %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
 <% @validations.each do |item| %>
   <% if item.color == 'warning' %>
