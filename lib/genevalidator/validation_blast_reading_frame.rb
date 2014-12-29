@@ -6,6 +6,8 @@ class BlastRFValidationOutput < ValidationReport
 
   attr_reader :frames_histo
   attr_reader :msg
+  attr_reader :totalHSP
+  attr_reader :result
 
   def initialize(short_header, header, description, frames_histo, expected = :yes)
     @short_header, @header, @description = short_header, header, description

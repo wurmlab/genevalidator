@@ -9,6 +9,8 @@ class GeneMergeValidationOutput < ValidationReport
   attr_reader :slope
   attr_reader :threshold_down
   attr_reader :threshold_up
+  attr_reader :unimodality
+  attr_reader :result
 
   def initialize(short_header, header, description, slope, unimodality,
                  threshold_down = 0.4, threshold_up = 1.2, expected = :no)

@@ -10,6 +10,7 @@ class LengthClusterValidationOutput < ValidationReport
 
   attr_reader :query_length
   attr_reader :limits
+  attr_reader :result
 
   def initialize(short_header, header, description, query_length, limits,
                  expected = :yes)

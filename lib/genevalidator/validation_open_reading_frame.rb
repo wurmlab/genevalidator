@@ -8,6 +8,8 @@ class ORFValidationOutput < ValidationReport
   attr_reader :orfs
   attr_reader :coverage
   attr_reader :threshold
+  attr_reader :mainORFFrame
+  attr_reader :result
 
   def initialize(short_header, header, description, orfs, coverage,
                  longest_orf_frame, threshold = 0.8, expected = :yes)

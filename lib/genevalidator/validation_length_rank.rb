@@ -6,8 +6,16 @@ require 'genevalidator/enumerable'
 # Class that stores the validation output information
 class LengthRankValidationOutput < ValidationReport
 
-  attr_reader :percentage
   attr_reader :msg
+  attr_reader :query_length
+  attr_reader :no_of_hits
+  attr_reader :median
+  attr_reader :mean
+  attr_reader :smallest_hit
+  attr_reader :largest_hit
+  attr_reader :extreme_hits
+  attr_reader :percentage    
+  attr_reader :result
 
   def initialize(short_header, header, description, msg, query_length,
                  no_of_hits, median, mean, smallest_hit, largest_hit,

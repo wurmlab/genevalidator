@@ -7,7 +7,9 @@ require 'genevalidator/enumerable'
 class DuplicationValidationOutput < ValidationReport
 
   attr_reader :pvalue
+  attr_reader :average
   attr_reader :threshold
+  attr_reader :result
 
   def initialize(short_header, header, description, pvalue, averages,
                  threshold = 0.05, expected = :no)

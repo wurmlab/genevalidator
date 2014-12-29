@@ -9,6 +9,7 @@ class AlignmentValidationOutput < ValidationReport
   attr_reader :extra_seq
   attr_reader :consensus
   attr_reader :threshold
+  attr_reader :result
 
   def initialize(short_header, header, description, gaps = 0, extra_seq = 0,
                   consensus = 1, threshold = 20, expected = :yes)
