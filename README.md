@@ -14,8 +14,9 @@ If you use GeneValidator in your work, please cite us as follows:
 
 
 #### Related projects 
-[GeneValidatorApp](https://github.com/IsmailM/GeneValidatorApp) - A Web App wrapper for GeneValidator. 
-[GeneValidatorApp-API](https://github.com/IsmailM/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use the power of GeneValidator within your web applications.
+[GeneValidatorApp](https://github.com/IsmailM/GeneValidatorApp) - A Web App wrapper for GeneValidator.
+
+[GeneValidatorApp-API](https://github.com/IsmailM/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.
 
 
 ### Validations
