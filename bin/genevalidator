@@ -4,17 +4,16 @@ require 'validation'
 require 'genevalidator/version'
 require 'genevalidator/arg_validation'
 require 'genevalidator/get_raw_sequences'
+
 opt = {}
 opt_parser = OptionParser.new do |opts|
   opts.banner =<<BANNER
 
 USAGE:
-    $ genevalidator [OPTIONS] INPUT_FILE
+    $ genevalidator [OPTIONS] Input_File
 
 ARGUMENTS:
-    INPUT_FILE: Path to the input FASTA file containing the predicted sequences.
-
-OPTIONAL ARGUMENTS:
+    Input_File: Path to the input fasta file containing the predicted sequences.
 
 BANNER
 
@@ -33,36 +32,31 @@ BANNER
     opt[:vlist] = lst
   end
 
-  opt[:db] = 'swissprot -remote'
-  opts.on('-d', '--db [BLAST_DATABASE]', 'Name of the BLAST database',
-         'e.g. "swissprot -remote" or a local BLAST database',
-         'Default is "swissprot -remote') do |db|
+  opts.on('-d', '--db [BLAST_DATABASE]', 
+         'Path to the BLAST database',
+         'GeneValidator also supports remote databases:',
+         'e.g.   $ genevalidator -d "remote" Input_File') do |db|
     opt[:db] = db
   end
 
   opt[:blast_xml_file] = nil
-  opts.on('-x', '--blast_xml_file [FILENAME]',
-         'Provide GeneValidator with a pre-computed BLAST output file',
-         'GeneValidator only supports xml and basic tabular outputs',
-         '(BLAST -outfmt options 5-7)') do |blast_xml_file|
+  opts.on('-x', '--blast_xml_file [FILE]',
+         'Provide GeneValidator with a pre-computed BLAST XML output',
+         'file (BLAST -outfmt option 5).') do |blast_xml_file|
     opt[:blast_xml_file] = blast_xml_file
   end
 
   opt[:blast_tabular_file] = nil
-  opts.on('-t', '--blast_tabular_file [FILENAME]',
-         'Provide GeneValidator with a pre-computed BLAST output file',
-         'GeneValidator only supports xml and basic tabular outputs',
-         '(BLAST -outfmt options 5-7)') do |blast_tabular_file|
+  opts.on('-t', '--blast_tabular_file [FILE]',
+         'Provide GeneValidator with a pre-computed BLAST tabular output',
+         'file. (BLAST -outfmt option 6).') do |blast_tabular_file|
     opt[:blast_tabular_file] = blast_tabular_file
   end
 
   # default blast tabular columns
-  opts.on('-o', '--blast_tabular_options [BLAST OUTFMT STRING]',
-         'Custom format used in BLAST -outfmt argument',
-         'Usage:',
-         '   $ genevalidator -t blast_tabular_file -o "slen qstart qend" INPUT_FILE',
-         'See BLAST+ manual pages for more details'
-    ) do |blast_table_options|
+  opts.on('-o', '--blast_tabular_options [Options]',
+          'Custom format used in BLAST -outfmt argument',
+         'See BLAST+ manual pages for more details') do |blast_table_options|
     opt[:blast_tabular_options] = blast_table_options
   end
 
@@ -77,9 +71,9 @@ BANNER
   end
 
   opt[:num_threads] = 1
-  opts.on('-n', '--num_threads num_of_threads', 'Specify the number of',
-          'processor threads to utilise when running BLAST and Mafft within',
-          'GeneValidator.') do |num_threads|
+  opts.on('-n', '--num_threads num_of_threads',
+          'Specify the number of processor threads to use when running',
+          'BLAST and Mafft within GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
 
@@ -96,7 +90,6 @@ end
 
 begin
   opt_parser.parse!(ARGV)
-
   if ARGV.length > 1
     $stderr.puts 'Error: you must specify a single fasta input file instead' +
                  ' of #{ARGV.length}.' + '\n'
@@ -105,44 +98,17 @@ begin
     puts opt_parser
     exit 1
   end
-
-  rescue OptionParser::ParseError
-    $stderr.print 'Error: ' + $! + '\n'
-    exit 1
+rescue OptionParser::ParseError
+  $stderr.print 'Error: ' + $! + '\n'
+  exit 1
 end
 
 start = Time.now
 
-# Validate BLAST installation
-if opt[:blast_bin]
-  GVArgValidation::Blast.export_bin_dir(opt[:blast_bin])
-else
-  GVArgValidation::Blast.assert_blast_installed_and_compatible
-end
+GVArgValidation.validate_args(opt)
 
-# Validate BLAST database
-if opt[:db] !~ /remote/
-  GVArgValidation::Blast.assert_blast_database_exists(opt[:db])
-end
-
-# Validate Mafft installation
-if opt[:mafft_bin]
-  GVArgValidation::Mafft.export_bin_dir(opt[:mafft_bin])
-else
-  GVArgValidation::Mafft.assert_mafft_installed
-end
-
-# Obtain Raw Sequences from db if XML file is provided
-if opt[:blast_xml_file] != nil
-  opt[:raw] = opt[:blast_xml_file] + '.raw_seq'
-  Get_raw_sequences.run(opt[:raw], opt[:db], opt[:blast_xml_file])
-end
-
-# Obtain Raw Sequences from db if BLAST table file is provided
-if opt[:blast_tabular_file] != nil
-  opt[:raw] = opt[:blast_tabular_file] + '.raw_seq'
-  Get_raw_sequences.run(opt[:raw], opt[:db], opt[:blast_tabular_file], 
-                        opt[:blast_tabular_options])
+if opt[:blast_xml_file] || opt[:blast_tabular_file]
+  opt[:raw] = GetRawSequences.run(opt)
 end
 
 b = Validation.new(ARGV[0], opt[:vlist], opt[:blast_tabular_file], 
