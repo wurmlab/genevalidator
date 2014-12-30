@@ -21,7 +21,7 @@ class ValidateOutput < Minitest::Test
 
     FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
-    b = Validation.new(filename_fasta, ["all"], nil, filename_xml)
+    b = Validation.new(filename_fasta, ["all"], nil, nil, filename_xml)
     output = File.open(filename_xml, "rb").read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
     hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)

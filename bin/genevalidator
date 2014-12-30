@@ -3,7 +3,7 @@ require 'optparse'
 require 'validation'
 require 'genevalidator/version'
 require 'genevalidator/arg_validation'
-
+require 'genevalidator/get_raw_sequences'
 opt = {}
 opt_parser = OptionParser.new do |opts|
   opts.banner =<<BANNER
@@ -48,14 +48,22 @@ BANNER
     opt[:blast_xml_file] = blast_xml_file
   end
 
+  opt[:blast_tabular_file] = nil
+  opts.on('-t', '--blast_tabular_file [FILENAME]',
+         'Provide GeneValidator with a pre-computed BLAST output file',
+         'GeneValidator only supports xml and basic tabular outputs',
+         '(BLAST -outfmt options 5-7)') do |blast_tabular_file|
+    opt[:blast_tabular_file] = blast_tabular_file
+  end
+
   # default blast tabular columns
-  opts.on('-t', '--blast_tabular_file [BLAST OUTFMT STRING]',
+  opts.on('-o', '--blast_tabular_options [BLAST OUTFMT STRING]',
          'Custom format used in BLAST -outfmt argument',
          'Usage:',
-         '   $ genevalidator -x blast_tabular_file -t "slen qstart qend" INPUT_FILE',
+         '   $ genevalidator -t blast_tabular_file -o "slen qstart qend" INPUT_FILE',
          'See BLAST+ manual pages for more details'
-    ) do |blast_table_file|
-    opt[:blast_tabular_file] = blast_table_file
+    ) do |blast_table_options|
+    opt[:blast_tabular_options] = blast_table_options
   end
 
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
@@ -66,13 +74,6 @@ BANNER
   opts.on('-b', '--blast_bin [BLAST_PATH]',
           'Path to BLAST+ bin folder') do |blast|
     opt[:blast_bin] = blast
-  end
-
-  opts.on('-r', '--raw_seq [FASTA_FILE]',
-         'Fasta file containing the raw sequences of each of the BLAST hits in',
-         'BLAST XML output file.',
-         'This option is required when using the -x option ') do |raw|
-    opt[:raw] = raw
   end
 
   opt[:num_threads] = 1
@@ -96,13 +97,6 @@ end
 begin
   opt_parser.parse!(ARGV)
 
-  if (opt[:blast_xml_file] != nil || opt[:blast_tabular_file] != nil) &&
-     opt[:db] != 'swissprot -remote'
-    $stderr.puts 'There is no need to specify the db argument if you use the' +
-                 ' blast_xml_file ("-x") or the blast_tabular_file ("-t")' +
-                 ' arguments.'
-  end
-
   if ARGV.length > 1
     $stderr.puts 'Error: you must specify a single fasta input file instead' +
                  ' of #{ARGV.length}.' + '\n'
@@ -117,6 +111,7 @@ begin
     exit 1
 end
 
+start = Time.now
 
 # Validate BLAST installation
 if opt[:blast_bin]
@@ -137,11 +132,22 @@ else
   GVArgValidation::Mafft.assert_mafft_installed
 end
 
-start = Time.now
+# Obtain Raw Sequences from db if XML file is provided
+if opt[:blast_xml_file] != nil
+  opt[:raw] = opt[:blast_xml_file] + '.raw_seq'
+  Get_raw_sequences.run(opt[:raw], opt[:db], opt[:blast_xml_file])
+end
 
-b = Validation.new(ARGV[0], opt[:vlist], opt[:blast_tabular_file],
-                   opt[:blast_xml_file], opt[:db], opt[:raw], opt[:start],
-                   opt[:num_threads])
+# Obtain Raw Sequences from db if BLAST table file is provided
+if opt[:blast_tabular_file] != nil
+  opt[:raw] = opt[:blast_tabular_file] + '.raw_seq'
+  Get_raw_sequences.run(opt[:raw], opt[:db], opt[:blast_tabular_file], 
+                        opt[:blast_tabular_options])
+end
+
+b = Validation.new(ARGV[0], opt[:vlist], opt[:blast_tabular_file], 
+                   opt[:blast_tabular_options], opt[:blast_xml_file],
+                   opt[:db], opt[:raw], opt[:start], opt[:num_threads])
 b.validation
 puts "Total running time: #{(Time.now - start).round(3)}s"
 puts # a blank line

@@ -73,6 +73,7 @@ class Validation
   # +multithreading+: boolean variable for enabling multithreading
   def initialize( fasta_filepath,
                   vlist = ["all"],
+                  tabular_file = nil,
                   tabular_format = nil,
                   xml_file = nil,
                   db = "swissprot -remote",
@@ -95,6 +96,7 @@ class Validation
 
     @fasta_filepath    = fasta_filepath
     @xml_file          = xml_file
+    @tabular_file      = tabular_file
     @tabular_format    = tabular_format
     @db                = db
 
@@ -214,7 +216,7 @@ class Validation
   ##
   # Parse the blast output and run validations
   def validation
-      if @xml_file.nil?
+      if @xml_file.nil? && @tabular_file.nil?
         #file seek for each query
         @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
           if (i+1) >= @start_idx
@@ -230,7 +232,8 @@ class Validation
         end
       else
         #check the format of the input file
-        parse_output(@xml_file)
+        parse_output(@xml_file) unless @xml_file.nil?
+        parse_output(@tabular_file) unless @tabular_file.nil?
       end
       if @overall_evaluation
          Output.print_footer(@no_queries, @scores, @good_predictions,
@@ -280,13 +283,13 @@ class Validation
           definition   = parse_query[0].gsub("\n","")
           identifier   = definition.gsub(/ .*/,"")
 
-          iterator_tab = TabularParser.new(@xml_file, tabular_format, @type)
+          iterator_tab = TabularParser.new(@tabular_file, tabular_format, @type)
 
           # the following instruction will raise exception if the file is not tabular
           hits = iterator_tab.next(identifier)
 
           input_file_type = :tabular
-          iterator_tab    = TabularParser.new(@xml_file, tabular_format, @type)
+          iterator_tab    = TabularParser.new(@tabular_file, tabular_format, @type)
 
           if @tabular_format == nil
             puts "Note: Please specify the --tabular argument if you used tabular format input with nonstandard columns.\n"

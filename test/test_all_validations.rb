@@ -47,7 +47,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_prot_html) rescue Error
 
-      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, 1, false, false)
+      b = Validation.new(filename_prot_fasta, validations, nil, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
@@ -56,8 +56,9 @@ class ValidateOutput < Minitest::Test
 
       b = Validation.new(filename_prot_fasta,
                          validations,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
                          filename_prot_tab,
+                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
+                         nil,
                          "swissprot -remote",
                          filename_prot_raw,
                          1, 1, false, false)
@@ -86,7 +87,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_mrna_html) rescue Error
 
-      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, 1, false, false)
+      b = Validation.new(filename_mrna_fasta, validations, nil, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_mrna_out_tab, "w")
@@ -95,8 +96,9 @@ class ValidateOutput < Minitest::Test
 
       b = Validation.new(filename_mrna_fasta,
                          validations,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
                          filename_mrna_tab,
+                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
+                         nil,
                          "swissprot -remote",
                          filename_mrna_raw,
                          1, 1, false, false)
