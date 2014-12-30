@@ -2,17 +2,59 @@
 ## CREDIT: most of these methods have been adapted from SequenceServer
 module GVArgValidation
 
+  class << self
+    def validate_args(opt)
+      Blast.assert_blast_database_provided(opt[:db])
+      if opt[:db] !~ /remote/
+        Blast.assert_blast_database_exists(opt[:db])
+      end
+      Blast.assert_blast_installation(opt[:blast_bin])
+      Mafft.assert_mafft_installation(opt[:mafft_bin])
+    end
+  end
+
   class Blast
     # Use a fixed minimum version of BLAST+
-    MINIMUM_BLAST_VERSION           = '2.2.27+'
+    MINIMUM_BLAST_VERSION           = '2.2.29+'
     # Use the following exit codes, or 1.
     EXIT_BLAST_NOT_INSTALLED        = 2
     EXIT_BLAST_NOT_COMPATIBLE       = 3
     EXIT_NO_BLAST_DATABASE          = 4
-    EXIT_BLAST_INSTALLATION_FAILED  = 5
-    EXIT_CONFIG_FILE_NOT_FOUND      = 6
-    EXIT_NO_SEQUENCE_DIR            = 7
 
+    def self.assert_blast_installation(blast_bin_dir = nil)
+      # Validate BLAST installation
+      if blast_bin_dir.nil?
+        assert_blast_installed_and_compatible
+      else
+        export_bin_dir(blast_bin_dir)
+      end
+    end
+
+    def self.assert_blast_database_provided(blast_db = nil)
+      if blast_db.nil?
+        puts "Error: A BLAST database is required."
+        puts "Please pass a local or remote BLAST database to GeneValidator as follows:"
+        puts # a blank line
+        puts "    $ genevalidator -d '~/blastdb/SwissProt' Input_File"
+        puts # a blank line
+        puts "Or use a remote database:"
+        puts # a blank line
+        puts "    $ genevalidator -d 'swissprot -remote' Input_File" 
+        exit 1
+      end
+    end
+
+    def self.assert_blast_database_exists(blast_db_path)
+      unless system("blastdbcmd -db #{blast_db_path} -info > /dev/null 2>&1")
+        puts "*** No BLAST database found at the provided path."
+        puts "    Please ensure that the provided path is correct and then" +
+             " try again."
+        exit EXIT_NO_BLAST_DATABASE
+      end
+    end
+
+    private
+    
     def self.assert_blast_installed_and_compatible
       unless GVArgValidation::command?('blastdbcmd')
         puts "*** Could not find BLAST+ binaries."
@@ -37,18 +79,19 @@ module GVArgValidation
         exit EXIT_BLAST_NOT_INSTALLED
       end
     end
-
-    def self.assert_blast_database_exists(blast_db_path)
-      unless system("blastdbcmd -db #{blast_db_path} -info > /dev/null 2>&1")
-        puts "*** No BLAST database found at the provided path."
-        puts "    Please ensure that the provided path is correct and then" +
-             " try again."
-        exit EXIT_NO_BLAST_DATABASE
-      end
-    end
   end
 
   class Mafft
+    def self.assert_mafft_installation(mafft_bin = nil)
+      if mafft_bin.nil?
+        GVArgValidation::Mafft.assert_mafft_installed
+      else
+        GVArgValidation::Mafft.export_bin_dir(mafft_bin)
+      end
+    end
+
+    private
+
     def self.assert_mafft_installed
       unless GVArgValidation::command?('mafft')
         puts "*** Could not find Mafft binaries."
