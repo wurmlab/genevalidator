@@ -25,8 +25,18 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
       file_mrna.close
 
       FileUtils.rm_rf("#{filename_mrna}.html") rescue Error
+    
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_mrna)
+      b = Validation.new(filename_mrna, default_opt)
 
       File.delete(filename_mrna)
       FileUtils.rm_rf("#{filename_mrna}.html")

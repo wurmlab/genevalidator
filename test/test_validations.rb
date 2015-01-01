@@ -31,7 +31,7 @@ class ValidateOutput < Minitest::Test
       num_threads: 1
     }
 
-    b = Validation.new(filename_fasta, ["all"], opt)
+    b = Validation.new(filename_fasta, opt)
     output = File.open(filename_xml, "rb").read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
     hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
