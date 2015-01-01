@@ -29,7 +29,7 @@ class DuplicationValidationOutput < ValidationReport
 
   def explain
     "The Wilcoxon test produced a p-value of #{@pvalue.to_scientific_notation}" +
-    "#{(@result == :yes) ? " (average = #{@average.round(2)})." : "."}"
+    "#{(@result == :no) ? " (average = #{@average.round(2)})." : "."}"
   end
 
   def conclude
