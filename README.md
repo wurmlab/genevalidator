@@ -93,21 +93,25 @@ OPTIONAL ARGUMENTS
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
 ## Example Usage Scenarios
-It is possible to run GeneValidator in a number of ways.
 
 ##### Running GeneValidator with a local Database, with two threads
+
 ` genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File ` 
 
 ##### Running GeneValidator with a remote Database
+
 ` genevalidator -d 'swissprot -remote' Input_File `
 
 ##### Running GeneValidator with a pre-computed BLAST XML file 
+
 ` genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File `
 
 ##### Running GeneValidator with a pre-computed BLAST tabular file 
+
 ` genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File `
 
 ##### Running GeneValidator with the fast option 
+
 ` genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File `
 
 ## Output
@@ -122,6 +126,6 @@ The output is also produced in YAML. This allows you to reuse the results and al
 ### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
 
-### Extra Resources
+### Other Resources
 
 * [Full Documentation](http://wurmlab.github.io/tools/genevalidator_documentation/v1/)
