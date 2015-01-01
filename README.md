@@ -19,7 +19,8 @@ If you use GeneValidator in your work, please cite us as follows:
 
 
 ### Validations
-GeneValidator currently carries out a number of validations which include:
+Currently, it is possible to run the following validations with GeneValidator
+
 * Length validation by clusterization (a graph is dynamically produced)
 * Length validation by ranking
 * Check gene merge (a graph is dynamically produced)
@@ -28,14 +29,14 @@ GeneValidator currently carries out a number of validations which include:
 * Main ORF validation (for nucleotides) (a graph is dynamically produced)
 * Validation based on multiple alignment (a graph is dynamically produced)
 
+It is also possible to add your own custom validations to GeneValidator. 
 
 ## Installation Requirements
 * Ruby (>= 1.9.3)
-* NCBI BLAST+ (>= 2.2.25+)
+* NCBI BLAST+ (>= 2.2.29+)
 * MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).<br>
 Linux and MacOS are officially supported!
-* Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox.
-
+* Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox (download [here](https://www.mozilla.org/en-GB/firefox/new/)).
 
 ## Installation
 1) Type the following command in the terminal
@@ -51,13 +52,12 @@ $ gem install GeneValidator
 ```bash
 
 USAGE:
-    $ genevalidator [OPTIONS] INPUT_FILE
+    $ genevalidator [OPTIONS] Input_File
 
 ARGUMENTS:
-    INPUT_FILE: Path to the input FASTA file containing the predicted sequences.
+    Input_File: Path to the input fasta file containing the predicted sequences.
 
-OPTIONAL ARGUMENTS:
-
+OPTIONAL ARGUMENTS
     -v, --validations <String>       The Validations to be applied.
                                      Validation Options Available (separated by coma):
                                        all   = All validations (default),
@@ -68,29 +68,47 @@ OPTIONAL ARGUMENTS:
                                        frame = Open reading frame (ORF) validation,
                                        orf   = Main ORF validation,
                                        align = Validating based on multiple alignment
-    -d, --db [BLAST_DATABASE]        Name of the BLAST database
-                                     e.g. "swissprot -remote" or a local BLAST database
-    -x, --skip_blast [FILENAME]      Skip blast-ing part and provide a blast xml or tabular output
-                                     as input to this script.
-                                     Only BLAST xml (BLAST -outfmt 5) or basic tabular (BLAST -outfmt 6
-                                     or 7) outputs accepted
-    -t [BLAST OUTFMT STRING],        Custom format used in BLAST -outfmt argument
-        --tabular                    Usage:
-                                        $ genevalidator -x tabular_file -t "slen qstart qend" INPUT_FILE
-                                      See BLAST+ manual pages for more details
-    -m, --mafft [MAFFT_PATH]         Path to MAFFT bin folder
-    -b, --blast [BLAST_PATH]         Path to BLAST+ bin folder
-    -r, --raw_seq [FASTA_FILE]       Fasta file containing the raw sequences of each of the BLAST hits in
-                                     BLAST XML output file.
-    -n, --num_threads num_of_threads Specify the number of processor
-                                     threads to utilise when running BLAST and Mafft within
-                                     GeneValidator.
+    -d, --db [BLAST_DATABASE]        Path to the BLAST database
+                                     GeneValidator also supports remote databases:
+                                     e.g.   $ genevalidator -d "remote" Input_File
+    -x, --blast_xml_file [FILE]      Provide GeneValidator with a pre-computed BLAST XML output
+                                     file (BLAST -outfmt option 5).
+    -t, --blast_tabular_file [FILE]  Provide GeneValidator with a pre-computed BLAST tabular output
+                                     file. (BLAST -outfmt option 6).
+    -o [Options],                    Custom format used in BLAST -outfmt argument
+        --blast_tabular_options      See BLAST+ manual pages for more details
+    -n, --num_threads num_of_threads Specify the number of processor threads to use when running
+                                     BLAST and Mafft within GeneValidator.
+    -f, --fast                       Run BLAST on all sequences together (rather than separately)
+                                     to speed up the analysis.
+                                     The speed difference is more apparent on larger input files
+    -m, --mafft_bin [MAFFT_PATH]     Path to MAFFT bin folder
+    -b, --blast_bin [BLAST_PATH]     Path to BLAST+ bin folder
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
+
 
 ```
 
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
+
+## Example Usage Scenarios
+It is possible to run GeneValidator in a number of ways.
+
+##### Running GeneValidator with a local Database, with two threads
+` genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File ` 
+
+##### Running GeneValidator with a remote Database
+` genevalidator -d 'swissprot -remote' Input_File `
+
+##### Running GeneValidator with a pre-computed BLAST XML file 
+` genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File `
+
+##### Running GeneValidator with a pre-computed BLAST tabular file 
+` genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File `
+
+##### Running GeneValidator with the fast option 
+` genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File `
 
 ## Output
 The output produced by GeneValidator is presented in three manners. See the examplar output [here]() 
@@ -106,5 +124,4 @@ Lastly, a summary of the results is also outputted in the terminal to provide qu
 
 ### Extra Resources
 
-* [Full Documentation](http://swarm.cs.pub.ro/~mdragan/gsoc2013/genevalidator/all_validations_prot.fasta.html/doc/about.html)
-* [Blog](http://gene-prediction.blogspot.ro/)
+* [Full Documentation](http://wurmlab.github.io/tools/genevalidator_documentation/v1/)
