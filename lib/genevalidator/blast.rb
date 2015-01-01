@@ -34,7 +34,7 @@ class BlastUtils
     #   running blast against local db or not 
     if (db !~ /remote/)
       blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" + 
-                 "-max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
+                 " -max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
                  " -gapextend #{gapextend} -num_threads #{num_threads}"
     else
       blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" +
