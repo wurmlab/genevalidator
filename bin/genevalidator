@@ -37,7 +37,7 @@ BANNER
   opts.on('-d', '--db [BLAST_DATABASE]', 
          'Path to the BLAST database',
          'GeneValidator also supports remote databases:',
-         'e.g.   $ genevalidator -d "remote" Input_File') do |db|
+         'e.g.   $ genevalidator -d "swissprot -remote" Input_File') do |db|
     opt[:db] = db
   end
 
@@ -79,12 +79,12 @@ BANNER
   end
 
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
-          'Path to MAFFT bin folder') do |mafft|
+          'Path to MAFFT bin folder (is added to $PATH variable)') do |mafft|
     opt[:mafft_bin] = mafft
   end
 
   opts.on('-b', '--blast_bin [BLAST_PATH]',
-          'Path to BLAST+ bin folder') do |blast|
+          'Path to BLAST+ bin folder (is added to $PATH variable)') do |blast|
     opt[:blast_bin] = blast
   end
 
@@ -126,7 +126,7 @@ if opt[:fast]
   BlastUtils.run_blast_on_file(input_file, opt)
 end
 
-opt[:raw] = nil # This is the variable that contains the raw_sequences.
+opt[:raw] = nil # This is the variable that contains the path to the raw_sequences.
 if opt[:blast_xml_file] || opt[:blast_tabular_file]
   puts 'Extracting sequences within the BLAST XML from the BLAST database'
   opt[:raw] = GetRawSequences.run(opt)
