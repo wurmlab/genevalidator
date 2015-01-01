@@ -16,6 +16,7 @@ USAGE:
 ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
 
+OPTIONAL ARGUMENTS
 BANNER
 
   opt[:validations] = ['all']
@@ -73,7 +74,7 @@ BANNER
   opts.on('-f', '--fast',
           'Run BLAST on all sequences together (rather than separately)',
           'to speed up the analysis.', 
-          'The difference in speed is only apparent on large input files') do
+          'The speed difference is more apparent on larger input files') do
     opt[:fast] = true
   end
 
