@@ -70,7 +70,7 @@ OPTIONAL ARGUMENTS
                                        align = Validating based on multiple alignment
     -d, --db [BLAST_DATABASE]        Path to the BLAST database
                                      GeneValidator also supports remote databases:
-                                     e.g.   $ genevalidator -d "remote" Input_File
+                                     e.g.   $ genevalidator -d "swissprot -remote" Input_File
     -x, --blast_xml_file [FILE]      Provide GeneValidator with a pre-computed BLAST XML output
                                      file (BLAST -outfmt option 5).
     -t, --blast_tabular_file [FILE]  Provide GeneValidator with a pre-computed BLAST tabular output
@@ -82,8 +82,8 @@ OPTIONAL ARGUMENTS
     -f, --fast                       Run BLAST on all sequences together (rather than separately)
                                      to speed up the analysis.
                                      The speed difference is more apparent on larger input files
-    -m, --mafft_bin [MAFFT_PATH]     Path to MAFFT bin folder
-    -b, --blast_bin [BLAST_PATH]     Path to BLAST+ bin folder
+    -m, --mafft_bin [MAFFT_PATH]     Path to MAFFT bin folder (is added to $PATH variable)
+    -b, --blast_bin [BLAST_PATH]     Path to BLAST+ bin folder (is added to $PATH variable)
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
 
@@ -106,7 +106,7 @@ $ genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File
 $ genevalidator -d 'swissprot -remote' Input_File
 ```
 
-##### Running GeneValidator with a pre-computed BLAST XML file 
+##### Running GeneValidator with a pre-computed BLAST XML file
 
 
 ```bash
