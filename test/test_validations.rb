@@ -100,7 +100,7 @@ class ValidateOutput < Minitest::Test
       dv = validations.select{|v| v.class == DuplicationValidationOutput}[0]
       assert_equal(1, dv.pvalue.round(4))
       assert_equal(1.0, dv.average)
-      assert_equal(:no, dv.result)
+      assert_equal(:yes, dv.result)
     end
 
     it 'should validate alignment' do 
