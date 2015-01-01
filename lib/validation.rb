@@ -84,7 +84,7 @@ class Validation
     @xml_file          = opt[:blast_xml_file]
     @tabular_file      = opt[:blast_tabular_file]
     @tabular_format    = opt[:blast_tabular_options]
-    @db                = opt[:db]
+    @db                = File.expand_path(opt[:db])
 
     @vlist             = opt[:validations].map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
     if opt[:validations].map{|v| v.strip.downcase}.include? "all"
