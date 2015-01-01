@@ -446,18 +446,18 @@ class AlignmentValidation < ValidationTest
 
       f.close
 
-      yAxisValues = 'prediction'
+      yAxisValues = 'Prediction'
       (1..ma.length-1).each do |i|
          yAxisValues << ", hit&nbsp;#{i}"
       end
 
-      yAxisValues << ', statistical model'
+      yAxisValues << ', Statistical Model'
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :align,
-                                "[Missing/Extra sequences] Multiple Align. & Statistical model of hits",
-                                "conserved region, yellow",
-                                "offset in the alignment",
+                                "Missing/Extra sequences Validation: Multiple Align. & Statistical model of hits",
+                                "Conserved Region, Yellow",
+                                "Offset in the Alignment",
                                 "",
                                 ma.length+1,
                                 yAxisValues)

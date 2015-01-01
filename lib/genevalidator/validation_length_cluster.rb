@@ -197,10 +197,10 @@ class LengthClusterValidation < ValidationTest
       f.close
       Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
               :bars,
-              "[Length Cluster] Distribution of the lengths of the hits",
+              "Length Cluster Validation: Distribution of BLAST hit lengths",
               "query, black;most dense cluster,red;other hits, blue",
-              "sequence length",
-              "number of sequences",
+              "Sequence Lenght",
+              "Number of Sequences",
               prediction.length_protein)
   end
 

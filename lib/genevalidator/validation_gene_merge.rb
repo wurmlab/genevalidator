@@ -195,10 +195,10 @@ class GeneMergeValidation < ValidationTest
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                      :lines,
-                     "[Gene Merge] Query coord covered by blast hit (1 line/hit)",
+                     "Gene Merge Validation: Query coord covered by blast hit (1 line/hit)",
                      "",
-                     "offset in the prediction",
-                     "number of the hit",
+                     "Offset in Prediction",
+                     "Hit Number",
                      hits_less.length)
   end
 
@@ -255,10 +255,10 @@ class GeneMergeValidation < ValidationTest
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                                 :scatter,
-                                "[Gene Merge] Start/end of matching hit coord. on query (1 point/hit)",
+                                "Gene Merge Validation: Start/end of matching hit coord. on query (1 point/hit)",
                                 "",
-                                "start offset (most left hsp)",
-                                "end offset (most right hsp)",
+                                "Start Offset (most left hsp)",
+                                "End Offset (most right hsp)",
                                  y_intercept,
                                  slope)
   end

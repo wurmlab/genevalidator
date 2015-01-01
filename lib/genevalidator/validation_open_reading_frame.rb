@@ -327,9 +327,9 @@ class OpenReadingFrameValidation < ValidationTest
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                     :lines,
-                    "Open reading frame with STOP codon",
+                    "Open reading frames in the 6 frames",
                     "",
-                    "offset in the prediction",
+                    "Offset in the Prediction",
                     "Reading Frame",
                     14)
   end
