@@ -96,23 +96,34 @@ Please type `genevalidator -h` into your terminal to see this information in you
 
 ##### Running GeneValidator with a local Database, with two threads
 
-` genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File ` 
+```
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File
+```
 
 ##### Running GeneValidator with a remote Database
 
-` genevalidator -d 'swissprot -remote' Input_File `
+```
+$ genevalidator -d 'swissprot -remote' Input_File
+```
 
 ##### Running GeneValidator with a pre-computed BLAST XML file 
 
-` genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File `
+
+```
+$  genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File
+```
 
 ##### Running GeneValidator with a pre-computed BLAST tabular file 
 
-` genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File `
+```
+$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File 
+```
 
 ##### Running GeneValidator with the fast option 
 
-` genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File `
+```
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File
+```
 
 ## Output
 The output produced by GeneValidator is presented in three manners. See the examplar output [here]() 
