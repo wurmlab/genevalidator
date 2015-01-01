@@ -46,7 +46,7 @@ class DuplicationValidationOutput < ValidationReport
   end
 
   def validation
-    (@pvalue > @threshold) ? :no : :yes
+    (@pvalue > @threshold) ? :yes : :no
   end
 
   def color
