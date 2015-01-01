@@ -47,21 +47,34 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_prot_html) rescue Error
 
-      b = Validation.new(filename_prot_fasta, validations, nil, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, 1, false, false)
+      opts = {
+        validations: validations,
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: filename_prot_xml,
+        db: 'swissprot -remote',
+        raw: filename_prot_raw,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_prot_fasta, opts, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
 
       FileUtils.rm_rf(filename_prot_html) rescue Error
+      
+      opts1 = {
+        validations: validations,
+        blast_tabular_file: filename_prot_tab,
+        blast_tabular_options: "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: filename_prot_raw,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_prot_fasta,
-                         validations,
-                         filename_prot_tab,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
-                         nil,
-                         "swissprot -remote",
-                         filename_prot_raw,
-                         1, 1, false, false)
+      b = Validation.new(filename_prot_fasta, opts1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -86,22 +99,35 @@ class ValidateOutput < Minitest::Test
       $stdout.reopen(filename_mrna_out_xml, "w")
 
       FileUtils.rm_rf(filename_mrna_html) rescue Error
+     
+      opts = {
+        validations: validations,
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: filename_mrna_xml,
+        db: 'swissprot -remote',
+        raw: filename_mrna_raw,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_mrna_fasta, validations, nil, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, 1, false, false)
+      b = Validation.new(filename_mrna_fasta, opts, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_mrna_out_tab, "w")
 
       FileUtils.rm_rf(filename_mrna_html) rescue Error
 
-      b = Validation.new(filename_mrna_fasta,
-                         validations,
-                         filename_mrna_tab,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
-                         nil,
-                         "swissprot -remote",
-                         filename_mrna_raw,
-                         1, 1, false, false)
+      opts1 = {
+        validations: validations,
+        blast_tabular_file: filename_mrna_tab,
+        blast_tabular_options: "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: filename_mrna_raw,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_mrna_fasta, opts1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 

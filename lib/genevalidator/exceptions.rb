@@ -53,7 +53,7 @@ class InconsistentTabularFormat < Exception
 end
 
 # Exception raised when there are more than one reading frame among the hits of one prediction
-class  ReadingFrameError < Exception
+class ReadingFrameError < Exception
 end
 
 class OtherError < Exception

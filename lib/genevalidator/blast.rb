@@ -28,16 +28,59 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
-    # -num_threads is not supported on remote databases, so check if running blast against local db or not 
+  def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11,
+                                 gapextend=1, nr_hits=200)
+    # -num_threads is not supported on remote databases, so need to check if
+    #   running blast against local db or not 
     if (db !~ /remote/)
-      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+      blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" + 
+                 "-max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
+                 " -gapextend #{gapextend} -num_threads #{num_threads}"
     else
-      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+      blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" +
+                 " -max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
+                 " -gapextend #{gapextend}"
     end
 
     cmd = "echo \"#{query}\" | #{blastcmd}"
     %x[#{cmd} 2>/dev/null]
+  end
+
+  ##
+  # Runs BLAST on an input file
+  # Params:
+  # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +query_file+: Input file
+  # +opt+: Hash containing the following ids: :blast_xml_file, :db, :num_threads
+  # +gapopen+: gapopen blast parameter
+  # +gapextend+: gapextend blast parameter
+  # +nr_hits+: max number of hits
+  # Output:
+  # XML file
+  def self.run_blast_on_file(query_file, opt, gapopen=11, gapextend=1,
+                             nr_hits=200)
+    seq_type   = guess_sequence_type_from_file(query_file)
+    blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
+
+    if (opt[:db] !~ /remote/)
+      blastcmd = "#{blast_type} -query '#{query_file}'" +
+                 " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]} " +
+                 " -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits}" +
+                 " -gapopen #{gapopen} -gapextend #{gapextend}" +
+                 " -num_threads #{opt[:num_threads]}"
+    else
+      blastcmd = "#{blast_type} -query '#{query_file}'" +
+                 " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]}" +
+                 " -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits}" +
+                 " -gapopen #{gapopen} -gapextend #{gapextend}"
+    end
+
+    %x[#{blastcmd}]
+    if File.zero?(opt[:blast_xml_file])
+      puts "Blast failed to run on the input file. Please ensure that the"
+      puts "BLAST database exists and try again"
+      exit 1
+    end
   end
 
   ##
@@ -136,6 +179,15 @@ class BlastUtils
 
     type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
     (type == Bio::Sequence::NA) ? :nucleotide : :protein
+  end
+
+  def self.guess_sequence_type_from_file(file)
+    lines = File.foreach(file).first(10)
+    seqs = ''
+    lines.each do |l|
+      seqs += l.chomp unless l[0] == '>'
+    end
+    guess_sequence_type(seqs)
   end
 
   ##

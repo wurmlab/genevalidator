@@ -50,7 +50,17 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       FileUtils.rm_rf("#{filename_prot}.html") rescue Error
 
-      b = Validation.new(filename_prot)
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_prot, default_opt)
 
       File.delete(filename_prot)
       FileUtils.rm_rf("#{filename_prot}.html")
@@ -66,8 +76,18 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
         $stderr.reopen("/dev/null", "w")
 
         FileUtils.rm_rf("#{filename_prot}.html") rescue Error
+ 
+        default_opt = {
+          validations: ["all"],
+          blast_tabular_file: nil,
+          blast_tabular_options: nil, 
+          blast_xml_file: nil,
+          db: 'swissprot -remote',
+          raw: nil,
+          num_threads: 1
+        }
 
-        b = Validation.new(filename_prot)
+        b = Validation.new(filename_prot, default_opt)
       rescue SystemExit => e
         mixed = true
       end
@@ -146,8 +166,18 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       filename_fasta = "test/test_files/test_validations.fasta"
 
       FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+      
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
       prediction = Sequence.new
       prediction.length_protein = 1808
 
@@ -162,7 +192,7 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       assert_in_delta(90, hits[1].hsp_list[0].pidentity, 0.01)
       hits = b.remove_identical_hits(prediction, hits)
 
-      # after removal
+      # after removal of identical hits
       assert_equal(1, hits.length)
       assert_in_delta(90, hits[0].hsp_list[0].pidentity, 0.01)
       FileUtils.rm_rf("#{filename_fasta}.html")
@@ -176,7 +206,17 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -200,8 +240,18 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       filename_fasta = "test/test_files/test_validations.fasta"
 
       FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+      
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -223,8 +273,18 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr.reopen("/dev/null", "w")
       error = false
       begin
+        default_opt = {
+          validations: ["all"],
+          blast_tabular_file: nil,
+          blast_tabular_options: nil, 
+          blast_xml_file: nil,
+          db: 'swissprot -remote',
+          raw: nil,
+          num_threads: 1
+        }
+
         filename_xml = "test/test_files/gost.txt"
-        b = Validation.new(filename_xml)
+        b = Validation.new(filename_xml, default_opt)
         output = File.open(filename_xml, "rb").read
         b.parse_output(output)
       rescue SystemExit => e

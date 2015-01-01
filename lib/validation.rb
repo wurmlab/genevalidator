@@ -64,25 +64,11 @@ class Validation
   # Initilizes the object
   # Params:
   # +fasta_filepath+: fasta file with query sequences
-  # +vlist+: list of validations
-  # +tabular_format+: list of column names for parsing the tablar blast output
-  # +xml_file+: name of the precalculated blast xml output (used in 'skip blast' case)
-  # +db+: comparition BLAST database (in case xml_file is not specified)
+  # +opt+: A hash - Default Values: {validations: ["all"], blast_tabular_file: nil, blast_tabular_options: nil,  blast_xml_file: nil, db: 'remote', raw: nil, num_threads: 1}
   # +start_idx+: number of the sequence from the file to start with
   # +overall_evaluation+: boolean variable for printing / not printing overall evaluation
   # +multithreading+: boolean variable for enabling multithreading
-  def initialize( fasta_filepath,
-                  vlist = ["all"],
-                  tabular_file = nil,
-                  tabular_format = nil,
-                  xml_file = nil,
-                  db = "swissprot -remote",
-                  raw_seq_file = nil,
-                  start_idx = 1,
-                  num_threads = 1,
-                  overall_evaluation = true,
-                  multithreading = true)
-
+  def initialize( fasta_filepath, opt, start_idx = 1, overall_evaluation = true, multithreading = true)
     puts "\nDepending on your input and your computational "<<
            "resources, this may take a while. Please wait..."
 
@@ -92,21 +78,21 @@ class Validation
     @mutex_yaml        = Mutex.new
     @mutex_html        = Mutex.new
     @mutex_array       = Mutex.new
-    @num_threads       = num_threads # used for BLAST & Mafft
+    @num_threads       = opt[:num_threads] # used for BLAST & Mafft
 
     @fasta_filepath    = fasta_filepath
-    @xml_file          = xml_file
-    @tabular_file      = tabular_file
-    @tabular_format    = tabular_format
-    @db                = db
+    @xml_file          = opt[:blast_xml_file]
+    @tabular_file      = opt[:blast_tabular_file]
+    @tabular_format    = opt[:blast_tabular_options]
+    @db                = opt[:db]
 
-    @vlist             = vlist.map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
-    if vlist.map{|v| v.strip.downcase}.include? "all"
+    @vlist             = opt[:validations].map{|v| v.gsub(/^\s/,"").gsub(/\s\Z/,"").split(/\s/)}.flatten
+    if opt[:validations].map{|v| v.strip.downcase}.include? "all"
       @vlist           = ['lenc', 'lenr', 'frame', 'merge', 'dup', 'orf', 'align']
     end
 
     @idx               = 0
-    @start_idx         = 1
+    @start_idx         = start_idx
 
     # global variables
     @no_queries        = 0
@@ -144,13 +130,13 @@ class Validation
       raise FileNotFoundException.new unless File.file?(@fasta_filepath)
 
       # index raw_sequence file
-      if raw_seq_file != nil
-        raise FileNotFoundException.new unless File.exists?(raw_seq_file)
-        @raw_seq_file = raw_seq_file
+      if opt[:raw] != nil
+        raise FileNotFoundException.new unless File.exists?(opt[:raw])
+        @raw_seq_file = opt[:raw]
 
         # leave only the identifiers in the fasta description
-        content = File.open(raw_seq_file, "rb").read.gsub(/ .*/, "")
-        File.open(raw_seq_file, 'w+') { |file| file.write(content)}
+        content = File.open(@raw_seq_file, "rb").read.gsub(/ .*/, "")
+        File.open(@raw_seq_file, 'w+') { |file| file.write(content)}
 
         #index the fasta file
         keys = content.scan(/>(.*)\n/).flatten
@@ -165,7 +151,7 @@ class Validation
         end
 
         # create FASTA index
-        @raw_seq_file_index = "#{raw_seq_file}.idx"
+        @raw_seq_file_index = "#{@raw_seq_file}.idx"
         @raw_seq_file_load  = index_hash
 
         File.open(@raw_seq_file_index, "w") do |f|
