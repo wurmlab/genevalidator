@@ -2,14 +2,19 @@ language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
-  - "2.1.0"
   - "2.1.3"
+  - "2.2.0"
 before_install:
   - wget -P ~ http://mafft.cbrc.jp/alignment/software/mafft-7.205-with-extensions-src.tgz
   - tar -zxvf ~/mafft-7.205-with-extensions-src.tgz -C ~
-  - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && sudo make install)
+  - mkdir ~/mafft
+  - ruby -pi -e "gsub(/^PREFIX = \/usr\/local/, 'PREFIX = ~/mafft/')" ~/mafft-7.205-with-extensions/core/Makefile
+  - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && make install)
+  - export PATH=$PATH:~/mafft/bin/
   - which mafft
 script: rake test
+cache: bundler
+sudo: false
 addons:
   code_climate:
     repo_token: 53b568ce70cefc91f4ee27f1ee901136d863d90ef6f8155cee2ba9b1248dc502
