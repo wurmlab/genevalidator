@@ -12,18 +12,12 @@ end
 
 desc "Unit tests for the majority of class methods"
 task :test do
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
   Rake::TestTask.new do |t|
     t.libs.push 'lib'
     t.test_files = FileList['test/*.rb']
     t.verbose = true
-  end
-end
-
-desc "GeneValidationValidator"
-task :test_output do
-  Rake::TestTask.new do |t|
-    t.libs << "test/big_test"
-    t.test_files = FileList['test/big_test/*.rb']
   end
 end
 
