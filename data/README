@@ -1,62 +1,57 @@
 # Running GeneValidator with sample data
 
-Here, we walk through the steps involved in analysing some sample data with GeneValidator. There are two options on how to run genevalidator - the second option is faster with larger input files. 
+Here, we walk through the steps involved in analysing some sample data with GeneValidator. There are two options on how to run genevalidator - the second option is faster with larger input files.
 
-## Running just GeneValidator
+## Expected Results
 
-1) Run GeneValidator
+<strong>protein_data.fasta</strong> [See here](http://wurmlab.github.io/tools/genevalidator/examplar_data/protein_input/)
+<strong>mrna_data.fasta</strong> [See here](http://wurmlab.github.io/tools/genevalidator/examplar_data/genetic_input/) 
 
-```
-$ genevalidator -d [BLAST database] [Input File]
+##### Running GeneValidator with a  Database, with four threads
 
-e.g. 
+```bash
+$ genevalidator -d 'local-or-remote-BLAST-db' -n num_threads input_file
 
-$ genevalidator -d ~/blastdb/SwissProt protein_data.fasta
-$ genevalidator -d ~/blastdb/SwissProt mrna_data.fasta
+e.g.
+
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -n 4 protein_data.fasta
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -n 4 mrna_data.fasta
+$ genevalidator -d 'swissprot -remote' -n 4 protein_data.fasta
+$ genevalidator -d 'swissprot -remote' -n 4 mrna_data.fasta
 
 ```
 This will produce a yaml file (in the same directory as the input file) and html file (within a subdirectory in the directory of the input files). 
 
-## Running BLAST Separately
 
-GeneValidator accepts BLAST XML files (as well as BLAST tabular outputs).
+##### Running GeneValidator with a pre-computed BLAST XML file
 
-1. Run BLAST
+```bash
+$  genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File
+
+e.g.
+$  genevalidator -d '/home/ismailm/blastdb/SwissProt' -x 'protein_data.fasta.blast_xml' protein_data.fasta
+$  genevalidator -d '/home/ismailm/blastdb/SwissProt' -x 'mrna_data.fasta.blast_xml' mrna_data.fasta
 
 ```
-$ blastp -db [BLAST database] -evalue 1e-5 -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query [input_file] -out [Output XML file]
+
+##### Running GeneValidator with a pre-computed BLAST tabular file 
+
+```bash
+$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File 
 
 e.g.
 
-$ blastp -db ~/blastdb/SwissProt -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query protein_data.fasta -out protein_data.xml
-$ blastx -db ~/blastdb/SwissProt -evalue 1e-5 -outfmt 5 -max_target_seqs 200 -gapopen 11 -gapextend 1 -query mrna_data.fasta -out mrna_data.xml
+
 
 ```
 
-2) Run get_raw_sequences script
+##### Running GeneValidator with the fast option 
 
-```
-$ get_raw_sequences -d [BLAST database] -o [Output Raw sequences file] [XML file]
+```bash
+$ genevalidator -d 'local-or-remote-BLAST-db' -n 2 -f Input_File
 
 e.g.
-
-$ get_raw_sequences -d ~/blastdb/SwissProt -o protein_data.raw_seq protein_data.xml
-$ get_raw_sequences -d ~/blastdb/SwissProt -o mrna_data.raw_seq mrna_data.xml
-
-```
-
-3) Run GeneValidator
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -n 4 -f protein_data.fasta
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -n 4 -f mrna_data.fasta
 
 ```
-$ genevalidator [Options] -x [XML file] -r [Raw sequences file] [Input File]
-
-e.g.
-
-$ genevalidator -x protein_data.xml -r protein_data.raw_seq protein_data.fasta
-$ genevalidator -x mrna_data.xml -r mrna_data.raw_seq mrna_data.fasta
-
-```
-
-## Output
-
-The HTML output can be found within an output folder that is created in the directory that the input file lies in. The Yaml output can found in the same directory that input folder lies. 
