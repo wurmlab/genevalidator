@@ -1,4 +1,3 @@
-require 'minitest'
 require 'minitest/autorun'
 
 require 'genevalidator/validation_test'

@@ -1,4 +1,3 @@
-require 'minitest'
 require 'minitest/autorun'
 require 'fileutils'
 require 'validation'
