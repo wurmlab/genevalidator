@@ -37,12 +37,12 @@ $  genevalidator -d '/home/ismailm/blastdb/SwissProt' -x 'mrna_data.fasta.blast_
 ##### Running GeneValidator with a pre-computed BLAST tabular file 
 
 ```bash
-$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File 
+$ blast(x/p)
+$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'tabular_file_format-(BLAST_option-out_fmt)' Input_File 
 
 e.g.
-
-
-
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -t 'protein_data.fasta.blast_tabular' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' protein_data.fasta 
+$ genevalidator -d '/home/ismailm/blastdb/SwissProt' -t 'mrna_data.fasta.blast_tabular' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' mrna_data.fasta 
 ```
 
 ##### Running GeneValidator with the fast option 
