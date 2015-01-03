@@ -1,3 +1,4 @@
+require 'test/test_helper'
 require 'genevalidator/enumerable'
 require 'minitest/autorun'
 
