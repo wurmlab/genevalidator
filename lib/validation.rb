@@ -177,13 +177,6 @@ class Validation
     @all_query_outputs = []
 
     # create 'html' directory
-    if File.exists? @html_path
-      $stderr.print "The output directory already exists for this fasta file.\n"
-      $stderr.print "For a new validation please remove the following directory: #{@html_path}\n"
-      $stderr.print "You can run the following command to remove the folder.\n"
-      $stderr.print "\n   $ rm -r #{@html_path} \n"
-      exit
-    end
     Dir.mkdir(@html_path)
 
     # copy auxiliar folders to the html folder

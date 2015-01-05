@@ -3,13 +3,25 @@
 module GVArgValidation
 
   class << self
-    def validate_args(opt)
+    def validate_args(input_file, opt)
+      assert_output_dir_does_not_exist(input_file)
       Blast.assert_blast_database_provided(opt[:db])
       if opt[:db] !~ /remote/
         Blast.assert_blast_database_exists(opt[:db])
       end
       Blast.assert_blast_installation(opt[:blast_bin])
       Mafft.assert_mafft_installation(opt[:mafft_bin])
+    end
+
+    def assert_output_dir_does_not_exist(input_file)
+      output_dir = "#{input_file}.html"
+      if File.exists? output_dir
+        puts "The output directory already exists for this fasta file.\n"
+        puts "For a new validation please remove the following directory: #{output_dir}\n"
+        puts "You can run the following command to remove the folder.\n"
+        puts "\n   $ rm -r #{output_dir} \n"
+        exit 1
+      end
     end
   end
 
