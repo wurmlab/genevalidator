@@ -34,6 +34,7 @@ BANNER
     opt[:validations] = lst
   end
 
+  opt[:db] = 'swissprot -remote'
   opts.on('-d', '--db [BLAST_DATABASE]', 
          'Path to the BLAST database',
          'GeneValidator also supports remote databases:',
@@ -118,7 +119,7 @@ input_file = ARGV[0]
 
 start = Time.now
 
-GVArgValidation.validate_args(opt)
+GVArgValidation.validate_args(ARGV[0], opt)
 
 if opt[:fast]
   puts 'Running BLAST'
