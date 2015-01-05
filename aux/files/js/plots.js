@@ -566,7 +566,7 @@ function plot_scatter(filename, target, title, footer, xTitle, yTitle, yLine, sl
 // maximum 80 lines
 function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, yValues){
   'use strict';
-  var margin = {top: 50, right: 50, bottom: 75, left: 50},
+  var margin = {top: 70, right: 50, bottom: 75, left: 50},
     width = 600 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;      
     var legend_width = 17   
@@ -578,7 +578,7 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
 
   var color = d3.scale.category10();
 
-  if (title === 'Open reading frame with STOP codon') {  
+  if (title === 'Open Reading Frames in all 6 Frames') {  
     var xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom")
@@ -688,29 +688,29 @@ function plot_lines(filename, target, title, footer, xTitle, yTitle, no_lines, y
     
   var h = 0
 
+  var offset = 40
+  var total_len = 0
   for (var i = 0; i < footer.length; i++) {
-    
   var array = footer[i].split(","); 
-  legend
-      .append("rect")
-      .attr("x", width + margin.left)
-      .attr("y", 15*h)
+  total_len = total_len + array[0].length*8 + 15;
+  }
+
+  for (var i = 0; i < footer.length; i++) {
+
+  var array = footer[i].split(","); 
+  svg.append("rect")
+      .attr("x", (width-total_len)/2 + offset)             
+      .attr("y", -30)
       .attr("width", 10)
       .attr("height", 10)
       .style("fill", color_beautification(array[1].replace(/\s+/g, '')))
-
-  var chunkSize = legend_width
-  var length = array[0].length 
     
-  for (var j = 0; j < length; j += chunkSize) {
-       var substr = array[0].substring(j, Math.min(length, j + chunkSize));
-     legend
-      .append("text")
-      .attr("x", width + margin.left + 15)
-      .attr("y", 15*h + 9)
-      .text(substr);
-      h += 1
-    }
+  svg.append("text")
+      .attr("x", (width-total_len)/2 + offset + 15)             
+      .attr("y", -20)
+      .text(array[0]);
+    offset = offset + array[0].length*8 + 15
+
   }
 }
 
