@@ -26,7 +26,7 @@ class ORFValidationOutput < ValidationReport
                     ' thus it should contain one main Open Reading Frame' +
                     ' (ORF) that occupies most of the query sequence.'
     @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where it " +
-                    " occupies #{(@coverage * 100).round}% of the query" +
+                    " occupies #{(@coverage).round}% of the query" +
                     " sequence."
     @conclusion   = conclude
   end
@@ -46,7 +46,7 @@ class ORFValidationOutput < ValidationReport
     orf_list = ""
     @orfs.map{ |elem| orf_list << "#{elem[0]}:#{elem[1].to_s}," }
 
-    "#{(@coverage * 100).round}%&nbsp;(frame&nbsp;#{@mainORFFrame})"
+    "#{(@coverage).round}%&nbsp;(frame&nbsp;#{@mainORFFrame})"
   end
 
   def validation
@@ -104,22 +104,11 @@ class OpenReadingFrameValidation < ValidationTest
     start = Time.new
     orfs = get_orfs
 
-    # check if longest ORF / prediction > 0.8 (ok)
-    prediction_len = prediction.raw_sequence.length
-    data = {}
-    orfs.each do |frame, all_orfs|
-      maxORF =[]
-      all_orfs.each do |orf|
-        maxORF << orf[1] - orf[0]
-      end
-      data[frame] = maxORF.max
-    end
-
-    longest_orf       = data.values.max
-    longest_orf_frame = data.key(longest_orf)
-    
-    coverage          = longest_orf/(prediction_len + 0.0)
-    plot1             = plot_orfs(orfs)
+    longest_orf       = orfs.sort_by { |_key, hash| hash[:coverage]}.last
+    longest_orf_frame = longest_orf[1][:frame]
+    coverage          = longest_orf[1][:coverage]
+    translated_length = longest_orf[1][:translated_length]
+    plot1             = plot_orfs(orfs, translated_length)
 
     @validation_report = ORFValidationOutput.new(@short_header, @header, @description, orfs, coverage, longest_orf_frame)
     @validation_report.running_time = Time.now - start
@@ -151,145 +140,25 @@ class OpenReadingFrameValidation < ValidationTest
       '-'
     end
 
-    seq = prediction.raw_sequence
-    len = seq.length
-    stops = {}
-
-    stop_codons.each do |codon|
-      occurences = (0 .. seq.length - 1).find_all { |i| seq[i,3].downcase == codon.downcase }
-      occurences.each do |occ|
-        stops[occ + 3] = codon
-      end
-    end
+    seq = Bio::Sequence::NA.new(prediction.raw_sequence)
 
     result = {}
-    result[1] = []
-    result[2] = []
-    result[3] = []
-    result[-1] = []
-    result[-2] = []
-    result[-3] = []
-
-    #direct strand
-    #reading frame 1, direct strand
-    m3 = stops.map{|x| x[0]}.select{|y| y % 3 == 0}.sort
-
-    m3 = [1, m3, prediction.raw_sequence.length].flatten
-    (1..m3.length-1).each do |i|
-      if start_codons.length == 0
-        if m3[i] - m3[i-1] > orf_length
-           result[1].push([m3[i-1], m3[i]])
-        end
-      else
-        start_codons.each do |scd|
-#          start_offset = 0
-#          unless i == 1
-            #find the first occurence of the start codon in the prospective orf
-            start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
-#          end
-          if start_offset != nil and m3[i] - start_offset > orf_length
-            result[1].push([start_offset, m3[i]])
-          end
-        end
-      end
-    end
-
-    #reading frame 2, direct strand
-    m3_1 = stops.map{|x| x[0]}.select{|y| y % 3 == 1}.sort
-    m3_1 = [2, m3_1, prediction.raw_sequence.length].flatten
-    (1..m3_1.length-1).each do |i|
-      if start_codons.length == 0
-        if m3_1[i] - m3_1[i-1] > orf_length
-           result[2].push([m3_1[i-1], m3_1[i]])
-        end
-      else
-        start_codons.each do |scd|
-          start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
-          if start_offset != nil and m3_1[i] - start_offset > orf_length
-            result[2].push([start_offset, m3_1[i]])
-          end
-        end
-      end
-    end
-
-    #reading frame 3, direct strand
-    m3_2 = stops.map{|x| x[0]}.select{|y| y % 3 == 2}.sort
-    m3_2 = [3, m3_2, prediction.raw_sequence.length].flatten
-    (1..m3_2.length-1).each do |i|
-      if start_codons.length == 0
-        if m3_2[i] - m3_2[i-1] > orf_length
-           result[3].push([m3_2[i-1], m3_2[i]])
-        end
-      else
-        start_codons.each do |scd|
-          start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
-          if start_offset != nil and m3_2[i] - start_offset > orf_length
-             result[3].push([start_offset, m3_2[i]])
-          end
-        end
-      end
-    end
-
-    #reverse strand
-    stops_reverse = {}
-
-    seq_reverse = Bio::Sequence::NA.new(seq).reverse_complement
-    stop_codons.each do |codon|
-      occurences = (0 .. seq_reverse.length - 1).find_all { |i| seq_reverse[i,3].downcase == codon.downcase }
-      occurences.each do |occ|
-        stops_reverse[occ + 3] = codon
-      end
-    end
-
-    m3 = stops_reverse.map{|x| x[0]}.select{|y| y % 3 == 0}.sort
-    m3 = [1, m3, prediction.raw_sequence.length].flatten
-
-    (1..m3.length-1).each do |i|
-      if start_codons.length == 0
-        if m3[i] - m3[i-1] > orf_length
-          result[-1].push([len - m3[i], len - m3[i-1]])
-        end
-      else
-        start_codons.each do |scd|
-          start_offset = (m3[i-1]-1..m3[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 0}.first
-          if start_offset != nil and m3[i] - start_offset > orf_length
-            result[-1].push([len - m3[i], len - start_offset])
-          end
-        end
-      end
-    end
-
-    m3_1 = stops_reverse.map{|x| x[0]}.select{|y| y % 3 == 1}.sort
-    m3_1 = [2, m3_1, prediction.raw_sequence.length].flatten
-    (1..m3_1.length-1).each do |i|
-      if start_codons.length == 0
-        if m3_1[i] - m3_1[i-1] > orf_length
-          result[-2].push([len - m3_1[i], len - m3_1[i-1]])
-        end
-      else
-        start_codons.each do |scd|
-          start_offset = (m3_1[i-1]-1..m3_1[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 1}.first
-          if start_offset != nil and m3_1[i] - start_offset > orf_length
-            result[-2].push([len - m3_1[i], len - start_offset])
-          end
-        end
-      end
-    end
-
-    m3_2 = stops_reverse.map{|x| x[0]}.select{|y| y % 3 == 2}.sort
-    m3_2 = [3, m3_2, prediction.raw_sequence.length].flatten
-    (1..m3_2.length-1).each do |i|
-      if start_codons.length == 0
-        if m3_2[i] - m3_2[i-1] > orf_length
-          result[-3].push([len - m3_2[i], len - m3_2[i-1]])
-        end
-      else
-        start_codons.each do |scd|
-          start_offset = (m3_2[i-1]-1..m3_2[i]-orf_length).find_all{|i| seq_reverse[i,3].downcase == scd.downcase}.select{|y| y % 3 == 2}.first
-          if start_offset != nil and m3_2[i] - start_offset > orf_length
-             result[-3].push([len - m3_2[i], len - start_offset])
-          end
-        end
+    key = 0
+    (1..6).each do |f|
+      s = seq.translate(f)
+      f = -1 if f == 4
+      f = -2 if f == 5
+      f = -3 if f == 6
+      s.scan(/(\w{30,})/) do |orf|
+        orf_start = $~.offset(0)[0] + 1
+        orf_end   = $~.offset(0)[1] + 1
+        coverage = (((orf_end - orf_start) / s.length.to_f) * 100).ceil
+        # reduce the orf_end and the translated length by 2% to increase the width between ORFs on the plot
+        chopping = s.length * 0.02
+        orf_end = (orf_end.to_f - chopping).floor
+        translated_length = (s.length - chopping).ceil
+        key += 1
+        result[key] = {frame: f, orf_start: orf_start, orf_end: orf_end, coverage: coverage, translated_length: translated_length}
       end
     end
     result
@@ -301,24 +170,22 @@ class OpenReadingFrameValidation < ValidationTest
   # +orfs+: +Hash+ containing the reading frame (the key) and a list of intervals (the values)
   # +output+: location where the plot will be saved in jped file format
   # +prediction+: Sequence objects
-  def plot_orfs(orfs, output = "#{@filename}_orfs.json", prediction = @prediction)
+  def plot_orfs(orfs, translated_length, output = "#{@filename}_orfs.json", prediction = @prediction)
     raise QueryError unless orfs.is_a? Hash
 
     len = prediction.raw_sequence.length
-    chopping = len*0.02
+    
     results = []
 
     # Create hashes for the Background
     (-3..3).each do |frame|
       next if frame == 0
-      results << {'y'=>frame, 'start'=>0, 'stop'=>len-chopping, 'color'=>'gray'}
+      results << {'y'=>frame, 'start'=>1, 'stop'=>translated_length, 'color'=>'gray'}
     end
 
     # Create the hashes for the ORFs...
-    orfs.each do |frame, all_orfs|
-      all_orfs.each do |orf|
-        results << {'y'=>frame, 'start'=>orf[0], 'stop'=>orf[1]-chopping, 'color'=>'red'}
-      end
+    orfs.each do |_key, h|
+        results << {'y'=>h[:frame], 'start'=>h[:orf_start], 'stop'=>h[:orf_end], 'color'=>'red'}
     end
 
     f = File.open(output, "w")
@@ -327,8 +194,8 @@ class OpenReadingFrameValidation < ValidationTest
 
     return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
                     :lines,
-                    "Open reading frames in the 6 frames",
-                    "",
+                    "Open Reading Frames in all 6 Frames",
+                    "Open Reading Frame (Minimimum Length: 30 amino acids),red",
                     "Offset in the Prediction",
                     "Reading Frame",
                     14)
