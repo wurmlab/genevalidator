@@ -113,11 +113,17 @@ class ValidateOutput < Minitest::Test
 
     it 'should validate open reading frames' do
       ov = validations.select{|v| v.class == ORFValidationOutput}[0]
-      expected_orf = {1=>[[1, 324]], 2=>[[2, 187], [190, 324]], 3=>[[3, 110]],
-                      -1=>[[183, 323], [0, 183]], -2=>[[146, 296], [0, 116]],
-                      -3=>[[61, 250]]}
+      expected_orf = {1=>{:frame=>1, :orf_start=>1, :orf_end=>105, :coverage=>100, :translated_length=>106},
+                      2=>{:frame=>2, :orf_start=>1, :orf_end=>59, :coverage=>58, :translated_length=>105},
+                      3=>{:frame=>2, :orf_start=>64, :orf_end=>105, :coverage=>42, :translated_length=>105},
+                      4=>{:frame=>3, :orf_start=>1, :orf_end=>33, :coverage=>33, :translated_length=>105},
+                      5=>{:frame=>-1, :orf_start=>1, :orf_end=>44, :coverage=>43, :translated_length=>106},
+                      6=>{:frame=>-1, :orf_start=>48, :orf_end=>106, :coverage=>57, :translated_length=>106},
+                      7=>{:frame=>-2, :orf_start=>10, :orf_end=>56, :coverage=>46, :translated_length=>105},
+                      8=>{:frame=>-2, :orf_start=>70, :orf_end=>105, :coverage=>36, :translated_length=>105},
+                      9=>{:frame=>-3, :orf_start=>25, :orf_end=>84, :coverage=>58, :translated_length=>105}}
       assert_equal(expected_orf, ov.orfs)
-      assert_equal(0.9969, ov.coverage.round(4))
+      assert_equal(100.0, ov.coverage.round(4))
       assert_equal(1, ov.mainORFFrame)
       assert_equal(:yes, ov.result)
     end
