@@ -39,7 +39,7 @@ class BlastRFValidationOutput < ValidationReport
       frame = @frames_histo.keys[0].to_s
       exp2  = "; all of these align in frame #{frame}."
     else
-      exp2 = ": #{@exp_msg.gsub(/;$/, '')}."
+      exp2 = ": #{@exp_msg.gsub(/; $/, '')}."
     end
     exp1 + exp2
   end
