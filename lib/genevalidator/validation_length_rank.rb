@@ -6,119 +6,144 @@ require 'genevalidator/enumerable'
 # Class that stores the validation output information
 class LengthRankValidationOutput < ValidationReport
 
-  attr_reader :percentage
   attr_reader :msg
+  attr_reader :query_length
+  attr_reader :no_of_hits
+  attr_reader :median
+  attr_reader :mean
+  attr_reader :smallest_hit
+  attr_reader :largest_hit
+  attr_reader :extreme_hits
+  attr_reader :percentage    
+  attr_reader :result
 
-  def initialize (msg, percentage, expected = :yes)       
-
-    @short_header = "LengthRank"
-    @header       = "Length Rank"
-    @description  = "Check whether the rank of the prediction length lies among 80% of "<<
-        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
-
-    @percentage   = percentage
+  def initialize(short_header, header, description, msg, query_length,
+                 no_of_hits, median, mean, smallest_hit, largest_hit,
+                 extreme_hits, percentage)
+    @short_header, @header, @description = short_header, header, description
     @msg          = msg
+    @query_length = query_length
+    @no_of_hits   = no_of_hits
+    @median       = median
+    @mean         = mean
+    @smallest_hit = smallest_hit
+    @largest_hit  = largest_hit
+    @extreme_hits = extreme_hits
+    @percentage   = percentage
+    
     @result       = validation
-    @expected     = expected
-    @explanation  = "#{percentage}% of the BLAST hits have a length that is more extreme"<<
-                    " (i.e. further away from the median) than the prediction."
+    @expected     = :yes
+    @approach     = 'If the query sequence is well conserved and similar' +
+                    ' sequences (BLAST hits) are correct, we can expect' +
+                    ' query and hit sequences to have similar lengths. '
+    @explanation  = explain
+    @conclusion   = conclude
+  end
+
+  def explain
+    diff = (@query_length < @median) ? 'longer' : 'shorter'
+    exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" +
+           " identified #{@no_of_hits} hit sequences with lengths from" +
+           " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" +
+           " #{@median}; mean: #{@mean})."
+    if @extreme_hits != 0
+      exp2 = " #{@extreme_hits} of these hit sequences (i.e. #{@percentage}%)" +
+             " are #{diff} than the query sequence."
+    else
+      exp2 = " All hit sequences are #{diff} than the query sequence."
+    end
+    exp1 + exp2
+  end
+
+  def conclude
+    if @result == :yes
+      "There is no reason to believe there is any problem with the length of" +
+      " the query sequence."
+    else
+      "The sequence may be #{@msg.gsub('&nbsp;', ' ')}."
+    end
   end
 
   def print
-    if msg != ""
-      return "#{@percentage}&nbsp;(#{msg})"
-    else 
-      return @percentage.to_s
-    end
+    (@msg.empty?) ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
   end
 
   def validation
-    if msg == ""
-      :yes
-    else
-      :no
-    end
+    (@msg.empty?) ? :yes : :no
   end
 end
 
 ##
-# This class contains the methods necessary for 
+# This class contains the methods necessary for
 # length validation by ranking the hit lengths
 class LengthRankValidation < ValidationTest
-
   include Enumerable
 
-  attr_reader :threshold
-
+  THRESHOLD = 20
   ##
-  # Initilizes the object
+  # Initializes the object
   # Params:
-  # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+  # +hits+: a vector of +Sequence+ objects (usually representing the blast hits)
   # +prediction+: a +Sequence+ object representing the blast query
-  # +threashold+: threashold below which the prediction length rank is considered to be inadequate 
-  def initialize(type, prediction, hits, threshold = 0.2)
+  # +threshold+: threshold below which the prediction length rank is considered to be inadequate
+  def initialize(type, prediction, hits)
     super
-    @threshold = threshold
-    @short_header = "LengthRank"
-    @header = "Length Rank"
-    @description = "Check whether the rank of the prediction length lies among 80% of "<<
-        "all the BLAST hit lengths. Meaning of the output displayed: no of extreme length hits / total no of hits"
-    @cli_name = "lenr"
+    @short_header = 'LengthRank'
+    @header       = 'Length Rank'
+    @description  = 'Check whether the rank of the prediction length lies' +
+                    ' among 80% of all the BLAST hit lengths.'
+    @cli_name     = 'lenr'
   end
 
   ##
-  # Calculates a precentage based on the rank of the predicion among the hit lengths
+  # Calculates a percentage based on the rank of the prediction among the hit lengths
   # Params:
   # +hits+ (optional): a vector of +Sequence+ objects
   # +prediction+ (optional): a +Sequence+ object
   # Output:
   # +LengthRankValidationOutput+ object
   def run(hits = @hits, prediction = @prediction)
-    begin
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and 
-                             hits[0].is_a? Sequence 
+    raise NotEnoughHitsError unless hits.length >= 5
+    raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
 
-      start = Time.now
+    start = Time.now
 
-      lengths = hits.map{ |x| x.length_protein.to_i }.sort{|a,b| a<=>b}
+    hits_lengths = hits.map { |x| x.length_protein.to_i }.sort { |a, b| a <=> b }
 
-      len = lengths.length
-      median = lengths.median
+    no_of_hits   = hits_lengths.length
+    median       = hits_lengths.median.round
+    query_length = prediction.length_protein
+    mean         = hits_lengths.mean.round
 
-      predicted_len = prediction.length_protein
+    smallest_hit = hits_lengths[0]
+    largest_hit  = hits_lengths[-1]
 
-      if hits.length == 1 || lengths.standard_deviation <= 5
-        msg = ""
-        percentage = 1
+    if hits_lengths.standard_deviation <= 5
+      msg = ''
+      percentage = 100
+    else
+      if query_length < median
+        extreme_hits = hits_lengths.find_all { |x| x < query_length }.length
+        percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
+        msg          = 'too&nbsp;short'
       else
-        if predicted_len < median
-          rank = lengths.find_all{|x| x < predicted_len}.length
-          percentage = rank / (len + 0.0)
-          msg = "too&nbsp;short"
-        else
-          rank = lengths.find_all{|x| x > predicted_len}.length
-          percentage = rank / (len + 0.0)
-          msg = "too&nbsp;long"
-        end
+        extreme_hits = hits_lengths.find_all { |x| x > query_length }.length
+        percentage   = ((extreme_hits.to_f / no_of_hits) * 100).round
+        msg          = 'too&nbsp;long'
       end
-
-      if percentage >= threshold
-        msg = ""
-      end
-
-      @validation_report = LengthRankValidationOutput.new(msg, percentage.round(2))
-      @validation_report.running_time = Time.now - start
-      return @validation_report
-
-    # Exception is raised when blast founds no hits
-     rescue NotEnoughHitsError#Exception
-      @validation_report = ValidationReport.new("Not enough evidence", :warning, @short_header, @header, @description, @explanation)
-     else
-      @validation_report = ValidationReport.new("Unexpected error", :error, @short_header, @header, @description, @explanation)
-      @validation_report.errors.push OtherError
     end
 
-  end
+    msg = '' if percentage >= THRESHOLD
 
+    @validation_report = LengthRankValidationOutput.new(@short_header, @header, @description, msg, query_length, no_of_hits, median, mean, smallest_hit, largest_hit, extreme_hits, percentage)
+    @validation_report.running_time = Time.now - start
+    return @validation_report
+
+  # Exception is raised when blast founds no hits
+  rescue NotEnoughHitsError
+    @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
+  else
+    @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
+    @validation_report.errors.push OtherError
+  end
 end

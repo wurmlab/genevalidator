@@ -3,7 +3,7 @@
 class ClasspathError < Exception
 end
 
-# Exception raised when the command line type argument 
+# Exception raised when the command line type argument
 # does not corrsepond to the type of the sequences in the fasta file
 class SequenceTypeError < Exception
 end
@@ -17,7 +17,7 @@ class QueryError < Exception
 end
 
 # Exception raised when a validation class is not instance of ValidationTest
-class ValidationClassError < Exception      
+class ValidationClassError < Exception
 end
 
 # Exception raised when a validation report class is not instance of ValidationReport
@@ -53,7 +53,7 @@ class InconsistentTabularFormat < Exception
 end
 
 # Exception raised when there are more than one reading frame among the hits of one prediction
-class  ReadingFrameError < Exception
+class ReadingFrameError < Exception
 end
 
 class OtherError < Exception

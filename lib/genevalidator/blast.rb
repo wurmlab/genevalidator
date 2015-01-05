@@ -10,6 +10,7 @@ require 'open-uri'
 require 'uri'
 require 'io/console'
 require 'yaml'
+require 'bio'
 
 class BlastUtils
 
@@ -27,17 +28,59 @@ class BlastUtils
   # +nr_hits+: max number of hits
   # Output:
   # String with the blast xml output
-  def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11, gapextend=1, nr_hits=200)
-
-    # If BLAST is not run remotely, then utilise the -num_threads argument (-num_threads is not supported on remote databases)
+  def self.call_blast_from_stdin(blast_type, query, db, num_threads, gapopen=11,
+                                 gapextend=1, nr_hits=200)
+    # -num_threads is not supported on remote databases, so need to check if
+    #   running blast against local db or not 
     if (db !~ /remote/)
-      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend} -num_threads #{num_threads}"
+      blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" + 
+                 " -max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
+                 " -gapextend #{gapextend} -num_threads #{num_threads}"
     else
-      blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits} -gapopen #{gapopen} -gapextend #{gapextend}"
+      blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" +
+                 " -max_target_seqs #{nr_hits} -gapopen #{gapopen}" +
+                 " -gapextend #{gapextend}"
     end
 
     cmd = "echo \"#{query}\" | #{blastcmd}"
     %x[#{cmd} 2>/dev/null]
+  end
+
+  ##
+  # Runs BLAST on an input file
+  # Params:
+  # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
+  # +query_file+: Input file
+  # +opt+: Hash containing the following ids: :blast_xml_file, :db, :num_threads
+  # +gapopen+: gapopen blast parameter
+  # +gapextend+: gapextend blast parameter
+  # +nr_hits+: max number of hits
+  # Output:
+  # XML file
+  def self.run_blast_on_file(query_file, opt, gapopen=11, gapextend=1,
+                             nr_hits=200)
+    seq_type   = guess_sequence_type_from_file(query_file)
+    blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
+
+    if (opt[:db] !~ /remote/)
+      blastcmd = "#{blast_type} -query '#{query_file}'" +
+                 " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]} " +
+                 " -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits}" +
+                 " -gapopen #{gapopen} -gapextend #{gapextend}" +
+                 " -num_threads #{opt[:num_threads]}"
+    else
+      blastcmd = "#{blast_type} -query '#{query_file}'" +
+                 " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]}" +
+                 " -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits}" +
+                 " -gapopen #{gapopen} -gapextend #{gapextend}"
+    end
+
+    %x[#{blastcmd}]
+    if File.zero?(opt[:blast_xml_file])
+      puts "Blast failed to run on the input file. Please ensure that the"
+      puts "BLAST database exists and try again"
+      exit 1
+    end
   end
 
   ##
@@ -56,11 +99,11 @@ class BlastUtils
 
       # parse blast the xml output and get the hits
       # hits obtained are proteins! (we use only blastp and blastx)
-      iter.each do | hit | 
-        
+      iter.each do | hit |
+
         seq = Sequence.new
 
-        seq.length_protein = hit.len.to_i        
+        seq.length_protein = hit.len.to_i
         seq.type           = :protein
         seq.identifier     = hit.hit_id
         seq.definition     = hit.hit_def
@@ -73,15 +116,15 @@ class BlastUtils
         hit.hsps.each do |hsp|
           current_hsp            = Hsp.new
           current_hsp.hsp_evalue = hsp.evalue.to_i
-          
+
           current_hsp.hit_from         = hsp.hit_from.to_i
           current_hsp.hit_to           = hsp.hit_to.to_i
           current_hsp.match_query_from = hsp.query_from.to_i
           current_hsp.match_query_to   = hsp.query_to.to_i
 
           if type == :nucleotide
-            current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1 
-            current_hsp.match_query_to   =  (current_hsp.match_query_to / 3) + 1             
+            current_hsp.match_query_from =  (current_hsp.match_query_from / 3) + 1
+            current_hsp.match_query_to   =  (current_hsp.match_query_to / 3) + 1
           end
 
           current_hsp.query_reading_frame = hsp.query_frame.to_i
@@ -96,47 +139,32 @@ class BlastUtils
             raise SequenceTypeError
           end
           current_hsp.align_len = hsp.align_len.to_i
-          current_hsp.identity  = hsp.identity.to_i          
-          current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)  
+          current_hsp.identity  = hsp.identity.to_i
+          current_hsp.pidentity = 100 * hsp.identity / (hsp.align_len + 0.0)
 
           hsps.push(current_hsp)
         end
 
         seq.hsp_list = hsps
         hits.push(seq)
-      end     
-    
+      end
+
       return hits
 
     rescue TypeError => error
       $stderr.print "Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-        "Possible cause: you didn't call parse method first!\n"       
-      exit!
+        "Possible cause: you didn't call parse method first!\n"
+      exit 1
     rescue SequenceTypeError => error
       $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
         "Possible cause: the blast output was not obtained against a protein database.\n"
-      exit!
+      exit 1
     rescue StopIteration
       nil
     end
   end
 
   ##
-  # Method copied from sequenceserver/sequencehelpers.rb
-  # Params:
-  # sequence_string: String of which we mfind the composition
-  # Output:
-  # a Hash
-  def self.composition(sequence_string)
-    count = Hash.new(0)
-    sequence_string.scan(/./) do |x|
-      count[x] += 1
-    end
-    count
-  end
-
-  ##
-  # Method copied from sequenceserver/sequencehelpers.rb
   # Strips all non-letter characters. guestimates sequence based on that.
   # If less than 10 useable characters... returns nil
   # If more than 90% ACGTU returns :nucleotide. else returns :protein
@@ -145,23 +173,21 @@ class BlastUtils
   # Output:
   # nil, :nucleotide or :protein
   def self.guess_sequence_type(sequence_string)
-    cleaned_sequence = sequence_string.gsub(/[^A-Z]/i, '') # removing non-letter characters
-    cleaned_sequence.gsub!(/[NX]/i, '') # removing ambiguous characters
-
+    # removing non-letter and ambiguous characters
+    cleaned_sequence = sequence_string.gsub(/[^A-Z]|[NX]/i, '')
     return nil if cleaned_sequence.length < 10 # conservative
 
-    composition = BlastUtils.composition(cleaned_sequence)
-    composition_NAs = composition.select { |character, count|character.match(/[ACGTU]/i) } # only putative NAs
-    putative_NA_counts = composition_NAs.collect { |key_value_array| key_value_array[1] } # only count, not char
-    putative_NA_sum = putative_NA_counts.inject { |sum, n| sum + n } # count of all putative NA
-    putative_NA_sum = 0 if putative_NA_sum.nil?
+    type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
+    (type == Bio::Sequence::NA) ? :nucleotide : :protein
+  end
 
-
-    if putative_NA_sum > (0.9 * cleaned_sequence.length)
-      return :nucleotide
-    else
-      return :protein
+  def self.guess_sequence_type_from_file(file)
+    lines = File.foreach(file).first(10)
+    seqs = ''
+    lines.each do |l|
+      seqs += l.chomp unless l[0] == '>'
     end
+    guess_sequence_type(seqs)
   end
 
   ##
@@ -177,19 +203,11 @@ class BlastUtils
   def self.type_of_sequences(fasta_format_string)
     # the first sequence does not need to have a fasta definition line
     sequences = fasta_format_string.split(/^>.*$/).delete_if { |seq| seq.empty? }
-
     # get all sequence types
     sequence_types = sequences.collect { |seq| BlastUtils.guess_sequence_type(seq) }.uniq.compact
 
     return nil if sequence_types.empty?
-
-    if sequence_types.length == 1
-      return sequence_types.first # there is only one (but yes its an array)
-    else
-      raise SequenceTypeError
-    end
+    return sequence_types.first if sequence_types.length == 1
+    raise SequenceTypeError
   end
-
 end
-
-

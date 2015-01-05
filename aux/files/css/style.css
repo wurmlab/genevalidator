@@ -2,9 +2,16 @@
 /* MAIN STRUCTURE
 __________________________*/
 
+html {
+  /* This is required in order to make the footer stick to the bottom..*/
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   text-align: center;
   padding-top: 10px;
+  margin-bottom: 100px;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -13,6 +20,13 @@ a:link, a:visited, a:hover, a:active {
 
 .container {
   width: 99%;
+}
+
+footer {
+  margin-top: 30px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 /* MAIN HEADER
@@ -142,6 +156,14 @@ tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
 .table tbody td.success,
 .table tbody td.danger {
   cursor: pointer !important;
+}
+
+.danger:hover {
+  background-color: rgb(242, 203, 203) !important;
+}
+
+.success:hover{
+  background-color: rgb(204, 228, 200) !important;
 }
 
 /* D3Js & Axis

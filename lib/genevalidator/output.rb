@@ -41,17 +41,17 @@ class Output
   def initialize(mutex, mutex_yaml, mutex_html, filename, html_path, yaml_path, idx = 0, start_idx = 0)
     @prediction_len = 0
     @prediction_def = "no_definition"
-    @nr_hits = 0
+    @nr_hits        = 0
 
-    @filename = filename
-    @html_path = html_path
-    @yaml_path = yaml_path
-    @idx = idx
-    @start_idx = start_idx
+    @filename       = filename
+    @html_path      = html_path
+    @yaml_path      = yaml_path
+    @idx            = idx
+    @start_idx      = start_idx
 
-    @mutex = mutex
-    @mutex_yaml = mutex_yaml
-    @mutex_html = mutex_html
+    @mutex          = mutex
+    @mutex_yaml     = mutex_yaml
+    @mutex_html     = mutex_html
   end
 
   def print_output_console
@@ -63,14 +63,14 @@ class Output
       puts header
     end
 
-    short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
+    short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
     validation_outputs = validations.map{|v| v.print}
 
-    output = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
+    output             = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
     validation_outputs.each do |item|
       item_padd = sprintf("%17s", item);
-      output << item
-      output << "|"
+      output    << item
+      output    << "|"
     end
 
     @mutex.synchronize {
@@ -197,55 +197,54 @@ class Output
   # Array of Strigs with the reports
   #def self.overall_evaluation(all_query_outputs, filename)
   def self.overall_evaluation(no_queries, good_scores, bad_scores, no_evidence, no_mafft, no_internet, map_errors, running_times, filename)
-      score_evaluation = ""
-      score_evaluation << "Query score evaluation for #{filename}:"
+    score_evaluation = ""
+    score_evaluation << "Query score evaluation for #{filename}:"
 
-      # count the cases of "not enough evidence"
-      #no_evidence = all_query_outputs.count{|report|
-      #  report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
-      #}
+    # count the cases of "not enough evidence"
+    #no_evidence = all_query_outputs.count{|report|
+    #  report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
+    #}
 
-      # print at the console
-      #scores = all_query_outputs.map{|query| query.score}
+    # print at the console
+    #scores = all_query_outputs.map{|query| query.score}
 
-      # how many genes are good
+    # how many genes are good
 
-      score_evaluation << "\nThere were validated #{no_queries} predictions from which:"
-      if good_scores == 1
-        score_evaluation << "\nOne good prediction"
-      else
-        score_evaluation << "\n#{good_scores} are good predictions"
-      end
-      if bad_scores == 1
-        score_evaluation << "\nOne possibly weak prediction"
-      else
-        score_evaluation << "\n#{bad_scores} are possibly weak predictions"
-      end
+    score_evaluation << "\nThere were validated #{no_queries} predictions from which:"
+    if good_scores == 1
+      score_evaluation << "\nOne good prediction"
+    else
+      score_evaluation << "\n#{good_scores} are good predictions"
+    end
+    if bad_scores == 1
+      score_evaluation << "\nOne possibly weak prediction"
+    else
+      score_evaluation << "\n#{bad_scores} are possibly weak predictions"
+    end
 
-      if no_evidence != 0
-        score_evaluation << "\n#{no_evidence} of them couldn't be evaluated because of low evidence"
-      end
+    if no_evidence != 0
+      score_evaluation << "\n#{no_evidence} of them couldn't be evaluated because of low evidence"
+    end
 
-      # errors per validation
-      error_evaluation = ""
-      map_errors.each{|k,v| error_evaluation <<  "\nWe couldn't run #{k} Validation for #{v} queries"}
+    # errors per validation
+    error_evaluation = ""
+    map_errors.each{|k,v| error_evaluation <<  "\nWe couldn't run #{k} Validation for #{v} queries"}
 
-      if no_mafft >=  (no_queries - no_evidence)
-        error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
-      end
-      if no_internet >=  (no_queries - no_evidence)
-        error_evaluation << "\nWe couldn't make use of your internet connection"
-      end
+    if no_mafft >=  (no_queries - no_evidence)
+      error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
+    end
+    if no_internet >=  (no_queries - no_evidence)
+      error_evaluation << "\nWe couldn't make use of your internet connection"
+    end
 
-      time_evaluation = ""
-      running_times.each do |key, value|
-        average_time = value.x / (value.y + 0.0)
-        time_evaluation << "\nAverage running time for #{key} Validation: #{average_time.round(3)}s per validation"
-      end
+    time_evaluation = ""
+    running_times.each do |key, value|
+      average_time = value.x / (value.y + 0.0)
+      time_evaluation << "\nAverage running time for #{key} Validation: #{average_time.round(3)}s per validation"
+    end
 
-      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
-      overall_evaluation = overall_evaluation.select{|e| e!=""}
-      return overall_evaluation
+    overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
+    overall_evaluation.select{|e| e!=""}
   end
 
 end

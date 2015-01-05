@@ -1,6 +1,4 @@
-require "rubygems"
-require "shoulda"
-require 'minitest'
+require_relative 'test_helper'
 require 'minitest/autorun'
 require 'fileutils'
 require 'validation'
@@ -15,7 +13,7 @@ class TestBlastClass < Minitest::Test
 
       filename_mrna = "test/test_files/file_mrna.txt"
       file_mrna = File.open(filename_mrna, "w+")
-      file_mrna.puts(">seq1")    
+      file_mrna.puts(">seq1")
       query_mrna = "ATGGCTAAATTACAGAGGAAGAGAAGCAAGGCTCTTGGGTCATCTCTAGAGATGTCCCAGATAATGGATG\
 CAGGAACAAACAAAATTAAAAGAAGAATAAGAGATTTAGAGAGGTTATTAAAAAAGAAGAAAGATATACT\
 TCCATCCACAGTAATAATAGAAAAGGAAAGAAATTTGCAAGCTTTACGGTTGGAATTGCAGAATAATGAA\
@@ -26,16 +24,23 @@ TATCCGAATGATACACCATCTACAGACCCAAAGGCGTAG"
       file_mrna.puts(query_mrna)
       file_mrna.close
 
-      begin
-        FileUtils.rm_rf("#{filename_mrna}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_mrna}.html") rescue Error
+    
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_mrna)
+      b = Validation.new(filename_mrna, default_opt)
 
       File.delete(filename_mrna)
       FileUtils.rm_rf("#{filename_mrna}.html")
-      assert_equal b.type, :nucleotide      
+      assert_equal(:nucleotide, b.type,)
     end
 
     it "should detect protein type" do
@@ -53,16 +58,23 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       file_prot.puts(query_prot)
       file_prot.close
 
-      begin
-        FileUtils.rm_rf("#{filename_prot}.html")
-      rescue Error
-      end
- 
-      b = Validation.new(filename_prot)
+      FileUtils.rm_rf("#{filename_prot}.html") rescue Error
+
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_prot, default_opt)
 
       File.delete(filename_prot)
       FileUtils.rm_rf("#{filename_prot}.html")
-      assert_equal b.type, :protein
+      assert_equal(:protein, b.type)
 
       end
 
@@ -73,17 +85,24 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
         original_stderr = $stderr
         $stderr.reopen("/dev/null", "w")
 
-        begin
-          FileUtils.rm_rf("#{filename_prot}.html")
-        rescue Error
-        end
+        FileUtils.rm_rf("#{filename_prot}.html") rescue Error
+ 
+        default_opt = {
+          validations: ["all"],
+          blast_tabular_file: nil,
+          blast_tabular_options: nil, 
+          blast_xml_file: nil,
+          db: 'swissprot -remote',
+          raw: nil,
+          num_threads: 1
+        }
 
-        b = Validation.new(filename_prot)
+        b = Validation.new(filename_prot, default_opt)
       rescue SystemExit => e
         mixed = true
       end
         $stderr = original_stderr
-        assert_equal mixed, true
+        assert_equal(true, mixed)
     end
 
     it "should parse xml input" do
@@ -91,11 +110,11 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       hits = BlastUtils.parse_next_query_xml(iterator, :protein)
-      assert_equal hits.length, 500
-      assert_equal hits[19].length_protein, 870
-      assert_equal hits[19].accession_no, "XP_004524940"
-      assert_equal hits[19].hsp_list.length, 3      
-      assert_equal hits[19].hsp_list[2].hit_from, 703
+      assert_equal(500, hits.length)
+      assert_equal(870, hits[19].length_protein)
+      assert_equal("XP_004524940", hits[19].accession_no)
+      assert_equal(3, hits[19].hsp_list.length)
+      assert_equal(703, hits[19].hsp_list[2].hit_from)
     end
 
     it "should parse tabular -6 input with default tabular format" do
@@ -103,16 +122,16 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(filename_prot, nil, :protein)
       hits = iterator_tab.next
-      assert_equal hits.length, 20
-      assert_equal hits[0].hsp_list.length, 1
-      assert_equal hits[0].hsp_list[0].hit_to, 111
-      assert hits[0].hsp_list[0].hit_from.is_a? Fixnum
+      assert_equal(20, hits.length)
+      assert_equal(1, hits[0].hsp_list.length)
+      assert_equal(111, hits[0].hsp_list[0].hit_to)
+      assert(hits[0].hsp_list[0].hit_from.is_a? Fixnum)
 
-      assert_equal hits[0].hsp_list[0].pidentity, 100
-      assert hits[0].hsp_list[0].pidentity.is_a? Float
-      
-      assert_equal hits[0].hsp_list[0].hsp_evalue, 2.0e-44
-      assert hits[0].hsp_list[0].hsp_evalue.is_a? Float
+      assert_equal(100, hits[0].hsp_list[0].pidentity)
+      assert(hits[0].hsp_list[0].pidentity.is_a? Float)
+
+      assert_equal(2.0e-44, hits[0].hsp_list[0].hsp_evalue)
+      assert(hits[0].hsp_list[0].hsp_evalue.is_a? Float)
     end
 
     it "should parse tabular -6 input with tabular format as argument" do
@@ -120,11 +139,11 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue", :protein)
       hits = iterator_tab.next
-      assert_equal hits.length, 4
-      assert_equal hits[0].length_protein, 199
-      assert_equal hits[0].accession_no, "EFZ19000"
-      assert_equal hits[0].hsp_list.length, 3
-      assert_equal hits[0].hsp_list[2].hit_to, 100
+      assert_equal(4, hits.length)
+      assert_equal(199, hits[0].length_protein)
+      assert_equal("EFZ19000", hits[0].accession_no)
+      assert_equal(3, hits[0].hsp_list.length)
+      assert_equal(100, hits[0].hsp_list[2].hit_to)
     end
 
     it "should parse tabular -6 input with mixed columns" do
@@ -132,11 +151,11 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(filename_prot, "qend sstart send pident length qframe evalue qseqid sseqid sacc slen qstart", :protein)
       hits = iterator_tab.next
-      assert_equal hits.length, 4
-      assert_equal hits[0].length_protein, 199
-      assert_equal hits[0].accession_no, "EFZ19000"
-      assert_equal hits[0].hsp_list.length, 3
-      assert_equal hits[0].hsp_list[2].hit_to, 100
+      assert_equal(4, hits.length)
+      assert_equal(199, hits[0].length_protein)
+      assert_equal("EFZ19000", hits[0].accession_no)
+      assert_equal(3, hits[0].hsp_list.length)
+      assert_equal(100, hits[0].hsp_list[2].hit_to)
     end
 
     it "should parse tabular -7 input" do
@@ -144,11 +163,11 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       iterator_tab = TabularParser.new(filename_prot, "qseqid sseqid sacc slen qstart qend sstart send length qframe evalue", :protein)
       hits = iterator_tab.next
-      assert_equal hits.length, 4
-      assert_equal hits[0].length_protein, 199
-      assert_equal hits[0].accession_no, "EFZ19000"
-      assert_equal hits[0].hsp_list.length, 3
-      assert_equal hits[0].hsp_list[2].hit_to, 100
+      assert_equal(4, hits.length)
+      assert_equal(199, hits[0].length_protein)
+      assert_equal("EFZ19000", hits[0].accession_no)
+      assert_equal(3, hits[0].hsp_list.length)
+      assert_equal(100, hits[0].hsp_list[2].hit_to)
       end
 
     it "should remove identical matches among protein sequences" do
@@ -156,12 +175,19 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       output = File.open(filename_prot, "rb").read
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+      
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
       prediction = Sequence.new
       prediction.length_protein = 1808
 
@@ -170,15 +196,15 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       hits = iterator_tab.next
 
       # before removal
-      assert_equal hits.length, 2
-      assert_equal hits[0].hsp_list[0].pidentity, 100
-      assert_in_delta hits[0].hsp_list[1].pidentity, 99.23, 0.01
-      assert_in_delta hits[1].hsp_list[0].pidentity, 90, 0.01 
+      assert_equal(2, hits.length)
+      assert_equal(100, hits[0].hsp_list[0].pidentity)
+      assert_in_delta(99.23, hits[0].hsp_list[1].pidentity, 0.01)
+      assert_in_delta(90, hits[1].hsp_list[0].pidentity, 0.01)
       hits = b.remove_identical_hits(prediction, hits)
 
-      # after removal
-      assert_equal hits.length, 1
-      assert_in_delta hits[0].hsp_list[0].pidentity, 90, 0.01
+      # after removal of identical hits
+      assert_equal(1, hits.length)
+      assert_in_delta(90, hits[0].hsp_list[0].pidentity, 0.01)
       FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
@@ -188,12 +214,19 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -201,12 +234,12 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       iterator_tab = TabularParser.new(filename_prot, nil, :nucleotide)
       hits = iterator_tab.next
 
-      assert_equal hits.length, 20
+      assert_equal(20, hits.length)
 
       hits = b.remove_identical_hits(prediction, hits)
- 
-      assert_equal hits.length, 13
-      assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
+
+      assert_equal(13, hits.length)
+      assert_in_delta(98.61, hits[0].hsp_list[0].pidentity, 0.01)
       FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
@@ -216,12 +249,19 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
 
       filename_fasta = "test/test_files/test_validations.fasta"
 
-      begin
-        FileUtils.rm_rf("#{filename_fasta}.html")
-      rescue Error
-      end
+      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+      
+      default_opt = {
+        validations: ["all"],
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: nil,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_fasta) # just use a valida filename to create the object
+      b = Validation.new(filename_fasta, default_opt) # just use a valida filename to create the object
 
       prediction = Sequence.new
       prediction.length_protein = 219/3
@@ -229,12 +269,12 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
       hits = BlastUtils.parse_next_query_xml(iterator, :protein)
 
-      assert_equal hits.length, 20
+      assert_equal(20, hits.length)
 
       hits = b.remove_identical_hits(prediction, hits)
 
-      assert_equal hits.length, 13
-      assert_in_delta hits[0].hsp_list[0].pidentity, 98.61, 0.01
+      assert_equal(13, hits.length)
+      assert_in_delta(98.61, hits[0].hsp_list[0].pidentity, 0.01)
       FileUtils.rm_rf("#{filename_fasta}.html")
     end
 
@@ -243,16 +283,25 @@ DPPPQGKRSETTPKHVPTKENLNGQISSKNVQKNLATILRTTGPPPSRTTSARLPSRNDLMSEVQRTTWARHTTK"
       $stderr.reopen("/dev/null", "w")
       error = false
       begin
+        default_opt = {
+          validations: ["all"],
+          blast_tabular_file: nil,
+          blast_tabular_options: nil, 
+          blast_xml_file: nil,
+          db: 'swissprot -remote',
+          raw: nil,
+          num_threads: 1
+        }
+
         filename_xml = "test/test_files/gost.txt"
-        b = Validation.new(filename_xml)
+        b = Validation.new(filename_xml, default_opt)
         output = File.open(filename_xml, "rb").read
         b.parse_output(output)
       rescue SystemExit => e
         error = true
       end
       $stderr = original_stderr
-      assert_equal error, true
-
+      assert_equal(true, error)
     end
   end
 end

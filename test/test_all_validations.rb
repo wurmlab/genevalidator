@@ -1,9 +1,6 @@
-require "rubygems"
-require "shoulda"
-require 'minitest'
+require_relative 'test_helper'
 require 'minitest/autorun'
 require "yaml"
-require 'genevalidator/blast'
 require 'fileutils'
 require 'validation'
 require 'genevalidator/blast'
@@ -48,28 +45,36 @@ class ValidateOutput < Minitest::Test
       original_stdout = $stdout.clone
       $stdout.reopen(filename_prot_out_xml, "w")
 
-      begin
-        FileUtils.rm_rf(filename_prot_html)
-        rescue Error
-      end
+      FileUtils.rm_rf(filename_prot_html) rescue Error
 
-      b = Validation.new(filename_prot_fasta, validations, nil, filename_prot_xml, "swissprot -remote", filename_prot_raw, 1, 1, false, false)
+      opts = {
+        validations: validations,
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: filename_prot_xml,
+        db: 'swissprot -remote',
+        raw: filename_prot_raw,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_prot_fasta, opts, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_prot_out_tab, "w")
 
-      begin
-        FileUtils.rm_rf(filename_prot_html)
-        rescue Error
-      end
+      FileUtils.rm_rf(filename_prot_html) rescue Error
+      
+      opts1 = {
+        validations: validations,
+        blast_tabular_file: filename_prot_tab,
+        blast_tabular_options: "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: filename_prot_raw,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_prot_fasta,
-                         validations,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
-                         filename_prot_tab,
-                         "swissprot -remote",
-                         filename_prot_raw,
-                         1, 1, false, false)
+      b = Validation.new(filename_prot_fasta, opts1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -82,7 +87,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_prot_html)
 
-      assert_equal diff, true
+      assert_equal(true, diff)
 
     end
   end
@@ -93,30 +98,36 @@ class ValidateOutput < Minitest::Test
       original_stdout = $stdout.clone
       $stdout.reopen(filename_mrna_out_xml, "w")
 
-      begin
-        FileUtils.rm_rf(filename_mrna_html)
-        rescue Error
-      end
+      FileUtils.rm_rf(filename_mrna_html) rescue Error
+     
+      opts = {
+        validations: validations,
+        blast_tabular_file: nil,
+        blast_tabular_options: nil, 
+        blast_xml_file: filename_mrna_xml,
+        db: 'swissprot -remote',
+        raw: filename_mrna_raw,
+        num_threads: 1
+      }
 
-      b = Validation.new(filename_mrna_fasta, validations, nil, filename_mrna_xml, "swissprot -remote", filename_mrna_raw, 1, 1, false, false)
-
-
+      b = Validation.new(filename_mrna_fasta, opts, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
       $stdout.reopen(filename_mrna_out_tab, "w")
 
-      begin
-        FileUtils.rm_rf(filename_mrna_html)
-        rescue Error
-      end
+      FileUtils.rm_rf(filename_mrna_html) rescue Error
 
-      b = Validation.new(filename_mrna_fasta,
-                         validations,
-                         "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue",
-                         filename_mrna_tab,
-                         "swissprot -remote",
-                         filename_mrna_raw,
-                         1, 1, false, false)
+      opts1 = {
+        validations: validations,
+        blast_tabular_file: filename_mrna_tab,
+        blast_tabular_options: "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue", 
+        blast_xml_file: nil,
+        db: 'swissprot -remote',
+        raw: filename_mrna_raw,
+        num_threads: 1
+      }
+
+      b = Validation.new(filename_mrna_fasta, opts1, 1, false, false)
       b.validation
       $stdout.reopen original_stdout
 
@@ -129,7 +140,7 @@ class ValidateOutput < Minitest::Test
 
       FileUtils.rm_rf(filename_mrna_html)
 
-      assert_equal diff, true
+      assert_equal(true, diff)
     end
   end
 end

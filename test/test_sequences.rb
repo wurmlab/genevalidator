@@ -1,6 +1,4 @@
-require "rubygems"
-require "shoulda"
-#require 'mini_shoulda'
+require_relative 'test_helper'
 require 'minitest/autorun'
 require 'genevalidator/sequences'
 require 'genevalidator/hsp'
@@ -12,15 +10,15 @@ class TestSequenceClass < Minitest::Test
     it "should get sequence by accession for mrna" do
       seq_mrna = Sequence.new
       seq_mrna.get_sequence_by_accession_no("EF100000","nucleotide", 'swissprot -remote')
-      assert_equal seq_mrna.raw_sequence[0..9], "AGAGTTTGAT"
-      assert_equal seq_mrna.raw_sequence[seq_mrna.raw_sequence.length-10..seq_mrna.raw_sequence.length-1], "GCCCGTCAAG"      
+      assert_equal("AGAGTTTGAT", seq_mrna.raw_sequence[0..9])
+      assert_equal("GCCCGTCAAG", seq_mrna.raw_sequence[seq_mrna.raw_sequence.length-10..seq_mrna.raw_sequence.length-1])
     end
 
     it "should get sequence by accession for protein" do
       seq_prot = Sequence.new
       seq_prot.get_sequence_by_accession_no("F8WCM5","protein", 'swissprot -remote')
-      assert_equal seq_prot.raw_sequence[0..9], "MALWMRLLPL"
-      assert_equal seq_prot.raw_sequence[seq_prot.raw_sequence.length-10..seq_prot.raw_sequence.length-1], "WPRRPQRSQN"
+      assert_equal("MALWMRLLPL", seq_prot.raw_sequence[0..9])
+      assert_equal("WPRRPQRSQN", seq_prot.raw_sequence[seq_prot.raw_sequence.length-10..seq_prot.raw_sequence.length-1])
     end
 
     it "should initialize seq tabular attributes" do
@@ -33,10 +31,10 @@ class TestSequenceClass < Minitest::Test
       seq.init_tabular_attribute("slen", no)
       seq.init_tabular_attribute("qseqid", value)
 
-      assert_equal seq.identifier, value
-      assert_equal seq.accession_no, value
-      assert_equal seq.length_protein, no
-      assert seq.length_protein.is_a? Fixnum
+      assert_equal(value, seq.identifier)
+      assert_equal(value, seq.accession_no)
+      assert_equal(no, seq.length_protein)
+      assert(seq.length_protein.is_a? Fixnum)
     end
 
     it "should initialize hsp tabular attributes" do
@@ -62,8 +60,7 @@ class TestSequenceClass < Minitest::Test
         protein = false
       end
       $stderr = original_stderr
-      assert_equal protein, false
-
+      assert_equal(false, protein)
       string = "IEDLRHSLIEDLRHS"
       seq.init_tabular_attribute("qseq",string)
       seq.init_tabular_attribute("sseq",string)
@@ -71,26 +68,25 @@ class TestSequenceClass < Minitest::Test
       fl = 1.253436
       seq.init_tabular_attribute("evalue",fl)
 
-      assert_equal seq.match_query_from, value
-      assert seq.match_query_from.is_a? Fixnum
-  
-      assert_equal seq.match_query_to , value
-      assert seq.match_query_to.is_a? Fixnum
+      assert_equal(value, seq.match_query_from)
+      assert(seq.match_query_from.is_a? Fixnum)
 
-      assert_equal seq.query_reading_frame , value
-      assert seq.query_reading_frame.is_a? Fixnum
+      assert_equal(value, seq.match_query_to)
+      assert(seq.match_query_to.is_a? Fixnum)
 
-      assert_equal seq.hit_from , value
-      assert seq.hit_from.is_a? Fixnum
-      
-      assert_equal seq.hit_to , value
-      assert seq.hit_to.is_a? Fixnum
+      assert_equal(value, seq.query_reading_frame)
+      assert(seq.query_reading_frame.is_a? Fixnum)
 
-      assert_equal seq.query_alignment , string
-      assert_equal seq.hit_alignment , string
+      assert_equal(value, seq.hit_from)
+      assert(seq.hit_from.is_a? Fixnum)
 
-      assert_equal seq.hsp_evalue, fl
-      assert seq.hsp_evalue.is_a? Float
+      assert_equal(value, seq.hit_to)
+      assert(seq.hit_to.is_a? Fixnum)
+
+      assert_equal(string, seq.query_alignment)
+      assert_equal(string, seq.hit_alignment)
+      assert_equal(fl, seq.hsp_evalue)
+      assert(seq.hsp_evalue.is_a? Float)
     end
 
   end
