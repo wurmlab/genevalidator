@@ -60,6 +60,8 @@ class ValidationReport
     end
     if validation == @expected
      "success"
+    elsif validation == :error || validation == :unapplicable
+      "warning"      
     else
       (validation == :warning) ? "warning" : "danger"
     end
