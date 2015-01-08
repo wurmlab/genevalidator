@@ -199,7 +199,7 @@ class LengthClusterValidation < ValidationTest
               :bars,
               "Length Cluster Validation: Distribution of BLAST hit lengths",
               "Query Sequence, black;Most Dense Cluster,red;Other Hits, blue",
-              "Sequence Lenght",
+              "Sequence Length",
               "Number of Sequences",
               prediction.length_protein)
   end
