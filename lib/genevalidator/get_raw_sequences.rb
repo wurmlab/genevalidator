@@ -58,6 +58,10 @@ module GetRawSequences
           end
         end
       end
+    rescue
+      puts '*** Error: There was an error in iterating the BLAST XML file. Please' +
+           ' ensure that BLAST XML file is in the correct format and then try again.'
+      exit 1
     end
 
     def iterate_tabular(file, db_type)
@@ -73,6 +77,10 @@ module GetRawSequences
           file.puts row[hit_id_idx]
         end
       end
+    rescue
+      puts '*** Error: There was an error in iterating the BLAST tabular file. Please' +
+           ' ensure that BLAST tabular file is in the correct format and then try again.'
+      exit 1
     end
 
     def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
@@ -94,8 +102,10 @@ module GetRawSequences
                  "query_key=#{queryKey}&WebEnv=#{webEnv}"
       result   = Net::HTTP.get(URI.parse(uri))
       raw_seqs = result[0..result.length-2]
-      unless  raw_seqs.downcase.index(/error/) == nil
-        raise Exception
+      unless raw_seqs.downcase.index(/error/) == nil
+        puts '*** Error: There was an error in obtaining the raw sequence of a' +
+             ' BLAST hit.'
+        exit 1
       end
       raw_seqs
     end
