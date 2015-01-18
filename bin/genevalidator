@@ -123,18 +123,18 @@ input_file = ARGV[0]
 
 start = Time.now
 
-GVArgValidation.validate_args(ARGV[0], opt)
+GeneValidator::GVArgValidation.validate_args(ARGV[0], opt)
 
 if opt[:fast]
   puts 'Running BLAST'
   opt[:blast_xml_file] = input_file + '.blast_xml'
-  BlastUtils.run_blast_on_file(input_file, opt)
+  GeneValidator::BlastUtils.run_blast_on_file(input_file, opt)
 end
 
 opt[:raw] = nil # This is the variable that contains the path to the raw_sequences.
 if opt[:blast_xml_file] || opt[:blast_tabular_file]
   puts 'Extracting sequences within the BLAST XML from the BLAST database'
-  opt[:raw] = GetRawSequences.run(opt)
+  opt[:raw] = GeneValidator::GetRawSequences.run(opt)
 end
 
 (GeneValidator::Validation.new(ARGV[0], opt)).run
