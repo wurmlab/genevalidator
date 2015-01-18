@@ -195,43 +195,43 @@ module GeneValidator
     ##
     # Parse the blast output and run validations
     def run
-        if @xml_file.nil? && @tabular_file.nil?
-          #file seek for each query
-          @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
-            if (i+1) >= @start_idx
-              query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
+      if @xml_file.nil? && @tabular_file.nil?
+        #file seek for each query
+        @query_offset_lst[0..@query_offset_lst.length-2].each_with_index do |pos, i|
+          if (i+1) >= @start_idx
+            query = IO.binread(@fasta_filepath, @query_offset_lst[i+1] - @query_offset_lst[i], @query_offset_lst[i]);
 
-              #call blast with the default parameters
-              blast_type = (type == :protein) ? 'blastp' : 'blastx'
-              output     = BlastUtils.call_blast_from_stdin(blast_type, query, @db, @num_threads, 11, 1)
-              parse_output(output, :stream)
-            else
-              @idx += 1
-            end
+            #call blast with the default parameters
+            blast_type = (type == :protein) ? 'blastp' : 'blastx'
+            output     = BlastUtils.call_blast_from_stdin(blast_type, query, @db, @num_threads, 11, 1)
+            parse_output(output, :stream)
+          else
+            @idx += 1
           end
-        else
-          #check the format of the input file
-          parse_output(@xml_file) unless @xml_file.nil?
-          parse_output(@tabular_file) unless @tabular_file.nil?
         end
-        if @overall_evaluation
-           Output.print_footer(@no_queries, @scores, @good_predictions,
-                               @bad_predictions, @nee, @no_mafft, @no_internet,
-                               @map_errors, @map_running_times, @html_path,
-                               @filename)
-        end
+      else
+        #check the format of the input file
+        parse_output(@xml_file) unless @xml_file.nil?
+        parse_output(@tabular_file) unless @tabular_file.nil?
+      end
+      if @overall_evaluation
+         Output.print_footer(@no_queries, @scores, @good_predictions,
+                             @bad_predictions, @nee, @no_mafft, @no_internet,
+                             @map_errors, @map_running_times, @html_path,
+                             @filename)
+      end
 
-      rescue SystemCallError => error
-        $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-          "Possible cause: input file is not valid\n"
-        exit 1
-      rescue SequenceTypeError => error
-        $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-          "Possible cause: the blast output was not obtained against a protein database.\n"
-        exit 1
-      rescue Exception => error
-         $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-         exit 1
+    rescue SystemCallError => error
+      $stderr.print "Load error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: input file is not valid\n"
+      exit 1
+    rescue SequenceTypeError => error
+      $stderr.print "Sequence Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
+        "Possible cause: the blast output was not obtained against a protein database.\n"
+      exit 1
+    rescue Exception => error
+       $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+       exit 1
     end
 
     ##
