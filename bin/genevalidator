@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'validation'
+require 'genevalidator'
 require 'genevalidator/version'
 require 'genevalidator/arg_validation'
 require 'genevalidator/get_raw_sequences'
@@ -137,7 +137,7 @@ if opt[:blast_xml_file] || opt[:blast_tabular_file]
   opt[:raw] = GetRawSequences.run(opt)
 end
 
-b = Validation.new(ARGV[0], opt)
-b.validation
+(GeneValidator::Validation.new(ARGV[0], opt)).run
+
 puts "Total running time: #{(Time.now - start).round(3)}s"
 puts # a blank line
