@@ -1,12 +1,11 @@
 module GeneValidator
-
-  Plot = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :aux1, :aux2)
+  Plot = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :aux1,
+                    :aux2)
 
   ##
   # This is an abstract class extended by
   # all validation reports
   class ValidationReport
-
     attr_reader :message
     attr_reader :bg_color
     attr_reader :plot_files
@@ -26,12 +25,16 @@ module GeneValidator
     # Initilizes the object
     # Params:
     # +message+: result of the validation (to be displayed in the output)
-    # +validation_result+: :yes for pass validation, :no for fail, :unapplicable or :error
+    # +validation_result+: :yes for pass validation, :no for fail, :unapplicable
+    # or :error
     # +short_header+: String
     # +header+: String
     # +description+: String
-    # +bg_color+: background color of the table cell for the html output (nil by default)
-    def initialize(message = "Not enough evidence", validation_result = :no, short_header="", header="", description="", approach="", explanation="", conclusion="")
+    # +bg_color+: background color of the table cell for the html output (nil
+    # by default)
+    def initialize(message = 'Not enough evidence', validation_result = :no,
+                   short_header = '', header = '', description = '',
+                   approach = '', explanation = '', conclusion = '')
       @message           = message
       @errors            = []
       @result            = validation_result
@@ -56,15 +59,13 @@ module GeneValidator
     ##
     # May return "success" or "error"
     def color
-      unless bg_color.nil?
-        bg_color
-      end
+      bg_color unless bg_color.nil?
       if validation == @expected
-       "success"
+        'success'
       elsif validation == :error || validation == :unapplicable
-        "warning"      
+        'warning'
       else
-        (validation == :warning) ? "warning" : "danger"
+        (validation == :warning) ? 'warning' : 'danger'
       end
     end
   end

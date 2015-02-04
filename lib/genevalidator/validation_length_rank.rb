@@ -3,11 +3,9 @@ require 'genevalidator/validation_test'
 require 'genevalidator/exceptions'
 require 'genevalidator/enumerable'
 module GeneValidator
-
   ##
   # Class that stores the validation output information
   class LengthRankValidationOutput < ValidationReport
-
     attr_reader :msg
     attr_reader :query_length
     attr_reader :no_of_hits
@@ -16,7 +14,7 @@ module GeneValidator
     attr_reader :smallest_hit
     attr_reader :largest_hit
     attr_reader :extreme_hits
-    attr_reader :percentage    
+    attr_reader :percentage
     attr_reader :result
 
     def initialize(short_header, header, description, msg, query_length,
@@ -32,25 +30,25 @@ module GeneValidator
       @largest_hit  = largest_hit
       @extreme_hits = extreme_hits
       @percentage   = percentage
-      
+
       @result       = validation
       @expected     = :yes
-      @approach     = 'If the query sequence is well conserved and similar' +
-                      ' sequences (BLAST hits) are correct, we can expect' +
-                      ' query and hit sequences to have similar lengths. '
+      @approach     = 'If the query sequence is well conserved and similar' \
+                      ' sequences (BLAST hits) are correct, we can expect' \
+                      ' query and hit sequences to have similar lengths.'
       @explanation  = explain
       @conclusion   = conclude
     end
 
     def explain
       diff = (@query_length < @median) ? 'longer' : 'shorter'
-      exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" +
-             " identified #{@no_of_hits} hit sequences with lengths from" +
-             " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" +
+      exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" \
+             " identified #{@no_of_hits} hit sequences with lengths from" \
+             " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" \
              " #{@median}; mean: #{@mean})."
       if @extreme_hits != 0
-        exp2 = " #{@extreme_hits} of these hit sequences (i.e. #{@percentage}%)" +
-               " are #{diff} than the query sequence."
+        exp2 = " #{@extreme_hits} of these hit sequences (i.e." \
+               " #{@percentage}%) are #{diff} than the query sequence."
       else
         exp2 = " All hit sequences are #{diff} than the query sequence."
       end
@@ -59,8 +57,8 @@ module GeneValidator
 
     def conclude
       if @result == :yes
-        "There is no reason to believe there is any problem with the length of" +
-        " the query sequence."
+        'There is no reason to believe there is any problem with the length' \
+        ' of the query sequence.'
       else
         "The sequence may be #{@msg.gsub('&nbsp;', ' ')}."
       end
@@ -85,28 +83,30 @@ module GeneValidator
     ##
     # Initializes the object
     # Params:
-    # +hits+: a vector of +Sequence+ objects (usually representing the blast hits)
+    # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +prediction+: a +Sequence+ object representing the blast query
-    # +threshold+: threshold below which the prediction length rank is considered to be inadequate
+    # +threshold+: threshold below which the prediction length rank is 
+    # considered to be inadequate
     def initialize(type, prediction, hits)
       super
       @short_header = 'LengthRank'
       @header       = 'Length Rank'
-      @description  = 'Check whether the rank of the prediction length lies' +
+      @description  = 'Check whether the rank of the prediction length lies' \
                       ' among 80% of all the BLAST hit lengths.'
       @cli_name     = 'lenr'
     end
 
     ##
-    # Calculates a percentage based on the rank of the prediction among the hit lengths
+    # Calculates a percentage based on the rank of the prediction among the 
+    # hit lengths
     # Params:
     # +hits+ (optional): a vector of +Sequence+ objects
     # +prediction+ (optional): a +Sequence+ object
     # Output:
     # +LengthRankValidationOutput+ object
     def run(hits = @hits, prediction = @prediction)
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      fail NotEnoughHitsError unless hits.length >= 5
+      fail Exception unless prediction.is_a?(Sequence) && hits[0].is_a?(Sequence)
 
       start = Time.now
 
@@ -137,16 +137,29 @@ module GeneValidator
 
       msg = '' if percentage >= THRESHOLD
 
-      @validation_report = LengthRankValidationOutput.new(@short_header, @header, @description, msg, query_length, no_of_hits, median, mean, smallest_hit, largest_hit, extreme_hits, percentage)
+      @validation_report = LengthRankValidationOutput.new(@short_header,
+                                                          @header, @description,
+                                                          msg, query_length,
+                                                          no_of_hits, median,
+                                                          mean, smallest_hit,
+                                                          largest_hit,
+                                                          extreme_hits,
+                                                          percentage)
       @validation_report.running_time = Time.now - start
       return @validation_report
 
     # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-    else
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      @validation_report.errors.push OtherError
+      @validation_report = ValidationReport.new('Not enough evidence', :warning,
+                                                @short_header, @header,
+                                                @description, @approach,
+                                                @explanation, @conclusion)
+    rescue Exception
+      @validation_report.errors.push 'Unexpected Error'
+      @validation_report = ValidationReport.new('Unexpected error', :error,
+                                                @short_header, @header,
+                                                @description, @approach,
+                                                @explanation, @conclusion)
     end
   end
 end

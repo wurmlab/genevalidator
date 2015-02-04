@@ -37,7 +37,7 @@ module GeneValidator
   end
 
   # Exception raised when the -v argument didn't filter any validatio test
-  class NoValidationError< Exception
+  class NoValidationError < Exception
   end
 
   # Exception raised when the are alias duplications

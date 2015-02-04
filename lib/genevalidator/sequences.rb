@@ -1,9 +1,9 @@
 require 'net/http'
 require 'io/console'
 module GeneValidator
+  # This is a class for the storing data on each sequence
   class Sequence
-
-    attr_accessor :type #protein | mRNA
+    attr_accessor :type # protein | mRNA
     attr_accessor :definition
     attr_accessor :identifier
     attr_accessor :species
@@ -14,7 +14,7 @@ module GeneValidator
 
     attr_accessor :raw_sequence
     attr_accessor :protein_translation # used only for nucleotides
-    attr_accessor :nucleotide_rf #used only for nucleotides
+    attr_accessor :nucleotide_rf # used only for nucleotides
 
     def initialize
       @hsp_list            = []
@@ -36,14 +36,16 @@ module GeneValidator
     # +hash+: String - loaded content of the index file
     # Output:
     # String with the nucleotide sequence corresponding to the identifier
-    def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier, hash = nil)
-      hash = YAML.load_file(index_file_name) if hash == nil
+    def get_sequence_from_index_file(raw_seq_file, index_file_name, identifier,
+                                     hash = nil)
+      hash = YAML.load_file(index_file_name) if hash.nil?
       idx           = hash[identifier]
       query         = IO.binread(raw_seq_file, idx[1] - idx[0], idx[0])
       parse_query   = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-      @raw_sequence = parse_query[1].gsub("\n","")
-    rescue Exception => error
-  #      $stderr.print "Unable to retrieve raw sequence for the following id: #{identifier}\n"
+      @raw_sequence = parse_query[1].gsub("\n", '')
+    rescue Exception
+      #   $stderr.print "Unable to retrieve raw sequence for the following" \
+      #                 "id: #{identifier}\n"
     end
 
     ##
@@ -54,56 +56,47 @@ module GeneValidator
     # Output:
     # String with the nucleotide sequence corresponding to the accno
     def get_sequence_by_accession_no(accno, dbtype, db)
-      if (db !~ /remote/)
+      if db !~ /remote/
         blast_cmd     = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
-        seq           = %x[#{blast_cmd}  2>&1]
+        seq           = `#{blast_cmd}  2>&1`
         if /Error/ =~ seq
-          raise IOError, 'GeneValidator was unable to obtain the raw sequences for the BLAST hits.'
+          fail IOError, 'GeneValidator was unable to obtain the raw sequences' \
+                        ' for the BLAST hits.'
         end
         @raw_sequence = seq
       else
         # puts "Tries to connect to the internet for #{accno}"
-        uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=#{dbtype}"<<
-           "&retmax=1&usehistory=y&term=#{accno}/"
+        uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?'\
+              "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
         result = Net::HTTP.get(URI.parse(uri))
 
-        result2  = result
-        queryKey = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-        webEnv   = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+        result2   = result
+        query  = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
+        web_env   = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
 
-        uri = "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?rettype=fasta&"<<
-           "retmode=text&retstart=0&retmax=1&db=#{dbtype}&query_key=#{queryKey}&WebEnv=#{webEnv}"
+        uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?'\
+              "rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{dbtype}" \
+              "&query_key=#{query}&WebEnv=#{web_env}"
         result = Net::HTTP.get(URI.parse(uri))
 
-        #parse FASTA output
-        rec           = result
-        nl            = rec.index("\n")
-        header        = rec[0..nl-1]
-        seq           = rec[nl+1..-1]
-        @raw_sequence = seq.gsub!(/\n/,'')
-        @raw_sequence = "" unless @raw_sequence.index(/ERROR/) == nil
+        # parse FASTA output
+        nl            = result.index("\n")
+        seq           = result[nl + 1..-1]
+        @raw_sequence = seq.gsub!(/\n/, '')
+        @raw_sequence = '' unless @raw_sequence.index(/ERROR/).nil?
       end
       @raw_sequence
-    rescue Exception => error
-       # @raw_sequence = ""
+      # rescue Exception => error
+      #   @raw_sequence = ""
     end
 
     ##
     # Initializes the corresponding attribute of the sequence
     # with respect to the column name of the tabular blast output
-    def init_tabular_attribute(column, value)
-      case column
-        when "sseqid"
-          # @definition = value
-          @identifier = value
-        when "qseqid"
-          # @definition = value
-          @identifier = value
-        when "sacc"
-          @accession_no = value
-        when "slen"
-          @length_protein = value.to_i
-      end
+    def init_tabular_attribute(hash)
+      @identifier     = hash['sseqid'] if hash['sseqid']
+      @accession_no   = hash['sacc'] if hash['sacc'] 
+      @length_protein = hash['slen'].to_i if hash['slen']
     end
   end
 end

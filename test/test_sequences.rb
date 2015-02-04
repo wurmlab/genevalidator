@@ -3,90 +3,100 @@ require 'minitest/autorun'
 require 'genevalidator/sequences'
 require 'genevalidator/hsp'
 module GeneValidator
-
   class TestSequenceClass < Minitest::Test
-
     describe 'Test Sequence Class' do
 
       it 'should get sequence by accession for mrna' do
         seq_mrna = Sequence.new
-        seq_mrna.get_sequence_by_accession_no('EF100000','nucleotide', 'swissprot -remote')
+        seq_mrna.get_sequence_by_accession_no('EF100000', 'nucleotide', 'swissprot -remote')
         assert_equal('AGAGTTTGAT', seq_mrna.raw_sequence[0..9])
-        assert_equal('GCCCGTCAAG', seq_mrna.raw_sequence[seq_mrna.raw_sequence.length-10..seq_mrna.raw_sequence.length-1])
+        assert_equal('GCCCGTCAAG', seq_mrna.raw_sequence[seq_mrna.raw_sequence.length - 10..seq_mrna.raw_sequence.length - 1])
       end
 
       it 'should get sequence by accession for protein' do
         seq_prot = Sequence.new
-        seq_prot.get_sequence_by_accession_no('F8WCM5','protein', 'swissprot -remote')
+        seq_prot.get_sequence_by_accession_no('F8WCM5', 'protein', 'swissprot -remote')
         assert_equal('MALWMRLLPL', seq_prot.raw_sequence[0..9])
-        assert_equal('WPRRPQRSQN', seq_prot.raw_sequence[seq_prot.raw_sequence.length-10..seq_prot.raw_sequence.length-1])
+        assert_equal('WPRRPQRSQN', seq_prot.raw_sequence[seq_prot.raw_sequence.length - 10..seq_prot.raw_sequence.length - 1])
       end
 
       it 'should initialize seq tabular attributes' do
-        value = 'definition'
-        no = 123
-        seq = Sequence.new
+        identifier   = 'sp|Q8N302|AGGF1_HUMAN'
+        accession_no = "Q8N302"
+        slen         = 714
+        seq          = Sequence.new
+        hash = {"qseqid"=> "GB10034-PA",
+                "sseqid"=> identifier,
+                "sacc"=> accession_no,
+                "slen"=> slen}
 
-        seq.init_tabular_attribute('sseqid', value)
-        seq.init_tabular_attribute('sacc', value)
-        seq.init_tabular_attribute('slen', no)
-        seq.init_tabular_attribute('qseqid', value)
+        seq.init_tabular_attribute(hash)
 
-        assert_equal(value, seq.identifier)
-        assert_equal(value, seq.accession_no)
-        assert_equal(no, seq.length_protein)
+        assert_equal(identifier, seq.identifier)
+        assert_equal(accession_no, seq.accession_no)
+        assert_equal(slen, seq.length_protein)
         assert(seq.length_protein.is_a? Fixnum)
       end
 
       it 'should initialize hsp tabular attributes' do
-        value = 123
+        qseqid = "sp|Q8GBW6|12S_PROFR"
+        sseqid = "sp|A5GSN7|ACCD_SYNR3"
+        sacc   = "A5GSN7"
+        slen   = "291"
+        qstart = "49"
+        qend   = "217"
+        sstart = "65"
+        send   = "247"
+        length = "183"
+        qframe = "1"
+        pident = "34.43"
+        nident = "63.0"
+        evalue = "8.0e-12"
+        qseq   = "ERLNNLLDPHSFDEVG---------"
+        sseq   = "ERLRILLDPGSFIPVDGELSPTDPL"
+
+
+        hash = {"qseqid" => qseqid,
+                "sseqid" => sseqid,
+                "sacc"   => sacc,
+                "slen"   => slen,
+                "qstart" => qstart,
+                "qend"   => qend,
+                "sstart" => sstart,
+                "send"   => send,
+                "length" => length,
+                "qframe" => qframe,
+                "pident" => pident,
+                "nident" => nident,
+                "evalue" => evalue,
+                "qseq"   => qseq,
+                "sseq"   => sseq}
+
         seq = Hsp.new
-        seq.init_tabular_attribute('qstart',value)
-        seq.init_tabular_attribute('qend',value)
-        seq.init_tabular_attribute('qframe',value)
-        seq.init_tabular_attribute('sstart',value)
-        seq.init_tabular_attribute('send',value)
-        seq.init_tabular_attribute('length',value)
+        seq.init_tabular_attribute(hash)
 
-        protein = true
-        filename_prot = 'test/test_files/mixed_type.fasta'
-        begin
-          original_stderr = $stderr
-          $stderr.reopen('/dev/null', 'w')
+        assert_equal(qstart, seq.match_query_from.to_s)
+        assert_equal(qend, seq.match_query_to.to_s)
+        assert_equal(qframe, seq.query_reading_frame.to_s)
+        assert_equal(sstart, seq.hit_from.to_s)
+        assert_equal(send, seq.hit_to.to_s)
+        assert_equal(qseq, seq.query_alignment.to_s)
+        assert_equal(sseq, seq.hit_alignment.to_s)
+        assert_equal(length, seq.align_len.to_s)
+        assert_equal(pident, seq.pidentity.to_s)
+        assert_equal(nident, seq.identity.to_s)
+        assert_equal(evalue, seq.hsp_evalue.to_s)
 
-          string2 = 'ATGCTGATCGACTATGCAAT'
-          seq.init_tabular_attribute('qseq',string2)
-          seq.init_tabular_attribute('sseq',string2)
-        rescue SequenceTypeError => e
-          protein = false
-        end
-        $stderr = original_stderr
-        assert_equal(false, protein)
-        string = 'IEDLRHSLIEDLRHS'
-        seq.init_tabular_attribute('qseq',string)
-        seq.init_tabular_attribute('sseq',string)
-
-        fl = 1.253436
-        seq.init_tabular_attribute('evalue',fl)
-
-        assert_equal(value, seq.match_query_from)
         assert(seq.match_query_from.is_a? Fixnum)
-
-        assert_equal(value, seq.match_query_to)
         assert(seq.match_query_to.is_a? Fixnum)
-
-        assert_equal(value, seq.query_reading_frame)
         assert(seq.query_reading_frame.is_a? Fixnum)
-
-        assert_equal(value, seq.hit_from)
         assert(seq.hit_from.is_a? Fixnum)
-
-        assert_equal(value, seq.hit_to)
         assert(seq.hit_to.is_a? Fixnum)
-
-        assert_equal(string, seq.query_alignment)
-        assert_equal(string, seq.hit_alignment)
-        assert_equal(fl, seq.hsp_evalue)
+        assert(seq.query_alignment.is_a? String)
+        assert(seq.hit_alignment.is_a? String)
+        assert(seq.align_len.is_a? Fixnum)
+        assert(seq.pidentity.is_a? Float)
+        assert(seq.identity.is_a? Float)
         assert(seq.hsp_evalue.is_a? Float)
       end
     end

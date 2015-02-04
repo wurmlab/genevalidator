@@ -1,0 +1,28 @@
+
+Depending on your input and your computational resources, this may take a while. Please wait...
+ No|Score|          Identifier|No_Hits|LengthCluster|LengthRank|Gene_Merge|Duplication|||MA
+  1|0|          GB10034-PA|    4|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+  2|13|          GB10040-PA|   44|1070 [694, 810]|23%|0.78|1.0|||70% conserved; 16% extra; 28% missing.|
+  3|75|          GB10056-PA|   10|339 [317, 365]|40%|-3.5|1.0|||95% conserved; 3% extra; 11% missing.|
+  4|38|          GB10058-PA|  215|1052 [1106, 1567]|38%|0.52|1.0|||84% conserved; 0% extra; 12% missing.|
+  5|63|          GB10063-PA|  271|615 [656, 1499]|38%|0.22|1.0|||95% conserved; 4% extra; 5% missing.|
+  6|0|          GB10071-PA|   40|494 [379, 402]|0% (too long)|0.69|1.0|||64% conserved; 21% extra; 6% missing.|
+  7|0|          GB10091-PA|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+  8|75|          GB10098-PA|   93|826 [633, 965]|40%|-0.04|1.0|||88% conserved; 2% extra; 18% missing.|
+  9|13|          GB10113-PA|   22|659 [300, 506]|36%|0.57|1.0|||98% conserved; 21% extra; 8% missing.|
+ 10|0|sp|P83011|13KDA_SCYCA|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+ 11|50| sp|Q8GBW6|12S_PROFR|  199|611 [289, 314]|0% (too long)|-0.91|1.0|||86% conserved; 13% extra; 5% missing.|
+ 12|63|       SI2.2.0_02565|   28|1761 [1603, 1677]|46%|0.21|1.0|||96% conserved; 1% extra; 10% missing.|
+ 13|0|       SI2.2.0_07054|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+ 14|63|       SI2.2.0_02651|   43|660 [404, 1242]|14% (too short)|0.0|1.0|||100% conserved; 1% extra; 19% missing.|
+ 15|0|          PB26730-RA|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+ 16|0|        Or13a-like-1|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+ 17|0|          PB18762-RA|   39|207 [237, 327]|0% (too short)|1.0|1.0|||53% conserved; 1% extra; 59% missing.|
+ 18|0|         Pbar_fem-RF|    0|Not enough evidence|Not enough evidence|Not enough evidence|Not enough evidence|||Not enough evidence|
+ 19|25|          PB18775-RA|   29|1160 [682, 689]|0% (too long)|2.0|1.0|||51% conserved; 46% extra; 8% missing.|
+ 20|25|          PB11933-RA|   93|845 [667, 885]|41%|0.95|1.0|||88% conserved; 0% extra; 27% missing.|
+ 21|25|          PB13750-RA|  248|974 [661, 1132]|21%|1.04|1.0|||22% conserved; 20% extra; 19% missing.|
+ 22|38|          PB13758-RA|  389|751 [261, 2828]|1% (too short)|0.0|1.0|||84% conserved; 0% extra; 21% missing.|
+ 23|25|          PB20127-RA|   16|679 [555, 640]|0% (too long)|0.69|1.0|||49% conserved; 18% extra; 15% missing.|
+ 24|50|          PB18752-RA|   72|794 [594, 698]|0% (too long)|-0.21|1.0|||80% conserved; 16% extra; 0% missing.|
+ 25|50|          PB18768-RA|    7|132 [124, 137]|43%|0.0|1.0|||Not enough evidence|

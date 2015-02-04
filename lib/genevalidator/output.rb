@@ -5,7 +5,6 @@ require 'yaml'
 require 'thread'
 module GeneValidator
   class Output
-
     attr_accessor :prediction_len
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -38,9 +37,10 @@ module GeneValidator
     # +yaml_path+: path where the yaml output wil be saved
     # +idx+: idnex of the current query
     # +start_idx+: number of the sequence from the file to start with
-    def initialize(mutex, mutex_yaml, mutex_html, filename, html_path, yaml_path, idx = 0, start_idx = 0)
+    def initialize(mutex, mutex_yaml, mutex_html, filename, html_path,
+                   yaml_path, idx = 0, start_idx = 0)
       @prediction_len = 0
-      @prediction_def = "no_definition"
+      @prediction_def = 'no_definition'
       @nr_hits        = 0
 
       @filename       = filename
@@ -56,136 +56,168 @@ module GeneValidator
 
     def print_output_console
       if @idx == @start_idx
-        header =sprintf("%3s|%s|%20s|%5s", "No", "Score", "Identifier", "No_Hits")
+        header = sprintf('%3s|%s|%20s|%5s', 'No', 'Score', 'Identifier',
+                         'No_Hits')
         validations.map do |v|
-          header<<"|#{v.short_header}"
+          header << "|#{v.short_header}"
         end
         puts header
       end
 
       short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
-      validation_outputs = validations.map{|v| v.print}
+      validation_outputs = validations.map(&:print)
 
-      output             = sprintf("%3s|%d|%20s|%5s|", @idx, @overall_score, short_def, @nr_hits)
+      output             = sprintf('%3s|%d|%20s|%5s|', @idx, @overall_score,
+                                   short_def, @nr_hits)
       validation_outputs.each do |item|
-        item_padd = sprintf("%17s", item);
+        item_padd = sprintf('%17s', item)
         output    << item
-        output    << "|"
+        output    << '|'
       end
 
-      @mutex.synchronize {
+      @mutex.synchronize do
         puts output.gsub('&nbsp;', ' ')
-      }
-
+      end
     end
 
-
     def print_output_file_yaml
-
       file_yaml = "#{@yaml_path}/#{@filename}.yaml"
       report = validations
       unless @idx == @start_idx
-        @mutex_yaml.synchronize {
-          hash = {} #YAML.load_file(file_yaml)
+        @mutex_yaml.synchronize do
+          hash = {} # YAML.load_file(file_yaml)
           hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
-          File.open(file_yaml, "a") do |f|
+          File.open(file_yaml, 'a') do |f|
             new_report =  hash.to_yaml
-            f.write(new_report[4..new_report.length-1])
+            f.write(new_report[4..new_report.length - 1])
           end
-        }
+        end
       else
-        @mutex_yaml.synchronize {
-          File.open(file_yaml, "w") do |f|
-            YAML.dump({@prediction_def.scan(/([^ ]+)/)[0][0] => report},f)
+        @mutex_yaml.synchronize do
+          File.open(file_yaml, 'w') do |f|
+            YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
           end
-        }
+        end
       end
-
     end
-
 
     def generate_html
       if @fails == 0
-        bg_icon = "success"
+        bg_icon = 'success'
       else
-        bg_icon = "danger"
+        bg_icon = 'danger'
       end
 
       index_file = "#{@html_path}/results.html"
+      table_file = "#{@html_path}/files/table.html"
+
+      aux_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../aux')
 
       # if it's the first time I write in the html file
       if @idx == @start_idx
-        @mutex_html.synchronize {
-          template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_header.erb"), 'r').read
-          erb = ERB.new(template_file, 0, '>')
-          File.open(index_file, 'w+') { |file| file.write(erb.result(binding)) }
+        @mutex_html.synchronize do
+          template_header     = File.join(aux_dir, 'template_header.erb')
+          template_file       = File.open(template_header, 'r').read
+          erb                 = ERB.new(template_file, 0, '>')
 
-          #  Creating a Separate output file with just the table in it (for the web app)
-          table_template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/app_template_header.erb"), 'r').read
-          erb_table = ERB.new(table_template_file , 0, '>')
-          File.open("#{@html_path}/files/table.html", 'w+') { |file| file.write(erb_table.result(binding)) }
-        }
+          #  Creating a Separate output file for the web app
+          app_template_header = File.join(aux_dir, 'app_template_header.erb')
+          table_template_file = File.open(app_template_header, 'r').read
+          erb_table           = ERB.new(table_template_file, 0, '>')
+
+          File.open(index_file, 'w+') do |file|
+            file.write(erb.result(binding))
+          end
+
+          File.open(table_file, 'w+') do |file|
+            file.write(erb_table.result(binding))
+          end
+        end
       end
 
       toggle = "toggle#{@idx}"
 
-      @mutex_yaml.synchronize {
-        template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_query.erb"), 'r').read
-        erb = ERB.new(template_file , 0, '>')
-        File.open(index_file, 'a') { |file| file.write(erb.result(binding)) }
-        File.open("#{@html_path}/files/table.html", 'a') { |file| file.write(erb.result(binding)) }
-      }
+      @mutex_yaml.synchronize do
+        template_query = File.join(aux_dir, 'template_query.erb')
+        template_file = File.open(template_query, 'r').read
+        erb = ERB.new(template_file, 0, '>')
 
+        File.open(index_file, 'a') do |file|
+          file.write(erb.result(binding))
+        end
+
+        File.open(table_file, 'a') do |file|
+          file.write(erb.result(binding))
+        end
+      end
     end
 
     ##
-    # Class that closes the gas in the html file and writes the overall evaluation
+    # Method that closes the gas in the html file and writes the overall
+    # evaluation
     # Param:
     # +all_query_outputs+: array with +ValidationTest+ objects
     # +html_path+: path of the html folder
     # +filemane+: name of the fasta input file
-    #def self.print_footer(all_query_outputs, html_path, filename)
-    def self.print_footer(no_queries, scores, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, html_path, filename)
+    # def self.print_footer(all_query_outputs, html_path, filename)
+    def self.print_footer(no_queries, scores, good_predictions, bad_predictions,
+                          nee, no_mafft, no_internet, map_errors, running_times,
+                          html_path, filename)
       # compute the statistics
-      #overall_evaluation = overall_evaluation(all_query_outputs, filename)
-      overall_evaluation = overall_evaluation(no_queries, good_predictions, bad_predictions, nee, no_mafft, no_internet, map_errors, running_times, filename)
+      # overall_evaluation = overall_evaluation(all_query_outputs, filename)
+      overall_evaluation = overall_evaluation(no_queries, good_predictions,
+                                              bad_predictions, nee, no_mafft,
+                                              no_internet, map_errors,
+                                              running_times, filename)
 
       less = overall_evaluation[0]
-      less = less.gsub("\n","<br>").gsub("'",%q(\\\'))
+      less = less.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
       # print to console
-      evaluation = ""
-      overall_evaluation.each{|e| evaluation << "\n#{e}"}
+      evaluation = ''
+      overall_evaluation.each { |e| evaluation << "\n#{e}" }
       puts evaluation
-      puts ""
+      puts ''
 
       # print to html
       # make the historgram with the resulted scores
       statistics_filename = "#{html_path}/files/json/#{filename}_statistics.json"
-      f = File.open(statistics_filename, "w")
+      f = File.open(statistics_filename, 'w')
 
       f.write(
-        [scores.group_by{|a| a}.map { |k, vs| {"key"=>k, "value"=>vs.length, "main"=>false}}].to_json)
+        [scores.group_by { |a| a }.map { |k, vs| { 'key' => k,
+                                                   'value' => vs.length,
+                                                   'main' => false } }].to_json)
       f.close
 
       plot_statistics = Plot.new("files/json/#{filename}_statistics.json",
-                :simplebars,
-                "Overall evaluation",
-                "",
-                "validation score",
-                "number of queries",
-                10)
+                                 :simplebars,
+                                 'Overall evaluation',
+                                 '',
+                                 'validation score',
+                                 'number of queries',
+                                 10)
 
-      evaluation = evaluation.gsub("\n","<br>").gsub("'",%q(\\\'))
+      evaluation = evaluation.gsub("\n", '<br>').gsub("'", %q(\\\'))
+
       index_file = "#{html_path}/results.html"
-      template_file = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/template_footer.erb"), 'r').read
-      erb = ERB.new(template_file, 0, '>')
-      File.open(index_file, 'a+') { |file| file.write(erb.result(binding)) }
-
       table_file = "#{html_path}/files/table.html"
-      table_footer_template = File.open(File.join(File.dirname(File.expand_path(__FILE__)), "../../aux/app_template_footer.erb"), 'r').read
+      aux_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../aux')
+
+      template_footer     = File.join(aux_dir, 'template_footer.erb')
+      app_template_footer = File.join(aux_dir, 'app_template_footer.erb')
+
+      template_file = File.open(template_footer, 'r').read
+      erb = ERB.new(template_file, 0, '>')
+      File.open(index_file, 'a+') do |file|
+        file.write(erb.result(binding))
+      end
+
+      table_footer_template = File.open(app_template_footer, 'r').read
       table_erb = ERB.new(table_footer_template, 0, '>')
-      File.open(table_file, 'a+') { |file| file.write(table_erb.result(binding)) }
+      File.open(table_file, 'a+') do |file|
+        file.write(table_erb.result(binding))
+      end
     end
 
     ##
@@ -195,56 +227,46 @@ module GeneValidator
     # +filemane+: name of the fasta input file
     # Output
     # Array of Strigs with the reports
-    #def self.overall_evaluation(all_query_outputs, filename)
-    def self.overall_evaluation(no_queries, good_scores, bad_scores, no_evidence, no_mafft, no_internet, map_errors, running_times, filename)
-      score_evaluation = ""
-      score_evaluation << "Query score evaluation for #{filename}:"
+    # def self.overall_evaluation(all_query_outputs, filename)
+    def self.overall_evaluation(no_queries, good_scores, bad_scores,
+                                no_evidence, no_mafft, no_internet, map_errors,
+                                running_times, filename)
+      good_pred = (good_scores == 1) ? 'One' : "#{good_scores} are"
+      bad_pred  = (bad_scores == 1) ? 'One' : "#{bad_scores} are"
 
-      # count the cases of "not enough evidence"
-      #no_evidence = all_query_outputs.count{|report|
-      #  report.validations.count{|v| v.result == :unapplicable or v.result == :warning} == report.validations.length
-      #}
-
-      # print at the console
-      #scores = all_query_outputs.map{|query| query.score}
-
-      # how many genes are good
-
-      score_evaluation << "\nThere were validated #{no_queries} predictions from which:"
-      if good_scores == 1
-        score_evaluation << "\nOne good prediction"
-      else
-        score_evaluation << "\n#{good_scores} are good predictions"
-      end
-      if bad_scores == 1
-        score_evaluation << "\nOne possibly weak prediction"
-      else
-        score_evaluation << "\n#{bad_scores} are possibly weak predictions"
-      end
+      eval = "Overall Query Score Evaluation:\n" \
+             "#{no_queries} predictions were validated, from which there" \
+             " were:\n" \
+             "#{good_pred} good prediction(s),\n" \
+             "#{bad_pred} possibly weak prediction(s).\n"
 
       if no_evidence != 0
-        score_evaluation << "\n#{no_evidence} of them couldn't be evaluated because of low evidence"
+        eval << "#{no_evidence} could not be evaluated due to the lack of" \
+                " evidence."
       end
 
       # errors per validation
-      error_evaluation = ""
-      map_errors.each{|k,v| error_evaluation <<  "\nWe couldn't run #{k} Validation for #{v} queries"}
+      error_eval = ''
+      map_errors.each do |k, v| 
+        error_eval << "\nWe couldn't run #{k} Validation for #{v} queries"
+      end
 
       if no_mafft >=  (no_queries - no_evidence)
-        error_evaluation << "\nWe couldn't run MAFFT multiple alignment"
+        error_eval << "\nWe couldn't run MAFFT multiple alignment"
       end
       if no_internet >=  (no_queries - no_evidence)
-        error_evaluation << "\nWe couldn't make use of your internet connection"
+        error_eval << "\nWe couldn't make use of your internet connection"
       end
 
-      time_evaluation = ""
+      time_eval = ''
       running_times.each do |key, value|
         average_time = value.x / (value.y + 0.0)
-        time_evaluation << "\nAverage running time for #{key} Validation: #{average_time.round(3)}s per validation"
+        time_eval << "\nAverage running time for #{key} Validation:" \
+                     " #{average_time.round(3)}s per validation"
       end
 
-      overall_evaluation = [score_evaluation, error_evaluation, time_evaluation]
-      overall_evaluation.select{|e| e!=""}
+      overall_evaluation = [eval, error_eval, time_eval]
+      overall_evaluation.select { |e| e != '' }
     end
   end
 end

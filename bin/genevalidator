@@ -2,13 +2,10 @@
 require 'optparse'
 require 'genevalidator'
 require 'genevalidator/version'
-require 'genevalidator/arg_validation'
-require 'genevalidator/get_raw_sequences'
-require 'genevalidator/blast'
 
 opt = {}
 opt_parser = OptionParser.new do |opts|
-  opts.banner =<<BANNER
+  opts.banner = <<BANNER
 
 USAGE:
     $ genevalidator [OPTIONS] Input_File
@@ -20,7 +17,7 @@ OPTIONAL ARGUMENTS
 BANNER
 
   opt[:validations] = ['all']
-  opts.on( '-v', '--validations <String>', Array,
+  opts.on('-v', '--validations <String>', Array,
           'The Validations to be applied.',
           'Validation Options Available (separated by coma):',
           '  all   = All validations (default),',
@@ -35,32 +32,29 @@ BANNER
   end
 
   opt[:db] = 'swissprot -remote'
-  opts.on('-d', '--db [BLAST_DATABASE]', 
-         'Path to the BLAST database',
-         'GeneValidator also supports remote databases:',
-         'e.g.   $ genevalidator -d "swissprot -remote" Input_File') do |db|
+  opts.on('-d', '--db [BLAST_DATABASE]',
+          'Path to the BLAST database',
+          'GeneValidator also supports remote databases:',
+          'e.g.   $ genevalidator -d "swissprot -remote" Input_File') do |db|
     opt[:db] = db
   end
 
-  opt[:blast_xml_file] = nil
   opts.on('-x', '--blast_xml_file [FILE]',
-         'Provide GeneValidator with a pre-computed BLAST XML output',
-         'file (BLAST -outfmt option 5).') do |blast_xml_file|
+          'Provide GeneValidator with a pre-computed BLAST XML output',
+          'file (BLAST -outfmt option 5).') do |blast_xml_file|
     opt[:blast_xml_file] = blast_xml_file
   end
 
-  opt[:blast_tabular_file] = nil
   opts.on('-t', '--blast_tabular_file [FILE]',
-         'Provide GeneValidator with a pre-computed BLAST tabular output',
-         'file. (BLAST -outfmt option 6).') do |blast_tabular_file|
+          'Provide GeneValidator with a pre-computed BLAST tabular output',
+          'file. (BLAST -outfmt option 6).') do |blast_tabular_file|
     opt[:blast_tabular_file] = blast_tabular_file
   end
 
   # default blast tabular columns
-  opt[:blast_tabular_options] = nil
   opts.on('-o', '--blast_tabular_options [Options]',
           'Custom format used in BLAST -outfmt argument',
-         'See BLAST+ manual pages for more details') do |blast_table_options|
+          'See BLAST+ manual pages for more details') do |blast_table_options|
     opt[:blast_tabular_options] = blast_table_options
   end
 
@@ -82,7 +76,6 @@ BANNER
     opt[:fast] = true
   end
 
-
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
           'Path to MAFFT bin folder (is added to $PATH variable)') do |mafft|
     opt[:mafft_bin] = mafft
@@ -94,8 +87,8 @@ BANNER
   end
 
   opts.on('--version', 'The version of GeneValidator that you are running.') do
-      puts GeneValidator::VERSION
-      exit
+    puts GeneValidator::VERSION
+    exit
   end
 
   opts.on('-h', '--help', 'Show this screen.') do
@@ -107,37 +100,22 @@ end
 begin
   opt_parser.parse!(ARGV)
   if ARGV.length > 1
-    $stderr.puts 'Error: you must specify a single fasta input file instead' +
-                 ' of #{ARGV.length}.' + '\n'
+    $stderr.puts 'Error: you must specify a single fasta input file instead' \
+                 ' of ' + ARGV.length + ".\n"
     exit 1
   elsif ARGV.length == 0
     puts opt_parser
     exit 1
   end
 rescue OptionParser::ParseError
-  $stderr.print 'Error: ' + $! + '\n'
+  $stderr.print 'Error: ' + $ERROR_INFO + '\n'
   exit 1
 end
 
-input_file = ARGV[0]
-
 start = Time.now
+opt[:input_fasta_file] = ARGV[0]
 
-GeneValidator::GVArgValidation.validate_args(ARGV[0], opt)
-
-if opt[:fast]
-  puts 'Running BLAST'
-  opt[:blast_xml_file] = input_file + '.blast_xml'
-  GeneValidator::BlastUtils.run_blast_on_file(input_file, opt)
-end
-
-opt[:raw] = nil # This is the variable that contains the path to the raw_sequences.
-if opt[:blast_xml_file] || opt[:blast_tabular_file]
-  puts 'Extracting sequences within the BLAST XML from the BLAST database'
-  opt[:raw] = GeneValidator::GetRawSequences.run(opt)
-end
-
-(GeneValidator::Validation.new(ARGV[0], opt)).run
+(GeneValidator::Validation.new(opt)).run
 
 puts "Total running time: #{(Time.now - start).round(3)}s"
 puts # a blank line

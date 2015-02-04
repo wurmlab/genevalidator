@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'monica.dragan@cti.pub.ro'
   s.homepage    = 'https://github.com/monicadragan/GeneValidator'
-  s.license     = "GPL"
+  s.license     = 'GPL'
   s.summary     = 'Identifying problems with gene predictions.'
   s.description = <<DESC
 The tool validates the input predicted genes and provides useful information (length validation, gene merge validation, sequence duplication checking, ORF finding) based on the similarities to genes in public databases.
@@ -20,15 +20,15 @@ DESC
   s.required_ruby_version     = '>= 1.9.3'
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~>10.3'
-  s.add_dependency('bio', "~> 1.4")
-  s.add_dependency('bio-blastxmlparser', "~>2.0")
-  s.add_dependency('minitest', "~> 5.4")
-  s.add_dependency('statsample', "~> 1.4")
+  s.add_dependency('bio', '~> 1.4')
+  s.add_dependency('bio-blastxmlparser', '~>2.0')
+  s.add_dependency('minitest', '~> 5.4')
+  s.add_dependency('statsample', '~> 1.4')
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
-  s.require_paths = ["lib"]
+  s.require_paths = ['lib']
 
   s.post_install_message = <<INFO
 

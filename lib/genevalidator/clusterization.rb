@@ -1,6 +1,5 @@
 
 module GeneValidator
-
   Pair = Struct.new(:x, :y) do
 
     include Comparable
@@ -9,9 +8,9 @@ module GeneValidator
     # Overload '-' operator
     # Returns the euclidian distane between two pairs
     def -(p)
-     xx = p.x
-     yy = p.y
-     Math.sqrt((x - xx) * (x - xx) + (y - yy) * (y - yy))
+      xx = p.x
+      yy = p.y
+      Math.sqrt((x - xx) * (x - xx) + (y - yy) * (y - yy))
     end
 
     def print
@@ -46,7 +45,7 @@ module GeneValidator
     # Overload quality operator
     # Returns true if the pairs are equal, false otherwise
     def ==(p)
-      (p.x == x and p.y == y) ? true : false
+      (p.x == x && p.y == y) ? true : false
     end
 
     def eql?(p)
@@ -60,8 +59,7 @@ module GeneValidator
   end
 
   class PairCluster
-
-    #a hash map containing the pair (object, no_occurences)
+    # a hash map containing the pair (object, no_occurences)
     attr_accessor :objects
 
     def initialize(objects)
@@ -77,17 +75,17 @@ module GeneValidator
     ##
     # Returns the weighted mean value of the cluster
     def mean
-      mean = Pair.new(0,0)
+      mean = Pair.new(0, 0)
       weight = 0
 
       objects.each do |object, n|
-        (1..n).each do |i|
+        (1..n).each do |_i|
           mean + object
           weight += 1
         end
       end
       mean / weight
-      return mean
+      mean
     end
 
     ##
@@ -122,15 +120,15 @@ module GeneValidator
         end
       end
 
-      #group average distance
+      # group average distance
       d /= (norm + 0.0)
     end
 
     ##
     # Returns within cluster sum of squares
     def wss(objects = nil)
-      if objects == nil
-        objects = @objects.map{|x| a = Array.new(x[1],x[0])}.flatten
+      if objects.nil?
+        objects = @objects.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
       cluster_mean = mean
@@ -155,7 +153,7 @@ module GeneValidator
   # Stores the values belonging to one cluster
   # Used for clusterization among a vector of values
   class Cluster
-    #a hash map containing the pair (length, no_occurences)
+    # a hash map containing the pair (length, no_occurences)
     attr_accessor :lengths
 
     def initialize(lengths)
@@ -207,7 +205,7 @@ module GeneValidator
         end
       end
 
-      #group average distance
+      # group average distance
       d /= (norm + 0.0)
       d.round(4)
     end
@@ -216,7 +214,7 @@ module GeneValidator
     # Returns within cluster sum of squares
     def wss(lengths = nil)
       if lengths.nil?
-        lengths = @lengths.map{|x| a = Array.new(x[1],x[0])}.flatten
+        lengths = @lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
       cluster_mean = mean
@@ -235,10 +233,10 @@ module GeneValidator
     # Real number
     def standard_deviation(lengths = nil)
       if lengths.nil?
-        lengths = @lengths.map{|x| a = Array.new(x[1],x[0])}.flatten
+        lengths = @lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
-      cluster_mean = mean()
+      cluster_mean = mean
       std_deviation = 0
       lengths.each do |len|
         std_deviation += (cluster_mean - len) * (cluster_mean - len)
@@ -254,10 +252,10 @@ module GeneValidator
     # Output:
     # Real number
     def deviation(clusters, queryLength)
-      hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten
-      raw_hits = clusters.map{|c| c.lengths.map{ |x| a = Array.new(x[1],x[0])}.flatten}.flatten.to_s.gsub('[','').gsub(']','')
+      hits = clusters.map { |c| c.lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten }.flatten
+      raw_hits = clusters.map { |c| c.lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten }.flatten.to_s.gsub('[', '').gsub(']', '')
       R.eval("sd = sd(c(#{raw_hits}))")
-      sd = R.pull("sd")
+      sd = R.pull('sd')
       sd = standard_deviation(hits)
       (queryLength - mean).abs / sd
     end
@@ -274,17 +272,17 @@ module GeneValidator
     ##
     # Prints the current cluster
     def print
-      puts "Cluster: mean = #{mean()}, density = #{density}"
-      lengths.sort{|a,b| a<=>b}.each do |elem|
+      puts "Cluster: mean = #{mean}, density = #{density}"
+      lengths.sort { |a, b| a <=> b }.each do |elem|
         puts "#{elem[0]}, #{elem[1]}"
       end
-      puts "--------------------------"
+      puts '--------------------------'
     end
 
     ##
     # Returns the interval limits of the current cluster
     def get_limits
-      lengths.map{|elem| elem[0]}.minmax
+      lengths.map { |elem| elem[0] }.minmax
     end
 
     ##
@@ -298,15 +296,13 @@ module GeneValidator
       left = limits[0]
       right = limits[1]
 
-      :ok if left <= value and right >= value
+      :ok if left <= value && right >= value
       :shorter if left >= value
       :longer if right <= value
     end
-
   end
 
   class HierarchicalClusterization
-
     attr_accessor :values
     attr_accessor :clusters
 
@@ -319,11 +315,11 @@ module GeneValidator
       @clusters = []
     end
 
-    def hierarchical_clusterization_2d (no_clusters = 0, distance_method = 0, vec = @values, debug = false)
+    def hierarchical_clusterization_2d(no_clusters = 0, distance_method = 0, vec = @values, debug = false)
       clusters = []
 
       if vec.length == 1
-        hash = {vec[0]=>1}
+        hash = { vec[0] => 1 }
         cluster = PairCluster.new(hash)
         clusters.push(cluster)
         clusters
@@ -334,7 +330,7 @@ module GeneValidator
       threshold_density = (0.5 * vec.length).to_i
 
       # make a histogram from the input vector
-      histogram = Hash[vec.group_by{|a| a}.map { |k, vs| [k, vs.length] }]
+      histogram = Hash[vec.group_by { |a| a }.map { |k, vs| [k, vs.length] }]
 
       # clusters = array of clusters
       # initially each length belongs to a different cluster
@@ -342,13 +338,12 @@ module GeneValidator
         if debug
           puts "pair (#{elem[0].x} #{elem[0].y}) appears #{elem[1]} times"
         end
-        hash = {elem[0] => elem[1]}
+        hash = { elem[0] => elem[1] }
         cluster = PairCluster.new(hash)
         clusters.push(cluster)
       end
 
-      
-      clusters.each { |elem| elem.print } if debug
+      clusters.each(&:print) if debug
 
       return clusters if clusters.length == 1
 
@@ -356,19 +351,19 @@ module GeneValidator
       # the loop stops according to the stop conditions
       iteration = 0
       loop do
-        #stop condition 1
-        break if no_clusters != 0 and clusters.length == no_clusters
+        # stop condition 1
+        break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration = iteration + 1
         puts "\nIteration #{iteration}" if debug
 
-        min_distance = 100000000
+        min_distance = 100_000_000
         cluster1     = 0
         cluster2     = 0
         density      = 0
 
-        [*(0..(clusters.length-2))].each do |i|
-          [*((i+1)..(clusters.length-1))].each do |j|
+        [*(0..(clusters.length - 2))].each do |i|
+          [*((i + 1)..(clusters.length - 1))].each do |j|
             dist = clusters[i].distance(clusters[j], distance_method)
             puts "distance between clusters #{i} and #{j} is #{dist}" if debug
             current_density = clusters[i].density + clusters[j].density
@@ -377,7 +372,7 @@ module GeneValidator
               cluster1 = i
               cluster2 = j
               density = current_density
-            elsif dist == min_distance and density < current_density
+            elsif dist == min_distance && density < current_density
               cluster1 = i
               cluster2 = j
               density = current_density
@@ -398,9 +393,9 @@ module GeneValidator
           end
         end
 
-        #stop condition 3
-        #the density of the biggest clusters exceeds the threshold
-        if no_clusters == 0 and clusters[cluster].density > threshold_density
+        # stop condition 3
+        # the density of the biggest clusters exceeds the threshold
+        if no_clusters == 0 && clusters[cluster].density > threshold_density
           break
         end
       end
@@ -419,34 +414,34 @@ module GeneValidator
     # +debug+: display debug information
     # Output:
     # vector of +Cluster+ objects
-    def hierarchical_clusterization (no_clusters = 0, distance_method = 0, vec = @values, debug = false)
+    def hierarchical_clusterization(no_clusters = 0, distance_method = 0, vec = @values, debug = false)
       clusters = []
       vec = vec.sort
 
       if vec.length == 1
-        hash = {vec[0]=>1}
+        hash = { vec[0] => 1 }
         cluster = Cluster.new(hash)
         clusters.push(cluster)
         clusters
       end
 
       # Thresholds
-      threshold_distance = (0.25 * (vec.max-vec.min))
+      threshold_distance = (0.25 * (vec.max - vec.min))
       threshold_density = (0.5 * vec.length).to_i
 
       # make a histogram from the input vector
       histogram = Hash[vec.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
 
       # clusters = array of clusters
-      #initially each length belongs to a different cluster
-      histogram.sort {|a,b| a[0]<=>b[0]}.each do |elem|
+      # initially each length belongs to a different cluster
+      histogram.sort { |a, b| a[0] <=> b[0] }.each do |elem|
         puts "len #{elem[0]} appears #{elem[1]} times" if debug
-        hash = {elem[0] => elem[1]}
+        hash = { elem[0] => elem[1] }
         cluster = Cluster.new(hash)
         clusters.push(cluster)
       end
 
-      clusters.each { |elem| elem.print } if debug
+      clusters.each(&:print) if debug
 
       return clusters if clusters.length == 1
 
@@ -455,42 +450,41 @@ module GeneValidator
       iteration = 0
       loop do
 
-        #stop condition 1
-        break if no_clusters != 0 and clusters.length == no_clusters
+        # stop condition 1
+        break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration = iteration + 1
         puts "\nIteration #{iteration}" if debug
 
-        min_distance = 100000000
+        min_distance = 100_000_000
         cluster      = 0
         density      = 0
 
-        clusters[0..clusters.length-2].each_with_index do |item, i|
-          dist = clusters[i].distance(clusters[i+1], distance_method)
-          puts "distance between clusters #{i} and #{i+1} is #{dist}" if debug
-          current_density = clusters[i].density + clusters[i+1].density
+        clusters[0..clusters.length - 2].each_with_index do |_item, i|
+          dist = clusters[i].distance(clusters[i + 1], distance_method)
+          puts "distance between clusters #{i} and #{i + 1} is #{dist}" if debug
+          current_density = clusters[i].density + clusters[i + 1].density
           if dist < min_distance
             min_distance = dist
             cluster = i
             density = current_density
-        	elsif dist == min_distance and density < current_density
+          elsif dist == min_distance && density < current_density
             cluster = i
             density = current_density
           end
         end
 
-
-        #stop condition 2
-        #the distance between the closest clusters exceeds the threshold
-        if no_clusters == 0 and (clusters[cluster].mean - clusters[cluster+1].mean).abs > threshold_distance
+        # stop condition 2
+        # the distance between the closest clusters exceeds the threshold
+        if no_clusters == 0 && (clusters[cluster].mean - clusters[cluster + 1].mean).abs > threshold_distance
           break
         end
 
-        #merge clusters 'cluster' and 'cluster'+1
-        puts "clusters to merge #{cluster} and #{cluster+1}" if debug
+        # merge clusters 'cluster' and 'cluster'+1
+        puts "clusters to merge #{cluster} and #{cluster + 1}" if debug
 
-        clusters[cluster].add(clusters[cluster+1])
-        clusters.delete_at(cluster+1)
+        clusters[cluster].add(clusters[cluster + 1])
+        clusters.delete_at(cluster + 1)
 
         if debug
           clusters.each_with_index do |elem, i|
@@ -499,9 +493,9 @@ module GeneValidator
           end
         end
 
-        #stop condition 3
-        #the density of the biggest clusters exceeds the threshold
-        if no_clusters == 0 and clusters[cluster].density > threshold_density
+        # stop condition 3
+        # the density of the biggest clusters exceeds the threshold
+        if no_clusters == 0 && clusters[cluster].density > threshold_density
           break
         end
       end
@@ -514,8 +508,8 @@ module GeneValidator
     # Params:
     # +clusters+: list of +Clususter+ objects
     def most_dense_cluster(clusters = @clusters)
-      max_density = 0;
-      max_density_cluster = 0;
+      max_density = 0
+      max_density_cluster = 0
 
       if clusters.nil?
         nil
@@ -524,7 +518,7 @@ module GeneValidator
       clusters.each_with_index do |item, i|
         if item.density > max_density
           max_density = item.density
-          max_density_cluster = i;
+          max_density_cluster = i
         end
       end
       clusters[max_density_cluster]

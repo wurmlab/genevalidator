@@ -1,17 +1,17 @@
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 module GeneValidator
+  # A class that initialises the BLAST tabular attributes
   class Hsp
-
-    attr_accessor :hit_from #references from the unaligned hit sequence
+    attr_accessor :hit_from # ref. from the unaligned hit sequence
     attr_accessor :hit_to
-    attr_accessor :match_query_from # references from the unaligned query sequence
+    attr_accessor :match_query_from # ref. from the unaligned query sequence
     attr_accessor :match_query_to
     attr_accessor :query_reading_frame
     attr_accessor :hit_alignment
     attr_accessor :query_alignment
     attr_accessor :middles # conserved residues are with letters,
-    #positive (mis)matches with +, mismatches and gaps are with space
+    # positive (mis)matches with +, mismatches and gaps are with space
 
     attr_accessor :bit_score
     attr_accessor :hsp_score
@@ -23,8 +23,8 @@ module GeneValidator
     attr_accessor :align_len
 
     def initialize
-      query_alignment = nil
-      hit_alignment   = nil
+      @query_alignment = nil
+      @hit_alignment   = nil
     end
 
     ##
@@ -34,34 +34,27 @@ module GeneValidator
     # +column+: String with column name.
     # +value+: Value of the column
     # +type+: type of the sequences: :nucleotide or :protein
-    def init_tabular_attribute(column, value, type=:protein)
-      case column
-        when "qstart"
-          # relative to the original sequence (i.e not translated sequence)
-          @match_query_from = value.to_i
-        when "qend"
-          # relative to the original sequence (i.e not translated sequence)
-          @match_query_to = value.to_i
-        when "qframe"
-          @query_reading_frame = value.to_i
-        when "sstart"
-          @hit_from = value.to_i
-        when "send"
-          @hit_to = value.to_i
-        when "qseq"
-          @query_alignment = value
-          seq_type = BlastUtils.guess_sequence_type(value) # (only blastp/ blastx used)
-          raise SequenceTypeError if seq_type != nil and seq_type != :protein
-        when "sseq"
-          @hit_alignment = value
-          seq_type = BlastUtils.guess_sequence_type(value) # (only blastp/ blastx used)
-          raise SequenceTypeError if seq_type != nil and seq_type != :protein
-        when "length"
-          @align_len = value.to_i
-        when "pident"
-          @pidentity = value.to_f
-        when "evalue"
-          @hsp_evalue = value.to_f
+    def init_tabular_attribute(hash, _type = :protein)
+      @match_query_from    = hash['qstart'].to_i if hash['qstart']
+      @match_query_to      = hash['qend'].to_i if hash['qend']
+      @query_reading_frame = hash['qframe'].to_i if hash['qframe']
+      @hit_from            = hash['sstart'].to_i if hash['sstart']
+      @hit_to              = hash['send'].to_i if hash['send']
+      @query_alignment     = hash['qseq'] if hash['qseq']
+      @hit_alignment       = hash['sseq'] if hash['sseq']
+      @align_len           = hash['length'].to_i if hash['length']
+      @pidentity           = hash['pident'].to_f if hash['pident']
+      @identity            = hash['nident'].to_f if hash['nident']
+      @hsp_evalue          = hash['evalue'].to_f if hash['evalue']
+      if hash['qseq']
+        puts @query_alignment
+        query_seq_type = BlastUtils.guess_sequence_type(@query_alignment)
+        fail SequenceTypeError if query_seq_type != :protein
+      end
+      if hash['sseq']
+        puts @hit_alignment
+        hit_seq_type = BlastUtils.guess_sequence_type(@hit_alignment)
+        fail SequenceTypeError if hit_seq_type != :protein
       end
     end
   end

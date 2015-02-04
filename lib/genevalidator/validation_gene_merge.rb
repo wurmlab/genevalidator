@@ -5,7 +5,6 @@ module GeneValidator
   ##
   # Class that stores the validation output information
   class GeneMergeValidationOutput < ValidationReport
-
     attr_reader :slope
     attr_reader :threshold_down
     attr_reader :threshold_up
@@ -22,11 +21,11 @@ module GeneValidator
       @result         = validation
       @expected       = expected
       @plot_files     = []
-      @approach       = 'We expect the query sequence to encode a single' +
-                        ' protein-coding gene. Here, we analyse the' +
-                        ' High-scoring Segment Pairs (HSPs) identified by BLAST' +
-                        ' to determine whether the query includes sequence from' +
-                        ' two or more genes.'
+      @approach       = 'We expect the query sequence to encode a single' \
+                        ' protein-coding gene. Here, we analyse the' \
+                        ' High-scoring Segment Pairs (HSPs) identified by' \
+                        ' BLAST to determine whether the query includes' \
+                        ' sequence from two or more genes.'
       @explanation    = explain
       @conclusion     = conclude
     end
@@ -47,39 +46,39 @@ module GeneValidator
       if @unimodality
         'This suggest that the query sequence represents a single gene.'
       else
-        diff = (@result == :yes) ? ' within' : ' outside' 
-        output_text = "This slope is #{diff} our empirically calculated" +
-                      " thresholds (0.4 and 1.2)."
+        diff = (@result == :yes) ? ' within' : ' outside'
+        t = "This slope is #{diff} our empirically calculated thresholds" \
+            ' (0.4 and 1.2).'
         if @result == :yes
-          output_text << ' This suggests the query contains sequence from two' +
-                         ' or more different genes.'
+          t << ' This suggests the query contains sequence from two or more' \
+               ' different genes.'
         else
-          output_text << ' There is no evidence that the query contains sequence' +
-                         ' from multiple genes.'
-        end 
-        output_text
+          t << ' There is no evidence that the query contains sequence from' \
+               ' multiple genes.'
+        end
+        t
       end
     end
 
     def print
-      (@slope.nan?) ? "Inf" : "#{@slope.round(2)}"
+      (@slope.nan?) ? 'Inf' : "#{@slope.round(2)}"
     end
 
     def validation
-      (@slope > threshold_down and @slope < threshold_up) ? :yes : :no
+      (@slope > threshold_down && @slope < threshold_up) ? :yes : :no
     end
 
     def color
-      (validation == :no) ? "success" : "danger"
+      (validation == :no) ? 'success' : 'danger'
     end
   end
+
 
   ##
   # This class contains the methods necessary for
   # checking whether there is evidence that the
   # prediction is a merge of multiple genes
   class GeneMergeValidation < ValidationTest
-
     include Enumerable
 
     attr_reader :hits
@@ -91,15 +90,15 @@ module GeneValidator
     # Params:
     # +type+: type of the predicted sequence (:nucleotide or :protein)
     # +prediction+: a +Sequence+ object representing the blast query
-    # +hits+: a vector of +Sequence+ objects (usually representig the blast hits)
+    # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +filename+: name of the input file, used when generatig the plot files
     # +boundary+: the offset of the hit from which we start analysing the hit
-    def initialize(type, prediction, hits, filename, boundary=10)
+    def initialize(type, prediction, hits, filename, boundary = 10)
       super
       @short_header = 'Gene_Merge'
       @header       = 'Gene Merge'
-      @description  = 'Check whether BLAST hits make evidence about a merge of' +
-                      ' two genes that match the predicted gene.'
+      @description  = 'Check whether BLAST hits make evidence about a merge' \
+                      ' of two genes that match the predicted gene.'
       @cli_name     = 'merge'
       @filename     = filename
       @boundary     = boundary
@@ -110,12 +109,13 @@ module GeneValidator
     # Output:
     # +GeneMergeValidationOutput+ object
     def run
-      raise NotEnoughHitsError unless hits.length >= 5
-      raise Exception unless prediction.is_a? Sequence and hits[0].is_a? Sequence
+      fail NotEnoughHitsError unless hits.length >= 5
+      fail Exception unless prediction.is_a?(Sequence) && hits[0].is_a?(Sequence)
 
       start = Time.now
 
-      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
+                                       hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
       xx_0 = pairs.map{|pair| pair.x}
       yy_0 = pairs.map{|pair| pair.y}
 
@@ -146,8 +146,10 @@ module GeneValidator
 
       y_intercept = line_slope[0]
 
-      @validation_report = GeneMergeValidationOutput.new(@short_header, @header, @description, lm_slope, unimodality)
 
+      @validation_report = GeneMergeValidationOutput.new(@short_header, @header,
+                                                         @description, lm_slope,
+                                                         unimodality)
       unless unimodality
         plot1 = plot_2d_start_from(lm_slope, y_intercept)
       else
@@ -158,17 +160,19 @@ module GeneValidator
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
       @validation_report.running_time = Time.now - start
-      return @validation_report
+      @validation_report
 
     # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError => error
-      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
-    rescue Exception => error
-      puts error.backtrace
+    rescue  NotEnoughHitsError
+      @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header,
+                           @header, @description, @approach, @explanation,
+                           @conclusion)
+    rescue Exception
       @validation_report.errors.push 'Unexpected Error'
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header, @description, @approach, @explanation, @conclusion)
-      return @validation_report
+      @validation_report = ValidationReport.new('Unexpected error', :error,
+                                                @short_header, @header,
+                                                @description, @approach,
+                                                @explanation, @conclusion)
     end
 
     ##
@@ -178,7 +182,8 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     # +prediction+: Sequence objects
-    def plot_matched_regions(output = "#{filename}_match.json", hits = @hits, prediction = @prediction)
+    def plot_matched_regions(output = "#{filename}_match.json", 
+                             hits = @hits, prediction = @prediction)
 
       colors   = ['orange', 'blue']  ##{colors[i%2]
       f        = File.open(output , 'w')
@@ -186,11 +191,18 @@ module GeneValidator
 
       hits_less = hits[0..[no_lines, hits.length-1].min]
 
-      f.write((hits_less.each_with_index.map{|hit, i|{'y'=>i, 'start'=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-               'stop'=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max, 'color'=>'black', 'dotted'=>'true'}}.flatten +
-               hits_less.each_with_index.map{|hit, i| hit.hsp_list.map{|hsp|
-               {'y'=>i, 'start'=>hsp.match_query_from, 'stop'=>hsp.match_query_to, 'color'=>'orange'}}}.flatten).to_json)
-
+      f.write((hits_less.each_with_index.map { |hit, i|
+        { 'y' => i, 
+          'start' => hit.hsp_list.map { |hsp| hsp.match_query_from}.min,
+          'stop' => hit.hsp_list.map { |hsp| hsp.match_query_to}.max,
+          'color'=>'black',
+          'dotted'=>'true'}}.flatten +
+        hits_less.each_with_index.map { |hit, i| 
+          hit.hsp_list.map { |hsp|
+            { 'y' => i,
+              'start' => hsp.match_query_from,
+              'stop' => hsp.match_query_to,
+              'color' => 'orange'}}}.flatten).to_json)
       f.close
 
       return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
@@ -212,43 +224,43 @@ module GeneValidator
     # +hits+: array of Sequence objects
     def plot_2d_start_from(slope = nil, y_intercept = nil, output = "#{filename}_match_2d.json", hits = @hits)
 
-        pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
 
-        xx = pairs.map{|pair| pair.x}
-        yy = pairs.map{|pair| pair.y}
+      xx = pairs.map{|pair| pair.x}
+      yy = pairs.map{|pair| pair.y}
 
-        freq_x = xx.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-        filename_x = "#{filename}_merge_x.json"
-        f = File.open(filename_x, "w")
-        f.write([freq_x.collect{|k,v|
-            {"key"=>k, "value"=>v, "main"=>(1==2)}
-          }].to_json)
-        f.close
-        plot3 = Plot.new(filename_x.scan(/\/([^\/]+)$/)[0][0],
-                :simplebars,
-                "[Gene Merge] X projection",
-                "",
-                "x projection",
-                "number of sequences")
-  #       @validation_report.plot_files.push(plot3)
+      freq_x = xx.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+      filename_x = "#{filename}_merge_x.json"
+      f = File.open(filename_x, "w")
+      f.write([freq_x.collect{|k,v|
+          {"key"=>k, "value"=>v, "main"=>(1==2)}
+        }].to_json)
+      f.close
+      plot3 = Plot.new(filename_x.scan(/\/([^\/]+)$/)[0][0],
+              :simplebars,
+              "[Gene Merge] X projection",
+              "",
+              "x projection",
+              "number of sequences")
+#       @validation_report.plot_files.push(plot3)
 
-        freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-        filename_y = "#{filename}_merge_y.json"
-        f = File.open(filename_y, "w")
-        f.write([freq_y.collect{|k,v|
-            {"key"=>k, "value"=>v, "main"=>(1==2)}
-          }].to_json)
-        f.close
-        plot4 = Plot.new(filename_y.scan(/\/([^\/]+)$/)[0][0],
-                :simplebars,
-                "[Gene Merge] Y projection",
-                "",
-                "y projection",
-                "number of sequences")
-  #       @validation_report.plot_files.push(plot4)
+      freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+      filename_y = "#{filename}_merge_y.json"
+      f = File.open(filename_y, "w")
+      f.write([freq_y.collect{|k,v|
+          {"key"=>k, "value"=>v, "main"=>(1==2)}
+        }].to_json)
+      f.close
+      plot4 = Plot.new(filename_y.scan(/\/([^\/]+)$/)[0][0],
+              :simplebars,
+              "[Gene Merge] Y projection",
+              "",
+              "y projection",
+              "number of sequences")
+#       @validation_report.plot_files.push(plot4)
 
       f = File.open(output , "w")
-      f.write(hits.map{|hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
+      f.write(hits.map{ |hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
                               "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max,
                               "color"=>"red"}}.to_json)
       f.close
@@ -263,6 +275,7 @@ module GeneValidator
                                    slope)
     end
 
+
     ##
     # Caclulates the slope of the regression line
     # give a set of 2d coordonates of the start/stop offests of the hits
@@ -273,24 +286,23 @@ module GeneValidator
     # Output:
     # The ecuation of the regression line: [y slope]
     def slope(xx, yy, weights = nil)
-
       weights = Array.new(hits.length, 1) if weights.nil?
 
       # calculate the slope
-      xx_weighted = xx.each_with_index.map{|x, i| x * weights[i]}
-      yy_weighted = yy.each_with_index.map{|y, i| y * weights[i]}
+      xx_weighted = xx.each_with_index.map { |x, i| x * weights[i] }
+      yy_weighted = yy.each_with_index.map { |y, i| y * weights[i] }
 
-      denominator = weights.reduce(0) { |sum, w| w + sum }
+      denominator = weights.reduce(0) { |a, e| a + e }
 
-      x_mean = xx_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
-      y_mean = yy_weighted.reduce(0) { |sum, x| x + sum } / (denominator + 0.0)
+      x_mean = xx_weighted.reduce(0) { |a, e| a + e } / (denominator + 0.0)
+      y_mean = yy_weighted.reduce(0) { |a, e| a + e } / (denominator + 0.0)
 
-      numerator = (0...xx.length).reduce(0) do |sum, i|
-        sum + (weights[i] * (xx[i] - x_mean) * (yy[i] - y_mean))
+      numerator = (0...xx.length).reduce(0) do |a, e|
+        a + (weights[e] * (xx[e] - x_mean) * (yy[e] - y_mean))
       end
 
-      denominator = (0...xx.length).reduce(0) do |sum, i|
-        sum + (weights[i] * ((xx[i] - x_mean) ** 2))
+      denominator = (0...xx.length).reduce(0) do |a, e|
+        a + (weights[e] * ((xx[e] - x_mean)**2))
       end
 
       slope = numerator / (denominator + 0.0)
@@ -309,14 +321,13 @@ module GeneValidator
     # The ecuation of the regression line: [y slope]
     def slope_statsample(xx, yy)
       require 'statsample'
-      sr=Statsample::Regression.simple(xx.to_scale,yy.to_scale)
+      sr = Statsample::Regression.simple(xx.to_scale, yy.to_scale)
       [sr.a, sr.b]
     end
 
     ##
     # xx and yy are the projections of the 2-d data on the two axes
     def unimodality_test(xx, yy)
-
       mean_x = xx.mean
       median_x = xx.median
       mode_x = xx.mode
@@ -327,9 +338,9 @@ module GeneValidator
         cond2_x = true
         cond3_x = true
       else
-        cond1_x = ((mean_x - median_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.6)
-        cond2_x = ((mean_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
-        cond3_x = ((median_x - mode_x).abs / (sd_x+ 0.0)) < Math.sqrt(0.3)
+        cond1_x = ((mean_x - median_x).abs / (sd_x + 0.0)) < Math.sqrt(0.6)
+        cond2_x = ((mean_x - mode_x).abs / (sd_x + 0.0)) < Math.sqrt(0.3)
+        cond3_x = ((median_x - mode_x).abs / (sd_x + 0.0)) < Math.sqrt(0.3)
       end
 
       mean_y = yy.mean
@@ -342,15 +353,15 @@ module GeneValidator
         cond2_y = true
         cond3_y = true
       else
-        cond1_y = ((mean_y - median_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.6)
-        cond2_y = ((mean_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
-        cond3_y = ((median_y - mode_y).abs / (sd_y+ 0.0)) < Math.sqrt(0.3)
+        cond1_y = ((mean_y - median_y).abs / (sd_y + 0.0)) < Math.sqrt(0.6)
+        cond2_y = ((mean_y - mode_y).abs / (sd_y + 0.0)) < Math.sqrt(0.3)
+        cond3_y = ((median_y - mode_y).abs / (sd_y + 0.0)) < Math.sqrt(0.3)
       end
 
-      if cond1_x and cond2_x and cond3_x and cond1_y and cond2_y and cond3_y
-        return true
+      if cond1_x && cond2_x && cond3_x && cond1_y && cond2_y && cond3_y
+        true
       else
-        return false
+        false
       end
     end
   end

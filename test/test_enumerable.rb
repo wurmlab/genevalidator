@@ -2,9 +2,7 @@ require_relative 'test_helper'
 require 'genevalidator/enumerable'
 require 'minitest/autorun'
 module GeneValidator
-
   class TestEnumerable < Minitest::Test
-
     include Enumerable
 
     describe 'Enumerable Module' do
