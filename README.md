@@ -35,11 +35,10 @@ It is also possible to add your own custom validations to GeneValidator.
 ## Installation Requirements
 * Ruby (>= 1.9.3)
 * NCBI BLAST+ (>= 2.2.29+)
-* MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).<br>
-Linux and MacOS are officially supported!
+* MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).
 * Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox (download [here](https://www.mozilla.org/en-GB/firefox/new/)).
 
-  * Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more information.
+Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more help with installing the prerequisites.
   
 ## Installation
 1) Type the following command in the terminal
@@ -129,15 +128,15 @@ $ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File
 ```
 
 ## Output
-The output produced by GeneValidator is presented in three manners. See the exemplar output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) 
+The output produced by GeneValidator is presented in three manners.
 
-### HTML Output 
+#### HTML Output 
 Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (genetic input data).
 
-### Yaml Output
+#### Yaml Output
 The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
 
-### Terminal Output
+#### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
 
 ### Other Resources

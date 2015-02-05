@@ -1,139 +1,202 @@
 # A module to validate the command line Arguments
-## CREDIT: most of these methods have been adapted from SequenceServer
-module GVArgValidation
+## CREDIT: some of these methods have been adapted from SequenceServer
 
-  class << self
-    def validate_args(input_file, opt)
-      assert_output_dir_does_not_exist(input_file)
-      Blast.assert_blast_database_provided(opt[:db])
-      if opt[:db] !~ /remote/
-        Blast.assert_blast_database_exists(opt[:db])
+# If a tabular file is provided, ensure that a tabular file has the right number of columns
+module GeneValidator
+  # A module to validate the arguments passed to the Validation Class
+  module GVArgValidation
+    class << self
+      def validate_args(opt)
+        @opt = opt  
+        assert_file_present('input file', opt[:input_fasta_file])
+        assert_input_file_probably_fasta
+        assert_input_contains_single_type_sequence
+        assert_output_dir_does_not_exist
+        
+        if @opt[:blast_xml_file] || @opt[:blast_tabular_file]
+          assert_BLAST_output_files
+        end
+        Blast.validate(opt)
+        Mafft.assert_mafft_installation(opt)
       end
-      Blast.assert_blast_installation(opt[:blast_bin])
-      Mafft.assert_mafft_installation(opt[:mafft_bin])
-    end
 
-    def assert_output_dir_does_not_exist(input_file)
-      output_dir = "#{input_file}.html"
-      if File.exists? output_dir
+      private
+
+      def assert_BLAST_output_files
+        if @opt[:blast_xml_file]
+          assert_file_present('BLAST XML file', @opt[:blast_xml_file])
+        elsif @opt[:blast_tabular_file]
+          assert_file_present('BLAST tabular file', @opt[:blast_tabular_file])
+          assert_tabular_options_exists
+        end
+      end 
+
+      def assert_output_dir_does_not_exist
+        output_dir = "#{@opt[:input_fasta_file]}.html"
+        return unless File.exist?(output_dir)
         puts "The output directory already exists for this fasta file.\n"
-        puts "For a new validation please remove the following directory: #{output_dir}\n"
+        puts "Please remove the following directory: #{output_dir}\n"
         puts "You can run the following command to remove the folder.\n"
         puts "\n   $ rm -r #{output_dir} \n"
         exit 1
       end
-    end
-  end
 
-  class Blast
-    # Use a fixed minimum version of BLAST+
-    MINIMUM_BLAST_VERSION           = '2.2.29+'
-    # Use the following exit codes, or 1.
-    EXIT_BLAST_NOT_INSTALLED        = 2
-    EXIT_BLAST_NOT_COMPATIBLE       = 3
-    EXIT_NO_BLAST_DATABASE          = 4
-
-    def self.assert_blast_installation(blast_bin_dir = nil)
-      # Validate BLAST installation
-      if blast_bin_dir.nil?
-        assert_blast_installed_and_compatible
-      else
-        export_bin_dir(blast_bin_dir)
+      def assert_tabular_options_exists
+        return if @opt[:blast_tabular_options]
+        puts '*** Error: BLAST tabular options (-o) have not been set.'
+        puts '    Please set the "-o" option with the custom format'
+        puts '    used in the BLAST -outfmt argument'
+        exit 1
       end
-    end
 
-    def self.assert_blast_database_provided(blast_db = nil)
-      if blast_db.nil?
-        puts "Error: A BLAST database is required."
-        puts "Please pass a local or remote BLAST database to GeneValidator as follows:"
-        puts # a blank line
-        puts "    $ genevalidator -d '~/blastdb/SwissProt' Input_File"
-        puts # a blank line
-        puts "Or use a remote database:"
-        puts # a blank line
-        puts "    $ genevalidator -d 'swissprot -remote' Input_File" 
+      def assert_input_file_probably_fasta
+        File.open(@opt[:input_fasta_file], 'r') do |file_stream|
+          (file_stream.readline[0] == '>') ? true : false
+        end
+      end
+
+      def assert_file_present(desc, file, exit_code = 1)
+        return if file && File.exist?(File.expand_path(file))
+        puts "*** Error: Couldn't find the #{desc}: #{file}."
+        exit exit_code
+      end
+
+      alias_method :assert_dir_present, :assert_file_present
+
+      def assert_input_contains_single_type_sequence
+        fasta_content = IO.binread(@opt[:input_fasta_file])
+        type = BlastUtils.type_of_sequences(fasta_content)
+        return if type == :nucleotide || type == :protein
+        puts '*** Error: The input files does not contain just protein or'
+        puts '    nucleotide data. Please correct this and try again.'
         exit 1
       end
     end
 
-    def self.assert_blast_database_exists(blast_db_path)
-      unless system("blastdbcmd -db #{blast_db_path} -info > /dev/null 2>&1")
-        puts "*** No BLAST database found at the provided path."
-        puts "    Please ensure that the provided path is correct and then" +
-             " try again."
-        exit EXIT_NO_BLAST_DATABASE
+    # Validates BLAST Installation (And BLAST databases)
+    class Blast
+      class << self
+        # Use a fixed minimum version of BLAST+
+        MINIMUM_BLAST_VERSION           = '2.2.29+'
+        # Use the following exit codes, or 1.
+        EXIT_BLAST_NOT_INSTALLED        = 2
+        EXIT_BLAST_NOT_COMPATIBLE       = 3
+        EXIT_NO_BLAST_DATABASE          = 4
+
+        def validate(opt)
+          @opt = opt
+          assert_blast_installation
+          assert_blast_database_provided
+          assert_local_blast_database_exists if @opt[:db] !~ /remote/
+        end
+
+        def assert_blast_installation
+          # Validate BLAST installation
+          if @opt[:blast_bin].nil?
+            assert_blast_installed
+            assert_blast_compatible
+          else
+            export_bin_dir(blast_bin_dir)
+          end
+        end
+
+        def assert_blast_database_provided
+          return unless @opt[:db].nil?
+          puts '*** Error: A BLAST database is required. Please pass a local or'
+          puts '    remote BLAST database to GeneValidator as follows:'
+          puts # a blank line
+          puts "      $ genevalidator -d '~/blastdb/SwissProt' Input_File"
+          puts # a blank line
+          puts '    Or use a remote database:'
+          puts # a blank line
+          puts "      $ genevalidator -d 'swissprot -remote' Input_File"
+          exit 1
+        end
+
+        def assert_local_blast_database_exists
+          return if system("blastdbcmd -db #{@opt[:db]} -info > /dev/null 2>&1")
+          puts '*** No BLAST database found at the provided path.'
+          puts '    Please ensure that the provided path is correct and then' \
+               ' try again.'
+          exit EXIT_NO_BLAST_DATABASE
+        end
+
+        private
+
+        def assert_blast_installed
+          return if GVArgValidation.command?('blastdbcmd')
+          puts '*** Could not find BLAST+ binaries.'
+          exit EXIT_BLAST_NOT_INSTALLED
+        end
+
+        def assert_blast_compatible
+          version = `blastdbcmd -version`.split[1]
+          return if version >= MINIMUM_BLAST_VERSION
+          puts "*** Your BLAST+ version #{version} is outdated."
+          puts '    GeneValidator needs NCBI BLAST+ version' \
+               " #{MINIMUM_BLAST_VERSION} or higher."
+          exit EXIT_BLAST_NOT_COMPATIBLE
+        end
+
+        def export_bin_dir
+          if File.directory?(@opt[:blast_bin])
+            GVArgValidation.add_to_path(@opt[:blast_bin])
+          else
+            puts '*** The provided BLAST bin directory does not exist.'
+            puts '    Please ensure that the provided BLAST bin directory is' \
+                 ' correct and try again.'
+            exit EXIT_BLAST_NOT_INSTALLED
+          end
+        end
       end
     end
 
-    private
-    
-    def self.assert_blast_installed_and_compatible
-      unless GVArgValidation::command?('blastdbcmd')
-        puts "*** Could not find BLAST+ binaries."
-        exit EXIT_BLAST_NOT_INSTALLED
-      end
-      version = %x|blastdbcmd -version|.split[1]
-      unless version >= MINIMUM_BLAST_VERSION
-        puts "*** Your BLAST+ version #{version} is outdated."
-        puts "    GeneValidator needs NCBI BLAST+ version" +
-             " #{MINIMUM_BLAST_VERSION} or higher."
-        exit EXIT_BLAST_NOT_COMPATIBLE
-      end
-    end
+    # Validates Mafft installation
+    class Mafft
+      class << self
+        def assert_mafft_installation(opt)
+          @opt = opt
+          if @opt[:mafft_bin].nil?
+            assert_mafft_installed
+          else
+            export_bin_dir
+          end
+        end
 
-    def self.export_bin_dir(blast_bin_dir)
-      if File.directory?(blast_bin_dir)
-        GVArgValidation::add_to_path(blast_bin_dir)
-      else
-        puts "*** The provided BLAST bin directory does not exist."
-        puts "    Please ensure that the provided BLAST bin directory is" +
-             " correct and try again."
-        exit EXIT_BLAST_NOT_INSTALLED
-      end
-    end
-  end
+        private
 
-  class Mafft
-    def self.assert_mafft_installation(mafft_bin = nil)
-      if mafft_bin.nil?
-        GVArgValidation::Mafft.assert_mafft_installed
-      else
-        GVArgValidation::Mafft.export_bin_dir(mafft_bin)
+        def assert_mafft_installed
+          return if GVArgValidation.command?('mafft')
+          puts '*** Could not find Mafft binaries.'
+          puts '    Ignoring error and continuing - Please note that some' \
+               ' validations may be skipped.'
+          puts # a blank line
+        end
+
+        def export_bin_dir
+          if File.directory?(@opt[:mafft_bin])
+            GVArgValidation.add_to_path(@opt[:mafft_bin])
+          else
+            puts '*** The provided Mafft bin directory does not exist.'
+            puts '    Ignoring error and continuing - Please note that some' \
+                 ' validations may be skipped.'
+            puts # a blank line
+          end
+        end
       end
     end
 
-    private
+    class << self
+      ## Checks if dir is in $PATH and if not, it adds the dir to the $PATH.
+      def add_to_path(bin_dir)
+        return if ENV['PATH'].split(':').include?(bin_dir)
+        ENV['PATH'] = "#{bin_dir}:#{ENV['PATH']}"
+      end
 
-    def self.assert_mafft_installed
-      unless GVArgValidation::command?('mafft')
-        puts "*** Could not find Mafft binaries."
-        puts "    Ignoring error and continuing - Please note that some" +
-             " validations may be skipped."
-        puts # a blank line
+      # Return `true` if the given command exists and is executable.
+      def command?(command)
+        system("which #{command} > /dev/null 2>&1")
       end
     end
-
-    def self.export_bin_dir(mafft_bin_dir)
-      if File.directory?(mafft_bin_dir)
-        GVArgValidation::add_to_path(mafft_bin_dir)
-      else
-        puts "*** The provided Mafft bin directory does not exist."
-        puts "    Ignoring error and continuing - Please note that some" +
-             " validations may be skipped."
-        puts # a blank line
-      end
-    end
-  end
-
-  ## Check whether dir is in the $PATH and if not, adds the dir to the $PATH.
-  def self.add_to_path(bin_dir)
-    unless ENV['PATH'].split(':').include?(bin_dir)
-      ENV['PATH'] = "#{bin_dir}:#{ENV['PATH']}"
-    end
-  end
-
-  # Return `true` if the given command exists and is executable.
-  def self.command?(command)
-    system("which #{command} > /dev/null 2>&1")
   end
 end
