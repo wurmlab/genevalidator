@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 The tool validates the input predicted genes and provides useful information (length validation, gene merge validation, sequence duplication checking, ORF finding) based on the similarities to genes in public databases.
 DESC
 
-  s.required_ruby_version     = '>= 1.9.3'
+  s.required_ruby_version     = '>= 2.0.0'
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~>10.3'
   s.add_dependency('bio', '~> 1.4')
