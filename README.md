@@ -1,6 +1,6 @@
 # GeneValidator - Identify problems with predicted genes 
 
-[![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=alpha)](https://travis-ci.org/monicadragan/GeneValidator)
+[![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=master)](https://travis-ci.org/monicadragan/GeneValidator)
 [![Gem Version](https://badge.fury.io/rb/GeneValidator.svg)](http://badge.fury.io/rb/GeneValidator)
 [![Dependency Status](https://gemnasium.com/IsmailM/GeneValidator.svg)](https://gemnasium.com/IsmailM/GeneValidator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/badges/quality-score.png?b=alpha)](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/?branch=alpha)
