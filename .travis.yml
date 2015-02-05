@@ -11,7 +11,9 @@ before_install:
   - ruby -pi -e "gsub(/^PREFIX = \/usr\/local/, 'PREFIX = ~/mafft/')" ~/mafft-7.205-with-extensions/core/Makefile
   - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && make install)
   - export PATH=$PATH:~/mafft/bin
-  - which mafft
+  - mkdir -p ~/fake_blast/bin
+  - touch ~/fake_blast/bin/blastdbcmd
+  - export PATH=$PATH:~/fake_blast/bin
 script: bundle exec rake test
 cache: bundler 
 sudo: false
