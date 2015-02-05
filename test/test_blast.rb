@@ -43,7 +43,8 @@ module GeneValidator
           input_fasta_file: filename_mrna,
           validations: ['all'],
           db: 'swissprot -remote',
-          num_threads: 1
+          num_threads: 1,
+          test: true
         }
 
         val = GeneValidator::Validation.new(default_opt)
@@ -77,7 +78,8 @@ module GeneValidator
           input_fasta_file: filename_prot,
           validations: ['all'],
           db: 'swissprot -remote',
-          num_threads: 1
+          num_threads: 1,
+          test: true
         }
 
         val = GeneValidator::Validation.new(default_opt)
@@ -100,7 +102,8 @@ module GeneValidator
             input_fasta_file: mixed_fasta,
             validations: ['all'],
             db: 'swissprot -remote',
-            num_threads: 1
+            num_threads: 1,
+          test: true
           }
 
           GeneValidator::Validation.new(default_opt)
@@ -186,7 +189,8 @@ module GeneValidator
           input_fasta_file: filename_fasta,
           validations: ['all'],
           db: 'swissprot -remote',
-          num_threads: 1
+          num_threads: 1,
+          test: true
         }
 
         b = GeneValidator::Validation.new(default_opt) # just use a valida filename to create the object
@@ -219,7 +223,8 @@ module GeneValidator
           input_fasta_file: filename_fasta,
           validations: ['all'],
           db: 'swissprot -remote',
-          num_threads: 1
+          num_threads: 1,
+          test: true
         }
         tabular_headers = 'qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'
 
@@ -249,7 +254,8 @@ module GeneValidator
           input_fasta_file: filename_fasta,
           validations: ['all'],
           db: 'swissprot -remote',
-          num_threads: 1
+          num_threads: 1,
+          test: true
         }
 
         b = GeneValidator::Validation.new(default_opt) 
@@ -276,7 +282,8 @@ module GeneValidator
             input_fasta_file: 'test/test_files/not_existing.txt',
             validations: ['all'],
             db: 'swissprot -remote',
-            num_threads: 1
+            num_threads: 1,
+            test: true
           }
 
           (GeneValidator::Validation.new(default_opt)).run

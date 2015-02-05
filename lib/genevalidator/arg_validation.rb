@@ -16,7 +16,7 @@ module GeneValidator
         if @opt[:blast_xml_file] || @opt[:blast_tabular_file]
           assert_BLAST_output_files
         end
-        Blast.validate(opt)
+        Blast.validate(opt) unless @opt[:testing]
         Mafft.assert_mafft_installation(opt)
       end
 

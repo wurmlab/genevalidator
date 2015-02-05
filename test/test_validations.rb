@@ -26,7 +26,8 @@ module GeneValidator
       blast_xml_file: filename_xml,
       db: 'swissprot -remote',
       num_threads: 1,
-      raw_sequences: filename_xml_raw
+      raw_sequences: filename_xml_raw,
+      test: true
     }
 
     val      = GeneValidator::Validation.new(opt)

@@ -64,7 +64,8 @@ module GeneValidator
     #       fast: false,
     #       input_fasta_file: prot_input_fasta_file,
     #       blast_xml_file: prot_blast_xml_file,
-    #       raw_sequences: prot_blast_xml_raw_seq
+    #       raw_sequences: prot_blast_xml_raw_seq,
+    #       test: true
     #     }
 
     #     (GeneValidator::Validation.new(opts, 1, false, false)).run
@@ -81,7 +82,8 @@ module GeneValidator
     #       input_fasta_file: prot_input_fasta_file,
     #       blast_tabular_file: prot_blast_tab_file,
     #       blast_tabular_options: tab_options,
-    #       raw_sequences: prot_blast_tab_raw_seq
+    #       raw_sequences: prot_blast_tab_raw_seq,
+    #       test: true
     #     }
 
     #     (GeneValidator::Validation.new(opts1, 1, false, false)).run
@@ -113,7 +115,8 @@ module GeneValidator
     #       fast: false,
     #       input_fasta_file: mrna_input_fasta_file,
     #       blast_xml_file: mrna_blast_xml_file ,
-    #       raw_sequences: mrna_blast_xml_raw_seq
+    #       raw_sequences: mrna_blast_xml_raw_seq,
+    #       test: true
     #     }
 
     #     (GeneValidator::Validation.new(opts, 1, false, false)).run
@@ -130,7 +133,8 @@ module GeneValidator
     #       input_fasta_file: mrna_input_fasta_file,
     #       blast_tabular_file: mrna_blast_tab_file,
     #       blast_tabular_options: tab_options,
-    #       raw_sequences: mrna_blast_tab_raw_seq
+    #       raw_sequences: mrna_blast_tab_raw_seq,
+    #       test: true
     #     }
 
     #     (GeneValidator::Validation.new(opts1, 1, false, false)).run
