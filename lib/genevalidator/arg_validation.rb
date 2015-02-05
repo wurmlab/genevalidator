@@ -7,7 +7,7 @@ module GeneValidator
   module GVArgValidation
     class << self
       def validate_args(opt)
-        @opt = opt  
+        @opt = opt
         assert_file_present('input file', opt[:input_fasta_file])
         assert_input_file_probably_fasta
         assert_input_contains_single_type_sequence
