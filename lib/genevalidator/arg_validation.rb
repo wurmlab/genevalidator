@@ -1,8 +1,8 @@
 # A module to validate the command line Arguments
 ## CREDIT: some of these methods have been adapted from SequenceServer
-
-# If a tabular file is provided, ensure that a tabular file has the right number of columns
 module GeneValidator
+# TODO: If a tabular file is provided, ensure that a tabular file has the right number of columns
+# TODO: assert_if_ruby_version_is_supported
   # A module to validate the arguments passed to the Validation Class
   module GVArgValidation
     class << self
