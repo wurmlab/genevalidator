@@ -14,7 +14,8 @@ module GeneValidator
     def initialize(short_header, header, description, slope, unimodality,
                    threshold_down = 0.4, threshold_up = 1.2, expected = :no)
       @short_header, @header, @description = short_header, header, description
-      @slope          = slope
+      @slope          = slope.round(1)
+      @slope          = @slope.abs if @slope == -0.0
       @unimodality    = unimodality
       @threshold_down = threshold_down
       @threshold_up   = threshold_up
@@ -38,7 +39,7 @@ module GeneValidator
         'The distribution of start and/or end-coordinates of HSPs are' \
         ' multi-modal. To detect potential problems we performed a linear'\
         ' regression (with coordinates weighted inversely proportionally to '\
-        " hit strength). The resulting slope is #{@slope.round(2)}."
+        " hit strength). The resulting slope is #{@slope}."
       end
     end
 
@@ -61,7 +62,7 @@ module GeneValidator
     end
 
     def print
-      (@slope.nan?) ? 'Inf' : "#{@slope.round(2)}"
+      (@slope.nan?) ? 'Inf' : "#{@slope}"
     end
 
     def validation
