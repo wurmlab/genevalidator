@@ -31,8 +31,8 @@ module GeneValidator
 
     tab_options            = "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue"
 
-    database               = "SwissProt", #'swissprot -remote'
-    threads                = "8" # "1"
+    database               = 'swissprot -remote'
+    threads                = '8'
 
     # Unwanted Output Files 
     prot_xml_out           = "#{prot_blast_xml_file}.out"
