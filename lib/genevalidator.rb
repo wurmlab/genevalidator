@@ -162,7 +162,7 @@ module GeneValidator
     ##
     # Extracts raw sequences of all blast hits
     def extract_raw_sequences_of_blast_hits
-        puts 'Extracting sequences within the BLAST XML from the BLAST database'
+        puts 'Extracting sequences within the BLAST output file from the BLAST database'
         @opt[:raw_sequences] = GetRawSequences.run(@opt)
     end
 
