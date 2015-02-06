@@ -30,7 +30,6 @@ module GeneValidator
     mrna_blast_tab_raw_seq = "#{mrna_input_fasta_file}.blast_tab.raw_seq"
 
     tab_options            = "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue"
-    validations            = %w(lenc lenr frame merge dup orf)
 
     database               = "SwissProt", #'swissprot -remote'
     threads                = "8" # "1"
@@ -54,7 +53,7 @@ module GeneValidator
         FileUtils.rm_rf(prot_output_dir) rescue Error
 
         opts = {
-          validations: validations,
+          validations: %w(lenc lenr frame merge dup orf),
           db: database,
           num_threads: threads,
           fast: false,
@@ -71,7 +70,7 @@ module GeneValidator
         FileUtils.rm_rf(prot_output_dir) rescue Error
 
         opts1 = {
-          validations: validations,
+          validations: %w(lenc lenr frame merge dup orf),
           db: database,
           num_threads: threads,
           fast: false,
@@ -106,7 +105,7 @@ module GeneValidator
         FileUtils.rm_rf(mrna_output_dir) rescue Error
 
         opts = {
-          validations: validations,
+          validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
           fast: false,
@@ -123,7 +122,7 @@ module GeneValidator
         FileUtils.rm_rf(mrna_output_dir) rescue Error
 
         opts1 = {
-          validations: validations,
+          validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
           fast: false,
