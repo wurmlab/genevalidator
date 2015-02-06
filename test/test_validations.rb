@@ -87,7 +87,7 @@ module GeneValidator
 
       it 'should validate gene merge' do
         gmv = validations.select { |v| v.class == GeneMergeValidationOutput }[0]
-        assert_equal(-0.4059, gmv.slope.round(4))
+        assert_equal(-0.4, gmv.slope.round(4))
         assert_equal(false, gmv.unimodality)
         assert_equal(0.4, gmv.threshold_down)
         assert_equal(1.2, gmv.threshold_up)
