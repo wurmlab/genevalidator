@@ -62,6 +62,7 @@ module GeneValidator
       move_to_next_query
       hit_seq
     rescue StopIteration
+      return []
     end
 
     ##
