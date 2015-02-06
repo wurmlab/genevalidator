@@ -30,7 +30,7 @@ module GeneValidator
     mrna_blast_tab_raw_seq = "#{mrna_input_fasta_file}.blast_tab.raw_seq"
 
     tab_options            = "qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue"
-    validations            = ["lenc", "lenr", "frame", "merge", "dup", "orf", "align"]
+    validations            = %w(lenc lenr frame merge dup orf)
 
     database               = "SwissProt", #'swissprot -remote'
     threads                = "8" # "1"
@@ -45,111 +45,108 @@ module GeneValidator
     prot_yaml              = "#{prot_input_fasta_file}.yaml"
     mrna_yaml              = "#{mrna_input_fasta_file}.yaml"
 
-    # TODO: FIXME
-    # THE PROBLEM: Validation_alignment produces different results each time it is run...
-    # find out when this problem was introduced and find a solution...
+    describe 'Protein dataset' do
+      it 'xml and tabular inputs give the same output' do
 
-    # describe 'Protein dataset' do
-    #   it 'xml and tabular inputs give the same output' do
+        original_stdout = $stdout.clone
+        $stdout.reopen(prot_xml_out, 'w')
 
-    #     original_stdout = $stdout.clone
-    #     $stdout.reopen(prot_xml_out, 'w')
+        FileUtils.rm_rf(prot_output_dir) rescue Error
 
-    #     FileUtils.rm_rf(prot_output_dir) rescue Error
+        opts = {
+          validations: validations,
+          db: database,
+          num_threads: threads,
+          fast: false,
+          input_fasta_file: prot_input_fasta_file,
+          blast_xml_file: prot_blast_xml_file,
+          raw_sequences: prot_blast_xml_raw_seq,
+          test: true
+        }
 
-    #     opts = {
-    #       validations: validations,
-    #       db: database,
-    #       num_threads: threads,
-    #       fast: false,
-    #       input_fasta_file: prot_input_fasta_file,
-    #       blast_xml_file: prot_blast_xml_file,
-    #       raw_sequences: prot_blast_xml_raw_seq,
-    #       test: true
-    #     }
+        (GeneValidator::Validation.new(opts, 1, false, false)).run
+        $stdout.reopen original_stdout
+        $stdout.reopen(prot_tab_out, 'w')
 
-    #     (GeneValidator::Validation.new(opts, 1, false, false)).run
-    #     $stdout.reopen original_stdout
-    #     $stdout.reopen(prot_tab_out, 'w')
+        FileUtils.rm_rf(prot_output_dir) rescue Error
 
-    #     FileUtils.rm_rf(prot_output_dir) rescue Error
+        opts1 = {
+          validations: validations,
+          db: database,
+          num_threads: threads,
+          fast: false,
+          input_fasta_file: prot_input_fasta_file,
+          blast_tabular_file: prot_blast_tab_file,
+          blast_tabular_options: tab_options,
+          raw_sequences: prot_blast_tab_raw_seq,
+          test: true
+        }
 
-    #     opts1 = {
-    #       validations: validations,
-    #       db: database,
-    #       num_threads: threads,
-    #       fast: false,
-    #       input_fasta_file: prot_input_fasta_file,
-    #       blast_tabular_file: prot_blast_tab_file,
-    #       blast_tabular_options: tab_options,
-    #       raw_sequences: prot_blast_tab_raw_seq,
-    #       test: true
-    #     }
+        (GeneValidator::Validation.new(opts1, 1, false, false)).run
+        $stdout.reopen original_stdout
 
-    #     (GeneValidator::Validation.new(opts1, 1, false, false)).run
-    #     $stdout.reopen original_stdout
+        diff = FileUtils.compare_file(prot_xml_out, prot_tab_out)
 
-    #     diff = FileUtils.compare_file(prot_xml_out, prot_tab_out)
+        File.delete(prot_xml_out)
+        File.delete(prot_tab_out)
+        File.delete(prot_yaml)
 
-    #     File.delete(prot_xml_out)
-    #     File.delete(prot_tab_out)
-    #     File.delete(prot_input_fasta_file)
-    #     FileUtils.rm_rf(prot_output_dir)
+        FileUtils.rm_rf(prot_output_dir)
 
-    #     assert_equal(true, diff)
-    #   end
-    # end
+        assert_equal(true, diff)
+      end
+    end
 
-    # describe 'mRNA dataset' do
-    #   it 'xml and tabular inputs give the same output' do
+    describe 'mRNA dataset' do
+      it 'xml and tabular inputs give the same output' do
 
-    #     original_stdout = $stdout.clone
-    #     $stdout.reopen(mrna_xml_out, 'w')
+        original_stdout = $stdout.clone
+        $stdout.reopen(mrna_xml_out, 'w')
 
-    #     FileUtils.rm_rf(mrna_output_dir) rescue Error
+        FileUtils.rm_rf(mrna_output_dir) rescue Error
 
-    #     opts = {
-    #       validations: validations,
-    #       db: database,
-    #       num_threads: threads,
-    #       fast: false,
-    #       input_fasta_file: mrna_input_fasta_file,
-    #       blast_xml_file: mrna_blast_xml_file ,
-    #       raw_sequences: mrna_blast_xml_raw_seq,
-    #       test: true
-    #     }
+        opts = {
+          validations: validations,
+          db: database,
+          num_threads: threads,
+          fast: false,
+          input_fasta_file: mrna_input_fasta_file,
+          blast_xml_file: mrna_blast_xml_file ,
+          raw_sequences: mrna_blast_xml_raw_seq,
+          test: true
+        }
 
-    #     (GeneValidator::Validation.new(opts, 1, false, false)).run
-    #     $stdout.reopen original_stdout
-    #     $stdout.reopen(mrna_tab_out, 'w')
+        (GeneValidator::Validation.new(opts, 1, false, false)).run
+        $stdout.reopen original_stdout
+        $stdout.reopen(mrna_tab_out, 'w')
 
-    #     FileUtils.rm_rf(mrna_output_dir) rescue Error
+        FileUtils.rm_rf(mrna_output_dir) rescue Error
 
-    #     opts1 = {
-    #       validations: validations,
-    #       db: database,
-    #       num_threads: threads,
-    #       fast: false,
-    #       input_fasta_file: mrna_input_fasta_file,
-    #       blast_tabular_file: mrna_blast_tab_file,
-    #       blast_tabular_options: tab_options,
-    #       raw_sequences: mrna_blast_tab_raw_seq,
-    #       test: true
-    #     }
+        opts1 = {
+          validations: validations,
+          db: database,
+          num_threads: threads,
+          fast: false,
+          input_fasta_file: mrna_input_fasta_file,
+          blast_tabular_file: mrna_blast_tab_file,
+          blast_tabular_options: tab_options,
+          raw_sequences: mrna_blast_tab_raw_seq,
+          test: true
+        }
 
-    #     (GeneValidator::Validation.new(opts1, 1, false, false)).run
-    #     $stdout.reopen original_stdout
+        (GeneValidator::Validation.new(opts1, 1, false, false)).run
+        $stdout.reopen original_stdout
 
-    #     diff = FileUtils.compare_file(mrna_xml_out, mrna_tab_out)
+        diff = FileUtils.compare_file(mrna_xml_out, mrna_tab_out)
 
-    #     File.delete(mrna_xml_out)
-    #     File.delete(mrna_tab_out)
-    #     File.delete(mrna_yaml)
+        File.delete(mrna_xml_out)
+        File.delete(mrna_tab_out)
+        File.delete(mrna_yaml)
 
-    #     FileUtils.rm_rf(mrna_output_dir)
+        FileUtils.rm_rf(mrna_output_dir)
 
-    #     assert_equal(true, diff)
-    #   end
-    # end
+        assert_equal(true, diff)
+      end
+    end
   end
 end
