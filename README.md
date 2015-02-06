@@ -34,7 +34,7 @@ It is also possible to add your own custom validations to GeneValidator.
 
 ## Installation Requirements
 * Ruby (>= 1.9.3)
-* NCBI BLAST+ (>= 2.2.29+)
+* NCBI BLAST+ (>= 2.2.30+)
 * MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).
 * Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox (download [here](https://www.mozilla.org/en-GB/firefox/new/)).
 
