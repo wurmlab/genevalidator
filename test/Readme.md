@@ -53,11 +53,15 @@ Please see below for a summary of the tests that are currently run.
 * Assert that the OpenReadingFrameValidation class is able to correctly obtain ORF.
 
 ## test_validations.rb
-
-* Assert that the correct number of hits can be derived from the XML file
-* Assert that the length by rank validation is able to function correctly
-* Assert that the blast reading frame validation is able to function correctly
-* Assert that the gene merge validation is able to function correctly
-* Assert that the duplication validation is able to function correctly
-* Assert that the alignment validation is able to function correctly
-* Assert that the open reading frames validation is able to function correctly
+* Assert that a normal query validates normally
+    * Assert that the correct number of hits can be derived from the XML file
+    * Assert that the length by rank validation is able to function correctly
+    * Assert that the blast reading frame validation is able to function correctly
+    * Assert that the gene merge validation is able to function correctly
+    * Assert that the duplication validation is able to function correctly
+    * Assert that the alignment validation is able to function correctly
+    * Assert that the open reading frames validation is able to function correctly
+* Validate a trancated sequence
+* Validate a duplicated sequence
+* Validate a merged sequence
+* Validate a sequence with a frameshift
