@@ -163,17 +163,16 @@ module GeneValidator
       @validation_report.running_time = Time.now - start
       @validation_report
 
-    # Exception is raised when blast founds no hits
-    rescue  NotEnoughHitsError
+    rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header,
                            @header, @description, @approach, @explanation,
                            @conclusion)
     rescue Exception
-      @validation_report.errors.push 'Unexpected Error'
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+      @validation_report.errors.push 'Unexpected Error'
     end
 
     ##

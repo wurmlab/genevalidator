@@ -234,24 +234,23 @@ module GeneValidator
                                                 @description, @explanation,
                                                 @conclusion)
     rescue NoMafftInstallationError
-      @validation_report.errors.push NoMafftInstallationError
       @validation_report = ValidationReport.new('Mafft error', :error,
                                                 @short_header, @header,
                                                 @description, @explanation,
                                                 @conclusion)
+      @validation_report.errors.push NoMafftInstallationError
     rescue NoInternetError
-      @validation_report.errors.push NoInternetError
       @validation_report = ValidationReport.new('Internet error', :error,
                                                 @short_header, @header,
                                                 @description, @explanation,
                                                 @conclusion)
+      @validation_report.errors.push NoInternetError
     rescue Exception
-      @validation_report.errors.push 'Unexpected Error'
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description, @explanation,
                                                 @conclusion)
-      # @validation_report
+      @validation_report.errors.push 'Unexpected Error'
     end
 
     ##

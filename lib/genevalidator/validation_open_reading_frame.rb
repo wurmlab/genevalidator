@@ -106,19 +106,19 @@ module GeneValidator
       @validation_report.running_time = Time.now - start
 
       @validation_report.plot_files.push(plot1)
-      return @validation_report
+      @validation_report
 
-    rescue  NotEnoughHitsError
+    rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
     rescue Exception
-      @validation_report.errors.push 'Unexpected Error'
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+      @validation_report.errors.push 'Unexpected Error'
     end
 
     ##

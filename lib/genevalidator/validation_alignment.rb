@@ -192,7 +192,6 @@ module GeneValidator
       @validation_report.running_time = Time.now - start
       @validation_report
 
-    # Exception is raised when blast founds no hits
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', 
                                                 :warning, @short_header,
@@ -200,28 +199,28 @@ module GeneValidator
                                                 @approach, @explanation,
                                                 @conclusion)
     rescue NoMafftInstallationError
-      @validation_report.errors.push NoMafftInstallationError
       @validation_report = ValidationReport.new('Mafft error', :error,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+      @validation_report.errors.push NoMafftInstallationError
     rescue NoInternetError
-      @validation_report.errors.push NoInternetError
       @validation_report = ValidationReport.new('Internet error', :error,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+      @validation_report.errors.push NoInternetError
     rescue ReadingFrameError
-      @validation_report.errors.push 'Multiple reading frames Error'
       ValidationReport.new('Multiple reading frames',:error, @short_header,
                            @header, @description, @approach, @explanation,
                            @conclusion)
+      @validation_report.errors.push 'Multiple reading frames Error'
     rescue Exception
-      @validation_report.errors.push 'Unexpected Error'
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+      @validation_report.errors.push 'Unexpected Error'
     end
 
     ##
