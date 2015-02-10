@@ -23,10 +23,8 @@ module GeneValidator
     opt = {
       input_fasta_file: filename_fasta,
       validations: ['all'],
-      blast_xml_file: filename_xml,
       db: 'swissprot -remote',
       num_threads: 1,
-      raw_sequences: filename_xml_raw,
       test: true
     }
 
