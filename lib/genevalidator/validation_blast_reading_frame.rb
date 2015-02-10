@@ -26,7 +26,7 @@ module GeneValidator
 
       @approach     = 'We expect the query sequence to encode a single gene,' \
                       ' thus it should contain one main Open Reading Frame' \
-                      ' (ORF). All all BLAST hits are thus expected to align' \
+                      ' (ORF). All BLAST hits are thus expected to align' \
                       ' within this ORF.'
       @explanation  = explain
       @conclusion   = conclude
