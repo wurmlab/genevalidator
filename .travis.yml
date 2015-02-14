@@ -1,6 +1,5 @@
 language: ruby
 rvm:
-  - "1.9.3"
   - "2.0.0"
   - "2.1.3"
   - "2.2.0"
@@ -11,7 +10,6 @@ before_install:
   - ruby -pi -e "gsub(/^PREFIX = \/usr\/local/, 'PREFIX = ~/mafft/')" ~/mafft-7.205-with-extensions/core/Makefile
   - (cd ~/mafft-7.205-with-extensions/core/ && make clean && make && make install)
   - export PATH=$PATH:~/mafft/bin
-  - which mafft
 script: bundle exec rake test
 cache: bundler 
 sudo: false

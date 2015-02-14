@@ -1,142 +1,97 @@
 require 'genevalidator/exceptions'
 require 'csv'
 
-TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :aux1, :aux2)
-
-##
-# This class parses the tabular output of BLAST (outfmt 6)
-class TabularParser
-
-  attr_reader :lines
-  attr_reader :format
-  attr_reader :type
-  attr_reader :column_names
-  attr_reader :query_id_idx
-  attr_reader :hit_id_idx
-
+#
+module GeneValidator
+  TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle,
+                            :ytitle, :aux1, :aux2)
   ##
-  # Initializes the object
-  # +file_content+ : String with the tabular BLAST output
-  # +format+: format of the tabular output (string with column sepatared by space or coma)
-  # +type+: :nucleotide or :mrna
-  def initialize (filename, format, type)
+  # This class parses the tabular output of BLAST (outfmt 6 & 7)
+  class TabularParser
+    attr_reader :rows
+    attr_reader :tab_results
+    attr_reader :column_names
+    attr_reader :type
 
-    file = File.open(filename, "r");
-    @lines = file.each_line
-
-    # skip the comment lines
-    while CSV.parse(@lines.peek, :col_sep => "\t")[0][0].match(/#.*/) != nil
-      @lines.next
+    ##
+    # Initializes the object
+    # +file_content+ : String with the tabular BLAST output
+    # +format+: format of the tabular output (comma/space delimited string)
+    # +type+: :nucleotide or :mrna
+    def initialize (filename, format, type)
+      @column_names = format.gsub(/[-\d]/, '').split(/[ ,]/)
+      @tab_results  = analayse_tabular_file(filename)
+      @rows         = @tab_results.to_enum
+      @type         = type
     end
 
-    if format.nil?
-      @format = "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore"
-    else
-      @format = format.gsub(/[-\d]/,"")
-    end
-
-    @column_names = @format.split(/[ ,]/)
-    @type         = type
-    @query_id_idx = @column_names.index("qseqid")
-    @hit_id_idx   = @column_names.index("sseqid")
-  end
-
-  ##
-  # Jumps to the next query
-  def jump_next
-    # get current query id
-    # search for the endline
-
-    entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-    unless entry.length == @column_names.length
-      raise InconsistentTabularFormat
-    end
-
-    query_id = entry[query_id_idx]
-    while 1
-      entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-      unless query_id == entry[query_id_idx]
-        break;
+    ##
+    #
+    def analayse_tabular_file(filename)
+      tab_results  = []
+      file         = File.read(filename)
+      lines        = CSV.parse(file, col_sep: "\t", skip_lines: /^#/,
+                               headers: @column_names)
+      lines.each do |line|
+        tab_results << line.to_hash
       end
-      @lines.next
+      tab_results
     end
 
-  rescue StopIteration => error
-  end
-
-  def make_hit_list(hits)
-    hit_list = []
-    # for each hit
-    hits.group_by{|hit| hit[@hit_id_idx]}.each do |idx, hit|
-      hit_seq = Sequence.new
-      column_names.each_with_index do |column, i|
-        hit_seq.init_tabular_attribute(column, hit[0][i])
+    ##
+    # move to next query
+    def next
+      current_entry = @rows.peek['qseqid']
+      loop do
+        entry = @rows.peek['qseqid']
+        @rows.next
+        break unless entry == current_entry
       end
-
-      # take all hsps
-      hsps = hits.select{|hit| hit[@hit_id_idx] == idx}
-      # for each hsp fill the Hsp structure
-      hsps.each do |hsp_array|
-        hsp = Hsp.new
-        column_names.each_with_index do |column, i|
-          hsp.init_tabular_attribute(column, hsp_array[i], @type)
-        end
-        hit_seq.hsp_list.push(hsp)
-      end
-      # all the hits are proteins because are obtained with blastx or blastp
-      hit_seq.type = :protein
-      hit_list.push(hit_seq)
+    # rescue StopIteration
     end
-    hit_list
-  end
 
-  # Returns the next query output
-  # +identifier+: +String+, the identifier of the next expected query
-  # if the identifier is nil, it takes the next query
-  # Output:
-  # Array of +Sequence+ objects corresponding to hits
-  def next(identifier = nil)
-    # get current query id
-    # search for the endline
-    begin
-      entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-    rescue StopIteration => error
+    alias move_to_next_query next
+
+    ##
+    #
+    def parse_next(query_id = nil)
+      current_id = @rows.peek['qseqid']
+      return [] if query_id != nil && current_id != query_id
+      hits = @tab_results.partition { |h| h['qseqid'] == current_id }[0]
+      hit_seq = initialise_classes(hits)
+      move_to_next_query
+      hit_seq
+    rescue StopIteration
       return []
     end
 
-    unless entry.length == @column_names.length
-      raise InconsistentTabularFormat
-    end
+    ##
+    #
+    def initialise_classes(hits)
+      hit_list = []
+      grouped_hits = hits.group_by{|row| row['sseqid']}
 
-    query_id = entry[query_id_idx]
-    return [] if (identifier != nil and query_id != identifier)
+      grouped_hits.each do |query_id, row|
+        hit_seq = Sequence.new
+        hit_seq.init_tabular_attribute(row[0])
 
-    hits = []
-
-    begin
-      while 1
-        entry = CSV.parse(@lines.peek, :col_sep => "\t")[0]
-        unless query_id == entry[query_id_idx]
-          return make_hit_list(hits)
-        end
-
-        hits << entry
-        @lines.next
+        initialise_all_hsps(query_id, hits, hit_seq)
+        
+        hit_seq.type = :protein
+        hit_list.push(hit_seq)
       end
-    rescue StopIteration => error
-      return make_hit_list(hits)
+      hit_list
     end
 
-    return make_hit_list(this)
-
-  rescue InconsistentTabularFormat => error
-    puts error.backtrace
-    $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "<<
-      "Possible cause: The tabular file and the tabular header do not correspond. "<<
-      "Please provide -tabular argument with the correct format of the columns\n"
-    exit 1
-  rescue Exception => error
-    $stderr.print "Tabular format error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-    exit 1
+    ##
+    #
+    def initialise_all_hsps(current_query_id, hits, hit_seq)
+      hsps = hits.select{|row| row['sseqid'] == current_query_id}
+      hsps.each do |row|
+        hsp = Hsp.new
+        hsp.init_tabular_attribute(row, type)
+        hit_seq.hsp_list.push(hsp)
+      end
+    end
   end
 end
