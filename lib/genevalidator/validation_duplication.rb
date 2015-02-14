@@ -1,6 +1,6 @@
 require 'genevalidator/validation_report'
 require 'genevalidator/exceptions'
-require 'genevalidator/enumerable'
+require 'genevalidator/ext/array'
 module GeneValidator
   ##
   # Class that stores the validation output information
@@ -61,7 +61,7 @@ module GeneValidator
     def prettify_evalue(evalue)
       evalue.to_s.sub(/(\d*\.\d*)e?([+-]\d*)?/) do
         s = format('%.3f', Regexp.last_match[1])
-        s << " x 10<sup>#{Regexp.last_match[2]}</sup" if Regexp.last_match[2]
+        s << " x 10<sup>#{Regexp.last_match[2]}</sup>" if Regexp.last_match[2]
         s
       end
     end
@@ -261,11 +261,8 @@ module GeneValidator
       wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale,
                                                      Array.new(averages.length,
                                                                1).to_scale)
-      if averages.length < 15
-        return wilcox.probability_exact
-      else
-        return wilcox.probability_z
-      end
+
+      (averages.length < 15) ? wilcox.probability_exact : wilcox.probability_z
     end
 
     ##

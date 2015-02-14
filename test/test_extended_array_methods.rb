@@ -1,11 +1,10 @@
 require_relative 'test_helper'
-require 'genevalidator/enumerable'
+require 'genevalidator/ext/array'
 require 'minitest/autorun'
 module GeneValidator
   class TestEnumerable < Minitest::Test
-    include Enumerable
 
-    describe 'Enumerable Module' do
+    describe 'Array Class' do
       it 'test1' do
         v = [1, 2, 3, 4, 5, 6]
         assert_equal(3.5, v.mean)

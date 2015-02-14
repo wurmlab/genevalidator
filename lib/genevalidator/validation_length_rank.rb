@@ -1,7 +1,7 @@
 require 'genevalidator/validation_report'
 require 'genevalidator/validation_test'
 require 'genevalidator/exceptions'
-require 'genevalidator/enumerable'
+require 'genevalidator/ext/array'
 module GeneValidator
   ##
   # Class that stores the validation output information
@@ -77,7 +77,6 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by ranking the hit lengths
   class LengthRankValidation < ValidationTest
-    include Enumerable
 
     THRESHOLD = 20
     ##

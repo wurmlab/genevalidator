@@ -1,6 +1,6 @@
 require 'json'
 require 'genevalidator/validation_report'
-require 'genevalidator/enumerable'
+require 'genevalidator/ext/array'
 module GeneValidator
   ##
   # Class that stores the validation output information
@@ -80,7 +80,6 @@ module GeneValidator
   # checking whether there is evidence that the
   # prediction is a merge of multiple genes
   class GeneMergeValidation < ValidationTest
-    include Enumerable
 
     attr_reader :hits
     attr_reader :prediction

@@ -1,6 +1,6 @@
-  # module GeneValidator
-  # extention of the enumerable module (i.e new methods fo vectors)
-  module Enumerable
+module GeneValidator
+  # extention of the Array Class (i.e new methods for vectors)
+  module ExtraArrayMethods
     def sum
       inject(0) { |accum, i| accum + i }
     end
@@ -30,9 +30,8 @@
       Math.sqrt(sample_variance)
     end
   end
-  # end
+end
 
-  # module Enumerable
-  #   include GeneValidator::Enumerable
-  # end
-# end
+class Array
+  include GeneValidator::ExtraArrayMethods
+end
