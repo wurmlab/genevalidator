@@ -8,21 +8,33 @@ module GeneValidator
     class << self
       def validate_args(opt)
         @opt = opt
+        assert_validations
         assert_file_present('input file', opt[:input_fasta_file])
         assert_input_file_probably_fasta
         assert_input_contains_single_type_sequence
         assert_output_dir_does_not_exist
-        
-        if @opt[:blast_xml_file] || @opt[:blast_tabular_file]
-          assert_BLAST_output_files
-        end
+        assert_BLAST_output_files
+
         Blast.validate(opt) unless @opt[:test]
         Mafft.assert_mafft_installation(opt)
-      end
+        @opt
+      end 
 
       private
 
+      def assert_validations 
+        unless @opt[:validations]
+          @opt[:validations] = %w(lenc lenr frame merge dup orf align)
+        end
+        @opt[:validations]      = opt[:validations].collect { |v| v.strip}
+        if @opt[:validations].map { |v| v.strip.downcase }.include? 'all'
+          @opt[:validations]    = %w(lenc lenr frame merge dup orf align)
+        end
+      end
+
       def assert_BLAST_output_files
+        return unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
+
         if @opt[:blast_xml_file]
           assert_file_present('BLAST XML file', @opt[:blast_xml_file])
         elsif @opt[:blast_tabular_file]

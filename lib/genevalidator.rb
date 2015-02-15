@@ -68,15 +68,8 @@ module GeneValidator
     # +overall_evaluation+: boolean variable for printing overall evaluation
     # +multithreading+: boolean variable for enabling multithreading
     def initialize(opt, start_idx = 1, overall_evaluation = true, multithreading = true)
-      @opt                    = opt
-
-      @opt[:validations]      = opt[:validations].map { |v| v.gsub(/^\s/, '').gsub(/\s\Z/, '').split(/\s/) }.flatten
-      if @opt[:validations].map { |v| v.strip.downcase }.include? 'all'
-        @opt[:validations]    = %w(lenc lenr frame merge dup orf align)
-      end
-
       # Validate opts
-      GVArgValidation.validate_args(@opt)
+      @opt = GVArgValidation.validate_args(opt)
       
       puts "\nDepending on your input and your computational resources, this"\
        ' may take a while. Please wait...'
