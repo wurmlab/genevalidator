@@ -26,9 +26,9 @@ module GeneValidator
         unless @opt[:validations]
           @opt[:validations] = %w(lenc lenr frame merge dup orf align)
         end
-        @opt[:validations]      = opt[:validations].collect { |v| v.strip}
+        @opt[:validations]   = @opt[:validations].collect { |v| v.strip}
         if @opt[:validations].map { |v| v.strip.downcase }.include? 'all'
-          @opt[:validations]    = %w(lenc lenr frame merge dup orf align)
+          @opt[:validations] = %w(lenc lenr frame merge dup orf align)
         end
       end
 
