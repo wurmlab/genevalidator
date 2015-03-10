@@ -413,6 +413,32 @@ module GeneValidator
       fail NoValidationError if query_output.validations.length == 0
 
       # compute validation score
+      compute_scores(query_output)
+      query_output
+
+    rescue ValidationClassError => error
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+         "Possible cause: type of one of the validations is not ValidationTest\n"
+      exit 1
+    rescue NoValidationError => error
+      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+         "Possible cause: your -v arguments are not valid aliases\n"
+      exit 1
+    rescue ReportClassError => error
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+        "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
+      exit 1
+    rescue AliasDuplicationError => error
+      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+        "Possible cause: At least two validations have the same CLI alias\n"
+      exit 1
+    rescue Exception => error
+      puts error.backtrace
+      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
+      exit 1
+    end
+
+    def compute_scores(query_output)
       validations = query_output.validations
       successes = validations.map { |v| v.result == v.expected }.count(true)
 
@@ -439,29 +465,6 @@ module GeneValidator
       query_output.successes = successes
       query_output.fails = fails
       query_output.overall_score = (successes * 100 / (successes + fails + 0.0)).round(0)
-
-      query_output
-
-    rescue ValidationClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-         "Possible cause: type of one of the validations is not ValidationTest\n"
-      exit 1
-    rescue NoValidationError => error
-      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-         "Possible cause: your -v arguments are not valid aliases\n"
-      exit 1
-    rescue ReportClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-        "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
-      exit 1
-    rescue AliasDuplicationError => error
-      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-        "Possible cause: At least two validations have the same CLI alias\n"
-      exit 1
-    rescue Exception => error
-      puts error.backtrace
-      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-      exit 1
     end
   end
 end
