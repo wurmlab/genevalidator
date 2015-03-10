@@ -11,7 +11,7 @@ module GeneValidator
     attr_reader :result
 
     def initialize(short_header, header, description, pvalue, averages,
-                   threshold = 0.05, expected = :no)
+                   threshold = 0.05, expected = :yes)
       @short_header, @header, @description = short_header, header, description
       @pvalue      = pvalue
       @threshold   = threshold
