@@ -432,10 +432,6 @@ module GeneValidator
       $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
         "Possible cause: At least two validations have the same CLI alias\n"
       exit 1
-    rescue Exception => error
-      puts error.backtrace
-      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-      exit 1
     end
 
     def compute_scores(query_output)
