@@ -393,6 +393,8 @@ module GeneValidator
       validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path)
       validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @opt[:raw_sequences], @raw_seq_file_index, @raw_seq_file_load, @opt[:db], @opt[:num_threads])
 
+      validations = validations.select { |v| @opt[:validations].include? v.cli_name.downcase }
+
       # check the class type of the elements in the list
       validations.each do |v|
         fail ValidationClassError unless v.is_a? ValidationTest
@@ -402,12 +404,11 @@ module GeneValidator
       aliases = validations.map(&:cli_name)
       fail AliasDuplicationError unless aliases.length == aliases.uniq.length
 
-      desired_validations = validations.select { |v| @opt[:validations].map { |vv| vv.strip.downcase }.include? v.cli_name.downcase }
-      desired_validations.each do |v|
+      validations.each do |v|
         v.run
         fail ReportClassError unless v.validation_report.is_a? ValidationReport
       end
-      query_output.validations = desired_validations.map(&:validation_report)
+      query_output.validations = validations.map(&:validation_report)
 
       fail NoValidationError if query_output.validations.length == 0
 
