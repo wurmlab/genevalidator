@@ -107,7 +107,7 @@ module GeneValidator
             assert_blast_installed
             assert_blast_compatible
           else
-            export_bin_dir(@opt[:blast_bin])
+            export_bin_dir
           end
         end
 
