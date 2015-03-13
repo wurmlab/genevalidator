@@ -18,7 +18,7 @@ module GeneValidator
         Blast.validate(opt) unless @opt[:test]
         Mafft.assert_mafft_installation(opt)
         @opt
-      end 
+      end
 
       private
 
@@ -40,7 +40,7 @@ module GeneValidator
           assert_file_present('BLAST tabular file', @opt[:blast_tabular_file])
           assert_tabular_options_exists
         end
-      end 
+      end
 
       def assert_output_dir_does_not_exist
         output_dir = "#{@opt[:input_fasta_file]}.html"
