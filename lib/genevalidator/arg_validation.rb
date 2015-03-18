@@ -18,18 +18,17 @@ module GeneValidator
         Blast.validate(opt) unless @opt[:test]
         Mafft.assert_mafft_installation(opt)
         @opt
-      end 
+      end
 
       private
 
-      def assert_validations 
-        unless @opt[:validations]
-          @opt[:validations] = %w(lenc lenr frame merge dup orf align)
+      def assert_validations
+        validations = %w(lenc lenr frame merge dup orf align)
+        if @opt[:validations]
+          val = @opt[:validations].collect { |v| v.strip.downcase }
+          validations = val unless val.include? 'all'
         end
-        @opt[:validations]   = @opt[:validations].collect { |v| v.strip}
-        if @opt[:validations].map { |v| v.strip.downcase }.include? 'all'
-          @opt[:validations] = %w(lenc lenr frame merge dup orf align)
-        end
+        @opt[:validations] = validations
       end
 
       def assert_BLAST_output_files
@@ -41,7 +40,7 @@ module GeneValidator
           assert_file_present('BLAST tabular file', @opt[:blast_tabular_file])
           assert_tabular_options_exists
         end
-      end 
+      end
 
       def assert_output_dir_does_not_exist
         output_dir = "#{@opt[:input_fasta_file]}.html"
@@ -108,7 +107,7 @@ module GeneValidator
             assert_blast_installed
             assert_blast_compatible
           else
-            export_bin_dir(blast_bin_dir)
+            export_bin_dir
           end
         end
 

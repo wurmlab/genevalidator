@@ -76,6 +76,12 @@ BANNER
     opt[:fast] = true
   end
 
+  opts.on('-r', '--raw_sequences [raw_seq]',
+          'Supply a fasta file of the raw sequences of all BLAST hits present', 
+          'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
+    opt[:raw_sequences] = raw_seq
+  end
+  
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
           'Path to MAFFT bin folder (is added to $PATH variable)') do |mafft|
     opt[:mafft_bin] = mafft
@@ -101,7 +107,7 @@ begin
   opt_parser.parse!(ARGV)
   if ARGV.length > 1
     $stderr.puts 'Error: you must specify a single fasta input file instead' \
-                 ' of ' + ARGV.length + ".\n"
+                 ' of ' + ARGV.length.to_s + ".\n"
     exit 1
   elsif ARGV.length == 0
     puts opt_parser

@@ -393,6 +393,8 @@ module GeneValidator
       validations.push OpenReadingFrameValidation.new(@type, prediction, hits, plot_path)
       validations.push AlignmentValidation.new(@type, prediction, hits, plot_path, @opt[:raw_sequences], @raw_seq_file_index, @raw_seq_file_load, @opt[:db], @opt[:num_threads])
 
+      validations = validations.select { |v| @opt[:validations].include? v.cli_name.downcase }
+
       # check the class type of the elements in the list
       validations.each do |v|
         fail ValidationClassError unless v.is_a? ValidationTest
@@ -402,16 +404,37 @@ module GeneValidator
       aliases = validations.map(&:cli_name)
       fail AliasDuplicationError unless aliases.length == aliases.uniq.length
 
-      desired_validations = validations.select { |v| @opt[:validations].map { |vv| vv.strip.downcase }.include? v.cli_name.downcase }
-      desired_validations.each do |v|
+      validations.each do |v|
         v.run
         fail ReportClassError unless v.validation_report.is_a? ValidationReport
       end
-      query_output.validations = desired_validations.map(&:validation_report)
+      query_output.validations = validations.map(&:validation_report)
 
       fail NoValidationError if query_output.validations.length == 0
 
       # compute validation score
+      compute_scores(query_output)
+      query_output
+
+    rescue ValidationClassError => error
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+         "Possible cause: type of one of the validations is not ValidationTest\n"
+      exit 1
+    rescue NoValidationError => error
+      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+         "Possible cause: your -v arguments are not valid aliases\n"
+      exit 1
+    rescue ReportClassError => error
+      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+        "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
+      exit 1
+    rescue AliasDuplicationError => error
+      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
+        "Possible cause: At least two validations have the same CLI alias\n"
+      exit 1
+    end
+
+    def compute_scores(query_output)
       validations = query_output.validations
       successes = validations.map { |v| v.result == v.expected }.count(true)
 
@@ -438,29 +461,6 @@ module GeneValidator
       query_output.successes = successes
       query_output.fails = fails
       query_output.overall_score = (successes * 100 / (successes + fails + 0.0)).round(0)
-
-      query_output
-
-    rescue ValidationClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-         "Possible cause: type of one of the validations is not ValidationTest\n"
-      exit 1
-    rescue NoValidationError => error
-      $stderr.print "Validation error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-         "Possible cause: your -v arguments are not valid aliases\n"
-      exit 1
-    rescue ReportClassError => error
-      $stderr.print "Class Type error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-        "Possible cause: type of one of the validation reports returned by the 'run' method is not ValidationReport\n"
-      exit 1
-    rescue AliasDuplicationError => error
-      $stderr.print "Alias Duplication error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}. "\
-        "Possible cause: At least two validations have the same CLI alias\n"
-      exit 1
-    rescue Exception => error
-      puts error.backtrace
-      $stderr.print "Error at #{error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]}.\n"
-      exit 1
     end
   end
 end
