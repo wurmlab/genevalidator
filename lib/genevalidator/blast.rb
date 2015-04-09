@@ -23,19 +23,14 @@ module GeneValidator
       # +query+: String containing the the query in fasta format
       # +db+: database
       # +num_threads+: The number of threads to run BLAST with.
-      # +gapopen+: gapopen blast parameter
-      # +gapextend+: gapextend blast parameter
-      # +nr_hits+: max number of hits
       # Output:
       # String with the blast xml output
-      def call_blast_from_stdin(blast_type, query, db, num_threads,
-                                gapopen = 11, gapextend = 1, nr_hits = 200)
+      def call_blast_from_stdin(blast_type, query, db, num_threads)
         # -num_threads is not supported on remote databases
         threads = (db !~ /remote/) ? "-num_threads #{num_threads}" : ''
 
         blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" \
-                   " -max_target_seqs #{nr_hits} -gapopen #{gapopen}" \
-                   " -gapextend #{gapextend} #{threads}"
+                   "#{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
         `#{cmd} 2>/dev/null`
@@ -51,7 +46,7 @@ module GeneValidator
       # +nr_hits+: max number of hits
       # Output:
       # XML file
-      def run_blast_on_file(opt, gapopen = 11, gapextend = 1, nr_hits = 200)
+      def run_blast_on_file(opt)
         seq_type   = guess_sequence_type_from_file(opt[:input_fasta_file])
         blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
@@ -59,8 +54,7 @@ module GeneValidator
 
         blastcmd = "#{blast_type} -query '#{opt[:input_fasta_file]}'" \
                    " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]} " \
-                   " -evalue #{EVALUE} -outfmt 5 -max_target_seqs #{nr_hits}" \
-                   " -gapopen #{gapopen} -gapextend #{gapextend} #{threads}"
+                   " -evalue #{EVALUE} #{threads}"
 
         return `#{blastcmd}` unless File.zero?(opt[:blast_xml_file])
         puts 'Blast failed to run on the input file. Please ensure that the'
