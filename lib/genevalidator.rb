@@ -67,7 +67,7 @@ module GeneValidator
     # +start_idx+: number of the sequence from the file to start with
     # +overall_evaluation+: boolean variable for printing overall evaluation
     # +multithreading+: boolean variable for enabling multithreading
-    def initialize(opt, start_idx = 1, overall_evaluation = true, multithreading = true)
+    def initialize(opt, start_idx = 1, overall_evaluation = true, multithreading = false)
       # Validate opts
       @opt = GVArgValidation.validate_args(opt)
       
