@@ -18,7 +18,7 @@ module GeneValidator
     # +file_content+ : String with the tabular BLAST output
     # +format+: format of the tabular output (comma/space delimited string)
     # +type+: :nucleotide or :mrna
-    def initialize (filename, format, type)
+    def initialize(filename, format, type)
       @column_names = format.gsub(/[-\d]/, '').split(/[ ,]/)
       @tab_results  = analayse_tabular_file(filename)
       @rows         = @tab_results.to_enum
@@ -47,7 +47,7 @@ module GeneValidator
         @rows.next
         break unless entry == current_entry
       end
-    # rescue StopIteration
+      # rescue StopIteration
     end
 
     alias move_to_next_query next
@@ -56,7 +56,7 @@ module GeneValidator
     #
     def parse_next(query_id = nil)
       current_id = @rows.peek['qseqid']
-      return [] if query_id != nil && current_id != query_id
+      return [] if !query_id.nil? && current_id != query_id
       hits = @tab_results.partition { |h| h['qseqid'] == current_id }[0]
       hit_seq = initialise_classes(hits)
       move_to_next_query
@@ -69,14 +69,14 @@ module GeneValidator
     #
     def initialise_classes(hits)
       hit_list = []
-      grouped_hits = hits.group_by{|row| row['sseqid']}
+      grouped_hits = hits.group_by{ |row| row['sseqid'] }
 
       grouped_hits.each do |query_id, row|
         hit_seq = Sequence.new
         hit_seq.init_tabular_attribute(row[0])
 
         initialise_all_hsps(query_id, hits, hit_seq)
-        
+
         hit_seq.type = :protein
         hit_list.push(hit_seq)
       end
@@ -86,7 +86,7 @@ module GeneValidator
     ##
     #
     def initialise_all_hsps(current_query_id, hits, hit_seq)
-      hsps = hits.select{|row| row['sseqid'] == current_query_id}
+      hsps = hits.select{ |row| row['sseqid'] == current_query_id }
       hsps.each do |row|
         hsp = Hsp.new
         hsp.init_tabular_attribute(row, type)

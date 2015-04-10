@@ -11,14 +11,18 @@ module GeneValidator
     attr_reader :unimodality
     attr_reader :result
 
+    # These thresholds are emperically chosen.
+    UPPER_THRESHOLD = 1.2 # radians
+    LOWER_THRESHOLD = 0.4 # radians
+
     def initialize(short_header, header, description, slope, unimodality,
-                   threshold_down = 0.4, threshold_up = 1.2, expected = :no)
+                   expected = :no)
       @short_header, @header, @description = short_header, header, description
       @slope          = slope.round(1)
       @slope          = @slope.abs if @slope == -0.0
       @unimodality    = unimodality
-      @threshold_down = threshold_down
-      @threshold_up   = threshold_up
+      @threshold_down = LOWER_THRESHOLD
+      @threshold_up   = UPPER_THRESHOLD
       @result         = validation
       @expected       = expected
       @plot_files     = []
@@ -74,13 +78,11 @@ module GeneValidator
     end
   end
 
-
   ##
   # This class contains the methods necessary for
   # checking whether there is evidence that the
   # prediction is a merge of multiple genes
   class GeneMergeValidation < ValidationTest
-
     attr_reader :hits
     attr_reader :prediction
     attr_reader :filename
@@ -114,26 +116,24 @@ module GeneValidator
 
       start = Time.now
 
-      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-                                       hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
-      xx_0 = pairs.map{|pair| pair.x}
-      yy_0 = pairs.map{|pair| pair.y}
+      pairs = hits.map { |hit| Pair.new(hit.hsp_list.map{ |hsp| hsp.match_query_from }.min,
+                                        hit.hsp_list.map{ |hsp| hsp.match_query_to }.max) }
+      xx_0 = pairs.map{ |pair| pair.x }
+      yy_0 = pairs.map{ |pair| pair.y }
 
       # minimum start shoud be at 'boundary' residues
-      xx = xx_0.map do |x|
-        x = (x < @boundary) ? @boundary : x
-      end
+      xx = xx_0.map { |x| (x < @boundary) ? @boundary : x }
 
       # maximum end should be at length - 'boundary' residues
       yy = yy_0.map do |y|
         if y > @prediction.raw_sequence.length - @boundary
-          y = @prediction.raw_sequence.length - @boundary
+          @prediction.raw_sequence.length - @boundary
         else
-          y = y
+          y
         end
       end
 
-      line_slope = slope(xx, yy, (1..hits.length).map{|x| 1 / (x + 0.0)})
+      line_slope = slope(xx, yy, (1..hits.length).map{ |x| 1 / (x + 0.0) })
       ## YW - what is this weighting?
 
       unimodality = false
@@ -146,14 +146,13 @@ module GeneValidator
 
       y_intercept = line_slope[0]
 
-
       @validation_report = GeneMergeValidationOutput.new(@short_header, @header,
                                                          @description, lm_slope,
                                                          unimodality)
-      unless unimodality
-        plot1 = plot_2d_start_from(lm_slope, y_intercept)
-      else
+      if unimodality
         plot1 = plot_2d_start_from
+      else
+        plot1 = plot_2d_start_from(lm_slope, y_intercept)
       end
 
       @validation_report.plot_files.push(plot1)
@@ -166,13 +165,7 @@ module GeneValidator
       @validation_report = ValidationReport.new('Not enough evidence', :warning, @short_header,
                            @header, @description, @approach, @explanation,
                            @conclusion)
-    rescue Exception
-      @validation_report = ValidationReport.new('Unexpected error', :error,
-                                                @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
-      @validation_report.errors.push 'Unexpected Error'
-    end
+     end
 
     ##
     # Generates a json file containing data used for
@@ -181,36 +174,36 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     # +prediction+: Sequence objects
-    def plot_matched_regions(output = "#{filename}_match.json", 
+    def plot_matched_regions(output = "#{filename}_match.json",
                              hits = @hits, prediction = @prediction)
 
       colors   = ['orange', 'blue']  ##{colors[i%2]
-      f        = File.open(output , 'w')
+      f        = File.open(output, 'w')
       no_lines = hits.length
 
-      hits_less = hits[0..[no_lines, hits.length-1].min]
+      hits_less = hits[0..[no_lines, hits.length - 1].min]
 
       f.write((hits_less.each_with_index.map { |hit, i|
-        { 'y' => i, 
-          'start' => hit.hsp_list.map { |hsp| hsp.match_query_from}.min,
-          'stop' => hit.hsp_list.map { |hsp| hsp.match_query_to}.max,
+        { 'y' => i,
+          'start' => hit.hsp_list.map { |hsp| hsp.match_query_from }.min,
+          'stop' => hit.hsp_list.map { |hsp| hsp.match_query_to }.max,
           'color'=>'black',
           'dotted'=>'true'}}.flatten +
-        hits_less.each_with_index.map { |hit, i| 
+        hits_less.each_with_index.map { |hit, i|
           hit.hsp_list.map { |hsp|
             { 'y' => i,
               'start' => hsp.match_query_from,
               'stop' => hsp.match_query_to,
-              'color' => 'orange'}}}.flatten).to_json)
+              'color' => 'orange'} } }.flatten).to_json)
       f.close
 
-      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
-                       :lines,
-                       "Gene Merge Validation: Query coord covered by blast hit (1 line/hit)",
-                       "",
-                       "Offset in Prediction",
-                       "Hit Number",
-                       hits_less.length)
+      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+               :lines,
+               'Gene Merge Validation: Query coord covered by blast hit (1 line/hit)',
+               '',
+               'Offset in Prediction',
+               'Hit Number',
+               hits_less.length)
     end
 
     ##
@@ -222,56 +215,58 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     def plot_2d_start_from(slope = nil, y_intercept = nil, output = "#{filename}_match_2d.json", hits = @hits)
+      pairs = hits.map do |hit|
+        Pair.new(hit.hsp_list.map { |hsp| hsp.match_query_from }.min,
+                 hit.hsp_list.map { |hsp| hsp.match_query_to }.max)
+      end
 
-      pairs = hits.map {|hit| Pair.new(hit.hsp_list.map{|hsp| hsp.match_query_from}.min, hit.hsp_list.map{|hsp| hsp.match_query_to}.max)}
+      xx = pairs.map{ |pair| pair.x }
+      yy = pairs.map{ |pair| pair.y }
 
-      xx = pairs.map{|pair| pair.x}
-      yy = pairs.map{|pair| pair.y}
-
-      freq_x = xx.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+      freq_x = xx.inject(Hash.new(0)) { |h, v| h[v] += 1; h }
       filename_x = "#{filename}_merge_x.json"
-      f = File.open(filename_x, "w")
-      f.write([freq_x.collect{|k,v|
-          {"key"=>k, "value"=>v, "main"=>(1==2)}
+      f = File.open(filename_x, 'w')
+      f.write([freq_x.collect { |k,v|
+          { 'key': k, 'value': v, 'main': (1==2) }
         }].to_json)
       f.close
-      plot3 = Plot.new(filename_x.scan(/\/([^\/]+)$/)[0][0],
-              :simplebars,
-              "[Gene Merge] X projection",
-              "",
-              "x projection",
-              "number of sequences")
+      plot3 = Plot.new(filename_x.scan(%r{([^/]+)$})[0][0],
+                       :simplebars,
+                       '[Gene Merge] X projection',
+                       '',
+                       'x projection',
+                       'number of sequences')
 #       @validation_report.plot_files.push(plot3)
 
       freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
       filename_y = "#{filename}_merge_y.json"
-      f = File.open(filename_y, "w")
-      f.write([freq_y.collect{|k,v|
-          {"key"=>k, "value"=>v, "main"=>(1==2)}
+      f = File.open(filename_y, 'w')
+      f.write([freq_y.collect { |k, v|
+          { 'key' => k, 'value' => v, 'main' => (1==2) }
         }].to_json)
       f.close
-      plot4 = Plot.new(filename_y.scan(/\/([^\/]+)$/)[0][0],
-              :simplebars,
-              "[Gene Merge] Y projection",
-              "",
-              "y projection",
-              "number of sequences")
+      plot4 = Plot.new(filename_y.scan(%r{([^/]+)$})[0][0],
+                       :simplebars,
+                       '[Gene Merge] Y projection',
+                       '',
+                       'y projection',
+                       'number of sequences')
 #       @validation_report.plot_files.push(plot4)
 
-      f = File.open(output , "w")
-      f.write(hits.map{ |hit| {"x"=>hit.hsp_list.map{|hsp| hsp.match_query_from}.min,
-                              "y"=>hit.hsp_list.map{|hsp| hsp.match_query_to}.max,
-                              "color"=>"red"}}.to_json)
+      f = File.open(output, 'w')
+      f.write(hits.map { |hit| {'x' => hit.hsp_list.map{ |hsp| hsp.match_query_from }.min,
+                                'y' => hit.hsp_list.map{ |hsp| hsp.match_query_to }.max,
+                                'color' => 'red'}}.to_json)
       f.close
 
-      return Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
-                                  :scatter,
-                                  "Gene Merge Validation: Start/end of matching hit coord. on query (1 point/hit)",
-                                  "",
-                                  "Start Offset (most left hsp)",
-                                  "End Offset (most right hsp)",
-                                   y_intercept,
-                                   slope)
+      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+               :scatter,
+               'Gene Merge Validation: Start/end of matching hit coord. on query (1 point/hit)',
+               '',
+               'Start Offset (most left hsp)',
+               'End Offset (most right hsp)',
+                y_intercept,
+                slope)
     end
 
 

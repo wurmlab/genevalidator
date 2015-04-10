@@ -87,7 +87,6 @@ module GeneValidator
         return @validation_report
       end
 
-      fail NotEnoughHitsError unless hits.length >= 5
       fail Exception unless prediction.is_a?(Sequence) &&
                             hits[0].is_a?(Sequence)
 
@@ -108,11 +107,6 @@ module GeneValidator
       @validation_report.plot_files.push(plot1)
       @validation_report
 
-    rescue NotEnoughHitsError
-      @validation_report = ValidationReport.new('Not enough evidence', :warning,
-                                                @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
@@ -188,7 +182,7 @@ module GeneValidator
       f.write((results).to_json)
       f.close
 
-      Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+      Plot.new(output.scan(%r{([^/]+)$})[0][0],
                :lines,
                'Open Reading Frames in all 6 Frames',
                'Open Reading Frame (Minimimum Length: 30 amino acids),red',

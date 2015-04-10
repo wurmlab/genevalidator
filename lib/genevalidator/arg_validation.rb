@@ -8,12 +8,15 @@ module GeneValidator
     class << self
       def validate_args(opt)
         @opt = opt
-        assert_validations
+        assert_output_dir_does_not_exist
         assert_file_present('input file', opt[:input_fasta_file])
         assert_input_file_probably_fasta
         assert_input_contains_single_type_sequence
         assert_output_dir_does_not_exist
         assert_BLAST_output_files
+
+        assert_validations_arg
+        check_num_threads
 
         Blast.validate(opt) unless @opt[:test]
         Mafft.assert_mafft_installation(opt)
@@ -22,7 +25,7 @@ module GeneValidator
 
       private
 
-      def assert_validations
+      def assert_validations_arg
         validations = %w(lenc lenr frame merge dup orf align)
         if @opt[:validations]
           val = @opt[:validations].collect { |v| v.strip.downcase }
@@ -31,9 +34,18 @@ module GeneValidator
         @opt[:validations] = validations
       end
 
+      def check_num_threads
+        @opt[:num_threads] = Integer(@opt[:num_threads])
+        unless @opt[:num_threads] > 0
+          puts 'Number of threads can not be lower than 0'
+        end
+        if @opt[:num_threads] > 256
+          puts "Number of threads set at #{@opt[:num_threads]} is unusually high."
+        end
+      end
+
       def assert_BLAST_output_files
         return unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
-
         if @opt[:blast_xml_file]
           assert_file_present('BLAST XML file', @opt[:blast_xml_file])
         elsif @opt[:blast_tabular_file]

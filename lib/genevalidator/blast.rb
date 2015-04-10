@@ -25,7 +25,7 @@ module GeneValidator
       # +num_threads+: The number of threads to run BLAST with.
       # Output:
       # String with the blast xml output
-      def call_blast_from_stdin(blast_type, query, db, num_threads)
+      def run_blast(blast_type, query, db, num_threads)
         # -num_threads is not supported on remote databases
         threads = (db !~ /remote/) ? "-num_threads #{num_threads}" : ''
 
@@ -54,9 +54,10 @@ module GeneValidator
 
         blastcmd = "#{blast_type} -query '#{opt[:input_fasta_file]}'" \
                    " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]} " \
-                   " -evalue #{EVALUE} #{threads}"
+                   " -evalue #{EVALUE} -outfmt 5 #{threads}"
 
-        return `#{blastcmd}` unless File.zero?(opt[:blast_xml_file])
+        `#{blastcmd}`
+        return unless File.zero?(opt[:blast_xml_file])
         puts 'Blast failed to run on the input file. Please ensure that the'
         puts 'BLAST database exists and try again'
         exit 1
@@ -69,7 +70,7 @@ module GeneValidator
       # +type+: the type of the sequence: :nucleotide or :protein
       # Outputs:
       # Array of +Sequence+ objects corresponding to the list of hits
-      def parse_next_query_xml(iterator, type)
+      def parse_next(iterator, type)
         fail TypeError unless iterator.is_a? Enumerator
 
         hits = []
@@ -77,8 +78,7 @@ module GeneValidator
 
         # parse blast the xml output and get the hits
         # hits obtained are proteins! (we use only blastp and blastx)
-        iter.each do | hit |
-
+        iter.each do |hit|
           seq = Sequence.new
 
           seq.length_protein = hit.len.to_i

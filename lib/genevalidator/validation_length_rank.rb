@@ -77,14 +77,13 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by ranking the hit lengths
   class LengthRankValidation < ValidationTest
-
     THRESHOLD = 20
     ##
     # Initializes the object
     # Params:
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +prediction+: a +Sequence+ object representing the blast query
-    # +threshold+: threshold below which the prediction length rank is 
+    # +threshold+: threshold below which the prediction length rank is
     # considered to be inadequate
     def initialize(type, prediction, hits)
       super
@@ -96,8 +95,8 @@ module GeneValidator
     end
 
     ##
-    # Calculates a percentage based on the rank of the prediction among the 
-    # hit lengths
+    # Calculates a percentage based on the rank of the prediction among the
+    # hit lengths
     # Params:
     # +hits+ (optional): a vector of +Sequence+ objects
     # +prediction+ (optional): a +Sequence+ object

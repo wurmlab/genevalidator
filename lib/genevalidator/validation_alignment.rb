@@ -155,9 +155,9 @@ module GeneValidator
 
       fail NoInternetError if less_hits.length == 0
       # in case of nucleotide prediction sequence translate into protein
-      # translate with the reading frame of all hits considered for the alignment
+      # translate with the reading frame of all hits considered for alignment
 
-      reading_frames = less_hits.map{|hit| hit.reading_frame}.uniq
+      reading_frames = less_hits.map{ |hit| hit.reading_frame }.uniq
       fail ReadingFrameError if reading_frames.length != 1
 
       if @type == :nucleotide
@@ -174,7 +174,8 @@ module GeneValidator
       freq = out[1]
 
       # remove isolated residues from the predicted sequence
-      prediction_raw = remove_isolated_residues(@multiple_alignment[@multiple_alignment.length - 1])
+      index          = @multiple_alignment.length - 1
+      prediction_raw = remove_isolated_residues(@multiple_alignment[index])
       # remove isolated residues from the statistical model
       sm = remove_isolated_residues(sm)
 
@@ -230,7 +231,7 @@ module GeneValidator
     # Also creates a fasta file with the alignment
     # Params:
     # +prediction+: a +Sequence+ object representing the blast query
-    # +hits+: a vector of +Sequience+ objects (usually representig the blast hits)
+    # +hits+: a vector of +Sequience+ objects (usually representing blast hits)
     # +path+: path of mafft installation
     # Output:
     # Array of +String+s, corresponding to the multiple aligned sequences
@@ -336,7 +337,7 @@ module GeneValidator
     # based on PSSM (Position Specific Matrix)
     # Params:
     # +ma+: array of +String+s, corresponding to the multiple aligned sequences
-    # +threshold+: the percentage of the genes that will be considered in the statistical model
+    # +threshold+: percentage of genes that are considered in statistical model
     # Output:
     # +String+ representing the statistical model
     # +Array+ with the maximum frequeny of the majoritary residue for each position
@@ -402,7 +403,7 @@ module GeneValidator
     # converts an array of integers into array of ranges
     def array_to_ranges(ar)
       prev = ar[0]
-      
+
       ranges = ar.slice_before { |e|
         prev, prev2 = e, prev
         prev2 + 1 != e
@@ -461,7 +462,7 @@ module GeneValidator
 
       yAxisValues << ', Statistical Model'
 
-      Plot.new(output.scan(/\/([^\/]+)$/)[0][0],
+      Plot.new(output.scan(%r{([^/]+)$})[0][0],
                :align,
                'Missing/Extra sequences Validation: Multiple Align. & Statistical model of hits',
                'Conserved Region, Yellow',
