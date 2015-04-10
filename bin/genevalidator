@@ -68,16 +68,16 @@ BANNER
   opt[:fast] = false
   opts.on('-f', '--fast',
           'Run BLAST on all sequences together (rather than separately)',
-          'to speed up the analysis. However, this means that there may',
-          'be a longer wait before the results can be viewed (as',
-          'GeneValidator will need to run BLAST on all sequences before',
-          'producing any results).',
+          'to speed up the analysis.',
+          'However, this means that there will be a longer wait before the',
+          'results can be viewed (as GeneValidator will need to run BLAST',
+          'on all sequences before producing any results).',
           'The speed difference will be more apparent on larger input files') do
     opt[:fast] = true
   end
 
   opts.on('-r', '--raw_sequences [raw_seq]',
-          'Supply a fasta file of the raw sequences of all BLAST hits present', 
+          'Supply a fasta file of the raw sequences of all BLAST hits present',
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
     opt[:raw_sequences] = raw_seq
   end
