@@ -45,7 +45,7 @@ Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more
 1) Type the following command in the terminal
 
 ```bash
-$ gem install GeneValidator
+$ gem install genevalidator
 ```
 
 

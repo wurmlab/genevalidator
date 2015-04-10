@@ -5,7 +5,7 @@ require 'genevalidator/version'
 
 Gem::Specification.new do |s|
   # meta
-  s.name        = 'GeneValidator'
+  s.name        = 'genevalidator'
   s.date        = '2013-07-22'
   s.version     =  GeneValidator::VERSION
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
@@ -23,7 +23,7 @@ DESC
   s.add_dependency('bio', '~> 1.4')
   s.add_dependency('bio-blastxmlparser', '~>2.0')
   s.add_dependency('minitest', '~> 5.4')
-  s.add_dependency('statsample', '~> 1.3')
+  s.add_dependency('statsample', '~> 1.4')
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
