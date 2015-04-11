@@ -173,7 +173,7 @@ module GeneValidator
               raw_align = report.alignment
               align     = []
 
-              raw_align.each { |s| align.push(s.to_s) }
+              raw_align.each { |seq| align.push(seq.to_s) }
               hit_alignment   = align[0]
               query_alignment = align[1]
             rescue Exception
@@ -201,7 +201,6 @@ module GeneValidator
           end
 
           ranges_prediction.push((hsp.match_query_from..hsp.match_query_to))
-
         end
         overlap = coverage.reject { |x| x == 0 }
         if overlap != []
@@ -263,34 +262,6 @@ module GeneValidator
                                                                1).to_scale)
 
       (averages.length < 15) ? wilcox.probability_exact : wilcox.probability_z
-    end
-
-    ##
-    # Calls R to calculate the p value for the wilcoxon-test
-    # Input
-    # +vector+ Array of values with nonparametric distribution
-    def wilcox_test_R(averages)
-      require 'rinruby'
-
-      original_stdout = $stdout
-      original_stderr = $stderr
-
-      $stdout = File.new('/dev/null', 'w')
-      $stderr = File.new('/dev/null', 'w')
-
-      R.echo 'enable = nil, stderr = nil, warn = nil'
-      averages = averages.to_s.gsub('[', '(').gsub(']', ')')
-      # make the wilcox-test and get the p-value
-      R.eval("coverageDistrib = c#{averages}")
-      R.eval("coverageDistrib = c#{averages}")
-      R.eval('pval = wilcox.test(coverageDistrib - 1)$p.value')
-
-      pval = R.pull 'pval'
-      $stdout = original_stdout
-      $stderr = original_stderr
-
-      return pval
-    rescue Exception
     end
   end
 end

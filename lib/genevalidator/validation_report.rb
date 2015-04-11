@@ -1,3 +1,4 @@
+# Top level module / namespace.
 module GeneValidator
   Plot = Struct.new(:filename, :type, :title, :footer, :xtitle, :ytitle, :aux1,
                     :aux2)

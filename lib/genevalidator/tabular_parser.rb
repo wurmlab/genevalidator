@@ -30,8 +30,9 @@ module GeneValidator
     def analayse_tabular_file(filename)
       tab_results  = []
       file         = File.read(filename)
-      lines        = CSV.parse(file, col_sep: "\t", skip_lines: /^#/,
-                               headers: @column_names)
+      lines        = CSV.parse(file, col_sep: "\t",
+                                     skip_lines: /^#/,
+                                     headers: @column_names)
       lines.each do |line|
         tab_results << line.to_hash
       end
@@ -69,7 +70,7 @@ module GeneValidator
     #
     def initialise_classes(hits)
       hit_list = []
-      grouped_hits = hits.group_by{ |row| row['sseqid'] }
+      grouped_hits = hits.group_by { |row| row['sseqid'] }
 
       grouped_hits.each do |query_id, row|
         hit_seq = Sequence.new
@@ -86,7 +87,7 @@ module GeneValidator
     ##
     #
     def initialise_all_hsps(current_query_id, hits, hit_seq)
-      hsps = hits.select{ |row| row['sseqid'] == current_query_id }
+      hsps = hits.select { |row| row['sseqid'] == current_query_id }
       hsps.each do |row|
         hsp = Hsp.new
         hsp.init_tabular_attribute(row, type)

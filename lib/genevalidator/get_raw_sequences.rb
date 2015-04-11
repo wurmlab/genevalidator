@@ -67,8 +67,9 @@ module GeneValidator
       def iterate_tabular(file, db_type)
         table_headers = @opt[:blast_tabular_options].split(/[ ,]/)
         tab_file      = File.read(@opt[:blast_tabular_file])
-        rows = CSV.parse(tab_file, col_sep: "\t", skip_lines: /^#/,
-                         headers: table_headers)
+        rows = CSV.parse(tab_file, col_sep: "\t",
+                                   skip_lines: /^#/,
+                                   headers: table_headers)
         assert_table_has_correct_no_of_collumns(rows, table_headers)
 
         rows.each do |row|
@@ -96,9 +97,8 @@ module GeneValidator
         uri      = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
                    "db=protein&retmax=1&usehistory=y&term=#{accession}/"
         result   = Net::HTTP.get(URI.parse(uri))
-        result2  = result
-        query    = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-        web_env  = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+        query    = result.scan(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[0][0]
+        web_env  = result.scan(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[0][0]
 
         uri      = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
                    'rettype=fasta&retmode=text&retstart=0&retmax=1&' \

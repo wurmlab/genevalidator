@@ -70,9 +70,8 @@ module GeneValidator
               "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
         result = Net::HTTP.get(URI.parse(uri))
 
-        result2   = result
-        query  = result2.scan(/<\bQueryKey\b>([\w\W\d]+)<\/\bQueryKey\b>/)[0][0]
-        web_env   = result.scan(/<\bWebEnv\b>([\w\W\d]+)<\/\bWebEnv\b>/)[0][0]
+        query   = result.scan(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[0][0]
+        web_env = result.scan(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[0][0]
 
         uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?'\
               "rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{dbtype}" \
@@ -95,7 +94,7 @@ module GeneValidator
     # with respect to the column name of the tabular blast output
     def init_tabular_attribute(hash)
       @identifier     = hash['sseqid'] if hash['sseqid']
-      @accession_no   = hash['sacc'] if hash['sacc'] 
+      @accession_no   = hash['sacc'] if hash['sacc']
       @length_protein = hash['slen'].to_i if hash['slen']
     end
   end

@@ -52,12 +52,11 @@ module GeneValidator
     end
 
     def validation
-      unless @limits.nil?
-        if @query_length >= @limits[0] && @query_length <= @limits[1]
-          :yes
-        else
-          :no
-        end
+      return if @limits.nil?
+      if @query_length >= @limits[0] && @query_length <= @limits[1]
+        :yes
+      else
+        :no
       end
     end
   end

@@ -19,7 +19,7 @@ module GeneValidator
       @exp_msg      = ''
       @total_hsp    = 0
       @frames_histo.each do |x, y|
-        @msg     << "#{y}&nbsp;HSPs&nbsp;align&nbsp;in&nbsp;frame&nbsp;#{x}; "
+        @msg << "#{y}&nbsp;HSPs&nbsp;align&nbsp;in&nbsp;frame&nbsp;#{x}; "
         @exp_msg << "#{y} HSPs align in frame #{x}; "
         @total_hsp += y.to_i
       end
@@ -114,12 +114,16 @@ module GeneValidator
       @validation_report
 
     rescue NotEnoughHitsError
-      @validation_report =  ValidationReport.new('Not enough evidence', :warning, @short_header,
-                           @header, @description, @approach, @explanation,
-                           @conclusion)
+      @validation_report =  ValidationReport.new('Not enough evidence',
+                                                 :warning, @short_header,
+                                                 @header, @description,
+                                                 @approach, @explanation,
+                                                 @conclusion)
     rescue Exception
-      @validation_report = ValidationReport.new('Unexpected error', :error, @short_header, @header,
-                           @description, @approach, @explanation, @conclusion)
+      @validation_report = ValidationReport.new('Unexpected error', :error,
+                                                @short_header, @header,
+                                                @description, @approach,
+                                                @explanation, @conclusion)
       @validation_report.errors.push 'Unexpected Error'
     end
   end

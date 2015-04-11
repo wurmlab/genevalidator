@@ -70,9 +70,8 @@ module GeneValidator
       output             = sprintf('%3s|%d|%20s|%5s|', @idx, @overall_score,
                                    short_def, @nr_hits)
       validation_outputs.each do |item|
-        item_padd = sprintf('%17s', item)
-        output    << item
-        output    << '|'
+        output << item
+        output << '|'
       end
 
       @mutex.synchronize do
@@ -83,19 +82,19 @@ module GeneValidator
     def print_output_file_yaml
       file_yaml = "#{@yaml_path}/#{@filename}.yaml"
       report = validations
-      unless @idx == @start_idx
+      if @idx == @start_idx
+        @mutex_yaml.synchronize do
+          File.open(file_yaml, 'w') do |f|
+            YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
+          end
+        end
+      else
         @mutex_yaml.synchronize do
           hash = {} # YAML.load_file(file_yaml)
           hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
           File.open(file_yaml, 'a') do |f|
             new_report =  hash.to_yaml
             f.write(new_report[4..new_report.length - 1])
-          end
-        end
-      else
-        @mutex_yaml.synchronize do
-          File.open(file_yaml, 'w') do |f|
-            YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
           end
         end
       end
@@ -227,10 +226,9 @@ module GeneValidator
     # +filemane+: name of the fasta input file
     # Output
     # Array of Strigs with the reports
-    # def self.overall_evaluation(all_query_outputs, filename)
     def self.overall_evaluation(no_queries, good_scores, bad_scores,
                                 no_evidence, no_mafft, no_internet, map_errors,
-                                running_times, filename)
+                                running_times)
       good_pred = (good_scores == 1) ? 'One' : "#{good_scores} are"
       bad_pred  = (bad_scores == 1) ? 'One' : "#{bad_scores} are"
 
@@ -242,19 +240,19 @@ module GeneValidator
 
       if no_evidence != 0
         eval << "#{no_evidence} could not be evaluated due to the lack of" \
-                " evidence."
+                ' evidence.'
       end
 
       # errors per validation
       error_eval = ''
-      map_errors.each do |k, v| 
+      map_errors.each do |k, v|
         error_eval << "\nWe couldn't run #{k} Validation for #{v} queries"
       end
 
-      if no_mafft >=  (no_queries - no_evidence)
+      if no_mafft >= (no_queries - no_evidence)
         error_eval << "\nWe couldn't run MAFFT multiple alignment"
       end
-      if no_internet >=  (no_queries - no_evidence)
+      if no_internet >= (no_queries - no_evidence)
         error_eval << "\nWe couldn't make use of your internet connection"
       end
 

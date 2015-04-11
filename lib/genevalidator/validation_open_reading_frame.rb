@@ -159,8 +159,7 @@ module GeneValidator
     # +orfs+: +Hash+ containing the open reading frame
     # +output+: location where the plot will be saved in jped file format
     # +prediction+: Sequence objects
-    def plot_orfs(orfs, translated_length, output = "#{@filename}_orfs.json",
-                  prediction = @prediction)
+    def plot_orfs(orfs, translated_length, output = "#{@filename}_orfs.json")
       fail QueryError unless orfs.is_a? Hash
 
       results = []

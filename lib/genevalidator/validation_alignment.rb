@@ -156,8 +156,7 @@ module GeneValidator
       fail NoInternetError if less_hits.length == 0
       # in case of nucleotide prediction sequence translate into protein
       # translate with the reading frame of all hits considered for alignment
-
-      reading_frames = less_hits.map{ |hit| hit.reading_frame }.uniq
+      reading_frames = less_hits.map(&:reading_frame).uniq
       fail ReadingFrameError if reading_frames.length != 1
 
       if @type == :nucleotide
@@ -194,7 +193,7 @@ module GeneValidator
       @validation_report
 
     rescue NotEnoughHitsError
-      @validation_report = ValidationReport.new('Not enough evidence', 
+      @validation_report = ValidationReport.new('Not enough evidence',
                                                 :warning, @short_header,
                                                 @header, @description,
                                                 @approach, @explanation,
@@ -212,9 +211,11 @@ module GeneValidator
                                                 @explanation, @conclusion)
       @validation_report.errors.push NoInternetError
     rescue ReadingFrameError
-      ValidationReport.new('Multiple reading frames',:error, @short_header,
-                           @header, @description, @approach, @explanation,
-                           @conclusion)
+      @validation_report = ValidationReport.new('Multiple reading frames',
+                                                :error, @short_header,
+                                                @header, @description,
+                                                @approach, @explanation,
+                                                @conclusion)
       @validation_report.errors.push 'Multiple reading frames Error'
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,

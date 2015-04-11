@@ -1,8 +1,9 @@
 # A module to validate the command line Arguments
 ## CREDIT: some of these methods have been adapted from SequenceServer
 module GeneValidator
-# TODO: If a tabular file is provided, ensure that a tabular file has the right number of columns
-# TODO: assert_if_ruby_version_is_supported
+  # TODO: If a tabular file is provided, ensure that a tabular file has the
+  #       right number of columns
+  # TODO: assert_if_ruby_version_is_supported
   # A module to validate the arguments passed to the Validation Class
   module GVArgValidation
     class << self
@@ -39,9 +40,8 @@ module GeneValidator
         unless @opt[:num_threads] > 0
           puts 'Number of threads can not be lower than 0'
         end
-        if @opt[:num_threads] > 256
-          puts "Number of threads set at #{@opt[:num_threads]} is unusually high."
-        end
+        return unless @opt[:num_threads] > 256
+        puts "Number of threads set at #{@opt[:num_threads]} is unusually high."
       end
 
       def assert_BLAST_output_files
