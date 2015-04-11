@@ -117,7 +117,7 @@ module GeneValidator
       it 'should parse xml input' do
         output = File.open(filename_prot_xml, 'rb').read
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next_query_xml(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator, :protein)
         assert_equal(500, hits.length)
         assert_equal(870, hits[19].length_protein)
         assert_equal('XP_004524940', hits[19].accession_no)
@@ -264,7 +264,7 @@ module GeneValidator
         prediction.length_protein = 219 / 3
 
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next_query_xml(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator, :protein)
 
         assert_equal(20, hits.length)
 
