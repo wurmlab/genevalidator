@@ -36,8 +36,8 @@ module GeneValidator
     # Overload '/' operator
     # This will modify the current object
     def /(other)
-      self.x /= other.to_i
-      self.y /= other.to_i
+      self.x /= other.to_f
+      self.y /= other.to_f
     end
 
     ##
@@ -96,8 +96,7 @@ module GeneValidator
       d
     end
 
-    # Returns the euclidian distance between the current cluster and the one
-    # given as parameter
+    # Returns the euclidian distance between the current cluster and the one given as parameter
     # Params:
     # +cluster+: Cluster object
     # +method+: 0 or 1
@@ -127,7 +126,7 @@ module GeneValidator
     # Returns within cluster sum of squares
     def wss(objects = nil)
       if objects.nil?
-        objects = @objects.map { |x| Array.new(x[1], x[0]) }.flatten
+        objects = @objects.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
       cluster_mean = mean
@@ -182,8 +181,7 @@ module GeneValidator
       d
     end
 
-    # Returns the euclidian distance between the current cluster and the one
-    # given as parameter
+    # Returns the euclidian distance between the current cluster and the one given as parameter
     # Params:
     # +cluster+: Cluster object
     # +method+: 0 or 1
@@ -214,7 +212,7 @@ module GeneValidator
     # Returns within cluster sum of squares
     def wss(lengths = nil)
       if lengths.nil?
-        lengths = @lengths.map { |x| Array.new(x[1], x[0]) }.flatten
+        lengths = @lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
       cluster_mean = mean
@@ -228,13 +226,12 @@ module GeneValidator
     ##
     # Returns the standard deviation of a set of values
     # Params:
-    # +lengths+: a vector of values (optional, by default it takes the values in
-    # the cluster)
+    # +lengths+: a vector of values (optional, by default it takes the values in the cluster)
     # Output:
     # Real number
     def standard_deviation(lengths = nil)
       if lengths.nil?
-        lengths = @lengths.map { |x| Array.new(x[1], x[0]) }.flatten
+        lengths = @lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten
       end
 
       cluster_mean = mean
@@ -253,8 +250,8 @@ module GeneValidator
     # Output:
     # Real number
     def deviation(clusters, queryLength)
-      hits = clusters.map { |c| c.lengths.map { |x| Array.new(x[1], x[0]) }.flatten }.flatten
-      raw_hits = clusters.map { |c| c.lengths.map { |x| Array.new(x[1], x[0]) }.flatten }.flatten.to_s.gsub('[', '').gsub(']', '')
+      hits = clusters.map { |c| c.lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten }.flatten
+      raw_hits = clusters.map { |c| c.lengths.map { |x| a = Array.new(x[1], x[0]) }.flatten }.flatten.to_s.gsub('[', '').gsub(']', '')
       R.eval("sd = sd(c(#{raw_hits}))")
       sd = R.pull('sd')
       sd = standard_deviation(hits)
@@ -316,8 +313,7 @@ module GeneValidator
       @clusters = []
     end
 
-    def hierarchical_clusterization_2d(no_clusters = 0, distance_method = 0,
-                                       vec = @values, debug = false)
+    def hierarchical_clusterization_2d(no_clusters = 0, distance_method = 0, vec = @values, debug = false)
       clusters = []
 
       if vec.length == 1
@@ -356,7 +352,7 @@ module GeneValidator
         # stop condition 1
         break if no_clusters != 0 && clusters.length == no_clusters
 
-        iteration += 1
+        iteration = iteration + 1
         puts "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
@@ -406,8 +402,7 @@ module GeneValidator
     end
 
     ##
-    # Makes an hierarchical clusterization until the most dense cluster is
-    # obtained
+    # Makes an hierarchical clusterization until the most dense cluster is obtained
     # or the distance between clusters is sufficintly big
     # or the desired number of clusters is obtained
     # Params:
@@ -417,8 +412,7 @@ module GeneValidator
     # +debug+: display debug information
     # Output:
     # vector of +Cluster+ objects
-    def hierarchical_clusterization(no_clusters = 0, distance_method = 0,
-                                    vec = @values, debug = false)
+    def hierarchical_clusterization(no_clusters = 0, distance_method = 0, vec = @values, debug = false)
       clusters = []
       vec = vec.sort
 
@@ -453,10 +447,11 @@ module GeneValidator
       # the loop stops according to the stop conditions
       iteration = 0
       loop do
+
         # stop condition 1
         break if no_clusters != 0 && clusters.length == no_clusters
 
-        iteration += 1
+        iteration = iteration + 1
         puts "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
@@ -514,7 +509,9 @@ module GeneValidator
       max_density = 0
       max_density_cluster = 0
 
-      nil if clusters.nil?
+      if clusters.nil?
+        nil
+      end
 
       clusters.each_with_index do |item, i|
         if item.density > max_density
