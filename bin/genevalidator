@@ -81,7 +81,7 @@ BANNER
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
     opt[:raw_sequences] = raw_seq
   end
-  
+
   opts.on('-m', '--mafft_bin [MAFFT_PATH]',
           'Path to MAFFT bin folder (is added to $PATH variable)') do |mafft|
     opt[:mafft_bin] = mafft
