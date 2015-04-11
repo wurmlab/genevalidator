@@ -167,7 +167,7 @@ module GeneValidator
       overall_evaluation = overall_evaluation(no_queries, good_predictions,
                                               bad_predictions, nee, no_mafft,
                                               no_internet, map_errors,
-                                              running_times, filename)
+                                              running_times)
 
       less = overall_evaluation[0]
       less = less.gsub("\n", '<br>').gsub("'", %q(\\\'))
@@ -223,7 +223,6 @@ module GeneValidator
     # Calculates an overall evaluation of the output
     # Params:
     # +all_query_outputs+: Array of +ValidationTest+ objects
-    # +filemane+: name of the fasta input file
     # Output
     # Array of Strigs with the reports
     def self.overall_evaluation(no_queries, good_scores, bad_scores,
