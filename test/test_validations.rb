@@ -31,7 +31,7 @@ module GeneValidator
       iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
 
     describe 'Detailed Validation of normal Insulin Query' do
-      hits     = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
+      hits     = BlastUtils.parse_next(iterator, :nucleotide)
       prediction              = Sequence.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -134,7 +134,7 @@ module GeneValidator
     end
 
     describe 'Validate a trancated sequence' do
-      hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator, :nucleotide)
       prediction              = Sequence.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -167,7 +167,7 @@ module GeneValidator
     end
 
     describe 'Validate a duplicated sequence' do
-      hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator, :nucleotide)
       prediction              = Sequence.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -210,7 +210,7 @@ module GeneValidator
     end
 
     describe 'Validate a merged sequence' do
-      hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator, :nucleotide)
 
       prediction              = Sequence.new
       prediction.definition   = ''
@@ -252,7 +252,7 @@ module GeneValidator
     end
 
     describe 'Validate a sequence with a frameshift' do
-      hits = BlastUtils.parse_next_query_xml(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator, :nucleotide)
 
       prediction              = Sequence.new
       prediction.definition   = ''
