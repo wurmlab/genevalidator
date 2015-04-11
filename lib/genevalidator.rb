@@ -243,7 +243,7 @@ module GeneValidator
         prediction = get_info_on_each_query_sequence
         @idx += 1
 
-        hits = parse_next_iteration(iterator)
+        hits = parse_next_iteration(iterator, prediction)
         
         if hits.nil?
           @idx -= 1
@@ -263,7 +263,7 @@ module GeneValidator
       @threads.each(&:join) unless @multithreading == false
     end
 
-    def parse_next_iteration(iterator)
+    def parse_next_iteration(iterator, prediction)
       iterator.next if @idx < @start_idx
       if @opt[:blast_xml_file]
         BlastUtils.parse_next(iterator, @type)
