@@ -227,7 +227,7 @@ module GeneValidator
       filename_x = "#{filename}_merge_x.json"
       f = File.open(filename_x, 'w')
       f.write([freq_x.collect { |k,v|
-          { 'key': k, 'value': v, 'main': (1==2) }
+          { 'key' => k, 'value' => v, 'main' => (1==2) }
         }].to_json)
       f.close
       plot3 = Plot.new(filename_x.scan(%r{([^/]+)$})[0][0],
