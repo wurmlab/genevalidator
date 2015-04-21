@@ -30,7 +30,7 @@ module GeneValidator
         threads = (db !~ /remote/) ? "-num_threads #{num_threads}" : ''
 
         blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" \
-                   "#{threads}"
+                   " #{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
         `#{cmd} 2>/dev/null`
