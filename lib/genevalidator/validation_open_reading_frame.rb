@@ -87,8 +87,7 @@ module GeneValidator
         return @validation_report
       end
 
-      fail Exception unless prediction.is_a?(Sequence) &&
-                            hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Sequence)
 
       start = Time.new
       orfs = get_orfs
@@ -106,7 +105,6 @@ module GeneValidator
 
       @validation_report.plot_files.push(plot1)
       @validation_report
-
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
