@@ -6,12 +6,11 @@ require 'genevalidator/version'
 Gem::Specification.new do |s|
   # meta
   s.name        = 'genevalidator'
-  s.date        = '2013-07-22'
   s.version     =  GeneValidator::VERSION
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'y.wurm@qmul.ac.uk'
   s.homepage    = 'https://github.com/monicadragan/GeneValidator'
-  s.license     = 'GPL'
+  s.license     = 'AGPL'
   s.summary     = 'Identifying problems with gene predictions.'
   s.description = <<DESC
 The tool validates the input predicted genes and provides useful information (length validation, gene merge validation, sequence duplication checking, ORF finding) based on the similarities to genes in public databases.
