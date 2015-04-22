@@ -14,21 +14,22 @@ require 'genevalidator/validation_alignment'
 
 module GeneValidator
   class ValidateOutput < Minitest::Test
-      filename_fasta   = 'test/test_files/test_sequences.fasta'
-      filename_xml     = "#{filename_fasta}.blast_xml"
-      filename_xml_raw = "#{filename_fasta}.blast_xml.raw_seq"
-      FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
-      opt = {
-        input_fasta_file: filename_fasta,
-        validations: ['all'],
-        db: 'swissprot -remote',
-        num_threads: 1,
-        test: true
-      }
+    filename_fasta   = 'test/test_files/test_sequences.fasta'
+    filename_xml     = "#{filename_fasta}.blast_xml"
+    filename_xml_raw = "#{filename_fasta}.blast_xml.raw_seq"
+    FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+    opt = {
+      input_fasta_file: filename_fasta,
+      validations: ['all'],
+      db: 'swissprot -remote',
+      raw_sequences: filename_xml_raw,
+      num_threads: 1,
+      test: true
+    }
 
-      val      = GeneValidator::Validation.new(opt)
-      xml      = File.open(filename_xml, 'rb').read
-      iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
+    val      = GeneValidator::Validation.new(opt)
+    xml      = File.open(filename_xml, 'rb').read
+    iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
 
     describe 'Detailed Validation of normal Insulin Query' do
       hits     = BlastUtils.parse_next(iterator, :nucleotide)
