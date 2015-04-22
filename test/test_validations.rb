@@ -30,6 +30,7 @@ module GeneValidator
     val      = GeneValidator::Validation.new(opt)
     xml      = File.open(filename_xml, 'rb').read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
+    val.create_an_index_file_of_raw_seq_file(opt[:raw_sequences])
 
     describe 'Detailed Validation of normal Insulin Query' do
       hits     = BlastUtils.parse_next(iterator, :nucleotide)
@@ -58,11 +59,11 @@ module GeneValidator
       ov  = vals.select { |v| v.class == ORFValidationOutput }[0]
 
       it 'should check the number of hits' do
-        assert_equal(199, hits.length)
+        assert_equal(499, hits.length)
       end
 
       it 'should validate length by clusterization' do
-        assert_equal([107, 112], lcv.limits)
+        assert_equal([81, 159], lcv.limits)
         assert_equal(108, lcv.query_length)
         assert_equal(:yes, lcv.result)
       end
@@ -70,19 +71,19 @@ module GeneValidator
       it 'should validate length by rank' do
         assert_equal('', lrv.msg)
         assert_equal(108, lrv.query_length)
-        assert_equal(199, lrv.no_of_hits)
-        assert_equal(107, lrv.median)
-        assert_equal(109, lrv.mean)
-        assert_equal(51, lrv.smallest_hit)
-        assert_equal(248, lrv.largest_hit)
-        assert_equal(84, lrv.extreme_hits)
-        assert_equal(42.0, lrv.percentage.round(4))
+        assert_equal(499, lrv.no_of_hits)
+        assert_equal(105, lrv.median)
+        assert_equal(92, lrv.mean)
+        assert_equal(23, lrv.smallest_hit)
+        assert_equal(526, lrv.largest_hit)
+        assert_equal(161, lrv.extreme_hits)
+        assert_equal(32.0, lrv.percentage.round(4))
         assert_equal(:yes, lrv.result)
       end
 
       it 'should validate gene merge' do
-        assert_equal(0.0, gmv.slope.round(4))
-        assert_equal(true, gmv.unimodality)
+        assert_equal(-0.6, gmv.slope.round(4))
+        assert_equal(false, gmv.unimodality)
         assert_equal(0.4, gmv.threshold_down)
         assert_equal(1.2, gmv.threshold_up)
         assert_equal(:no, gmv.result)
@@ -95,8 +96,8 @@ module GeneValidator
       end
 
       it 'should validate blast reading frame' do
-        assert_equal({ 1 => 199 }, rfv.frames_histo)
-        assert_equal(199, rfv.total_hsp)
+        assert_equal({ 1 => 500 }, rfv.frames_histo)
+        assert_equal(500, rfv.total_hsp)
         assert_equal(:yes, rfv.result)
       end
 
@@ -242,7 +243,7 @@ module GeneValidator
       ov  = validations.select { |v| v.class == ORFValidationOutput }[0]
 
       it 'should validate length cluster validation' do
-        assert_equal(:yes, lcv.result)
+        assert_equal(:no, lcv.result)
         assert_equal(:no, lrv.result)
         assert_equal(:yes, gmv.result)
         assert_equal(:yes, dv.result)
