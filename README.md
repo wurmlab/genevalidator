@@ -34,7 +34,7 @@ Currently, it is possible to run the following validations with GeneValidator
 It is also possible to add your own custom validations to GeneValidator. 
 
 ## Installation Requirements
-* Ruby (>= 1.9.3)
+* Ruby (>= 2.0.0)
 * NCBI BLAST+ (>= 2.2.30+)
 * MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).
 * Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox (download [here](https://www.mozilla.org/en-GB/firefox/new/)).
@@ -101,32 +101,32 @@ Please type `genevalidator -h` into your terminal to see this information in you
 ##### Running GeneValidator with a local Database, with two threads
 
 ```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_File
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_FASTA_File
 ```
 
 ##### Running GeneValidator with a remote Database
 
 ```bash
-$ genevalidator -d 'swissprot -remote' Input_File
+$ genevalidator -d 'swissprot -remote' Input_FASTA_File
 ```
 
 ##### Running GeneValidator with a pre-computed BLAST XML file
 
 
 ```bash
-$  genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_File
+$  genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_FASTA_File
 ```
 
 ##### Running GeneValidator with a pre-computed BLAST tabular file 
 
 ```bash
-$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_File 
+$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_FASTA_File 
 ```
 
 ##### Running GeneValidator with the fast option 
 
 ```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_File
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_FASTA_File
 ```
 
 ## Output
