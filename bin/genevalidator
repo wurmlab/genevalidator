@@ -114,7 +114,7 @@ begin
     exit 1
   end
 rescue OptionParser::ParseError
-  $stderr.print 'Error: ' + $ERROR_INFO + '\n'
+  $stderr.print 'Error: ' + $ERROR_INFO.to_s + '\n'
   exit 1
 end
 
