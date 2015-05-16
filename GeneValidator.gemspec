@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     =  GeneValidator::VERSION
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'y.wurm@qmul.ac.uk'
-  s.homepage    = 'https://github.com/monicadragan/GeneValidator'
+  s.homepage    = 'https://github.com/wurmlab/GeneValidator'
   s.license     = 'AGPL'
   s.summary     = 'Identifying problems with gene predictions.'
   s.description = <<DESC
@@ -38,7 +38,7 @@ DESC
 
     $ genevalidator [options] FASTA_FILE
 
-  Visit https://github.com/monicadragan/GeneValidator for more information.
+  Visit https://github.com/wurmlab/GeneValidator for more information.
 ------------------------------------------------------------------------
 
 INFO
