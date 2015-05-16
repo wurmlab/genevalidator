@@ -1,10 +1,10 @@
 # GeneValidator - Identify problems with predicted genes 
 
-[![Build Status](https://travis-ci.org/monicadragan/GeneValidator.svg?branch=master)](https://travis-ci.org/wurmlab/GeneValidator)
+[![Build Status](https://travis-ci.org/wurmlab/GeneValidator.svg?branch=master)](https://travis-ci.org/wurmlab/GeneValidator)
 [![Gem Version](https://badge.fury.io/rb/GeneValidator.svg)](http://badge.fury.io/rb/GeneValidator)
-[![Dependency Status](https://gemnasium.com/IsmailM/GeneValidator.svg)](https://gemnasium.com/IsmailM/GeneValidator)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/badges/quality-score.png?b=alpha)](https://scrutinizer-ci.com/g/IsmailM/GeneValidator/?branch=alpha)
-[![Test Coverage](https://codeclimate.com/github/IsmailM/GeneValidator/badges/coverage.svg)](https://codeclimate.com/github/IsmailM/GeneValidator)
+[![Dependency Status](https://gemnasium.com/wurmlab/GeneValidator.svg)](https://gemnasium.com/wurmlab/GeneValidator)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wurmlab/GeneValidator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wurmlab/GeneValidator/?branch=master)
+[![Test Coverage](https://codeclimate.com/github/wurmlab/GeneValidator/badges/coverage.svg)](https://codeclimate.com/github/wurmlab/GeneValidator)
 [![total downloads](http://ruby-gem-downloads-badge.herokuapp.com/GeneValidator?type=total&color=brightgreen)](https://rubygems.org/gems/GeneValidator)
 
 ## Introduction
@@ -16,8 +16,8 @@ If you use GeneValidator in your work, please cite us as follows:
 
 
 #### Related projects 
-[GeneValidatorApp](https://github.com/IsmailM/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
-[GeneValidatorApp-API](https://github.com/IsmailM/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.
+[GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
+[GeneValidatorApp-API](https://github.com/wurmlab/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.
 
 
 ### Validations
