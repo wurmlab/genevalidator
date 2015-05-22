@@ -133,7 +133,7 @@ $ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_FASTA_File
 The output produced by GeneValidator is presented in three manners.
 
 #### HTML Output 
-Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (genetic input data).
+Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (DNA input data).
 
 #### Yaml Output
 The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
