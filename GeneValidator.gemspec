@@ -5,7 +5,7 @@ require 'genevalidator/version'
 
 Gem::Specification.new do |s|
   # meta
-  s.name        = 'GeneValidator'
+  s.name        = 'genevalidator'
   s.version     =  GeneValidator::VERSION
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
   s.email       = 'y.wurm@qmul.ac.uk'
