@@ -250,13 +250,13 @@ module GeneValidator
           @idx -= 1
           break
         end
-
+        current_idx = @idx
         # the first validation should be treated separately
-        if @idx == @start_idx || @multithreading == false
-          validate(prediction, hits, idx)
+        if current_idx == @start_idx || @multithreading == false
+          validate(prediction, hits, current_idx)
         else
-          @threads << Thread.new(prediction, hits, @idx) do |prediction, hits, idx|
-            validate(prediction, hits, idx)
+          @threads << Thread.new(prediction, hits, current_idx) do |prediction, hits, current_idx|
+            validate(prediction, hits, current_idx)
           end
         end
 
@@ -297,8 +297,8 @@ module GeneValidator
     # +prediction+: Sequence object
     # +hits+: Array of +Sequence+ objects
     # +idx+: the index number of the query
-    def validate(prediction, hits, idx)
-      query_output = do_validations(prediction, hits, idx)
+    def validate(prediction, hits, current_idx)
+      query_output = do_validations(prediction, hits, current_idx)
       query_output.generate_html
       query_output.print_output_file_yaml
       query_output.print_output_console
@@ -382,7 +382,7 @@ module GeneValidator
     # +idx+: the index number of the query
     # Output:
     # +Output+ object
-    def do_validations(prediction, hits, idx)
+    def do_validations(prediction, hits, current_idx)
       begin
         hits = remove_identical_hits(prediction, hits)
         rescue Exception => error # NoPIdentError
@@ -390,12 +390,12 @@ module GeneValidator
 
       query_output                = Output.new(@mutex, @mutex_yaml, @mutex_html,
                                                @filename, @html_path,
-                                               @yaml_path, idx, @start_idx)
+                                               @yaml_path, current_idx, @start_idx)
       query_output.prediction_len = prediction.length_protein
       query_output.prediction_def = prediction.definition
       query_output.nr_hits        = hits.length
 
-      plot_path                   = File.join(@plot_dir, "#{@filename}_#{@idx}")
+      plot_path                   = File.join(@plot_dir, "#{@filename}_#{current_idx}")
 
       validations = []
       validations.push LengthClusterValidation.new(@type, prediction, hits,
