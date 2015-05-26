@@ -237,7 +237,7 @@ module GeneValidator
     ##
     #
     def run_validations(iterator)
-      p = Pool.new(@opt[:num_threads].to_i) if @opt[:num_threads] > 1
+      p = Pool.new(@opt[:num_threads]) if @opt[:num_threads] > 1
 
       while @idx + 1 < @query_offset_lst.length
         prediction = get_info_on_each_query_sequence
