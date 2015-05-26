@@ -251,7 +251,7 @@ module GeneValidator
         end
         current_idx = @idx
         # the first validation should be treated separately
-        if current_idx == @start_idx || @multithreading == false
+        if current_idx == @start_idx || @opt[:num_threads] == 1
           validate(prediction, hits, current_idx)
         else
           p.schedule(prediction, hits, current_idx) do |prediction, hits, current_idx|
