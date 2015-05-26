@@ -11,6 +11,7 @@ require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
+require 'genevalidator/pool'
 require 'bio-blastxmlparser'
 require 'open-uri'
 require 'uri'
@@ -37,7 +38,6 @@ module GeneValidator
     # array of indexes for the start offsets of each query in the fasta file
     attr_reader :query_offset_lst
     attr_reader :overall_evaluation
-    attr_reader :multithreading
 
     # global variables
     attr_reader :no_queries
@@ -64,9 +64,7 @@ module GeneValidator
     # db: 'remote', raw_sequences: nil, num_threads: 1 fast: false}
     # +start_idx+: number of the sequence from the file to start with
     # +overall_evaluation+: boolean variable for printing overall evaluation
-    # +multithreading+: boolean variable for enabling multithreading
-    def initialize(opt, start_idx = 1, overall_evaluation = true,
-                   multithreading = false)
+    def initialize(opt, start_idx = 1, overall_evaluation = true)
       # Validate opts
       @opt = GVArgValidation.validate_args(opt)
 
@@ -76,7 +74,6 @@ module GeneValidator
       @idx                    = 0
       @start_idx              = start_idx
 
-      @multithreading         = multithreading
       @overall_evaluation     = overall_evaluation
 
       # start a worker thread
@@ -240,6 +237,8 @@ module GeneValidator
     ##
     #
     def run_validations(iterator)
+      p = Pool.new(@opt[:num_threads].to_i) if @opt[:num_threads] > 1
+
       while @idx + 1 < @query_offset_lst.length
         prediction = get_info_on_each_query_sequence
         @idx += 1
@@ -255,13 +254,13 @@ module GeneValidator
         if current_idx == @start_idx || @multithreading == false
           validate(prediction, hits, current_idx)
         else
-          @threads << Thread.new(prediction, hits, current_idx) do |prediction, hits, current_idx|
+          p.schedule(prediction, hits, current_idx) do |prediction, hits, current_idx|
             validate(prediction, hits, current_idx)
           end
         end
-
       end
-      @threads.each(&:join) unless @multithreading == false
+    ensure
+      p.shutdown if @opt[:num_threads] > 1
     end
 
     def parse_next_iteration(iterator, prediction)
