@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'optparse'
 require 'genevalidator'
+require 'genevalidator/get_raw_sequences'
 require 'genevalidator/version'
 
 opt = {}
@@ -37,6 +38,13 @@ BANNER
           'GeneValidator also supports remote databases:',
           'e.g.   $ genevalidator -d "swissprot -remote" Input_File') do |db|
     opt[:db] = db
+  end
+
+  opts.on('-e', '--extract_raw_seqs',
+          'Produces a fasta file of the raw sequences of all BLAST hits in the',
+          'supplied BLAST output file. This fasta file can then be provided to',
+          'GeneValidator with the "-r", "--raw_sequences" argument') do
+    opt[:extract_raw_seqs] = true
   end
 
   opts.on('-x', '--blast_xml_file [FILE]',
@@ -118,10 +126,16 @@ rescue OptionParser::ParseError
   exit 1
 end
 
-start = Time.now
 opt[:input_fasta_file] = ARGV[0]
 
+start = Time.now
 GeneValidator.init(opt)
+
+if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
+  GetRawSequences.run
+  exit
+end
+
 GeneValidator.run
 
 puts "Total running time: #{(Time.now - start).round(3)}s"
