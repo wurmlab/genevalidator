@@ -20,7 +20,7 @@ module GeneValidator
     attr_reader :raw_seq_file_index
     attr_reader :raw_seq_file_load
     # array of indexes for the start offsets of each query in the fasta file
-    attr_reader :query_offset_lst
+    attr_reader :query_idx
     attr_reader :mutex
     attr_accessor :mutex_yaml
     attr_accessor :mutex_html
@@ -92,8 +92,8 @@ module GeneValidator
     # start and end positions of each query.
     def index_the_input
       fasta_content = IO.binread(@opt[:input_fasta_file])
-      @query_offset_lst = fasta_content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
-      @query_offset_lst.push(fasta_content.length)
+      @query_idx = fasta_content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
+      @query_idx.push(fasta_content.length)
     end
 
     ##
@@ -114,13 +114,13 @@ module GeneValidator
     #
     def analyse_each_sequence
       # file seek for each query
-      @query_offset_lst[0..@query_offset_lst.length - 2].each_with_index do |_, i|
+      @query_idx[0..@query_idx.length - 2].each_with_index do |_, i|
         if (i + 1) < @config[:start_idx]
           @config[:idx] += 1
           next
         end
-        start_offset = @query_offset_lst[i + 1] - @query_offset_lst[i]
-        end_offset   = @query_offset_lst[i]
+        start_offset = @query_idx[i + 1] - @query_idx[i]
+        end_offset   = @query_idx[i]
         query = IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
         
         xml_output = BlastUtils.run_blast(query)

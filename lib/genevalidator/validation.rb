@@ -16,7 +16,7 @@ module GeneValidator
   # Main Class that initalises and then runs validations.
   class Validation
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :query_offset_lst, :mutex_array
+    def_delegators GeneValidator, :opt, :config, :query_idx, :mutex_array
     # global variables
     attr_reader :no_queries
     attr_reader :scores
@@ -39,7 +39,7 @@ module GeneValidator
     def initialize
       @opt               = opt
       @config            = config
-      @query_offset_lst  = query_offset_lst
+      @query_idx         = query_idx
       @mutex_array       = mutex_array
       # global variables
       @no_queries        = 0
@@ -59,7 +59,7 @@ module GeneValidator
     def run_validations(iterator)
       p = Pool.new(@opt[:num_threads]) if @opt[:num_threads] > 1
 
-      while @config[:idx] + 1 < @query_offset_lst.length
+      while @config[:idx] + 1 < @query_idx.length
         prediction = get_info_on_query_sequence
         @config[:idx] += 1
 
@@ -89,8 +89,8 @@ module GeneValidator
                                         seq_type = @config[:type])
       prediction   = Sequence.new
       idx          = @config[:idx]
-      start_offset = @query_offset_lst[idx + 1] - @query_offset_lst[idx]
-      end_offset   = @query_offset_lst[idx]
+      start_offset = @query_idx[idx + 1] - @query_idx[idx]
+      end_offset   = @query_idx[idx]
       query        = IO.binread(input_file, start_offset, end_offset)
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
