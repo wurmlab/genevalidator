@@ -6,7 +6,7 @@ require 'thread'
 module GeneValidator
   class Output
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_yaml, :mutex_html
+    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_yaml, :mutex_html, :mutex_json
     attr_accessor :prediction_len
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -34,6 +34,7 @@ module GeneValidator
       @mutex          = mutex
       @mutex_yaml     = mutex_yaml
       @mutex_html     = mutex_html
+      @mutex_json     = mutex_json
 
       @prediction_len = 0
       @prediction_def = 'no_definition'
@@ -45,6 +46,7 @@ module GeneValidator
       @html_path      = @config[:html_path]
       @yaml_path      = @config[:yaml_path]
       @aux_dir        = @config[:aux]
+      @json_hash      = @config[:json_hash]
       @results_html   = "#{@html_path}/results.html"
       @table_html     = "#{@html_path}/files/table.html"
       @yaml_file      = "#{@yaml_path}/#{@filename}.yaml"
@@ -77,6 +79,12 @@ module GeneValidator
       end
       puts header
     end
+    def set_up_yaml_file
+      return if File.exist?(@yaml_file)
+      File.open(@yaml_file, 'w') do |f|
+        YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
+      end
+    end
 
     def print_output_file_yaml
       report = validations
@@ -91,34 +99,23 @@ module GeneValidator
       end
     end
 
-    def set_up_yaml_file
-      return if File.exist?(@yaml_file)
-      @mutex_yaml.synchronize do
-        File.open(@yaml_file, 'w') do |f|
-          YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
-        end
-      end
-    end 
-
     def set_up_html_file
+      template_header     = File.join(@aux_dir, 'template_header.erb')
+      template_file       = File.open(template_header, 'r').read
+      erb                 = ERB.new(template_file, 0, '>')
+
+      # Creating a separate output file for the web app
+      app_template_header = File.join(@aux_dir, 'app_template_header.erb')
+      table_template_file = File.open(app_template_header, 'r').read
+      erb_table           = ERB.new(table_template_file, 0, '>')
       return if File.exist?(@results_html)
-      @mutex_html.synchronize do
-        template_header     = File.join(@aux_dir, 'template_header.erb')
-        template_file       = File.open(template_header, 'r').read
-        erb                 = ERB.new(template_file, 0, '>')
 
-        # Creating a separate output file for the web app
-        app_template_header = File.join(@aux_dir, 'app_template_header.erb')
-        table_template_file = File.open(app_template_header, 'r').read
-        erb_table           = ERB.new(table_template_file, 0, '>')
+      File.open(@results_html, 'w+') do |file|
+        file.write(erb.result(binding))
+      end
 
-        File.open(@results_html, 'w+') do |file|
-          file.write(erb.result(binding))
-        end
-
-        File.open(@table_html, 'w+') do |file|
-          file.write(erb_table.result(binding))
-        end
+      File.open(@table_html, 'w+') do |file|
+        file.write(erb_table.result(binding))
       end
     end
 
@@ -143,6 +140,16 @@ module GeneValidator
       end
     end
 
+    def generate_json
+      @mutex_json.synchronize do
+        current_seq = {}
+        current_seq[:id] = @idx
+        current_seq[:definition] = @prediction_def
+        current_seq[:no_hits] = @nr_hits
+        @json_hash << current_seq
+      end
+    end
+
     ##
     # Method that closes the gas in the html file and writes the overall
     # evaluation
@@ -154,8 +161,7 @@ module GeneValidator
     def self.print_footer(no_queries, scores, good_predictions, bad_predictions,
                           nee, no_mafft, no_internet, map_errors, running_times,
                           html_path, filename)
-      # compute the statistics
-      # overall_evaluation = overall_evaluation(all_query_outputs, filename)
+
       overall_evaluation = overall_evaluation(no_queries, good_predictions,
                                               bad_predictions, nee, no_mafft,
                                               no_internet, map_errors,

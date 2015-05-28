@@ -74,8 +74,8 @@ module GeneValidator
         if @opt[:num_threads] == 1
           validate(prediction, hits, current_idx)
         else
-          p.schedule(prediction, hits, current_idx) do |prediction, hits, idx|
-            validate(prediction, hits, idx)
+          p.schedule(prediction, hits, current_idx) do |p, h, idx|
+            validate(p, h, idx)
           end
         end
       end
@@ -121,6 +121,7 @@ module GeneValidator
     def validate(prediction, hits, current_idx)
       query_output = do_validations(prediction, hits, current_idx)
       query_output.generate_html
+      query_output.generate_json
       query_output.print_output_file_yaml
       query_output.print_output_console
 
@@ -156,7 +157,8 @@ module GeneValidator
         validations.each do |v|
           next if v.running_time == 0 || v.running_time.nil?
           next if v.validation == :unapplicable || v.validation == :error
-          p = Pair1.new(@map_running_times[v.short_header].x + v.running_time, @map_running_times[v.short_header].y + 1)
+          p = Pair1.new(@map_running_times[v.short_header].x + v.running_time,
+                        @map_running_times[v.short_header].y + 1)
           @map_running_times[v.short_header] = p
         end
       end
@@ -181,8 +183,10 @@ module GeneValidator
         # check the coverage
         coverage = Array.new(prediction.length_protein, 0)
         hit.hsp_list.each do |hsp|
-          len = hsp.match_query_to - hsp.match_query_from + 1
-          coverage[hsp.match_query_from - 1..hsp.match_query_to - 1] = Array.new(len, 1)
+          match_to   = hsp.match_query_to
+          match_from = hsp.match_query_from
+          len        = match_to - match_from + 1
+          coverage[match_from - 1..match_to - 1] = Array.new(len, 1)
         end
 
         if low_identity.length == 0 && coverage.uniq.length == 1

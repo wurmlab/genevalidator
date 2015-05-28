@@ -25,6 +25,7 @@ module GeneValidator
     attr_reader :mutex
     attr_accessor :mutex_yaml
     attr_accessor :mutex_html
+    attr_accessor :mutex_json
     attr_accessor :mutex_array
 
     def init(opt, start_idx = 1, summary = true)
@@ -45,11 +46,13 @@ module GeneValidator
       @config[:plot_dir]  = "#{@config[:html_path]}/files/json"
       relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
       @config[:aux]       = File.expand_path(relative_aux_path)
+      @config[:json_hash]  = []
 
-      @mutex_array        = Mutex.new
       @mutex              = Mutex.new
+      @mutex_array        = Mutex.new
       @mutex_yaml         = Mutex.new
       @mutex_html         = Mutex.new
+      @mutex_json         = Mutex.new
       create_output_folder
       index_the_input
     end
@@ -70,6 +73,7 @@ module GeneValidator
         iterator = parse_blast_output_file
         (Validation.new).run_validations(iterator)
       end
+      puts config[:json_hash].to_s
       # if @config[:summary]
       #   Output.print_footer(@no_queries, @scores, @good_predictions,
       #                       @bad_predictions, @nee, @no_mafft, @no_internet,
