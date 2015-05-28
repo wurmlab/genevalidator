@@ -124,13 +124,11 @@ module GeneValidator
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
+                                                @description)
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
+                                                @description)
       @validation_report.errors.push 'Unexpected Error'
     end
 

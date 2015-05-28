@@ -204,10 +204,7 @@ module GeneValidator
     # Output:
     # +Output+ object
     def do_validations(prediction, hits, idx)
-      begin
-        hits = remove_identical_hits(prediction, hits)
-        rescue Exception => error # NoPIdentError
-      end
+      hits = remove_identical_hits(prediction, hits)
 
       query_output                = Output.new(idx)
       query_output.prediction_len = prediction.length_protein
@@ -248,28 +245,17 @@ module GeneValidator
       compute_scores(query_output)
       query_output
 
-    rescue ValidationClassError => error
-      error_line = error.backtrace[0].scan(%r{/([^/]+:\d+):.*})[0][0]
-      $stderr.print "Class Type error at #{error_line}." \
-                    ' Possible cause: type of one of the validations is not' \
-                    " ValidationTest\n"
+    rescue ValidationClassError => e
+      puts e
       exit 1
-    rescue NoValidationError => error
-      error_line = error.backtrace[0].scan(%r{/([^/]+:\d+):.*})[0][0]
-      $stderr.print "Validation error at #{error_line}." \
-                    " Possible cause: your -v arguments are not valid aliases\n"
+    rescue NoValidationError => e
+      puts e
       exit 1
-    rescue ReportClassError => error
-      error_line = error.backtrace[0].scan(%r{/([^/]+:\d+):.*})[0][0]
-      $stderr.print "Class Type error at #{error_line}."\
-                    ' Possible cause: type of one of the validation reports' \
-                    " returned by the 'run' method is not ValidationReport\n"
+    rescue ReportClassError => e
+      puts e
       exit 1
-    rescue AliasDuplicationError => error
-      error_line = error.backtrace[0].scan(%r{/([^/]+:\d+):.*})[0][0]
-      $stderr.print "Alias Duplication error at #{error_line}."\
-                    ' Possible cause: At least two validations have the same' \
-                    " CLI alias\n"
+    rescue AliasDuplicationError => e
+      puts e
       exit 1
     end
 

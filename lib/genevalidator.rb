@@ -11,6 +11,7 @@ require 'io/console'
 require 'yaml'
 require 'forwardable'
 require 'fileutils'
+require 'genevalidator/exceptions'
 
 # Top level module / namespace.
 module GeneValidator
@@ -42,14 +43,13 @@ module GeneValidator
       @config[:yaml_path] = File.dirname(@opt[:input_fasta_file])
       @config[:html_path] = "#{@opt[:input_fasta_file]}.html"
       @config[:plot_dir]  = "#{@config[:html_path]}/files/json"
-      @config[:aux]       = File.join(File.dirname(File.expand_path(__FILE__)),
-                                      '../aux/files')
+      relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
+      @config[:aux]       = File.expand_path(relative_aux_path)
 
       @mutex_array        = Mutex.new
       @mutex              = Mutex.new
       @mutex_yaml         = Mutex.new
       @mutex_html         = Mutex.new
-
       create_output_folder
       index_the_input
     end
@@ -83,7 +83,8 @@ module GeneValidator
     def create_output_folder(output_dir = @config[:html_path],
                              aux_dir = @config[:aux])
       Dir.mkdir(output_dir)
-      FileUtils.cp_r(aux_dir, output_dir)
+      aux_files = File.join(aux_dir, 'files/')
+      FileUtils.cp_r(aux_files, output_dir)
     end
 
     ##

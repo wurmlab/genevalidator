@@ -84,8 +84,6 @@ module GeneValidator
       # Outputs:
       # Array of +Sequence+ objects corresponding to the list of hits
       def parse_next(iterator, type = config[:type])
-        fail TypeError unless iterator.is_a? Enumerator
-
         hits = []
         iter = iterator.next
 
@@ -142,18 +140,9 @@ module GeneValidator
           hits.push(seq)
         end
 
-        return hits
-
-      rescue TypeError => error
-        line = error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]
-        $stderr.print "Type error at #{line}. Possible cause: you didn't call" \
-                      " parse method first!\n"
-        exit 1
-      rescue SequenceTypeError => error
-        line = error.backtrace[0].scan(/\/([^\/]+:\d+):.*/)[0][0]
-        $stderr.print "Sequence Type error at #{line}. Possible cause: the" \
-                      'blast output was not obtained against a protein' \
-                      " database.\n"
+        hits
+      rescue SequenceTypeError => e
+        puts e
         exit 1
       rescue StopIteration
         nil

@@ -110,8 +110,7 @@ module GeneValidator
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
+                                                @description)
       @validation_report.errors.push 'Unexpected Error'
     end
 

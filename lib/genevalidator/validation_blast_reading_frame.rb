@@ -8,17 +8,17 @@ module GeneValidator
     attr_reader :total_hsp
     attr_reader :result
 
-    def initialize(short_header, header, description, frames_histo,
+    def initialize(short_header, header, description, frames,
                    expected = :yes)
       @short_header, @header, @description = short_header, header, description
-      @frames_histo = frames_histo
+      @frames = frames
       @expected     = expected
       @result       = validation
 
       @msg          = ''
       @exp_msg      = ''
       @total_hsp    = 0
-      @frames_histo.each do |x, y|
+      @frames.each do |x, y|
         @msg << "#{y}&nbsp;HSPs&nbsp;align&nbsp;in&nbsp;frame&nbsp;#{x}; "
         @exp_msg << "#{y} HSPs align in frame #{x}; "
         @total_hsp += y.to_i
@@ -36,7 +36,7 @@ module GeneValidator
       t = "BLAST identified #{@total_hsp} High-scoring Segment Pairs" \
              ' (HSPs)'
       if @result == :yes # i.e. if there is only one ORF...
-        frame = @frames_histo.keys[0].to_s
+        frame = @frames.keys[0].to_s
         t1    = "; all of these align in frame #{frame}."
       else
         t1 = ": #{@exp_msg.gsub(/; $/, '')}."
@@ -61,7 +61,7 @@ module GeneValidator
       # chack if there are different reading frames
       count_p = 0
       count_n = 0
-      frames_histo.each do |x, _y|
+      frames.each do |x, _y|
         count_p += 1 if x > 0
         count_n += 1 if x < 0
       end
@@ -101,29 +101,25 @@ module GeneValidator
       start = Time.now
 
       rfs =  lst.map { |x| x.hsp_list.map(&:query_reading_frame) }.flatten
-      frames_histo = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
+      frames = Hash[rfs.group_by { |x| x }.map { |k, vs| [k, vs.length] }]
 
       # get the main reading frame
-      main_rf = frames_histo.map { |_k, v| v }.max
-      @prediction.nucleotide_rf = frames_histo.select { |_k, v| v == main_rf }.first.first
+      main_rf = frames.map { |_k, v| v }.max
+      @prediction.nucleotide_rf = frames.select { |_k, v| v == main_rf }.first.first
 
       @validation_report = BlastRFValidationOutput.new(@short_header, @header,
-                                                       @description,
-                                                       frames_histo)
+                                                       @description, frames)
       @validation_report.running_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError
       @validation_report =  ValidationReport.new('Not enough evidence',
                                                  :warning, @short_header,
-                                                 @header, @description,
-                                                 @approach, @explanation,
-                                                 @conclusion)
+                                                 @header, @description)
     rescue Exception
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
-                                                @description, @approach,
-                                                @explanation, @conclusion)
+                                                @description)
       @validation_report.errors.push 'Unexpected Error'
     end
   end

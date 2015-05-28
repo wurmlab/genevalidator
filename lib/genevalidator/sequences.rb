@@ -85,8 +85,6 @@ module GeneValidator
         @raw_sequence = '' unless @raw_sequence.index(/ERROR/).nil?
       end
       @raw_sequence
-      # rescue Exception => error
-      #   @raw_sequence = ""
     end
 
     ##
