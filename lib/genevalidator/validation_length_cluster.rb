@@ -65,7 +65,7 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by hit length clusterization
   class LengthClusterValidation < ValidationTest
-    attr_reader :filename
+    attr_reader :plot_path
     attr_reader :clusters
     attr_reader :max_density_cluster
 
@@ -76,9 +76,9 @@ module GeneValidator
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +dilename+: +String+ with the name of the fasta file
-    def initialize(type, prediction, hits, filename)
+    def initialize(prediction, hits, plot_path)
       super
-      @filename     = filename
+      @plot_path    = plot_path
       @short_header = 'LengthCluster'
       @header       = 'Length Cluster'
       @description  = 'Check whether the prediction length fits most of the' \
@@ -175,13 +175,13 @@ module GeneValidator
     ##
     # Generates a json file containing data used for plotting the histogram
     # of the length distribution given a lust of Cluster objects
-    # +output+: filename where to save the graph
+    # +output+: plot_path where to save the graph
     # +clusters+: array of +Cluster+ objects
     # +max_density_cluster+: index of the most dense cluster
     # +prediction+: +Sequence+ object
     # Output:
     # +Plot+ object
-    def plot_histo_clusters(output = "#{@filename}_len_clusters.json",
+    def plot_histo_clusters(output = "#{@plot_path}_len_clusters.json",
                           clusters = @clusters,
                           max_density_cluster = @max_density_cluster,
                           prediction = @prediction)
@@ -206,11 +206,11 @@ module GeneValidator
     # Generates a json file cotaining data used for plotting
     # lines corresponding to the start and end hit offsets
     # Params:
-    # +output+: filename where to save the graph
+    # +output+: plot_path where to save the graph
     # +hits+: array of Sequence objects
     # Output:
     # +Plot+ object
-    def plot_len_clusters(output = "#{@filename}_len.json", _hits = @hits)
+    def plot_len_clusters(output = "#{@plot_path}_len.json", _hits = @hits)
       f = File.open(output, 'w')
       lst = @hits.sort { |a, b| a.length_protein <=> b.length_protein }
 

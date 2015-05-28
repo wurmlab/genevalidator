@@ -57,16 +57,17 @@ module GeneValidator
   # This class contains the methods necessary for checking whether there is
   # a main Open Reading Frame in the predicted sequence
   class OpenReadingFrameValidation < ValidationTest
-    attr_reader :filename
+    extend Forwardable
+    def_delegators GeneValidator, :config
+    attr_reader :plot_path
 
     ##
     # Initilizes the object
     # Params:
-    # +type+: type of the predicted sequence (:nucleotide or :protein)
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
-    # +plot_filename+: name of the input file, used when making plot files
-    def initialize(type, prediction, hits, filename)
+    # +plot_path+: name of the input file, used when making plot files
+    def initialize(prediction, hits, plot_path)
       super
       @short_header = 'ORF'
       @header       = 'Main ORF'
@@ -74,7 +75,8 @@ module GeneValidator
                       ' Frame in the predicted gene. Applicable only for' \
                       ' nucleotide queries.'
       @cli_name     = 'orf'
-      @filename     = filename
+      @plot_path    = plot_path
+      @type         = config[:type]
     end
 
     ##
@@ -157,7 +159,7 @@ module GeneValidator
     # +orfs+: +Hash+ containing the open reading frame
     # +output+: location where the plot will be saved in jped file format
     # +prediction+: Sequence objects
-    def plot_orfs(orfs, translated_length, output = "#{@filename}_orfs.json")
+    def plot_orfs(orfs, translated_length, output = "#{@plot_path}_orfs.json")
       fail QueryError unless orfs.is_a? Hash
 
       results = []

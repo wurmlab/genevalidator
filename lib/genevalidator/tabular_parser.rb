@@ -8,6 +8,9 @@ module GeneValidator
   ##
   # This class parses the tabular output of BLAST (outfmt 6 & 7)
   class TabularParser
+    extend Forwardable
+    def_delegators GeneValidator, :opt, :config
+
     attr_reader :rows
     attr_reader :tab_results
     attr_reader :column_names
@@ -15,28 +18,27 @@ module GeneValidator
 
     ##
     # Initializes the object
-    # +file_content+ : String with the tabular BLAST output
-    # +format+: format of the tabular output (comma/space delimited string)
-    # +type+: :nucleotide or :mrna
-    def initialize(filename, format, type)
+    def initialize
+      @opt          = opt
+      @config       = config
+      format        = opt[:blast_tabular_options]
       @column_names = format.gsub(/[-\d]/, '').split(/[ ,]/)
-      @tab_results  = analayse_tabular_file(filename)
-      @rows         = @tab_results.to_enum
-      @type         = type
+      @type         = config[:type]
+      @tab_results  = []
+      @rows         = nil
     end
 
     ##
     #
-    def analayse_tabular_file(filename)
-      tab_results  = []
+    def analayse_tabular_file(filename = @opt[:blast_tabular_file])
       file         = File.read(filename)
       lines        = CSV.parse(file, col_sep: "\t",
                                      skip_lines: /^#/,
                                      headers: @column_names)
       lines.each do |line|
-        tab_results << line.to_hash
+        @tab_results << line.to_hash
       end
-      tab_results
+      @rows = @tab_results.to_enum
     end
 
     ##

@@ -5,6 +5,8 @@ require 'yaml'
 require 'thread'
 module GeneValidator
   class Output
+    extend Forwardable
+    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_yaml, :mutex_html
     attr_accessor :prediction_len
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -22,52 +24,39 @@ module GeneValidator
     attr_accessor :fails
     attr_accessor :successes
 
-    attr_accessor :mutex
-    attr_accessor :mutex_yaml
-    attr_accessor :mutex_html
-
     ##
     # Initilizes the object
     # Params:
-    # +mutex+: +Mutex+ for exclusive access to the console
-    # +mutex_yaml+: +Mutex+ for exclusive access to the YAML file
-    # +mutex_html+: +Mutex+ for exclusive access to the HTML file
-    # +filename+: name of the fasta input file
-    # +html_path+: path of the html folder
-    # +yaml_path+: path where the yaml output wil be saved
-    # +idx+: idnex of the current query
-    # +start_idx+: number of the sequence from the file to start with
-    def initialize(mutex, mutex_yaml, mutex_html, filename, html_path,
-                   yaml_path, idx = 0, start_idx = 0)
-      @prediction_len = 0
-      @prediction_def = 'no_definition'
-      @nr_hits        = 0
-
-      @filename       = filename
-      @html_path      = html_path
-      @yaml_path      = yaml_path
-      @idx            = idx
-      @start_idx      = start_idx
-
+    # +current_idx+: index of the current query
+    def initialize(current_idx)
+      @opt            = opt
+      @config         = config
       @mutex          = mutex
       @mutex_yaml     = mutex_yaml
       @mutex_html     = mutex_html
+
+      @prediction_len = 0
+      @prediction_def = 'no_definition'
+      @nr_hits        = 0
+      @idx            = current_idx
+      @start_idx      = @config[:start_idx]
+
+      @filename       = @config[:filename]
+      @html_path      = @config[:html_path]
+      @yaml_path      = @config[:yaml_path]
+      @aux_dir        = @config[:aux]
+      @results_html   = "#{@html_path}/results.html"
+      @table_html     = "#{@html_path}/files/table.html"
+      @yaml_file      = "#{@yaml_path}/#{@filename}.yaml"
     end
 
     def print_output_console
-      if @idx == @start_idx
-        header = sprintf('%3s|%s|%20s|%5s', 'No', 'Score', 'Identifier',
-                         'No_Hits')
-        validations.map do |v|
-          header << "|#{v.short_header}"
-        end
-        puts header
-      end
+      print_console_header if @config[:run_no] == 0
 
       short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
       validation_outputs = validations.map(&:print)
 
-      output             = sprintf('%3s|%d|%20s|%5s|', @idx, @overall_score,
+      output             = sprintf('%3s|%5s|%20s|%7s|', @idx, @overall_score,
                                    short_def, @nr_hits)
       validation_outputs.each do |item|
         output << item
@@ -79,73 +68,76 @@ module GeneValidator
       end
     end
 
+    def print_console_header
+      @config[:run_no] += 1
+      header = sprintf('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier',
+                       'No_Hits')
+      validations.map do |v|
+        header << "|#{v.short_header}"
+      end
+      puts header
+    end
+
     def print_output_file_yaml
-      file_yaml = "#{@yaml_path}/#{@filename}.yaml"
       report = validations
-      if @idx == @start_idx
-        @mutex_yaml.synchronize do
-          File.open(file_yaml, 'w') do |f|
-            YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
-          end
+      set_up_yaml_file unless File.exist?(@yaml_file)
+      @mutex_yaml.synchronize do
+        hash = {}
+        hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
+        File.open(@yaml_file, 'a') do |f|
+          new_report =  hash.to_yaml
+          f.write(new_report[4..new_report.length - 1])
         end
-      else
-        @mutex_yaml.synchronize do
-          hash = {} # YAML.load_file(file_yaml)
-          hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
-          File.open(file_yaml, 'a') do |f|
-            new_report =  hash.to_yaml
-            f.write(new_report[4..new_report.length - 1])
-          end
+      end
+    end
+
+    def set_up_yaml_file
+      return if File.exist?(@yaml_file)
+      @mutex_yaml.synchronize do
+        File.open(@yaml_file, 'w') do |f|
+          YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
+        end
+      end
+    end 
+
+    def set_up_html_file
+      return if File.exist?(@results_html)
+      @mutex_html.synchronize do
+        template_header     = File.join(@aux_dir, 'template_header.erb')
+        template_file       = File.open(template_header, 'r').read
+        erb                 = ERB.new(template_file, 0, '>')
+
+        # Creating a separate output file for the web app
+        app_template_header = File.join(@aux_dir, 'app_template_header.erb')
+        table_template_file = File.open(app_template_header, 'r').read
+        erb_table           = ERB.new(table_template_file, 0, '>')
+
+        File.open(@results_html, 'w+') do |file|
+          file.write(erb.result(binding))
+        end
+
+        File.open(@table_html, 'w+') do |file|
+          file.write(erb_table.result(binding))
         end
       end
     end
 
     def generate_html
-      if @fails == 0
-        bg_icon = 'success'
-      else
-        bg_icon = 'danger'
-      end
-
-      index_file = "#{@html_path}/results.html"
-      table_file = "#{@html_path}/files/table.html"
-
-      aux_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../aux')
-
-      # if it's the first time I write in the html file
-      if @idx == @start_idx
-        @mutex_html.synchronize do
-          template_header     = File.join(aux_dir, 'template_header.erb')
-          template_file       = File.open(template_header, 'r').read
-          erb                 = ERB.new(template_file, 0, '>')
-
-          #  Creating a Separate output file for the web app
-          app_template_header = File.join(aux_dir, 'app_template_header.erb')
-          table_template_file = File.open(app_template_header, 'r').read
-          erb_table           = ERB.new(table_template_file, 0, '>')
-
-          File.open(index_file, 'w+') do |file|
-            file.write(erb.result(binding))
-          end
-
-          File.open(table_file, 'w+') do |file|
-            file.write(erb_table.result(binding))
-          end
-        end
-      end
-
+      bg_icon = (@fails == 0) ? 'success' : 'danger'
+      
       toggle = "toggle#{@idx}"
-
-      @mutex_yaml.synchronize do
-        template_query = File.join(aux_dir, 'template_query.erb')
+      set_up_html_file unless File.exist?(@results_html)
+      @mutex_html.synchronize do
+  
+        template_query = File.join(@aux_dir, 'template_query.erb')
         template_file = File.open(template_query, 'r').read
         erb = ERB.new(template_file, 0, '>')
 
-        File.open(index_file, 'a') do |file|
+        File.open(@results_html, 'a') do |file|
           file.write(erb.result(binding))
         end
 
-        File.open(table_file, 'a') do |file|
+        File.open(@table_html, 'a') do |file|
           file.write(erb.result(binding))
         end
       end
@@ -199,22 +191,18 @@ module GeneValidator
 
       evaluation = evaluation.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
-      index_file = "#{html_path}/results.html"
-      table_file = "#{html_path}/files/table.html"
-      aux_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../aux')
-
-      template_footer     = File.join(aux_dir, 'template_footer.erb')
-      app_template_footer = File.join(aux_dir, 'app_template_footer.erb')
+      template_footer     = File.join(@aux_dir, 'template_footer.erb')
+      app_template_footer = File.join(@aux_dir, 'app_template_footer.erb')
 
       template_file = File.open(template_footer, 'r').read
       erb = ERB.new(template_file, 0, '>')
-      File.open(index_file, 'a+') do |file|
+      File.open(@results_html, 'a+') do |file|
         file.write(erb.result(binding))
       end
 
       table_footer_template = File.open(app_template_footer, 'r').read
       table_erb = ERB.new(table_footer_template, 0, '>')
-      File.open(table_file, 'a+') do |file|
+      File.open(@table_html, 'a+') do |file|
         file.write(table_erb.result(binding))
       end
     end

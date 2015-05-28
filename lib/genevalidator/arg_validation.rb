@@ -4,15 +4,19 @@ module GeneValidator
   # TODO: If a tabular file is provided, ensure that a tabular file has the
   #       right number of columns
   # TODO: assert_if_ruby_version_is_supported
-  # A module to validate the arguments passed to the Validation Class
-  module GVArgValidation
+  # A class to validate the arguments passed to the Validation Class
+  class GVArgValidation
     class << self
-      def validate_args(opt)
+
+      extend Forwardable
+      def_delegators GeneValidator, :opt
+
+      def validate_args
         @opt = opt
         assert_output_dir_does_not_exist
         assert_file_present('input file', opt[:input_fasta_file])
         assert_input_file_probably_fasta
-        assert_input_contains_single_type_sequence
+        assert_input_sequence
         assert_BLAST_output_files
 
         assert_validations_arg
@@ -20,7 +24,6 @@ module GeneValidator
 
         Blast.validate(opt) unless @opt[:test]
         Mafft.assert_mafft_installation(opt)
-        @opt
       end
 
       private
@@ -85,7 +88,7 @@ module GeneValidator
 
       alias_method :assert_dir_present, :assert_file_present
 
-      def assert_input_contains_single_type_sequence
+      def assert_input_sequence
         fasta_content = IO.binread(@opt[:input_fasta_file])
         type = BlastUtils.type_of_sequences(fasta_content)
         return if type == :nucleotide || type == :protein

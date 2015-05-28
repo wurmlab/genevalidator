@@ -81,11 +81,9 @@ module GeneValidator
     ##
     # Initializes the object
     # Params:
-    # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +prediction+: a +Sequence+ object representing the blast query
-    # +threshold+: threshold below which the prediction length rank is
-    # considered to be inadequate
-    def initialize(type, prediction, hits)
+    # +hits+: a vector of +Sequence+ objects (representing blast hits)
+    def initialize(prediction, hits)
       super
       @short_header = 'LengthRank'
       @header       = 'Length Rank'

@@ -8,29 +8,36 @@ require 'io/console'
 require 'yaml'
 module GeneValidator
   # Gets the raw sequences for each hit in a BLAST output file
-  module GetRawSequences
+  class GetRawSequences
     class <<self
+      extend Forwardable
+      def_delegators GeneValidator, :opt, :config
+
       ##
       # Obtains raw_sequences from BLAST output file...
-      def run(opt)
+      def run
         @opt = opt
+        @config = config
+        
+        puts 'Extracting sequences within the BLAST output file from the' \
+             ' BLAST database'
 
-        if opt[:blast_xml_file]
-          @blast_file  = opt[:blast_xml_file]
+        if @opt[:blast_xml_file]
+          @blast_file  = @opt[:blast_xml_file]
         else
-          @blast_file = opt[:blast_tabular_file]
+          @blast_file = @opt[:blast_tabular_file]
         end
 
-        raw_seq_file = @blast_file + '.raw_seq'
+        @opt[:raw_sequences] = @blast_file + '.raw_seq'
         index_file   = @blast_file + '.index'
 
         if opt[:db] =~ /remote/
-          write_an_raw_seq_file(raw_seq_file, 'remote')
+          write_a_raw_seq_file(@opt[:raw_sequences], 'remote')
         else
           write_an_index_file(index_file, 'local')
-          obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
+          obtain_raw_seqs_from_local_db(index_file, @opt[:raw_sequences])
         end
-        raw_seq_file
+        index_raw_seq_file
       end
 
       private
@@ -43,7 +50,7 @@ module GeneValidator
         file.close unless file.nil?
       end
 
-      alias_method :write_an_raw_seq_file, :write_an_index_file
+      alias_method :write_a_raw_seq_file, :write_an_index_file
 
       def iterate_xml(file, db_type)
         n = Bio::BlastXMLParser::XmlIterator.new(@opt[:blast_xml_file]).to_enum
@@ -125,6 +132,36 @@ module GeneValidator
           break # break after checking the first column
         end
       end
+
+      ##
+      # Index the raw sequences file...
+      def index_raw_seq_file(raw_seq_file = @opt[:raw_sequences])
+        # leave only the identifiers in the fasta description
+        content = File.open(raw_seq_file, 'rb').read.gsub(/ .*/, '')
+        File.open(raw_seq_file, 'w+') { |f| f.write(content) }
+
+        # index the fasta file
+        keys   = content.scan(/>(.*)\n/).flatten
+        values = content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
+
+        # make an index hash
+        index_hash = {}
+        keys.each_with_index do |k, i|
+          start = values[i]
+          endf  = (i == values.length - 1) ? content.length - 1 : values[i + 1]
+          index_hash[k] = [start, endf]
+        end
+
+        # create FASTA index
+        @config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
+        @config[:raw_seq_file_load]  = index_hash
+
+        File.open(@config[:raw_seq_file_index], 'w') do |f|
+          YAML.dump(index_hash, f)
+        end
+        content = nil
+      end
+
     end
   end
 end

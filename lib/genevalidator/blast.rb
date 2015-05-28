@@ -14,6 +14,10 @@ module GeneValidator
   # Contains methods that run BLAST and methods that analyse sequences
   class BlastUtils
     class << self
+
+      extend Forwardable
+      def_delegators GeneValidator, :opt, :config
+      
       EVALUE = 1e-5
 
       ##
@@ -25,7 +29,10 @@ module GeneValidator
       # +num_threads+: The number of threads to run BLAST with.
       # Output:
       # String with the blast xml output
-      def run_blast(blast_type, query, db, num_threads)
+      def run_blast(query, db = opt[:db], seq_type = config[:type],
+                    num_threads = opt[:num_threads])
+
+        blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
         threads = (db !~ /remote/) ? "-num_threads #{num_threads}" : ''
 
@@ -46,14 +53,20 @@ module GeneValidator
       # +nr_hits+: max number of hits
       # Output:
       # XML file
-      def run_blast_on_file(opt)
-        seq_type   = guess_sequence_type_from_file(opt[:input_fasta_file])
+      def run_blast_on_input_file(input_file = opt[:input_fasta_file],
+                                  db = opt[:db], seq_type = config[:type],
+                                  num_threads = opt[:num_threads])
+        return if opt[:blast_xml_file] || opt[:blast_tabular_file]
+
+        puts 'Running BLAST'
+        opt[:blast_xml_file] = input_file + '.blast_xml'
+
         blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = (opt[:db] !~ /remote/) ? "-num_threads #{opt[:num_threads]}" : ''
+        threads = (opt[:db] !~ /remote/) ? "-num_threads #{num_threads}" : ''
 
-        blastcmd = "#{blast_type} -query '#{opt[:input_fasta_file]}'" \
-                   " -out '#{opt[:blast_xml_file]}' -db #{opt[:db]} " \
+        blastcmd = "#{blast_type} -query '#{input_file}'" \
+                   " -out '#{opt[:blast_xml_file]}' -db #{db} " \
                    " -evalue #{EVALUE} -outfmt 5 #{threads}"
 
         `#{blastcmd}`
@@ -70,7 +83,7 @@ module GeneValidator
       # +type+: the type of the sequence: :nucleotide or :protein
       # Outputs:
       # Array of +Sequence+ objects corresponding to the list of hits
-      def parse_next(iterator, type)
+      def parse_next(iterator, type = config[:type])
         fail TypeError unless iterator.is_a? Enumerator
 
         hits = []
@@ -147,34 +160,6 @@ module GeneValidator
       end
 
       ##
-      # Strips all non-letter characters. guestimates sequence based on that.
-      # If less than 10 useable characters... returns nil
-      # If more than 90% ACGTU returns :nucleotide. else returns :protein
-      # Params:
-      # +sequence_string+: String to validate
-      # Output:
-      # nil, :nucleotide or :protein
-      def guess_sequence_type(sequence_string)
-        # removing non-letter and ambiguous characters
-        cleaned_sequence = sequence_string.gsub(/[^A-Z]|[NX]/i, '')
-        return nil if cleaned_sequence.length < 10 # conservative
-
-        type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
-        (type == Bio::Sequence::NA) ? :nucleotide : :protein
-      end
-
-      ##
-      #
-      def guess_sequence_type_from_file(file)
-        lines = File.foreach(file).first(10)
-        seqs = ''
-        lines.each do |l|
-          seqs += l.chomp unless l[0] == '>'
-        end
-        guess_sequence_type(seqs)
-      end
-
-      ##
       # Method copied from sequenceserver/sequencehelpers.rb
       # Splits input at putative fasta definition lines (like ">adsfadsf");
       # then guesses sequence type for each sequence.
@@ -193,6 +178,34 @@ module GeneValidator
 
         return nil if sequence_types.empty?
         return sequence_types.first if sequence_types.length == 1
+      end
+
+      ##
+      # Strips all non-letter characters. guestimates sequence based on that.
+      # If less than 10 useable characters... returns nil
+      # If more than 90% ACGTU returns :nucleotide. else returns :protein
+      # Params:
+      # +sequence_string+: String to validate
+      # Output:
+      # nil, :nucleotide or :protein
+      def guess_sequence_type(sequence_string)
+        # removing non-letter and ambiguous characters
+        cleaned_sequence = sequence_string.gsub(/[^A-Z]|[NX]/i, '')
+        return nil if cleaned_sequence.length < 10 # conservative
+
+        type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
+        (type == Bio::Sequence::NA) ? :nucleotide : :protein
+      end
+
+      ##
+      #
+      def guess_sequence_type_from_input_file(file = opt[:input_fasta_file])
+        lines = File.foreach(file).first(10)
+        seqs = ''
+        lines.each do |l|
+          seqs += l.chomp unless l[0] == '>'
+        end
+        guess_sequence_type(seqs)
       end
     end
   end

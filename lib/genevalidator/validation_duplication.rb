@@ -71,12 +71,14 @@ module GeneValidator
   # This class contains the methods necessary for
   # finding duplicated subsequences in the predicted gene
   class DuplicationValidation < ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :opt, :config
+
     attr_reader :raw_seq_file
     attr_reader :index_file_name
     attr_reader :raw_seq_file_load
 
-    def initialize(type, prediction, hits, raw_seq_file, index_file_name,
-                   raw_seq_file_load, db, num_threads)
+    def initialize(prediction, hits)
       super
       @short_header      = 'Duplication'
       @header            = 'Duplication'
@@ -84,11 +86,12 @@ module GeneValidator
                            ' in the predicted gene by counting the hsp' \
                            ' residue coverage of the prediction, for each hit.'
       @cli_name          = 'dup'
-      @raw_seq_file      = raw_seq_file
-      @index_file_name   = index_file_name
-      @raw_seq_file_load = raw_seq_file_load
-      @db                = db
-      @num_threads       = num_threads
+      @raw_seq_file      = opt[:raw_sequences]
+      @index_file_name   = config[:raw_seq_file_index]
+      @raw_seq_file_load = config[:raw_seq_file_load]
+      @db                = opt[:db]
+      @num_threads       = opt[:num_threads]
+      @type              = config[:type]
     end
 
     def in_range?(ranges, idx)

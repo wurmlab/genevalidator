@@ -2,6 +2,8 @@ module GeneValidator
   # This is an abstract class extended
   # by all validation classes
   class ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :config
     attr_accessor :type
     attr_accessor :prediction
     attr_accessor :hits
@@ -19,8 +21,8 @@ module GeneValidator
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +argv+: aditional arguments if needed
-    def initialize(type, prediction, hits = nil, *_argv)
-      @type              = type
+    def initialize(prediction, hits = nil, *_argv)
+      @type              = config[:type]
       @prediction        = prediction
       @hits              = hits
       @short_header      = 'NewVal'

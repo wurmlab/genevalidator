@@ -121,7 +121,8 @@ end
 start = Time.now
 opt[:input_fasta_file] = ARGV[0]
 
-(GeneValidator::Validation.new(opt)).run
+GeneValidator.init(opt)
+GeneValidator.run
 
 puts "Total running time: #{(Time.now - start).round(3)}s"
 puts # a blank line

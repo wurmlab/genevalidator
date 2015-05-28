@@ -83,26 +83,25 @@ module GeneValidator
   # checking whether there is evidence that the
   # prediction is a merge of multiple genes
   class GeneMergeValidation < ValidationTest
-    attr_reader :hits
     attr_reader :prediction
-    attr_reader :filename
+    attr_reader :hits
+    attr_reader :plot_path
 
     ##
     # Initilizes the object
     # Params:
-    # +type+: type of the predicted sequence (:nucleotide or :protein)
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
-    # +filename+: name of the input file, used when generatig the plot files
+    # +plot_path+: name of the input file, used when generatig the plot files
     # +boundary+: the offset of the hit from which we start analysing the hit
-    def initialize(type, prediction, hits, filename, boundary = 10)
+    def initialize(prediction, hits, plot_path, boundary = 10)
       super
       @short_header = 'Gene_Merge'
       @header       = 'Gene Merge'
       @description  = 'Check whether BLAST hits make evidence about a merge' \
                       ' of two genes that match the predicted gene.'
       @cli_name     = 'merge'
-      @filename     = filename
+      @plot_path    = plot_path
       @boundary     = boundary
     end
 
@@ -166,6 +165,12 @@ module GeneValidator
                                                 @short_header, @header,
                                                 @description, @approach,
                                                 @explanation, @conclusion)
+    rescue Exception
+      @validation_report = ValidationReport.new('Unexpected error', :error,
+                                                @short_header, @header,
+                                                @description, @approach,
+                                                @explanation, @conclusion)
+      @validation_report.errors.push 'Unexpected Error'
     end
 
     ##
@@ -175,7 +180,7 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     # +prediction+: Sequence objects
-    def plot_matched_regions(output = "#{filename}_match.json", hits = @hits)
+    def plot_matched_regions(output = "#{plot_path}_match.json", hits = @hits)
 
       colors   = ['orange', 'blue']  ##{colors[i%2]
       f        = File.open(output, 'w')
@@ -215,7 +220,7 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     def plot_2d_start_from(slope = nil, y_intercept = nil,
-                           output = "#{filename}_match_2d.json", hits = @hits)
+                           output = "#{plot_path}_match_2d.json", hits = @hits)
       pairs = hits.map do |hit|
         Pair.new(hit.hsp_list.map(&:match_query_from).min,
                  hit.hsp_list.map(&:match_query_to).max)
@@ -225,7 +230,7 @@ module GeneValidator
       yy = pairs.map(&:y)
 
       freq_x = xx.inject(Hash.new(0)) { |h, v| h[v] += 1; h }
-      filename_x = "#{filename}_merge_x.json"
+      filename_x = "#{plot_path}_merge_x.json"
       f = File.open(filename_x, 'w')
       f.write([freq_x.collect { |k,v|
           { 'key' => k, 'value' => v, 'main' => (1==2) }
@@ -240,7 +245,7 @@ module GeneValidator
 #       @validation_report.plot_files.push(plot3)
 
       freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-      filename_y = "#{filename}_merge_y.json"
+      filename_y = "#{plot_path}_merge_y.json"
       f = File.open(filename_y, 'w')
       f.write([freq_y.collect { |k, v|
           { 'key' => k, 'value' => v, 'main' => (1 == 2) }

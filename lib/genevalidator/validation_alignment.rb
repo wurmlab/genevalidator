@@ -81,7 +81,9 @@ module GeneValidator
   # This class contains the methods necessary for
   # validations based on multiple alignment
   class AlignmentValidation < ValidationTest
-    attr_reader :filename
+    extend Forwardable
+    def_delegators GeneValidator, :opt, :config
+    attr_reader :plot_path
     attr_reader :multiple_alignment
     attr_reader :raw_seq_file
     attr_reader :index_file_name
@@ -90,32 +92,27 @@ module GeneValidator
     ##
     # Initilizes the object
     # Params:
-    # +type+: type of the predicted sequence (:nucleotide or :protein)
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
-    # +filename+: name of the fasta file
-    # +mafft_path+: path of the MAFFT installation
-    # +raw_seq_file+: name of the fasta file with raw sequences
-    # +index_file_name+: name of the fasta index file
-    # +raw_seq_file_load+: String - loaded content of the index file
-    def initialize(type, prediction, hits, filename, raw_seq_file,
-                   index_file_name, raw_seq_file_load, db, num_threads)
+    # +plot_path+: name of the fasta file
+    def initialize(prediction, hits, plot_path)
       super
       @short_header       = 'MA'
+      @cli_name           = 'align'
       @header             = 'Missing/Extra sequences'
       @description        = 'Finds missing and extra sequences in the' \
                             ' prediction, based on the multiple alignment of' \
                             ' the best hits. Also counts the percentage of' \
                             ' the conserved regions that appear in the' \
                             ' prediction.'
-      @filename           = filename
-      @raw_seq_file       = raw_seq_file
-      @index_file_name    = index_file_name
-      @raw_seq_file_load  = raw_seq_file_load
-      @db                 = db
+      @plot_path          = plot_path
+      @raw_seq_file       = opt[:raw_sequences]
+      @index_file_name    = config[:raw_seq_file_index]
+      @raw_seq_file_load  = config[:raw_seq_file_load]
+      @db                 = opt[:db]
       @multiple_alignment = []
-      @cli_name           = 'align'
-      @num_threads        = num_threads
+      @num_threads        = opt[:num_threads]
+      @type               = config[:type]
     end
 
     ##
@@ -417,9 +414,9 @@ module GeneValidator
     # lines for multiple hits alignment, prediction and statistical model
     # Params:
     # +freq+: +String+ residue frequency from the statistical model
-    # +output+: filename of the json file
+    # +output+: plot_path of the json file
     # +ma+: +String+ array with the multiple alignmened hits and prediction
-    def plot_alignment(freq, output = "#{@filename}_ma.json", ma = @multiple_alignment)
+    def plot_alignment(freq, output = "#{@plot_path}_ma.json", ma = @multiple_alignment)
       # get indeces of consensus in the multiple alignment
       consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length - 2])
       consensus_idxs = consensus.split(//).each_index.select { |j| isalpha(consensus[j]) }
