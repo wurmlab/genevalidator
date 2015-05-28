@@ -17,7 +17,7 @@ module GeneValidator
 
       extend Forwardable
       def_delegators GeneValidator, :opt, :config
-      
+
       EVALUE = 1e-5
 
       ##

@@ -121,11 +121,11 @@ module GeneValidator
 
     def generate_html
       bg_icon = (@fails == 0) ? 'success' : 'danger'
-      
+
       toggle = "toggle#{@idx}"
       set_up_html_file unless File.exist?(@results_html)
       @mutex_html.synchronize do
-  
+
         template_query = File.join(@aux_dir, 'template_query.erb')
         template_file = File.open(template_query, 'r').read
         erb = ERB.new(template_file, 0, '>')

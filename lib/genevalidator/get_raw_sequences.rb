@@ -18,7 +18,7 @@ module GeneValidator
       def run
         @opt = opt
         @config = config
-        
+
         puts 'Extracting sequences within the BLAST output file from the' \
              ' BLAST database'
 

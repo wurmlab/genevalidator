@@ -127,7 +127,7 @@ module GeneValidator
         start_offset = @query_idx[i + 1] - @query_idx[i]
         end_offset   = @query_idx[i]
         query = IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
-        
+
         xml_output = BlastUtils.run_blast(query)
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml_output).to_enum
         (Validation.new).run_validations(iterator)
