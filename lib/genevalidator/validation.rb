@@ -223,8 +223,10 @@ module GeneValidator
       val.push LengthRankValidation.new(prediction, hits)
       val.push GeneMergeValidation.new(prediction, hits, plot_path)
       val.push DuplicationValidation.new(prediction, hits)
-      val.push BlastReadingFrameValidation.new(prediction, hits)
-      val.push OpenReadingFrameValidation.new(prediction, hits, plot_path)
+      if @config[:type] == :nucleotide
+        val.push BlastReadingFrameValidation.new(prediction, hits)
+        val.push OpenReadingFrameValidation.new(prediction, hits, plot_path)
+      end
       val.push AlignmentValidation.new(prediction, hits, plot_path)
 
       val = val.select { |v| @opt[:validations].include? v.cli_name.downcase }
