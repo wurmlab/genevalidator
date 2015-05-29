@@ -81,44 +81,29 @@ module GeneValidator
       puts header
     end
 
-    def set_up_html_file
-      template_header     = File.join(@aux_dir, 'template_header.erb')
-      template_file       = File.open(template_header, 'r').read
-      erb                 = ERB.new(template_file, 0, '>')
-
-      # Creating a separate output file for the web app
-      app_template_header = File.join(@aux_dir, 'app_template_header.erb')
-      table_template_file = File.open(app_template_header, 'r').read
-      erb_table           = ERB.new(table_template_file, 0, '>')
-      return if File.exist?(@results_html)
-
-      File.open(@results_html, 'w+') do |file|
-        file.write(erb.result(binding))
-      end
-
-      File.open(@table_html, 'w+') do |file|
-        file.write(erb_table.result(binding))
+    def set_up_html_file(erb_file, output_file)
+      template_file_name = File.join(@aux_dir, erb_file)
+      template_contents  = File.open(template_file_name, 'r').read
+      erb                = ERB.new(template_contents, 0, '>')
+      return if File.exist?(output_file)
+      File.open(output_file, 'w+') do |f|
+        f.write(erb.result(binding))
       end
     end
 
     def generate_html
-      bg_icon = (@fails == 0) ? 'success' : 'danger'
-
+      bg_icon = (@fails == 0) ? 'success' : 'danger'=
       toggle = "toggle#{@idx}"
-      set_up_html_file unless File.exist?(@results_html)
+      unless File.exist?(@results_html)
+        set_up_html_file('template_header.erb', @results_html)
+        set_up_html_file('app_template_header.erb', @table_html)
+      end
       @mutex_html.synchronize do
-
         template_query = File.join(@aux_dir, 'template_query.erb')
         template_file = File.open(template_query, 'r').read
-        erb = ERB.new(template_file, 0, '>')
-
-        File.open(@results_html, 'a') do |file|
-          file.write(erb.result(binding))
-        end
-
-        File.open(@table_html, 'a') do |file|
-          file.write(erb.result(binding))
-        end
+        erb = ERB.new(template_file, 0, '>') 
+        File.open(@results_html, 'a') { |f| f.write(erb.result(binding)) }
+        File.open(@table_html, 'a') { |f| f.write(erb.result(binding)) }
       end
     end
 
