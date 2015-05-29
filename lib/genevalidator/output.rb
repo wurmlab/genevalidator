@@ -3,6 +3,8 @@ require 'fileutils'
 require 'erb'
 require 'yaml'
 require 'thread'
+require 'json'
+
 module GeneValidator
   class Output
     extend Forwardable
@@ -44,12 +46,13 @@ module GeneValidator
 
       @filename       = @config[:filename]
       @html_path      = @config[:html_path]
-      @yaml_path      = @config[:yaml_path]
+      @dir            = @config[:dir]
       @aux_dir        = @config[:aux]
       @json_hash      = @config[:json_hash]
+
       @results_html   = "#{@html_path}/results.html"
       @table_html     = "#{@html_path}/files/table.html"
-      @yaml_file      = "#{@yaml_path}/#{@filename}.yaml"
+      @yaml_file      = "#{@dir}/#{@filename}.yaml"
     end
 
     def print_output_console
@@ -142,11 +145,29 @@ module GeneValidator
 
     def generate_json
       @mutex_json.synchronize do
-        current_seq = {}
-        current_seq[:id] = @idx
-        current_seq[:definition] = @prediction_def
-        current_seq[:no_hits] = @nr_hits
-        @json_hash << current_seq
+        row                 = {}
+        row[:id]            = @idx
+        row[:overall_score] = @overall_score
+        row[:definition]    = @prediction_def
+        row[:no_hits]       = @nr_hits
+        @validations.each do |item|
+          next if item.header.nil?
+          if item.color == 'warning' 
+            hash = {print: item.print, status: item.color}
+          else
+            hash = {print: item.print, status: item.color,
+                    approach: item.approach, explanation: item.explanation,
+                    conclusion: item.conclusion}
+          end
+          row[item.header] = hash
+        end
+        @json_hash << row
+      end
+    end
+
+    def self.write_json_file(hash, json_file)
+      File.open(json_file, 'w') do |f|
+        f.write(hash.to_json)
       end
     end
 

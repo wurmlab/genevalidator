@@ -39,11 +39,12 @@ module GeneValidator
       @config[:summary]   = summary
 
       @config[:type]      = BlastUtils.guess_sequence_type_from_input_file
-
       @config[:filename]  = File.basename(@opt[:input_fasta_file])
-      @config[:yaml_path] = File.dirname(@opt[:input_fasta_file])
+      @config[:dir]       = File.dirname(@opt[:input_fasta_file])
       @config[:html_path] = "#{@opt[:input_fasta_file]}.html"
+      @config[:json_file] = "#{@config[:dir]}/#{@config[:filename]}.json"
       @config[:plot_dir]  = "#{@config[:html_path]}/files/json"
+
       relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
       @config[:aux]       = File.expand_path(relative_aux_path)
       @config[:json_hash]  = []
@@ -73,7 +74,7 @@ module GeneValidator
         iterator = parse_blast_output_file
         (Validation.new).run_validations(iterator)
       end
-      puts config[:json_hash].to_s
+      Output.write_json_file(@config[:json_hash], @config[:json_file])
       # if @config[:summary]
       #   Output.print_footer(@no_queries, @scores, @good_predictions,
       #                       @bad_predictions, @nee, @no_mafft, @no_internet,
