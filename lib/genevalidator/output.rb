@@ -8,7 +8,7 @@ require 'json'
 module GeneValidator
   class Output
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_yaml, :mutex_html, :mutex_json
+    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_html, :mutex_json
     attr_accessor :prediction_len
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -34,7 +34,6 @@ module GeneValidator
       @opt            = opt
       @config         = config
       @mutex          = mutex
-      @mutex_yaml     = mutex_yaml
       @mutex_html     = mutex_html
       @mutex_json     = mutex_json
 
@@ -52,7 +51,6 @@ module GeneValidator
 
       @results_html   = "#{@html_path}/results.html"
       @table_html     = "#{@html_path}/files/table.html"
-      @yaml_file      = "#{@dir}/#{@filename}.yaml"
     end
 
     def print_output_console
@@ -81,25 +79,6 @@ module GeneValidator
         header << "|#{v.short_header}"
       end
       puts header
-    end
-    def set_up_yaml_file
-      return if File.exist?(@yaml_file)
-      File.open(@yaml_file, 'w') do |f|
-        YAML.dump({ @prediction_def.scan(/([^ ]+)/)[0][0] => report }, f)
-      end
-    end
-
-    def print_output_file_yaml
-      report = validations
-      set_up_yaml_file unless File.exist?(@yaml_file)
-      @mutex_yaml.synchronize do
-        hash = {}
-        hash[@prediction_def.scan(/([^ ]+)/)[0][0]] = report
-        File.open(@yaml_file, 'a') do |f|
-          new_report =  hash.to_yaml
-          f.write(new_report[4..new_report.length - 1])
-        end
-      end
     end
 
     def set_up_html_file

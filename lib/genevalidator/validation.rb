@@ -122,7 +122,6 @@ module GeneValidator
       query_output = do_validations(prediction, hits, current_idx)
       query_output.generate_html
       query_output.generate_json
-      query_output.print_output_file_yaml
       query_output.print_output_console
 
       validations = query_output.validations
