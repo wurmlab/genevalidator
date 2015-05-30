@@ -51,6 +51,10 @@ module GeneValidator
 
       @results_html   = "#{@html_path}/results.html"
       @table_html     = "#{@html_path}/files/table.html"
+
+      @query_erb      = File.join(@aux_dir, 'template_query.erb')
+      @head_erb       = File.join(@aux_dir, 'template_header.erb')
+      @head_table_erb = File.join(@aux_dir, 'app_template_header.erb')
     end
 
     def print_output_console
@@ -81,10 +85,9 @@ module GeneValidator
       puts header
     end
 
-    def set_up_html_file(erb_file, output_file)
-      template_file_name = File.join(@aux_dir, erb_file)
-      template_contents  = File.open(template_file_name, 'r').read
-      erb                = ERB.new(template_contents, 0, '>')
+    def set_up_html(erb_file, output_file)
+      template_contents = File.open(erb_file, 'r').read
+      erb               = ERB.new(template_contents, 0, '>')
       return if File.exist?(output_file)
       File.open(output_file, 'w+') do |f|
         f.write(erb.result(binding))
@@ -92,14 +95,10 @@ module GeneValidator
     end
 
     def generate_html
-      bg_icon = (@fails == 0) ? 'success' : 'danger'
-      unless File.exist?(@results_html)
-        set_up_html_file('template_header.erb', @results_html)
-        set_up_html_file('app_template_header.erb', @table_html)
-      end
+      set_up_html(@head_erb, @results_html) unless File.exist?(@results_html)
+      set_up_html(@head_table_erb, @table_html) unless File.exist?(@table_html)
       @mutex_html.synchronize do
-        template_query = File.join(@aux_dir, 'template_query.erb')
-        template_file = File.open(template_query, 'r').read
+        template_file = File.open(@query_erb, 'r').read
         erb = ERB.new(template_file, 0, '>')
         File.open(@results_html, 'a') { |f| f.write(erb.result(binding)) }
         File.open(@table_html, 'a') { |f| f.write(erb.result(binding)) }
@@ -117,11 +116,11 @@ module GeneValidator
 
     def create_validation_hashes(row)
       @validations.each do |item|
-        val = { print: item.print, status: item.color }
+        val = { print: item.print.gsub('&nbsp;', ' '), status: item.color }
         if item.color != 'warning'
-          val = { print: item.print, status: item.color,
-                  approach: item.approach, explanation: item.explanation,
-                  conclusion: item.conclusion }
+          explain = { approach: item.approach, explanation: item.explanation,
+                      conclusion: item.conclusion }
+          val.merge(explain)
         end
         val[:graphs] = create_graphs_hash(item) unless item.plot_files.nil?
         row[item.header] = val
@@ -130,12 +129,11 @@ module GeneValidator
     end
 
     def create_graphs_hash(item)
-      graphs = []
-      item.plot_files.each do |p|
-        graph = { filename: p.filename, type: p.type, title: p.title,
-                  footer: p.footer, xtitle: p.xtitle, ytitle: p.ytitle,
-                  aux1: p.aux1, aux2: p.aux2 }
-        graphs << graph
+      graphs = {}
+      item.plot_files.each do |g|
+        graphs[g.filename] = { type: g.type, title: g.title, footer: g.footer,
+                               xtitle: g.xtitle, ytitle: g.ytitle, aux1: g.aux1,
+                               aux2: g.aux2 }
       end
       graphs
     end
