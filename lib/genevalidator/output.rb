@@ -92,8 +92,7 @@ module GeneValidator
     end
 
     def generate_html
-      bg_icon = (@fails == 0) ? 'success' : 'danger'=
-      toggle = "toggle#{@idx}"
+      bg_icon = (@fails == 0) ? 'success' : 'danger'
       unless File.exist?(@results_html)
         set_up_html_file('template_header.erb', @results_html)
         set_up_html_file('app_template_header.erb', @table_html)
@@ -101,7 +100,7 @@ module GeneValidator
       @mutex_html.synchronize do
         template_query = File.join(@aux_dir, 'template_query.erb')
         template_file = File.open(template_query, 'r').read
-        erb = ERB.new(template_file, 0, '>') 
+        erb = ERB.new(template_file, 0, '>')
         File.open(@results_html, 'a') { |f| f.write(erb.result(binding)) }
         File.open(@table_html, 'a') { |f| f.write(erb.result(binding)) }
       end
@@ -109,24 +108,36 @@ module GeneValidator
 
     def generate_json
       @mutex_json.synchronize do
-        row                 = {}
-        row[:id]            = @idx
-        row[:overall_score] = @overall_score
-        row[:definition]    = @prediction_def
-        row[:no_hits]       = @nr_hits
-        @validations.each do |item|
-          next if item.header.nil?
-          if item.color == 'warning' 
-            hash = {print: item.print, status: item.color}
-          else
-            hash = {print: item.print, status: item.color,
-                    approach: item.approach, explanation: item.explanation,
-                    conclusion: item.conclusion}
-          end
-          row[item.header] = hash
-        end
-        @json_hash << row
+        row = { overall_score: @overall_score, definition: @prediction_def,
+                no_hits: @nr_hits }
+        row = create_validation_hashes(row)
+        @json_hash[@idx] = row
       end
+    end
+
+    def create_validation_hashes(row)
+      @validations.each do |item|
+        val = { print: item.print, status: item.color }
+        if item.color != 'warning'
+          val = { print: item.print, status: item.color,
+                  approach: item.approach, explanation: item.explanation,
+                  conclusion: item.conclusion }
+        end
+        val[:graphs] = create_graphs_hash(item) unless item.plot_files.nil?
+        row[item.header] = val
+      end
+      row
+    end
+
+    def create_graphs_hash(item)
+      graphs = []
+      item.plot_files.each do |p|
+        graph = { filename: p.filename, type: p.type, title: p.title,
+                  footer: p.footer, xtitle: p.xtitle, ytitle: p.ytitle,
+                  aux1: p.aux1, aux2: p.aux2 }
+        graphs << graph
+      end
+      graphs
     end
 
     def self.write_json_file(hash, json_file)

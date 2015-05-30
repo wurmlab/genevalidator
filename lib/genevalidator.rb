@@ -15,7 +15,6 @@ require 'genevalidator/exceptions'
 
 # Top level module / namespace.
 module GeneValidator
-
   class << self
     attr_accessor :opt, :config
     attr_reader :raw_seq_file_index
@@ -47,7 +46,7 @@ module GeneValidator
 
       relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
       @config[:aux]       = File.expand_path(relative_aux_path)
-      @config[:json_hash]  = []
+      @config[:json_hash]  = {}
 
       @mutex              = Mutex.new
       @mutex_array        = Mutex.new
