@@ -79,7 +79,7 @@ module GeneValidator
     def print_console_header
       @config[:run_no] += 1
       header = format('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier',
-                       'No_Hits')
+                      'No_Hits')
       validations.map do |v|
         header << "|#{v.short_header}"
       end
