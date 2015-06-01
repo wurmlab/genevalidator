@@ -103,7 +103,7 @@ module GeneValidator
       @validation_report = ORFValidationOutput.new(@short_header, @header,
                                                    @description, orfs,
                                                    coverage, longest_orf_frame)
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
 
       @validation_report.plot_files.push(plot1)
       @validation_report

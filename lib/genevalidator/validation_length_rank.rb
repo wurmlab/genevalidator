@@ -141,7 +141,7 @@ module GeneValidator
                                                           largest_hit,
                                                           extreme_hits,
                                                           percentage)
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError

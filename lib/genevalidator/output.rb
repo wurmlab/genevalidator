@@ -8,7 +8,8 @@ require 'json'
 module GeneValidator
   class Output
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_html, :mutex_json
+    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_html,
+                   :mutex_json
     attr_accessor :prediction_len
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -49,8 +50,8 @@ module GeneValidator
       @aux_dir        = @config[:aux]
       @json_hash      = @config[:json_hash]
 
-      @results_html   = "#{@html_path}/results.html"
-      @table_html     = "#{@html_path}/files/table.html"
+      @results_html   = File.join(@html_path, 'results.html')
+      @table_html     = File.join(@html_path, 'files/table.html')
 
       @query_erb      = File.join(@aux_dir, 'template_query.erb')
       @head_erb       = File.join(@aux_dir, 'template_header.erb')
@@ -63,8 +64,8 @@ module GeneValidator
       short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
       validation_outputs = validations.map(&:print)
 
-      output             = sprintf('%3s|%5s|%20s|%7s|', @idx, @overall_score,
-                                   short_def, @nr_hits)
+      output             = format('%3s|%5s|%20s|%7s|', @idx, @overall_score,
+                                  short_def, @nr_hits)
       validation_outputs.each do |item|
         output << item
         output << '|'
@@ -77,7 +78,7 @@ module GeneValidator
 
     def print_console_header
       @config[:run_no] += 1
-      header = sprintf('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier',
+      header = format('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier',
                        'No_Hits')
       validations.map do |v|
         header << "|#{v.short_header}"
@@ -151,16 +152,18 @@ module GeneValidator
     # +all_query_outputs+: array with +ValidationTest+ objects
     # +html_path+: path of the html folder
     # +filemane+: name of the fasta input file
-    # def self.print_footer(all_query_outputs, html_path, filename)
-    def self.print_footer(no_queries, scores, good_predictions, bad_predictions,
-                          nee, no_mafft, no_internet, map_errors, running_times,
-                          html_path, filename)
+    def self.print_footer(overview, config)
+      if config[:summary]
+        overall_evaluation = overview(overview)
+      end
+      filename = config[:filename]
+      plot_dir = config[:plot_dir]
+      footer_erb     = File.join(config[:aux], 'template_footer.erb')
+      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
+      results_html   = File.join(config[:html_path], 'results.html')
+      table_html     = File.join(config[:html_path], 'files/table.html')
 
-      overall_evaluation = overall_evaluation(no_queries, good_predictions,
-                                              bad_predictions, nee, no_mafft,
-                                              no_internet, map_errors,
-                                              running_times)
-
+      create_plot_statistics_json(overview[:scores], plot_dir, filename)
       less = overall_evaluation[0]
       less = less.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
@@ -170,17 +173,6 @@ module GeneValidator
       puts evaluation
       puts ''
 
-      # print to html
-      # make the historgram with the resulted scores
-      statistics_filename = "#{html_path}/files/json/#{filename}_statistics.json"
-      f = File.open(statistics_filename, 'w')
-
-      f.write(
-        [scores.group_by { |a| a }.map { |k, vs| { 'key' => k,
-                                                   'value' => vs.length,
-                                                   'main' => false } }].to_json)
-      f.close
-
       plot_statistics = Plot.new("files/json/#{filename}_statistics.json",
                                  :simplebars,
                                  'Overall evaluation',
@@ -189,21 +181,27 @@ module GeneValidator
                                  'number of queries',
                                  10)
 
+
       evaluation = evaluation.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
-      template_footer     = File.join(@aux_dir, 'template_footer.erb')
-      app_template_footer = File.join(@aux_dir, 'app_template_footer.erb')
 
-      template_file = File.open(template_footer, 'r').read
+      template_file = File.open(footer_erb, 'r').read
       erb = ERB.new(template_file, 0, '>')
-      File.open(@results_html, 'a+') do |file|
-        file.write(erb.result(binding))
-      end
-
-      table_footer_template = File.open(app_template_footer, 'r').read
+      table_footer_template = File.open(app_footer_erb, 'r').read
       table_erb = ERB.new(table_footer_template, 0, '>')
-      File.open(@table_html, 'a+') do |file|
-        file.write(table_erb.result(binding))
+
+      File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
+      File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
+    end
+
+    # make the historgram with the resulted scores
+    def self.create_plot_statistics_json(scores, plot_dir, filename)
+      plot_file = File.join(plot_dir, "#{filename}_statistics.json")
+      File.open(plot_file, 'w') do |f|
+        scores = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k,
+                                                   'value' => vs.length,
+                                                   'main' => false } }].to_json
+        f.write scores
       end
     end
 
@@ -213,38 +211,36 @@ module GeneValidator
     # +all_query_outputs+: Array of +ValidationTest+ objects
     # Output
     # Array of Strigs with the reports
-    def self.overall_evaluation(no_queries, good_scores, bad_scores,
-                                no_evidence, no_mafft, no_internet, map_errors,
-                                running_times)
-      good_pred = (good_scores == 1) ? 'One' : "#{good_scores} are"
-      bad_pred  = (bad_scores == 1) ? 'One' : "#{bad_scores} are"
+    def self.overview(o)
+      good_pred = (o[:good_scores] == 1) ? 'One' : "#{o[:good_scores]} are"
+      bad_pred  = (o[:bad_scores] == 1) ? 'One' : "#{o[:bad_scores]} are"
 
       eval = "Overall Query Score Evaluation:\n" \
-             "#{no_queries} predictions were validated, from which there" \
+             "#{o[:no_queries]} predictions were validated, from which there" \
              " were:\n" \
              "#{good_pred} good prediction(s),\n" \
              "#{bad_pred} possibly weak prediction(s).\n"
 
-      if no_evidence != 0
-        eval << "#{no_evidence} could not be evaluated due to the lack of" \
+      if o[:nee] != 0 # nee = no evidence
+        eval << "#{o[:nee]} could not be evaluated due to the lack of" \
                 ' evidence.'
       end
 
       # errors per validation
       error_eval = ''
-      map_errors.each do |k, v|
+      o[:map_errors].each do |k, v|
         error_eval << "\nWe couldn't run #{k} Validation for #{v} queries"
       end
 
-      if no_mafft >= (no_queries - no_evidence)
+      if o[:no_mafft] >= (o[:no_queries] - o[:nee])
         error_eval << "\nWe couldn't run MAFFT multiple alignment"
       end
-      if no_internet >= (no_queries - no_evidence)
+      if o[:no_internet] >= (o[:no_queries] - o[:nee])
         error_eval << "\nWe couldn't make use of your internet connection"
       end
 
       time_eval = ''
-      running_times.each do |key, value|
+      o[:run_time].each do |key, value|
         average_time = value.x / (value.y + 0.0)
         time_eval << "\nAverage running time for #{key} Validation:" \
                      " #{average_time.round(3)}s per validation"

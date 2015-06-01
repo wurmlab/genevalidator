@@ -109,7 +109,7 @@ module GeneValidator
 
       @validation_report = BlastRFValidationOutput.new(@short_header, @header,
                                                        @description, frames)
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError

@@ -12,7 +12,7 @@ module GeneValidator
     attr_accessor :cli_name
     attr_accessor :description
     attr_accessor :validation_report
-    attr_accessor :running_time
+    attr_accessor :run_time
 
     ##
     # Initilizes the object
@@ -27,7 +27,7 @@ module GeneValidator
       @hits              = hits
       @short_header      = 'NewVal'
       @header            = 'New Validation'
-      @running_time      = 0
+      @run_time          = 0
       @cli_name          = 'all'
       @description       = 'No description available.'
       @validation_report = ValidationReport.new('Not enough evidence')

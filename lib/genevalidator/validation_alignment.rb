@@ -186,7 +186,7 @@ module GeneValidator
                                                          @description, gaps,
                                                          extra_seq, consensus)
       @validation_report.plot_files.push(plot1)
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError

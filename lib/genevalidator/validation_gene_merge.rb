@@ -157,7 +157,7 @@ module GeneValidator
       @validation_report.plot_files.push(plot1)
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError

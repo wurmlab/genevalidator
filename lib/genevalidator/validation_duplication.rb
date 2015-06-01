@@ -217,7 +217,7 @@ module GeneValidator
                                                              @header,
                                                              @description, 1,
                                                              averages)
-        @validation_report.running_time = Time.now - start
+        @validation_report.run_time = Time.now - start
         return @validation_report
       end
 
@@ -227,7 +227,7 @@ module GeneValidator
                                                            @header,
                                                            @description, pval,
                                                            averages)
-      @running_time = Time.now - start
+      @run_time = Time.now - start
       @validation_report
 
     rescue NotEnoughHitsError

@@ -9,24 +9,14 @@ require 'genevalidator/pool'
 require 'genevalidator/output'
 require 'genevalidator/exceptions'
 
-
 # Top level module / namespace.
 module GeneValidator
   Pair1 = Struct.new(:x, :y)
   # Main Class that initalises and then runs validations.
   class Validation
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :query_idx, :mutex_array
-    # global variables
-    attr_reader :no_queries
-    attr_reader :scores
-    attr_reader :good_predictions
-    attr_reader :bad_predictions
-    attr_reader :nee
-    attr_reader :no_mafft
-    attr_reader :no_internet
-    attr_reader :map_errors
-    attr_reader :map_running_times
+    def_delegators GeneValidator, :opt, :config, :query_idx, :mutex_array,
+                   :overview
 
     ##
     # Initilizes the object
@@ -37,21 +27,23 @@ module GeneValidator
     # +start_idx+: number of the sequence from the file to start with
     # +overall_evaluation+: boolean variable for printing overall evaluation
     def initialize
-      @opt               = opt
-      @config            = config
-      @query_idx         = query_idx
-      @mutex_array       = mutex_array
-      # global variables
-      @no_queries        = 0
-      @scores            = []
-      @good_predictions  = 0
-      @bad_predictions   = 0
-      @nee               = 0
-      @no_mafft          = 0
-      @no_internet       = 0
-      @map_errors        = Hash.new(0)
-      @map_running_times = Hash.new(Pair1.new(0, 0))
-      @config[:run_no]   = 0 # required in Output.print_output_console
+      @opt                    = opt
+      @config                 = config
+      @query_idx              = query_idx
+      @mutex_array            = mutex_array
+      # required in Output.print_output_console method
+      @config[:run_no]        = 0
+
+      @overview               = overview
+      @overview[:no_queries]  = 0
+      @overview[:scores]      = []
+      @overview[:good_scores] = 0
+      @overview[:bad_scores]  = 0
+      @overview[:nee]         = 0
+      @overview[:no_mafft]    = 0
+      @overview[:no_internet] = 0
+      @overview[:map_errors]  = Hash.new(0)
+      @overview[:run_time]    = Hash.new(Pair1.new(0, 0))
     end
 
     ##
@@ -63,19 +55,18 @@ module GeneValidator
         prediction = get_info_on_query_sequence
         @config[:idx] += 1
 
-        hits = parse_next_iteration(iterator, prediction)
+        blast_hits = parse_next_iteration(iterator, prediction)
 
-        if hits.nil?
+        if blast_hits.nil?
           @config[:idx] -= 1
           break
         end
-        current_idx = @config[:idx]
 
         if @opt[:num_threads] == 1
-          validate(prediction, hits, current_idx)
+          validate(prediction, blast_hits, @config[:idx])
         else
-          p.schedule(prediction, hits, current_idx) do |p, h, idx|
-            validate(p, h, idx)
+          p.schedule(prediction, blast_hits, @config[:idx]) do |pred, hits, idx|
+            validate(pred, hits, idx)
           end
         end
       end
@@ -123,12 +114,14 @@ module GeneValidator
       query_output.generate_html
       query_output.generate_json
       query_output.print_output_console
+      query_overview(query_output)
+    end
 
-      validations = query_output.validations
-
-      no_mafft = 0
+    def query_overview(query_output)
+      validations = query_output.validations 
+      no_mafft    = 0
       no_internet = 0
-      errors = []
+      errors      = []
       validations.each do |v|
         unless v.errors.nil?
           no_mafft += v.errors.select { |e| e == NoMafftInstallationError }.length
@@ -140,28 +133,27 @@ module GeneValidator
       no_evidence = validations.count { |v| v.result == :unapplicable || v.result == :warning } == validations.length
       nee = (no_evidence) ? 1 : 0
 
-      good_predictions = (query_output.overall_score >= 75) ? 1 : 0
-      bad_predictions  = (query_output.overall_score >= 75) ? 0 : 1
+      good_scores = (query_output.overall_score >= 75) ? 1 : 0
+      bad_scores  = (query_output.overall_score >= 75) ? 0 : 1
 
       @mutex_array.synchronize do
-        @no_queries += 1
-        @scores.push(query_output.overall_score)
-        @good_predictions += good_predictions
-        @bad_predictions += bad_predictions
-        @nee += nee
-        @no_mafft += no_mafft
-        @no_internet += no_internet
-        errors.each { |err| @map_errors[err] += 1 }
+        @overview[:no_queries] += 1
+        @overview[:scores].push(query_output.overall_score)
+        @overview[:good_scores] += good_scores
+        @overview[:bad_scores] += bad_scores
+        @overview[:nee] += nee
+        @overview[:no_mafft] += no_mafft
+        @overview[:no_internet] += no_internet
+        errors.each { |err| @overview[:map_errors][err] += 1 }
 
         validations.each do |v|
-          next if v.running_time == 0 || v.running_time.nil?
+          next if v.run_time == 0 || v.run_time.nil?
           next if v.validation == :unapplicable || v.validation == :error
-          p = Pair1.new(@map_running_times[v.short_header].x + v.running_time,
-                        @map_running_times[v.short_header].y + 1)
-          @map_running_times[v.short_header] = p
+          p = Pair1.new(@overview[:run_time][v.short_header].x + v.run_time,
+                        @overview[:run_time][v.short_header].y + 1)
+          @overview[:run_time][v.short_header] = p
         end
       end
-      query_output
     end
 
     ##
@@ -267,9 +259,7 @@ module GeneValidator
     def compute_scores(query_output)
       validations = query_output.validations
       successes = validations.map { |v| v.result == v.expected }.count(true)
-      fails = validations.map { |v| v.validation != :unapplicable &&
-                                    v.validation != :error &&
-                                    v.result != v.expected }.count(true)
+      fails = validations.map { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }.count(true)
 
       lcv = validations.select { |v| v.class == LengthClusterValidationOutput }
       lrv = validations.select { |v| v.class == LengthRankValidationOutput }

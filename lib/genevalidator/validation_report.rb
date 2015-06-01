@@ -17,7 +17,7 @@ module GeneValidator
     attr_accessor :short_header
     attr_accessor :header
     attr_accessor :description
-    attr_accessor :running_time
+    attr_accessor :run_time
     attr_accessor :approach
     attr_accessor :explanation
     attr_accessor :conclusion

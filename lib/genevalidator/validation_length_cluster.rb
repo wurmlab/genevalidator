@@ -117,7 +117,7 @@ module GeneValidator
       plot1 = plot_histo_clusters
       @validation_report.plot_files.push(plot1)
 
-      @validation_report.running_time = Time.now - start
+      @validation_report.run_time = Time.now - start
 
       @validation_report
 

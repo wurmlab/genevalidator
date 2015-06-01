@@ -16,16 +16,13 @@ require 'genevalidator/exceptions'
 # Top level module / namespace.
 module GeneValidator
   class << self
-    attr_accessor :opt, :config
+    attr_accessor :opt, :config, :overview
     attr_reader :raw_seq_file_index
     attr_reader :raw_seq_file_load
     # array of indexes for the start offsets of each query in the fasta file
     attr_reader :query_idx
     attr_reader :mutex
-    attr_accessor :mutex_yaml
-    attr_accessor :mutex_html
-    attr_accessor :mutex_json
-    attr_accessor :mutex_array
+    attr_accessor :mutex_yaml, :mutex_html, :mutex_json, :mutex_array
 
     def init(opt, start_idx = 1, summary = true)
       puts 'Analysing input arguments'
@@ -46,7 +43,9 @@ module GeneValidator
 
       relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
       @config[:aux]       = File.expand_path(relative_aux_path)
-      @config[:json_hash]  = {}
+      @config[:json_hash] = {}
+
+      @overview           = {}
 
       @mutex              = Mutex.new
       @mutex_array        = Mutex.new
@@ -74,12 +73,7 @@ module GeneValidator
         (Validation.new).run_validations(iterator)
       end
       Output.write_json_file(@config[:json_hash], @config[:json_file])
-      # if @config[:summary]
-      #   Output.print_footer(@no_queries, @scores, @good_predictions,
-      #                       @bad_predictions, @nee, @no_mafft, @no_internet,
-      #                       @map_errors, @map_running_times, @html_path,
-      #                       @filename)
-      # end
+      Output.print_footer(@overview, @config)
     end
 
     ##
