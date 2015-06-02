@@ -4,6 +4,8 @@ require 'fileutils'
 require 'genevalidator'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
+require 'genevalidator/validation'
+
 
 module GeneValidator
   class TestBlastClass < Minitest::Test
@@ -20,7 +22,6 @@ module GeneValidator
     ncbi_mrna_xml20   = "#{dir}/ncbi_mrna.xml.20"
 
     describe 'Test Blast Class' do
-
       it 'should detect nucleotide seq type' do
 
         file_mrna = File.open(filename_mrna, 'w+')
@@ -47,11 +48,10 @@ module GeneValidator
           test: true
         }
 
-        val = GeneValidator::Validation.new(default_opt)
-
+        GeneValidator.init(default_opt)
         File.delete(filename_mrna)
         FileUtils.rm_rf("#{filename_mrna}.html")
-        assert_equal(:nucleotide, val.type)
+        assert_equal(:nucleotide, GeneValidator.config[:type])
       end
 
       it 'should detect protein type' do
@@ -82,12 +82,11 @@ module GeneValidator
           test: true
         }
 
-        val = GeneValidator::Validation.new(default_opt)
+        GeneValidator.init(default_opt)
 
         File.delete(filename_prot)
         FileUtils.rm_rf("#{filename_prot}.html")
-        assert_equal(:protein, val.type)
-
+        assert_equal(:protein, GeneValidator.config[:type])
       end
 
       it 'should raise error when input types are mixed in the fasta' do
@@ -103,10 +102,10 @@ module GeneValidator
             validations: ['all'],
             db: 'swissprot -remote',
             num_threads: 1,
-          test: true
+            test: true
           }
 
-          GeneValidator::Validation.new(default_opt)
+          GeneValidator.init(default_opt)
         rescue SystemExit => e
           mixed = true
         end
@@ -126,10 +125,10 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with default tabular format' do
-
-        output = File.open(ncbi_mrna_tab20, 'rb').read
-        tabular_headers = 'qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'
-        iterator_tab = TabularParser.new(ncbi_mrna_tab20, tabular_headers, :protein)
+        tabular_headers = 'qseqid sseqid pident length mismatch gapopen qstart' \
+                          ' qend sstart send evalue bitscore'
+        iterator_tab = TabularParser.new(tabular_headers, :protein)
+        iterator_tab.analayse_tabular_file(ncbi_mrna_tab20)
         hits = iterator_tab.parse_next
 
         assert_equal(20, hits.length)
@@ -145,9 +144,10 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with tabular format as argument' do
-        output = File.open(output_tab6, 'rb').read
-        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue'
-        iterator_tab = TabularParser.new(output_tab6, tabular_headers, :protein)
+        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
+                          ' pident length qframe evalue'
+        iterator_tab = TabularParser.new(tabular_headers, :protein)
+        iterator_tab.analayse_tabular_file(output_tab6)
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -157,9 +157,10 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with mixed columns' do
-        output = File.open(output_tab_mixed, 'rb').read
-        tabular_headers = 'qend sstart send pident length qframe evalue qseqid sseqid sacc slen qstart'
-        iterator_tab = TabularParser.new(output_tab_mixed, tabular_headers, :protein)
+        tabular_headers = 'qend sstart send pident length qframe evalue' \
+                          ' qseqid sseqid sacc slen qstart'
+        iterator_tab = TabularParser.new(tabular_headers, :protein)
+        iterator_tab.analayse_tabular_file(output_tab_mixed)
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -169,9 +170,10 @@ module GeneValidator
       end
 
       it 'should parse tabular -7 input' do
-        output = File.open(output_tab7, 'rb').read
-        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send length qframe evalue'
-        iterator_tab = TabularParser.new(output_tab7, tabular_headers, :protein)
+        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
+                          ' length qframe evalue'
+        iterator_tab = TabularParser.new(tabular_headers, :protein)
+        iterator_tab.analayse_tabular_file(output_tab7)
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -180,9 +182,7 @@ module GeneValidator
         assert_equal(100, hits[0].hsp_list[2].hit_to)
       end
 
-      it 'should remove identical matches among protein sequences' do
-        output = File.open(output_tab6, 'rb').read
-
+      it 'should remove identical matches (protein sequences)' do
         FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
         default_opt = {
@@ -193,19 +193,24 @@ module GeneValidator
           test: true
         }
 
-        b = GeneValidator::Validation.new(default_opt) # just use a valida filename to create the object
+        GeneValidator.init(default_opt)
+
         prediction = Sequence.new
         prediction.length_protein = 1808
-        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send pident length qframe evalue'
-        iterator_tab = TabularParser.new(output_tab6, tabular_headers, :protein)
+        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
+                          ' pident length qframe evalue'
+        iterator_tab = TabularParser.new(tabular_headers, :protein)
+        iterator_tab.analayse_tabular_file(output_tab6)
         iterator_tab.parse_next
         hits = iterator_tab.parse_next
 
-        # before removal
         assert_equal(2, hits.length)
         assert_equal(100, hits[0].hsp_list[0].pidentity)
         assert_in_delta(99.23, hits[0].hsp_list[1].pidentity, 0.01)
         assert_in_delta(90, hits[1].hsp_list[0].pidentity, 0.01)
+
+        # Remove identical hits
+        b = GeneValidator::Validation.new
         hits = b.remove_identical_hits(prediction, hits)
 
         # after removal of identical hits
@@ -214,9 +219,7 @@ module GeneValidator
         FileUtils.rm_rf("#{filename_fasta}.html")
       end
 
-      it 'should remove identical matches among nucleotide sequences with tabular input' do
-        output = File.open(ncbi_mrna_tab20, 'rb').read
-
+      it 'should remove identical matches (nucleotide seqs) - tabular input' do
         FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
         default_opt = {
@@ -226,17 +229,20 @@ module GeneValidator
           num_threads: 1,
           test: true
         }
-        tabular_headers = 'qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'
 
-        b = GeneValidator::Validation.new(default_opt) # just use a valida filename to create the object
+        GeneValidator.init(default_opt)
 
         prediction = Sequence.new
         prediction.length_protein = 219 / 3
-        iterator_tab = TabularParser.new(ncbi_mrna_tab20, tabular_headers, :nucleotide)
+        tabular_headers = 'qseqid sseqid pident length mismatch gapopen' \
+                          ' qstart qend sstart send evalue bitscore'
+        iterator_tab = TabularParser.new(tabular_headers, :nucleotide)
+        iterator_tab.analayse_tabular_file(ncbi_mrna_tab20)
         hits = iterator_tab.parse_next
 
         assert_equal(20, hits.length)
-
+        # remove identical hits
+        b = GeneValidator::Validation.new
         hits = b.remove_identical_hits(prediction, hits)
 
         assert_equal(13, hits.length)
@@ -244,9 +250,7 @@ module GeneValidator
         FileUtils.rm_rf("#{filename_fasta}.html")
       end
 
-      it 'should remove identical matches among nucleotide sequences with xml input' do
-        output = File.open(ncbi_mrna_xml20, 'rb').read
-
+      it 'should remove identical matches (nucleotide seqs) - xml input' do
         FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
 
         # just use a valid opts hash to create the object
@@ -258,16 +262,17 @@ module GeneValidator
           test: true
         }
 
-        b = GeneValidator::Validation.new(default_opt) 
+        GeneValidator.init(default_opt)
 
         prediction = Sequence.new
         prediction.length_protein = 219 / 3
-
+        output = File.open(ncbi_mrna_xml20, 'rb').read
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
         hits = BlastUtils.parse_next(iterator, :protein)
 
         assert_equal(20, hits.length)
 
+        b = GeneValidator::Validation.new
         hits = b.remove_identical_hits(prediction, hits)
 
         assert_equal(13, hits.length)
@@ -286,8 +291,9 @@ module GeneValidator
             test: true
           }
 
-          (GeneValidator::Validation.new(default_opt)).run
-        rescue SystemExit => error
+          GeneValidator.init(default_opt)
+
+        rescue SystemExit
           error = true
         end
         assert_equal(true, error)
