@@ -124,8 +124,8 @@ module GeneValidator
       end
 
       def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
-        cmd = "blastdbcmd -entry_batch #{index_file} -db #{@opt[:db]} -outfmt" \
-              " '%f' -out #{raw_seq_file}"
+        cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}' -outfmt" \
+              " '%f' -out '#{raw_seq_file}'"
         `#{cmd}`
       end
 
