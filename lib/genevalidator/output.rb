@@ -153,26 +153,14 @@ module GeneValidator
     # +html_path+: path of the html folder
     # +filemane+: name of the fasta input file
     def self.print_footer(overview, config)
-      if config[:summary]
-        overall_evaluation = overview(overview)
-      end
       filename = config[:filename]
       plot_dir = config[:plot_dir]
-      footer_erb     = File.join(config[:aux], 'template_footer.erb')
-      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
-      results_html   = File.join(config[:html_path], 'results.html')
-      table_html     = File.join(config[:html_path], 'files/table.html')
+
+      overall_evaluation = overview(overview)
+
+      eval = print_summary_to_console(overall_evaluation, config[:summary])
 
       create_plot_statistics_json(overview[:scores], plot_dir, filename)
-      less = overall_evaluation[0]
-      less = less.gsub("\n", '<br>').gsub("'", %q(\\\'))
-
-      # print to console
-      evaluation = ''
-      overall_evaluation.each { |e| evaluation << "\n#{e}" }
-      puts evaluation
-      puts ''
-
       plot_statistics = Plot.new("files/json/#{filename}_statistics.json",
                                  :simplebars,
                                  'Overall evaluation',
@@ -181,26 +169,38 @@ module GeneValidator
                                  'number of queries',
                                  10)
 
+      less = overall_evaluation[0].gsub("\n", '<br>').gsub("'", %q(\\\'))
 
-      evaluation = evaluation.gsub("\n", '<br>').gsub("'", %q(\\\'))
+      evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
+      footer_erb     = File.join(config[:aux], 'template_footer.erb')
+      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
+      results_html   = File.join(config[:html_path], 'results.html')
+      table_html     = File.join(config[:html_path], 'files/table.html')
 
-      template_file = File.open(footer_erb, 'r').read
-      erb = ERB.new(template_file, 0, '>')
+      template_file         = File.open(footer_erb, 'r').read
+      erb                   = ERB.new(template_file, 0, '>')
       table_footer_template = File.open(app_footer_erb, 'r').read
-      table_erb = ERB.new(table_footer_template, 0, '>')
+      table_erb             = ERB.new(table_footer_template, 0, '>')
 
       File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
       File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
+    end
+
+    def self.print_summary_to_console(overall_evaluation, summary)
+      # print to console
+      eval = ''
+      overall_evaluation.each { |e| eval << "\n#{e}" }
+      puts eval if summary
+      puts ''
+      eval
     end
 
     # make the historgram with the resulted scores
     def self.create_plot_statistics_json(scores, plot_dir, filename)
       plot_file = File.join(plot_dir, "#{filename}_statistics.json")
       File.open(plot_file, 'w') do |f|
-        scores = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k,
-                                                   'value' => vs.length,
-                                                   'main' => false } }].to_json
+        scores = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }].to_json
         f.write scores
       end
     end
