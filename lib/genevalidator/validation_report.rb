@@ -8,7 +8,6 @@ module GeneValidator
   # all validation reports
   class ValidationReport
     attr_reader :message
-    attr_reader :bg_color
     attr_reader :plot_files
     attr_reader :result
     attr_reader :expected
@@ -31,7 +30,6 @@ module GeneValidator
     # +short_header+: String
     # +header+: String
     # +description+: String
-    # +bg_color+: background color of the table cell for the html output (nil
     # by default)
     def initialize(message = 'Not enough evidence', validation_result = :no,
                    short_header = '', header = '', description = '',
@@ -60,7 +58,6 @@ module GeneValidator
     ##
     # May return "success" or "error"
     def color
-      bg_color unless bg_color.nil?
       if validation == @expected
         'success'
       elsif validation == :error || validation == :unapplicable
