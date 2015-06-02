@@ -11,6 +11,7 @@ require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
+require 'genevalidator/validation'
 
 module GeneValidator
   class ValidateOutput < Minitest::Test
@@ -26,11 +27,10 @@ module GeneValidator
       num_threads: 1,
       test: true
     }
-
-    val      = GeneValidator::Validation.new(opt)
+    GeneValidator.init(opt)
+    val      = GeneValidator::Validation.new
     xml      = File.open(filename_xml, 'rb').read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
-    val.create_an_index_file_of_raw_seq_file(opt[:raw_sequences])
 
     describe 'Detailed Validation of normal Insulin Query' do
       hits     = BlastUtils.parse_next(iterator, :nucleotide)
@@ -96,7 +96,7 @@ module GeneValidator
       end
 
       it 'should validate blast reading frame' do
-        assert_equal({ 1 => 500 }, rfv.frames_histo)
+        assert_equal({ 1 => 500 }, rfv.frames)
         assert_equal(500, rfv.total_hsp)
         assert_equal(:yes, rfv.result)
       end
@@ -190,15 +190,15 @@ module GeneValidator
                                 'CAACTGGAAAACTACTGCAACTAG'
       prediction.length_protein = 46
 
-      validations = val.do_validations(prediction, hits, 1).validations
+      vals = val.do_validations(prediction, hits, 1).validations
 
-      lcv = validations.select { |v| v.class == LengthClusterValidationOutput }[0]
-      lrv = validations.select { |v| v.class == LengthRankValidationOutput }[0]
-      rfv = validations.select { |v| v.class == BlastRFValidationOutput }[0]
-      gmv = validations.select { |v| v.class == GeneMergeValidationOutput }[0]
-      dv  = validations.select { |v| v.class == DuplicationValidationOutput }[0]
-      av  = validations.select { |v| v.class == AlignmentValidationOutput }[0]
-      ov  = validations.select { |v| v.class == ORFValidationOutput }[0]
+      lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
+      lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
+      rfv = vals.select { |v| v.class == BlastRFValidationOutput }[0]
+      gmv = vals.select { |v| v.class == GeneMergeValidationOutput }[0]
+      dv  = vals.select { |v| v.class == DuplicationValidationOutput }[0]
+      av  = vals.select { |v| v.class == AlignmentValidationOutput }[0]
+      ov  = vals.select { |v| v.class == ORFValidationOutput }[0]
 
       it 'should validate as expected' do
         assert_equal(:no, lcv.result)
@@ -232,15 +232,15 @@ module GeneValidator
                                 'AAGGCCGCTGCTTCGGGCCCAGCATCTGCTGCGCGGACGAGC'
       prediction.length_protein = 175
 
-      validations = val.do_validations(prediction, hits, 1).validations
+      vals = val.do_validations(prediction, hits, 1).validations
 
-      lcv = validations.select { |v| v.class == LengthClusterValidationOutput }[0]
-      lrv = validations.select { |v| v.class == LengthRankValidationOutput }[0]
-      rfv = validations.select { |v| v.class == BlastRFValidationOutput }[0]
-      gmv = validations.select { |v| v.class == GeneMergeValidationOutput }[0]
-      dv  = validations.select { |v| v.class == DuplicationValidationOutput }[0]
-      av  = validations.select { |v| v.class == AlignmentValidationOutput }[0]
-      ov  = validations.select { |v| v.class == ORFValidationOutput }[0]
+      lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
+      lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
+      rfv = vals.select { |v| v.class == BlastRFValidationOutput }[0]
+      gmv = vals.select { |v| v.class == GeneMergeValidationOutput }[0]
+      dv  = vals.select { |v| v.class == DuplicationValidationOutput }[0]
+      av  = vals.select { |v| v.class == AlignmentValidationOutput }[0]
+      ov  = vals.select { |v| v.class == ORFValidationOutput }[0]
 
       it 'should validate length cluster validation' do
         assert_equal(:no, lcv.result)
@@ -320,15 +320,15 @@ module GeneValidator
                                 'AGATATTGTTAC'
       prediction.length_protein = 840
 
-      validations = val.do_validations(prediction, hits, 1).validations
+      vals = val.do_validations(prediction, hits, 1).validations
 
-      lcv = validations.select { |v| v.class == LengthClusterValidationOutput }[0]
-      lrv = validations.select { |v| v.class == LengthRankValidationOutput }[0]
-      rfv = validations.select { |v| v.class == BlastRFValidationOutput }[0]
-      gmv = validations.select { |v| v.class == GeneMergeValidationOutput }[0]
-      dv  = validations.select { |v| v.class == DuplicationValidationOutput }[0]
-      av  = validations.select { |v| v.class == AlignmentValidationOutput }[0]
-      ov  = validations.select { |v| v.class == ORFValidationOutput }[0]
+      lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
+      lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
+      rfv = vals.select { |v| v.class == BlastRFValidationOutput }[0]
+      gmv = vals.select { |v| v.class == GeneMergeValidationOutput }[0]
+      dv  = vals.select { |v| v.class == DuplicationValidationOutput }[0]
+      av  = vals.select { |v| v.class == AlignmentValidationOutput }[0]
+      ov  = vals.select { |v| v.class == ORFValidationOutput }[0]
 
       it 'should validate length cluster validation' do
         assert_equal(:no, lcv.result)
