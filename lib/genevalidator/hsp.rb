@@ -33,8 +33,7 @@ module GeneValidator
     # Params:
     # +column+: String with column name.
     # +value+: Value of the column
-    # +type+: type of the sequences: :nucleotide or :protein
-    def init_tabular_attribute(hash, _type = :protein)
+    def init_tabular_attribute(hash)
       @match_query_from    = hash['qstart'].to_i if hash['qstart']
       @match_query_to      = hash['qend'].to_i if hash['qend']
       @query_reading_frame = hash['qframe'].to_i if hash['qframe']
@@ -47,12 +46,10 @@ module GeneValidator
       @identity            = hash['nident'].to_f if hash['nident']
       @hsp_evalue          = hash['evalue'].to_f if hash['evalue']
       if hash['qseq']
-        puts @query_alignment
         query_seq_type = BlastUtils.guess_sequence_type(@query_alignment)
         fail SequenceTypeError if query_seq_type != :protein
       end
       if hash['sseq']
-        puts @hit_alignment
         hit_seq_type = BlastUtils.guess_sequence_type(@hit_alignment)
         fail SequenceTypeError if hit_seq_type != :protein
       end
