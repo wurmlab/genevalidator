@@ -105,7 +105,7 @@ module GeneValidator
       if @opt[:blast_xml_file]
         Bio::BlastXMLParser::XmlIterator.new(@opt[:blast_xml_file]).to_enum
       else
-        (TabularParser.new).analayse_tabular_file
+        TabularParser.new
       end
       ## TODO: Add a Rescue statement - e.g. if unable to create the Object...
     end
