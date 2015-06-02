@@ -18,12 +18,11 @@ module GeneValidator
 
     ##
     # Initializes the object
-    def initialize
+    def initialize(format = opt[:blast_tabular_options], type = config[:type])
       @opt          = opt
       @config       = config
-      format        = opt[:blast_tabular_options]
       @column_names = format.gsub(/[-\d]/, '').split(/[ ,]/)
-      @type         = config[:type]
+      @type         = type
       @tab_results  = []
       @rows         = nil
     end
