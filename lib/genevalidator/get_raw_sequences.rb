@@ -8,7 +8,7 @@ require 'io/console'
 require 'yaml'
 module GeneValidator
   # Gets the raw sequences for each hit in a BLAST output file
-  class GetRawSequences
+  class RawSequences
     class <<self
       extend Forwardable
       def_delegators GeneValidator, :opt, :config
@@ -38,6 +38,35 @@ module GeneValidator
           obtain_raw_seqs_from_local_db(index_file, @opt[:raw_sequences])
         end
         index_raw_seq_file
+      end
+
+      ##
+      # Index the raw sequences file...
+      def index_raw_seq_file(raw_seq_file = @opt[:raw_sequences])
+        # leave only the identifiers in the fasta description
+        content = File.open(raw_seq_file, 'rb').read.gsub(/ .*/, '')
+        File.open(raw_seq_file, 'w+') { |f| f.write(content) }
+
+        # index the fasta file
+        keys   = content.scan(/>(.*)\n/).flatten
+        values = content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
+
+        # make an index hash
+        index_hash = {}
+        keys.each_with_index do |k, i|
+          start = values[i]
+          endf  = (i == values.length - 1) ? content.length - 1 : values[i + 1]
+          index_hash[k] = [start, endf]
+        end
+
+        # create FASTA index
+        @config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
+        @config[:raw_seq_file_load]  = index_hash
+
+        File.open(@config[:raw_seq_file_index], 'w') do |f|
+          YAML.dump(index_hash, f)
+        end
+        content = nil
       end
 
       private
@@ -132,36 +161,6 @@ module GeneValidator
           break # break after checking the first column
         end
       end
-
-      ##
-      # Index the raw sequences file...
-      def index_raw_seq_file(raw_seq_file = @opt[:raw_sequences])
-        # leave only the identifiers in the fasta description
-        content = File.open(raw_seq_file, 'rb').read.gsub(/ .*/, '')
-        File.open(raw_seq_file, 'w+') { |f| f.write(content) }
-
-        # index the fasta file
-        keys   = content.scan(/>(.*)\n/).flatten
-        values = content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
-
-        # make an index hash
-        index_hash = {}
-        keys.each_with_index do |k, i|
-          start = values[i]
-          endf  = (i == values.length - 1) ? content.length - 1 : values[i + 1]
-          index_hash[k] = [start, endf]
-        end
-
-        # create FASTA index
-        @config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
-        @config[:raw_seq_file_load]  = index_hash
-
-        File.open(@config[:raw_seq_file_index], 'w') do |f|
-          YAML.dump(index_hash, f)
-        end
-        content = nil
-      end
-
     end
   end
 end

@@ -54,6 +54,7 @@ module GeneValidator
       @mutex_json         = Mutex.new
       create_output_folder
       index_the_input
+      RawSequences.index_raw_seq_file if @opt[:raw_sequences]
     end
 
     ##
@@ -67,7 +68,7 @@ module GeneValidator
         analyse_each_sequence
       else
         # Obtain fasta file of all BLAST hits
-        GetRawSequences.run unless @opt[:raw_sequences]
+        RawSequencess.run unless @opt[:raw_sequences]
         # Run Validations
         iterator = parse_blast_output_file
         (Validation.new).run_validations(iterator)
