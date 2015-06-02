@@ -7,7 +7,6 @@ module GeneValidator
   # A class to validate the arguments passed to the Validation Class
   class GVArgValidation
     class << self
-
       extend Forwardable
       def_delegators GeneValidator, :opt
 
