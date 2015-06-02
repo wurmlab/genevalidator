@@ -117,7 +117,7 @@ begin
     $stderr.puts 'Error: you must specify a single fasta input file instead' \
                  ' of ' + ARGV.length.to_s + ".\n"
     exit 1
-  elsif ARGV.length == 0
+  elsif ARGV.length == 0 && opt[:extract_raw_seqs].nil?
     puts opt_parser
     exit 1
   end
@@ -129,13 +129,15 @@ end
 opt[:input_fasta_file] = ARGV[0]
 
 start = Time.now
-GeneValidator.init(opt)
 
 if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
-  GetRawSequences.run
+  GeneValidator.opt    = opt
+  GeneValidator.config = {}
+  GeneValidator::RawSequences.run
   exit
 end
 
+GeneValidator.init(opt)
 GeneValidator.run
 
 puts "Total running time: #{(Time.now - start).round(3)}s"
