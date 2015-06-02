@@ -37,12 +37,12 @@ module GeneValidator
           write_an_index_file(index_file, 'local')
           obtain_raw_seqs_from_local_db(index_file, @opt[:raw_sequences])
         end
-        index_raw_seq_file
+        index_raw_seq_file(@opt[:raw_sequences])
       end
 
       ##
       # Index the raw sequences file...
-      def index_raw_seq_file(raw_seq_file = @opt[:raw_sequences])
+      def index_raw_seq_file(raw_seq_file = opt[:raw_sequences])
         # leave only the identifiers in the fasta description
         content = File.open(raw_seq_file, 'rb').read.gsub(/ .*/, '')
         File.open(raw_seq_file, 'w+') { |f| f.write(content) }
@@ -60,10 +60,10 @@ module GeneValidator
         end
 
         # create FASTA index
-        @config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
-        @config[:raw_seq_file_load]  = index_hash
+        config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
+        config[:raw_seq_file_load]  = index_hash
 
-        File.open(@config[:raw_seq_file_index], 'w') do |f|
+        File.open(config[:raw_seq_file_index], 'w') do |f|
           YAML.dump(index_hash, f)
         end
         content = nil
