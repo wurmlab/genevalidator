@@ -3,7 +3,7 @@ module GeneValidator
   ##
   # Class that stores the validation output information
   class BlastRFValidationOutput < ValidationReport
-    attr_reader :frames_histo
+    attr_reader :frames
     attr_reader :msg
     attr_reader :total_hsp
     attr_reader :result
