@@ -27,11 +27,9 @@ module GeneValidator
     prot_xml_out           = "#{prot_xml}.out"
     prot_tab_out           = "#{prot_tab}.out"
     prot_output_dir        = "#{prot_input}.html"
-    prot_json              = "#{prot_input}.json"
     mrna_xml_out           = "#{mrna_xml}.out"
     mrna_tab_out           = "#{mrna_tab}.out"
     mrna_output_dir        = "#{mrna_input}.html"
-    mrna_json              = "#{prot_input}.json"
 
     describe 'Protein dataset' do
       it 'xml and tabular inputs give the same output' do
@@ -77,7 +75,6 @@ module GeneValidator
 
         File.delete(prot_xml_out)
         File.delete(prot_tab_out)
-        File.delete(prot_json)
         FileUtils.rm_rf(prot_output_dir)
 
         assert_equal(true, diff)
@@ -129,8 +126,6 @@ module GeneValidator
 
         File.delete(mrna_xml_out)
         File.delete(mrna_tab_out)
-        File.delete(mrna_json)
-
         FileUtils.rm_rf(mrna_output_dir)
 
         assert_equal(true, diff)
