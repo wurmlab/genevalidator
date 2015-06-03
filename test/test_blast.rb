@@ -6,7 +6,6 @@ require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'
 require 'genevalidator/validation'
 
-
 module GeneValidator
   class TestBlastClass < Minitest::Test
     dir = 'test/test_files'
@@ -23,7 +22,6 @@ module GeneValidator
 
     describe 'Test Blast Class' do
       it 'should detect nucleotide seq type' do
-
         file_mrna = File.open(filename_mrna, 'w+')
         query_mrna = 'ATGGCTAAATTACAGAGGAAGAGAAGCAAGGCTCTTGGGTCATCTCTAGAGATGT' \
                      'CCCAGATAATGGATGCAGGAACAAACAAAATTAAAAGAAGAATAAGAGATTTAGA' \
@@ -106,7 +104,7 @@ module GeneValidator
           }
 
           GeneValidator.init(default_opt)
-        rescue SystemExit => e
+        rescue SystemExit
           mixed = true
         end
         $stderr = original_stderr
@@ -125,10 +123,12 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with default tabular format' do
-        tabular_headers = 'qseqid sseqid pident length mismatch gapopen qstart' \
-                          ' qend sstart send evalue bitscore'
-        iterator_tab = TabularParser.new(tabular_headers, :protein)
-        iterator_tab.analayse_tabular_file(ncbi_mrna_tab20)
+        tabular_headers      = 'qseqid sseqid pident length mismatch gapopen' \
+                               ' qstart qend sstart send evalue bitscore'
+        GeneValidator.opt    = { blast_tabular_file: ncbi_mrna_tab20,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :protein }
+        iterator_tab = TabularParser.new
         hits = iterator_tab.parse_next
 
         assert_equal(20, hits.length)
@@ -144,10 +144,12 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with tabular format as argument' do
-        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
-                          ' pident length qframe evalue'
-        iterator_tab = TabularParser.new(tabular_headers, :protein)
-        iterator_tab.analayse_tabular_file(output_tab6)
+        tabular_headers      = 'qseqid sseqid sacc slen qstart qend sstart' \
+                               ' send pident length qframe evalue'
+        GeneValidator.opt    = { blast_tabular_file: output_tab6,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :protein }
+        iterator_tab = TabularParser.new
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -157,10 +159,12 @@ module GeneValidator
       end
 
       it 'should parse tabular -6 input with mixed columns' do
-        tabular_headers = 'qend sstart send pident length qframe evalue' \
-                          ' qseqid sseqid sacc slen qstart'
-        iterator_tab = TabularParser.new(tabular_headers, :protein)
-        iterator_tab.analayse_tabular_file(output_tab_mixed)
+        tabular_headers      = 'qend sstart send pident length qframe evalue' \
+                               ' qseqid sseqid sacc slen qstart'
+        GeneValidator.opt    = { blast_tabular_file: output_tab_mixed,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :protein }
+        iterator_tab = TabularParser.new
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -172,8 +176,10 @@ module GeneValidator
       it 'should parse tabular -7 input' do
         tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
                           ' length qframe evalue'
-        iterator_tab = TabularParser.new(tabular_headers, :protein)
-        iterator_tab.analayse_tabular_file(output_tab7)
+        GeneValidator.opt    = { blast_tabular_file: output_tab7,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :protein }
+        iterator_tab = TabularParser.new
         hits = iterator_tab.parse_next
         assert_equal(4, hits.length)
         assert_equal(199, hits[0].length_protein)
@@ -197,10 +203,12 @@ module GeneValidator
 
         prediction = Sequence.new
         prediction.length_protein = 1808
-        tabular_headers = 'qseqid sseqid sacc slen qstart qend sstart send' \
-                          ' pident length qframe evalue'
-        iterator_tab = TabularParser.new(tabular_headers, :protein)
-        iterator_tab.analayse_tabular_file(output_tab6)
+        tabular_headers      = 'qseqid sseqid sacc slen qstart qend sstart' \
+                               ' send pident length qframe evalue'
+        GeneValidator.opt    = { blast_tabular_file: output_tab6,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :protein }
+        iterator_tab = TabularParser.new
         iterator_tab.parse_next
         hits = iterator_tab.parse_next
 
@@ -234,10 +242,12 @@ module GeneValidator
 
         prediction = Sequence.new
         prediction.length_protein = 219 / 3
-        tabular_headers = 'qseqid sseqid pident length mismatch gapopen' \
-                          ' qstart qend sstart send evalue bitscore'
-        iterator_tab = TabularParser.new(tabular_headers, :nucleotide)
-        iterator_tab.analayse_tabular_file(ncbi_mrna_tab20)
+        tabular_headers      = 'qseqid sseqid pident length mismatch gapopen' \
+                               ' qstart qend sstart send evalue bitscore'
+        GeneValidator.opt    = { blast_tabular_file: ncbi_mrna_tab20,
+                                 blast_tabular_options: tabular_headers }
+        GeneValidator.config = { type: :nucleotide }
+        iterator_tab = TabularParser.new
         hits = iterator_tab.parse_next
 
         assert_equal(20, hits.length)
