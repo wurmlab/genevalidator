@@ -61,21 +61,21 @@ module GeneValidator
         qseq   = 'ERLNNLLDPHSFDEVG---------'
         sseq   = 'ERLRILLDPGSFIPVDGELSPTDPL'
 
-        hash = { 'qseqid': qseqid,
-                 'sseqid': sseqid,
-                 'sacc': sacc,
-                 'slen': slen,
-                 'qstart': qstart,
-                 'qend': qend,
-                 'sstart': sstart,
-                 'send': send,
-                 'length': length,
-                 'qframe': qframe,
-                 'pident': pident,
-                 'nident': nident,
-                 'evalue': evalue,
-                 'qseq': qseq,
-                 'sseq': sseq }
+        hash = { 'qseqid' => qseqid,
+                 'sseqid' => sseqid,
+                 'sacc'   => sacc,
+                 'slen'   => slen,
+                 'qstart' => qstart,
+                 'qend'   => qend,
+                 'sstart' => sstart,
+                 'send'   => send,
+                 'length' => length,
+                 'qframe' => qframe,
+                 'pident' => pident,
+                 'nident' => nident,
+                 'evalue' => evalue,
+                 'qseq'   => qseq,
+                 'sseq'   => sseq }
 
         seq = Hsp.new
         seq.init_tabular_attribute(hash)
