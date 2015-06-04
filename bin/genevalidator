@@ -28,8 +28,8 @@ BANNER
           '  dup   = Check for duplications,',
           '  frame = Open reading frame (ORF) validation,',
           '  orf   = Main ORF validation,',
-          '  align = Validating based on multiple alignment') do |lst|
-    opt[:validations] = lst
+          '  align = Validating based on multiple alignment') do |val|
+    opt[:validations] = val
   end
 
   opt[:db] = 'swissprot -remote'
@@ -134,11 +134,10 @@ if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
   GeneValidator.opt    = opt
   GeneValidator.config = {}
   GeneValidator::RawSequences.run
-  exit
+else
+  GeneValidator.init(opt)
+  GeneValidator.run
 end
-
-GeneValidator.init(opt)
-GeneValidator.run
 
 puts "Total running time: #{(Time.now - start).round(3)}s"
 puts # a blank line

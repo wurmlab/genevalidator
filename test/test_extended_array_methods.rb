@@ -2,8 +2,8 @@ require_relative 'test_helper'
 require 'genevalidator/ext/array'
 require 'minitest/autorun'
 module GeneValidator
+  # Test the Enumerable extension class
   class TestEnumerable < Minitest::Test
-
     describe 'Array Class' do
       it 'test1' do
         v = [1, 2, 3, 4, 5, 6]

@@ -5,6 +5,7 @@ require 'fileutils'
 require 'genevalidator'
 
 module GeneValidator
+  # Test if GV produces the same output with XML and tabular input
   class ValidateOutput < Minitest::Test
     prot_dir    = 'test/test_files/all_validations_prot'
     prot_input  = File.join(prot_dir, 'prot.fa')
@@ -36,7 +37,7 @@ module GeneValidator
         original_stdout = $stdout.clone
         $stdout.reopen(prot_xml_out, 'w')
 
-        FileUtils.rm_rf(prot_output_dir) rescue Error
+        FileUtils.rm_rf(prot_output_dir) rescue Errno::ENOENT
         opts = {
           validations: %w(lenc lenr frame merge dup orf align),
           db: database,
@@ -53,7 +54,7 @@ module GeneValidator
         $stdout.reopen original_stdout
         $stdout.reopen(prot_tab_out, 'w')
 
-        FileUtils.rm_rf(prot_output_dir) rescue Error
+        FileUtils.rm_rf(prot_output_dir) rescue Errno::ENOENT
 
         opts1 = {
           validations: %w(lenc lenr frame merge dup orf align),
@@ -86,7 +87,7 @@ module GeneValidator
         original_stdout = $stdout.clone
         $stdout.reopen(mrna_xml_out, 'w')
 
-        FileUtils.rm_rf(mrna_output_dir) rescue Error
+        FileUtils.rm_rf(mrna_output_dir) rescue Errno::ENOENT
 
         opts = {
           validations: %w(lenc lenr frame merge dup orf align),
@@ -104,7 +105,7 @@ module GeneValidator
         $stdout.reopen original_stdout
         $stdout.reopen(mrna_tab_out, 'w')
 
-        FileUtils.rm_rf(mrna_output_dir) rescue Error
+        FileUtils.rm_rf(mrna_output_dir) rescue Errno::ENOENT
 
         opts1 = {
           validations: %w(lenc lenr frame merge dup orf align),

@@ -14,11 +14,12 @@ require 'genevalidator/validation_alignment'
 require 'genevalidator/validation'
 
 module GeneValidator
+  # Test the output produced by the validations
   class ValidateOutput < Minitest::Test
     filename_fasta   = 'test/test_files/test_sequences.fasta'
     filename_xml     = "#{filename_fasta}.blast_xml"
     filename_xml_raw = "#{filename_fasta}.blast_xml.raw_seq"
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
     opt = {
       input_fasta_file: filename_fasta,
       validations: ['all'],
@@ -340,6 +341,6 @@ module GeneValidator
         assert_equal(:no, av.result)
       end
     end
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
   end
 end

@@ -68,7 +68,7 @@ module GeneValidator
         analyse_each_sequence
       else
         # Obtain fasta file of all BLAST hits
-        RawSequencess.run unless @opt[:raw_sequences]
+        RawSequences.run unless @opt[:raw_sequences]
         # Run Validations
         iterator = parse_blast_output_file
         (Validation.new).run_validations(iterator)

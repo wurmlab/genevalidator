@@ -3,9 +3,9 @@ require 'minitest/autorun'
 require 'genevalidator/clusterization'
 
 module GeneValidator
+  # Test hierarchical clusterization
   class TestHierarchicalClusterization < Minitest::Test
     describe 'Hierarchical clusterization' do
-
       vec = [4, 5, 8, 11, 11, 14, 15, 15, 15, 15, 15, 16, 17, 17, 20]
 
       it 'should make clusterization ' do

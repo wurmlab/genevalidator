@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'genevalidator/version'
@@ -7,16 +7,18 @@ Gem::Specification.new do |s|
   # meta
   s.name        = 'genevalidator'
   s.version     =  GeneValidator::VERSION
-  s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam', 'Yannick Wurm']
+  s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam',
+                   'Yannick Wurm']
   s.email       = 'y.wurm@qmul.ac.uk'
   s.homepage    = 'https://github.com/wurmlab/GeneValidator'
   s.license     = 'AGPL'
   s.summary     = 'Identifying problems with gene predictions.'
-  s.description = <<DESC
-The tool validates the input predicted genes and provides useful information (length validation, gene merge validation, sequence duplication checking, ORF finding) based on the similarities to genes in public databases.
-DESC
+  s.description = 'The tool validates the input predicted genes and provides' \
+                  ' useful information (length validation, gene merge'\
+                  ' validation, sequence duplication checking, ORF finding)' \
+                  ' based on the similarities to genes in public databases.'
 
-  s.required_ruby_version     = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.0.0'
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~>10.3'
   s.add_dependency('bio', '~> 1.4')

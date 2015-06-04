@@ -7,6 +7,7 @@ require 'genevalidator/tabular_parser'
 require 'genevalidator/validation'
 
 module GeneValidator
+  # Test the BlastUtil Class
   class TestBlastClass < Minitest::Test
     dir = 'test/test_files'
     filename_mrna     = "#{dir}/file_mrna.txt"
@@ -36,7 +37,7 @@ module GeneValidator
         file_mrna.puts(query_mrna)
         file_mrna.close
 
-        FileUtils.rm_rf("#{filename_mrna}.html") rescue Error
+        FileUtils.rm_rf("#{filename_mrna}.html") rescue Errno::ENOENT
 
         default_opt = {
           input_fasta_file: filename_mrna,
@@ -70,7 +71,7 @@ module GeneValidator
         file_prot.puts(query_prot)
         file_prot.close
 
-        FileUtils.rm_rf("#{filename_prot}.html") rescue Error
+        FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
 
         default_opt = {
           input_fasta_file: filename_prot,
@@ -93,7 +94,7 @@ module GeneValidator
           original_stderr = $stderr
           $stderr.reopen('/dev/null', 'w')
 
-          FileUtils.rm_rf("#{filename_prot}.html") rescue Error
+          FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
 
           default_opt = {
             input_fasta_file: mixed_fasta,
@@ -189,7 +190,7 @@ module GeneValidator
       end
 
       it 'should remove identical matches (protein sequences)' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
 
         default_opt = {
           input_fasta_file: filename_fasta,
@@ -228,7 +229,7 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - tabular input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
 
         default_opt = {
           input_fasta_file: filename_fasta,
@@ -261,7 +262,7 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - xml input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Error
+        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
 
         # just use a valid opts hash to create the object
         default_opt = {
