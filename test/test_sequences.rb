@@ -31,10 +31,10 @@ module GeneValidator
         accession_no = 'Q8N302'
         slen         = 714
         seq          = Sequence.new
-        hash = { 'qseqid': 'GB10034-PA',
-                 'sseqid': identifier,
-                 'sacc': accession_no,
-                 'slen': slen }
+        hash = { 'qseqid' => 'GB10034-PA',
+                 'sseqid' => identifier,
+                 'sacc'   => accession_no,
+                 'slen'   => slen }
 
         seq.init_tabular_attribute(hash)
 
