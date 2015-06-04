@@ -10,9 +10,9 @@
     <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" data-approach="<%= item.approach%>" data-explanation="<%= item.explanation%>" data-conclusion="<%= item.conclusion%>" onclick="showDiv(this, 'toggle<%= @idx %>');
     <% item.plot_files.each do |plot| %>
       addPlot('toggle<%= @idx %>', 'files/json/<%= plot.filename %>', '<%= plot.type %>', '<%= plot.title %>', '<%= plot.footer %>', '<%= plot.xtitle %>', '<%= plot.ytitle %>', '<%= plot.aux1 %>', '<%= plot.aux2 %>');
-    <% end %>AddExplanation(this, toggle'<% @idx%>');"><%= item.print%></td>
+    <% end %>AddExplanation(this, 'toggle<%= @idx%>');"><%= item.print%></td>
   <% elsif item.plot_files == nil %>
-    <td title="<%=item.header%>" class="<%=item.color%>" data-approach="<%= item.approach%>" data-explanation="<%= item.explanation%>" data-conclusion="<%= item.conclusion%>" onclick="showDiv(this, 'toggle<%= @idx %>'); AddExplanation(this,toggle'<% @idx%>');"><%= item.print%></td>
+    <td title="<%=item.header%>" class="<%=item.color%>" data-approach="<%= item.approach%>" data-explanation="<%= item.explanation%>" data-conclusion="<%= item.conclusion%>" onclick="showDiv(this, 'toggle<%= @idx %>'); AddExplanation(this,'toggle<%= @idx%>');"><%= item.print%></td>
   <% end %>
 <% end %>
 
@@ -26,17 +26,8 @@
     <% end %>"><i class="fa fa-bar-chart-o"></i></button>
   </td>
 </tr>
-<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
-  <td colspan="<%=validations.length + 7%>" id=toggle"<% @idx %>row">
-    <div id=toggle"<% @idx%>" class="expanded-child"></div>
-  </td>
-</tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;"><td colspan="<%=validations.length + 7%>" id="toggle<%= @idx %>row"><div id="toggle<%= @idx%>" class="expanded-child"></div>
+  </td></tr>
 <% else %>
-<td></td>
-</tr>
-<tr class="tablesorter-childRow" style="display:none;">
-  <td colspan="<%=validations.length + 7%>">
-    <div></div>
-  </td>
-</tr>
+  <td></td></tr><tr class="tablesorter-childRow" style="display:none;"><td colspan="<%=validations.length + 7%>"><div></div></td></tr>
 <% end %>

@@ -1,59 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>GeneValidator: identify problems with gene predictions</title>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-
-  <script type="text/javascript" src="files/js/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="files/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="files/js/jquery.tablesorter.min.js"></script>
-  <script type="text/javascript" src="files/js/d3.v3.min.js"></script>
-  <script type="text/javascript" src="files/js/script.js"></script>
-  <script type="text/javascript" src="files/js/plots.js"></script>
-
-  <link href="files/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="files/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="files/css/style.css" rel="stylesheet" type="text/css">
-
-</head>
-<body>
-  <div class="container">
-    <span class="menu_icon pull-right"><a href="#" id="show_all_plots" onclick="show_all_plots(this);"><i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts</a></span>
-    <span class="menu_icon pull-right"><a href="https://github.com/wurmlab/GeneValidator" target="_blank"><i class="fa fa-2x fa-github"></i><br>Source Code</a></span>
-    <span class="menu_icon pull-right"><a href="http://wurmlab.github.io/tools/genevalidator/documentation/v1/"><i class="fa fa-2x fa-info-circle"></i><br>About</a></span>
-    <div class="clearfix"></div>
-    <img class="logo" src="files/img/gene.png" alt="logo">
-    <div class="page-title">
-      <h1>Gene Validator <small>v<%= GeneValidator::VERSION %></small></h1>
-      <h4 class="subheading">Identify Problems with Gene Predictions</h4>
-    </div>
-    <br/><br/>
-    <div id="report">
-      <div id="report_1"></div>
-    </div>
-    <br><br>
-      <table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter">
-        <thead>
-          <tr id="header">
-            <th>#</th>
-            <th>Ranking</th>
-            <th>Sequence Definition
-              <span data-toggle="tooltip" title="Query definition as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span>
-            </th>
-            <th>No. Hits
-              <span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="top"><i class="fa fa-question-circle"></i></span>
-            </th>
-            <% @validations.each do |item| %>
-            <th class="sorter-false">
-              <b><%= item.header %></b>
-                <% if item.short_header == "LengthCluster" || item.short_header == "Gene_Merge" || item.short_header == "ORF" || item.short_header == "MA" %>
-                  <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
-                <% else %>
-                   <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
-                <% end %>
-            </th>
-            <% end %>
-            <th class="sorter-false chart-column"></th>
-          </tr>
-        </thead>
-        <tbody>
+<!DOCTYPE html><html><head><title>GeneValidator: identify problems with gene predictions</title><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><script type="text/javascript" src="files/js/jquery-2.1.1.min.js"></script><script type="text/javascript" src="files/js/bootstrap.min.js"></script><script type="text/javascript" src="files/js/jquery.tablesorter.min.js"></script><script type="text/javascript" src="files/js/d3.v3.min.js"></script><script type="text/javascript" src="files/js/script.js"></script><script type="text/javascript" src="files/js/plots.js"></script><link href="files/css/bootstrap.min.css" rel="stylesheet" type="text/css"><link href="files/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link href="files/css/style.css" rel="stylesheet" type="text/css"></head>
+<body><div class="container"><span class="menu_icon pull-right"><a href="#" id="show_all_plots" onclick="show_all_plots(this);"><i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts</a></span><span class="menu_icon pull-right"><a href="https://github.com/wurmlab/GeneValidator" target="_blank"><i class="fa fa-2x fa-github"></i><br>Source Code</a></span><span class="menu_icon pull-right"><a href="http://wurmlab.github.io/tools/genevalidator/documentation/v1/"><i class="fa fa-2x fa-info-circle"></i><br>About</a></span><div class="clearfix"></div><img class="logo" src="files/img/gene.png" alt="logo"><div class="page-title"><h1>Gene Validator <small>v<%= GeneValidator::VERSION %></small></h1><h4 class="subheading">Identify Problems with Gene Predictions</h4></div><br/><br/>
+<div id="report"><div id="report_1"></div></div><br><br>
+<table id="sortable_table" class="table table-collapsed table-bordered table-condensed tablesorter"><thead>
+<tr id="header"><th>#</th><th>Ranking</th><th>Sequence Definition<span data-toggle="tooltip" title="Query definition as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span></th><th>No. Hits<span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="top"><i class="fa fa-question-circle"></i></span></th>
+<% @validations.each do |item| %>
+  <th class="sorter-false"><b><%= item.header %></b>
+  <% if item.short_header == "LengthCluster" || item.short_header == "Gene_Merge" || item.short_header == "ORF" || item.short_header == "MA" %>
+    <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+  <% else %>
+     <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+  <% end %>
+</th>
+<% end %>
+<th class="sorter-false chart-column"></th></tr></thead><tbody>
