@@ -59,31 +59,19 @@ module GeneValidator
     end
 
     def print_output_console
-      print_console_header if @config[:run_no] == 0
-
-      short_def          = @prediction_def.scan(/([^ ]+)/)[0][0]
-      validation_outputs = validations.map(&:print)
-
-      output             = format('%3s|%5s|%20s|%7s|', @idx, @overall_score,
-                                  short_def, @nr_hits)
-      validation_outputs.each do |item|
-        output << item
-        output << '|'
-      end
-
+      print_console_header unless @config[:console_header_printed]
+      short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
       @mutex.synchronize do
-        puts output.gsub('&nbsp;', ' ')
+        print format('%3s|%5s|%20s|%7s|', @idx, @overall_score, short_def,
+                     @nr_hits)
+        puts validations.map(&:print).join('|').gsub('&nbsp;', ' ')
       end
     end
 
     def print_console_header
-      @config[:run_no] += 1
-      header = format('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier',
-                      'No_Hits')
-      validations.map do |v|
-        header << "|#{v.short_header}"
-      end
-      puts header
+      @config[:console_header_printed] = true
+      print format('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier', 'No_Hits')
+      puts validations.map(&:short_header).join('|')
     end
 
     def set_up_html(erb_file, output_file)
