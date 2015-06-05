@@ -51,7 +51,7 @@ module GeneValidator
       @json_hash      = @config[:json_hash]
 
       @results_html   = File.join(@html_path, 'results.html')
-      @table_html     = File.join(@html_path, 'files/table.html')
+      @app_html       = File.join(@html_path, 'files/table.html')
 
       @query_erb      = File.join(@aux_dir, 'template_query.erb')
       @head_erb       = File.join(@aux_dir, 'template_header.erb')
@@ -84,13 +84,13 @@ module GeneValidator
     end
 
     def generate_html
-      set_up_html(@head_erb, @results_html) unless File.exist?(@results_html)
-      set_up_html(@head_table_erb, @table_html) unless File.exist?(@table_html)
       @mutex_html.synchronize do
+        set_up_html(@head_erb, @results_html) unless File.exist?(@results_html)
+        set_up_html(@head_table_erb, @app_html) unless File.exist?(@app_html)
         template_file = File.open(@query_erb, 'r').read
         erb = ERB.new(template_file, 0, '>')
         File.open(@results_html, 'a') { |f| f.write(erb.result(binding)) }
-        File.open(@table_html, 'a') { |f| f.write(erb.result(binding)) }
+        File.open(@app_html, 'a') { |f| f.write(erb.result(binding)) }
       end
     end
 
