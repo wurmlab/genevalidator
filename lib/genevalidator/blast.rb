@@ -96,7 +96,6 @@ module GeneValidator
           seq.type           = :protein
           seq.identifier     = hit.hit_id
           seq.definition     = hit.hit_def
-          # puts seq.identifier
           seq.accession_no = hit.accession
 
           # get all high-scoring segment pairs (hsp)
@@ -104,7 +103,7 @@ module GeneValidator
 
           hit.hsps.each do |hsp|
             current_hsp            = Hsp.new
-            current_hsp.hsp_evalue = '%.0e' % hsp.evalue
+            current_hsp.hsp_evalue = format('%.0e', hsp.evalue)
 
             current_hsp.hit_from         = hsp.hit_from.to_i
             current_hsp.hit_to           = hsp.hit_to.to_i
@@ -113,9 +112,9 @@ module GeneValidator
 
             if type == :nucleotide
               current_hsp.match_query_from /= 3
-              current_hsp.match_query_to   /= 3
+              current_hsp.match_query_to /= 3
               current_hsp.match_query_from += 1
-              current_hsp.match_query_to   += 1
+              current_hsp.match_query_to += 1
             end
 
             current_hsp.query_reading_frame = hsp.query_frame.to_i
