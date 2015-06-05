@@ -31,16 +31,16 @@ module GeneValidator
     # Initilizes the object
     # Params:
     # +current_idx+: index of the current query
-    def initialize(current_idx)
+    def initialize(prediction, hits, current_idx)
       @opt            = opt
       @config         = config
       @mutex          = mutex
       @mutex_html     = mutex_html
       @mutex_json     = mutex_json
 
-      @prediction_len = 0
-      @prediction_def = 'no_definition'
-      @nr_hits        = 0
+      @prediction_len = prediction.length_protein
+      @prediction_def = prediction.definition
+      @nr_hits        = hits.length
       @idx            = current_idx
       @start_idx      = @config[:start_idx]
 
@@ -70,7 +70,7 @@ module GeneValidator
 
     def print_console_header
       @config[:console_header_printed] = true
-      print format('%3s|%5s|%20s|%7s', 'No', 'Score', 'Identifier', 'No_Hits')
+      print format('%3s|%5s|%20s|%7s|', 'No', 'Score', 'Identifier', 'No_Hits')
       puts validations.map(&:short_header).join('|')
     end
 

@@ -78,13 +78,12 @@ module GeneValidator
     # get info about the query
     def get_info_on_query_sequence(input_file = @opt[:input_fasta_file],
                                         seq_type = @config[:type])
-      prediction   = Sequence.new
-      idx          = @config[:idx]
-      start_offset = @query_idx[idx + 1] - @query_idx[idx]
-      end_offset   = @query_idx[idx]
+      start_offset = @query_idx[@config[:idx] + 1] - @query_idx[@config[:idx]]
+      end_offset   = @query_idx[@config[:idx]]
       query        = IO.binread(input_file, start_offset, end_offset)
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
+      prediction                = Sequence.new
       prediction.definition     = parse_query[0].gsub("\n", '')
       prediction.identifier     = prediction.definition.gsub(/ .*/, '')
       prediction.type           = seq_type
@@ -110,67 +109,31 @@ module GeneValidator
     # +hits+: Array of +Sequence+ objects
     # +current_idx+: the index number of the query
     def validate(prediction, hits, current_idx)
-      query_output = do_validations(prediction, hits, current_idx)
-      query_output.generate_html
-      query_output.generate_json
-      query_output.print_output_console
-      query_overview(query_output)
-    end
+      hits       = remove_identical_hits(prediction, hits)
+      run_output = Output.new(prediction, hits, current_idx)
+      vals       = create_validation_tests(prediction, hits, current_idx)
+      check_validations(vals)
+      vals.each(&:run)
+      run_output.validations = vals.map(&:validation_report)
+      check_validations_output(vals, run_output)
 
-    def query_overview(query_output)
-      validations = query_output.validations 
-      no_mafft    = 0
-      no_internet = 0
-      errors      = []
-      validations.each do |v|
-        unless v.errors.nil?
-          no_mafft += v.errors.select { |e| e == NoMafftInstallationError }.length
-          no_internet += v.errors.select { |e| e == NoInternetError }.length
-        end
-        errors.push(v.short_header) if v.validation == :error
-      end
-
-      no_evidence = validations.count { |v| v.result == :unapplicable || v.result == :warning } == validations.length
-      nee = (no_evidence) ? 1 : 0
-
-      good_scores = (query_output.overall_score >= 75) ? 1 : 0
-      bad_scores  = (query_output.overall_score >= 75) ? 0 : 1
-
-      @mutex_array.synchronize do
-        @overview[:no_queries] += 1
-        @overview[:scores].push(query_output.overall_score)
-        @overview[:good_scores] += good_scores
-        @overview[:bad_scores] += bad_scores
-        @overview[:nee] += nee
-        @overview[:no_mafft] += no_mafft
-        @overview[:no_internet] += no_internet
-        errors.each { |err| @overview[:map_errors][err] += 1 }
-
-        validations.each do |v|
-          next if v.run_time == 0 || v.run_time.nil?
-          next if v.validation == :unapplicable || v.validation == :error
-          p = Pair1.new(@overview[:run_time][v.short_header].x + v.run_time,
-                        @overview[:run_time][v.short_header].y + 1)
-          @overview[:run_time][v.short_header] = p
-        end
-      end
+      compute_scores(run_output)
+      generate_run_output(run_output)
     end
 
     ##
-    # Removes identical hits
+    # Removes identical hits (100% coverage and >99% identity)
     # Params:
     # +prediction+: Sequence object
     # +hits+: Array of +Sequence+ objects
     # Output:
     # new array of hit +Sequence+ objects
     def remove_identical_hits(prediction, hits)
-      # remove the identical hits
-      # identical hit means 100%coverage and >99% identity
       identical_hits = []
       hits.each do |hit|
-        # check if all hsps have identity more than 99%
-        low_identity = hit.hsp_list.select { |hsp| hsp.pidentity.nil? || hsp.pidentity < 99 }
-
+        low_identity = hit.hsp_list.select { |hsp| hsp.pidentity < 99 }
+        no_data      = hit.hsp_list.select { |hsp| hsp.pidentity.nil? }
+        low_identity += no_data
         # check the coverage
         coverage = Array.new(prediction.length_protein, 0)
         hit.hsp_list.each do |hsp|
@@ -189,26 +152,8 @@ module GeneValidator
       hits
     end
 
-    ##
-    # Runs all the validations and prints the outputs given the current
-    # prediction query and the corresponding hits
-    # Params:
-    # +prediction+: Sequence object
-    # +hits+: Array of +Sequence+ objects
-    # +idx+: the index number of the query
-    # Output:
-    # +Output+ object
-    def do_validations(prediction, hits, idx)
-      hits = remove_identical_hits(prediction, hits)
-
-      query_output                = Output.new(idx)
-      query_output.prediction_len = prediction.length_protein
-      query_output.prediction_def = prediction.definition
-      query_output.nr_hits        = hits.length
-
-      plot_path                   = File.join(@config[:plot_dir],
-                                              "#{@config[:filename]}_#{idx}")
-
+    def create_validation_tests(prediction, hits, idx)
+      plot_path = File.join(@config[:plot_dir], "#{@config[:filename]}_#{idx}")
       val = []
       val.push LengthClusterValidation.new(prediction, hits, plot_path)
       val.push LengthRankValidation.new(prediction, hits)
@@ -219,36 +164,16 @@ module GeneValidator
         val.push OpenReadingFrameValidation.new(prediction, hits, plot_path)
       end
       val.push AlignmentValidation.new(prediction, hits, plot_path)
+      val.select { |v| @opt[:validations].include? v.cli_name.downcase }
+    end
 
-      val = val.select { |v| @opt[:validations].include? v.cli_name.downcase }
+    def check_validations(vals)
       # check the class type of the elements in the list
-      val.each do |v|
-        fail ValidationClassError unless v.is_a? ValidationTest
-      end
-
+      vals.each { |v| fail ValidationClassError unless v.is_a? ValidationTest }
       # check alias duplication
-      aliases = val.map(&:cli_name)
+      aliases = vals.map(&:cli_name)
       fail AliasDuplicationError unless aliases.length == aliases.uniq.length
-
-      val.each do |v|
-        v.run
-        fail ReportClassError unless v.validation_report.is_a? ValidationReport
-      end
-      query_output.validations = val.map(&:validation_report)
-
-      fail NoValidationError if query_output.validations.length == 0
-
-      # compute validation score
-      compute_scores(query_output)
-      query_output
-
     rescue ValidationClassError => e
-      puts e
-      exit 1
-    rescue NoValidationError => e
-      puts e
-      exit 1
-    rescue ReportClassError => e
       puts e
       exit 1
     rescue AliasDuplicationError => e
@@ -256,32 +181,96 @@ module GeneValidator
       exit 1
     end
 
-    def compute_scores(query_output)
-      validations = query_output.validations
-      successes = validations.map { |v| v.result == v.expected }.count(true)
-      fails = validations.map { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }.count(true)
+    def check_validations_output(vals, run_output)
+      vals.each do |v|
+        fail ReportClassError unless v.validation_report.is_a? ValidationReport
+      end
+      fail NoValidationError if run_output.validations.length == 0
+    rescue ReportClassError => e
+      puts e
+      exit 1
+    rescue NoValidationError => e
+      puts e
+      exit 1
+    end
 
+    def compute_scores(run_output)
+      validations        = run_output.validations
+      scores             = {}
+      scores[:successes] = validations.map { |v| v.result == v.expected }.count(true)
+      scores[:fails] = validations.map { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }.count(true)
+      scores         = length_validation_scores(validations, scores)
+
+      run_output.successes     = scores[:successes]
+      run_output.fails         = scores[:fails]
+      total_query              = scores[:successes].to_i + scores[:fails]
+      run_output.overall_score = (scores[:successes] * 100 / total_query).round
+    end
+
+    # Since there are two length validations, it is necessary to adjust the
+    #   scores accordingly
+    def length_validation_scores(validations, scores)
       lcv = validations.select { |v| v.class == LengthClusterValidationOutput }
       lrv = validations.select { |v| v.class == LengthRankValidationOutput }
       if lcv.length == 1 && lrv.length == 1
         score_lcv = (lcv[0].result == lcv[0].expected)
         score_lrv = (lrv[0].result == lrv[0].expected)
-        # if both are true this should be counted as a single success
         if score_lcv == true && score_lrv == true
-          successes -= 1
+          scores[:successes] -= 1 # if both are true: counted as 1 success
         elsif score_lcv == false && score_lrv == false
-          # if both are false this will be a fail
-          fails -= 1
+          scores[:fails] -= 1 # if both are false: counted as 1 fail
         else
-          successes -= 0.5
-          fails -= 0.5
+          scores[:successes] -= 0.5
+          scores[:fails] -= 0.5
         end
       end
+      scores
+    end
 
-      query_output.successes     = successes
-      query_output.fails         = fails
-      total_query                = successes.to_i + fails
-      query_output.overall_score = (successes * 100 / (total_query)).round(0)
+    def generate_run_output(run_output)
+      run_output.generate_html
+      run_output.generate_json
+      run_output.print_output_console
+      generate_run_overview(run_output)
+    end
+
+    def generate_run_overview(run_output)
+      vals        = run_output.validations
+      no_mafft    = 0
+      no_internet = 0
+      errors      = []
+      vals.each do |v|
+        unless v.errors.nil?
+          no_mafft += v.errors.select { |e| e == NoMafftInstallationError }.length
+          no_internet += v.errors.select { |e| e == NoInternetError }.length
+        end
+        errors.push(v.short_header) if v.validation == :error
+      end
+
+      no_evidence = vals.count { |v| v.result == :unapplicable || v.result == :warning } == vals.length
+      nee = (no_evidence) ? 1 : 0
+
+      good_scores = (run_output.overall_score >= 75) ? 1 : 0
+      bad_scores  = (run_output.overall_score >= 75) ? 0 : 1
+
+      @mutex_array.synchronize do
+        @overview[:no_queries] += 1
+        @overview[:scores].push(run_output.overall_score)
+        @overview[:good_scores] += good_scores
+        @overview[:bad_scores] += bad_scores
+        @overview[:nee] += nee
+        @overview[:no_mafft] += no_mafft
+        @overview[:no_internet] += no_internet
+        errors.each { |err| @overview[:map_errors][err] += 1 }
+
+        vals.each do |v|
+          next if v.run_time == 0 || v.run_time.nil?
+          next if v.validation == :unapplicable || v.validation == :error
+          p = Pair1.new(@overview[:run_time][v.short_header].x + v.run_time,
+                        @overview[:run_time][v.short_header].y + 1)
+          @overview[:run_time][v.short_header] = p
+        end
+      end
     end
   end
 end
