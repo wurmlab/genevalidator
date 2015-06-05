@@ -4,10 +4,10 @@ task default: [:build]
 
 desc 'Installs the ruby gem'
 task :build do
-  require 'genevalidator/version'
   lib = File.expand_path('../lib', __FILE__)
   $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-  exec("gem build GeneValidator.gemspec && gem install ./GeneValidator-#{GeneValidator::VERSION}.gem")
+  require 'genevalidator/version'
+  exec("gem build genevalidator.gemspec && gem install ./genevalidator-#{GeneValidator::VERSION}.gem")
 end
 
 desc 'Unit tests for the majority of class methods'
