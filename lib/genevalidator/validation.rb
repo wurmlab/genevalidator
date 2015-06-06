@@ -31,8 +31,6 @@ module GeneValidator
       @config                 = config
       @query_idx              = query_idx
       @mutex_array            = mutex_array
-      # required in Output.print_output_console method
-      @config[:run_no]        = 0
 
       @overview               = overview
       @overview[:no_queries]  = 0
