@@ -14,6 +14,22 @@ require 'genevalidator/validation_alignment'
 require 'genevalidator/validation'
 
 module GeneValidator
+  class Validation
+    # Extend Validation Class with an alternative validate method that
+    #   doesn't produce the output and returns an array of the
+    #   validation reports
+    def validate_without_output(prediction, hits, current_idx)
+      hits = remove_identical_hits(prediction, hits)
+      vals = create_validation_tests(prediction, hits, current_idx)
+      check_validations(vals)
+      vals.each(&:run)
+      run_output = Output.new(prediction, hits, current_idx)
+      run_output.validations = vals.map(&:validation_report)
+      check_validations_output(vals, run_output)
+      run_output
+    end
+  end
+
   # Test the output produced by the validations
   class ValidateOutput < Minitest::Test
     filename_fasta   = 'test/test_files/test_sequences.fasta'
@@ -49,7 +65,7 @@ module GeneValidator
                                 'AAACTACTGCAACTAG'
 
       prediction.length_protein = 108
-      vals = val.do_validations(prediction, hits, 1).validations
+      vals = val.validate_without_output(prediction, hits, 1).validations
 
       lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
       lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
@@ -148,7 +164,7 @@ module GeneValidator
                                 'GAGCGGGG'
       prediction.length_protein = 46
 
-      vals = val.do_validations(prediction, hits, 1).validations
+      vals = val.validate_without_output(prediction, hits, 1).validations
 
       lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
       lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
@@ -191,7 +207,7 @@ module GeneValidator
                                 'CAACTGGAAAACTACTGCAACTAG'
       prediction.length_protein = 46
 
-      vals = val.do_validations(prediction, hits, 1).validations
+      vals = val.validate_without_output(prediction, hits, 1).validations
 
       lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
       lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
@@ -233,7 +249,7 @@ module GeneValidator
                                 'AAGGCCGCTGCTTCGGGCCCAGCATCTGCTGCGCGGACGAGC'
       prediction.length_protein = 175
 
-      vals = val.do_validations(prediction, hits, 1).validations
+      vals = val.validate_without_output(prediction, hits, 1).validations
 
       lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
       lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
@@ -321,7 +337,7 @@ module GeneValidator
                                 'AGATATTGTTAC'
       prediction.length_protein = 840
 
-      vals = val.do_validations(prediction, hits, 1).validations
+      vals = val.validate_without_output(prediction, hits, 1).validations
 
       lcv = vals.select { |v| v.class == LengthClusterValidationOutput }[0]
       lrv = vals.select { |v| v.class == LengthRankValidationOutput }[0]
