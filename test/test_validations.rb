@@ -16,8 +16,7 @@ require 'genevalidator/validation'
 module GeneValidator
   class Validation
     # Extend Validation Class with an alternative validate method that
-    #   doesn't produce the output and returns an array of the
-    #   validation reports
+    #   doesn't produce the output and returns the output instance
     def validate_without_output(prediction, hits, current_idx)
       hits = remove_identical_hits(prediction, hits)
       vals = create_validation_tests(prediction, hits, current_idx)
