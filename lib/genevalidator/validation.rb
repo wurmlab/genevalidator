@@ -109,11 +109,11 @@ module GeneValidator
     # +hits+: Array of +Sequence+ objects
     # +current_idx+: the index number of the query
     def validate(prediction, hits, current_idx)
-      hits       = remove_identical_hits(prediction, hits)
-      run_output = Output.new(prediction, hits, current_idx)
-      vals       = create_validation_tests(prediction, hits, current_idx)
+      hits = remove_identical_hits(prediction, hits)
+      vals = create_validation_tests(prediction, hits, current_idx)
       check_validations(vals)
       vals.each(&:run)
+      run_output = Output.new(prediction, hits, current_idx)
       run_output.validations = vals.map(&:validation_report)
       check_validations_output(vals, run_output)
 
@@ -182,14 +182,14 @@ module GeneValidator
     end
 
     def check_validations_output(vals, run_output)
+      fail NoValidationError if run_output.validations.length == 0
       vals.each do |v|
         fail ReportClassError unless v.validation_report.is_a? ValidationReport
       end
-      fail NoValidationError if run_output.validations.length == 0
-    rescue ReportClassError => e
+    rescue NoValidationError => e
       puts e
       exit 1
-    rescue NoValidationError => e
+    rescue ReportClassError => e
       puts e
       exit 1
     end
