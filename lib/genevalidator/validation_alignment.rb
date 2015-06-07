@@ -431,7 +431,7 @@ module GeneValidator
       f = File.open(output, 'w')
       f.write((
       # plot statistical model
-      freq.each_with_index.map { |f, j| { 'y' => ma.length, 'start' => j, 'stop' => j + 1, 'color' => 'orange', 'height' => f } } +
+      freq.each_with_index.map { |h, j| { 'y' => ma.length, 'start' => j, 'stop' => j + 1, 'color' => 'orange', 'height' => h } } +
       # hits
       match_alignment_ranges.each_with_index.map { |ranges, j| ranges.map { |range| { 'y' => ma.length - j - 1, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } } }.flatten +
       ma[0..ma.length - 2].each_with_index.map { |_seq, j|
