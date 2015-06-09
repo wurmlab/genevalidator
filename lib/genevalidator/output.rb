@@ -171,14 +171,18 @@ module GeneValidator
       no_of_results_files = (config[:run_no].to_f / config[:output_max]).ceil
       template_file       = File.open(footer_erb, 'r').read
       erb                 = ERB.new(template_file, 0, '>')
+
+      output_files = []
+      (1..no_of_results_files).each { |i| output_files << "results#{i}.html" }
+
       (1..no_of_results_files).each do |i|
         results_html = File.join(config[:html_path], "results#{i}.html")
         File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
       end
 
+      # write footer for the app
       app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
       table_html     = File.join(config[:html_path], 'files/table.html')
-
       table_footer_template = File.open(app_footer_erb, 'r').read
       table_erb             = ERB.new(table_footer_template, 0, '>')
       File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
