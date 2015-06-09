@@ -224,39 +224,6 @@ module GeneValidator
                  hit.hsp_list.map(&:match_query_to).max)
       end
 
-      xx = pairs.map(&:x)
-      yy = pairs.map(&:y)
-
-      freq_x = xx.inject(Hash.new(0)) { |h, v| h[v] += 1; h }
-      filename_x = "#{plot_path}_merge_x.json"
-      f = File.open(filename_x, 'w')
-      f.write([freq_x.collect { |k,v|
-          { 'key' => k, 'value' => v, 'main' => (1==2) }
-        }].to_json)
-      f.close
-      plot3 = Plot.new(filename_x.scan(%r{([^/]+)$})[0][0],
-                       :simplebars,
-                       '[Gene Merge] X projection',
-                       '',
-                       'x projection',
-                       'number of sequences')
-#       @validation_report.plot_files.push(plot3)
-
-      freq_y = yy.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-      filename_y = "#{plot_path}_merge_y.json"
-      f = File.open(filename_y, 'w')
-      f.write([freq_y.collect { |k, v|
-          { 'key' => k, 'value' => v, 'main' => (1 == 2) }
-        }].to_json)
-      f.close
-      plot4 = Plot.new(filename_y.scan(%r{([^/]+)$})[0][0],
-                       :simplebars,
-                       '[Gene Merge] Y projection',
-                       '',
-                       'y projection',
-                       'number of sequences')
-#       @validation_report.plot_files.push(plot4)
-
       f = File.open(output, 'w')
       f.write(hits.map { |hit| {'x' => hit.hsp_list.map(&:match_query_from).min,
                                 'y' => hit.hsp_list.map(&:match_query_to).max,
