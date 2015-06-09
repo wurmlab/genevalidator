@@ -12,36 +12,15 @@ require 'genevalidator/exceptions'
 # Top level module / namespace.
 module GeneValidator
   Pair1 = Struct.new(:x, :y)
-  # Main Class that initalises and then runs validations.
-  class Validation
+
+  # Class that initalises separate Validate.new() instances for each query.
+  class Validations
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :query_idx, :mutex_array,
-                   :overview
-
-    ##
-    # Initilizes the object
-    # Params:
-    # +opt+: A hash with the following keys: validations:, blast_tabular_file:,
-    # blast_tabular_options:, blast_xml_file:, db:, raw_sequences:,
-    # num_threads:, fast:}
-    # +start_idx+: number of the sequence from the file to start with
-    # +overall_evaluation+: boolean variable for printing overall evaluation
+    def_delegators GeneValidator, :opt, :config, :query_idx
     def initialize
-      @opt                    = opt
-      @config                 = config
-      @query_idx              = query_idx
-      @mutex_array            = mutex_array
-
-      @overview               = overview
-      @overview[:no_queries]  = 0
-      @overview[:scores]      = []
-      @overview[:good_scores] = 0
-      @overview[:bad_scores]  = 0
-      @overview[:nee]         = 0
-      @overview[:no_mafft]    = 0
-      @overview[:no_internet] = 0
-      @overview[:map_errors]  = Hash.new(0)
-      @overview[:run_time]    = Hash.new(Pair1.new(0, 0))
+      @opt       = opt
+      @config    = config
+      @query_idx = query_idx
     end
 
     ##
@@ -61,10 +40,10 @@ module GeneValidator
         end
 
         if @opt[:num_threads] == 1
-          validate(prediction, blast_hits, @config[:idx])
+          (Validate.new).validate(prediction, blast_hits, @config[:idx])
         else
           p.schedule(prediction, blast_hits, @config[:idx]) do |pred, hits, idx|
-            validate(pred, hits, idx)
+            (Validate.new).validate(pred, hits, idx)
           end
         end
       end
@@ -99,6 +78,38 @@ module GeneValidator
         iterator.parse_next(prediction.identifier)
       end
     end
+  end
+
+  # Class that runs the validations (Instatiated for each query)
+  class Validate
+    extend Forwardable
+    def_delegators GeneValidator, :opt, :config, :mutex_array, :overview
+
+    ##
+    # Initilizes the object
+    # Params:
+    # +opt+: A hash with the following keys: validations:, blast_tabular_file:,
+    # blast_tabular_options:, blast_xml_file:, db:, raw_sequences:,
+    # num_threads:, fast:}
+    # +start_idx+: number of the sequence from the file to start with
+    # +overall_evaluation+: boolean variable for printing overall evaluation
+    def initialize
+      @opt         = opt
+      @config      = config
+      @mutex_array = mutex_array
+      @run_output  = nil
+
+      @overview               = overview
+      @overview[:no_queries]  = 0
+      @overview[:scores]      = []
+      @overview[:good_scores] = 0
+      @overview[:bad_scores]  = 0
+      @overview[:nee]         = 0
+      @overview[:no_mafft]    = 0
+      @overview[:no_internet] = 0
+      @overview[:map_errors]  = Hash.new(0)
+      @overview[:run_time]    = Hash.new(Pair1.new(0, 0))
+    end
 
     ##
     # Validate one query and create validation report
@@ -111,12 +122,12 @@ module GeneValidator
       vals = create_validation_tests(prediction, hits, current_idx)
       check_validations(vals)
       vals.each(&:run)
-      run_output = Output.new(prediction, hits, current_idx)
-      run_output.validations = vals.map(&:validation_report)
-      check_validations_output(vals, run_output)
+      @run_output = Output.new(prediction, hits, current_idx)
+      @run_output.validations = vals.map(&:validation_report)
+      check_validations_output(vals)
 
-      compute_scores(run_output)
-      generate_run_output(run_output)
+      compute_scores
+      generate_run_output
     end
 
     ##
@@ -179,8 +190,8 @@ module GeneValidator
       exit 1
     end
 
-    def check_validations_output(vals, run_output)
-      fail NoValidationError if run_output.validations.length == 0
+    def check_validations_output(vals)
+      fail NoValidationError if @run_output.validations.length == 0
       vals.each do |v|
         fail ReportClassError unless v.validation_report.is_a? ValidationReport
       end
@@ -192,17 +203,17 @@ module GeneValidator
       exit 1
     end
 
-    def compute_scores(run_output)
-      validations        = run_output.validations
+    def compute_scores
+      validations        = @run_output.validations
       scores             = {}
       scores[:successes] = validations.map { |v| v.result == v.expected }.count(true)
       scores[:fails] = validations.map { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }.count(true)
       scores         = length_validation_scores(validations, scores)
 
-      run_output.successes     = scores[:successes]
-      run_output.fails         = scores[:fails]
+      @run_output.successes     = scores[:successes]
+      @run_output.fails         = scores[:fails]
       total_query              = scores[:successes].to_i + scores[:fails]
-      run_output.overall_score = (scores[:successes] * 100 / total_query).round
+      @run_output.overall_score = (scores[:successes] * 100 / total_query).round
     end
 
     # Since there are two length validations, it is necessary to adjust the
@@ -225,15 +236,15 @@ module GeneValidator
       scores
     end
 
-    def generate_run_output(run_output)
-      run_output.generate_html
-      run_output.generate_json
-      run_output.print_output_console
-      generate_run_overview(run_output)
+    def generate_run_output
+      @run_output.generate_html
+      @run_output.generate_json
+      @run_output.print_output_console
+      generate_run_overview
     end
 
-    def generate_run_overview(run_output)
-      vals        = run_output.validations
+    def generate_run_overview
+      vals        = @run_output.validations
       no_mafft    = 0
       no_internet = 0
       errors      = []
@@ -248,12 +259,12 @@ module GeneValidator
       no_evidence = vals.count { |v| v.result == :unapplicable || v.result == :warning } == vals.length
       nee = (no_evidence) ? 1 : 0
 
-      good_scores = (run_output.overall_score >= 75) ? 1 : 0
-      bad_scores  = (run_output.overall_score >= 75) ? 0 : 1
+      good_scores = (@run_output.overall_score >= 75) ? 1 : 0
+      bad_scores  = (@run_output.overall_score >= 75) ? 0 : 1
 
       @mutex_array.synchronize do
         @overview[:no_queries] += 1
-        @overview[:scores].push(run_output.overall_score)
+        @overview[:scores].push(@run_output.overall_score)
         @overview[:good_scores] += good_scores
         @overview[:bad_scores] += bad_scores
         @overview[:nee] += nee

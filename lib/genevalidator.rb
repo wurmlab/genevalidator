@@ -73,7 +73,7 @@ module GeneValidator
         RawSequences.run unless @opt[:raw_sequences]
         # Run Validations
         iterator = parse_blast_output_file
-        (Validation.new).run_validations(iterator)
+        (Validations.new).run_validations(iterator)
       end
       Output.write_json_file(@config[:json_hash], @config[:json_file])
       Output.print_footer(@overview, @config)
@@ -127,7 +127,7 @@ module GeneValidator
 
         xml_output = BlastUtils.run_blast(query)
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml_output).to_enum
-        (Validation.new).run_validations(iterator)
+        (Validations.new).run_validations(iterator)
       end
     end
   end
