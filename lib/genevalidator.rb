@@ -29,29 +29,31 @@ module GeneValidator
       @opt = opt
       GVArgValidation.validate_args
 
-      @config             = {}
-      @config[:idx]       = 0
-      @config[:start_idx] = start_idx
-      @config[:summary]   = summary
+      @config              = {}
+      @config[:idx]        = 0
+      @config[:start_idx]  = start_idx
+      @config[:summary]    = summary
 
-      @config[:type]      = BlastUtils.guess_sequence_type_from_input_file
-      @config[:filename]  = File.basename(@opt[:input_fasta_file])
-      @config[:dir]       = File.dirname(@opt[:input_fasta_file])
-      @config[:html_path] = "#{@opt[:input_fasta_file]}.html"
-      @config[:json_file] = "#{@config[:dir]}/#{@config[:filename]}.json"
-      @config[:plot_dir]  = "#{@config[:html_path]}/files/json"
+      @config[:type]       = BlastUtils.guess_sequence_type_from_input_file
+      @config[:filename]   = File.basename(@opt[:input_fasta_file])
+      @config[:dir]        = File.dirname(@opt[:input_fasta_file])
+      @config[:html_path]  = "#{@opt[:input_fasta_file]}.html"
+      @config[:json_file]  = "#{@config[:dir]}/#{@config[:filename]}.json"
+      @config[:plot_dir]   = "#{@config[:html_path]}/files/json"
 
-      relative_aux_path   = File.join(File.dirname(__FILE__), '../aux')
-      @config[:aux]       = File.expand_path(relative_aux_path)
-      @config[:json_hash] = {}
+      relative_aux_path    = File.join(File.dirname(__FILE__), '../aux')
+      @config[:aux]        = File.expand_path(relative_aux_path)
+      @config[:json_hash]  = {}
+      @config[:run_no]     = 0
+      @config[:output_max] = 5000 # max no. of queries in the output file
 
-      @overview           = {}
+      @overview            = {}
 
-      @mutex              = Mutex.new
-      @mutex_array        = Mutex.new
-      @mutex_yaml         = Mutex.new
-      @mutex_html         = Mutex.new
-      @mutex_json         = Mutex.new
+      @mutex               = Mutex.new
+      @mutex_array         = Mutex.new
+      @mutex_yaml          = Mutex.new
+      @mutex_html          = Mutex.new
+      @mutex_json          = Mutex.new
       create_output_folder
       index_the_input
       RawSequences.index_raw_seq_file if @opt[:raw_sequences]

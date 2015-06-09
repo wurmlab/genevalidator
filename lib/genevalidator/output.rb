@@ -34,6 +34,8 @@ module GeneValidator
     def initialize(prediction, hits, current_idx)
       @opt            = opt
       @config         = config
+      @config[:run_no] += 1
+
       @mutex          = mutex
       @mutex_html     = mutex_html
       @mutex_json     = mutex_json
@@ -44,18 +46,19 @@ module GeneValidator
       @idx            = current_idx
       @start_idx      = @config[:start_idx]
 
-      @filename       = @config[:filename]
-      @html_path      = @config[:html_path]
-      @dir            = @config[:dir]
-      @aux_dir        = @config[:aux]
       @json_hash      = @config[:json_hash]
 
-      @results_html   = File.join(@html_path, 'results.html')
-      @app_html       = File.join(@html_path, 'files/table.html')
+      @results_html   = create_new_result_file
+      @app_html       = File.join(@config[:html_path], 'files/table.html')
 
-      @query_erb      = File.join(@aux_dir, 'template_query.erb')
-      @head_erb       = File.join(@aux_dir, 'template_header.erb')
-      @head_table_erb = File.join(@aux_dir, 'app_template_header.erb')
+      @query_erb      = File.join(@config[:aux], 'template_query.erb')
+      @head_erb       = File.join(@config[:aux], 'template_header.erb')
+      @head_table_erb = File.join(@config[:aux], 'app_template_header.erb')
+    end
+
+    def create_new_result_file
+      i = (@config[:run_no].to_f / @config[:output_max]).ceil
+      File.join(@config[:html_path], "results#{i}.html")
     end
 
     def print_output_console
@@ -74,24 +77,26 @@ module GeneValidator
       puts validations.map(&:short_header).join('|')
     end
 
-    def set_up_html(erb_file, output_file)
-      template_contents = File.open(erb_file, 'r').read
-      erb               = ERB.new(template_contents, 0, '>')
-      return if File.exist?(output_file)
-      File.open(output_file, 'w+') do |f|
-        f.write(erb.result(binding))
-      end
-    end
-
     def generate_html
       @mutex_html.synchronize do
-        set_up_html(@head_erb, @results_html) unless File.exist?(@results_html)
-        set_up_html(@head_table_erb, @app_html) unless File.exist?(@app_html)
+        write_html_header
         template_file = File.open(@query_erb, 'r').read
         erb = ERB.new(template_file, 0, '>')
         File.open(@results_html, 'a') { |f| f.write(erb.result(binding)) }
         File.open(@app_html, 'a') { |f| f.write(erb.result(binding)) }
       end
+    end
+
+    def write_html_header
+      set_up_html(@head_erb, @results_html) unless File.exist?(@results_html)
+      set_up_html(@head_table_erb, @app_html) unless File.exist?(@app_html)
+    end
+
+    def set_up_html(erb_file, output_file)
+      template_contents = File.open(erb_file, 'r').read
+      erb               = ERB.new(template_contents, 0, '>')
+      return if File.exist?(output_file)
+      File.open(output_file, 'w+') { |f| f.write(erb.result(binding)) }
     end
 
     def generate_json
@@ -162,16 +167,24 @@ module GeneValidator
       evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
       footer_erb     = File.join(config[:aux], 'template_footer.erb')
-      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
-      results_html   = File.join(config[:html_path], 'results.html')
-      table_html     = File.join(config[:html_path], 'files/table.html')
 
-      template_file         = File.open(footer_erb, 'r').read
-      erb                   = ERB.new(template_file, 0, '>')
+      no_of_results_files = (config[:run_no].to_f / config[:output_max]).ceil
+      template_file       = File.open(footer_erb, 'r').read
+      erb                 = ERB.new(template_file, 0, '>')
+
+      output_files = []
+      (1..no_of_results_files).each { |i| output_files << "results#{i}.html" }
+
+      (1..no_of_results_files).each do |i|
+        results_html = File.join(config[:html_path], "results#{i}.html")
+        File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
+      end
+
+      # write footer for the app
+      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
+      table_html     = File.join(config[:html_path], 'files/table.html')
       table_footer_template = File.open(app_footer_erb, 'r').read
       table_erb             = ERB.new(table_footer_template, 0, '>')
-
-      File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
       File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
     end
 
