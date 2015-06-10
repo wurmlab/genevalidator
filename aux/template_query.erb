@@ -16,7 +16,7 @@
     <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="addData(this, 'all');"><i class="fa fa-bar-chart-o"></i></button>
   </td>
 </tr>
-<tr class="tablesorter-childRow" name="plot_row" style="display:none;"><td colspan="<%=validations.length + 7%>"><div id="toggle<%= @idx%>" class="expanded-child"></div>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;"><td colspan="<%=validations.length + 7%>" id="toggle<%= @idx %>row"><div id="toggle<%= @idx%>" class="expanded-child"></div>
   </td></tr>
 <% else %>
   <td></td></tr><tr class="tablesorter-childRow" style="display:none;"><td colspan="<%=validations.length + 7%>"><div></div></td></tr>
