@@ -48,8 +48,11 @@ module GeneValidator
 
       @json_hash      = @config[:json_hash]
 
+      filename        = @config[:filename]
       @results_html   = create_new_result_file
       @app_html       = File.join(@config[:html_path], 'files/table.html')
+      @json_file      = File.join(@config[:plot_dir], "#{filename}_#{@idx}.json")
+      @relative_json  = File.join('files/json', "#{filename}_#{@idx}.json")
 
       @query_erb      = File.join(@config[:aux], 'template_query.erb')
       @head_erb       = File.join(@config[:aux], 'template_header.erb')
@@ -104,38 +107,42 @@ module GeneValidator
         row = { overall_score: @overall_score, definition: @prediction_def,
                 no_hits: @nr_hits }
         row = create_validation_hashes(row)
+        write_row_json(row)
         @json_hash[@idx] = row
       end
     end
 
     def create_validation_hashes(row)
+      row[:validations] = {}
       @validations.each do |item|
         val = { print: item.print.gsub('&nbsp;', ' '), status: item.color }
         if item.color != 'warning'
           explain = { approach: item.approach, explanation: item.explanation,
                       conclusion: item.conclusion }
-          val.merge(explain)
+          val.merge!(explain)
         end
         val[:graphs] = create_graphs_hash(item) unless item.plot_files.nil?
-        row[item.header] = val
+        row[:validations][item.short_header] = val
       end
       row
     end
 
     def create_graphs_hash(item)
-      graphs = {}
+      graphs = []
       item.plot_files.each do |g|
-        graphs[g.filename] = { type: g.type, title: g.title, footer: g.footer,
-                               xtitle: g.xtitle, ytitle: g.ytitle, aux1: g.aux1,
-                               aux2: g.aux2 }
+        graphs << { data: g.data, type: g.type, title: g.title,
+                    footer: g.footer, xtitle: g.xtitle,
+                    ytitle: g.ytitle, aux1: g.aux1, aux2: g.aux2 }
       end
       graphs
     end
 
+    def write_row_json(row)
+      File.open(@json_file, 'w') { |f| f.write(row.to_json) }
+    end
+
     def self.write_json_file(hash, json_file)
-      File.open(json_file, 'w') do |f|
-        f.write(hash.to_json)
-      end
+      File.open(json_file, 'w') { |f| f.write(hash.to_json) }
     end
 
     ##
@@ -146,24 +153,13 @@ module GeneValidator
     # +html_path+: path of the html folder
     # +filemane+: name of the fasta input file
     def self.print_footer(overview, config)
-      filename = config[:filename]
-      plot_dir = config[:plot_dir]
-
       overall_evaluation = overview(overview)
 
-      eval = print_summary_to_console(overall_evaluation, config[:summary])
-
-      create_plot_statistics_json(overview[:scores], plot_dir, filename)
-      plot_statistics = Plot.new("files/json/#{filename}_statistics.json",
-                                 :simplebars,
-                                 'Overall evaluation',
-                                 '',
-                                 'validation score',
-                                 'number of queries',
-                                 10)
+      create_plot_json(overview[:scores], config[:plot_dir])
 
       less = overall_evaluation[0].gsub("\n", '<br>').gsub("'", %q(\\\'))
 
+      eval = print_summary_to_console(overall_evaluation, config[:summary])
       evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
 
       footer_erb     = File.join(config[:aux], 'template_footer.erb')
@@ -198,12 +194,13 @@ module GeneValidator
     end
 
     # make the historgram with the resulted scores
-    def self.create_plot_statistics_json(scores, plot_dir, filename)
-      plot_file = File.join(plot_dir, "#{filename}_statistics.json")
-      File.open(plot_file, 'w') do |f|
-        scores = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }].to_json
-        f.write scores
-      end
+    def self.create_plot_json(scores, plot_dir)
+      plot_file = File.join(plot_dir, 'overview.json')
+      data = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }]
+      hash = { data: data, type: :simplebars, title: 'Overall Evaluation',
+               footer: '', xtitle: 'Validation Score',
+               ytitle: 'Number of Queries', aux1: 10, aux2: '' }
+      File.open(plot_file, 'w') { |f| f.write hash.to_json }
     end
 
     ##

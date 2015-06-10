@@ -162,17 +162,16 @@ module GeneValidator
     end
 
     def create_validation_tests(prediction, hits, idx)
-      plot_path = File.join(@config[:plot_dir], "#{@config[:filename]}_#{idx}")
       val = []
-      val.push LengthClusterValidation.new(prediction, hits, plot_path)
+      val.push LengthClusterValidation.new(prediction, hits)
       val.push LengthRankValidation.new(prediction, hits)
-      val.push GeneMergeValidation.new(prediction, hits, plot_path)
+      val.push GeneMergeValidation.new(prediction, hits)
       val.push DuplicationValidation.new(prediction, hits)
       if @config[:type] == :nucleotide
         val.push BlastReadingFrameValidation.new(prediction, hits)
-        val.push OpenReadingFrameValidation.new(prediction, hits, plot_path)
+        val.push OpenReadingFrameValidation.new(prediction, hits)
       end
-      val.push AlignmentValidation.new(prediction, hits, plot_path)
+      val.push AlignmentValidation.new(prediction, hits)
       val.select { |v| @opt[:validations].include? v.cli_name.downcase }
     end
 

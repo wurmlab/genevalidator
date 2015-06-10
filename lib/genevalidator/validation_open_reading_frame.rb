@@ -59,15 +59,13 @@ module GeneValidator
   class OpenReadingFrameValidation < ValidationTest
     extend Forwardable
     def_delegators GeneValidator, :config
-    attr_reader :plot_path
 
     ##
     # Initilizes the object
     # Params:
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
-    # +plot_path+: name of the input file, used when making plot files
-    def initialize(prediction, hits, plot_path)
+    def initialize(prediction, hits)
       super
       @short_header = 'ORF'
       @header       = 'Main ORF'
@@ -75,7 +73,6 @@ module GeneValidator
                       ' Frame in the predicted gene. Applicable only for' \
                       ' nucleotide queries.'
       @cli_name     = 'orf'
-      @plot_path    = plot_path
       @type         = config[:type]
     end
 
@@ -161,26 +158,22 @@ module GeneValidator
     def plot_orfs(orfs, translated_length, output = "#{@plot_path}_orfs.json")
       fail QueryError unless orfs.is_a? Hash
 
-      results = []
+      data = []
 
       # Create hashes for the Background
       (-3..3).each do |frame|
         next if frame == 0
-        results << { 'y' => frame, 'start' => 1, 'stop' => translated_length,
+        data << { 'y' => frame, 'start' => 1, 'stop' => translated_length,
                      'color' => 'gray' }
       end
 
       # Create the hashes for the ORFs...
       orfs.each do |_key, h|
-        results << { 'y' => h[:frame], 'start' => h[:orf_start],
+        data << { 'y' => h[:frame], 'start' => h[:orf_start],
                      'stop' => h[:orf_end], 'color' => 'red' }
       end
 
-      f = File.open(output, 'w')
-      f.write((results).to_json)
-      f.close
-
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+      Plot.new(data,
                :lines,
                'Open Reading Frames in all 6 Frames',
                'Open Reading Frame (Minimimum Length: 30 amino acids),red',

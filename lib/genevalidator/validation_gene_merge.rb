@@ -85,7 +85,6 @@ module GeneValidator
   class GeneMergeValidation < ValidationTest
     attr_reader :prediction
     attr_reader :hits
-    attr_reader :plot_path
 
     ##
     # Initilizes the object
@@ -94,14 +93,13 @@ module GeneValidator
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +plot_path+: name of the input file, used when generatig the plot files
     # +boundary+: the offset of the hit from which we start analysing the hit
-    def initialize(prediction, hits, plot_path, boundary = 10)
+    def initialize(prediction, hits, boundary = 10)
       super
       @short_header = 'Gene_Merge'
       @header       = 'Gene Merge'
       @description  = 'Check whether BLAST hits make evidence about a merge' \
                       ' of two genes that match the predicted gene.'
       @cli_name     = 'merge'
-      @plot_path    = plot_path
       @boundary     = boundary
     end
 
@@ -178,29 +176,25 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
     # +prediction+: Sequence objects
-    def plot_matched_regions(output = "#{plot_path}_match.json", hits = @hits)
-
-      colors   = ['orange', 'blue']  ##{colors[i%2]
-      f        = File.open(output, 'w')
+    def plot_matched_regions(hits = @hits)
       no_lines = hits.length
 
       hits_less = hits[0..[no_lines, hits.length - 1].min]
 
-      f.write((hits_less.each_with_index.map { |hit, i|
+      data = hits_less.each_with_index.map { |hit, i|
         { 'y' => i,
           'start' => hit.hsp_list.map(&:match_query_from).min,
           'stop' => hit.hsp_list.map(&:match_query_to).max,
-          'color'=>'black',
-          'dotted'=>'true'}}.flatten +
+          'color' =>'black',
+          'dotted' =>'true'}}.flatten +
         hits_less.each_with_index.map { |hit, i|
           hit.hsp_list.map { |hsp|
             { 'y' => i,
               'start' => hsp.match_query_from,
               'stop' => hsp.match_query_to,
-              'color' => 'orange'} } }.flatten).to_json)
-      f.close
+              'color' => 'orange'} } }.flatten
 
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+      Plot.new(data,
                :lines,
                'Gene Merge Validation: Query coord covered by blast hit (1 line/hit)',
                '',
@@ -217,27 +211,24 @@ module GeneValidator
     # +y_intercept+: the ecuation of the line is y= slope*x + y_intercept
     # +output+: location where the plot will be saved in jped file format
     # +hits+: array of Sequence objects
-    def plot_2d_start_from(slope = nil, y_intercept = nil,
-                           output = "#{plot_path}_match_2d.json", hits = @hits)
+    def plot_2d_start_from(slope = nil, y_intercept = nil, hits = @hits)
       pairs = hits.map do |hit|
         Pair.new(hit.hsp_list.map(&:match_query_from).min,
                  hit.hsp_list.map(&:match_query_to).max)
       end
 
-      f = File.open(output, 'w')
-      f.write(hits.map { |hit| {'x' => hit.hsp_list.map(&:match_query_from).min,
+      data = hits.map { |hit| { 'x' => hit.hsp_list.map(&:match_query_from).min,
                                 'y' => hit.hsp_list.map(&:match_query_to).max,
-                                'color' => 'red'}}.to_json)
-      f.close
+                                'color' => 'red'}}
 
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+      Plot.new(data,
                :scatter,
                'Gene Merge Validation: Start/end of matching hit coord. on query (1 point/hit)',
                '',
                'Start Offset (most left hsp)',
                'End Offset (most right hsp)',
-               y_intercept,
-               slope)
+               y_intercept.to_s,
+               slope.to_s)
     end
 
     ##

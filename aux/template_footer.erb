@@ -7,7 +7,7 @@
   function add_content(){
     evaluation_div = document.getElementById('report_1');
     evaluation_div.innerHTML=content;
-    addPlot('report_1', '<%= plot_statistics.filename %>', '<%= plot_statistics.type %>', '<%= plot_statistics.title %>', '<%= plot_statistics.footer %>', '<%= plot_statistics.xtitle %>', '<%= plot_statistics.ytitle %>');
+    addOverallPlot('files/json/overview.json');
   }
 </script>
 </div>

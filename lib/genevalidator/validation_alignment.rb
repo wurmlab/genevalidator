@@ -83,7 +83,6 @@ module GeneValidator
   class AlignmentValidation < ValidationTest
     extend Forwardable
     def_delegators GeneValidator, :opt, :config
-    attr_reader :plot_path
     attr_reader :multiple_alignment
     attr_reader :raw_seq_file
     attr_reader :index_file_name
@@ -95,7 +94,7 @@ module GeneValidator
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +plot_path+: name of the fasta file
-    def initialize(prediction, hits, plot_path)
+    def initialize(prediction, hits)
       super
       @short_header       = 'MA'
       @cli_name           = 'align'
@@ -105,7 +104,6 @@ module GeneValidator
                             ' the best hits. Also counts the percentage of' \
                             ' the conserved regions that appear in the' \
                             ' prediction.'
-      @plot_path          = plot_path
       @raw_seq_file       = opt[:raw_sequences]
       @index_file_name    = config[:raw_seq_file_index]
       @raw_seq_file_load  = config[:raw_seq_file_load]
@@ -409,7 +407,7 @@ module GeneValidator
     # +freq+: +String+ residue frequency from the statistical model
     # +output+: plot_path of the json file
     # +ma+: +String+ array with the multiple alignmened hits and prediction
-    def plot_alignment(freq, output = "#{@plot_path}_ma.json", ma = @multiple_alignment)
+    def plot_alignment(freq, ma = @multiple_alignment)
       # get indeces of consensus in the multiple alignment
       consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length - 2])
       consensus_idxs = consensus.split(//).each_index.select { |j| isalpha(consensus[j]) }
@@ -428,32 +426,24 @@ module GeneValidator
 
       len = ma[0].length
 
-      f = File.open(output, 'w')
-      f.write((
       # plot statistical model
-      freq.each_with_index.map { |h, j| { 'y' => ma.length, 'start' => j, 'stop' => j + 1, 'color' => 'orange', 'height' => h } } +
+      data = freq.each_with_index.map { |h, j| { 'y' => ma.length, 'start' => j, 'stop' => j + 1, 'color' => 'orange', 'height' => h } } +
       # hits
       match_alignment_ranges.each_with_index.map { |ranges, j| ranges.map { |range| { 'y' => ma.length - j - 1, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } } }.flatten +
-      ma[0..ma.length - 2].each_with_index.map { |_seq, j|
-        consensus_ranges.map { |range| { 'y' => j + 1, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }
-      }.flatten +
+      ma[0..ma.length - 2].each_with_index.map { |_seq, j| consensus_ranges.map { |range| { 'y' => j + 1, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } } }.flatten +
       # plot prediction
       [{ 'y' => 0, 'start' => 0, 'stop' => len, 'color' => 'gray', 'height' => -1 }] +
       query_alignment_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } }.flatten +
 
       # plot consensus
-      consensus_all_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }.flatten).to_json)
-
-      f.close
+      consensus_all_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }.flatten
 
       yAxisValues = 'Prediction'
-      (1..ma.length - 1).each do |i|
-        yAxisValues << ", hit&nbsp;#{i}"
-      end
+      (1..ma.length - 1).each { |i| yAxisValues << ", hit #{i}" }
 
       yAxisValues << ', Statistical Model'
 
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+      Plot.new(data,
                :align,
                'Missing/Extra sequences Validation: Multiple Align. & Statistical model of hits',
                'Conserved Region, Yellow',

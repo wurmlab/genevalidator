@@ -65,7 +65,6 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by hit length clusterization
   class LengthClusterValidation < ValidationTest
-    attr_reader :plot_path
     attr_reader :clusters
     attr_reader :max_density_cluster
 
@@ -76,9 +75,8 @@ module GeneValidator
     # +prediction+: a +Sequence+ object representing the blast query
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     # +dilename+: +String+ with the name of the fasta file
-    def initialize(prediction, hits, plot_path)
+    def initialize(prediction, hits)
       super
-      @plot_path    = plot_path
       @short_header = 'LengthCluster'
       @header       = 'Length Cluster'
       @description  = 'Check whether the prediction length fits most of the' \
@@ -184,56 +182,19 @@ module GeneValidator
                           max_density_cluster = @max_density_cluster,
                           prediction = @prediction)
 
-      f = File.open(output, 'w')
-      f.write(clusters.each_with_index.map { |cluster, i|
+      data = clusters.each_with_index.map { |cluster, i|
         cluster.lengths.collect { |k, v|
           { 'key' => k, 'value' => v, 'main' => (i == max_density_cluster) }
         }
-      }.to_json)
-      f.close
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
+      }
+
+      Plot.new(data,
                :bars,
                'Length Cluster Validation: Distribution of BLAST hit lengths',
                'Query Sequence, black;Most Dense Cluster,red;Other Hits, blue',
                'Sequence Length',
                'Number of Sequences',
                prediction.length_protein)
-    end
-
-    ##
-    # Generates a json file cotaining data used for plotting
-    # lines corresponding to the start and end hit offsets
-    # Params:
-    # +output+: plot_path where to save the graph
-    # +hits+: array of Sequence objects
-    # Output:
-    # +Plot+ object
-    def plot_len_clusters(output = "#{@plot_path}_len.json", _hits = @hits)
-      f = File.open(output, 'w')
-      lst = @hits.sort { |a, b| a.length_protein <=> b.length_protein }
-
-      no_lines = 100
-
-      lst_less = lst[0..[no_lines, lst.length - 1].min]
-
-      f.write((lst_less.each_with_index.map { |hit, i|
-        { 'y' => i, 'start' => 0, 'stop' => hit.length_protein,
-          'color' => 'gray' }
-      } + lst_less.each_with_index.map { |hit, i|
-        hit.hsp_list.map { |hsp|
-          { 'y' => i, 'start' => hsp.hit_from, 'stop' => hsp.hit_to,
-            'color' => 'red' }
-        }
-      }.flatten).to_json)
-
-      f.close
-      Plot.new(output.scan(%r{([^/]+)$})[0][0],
-               :lines,
-               '[Length Cluster] Matched regions in hits',
-               'hit, gray;high-scoring segment pairs (hsp), red',
-               'offset in the hit',
-               'number of the hit',
-               lst_less.length)
     end
   end
 end
