@@ -14,18 +14,18 @@ require 'genevalidator/validation_alignment'
 require 'genevalidator/validation'
 
 module GeneValidator
-  class Validation
-    # Extend Validation Class with an alternative validate method that
+  class Validate
+    # Extend Validate Class with an alternative validate method that
     #   doesn't produce the output and returns the output instance
     def validate_without_output(prediction, hits, current_idx)
       hits = remove_identical_hits(prediction, hits)
       vals = create_validation_tests(prediction, hits, current_idx)
       check_validations(vals)
       vals.each(&:run)
-      run_output = Output.new(prediction, hits, current_idx)
-      run_output.validations = vals.map(&:validation_report)
-      check_validations_output(vals, run_output)
-      run_output
+      @run_output = Output.new(prediction, hits, current_idx)
+      @run_output.validations = vals.map(&:validation_report)
+      check_validations_output(vals)
+      @run_output
     end
   end
 
@@ -44,7 +44,7 @@ module GeneValidator
       test: true
     }
     GeneValidator.init(opt)
-    val      = GeneValidator::Validation.new
+    val      = GeneValidator::Validate.new
     xml      = File.open(filename_xml, 'rb').read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
 
