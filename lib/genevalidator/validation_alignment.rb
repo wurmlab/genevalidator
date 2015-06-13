@@ -96,9 +96,9 @@ module GeneValidator
     # +plot_path+: name of the fasta file
     def initialize(prediction, hits)
       super
-      @short_header       = 'MA'
+      @short_header       = 'MissingExtraSequences'
       @cli_name           = 'align'
-      @header             = 'Missing/Extra sequences'
+      @header             = 'Missing/Extra Sequences'
       @description        = 'Finds missing and extra sequences in the' \
                             ' prediction, based on the multiple alignment of' \
                             ' the best hits. Also counts the percentage of' \

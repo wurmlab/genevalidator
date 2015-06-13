@@ -71,16 +71,17 @@ function hide_all_plots(button, expand_children){
 }
 
 function addData(source, val){
-  var target = $(source).closest('tr').attr("data-target");
-  var file = $(source).closest('tr').attr("data-jsonFile");
+  var graphs = '', 
+      graphData = '',
+      target = $(source).closest('tr').attr("data-target"),
+      file = $(source).closest('tr').attr("data-jsonFile");
   d3.select('#'.concat(target)).selectAll('svg').remove();
 
   showDiv(source, target);
   if (source.status == 'released'){
     return true;
   }
-  var graphs = '';
-  var graphData = '';
+
   $.getJSON(file, function( json ) {
     if (val === 'all'){
       for (var i in json.validations){

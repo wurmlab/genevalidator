@@ -4,20 +4,18 @@
   <td title="Definition" class="seq_definition"><%= @prediction_def %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
 <% @validations.each do |item| %>
-  <% if item.color == 'warning' %>
-    <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
-  <% else %>
-    <td title="<%=item.header%>" class="<%=item.color%> my-btn-<%=item.color%>" onclick="addData(this, '<%= item.short_header%>');"><%= item.print%></td>
-  <% end %>
+  <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
 <% end %>
-
 <% if @validations.select{|item| item.plot_files != nil}.map{|item| item.plot_files.length}.inject(0){|r, e| r+e } != 0 %>
-  <td>
-    <button title="Show plots" name="plot_btn" class="plot_btn btn btn-default" onclick="addData(this, 'all');"><i class="fa fa-bar-chart-o"></i></button>
-  </td>
+  <td><button title="Show plots" name="plot_btn" class="plot_btn btn btn-default"><i class="fa fa-bar-chart-o"></i></button></td>
 </tr>
-<tr class="tablesorter-childRow" name="plot_row" style="display:none;"><td colspan="<%=validations.length + 7%>" id="toggle<%= @idx %>row"><div id="toggle<%= @idx%>" class="expanded-child"></div>
-  </td></tr>
+<tr class="tablesorter-childRow" name="plot_row" style="display:none;">
+  <td colspan="<%=validations.length + 7%>" id="toggle<%= @idx %>row"><div id="toggle<%= @idx%>" class="expanded-child"></div></td>
+</tr>
 <% else %>
-  <td></td></tr><tr class="tablesorter-childRow" style="display:none;"><td colspan="<%=validations.length + 7%>"><div></div></td></tr>
+  <td></td>
+</tr>
+<tr class="tablesorter-childRow" style="display:none;">
+  <td colspan="<%=validations.length + 7%>"><div></div></td>
+</tr>
 <% end %>

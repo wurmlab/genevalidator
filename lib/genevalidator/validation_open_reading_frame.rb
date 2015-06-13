@@ -67,7 +67,7 @@ module GeneValidator
     # +hits+: a vector of +Sequence+ objects (representing blast hits)
     def initialize(prediction, hits)
       super
-      @short_header = 'ORF'
+      @short_header = 'MainORF'
       @header       = 'Main ORF'
       @description  = 'Check whether there is a single main Open Reading' \
                       ' Frame in the predicted gene. Applicable only for' \

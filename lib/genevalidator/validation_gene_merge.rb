@@ -95,7 +95,7 @@ module GeneValidator
     # +boundary+: the offset of the hit from which we start analysing the hit
     def initialize(prediction, hits, boundary = 10)
       super
-      @short_header = 'Gene_Merge'
+      @short_header = 'GeneMerge'
       @header       = 'Gene Merge'
       @description  = 'Check whether BLAST hits make evidence about a merge' \
                       ' of two genes that match the predicted gene.'
