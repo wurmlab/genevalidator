@@ -158,11 +158,11 @@ tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
   cursor: pointer !important;
 }
 
-.danger:hover {
+.table tbody td.danger:hover {
   background-color: rgb(242, 203, 203) !important;
 }
 
-.success:hover{
+.table tbody td.success:hover{
   background-color: rgb(204, 228, 200) !important;
 }
 
