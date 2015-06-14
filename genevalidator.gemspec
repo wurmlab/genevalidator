@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency('bio', '~> 1.4')
   s.add_dependency('bio-blastxmlparser', '~>2.0')
   s.add_dependency('minitest', '~> 5.4')
-  s.add_dependency('statsample', '~> 1.4')
+  s.add_dependency('statsample', '1.4') # Updating to 1.5 breaks GV
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
