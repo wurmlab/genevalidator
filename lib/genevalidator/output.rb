@@ -176,12 +176,23 @@ module GeneValidator
         File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
       end
 
+      turn_off_sorting(config[:html_path]) if no_of_results_files > 1
+
       # write footer for the app
       app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
       table_html     = File.join(config[:html_path], 'files/table.html')
       table_footer_template = File.open(app_footer_erb, 'r').read
       table_erb             = ERB.new(table_footer_template, 0, '>')
       File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
+    end
+
+    def self.turn_off_sorting(html_path)
+      script_file = File.join(html_path, 'files/js/script.js')
+      temp_file   = File.join(html_path, 'files/js/script.temp.js')
+      File.open(temp_file, 'w') do |out_file|
+        out_file.puts File.readlines(script_file)[30..-1].join
+      end
+      FileUtils.mv(temp_file, script_file)
     end
 
     def self.print_summary_to_console(overall_evaluation, summary)
