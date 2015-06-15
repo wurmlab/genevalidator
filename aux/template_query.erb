@@ -1,7 +1,7 @@
 <tr data-target="toggle<%= @idx %>" data-jsonFile="<%= @relative_json%>">
-  <td><%= @idx %></td>
+  <td title="idx"><%= @idx %></td>
   <td data-score="<%= overall_score %>"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:<%= overall_score * 0.85 %>%;"></div></div></td>
-  <td title="Definition" class="seq_definition"><%= @prediction_def %></td>
+  <td title="Definition"><%= @prediction_def %></td>
   <td title="No. Hits"><%= @nr_hits %></td>
 <% @validations.each do |item| %>
   <td title="<%=item.header%>" class="<%=item.color%>"><%= item.print%></td>
