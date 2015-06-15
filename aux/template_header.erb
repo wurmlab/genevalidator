@@ -9,7 +9,7 @@
 <tr id="header"><th>#</th><th>Ranking</th><th>Sequence Definition&nbsp;<span data-toggle="tooltip" title="Query definition as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span></th><th>No. Hits&nbsp;<span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="top"><i class="fa fa-question-circle"></i></span></th>
 <% @validations.each do |item| %>
   <th class="sorter-false"><b><%= item.header %></b>
-  <% if item.short_header == "LengthCluster" || item.short_header == "Gene_Merge" || item.short_header == "ORF" || item.short_header == "MA" %>
+  <% if item.short_header == "LengthCluster" || item.short_header == "GeneMerge" || item.short_header == "MainORF" || item.short_header == "MissingExtraSequences" %>
     <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
   <% else %>
      <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
