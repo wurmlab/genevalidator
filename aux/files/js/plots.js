@@ -1,86 +1,131 @@
 function show_all_plots(button){
   'use strict';
-  var expand_children = document.getElementsByName('plot_row');
-  if (expand_children.length > 30){
+  var plotBtns = $('.plot_row');
+  if (plotBtns.length > 30){
     $('#alert').modal();
   } else {
     if (window.chrome && (window.location.protocol === 'file:') ) {
-      if (($('#browser-alert').length) === 0) {
-        $('#browseralertText').html('<stong>Sorry, this feature is not supported in your browser.');
-        $('#browseralert').modal();
-      }
+      createChromeModal();
     } else {
 
       // show activity spinner
-      $('#spinner1').modal({
-        backdrop: 'static',
-        keyboard: 'false'
-      });
+      $('#spinner1').modal({ backdrop: 'static', keyboard: 'false' });
 
       if (button.status !== 'pressed'){
         button.status = 'pressed';
         button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Hide All Charts';
         button.onclick = function() {
-          hide_all_plots(button, expand_children);
+          hide_all_plots(button);
         };
       }
 
-      //get all end of row buttons
-      var buttons_dom = document.getElementsByName('plot_btn');
+      remove_all_plots();       // remove all plots
 
-      // remove all plots
-      remove_all_plots(expand_children);
+      //iterate over the plot_btns and add data to each childRow
+      $('.plot_btn').each (function(){
+        addData(this, 'all');
+      });
 
-      for (var i = 0; i < buttons_dom.length; i++) {
-        addData(buttons_dom[i], 'all');
-      }
-      // remove progress notification
-      $('#spinner1').modal('hide');
+      $('#spinner1').modal('hide');      // remove activity spinner
     }
   }
 }
 
-function remove_all_plots(expand_children){
+function createChromeModal() {
+  if (($('#browser-alert').length) === 0) {
+    $('#browseralertText').html('<stong>Sorry, this feature is not supported in your browser.');
+    $('#browseralert').modal();
+  }
+}
+
+function remove_all_plots() {
   'use strict';
-  var extensions = document.querySelectorAll('div');
-  for (var i = 0; i < extensions.length; i++) {
-    if (extensions[i].id.search(/toggle*/) === 0){
-      d3.select('#'.concat(extensions[i].id)).selectAll('svg').remove();
-    }
-  }
+  $('.tablesorter-childRow').each (function(){
+    $(this).remove();
+  });
 
-  for (var j = 0; j < expand_children.length; j++) {
-    var expand_child_div = expand_children[j].getElementsByTagName('div')[0];
-    $(expand_child_div).parent().parent().hide();
-  }
-
-  var buttons = document.getElementsByTagName('button');
-  for (var k = 0; k < buttons.length; k++) {
-    buttons[k].status = 'released';
-  }
+  $('.plot_btn').each (function(){
+    this.status = 'released';
+  });
 }
 
-function hide_all_plots(button, expand_children){
+function hide_all_plots(button){
   'use strict';
   button.status = 'released';
   button.innerHTML = '<i class="fa fa-2x fa-bar-chart-o"></i><br>Show All Charts';
   button.onclick = function() {
     show_all_plots(button);
   };
-  remove_all_plots(expand_children);
+  remove_all_plots();
 }
 
 function addData(source, val){
-  var graphs = '', 
-      graphData = '',
-      target = $(source).closest('tr').attr("data-target"),
-      file = $(source).closest('tr').attr("data-jsonFile");
-  d3.select('#'.concat(target)).selectAll('svg').remove();
-
-  showDiv(source, target);
-  if (source.status == 'released'){
+  'use strict';
+  if (window.chrome && (window.location.protocol === 'file:') ) {
+    createChromeModal();
     return true;
   }
+  var graphs      = '',
+      graphData   = '',
+      $currentRow = $(source).closest('tr'),
+      target      = $currentRow.attr("data-target"),
+      $childRow   = $('#mainrow' + target);
+  
+  if ($childRow.length && source.status !== 'pressed') {
+    // if you click on another td...
+    emptyChildRow($currentRow, target, source);
+    addDataToChildRow($currentRow, target, val);
+  } else if ($childRow.length === 0){
+    createChildRow($currentRow, target, source);
+    addDataToChildRow($currentRow, target, val);
+  } else if ($childRow.length) {
+    removeChildRow($currentRow, $childRow, source);
+  }
+
+  $('table').trigger('update');
+
+}
+
+function addOverallPlot(file){
+  $.getJSON(file, function( json ) {
+    addPlot(json.data, 'report_1', json.type, json.title, json.footer, json.xtitle, json.ytitle);
+  });
+}
+
+function createChildRow($currentRow, target, source){
+  var childRowHTML = '<tr class="tablesorter-childRow" id="mainrow' + target + '"><td colspan="12" id="row' +
+                     target + '"><div id="' + target + '" class="expanded-child"></div></td></tr>';
+  $currentRow.addClass('tablesorter-hasChildRow');
+  $currentRow.after(childRowHTML);
+  source.status = 'pressed';
+}
+
+function removeChildRow($currentRow, $childRow, source){
+  $currentRow.removeClass('tablesorter-hasChildRow');
+  $childRow.remove();
+  source.status = 'released';
+}
+
+function emptyChildRow($currentRow, target, source){
+  var targetId = '#' + target;
+  var explanationId = '#' + target + 'explanation';
+  $(targetId).empty();
+  $(explanationId).remove();
+  resetStatusOfOtherButtons($currentRow);
+  source.status = 'pressed';
+}
+
+function resetStatusOfOtherButtons($currentRow){
+  $currentRow.find('td').each (function(){
+    if (this.status == 'pressed') { this.status = 'released'; }
+  });
+  $currentRow.find('.plot_btn').each (function(){
+    if (this.status == 'pressed') { this.status = 'released'; }
+  });
+}
+
+function addDataToChildRow($currentRow, target, val){
+  var file = $currentRow.attr("data-jsonFile");
 
   $.getJSON(file, function( json ) {
     if (val === 'all'){
@@ -90,7 +135,7 @@ function addData(source, val){
         }
       }
     } else {
-      AddExplanation(source, target, json.validations[val]);
+      addExplanation(target, json.validations[val]);
       if (json.validations[val].graphs !== undefined) {
         generatePlotCommands(json.validations[val].graphs, target);
       }
@@ -98,15 +143,7 @@ function addData(source, val){
   });
 }
 
-function addOverallPlot(file){
-  $.getJSON(file, function( json ) {
-    addPlot(json.data, 'report_1', json.type, json.title, json.footer, json.xtitle, json.ytitle);
-
-  });
-}
-
 function generatePlotCommands(graphs, target) {
-  console.log(target);
   for (var g = 0; g < graphs.length; g++) {
     var graphData = graphs[g];
     addPlot(graphData.data, target, graphData.type, graphData.title,
@@ -115,54 +152,16 @@ function generatePlotCommands(graphs, target) {
   }
 }
 
-function showDiv(source, target){
+function addExplanation(target, jsonData){
   'use strict';
-  if (window.chrome && (window.location.protocol === 'file:') ) {
-    if (($('#browser-alert').length) === 0) {
-      $('#browseralertText').html('<stong>Sorry, this feature is not supported in your browser.');
-      $('#browseralert').modal();
-    }
-    return;
-  }
-  var explanationId = '#' + target + 'explanation';
-
-  if ( $(explanationId).length) {
-    $(explanationId).remove();
-  }
-
-  var button = document.getElementById(target);
-  if (source.status === 'pressed'){
-    button.style.display = 'none';
-    $(button).parent().parent().hide();
-  } else {
-    button.style.display = 'block';
-    $(button).parent().parent().show();
-    var pressedButtons = document.querySelectorAll('td');
-    for (var i = 0; i < pressedButtons.length; i++) {
-      if (pressedButtons[i].status === 'pressed') {
-        pressedButtons[i].status = 'released';
-      }
-    }
-  }
-
-  if (source.status=='pressed') {
-    source.status='released';
-  } else {
-    source.status='pressed';
-  }
-}
-
-function AddExplanation(source, target, jsonData){
-  'use strict';
-  var row = '#' + target +'row';
+  var row = '#row' + target;
   var approach_html = '<p><b>Approach:</b> ' + jsonData.approach + '</p>';
   var explanation_html = '<p><b>Explanation:</b> ' + jsonData.explanation + '</p>';
   var conclusion_html = '<p><b>Conclusion:</b> ' + jsonData.conclusion + '</p>';
 
-  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' + approach_html + explanation_html + conclusion_html + '</div>');
-  if (source.status === 'pressed') {
-    $(row).prepend(explain);
-  }
+  var explain = $('<div id="' + target + 'explanation" class="alert alert-info explanation_alert" role="alert">' +
+                approach_html + explanation_html + conclusion_html + '</div>');
+  $(row).prepend(explain);
 }
 
 function addPlot(jsonData, target, type, title, footer, xtitle, ytitle, aux1, aux2){

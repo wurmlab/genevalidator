@@ -75,12 +75,6 @@ tr {
   text-align: center;
 }
 
-/* table striped backgrounds ___________*/
-
-tbody > tr:nth-child(4n+1), tbody > tr:nth-child(4n+2) {
-  background-color: #f5f5f5;
-}
-
 /* table sorter ___________*/
 
 .tablesorter-default .header,
