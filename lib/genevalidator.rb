@@ -45,7 +45,7 @@ module GeneValidator
       @config[:aux]        = File.expand_path(relative_aux_path)
       @config[:json_hash]  = {}
       @config[:run_no]     = 0
-      @config[:output_max] = 5000 # max no. of queries in the output file
+      @config[:output_max] = 2500 # max no. of queries in the output file
 
       @overview            = {}
 
