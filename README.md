@@ -48,16 +48,16 @@ $ gem install genevalidator
 
 
 ## Usage 
-1) After installing, GeneValidator can be run by typing the following command in the terminal
+1) After installing, GeneValidator can be run by typing the following command in the terminal:
+
 
 ```bash
-
 USAGE:
     $ genevalidator [OPTIONS] Input_File
-
+    
 ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
-
+    
 OPTIONAL ARGUMENTS
     -v, --validations <String>       The Validations to be applied.
                                      Validation Options Available (separated by coma):
@@ -72,59 +72,63 @@ OPTIONAL ARGUMENTS
     -d, --db [BLAST_DATABASE]        Path to the BLAST database
                                      GeneValidator also supports remote databases:
                                      e.g.   $ genevalidator -d "swissprot -remote" Input_File
-    -x, --blast_xml_file [FILE]      Provide GeneValidator with a pre-computed BLAST XML output
-                                     file (BLAST -outfmt option 5).
-    -t, --blast_tabular_file [FILE]  Provide GeneValidator with a pre-computed BLAST tabular output
-                                     file. (BLAST -outfmt option 6).
-    -o [Options],                    Custom format used in BLAST -outfmt argument
+    -e, --extract_raw_seqs           Produces a fasta file of the raw sequences of all BLAST hits in the
+                                     supplied BLAST output file. This fasta file can then be provided to
+                                     GeneValidator with the "-r", "--raw_sequences" argument
+    -j, --json_file [JSON_FILE]      Generate GV results from a json file (or a subset of a json file)
+                                     produced from GeneValidator
+    -x [BLAST_XML_FILE],             Provide GeneValidator with a pre-computed BLAST XML output
+        --blast_xml_file             file (BLAST -outfmt option 5).
+    -t [BLAST_TABULAR_FILE],         Provide GeneValidator with a pre-computed BLAST tabular output
+        --blast_tabular_file         file. (BLAST -outfmt option 6).
+    -o [BLAST_TABULAR_OPTIONS],      Custom format used in BLAST -outfmt argument
         --blast_tabular_options      See BLAST+ manual pages for more details
     -n, --num_threads num_of_threads Specify the number of processor threads to use when running
                                      BLAST and Mafft within GeneValidator.
     -f, --fast                       Run BLAST on all sequences together (rather than separately)
                                      to speed up the analysis.
-                                     The speed difference is more apparent on larger input files
+                                     However, this means that there will be a longer wait before the
+                                     results can be viewed (as GeneValidator will need to run BLAST
+                                     on all sequences before producing any results).
+                                     The speed difference will be more apparent on larger input files
+    -r, --raw_sequences [raw_seq]    Supply a fasta file of the raw sequences of all BLAST hits present
+                                     in the supplied BLAST XML or BLAST tabular file.
     -m, --mafft_bin [MAFFT_PATH]     Path to MAFFT bin folder (is added to $PATH variable)
     -b, --blast_bin [BLAST_PATH]     Path to BLAST+ bin folder (is added to $PATH variable)
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
-
-
 ```
 
 Please type `genevalidator -h` into your terminal to see this information in your terminal. 
 
 ## Example Usage Scenarios
 
-##### Running GeneValidator with a local Database, with two threads
+##### Local Database, with custom number of threads (in this case 8)
 
 ```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 Input_FASTA_File
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 8 Input_FASTA_File
 ```
-
-##### Running GeneValidator with a remote Database
+##### Local Database, with the fast mode, with custom number of threads (in this case 8)
+Internally, GV will run BLAST on all input sequences before analysing any sequences (instead of running BLAST on each sequence and then analysing the sequence).
 
 ```bash
-$ genevalidator -d 'swissprot -remote' Input_FASTA_File
+$ genevalidator -d 'Path-to-local-BLAST-db' -n 8 -f Input_FASTA_File
 ```
 
-##### Running GeneValidator with a pre-computed BLAST XML file
-
+##### Local Database, with pre-computed BLAST XML file, with custom number of threads (in this case 8)
 
 ```bash
-$  genevalidator -d 'local-or-remote-BLAST-db' -x 'Path-to-XML-file' Input_FASTA_File
+$  blast(p/x) -db SwissProt -out Path-to-XML-file -num_threads 8 -outfmt 5 -query Input_FASTA_File
+$  genevalidator -d 'local-or-remote-BLAST-db' -n 8 -x 'Path-to-XML-file' Input_FASTA_File
 ```
 
-##### Running GeneValidator with a pre-computed BLAST tabular file 
+##### Local Database, with pre-computed BLAST XML file, with custom number of threads (in this case 8)
 
 ```bash
-$ genevalidator -d 'local-or-remote-BLAST-db' -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_FASTA_File 
+$ blast(p/x) -db SwissProt -out Path-to-tabular-file -num_threads 8 -outfmt "7 qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq" -query Input_FASTA_File
+$ genevalidator -d 'local-or-remote-BLAST-db' -n 8 -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_FASTA_File 
 ```
 
-##### Running GeneValidator with the fast option 
-
-```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 2 -f Input_FASTA_File
-```
 
 ## Output
 The output produced by GeneValidator is presented in three manners.
@@ -132,12 +136,43 @@ The output produced by GeneValidator is presented in three manners.
 #### HTML Output 
 Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (DNA input data).
 
-#### Yaml Output
-The output is also produced in YAML. This allows you to reuse the results and all the related global variables within your own programs.
+#### JSON Output
+The output is also produced in JSON. GeneValidator is able to re-generate results for any JSON files (or derived JSON files) with that were previously generated by the program. This means that you are able to use the JSON file in your own analysis pipelines and then use GeneValidator to produce the HTML output for the analysed JSON file.
 
 #### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
 
-### Other Resources
+
+## Analysing the JSON output
+
+There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/). The below examples use this tool.
+
+### Examplar JSON CLI Installation
+After installing node:
+
+```bash
+$ npm install -g json
+```
+
+### Extracting a sub-list of the results
+
+```bash
+$ cat INPUT_JSON_FILE | json -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
+```
+
+### Sorting a list based on the overall score
+
+#####Ascending List: (i.e. 0 to 100)
+
+```bash
+cat INPUT_JSON_FILE | json -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+```
+#####Decending List: (i.e. 100 to 0)
+
+```bash
+cat INPUT_JSON_FILE | json -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+```
+
+## Other Resources
 
 * [Full Documentation](http://wurmlab.github.io/tools/genevalidator/documentation/v1/)
