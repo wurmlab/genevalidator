@@ -21,37 +21,45 @@ module GeneValidator
     attr_reader :raw_seq_file_load
     # array of indexes for the start offsets of each query in the fasta file
     attr_reader :query_idx
-    attr_reader :mutex
-    attr_accessor :mutex_yaml, :mutex_html, :mutex_json, :mutex_array
+    attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array
 
     def init(opt, start_idx = 1, summary = true)
       puts 'Analysing input arguments'
       @opt = opt
-      GVArgValidation.validate_args
+      GVArgValidation.validate_args # validates @opt
 
-      @config              = {}
-      @config[:idx]        = 0
-      @config[:start_idx]  = start_idx
-      @config[:summary]    = summary
+      @config = {
+        idx: 0,
+        start_idx: start_idx,
+        summary: summary,
 
-      @config[:type]       = BlastUtils.guess_sequence_type_from_input_file
-      @config[:filename]   = File.basename(@opt[:input_fasta_file])
-      @config[:dir]        = File.dirname(@opt[:input_fasta_file])
-      @config[:html_path]  = "#{@opt[:input_fasta_file]}.html"
-      @config[:json_file]  = "#{@config[:dir]}/#{@config[:filename]}.json"
-      @config[:plot_dir]   = "#{@config[:html_path]}/files/json"
+        type: BlastUtils.guess_sequence_type_from_input_file,
+        filename: File.basename(@opt[:input_fasta_file]),
+        html_path: "#{@opt[:input_fasta_file]}.html",
+        json_file: File.join(File.dirname(@opt[:input_fasta_file]),
+                             "#{File.basename(@opt[:input_fasta_file])}.json"),
+        plot_dir: "#{@opt[:input_fasta_file]}.html/files/json",
+        aux: File.expand_path(File.join(File.dirname(__FILE__), '../aux')),
 
-      relative_aux_path    = File.join(File.dirname(__FILE__), '../aux')
-      @config[:aux]        = File.expand_path(relative_aux_path)
-      @config[:json_hash]  = {}
-      @config[:run_no]     = 0
-      @config[:output_max] = 2500 # max no. of queries in the output file
+        json_output: [],
+        run_no: 0,
+        output_max: 2500 # max no. of queries in the output file
+      }
 
-      @overview            = {}
+      @overview = {
+        no_queries: 0,
+        scores: [],
+        good_scores: 0,
+        bad_scores: 0,
+        nee: 0,
+        no_mafft: 0,
+        no_internet: 0,
+        map_errors: Hash.new(0),
+        run_time: Hash.new(Pair1.new(0, 0))
+      }
 
       @mutex               = Mutex.new
       @mutex_array         = Mutex.new
-      @mutex_yaml          = Mutex.new
       @mutex_html          = Mutex.new
       @mutex_json          = Mutex.new
       create_output_folder
@@ -62,7 +70,7 @@ module GeneValidator
     ##
     # Parse the blast output and run validations
     def run
-      # Run BLAST on all sequences
+      # Run BLAST on all sequences (generates @opt[:blast_xml_file])
       BlastUtils.run_blast_on_input_file if @opt[:fast]
 
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
