@@ -135,6 +135,7 @@ module GeneValidator
 
         xml_output = BlastUtils.run_blast(query)
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml_output).to_enum
+        @opt[:blast_xml_file] = true # So that GV knows that it is in XML format
         (Validations.new).run_validations(iterator)
       end
     end
