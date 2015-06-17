@@ -2,6 +2,7 @@
 require 'optparse'
 require 'genevalidator'
 require 'genevalidator/get_raw_sequences'
+require 'genevalidator/json_to_gv_results'
 require 'genevalidator/version'
 
 opt = {}
@@ -45,6 +46,12 @@ BANNER
           'supplied BLAST output file. This fasta file can then be provided to',
           'GeneValidator with the "-r", "--raw_sequences" argument') do
     opt[:extract_raw_seqs] = true
+  end
+
+  opts.on('-j', '--json_file [JSON_FILE]',
+          'Generate GV results from a json file (or a subset of a json file)',
+          'produced from GeneValidator') do |json|
+    opt[:json_file] = json
   end
 
   opts.on('-x', '--blast_xml_file [BLAST_XML_FILE]',
@@ -117,7 +124,7 @@ begin
     $stderr.puts 'Error: you must specify a single fasta input file instead' \
                  ' of ' + ARGV.length.to_s + ".\n"
     exit 1
-  elsif ARGV.length == 0 && opt[:extract_raw_seqs].nil?
+  elsif ARGV.length == 0 && opt[:extract_raw_seqs].nil? && opt[:json_file].nil?
     puts opt_parser
     exit 1
   end
@@ -134,6 +141,9 @@ if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
   GeneValidator.opt    = opt
   GeneValidator.config = {}
   GeneValidator::RawSequences.run
+elsif opt[:json_file]
+  GeneValidator.opt = opt
+  GeneValidator::JsonToGVResults.run
 else
   GeneValidator.init(opt)
   GeneValidator.run
