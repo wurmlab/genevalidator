@@ -47,20 +47,20 @@ BANNER
     opt[:extract_raw_seqs] = true
   end
 
-  opts.on('-x', '--blast_xml_file [FILE]',
+  opts.on('-x', '--blast_xml_file [BLAST_XML_FILE]',
           'Provide GeneValidator with a pre-computed BLAST XML output',
           'file (BLAST -outfmt option 5).') do |blast_xml_file|
     opt[:blast_xml_file] = blast_xml_file
   end
 
-  opts.on('-t', '--blast_tabular_file [FILE]',
+  opts.on('-t', '--blast_tabular_file [BLAST_TABULAR_FILE]',
           'Provide GeneValidator with a pre-computed BLAST tabular output',
           'file. (BLAST -outfmt option 6).') do |blast_tabular_file|
     opt[:blast_tabular_file] = blast_tabular_file
   end
 
   # default blast tabular columns
-  opts.on('-o', '--blast_tabular_options [Options]',
+  opts.on('-o', '--blast_tabular_options [BLAST_TABULAR_OPTIONS]',
           'Custom format used in BLAST -outfmt argument',
           'See BLAST+ manual pages for more details') do |blast_table_options|
     opt[:blast_tabular_options] = blast_table_options
