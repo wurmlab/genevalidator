@@ -19,7 +19,7 @@ module GeneValidator
     #   doesn't produce the output and returns the output instance
     def validate_without_output(prediction, hits, current_idx)
       hits = remove_identical_hits(prediction, hits)
-      vals = create_validation_tests(prediction, hits, current_idx)
+      vals = create_validation_tests(prediction, hits)
       check_validations(vals)
       vals.each(&:run)
       @run_output = Output.new(current_idx, hits.length, prediction.definition)
