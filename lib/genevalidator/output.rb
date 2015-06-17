@@ -38,8 +38,6 @@ module GeneValidator
       @nr_hits        = no_of_hits
       @idx            = current_idx
 
-      filename        = @config[:filename]
-      @results_html   = create_new_result_file
       @app_html       = File.join(@config[:html_path], 'files/table.html')
     end
 
