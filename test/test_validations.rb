@@ -22,7 +22,7 @@ module GeneValidator
       vals = create_validation_tests(prediction, hits, current_idx)
       check_validations(vals)
       vals.each(&:run)
-      @run_output = Output.new(prediction, hits, current_idx)
+      @run_output = Output.new(current_idx, hits.length, prediction.definition)
       @run_output.validations = vals.map(&:validation_report)
       check_validations_output(vals)
       @run_output

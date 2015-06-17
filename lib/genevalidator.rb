@@ -83,7 +83,7 @@ module GeneValidator
         iterator = parse_blast_output_file
         (Validations.new).run_validations(iterator)
       end
-      Output.write_json_file(@config[:json_hash], @config[:json_file])
+      Output.write_json_file(@config[:json_output], @config[:json_file])
       Output.print_footer(@overview, @config)
     end
 
@@ -132,7 +132,6 @@ module GeneValidator
         start_offset = @query_idx[i + 1] - @query_idx[i]
         end_offset   = @query_idx[i]
         query = IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
-
         xml_output = BlastUtils.run_blast(query)
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml_output).to_enum
         @opt[:blast_xml_file] = true # So that GV knows that it is in XML format

@@ -99,16 +99,7 @@ module GeneValidator
       @mutex_array = mutex_array
       @run_output  = nil
 
-      @overview               = overview
-      @overview[:no_queries]  = 0
-      @overview[:scores]      = []
-      @overview[:good_scores] = 0
-      @overview[:bad_scores]  = 0
-      @overview[:nee]         = 0
-      @overview[:no_mafft]    = 0
-      @overview[:no_internet] = 0
-      @overview[:map_errors]  = Hash.new(0)
-      @overview[:run_time]    = Hash.new(Pair1.new(0, 0))
+      @overview    = overview
     end
 
     ##
@@ -119,10 +110,10 @@ module GeneValidator
     # +current_idx+: the index number of the query
     def validate(prediction, hits, current_idx)
       hits = remove_identical_hits(prediction, hits)
-      vals = create_validation_tests(prediction, hits, current_idx)
+      vals = create_validation_tests(prediction, hits)
       check_validations(vals)
       vals.each(&:run)
-      @run_output = Output.new(prediction, hits, current_idx)
+      @run_output = Output.new(current_idx, hits.length, prediction.definition)
       @run_output.validations = vals.map(&:validation_report)
       check_validations_output(vals)
 
@@ -161,7 +152,7 @@ module GeneValidator
       hits
     end
 
-    def create_validation_tests(prediction, hits, idx)
+    def create_validation_tests(prediction, hits)
       val = []
       val.push LengthClusterValidation.new(prediction, hits)
       val.push LengthRankValidation.new(prediction, hits)
