@@ -154,23 +154,36 @@ After installing node:
 $ npm install -g json
 ```
 
-### Extracting a sub-list of the results
+### Filtering the results 
+
+- Extract sequences that have an overall score of 100
 
 ```bash
-$ cat INPUT_JSON_FILE | json -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
+$ json -f INPUT_JSON_FILE -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
 ```
 
-### Sorting a list based on the overall score
-
-#####Ascending List: (i.e. 0 to 100)
+- Extract sequences that have an overall score of over 70
 
 ```bash
-cat INPUT_JSON_FILE | json -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+$ json -f INPUT_JSON_FILE -c 'this.overall_score > 70' > OUTPUT_JSON_FILE
 ```
-#####Decending List: (i.e. 100 to 0)
+
+- Extract sequences that have more than 50 hits
 
 ```bash
-cat INPUT_JSON_FILE | json -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+$ json -f INPUT_JSON_FILE -c 'this.no_hits > 50' > OUTPUT_JSON_FILE
+```
+
+- Sort the JSON based on the overall score (ascending - 0 to 100)
+
+```bash
+$ json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+```
+
+- Sort the JSON based on the overall score (decending - 100 to 0)
+
+```bash
+json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
 ```
 
 ## Other Resources
