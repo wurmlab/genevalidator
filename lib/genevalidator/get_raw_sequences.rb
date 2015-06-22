@@ -29,7 +29,7 @@ module GeneValidator
         end
 
         @opt[:raw_sequences] = @blast_file + '.raw_seq'
-        index_file   = @blast_file + '.index'
+        index_file           = @blast_file + '.index'
 
         if opt[:db] =~ /remote/
           write_a_raw_seq_file(@opt[:raw_sequences], 'remote')
@@ -85,7 +85,7 @@ module GeneValidator
         n = Bio::BlastXMLParser::XmlIterator.new(@opt[:blast_xml_file]).to_enum
         n.each do |iter|
           iter.each do |hit|
-            if db_type == 'remote'
+            if db_type == 'remote' || hit.hit_id.nil?
               file.puts obtain_raw_seqs_from_remote_db(hit.accession)
             else
               file.puts hit.hit_id
@@ -109,7 +109,7 @@ module GeneValidator
         assert_table_has_correct_no_of_collumns(rows, table_headers)
 
         rows.each do |row|
-          if db_type == 'remote'
+          if db_type == 'remote' || row['sseqid'].nil?
             file.puts obtain_raw_seqs_from_remote_db(row['sacc'])
           else
             file.puts row['sseqid']
@@ -124,8 +124,8 @@ module GeneValidator
       end
 
       def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
-        cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}' -outfmt" \
-              " '%f' -out '#{raw_seq_file}'"
+        cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}'" \
+              " -outfmt '%f' -out '#{raw_seq_file}'"
         `#{cmd}`
       end
 
