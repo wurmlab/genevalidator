@@ -58,10 +58,10 @@ module GeneValidator
         run_time: Hash.new(Pair1.new(0, 0))
       }
 
-      @mutex               = Mutex.new
-      @mutex_array         = Mutex.new
-      @mutex_html          = Mutex.new
-      @mutex_json          = Mutex.new
+      @mutex       = Mutex.new
+      @mutex_array = Mutex.new
+      @mutex_html  = Mutex.new
+      @mutex_json  = Mutex.new
       create_output_folder
       index_the_input
       RawSequences.index_raw_seq_file if @opt[:raw_sequences]
