@@ -189,8 +189,8 @@ module GeneValidator
       # print to console
       eval = ''
       overall_evaluation.each { |e| eval << "\n#{e}" }
-      puts eval if summary
-      puts ''
+      $stderr.puts eval if summary
+      $stderr.puts ''
       eval
     end
 

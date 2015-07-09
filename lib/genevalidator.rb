@@ -24,7 +24,7 @@ module GeneValidator
     attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array
 
     def init(opt, start_idx = 1, summary = true)
-      puts 'Analysing input arguments'
+      $stderr.puts 'Analysing input arguments'
       @opt = opt
       GVArgValidation.validate_args # validates @opt
 

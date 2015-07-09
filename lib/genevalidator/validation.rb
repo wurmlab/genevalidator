@@ -173,10 +173,10 @@ module GeneValidator
       aliases = vals.map(&:cli_name)
       fail AliasDuplicationError unless aliases.length == aliases.uniq.length
     rescue ValidationClassError => e
-      puts e
+      $stderr.puts e
       exit 1
     rescue AliasDuplicationError => e
-      puts e
+      $stderr.puts e
       exit 1
     end
 
@@ -186,10 +186,10 @@ module GeneValidator
         fail ReportClassError unless v.validation_report.is_a? ValidationReport
       end
     rescue NoValidationError => e
-      puts e
+      $stderr.puts e
       exit 1
     rescue ReportClassError => e
-      puts e
+      $stderr.puts e
       exit 1
     end
 

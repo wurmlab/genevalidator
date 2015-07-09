@@ -1,3 +1,4 @@
+# coding: utf-8
 # From http://burgestrand.se/code/ruby-thread-pool/
 #
 # Copyright © 2012, Kim Burgestrand kim@burgestrand.se
@@ -57,7 +58,7 @@ if $0 == __FILE__
   20.times do |i|
     p.schedule do
       sleep rand(4) + 2
-      puts "Job #{i} finished by thread #{Thread.current[:id]}"
+      $stderr.puts "Job #{i} finished by thread #{Thread.current[:id]}"
     end
   end
   at_exit { p.shutdown }

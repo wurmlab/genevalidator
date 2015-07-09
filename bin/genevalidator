@@ -113,7 +113,7 @@ BANNER
   end
 
   opts.on('-h', '--help', 'Show this screen.') do
-    puts opt_parser
+    $stderr.puts opt_parser
     exit
   end
 end
@@ -125,7 +125,7 @@ begin
                  ' of ' + ARGV.length.to_s + ".\n"
     exit 1
   elsif ARGV.length == 0 && opt[:extract_raw_seqs].nil? && opt[:json_file].nil?
-    puts opt_parser
+    $stderr.puts opt_parser
     exit 1
   end
 rescue OptionParser::ParseError
@@ -149,5 +149,5 @@ else
   GeneValidator.run
 end
 
-puts "Total running time: #{(Time.now - start).round(3)}s"
-puts # a blank line
+$stderr.puts "Total running time: #{(Time.now - start).round(3)}s"
+$stderr.puts # a blank line

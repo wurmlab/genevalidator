@@ -93,10 +93,10 @@ module GeneValidator
           end
         end
       rescue
-        puts '*** Error: There was an error in analysing the BLAST XML file.'
-        puts '    Please ensure that BLAST XML file is in the correct format'
-        puts '    and then try again. If you are using a remote database,'
-        puts '    please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST XML file.'
+        $stderr.puts '    Please ensure that BLAST XML file is in the correct format'
+        $stderr.puts '    and then try again. If you are using a remote database,'
+        $stderr.puts '    please ensure that you have internet access.'
         exit 1
       end
 
@@ -116,10 +116,10 @@ module GeneValidator
           end
         end
       rescue
-        puts '*** Error: There was an error in analysing the BLAST tabular'
-        puts '    file. Please ensure that BLAST tabular file is in the correct'
-        puts '    format and then try again. If you are using a remote'
-        puts '    database, please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST tabular'
+        $stderr.puts '    file. Please ensure that BLAST tabular file is in the correct'
+        $stderr.puts '    format and then try again. If you are using a remote'
+        $stderr.puts '    database, please ensure that you have internet access.'
         exit 1
       end
 
@@ -142,8 +142,8 @@ module GeneValidator
         result   = Net::HTTP.get(URI.parse(uri))
         raw_seqs = result[0..result.length - 2]
         unless raw_seqs.downcase.index(/error/).nil?
-          puts '*** Error: There was an error in obtaining the raw sequence' \
-               ' of a BLAST hit. Please ensure that you have internet access.'
+          $stderr.puts '*** Error: There was an error in obtaining the raw sequence' \
+                       ' of a BLAST hit. Please ensure that you have internet access.'
           exit 1
         end
         raw_seqs
@@ -152,10 +152,10 @@ module GeneValidator
       def assert_table_has_correct_no_of_collumns(rows, table_headers)
         rows.each do |row|
           unless row.length == table_headers.length
-            puts '*** Error: The BLAST tabular file cannot be parsed. This is' \
-                 ' could possibly be due to an incorrect BLAST tabular' \
-                 ' options ("-o", "--blast_tabular_options") being supplied.' \
-                 ' Please correct this and try again.'
+            $stderr.puts '*** Error: The BLAST tabular file cannot be parsed. This is' \
+                         ' could possibly be due to an incorrect BLAST tabular' \
+                         ' options ("-o", "--blast_tabular_options") being supplied.' \
+                         ' Please correct this and try again.'
             exit 1
           end
           break # break after checking the first column

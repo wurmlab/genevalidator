@@ -58,7 +58,7 @@ module GeneValidator
                                   num_threads = opt[:num_threads])
         return if opt[:blast_xml_file] || opt[:blast_tabular_file]
 
-        puts 'Running BLAST'
+        $stderr.puts 'Running BLAST'
         opt[:blast_xml_file] = input_file + '.blast_xml'
 
         blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
@@ -71,8 +71,8 @@ module GeneValidator
 
         `#{blastcmd}`
         return unless File.zero?(opt[:blast_xml_file])
-        puts 'Blast failed to run on the input file. Please ensure that the'
-        puts 'BLAST database exists and try again'
+        $stderr.puts 'Blast failed to run on the input file. Please ensure that the'
+        $stderr.puts 'BLAST database exists and try again'
         exit 1
       end
 
@@ -141,7 +141,7 @@ module GeneValidator
 
         hits
       rescue SequenceTypeError => e
-        puts e
+        $stderr.puts e
         exit 1
       rescue StopIteration
         nil

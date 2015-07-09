@@ -65,7 +65,7 @@ module GeneValidator
         end
         @raw_sequence = seq
       else
-        # puts "Tries to connect to the internet for #{accno}"
+        $stderr.puts "Getting sequence for '#{accno}' from NCBI - avoid this with '-r'."
         uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?'\
               "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
         result = Net::HTTP.get(URI.parse(uri))
