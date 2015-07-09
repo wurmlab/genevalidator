@@ -45,16 +45,16 @@ module GeneValidator
       mutex.synchronize do
         print_console_header unless @config[:console_header_printed]
         short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-        print format('%3s|%5s|%20s|%7s|', @idx, @overall_score, short_def,
+        print format("%3s\t%5s\t%20s\t%7s\t", @idx, @overall_score, short_def,
                      @nr_hits)
-        puts validations.map(&:print).join('|').gsub('&nbsp;', ' ')
+        puts validations.map(&:print).join("\t").gsub('&nbsp;', ' ')
       end
     end
 
     def print_console_header
       @config[:console_header_printed] = true
-      print format('%3s|%5s|%20s|%7s|', 'No', 'Score', 'Identifier', 'No_Hits')
-      puts validations.map(&:short_header).join('|')
+      print format("%3s\t%5s\t%20s\t%7s\t", 'No', 'Score', 'Identifier', 'No_Hits')
+      puts validations.map(&:short_header).join("\t")
     end
 
     def generate_html
