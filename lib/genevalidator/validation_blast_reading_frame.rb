@@ -75,7 +75,7 @@ module GeneValidator
   class BlastReadingFrameValidation < ValidationTest
     def initialize(type, prediction, hits = nil)
       super
-      @short_header = 'Frame'
+      @short_header = 'ReadingFrame'
       @header       = 'Reading Frame'
       @description  = 'Check whether there is a single reading frame among' \
                       ' BLAST hits. Otherwise there might be a reading frame' \

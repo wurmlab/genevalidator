@@ -7,12 +7,12 @@
 <div id="report"><div id="report_1"></div></div><br><br>
 <table id="sortable_table" class="table table-striped table-collapsed table-bordered table-condensed tablesorter"><thead>
 <tr id="header"><th>#</th><th>Ranking</th><th>Sequence Definition&nbsp;<span data-toggle="tooltip" title="Query definition as it apears in the input fasta file." data-placement="top"><i class="fa fa-question-circle"></i></span></th><th>No. Hits&nbsp;<span data-toggle="tooltip" title="Number of non-identical hits found by BLAST." data-placement="top"><i class="fa fa-question-circle"></i></span></th>
-<% @validations.each do |item| %>
-  <th class="sorter-false"><b><%= item.header %></b>
-  <% if item.short_header == "LengthCluster" || item.short_header == "GeneMerge" || item.short_header == "MainORF" || item.short_header == "MissingExtraSequences" %>
-    <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+<% @json_array[0]['validations'].each do |_short_header, item| %>
+  <th class="sorter-false"><b><%= item['header'] %></b>
+  <% if item['header'] == "LengthCluster" || item['header'] == "GeneMerge" || item['header'] == "MainORF" || item['header'] == "MissingExtraSequences" %>
+    <span data-toggle="tooltip" title="Charts available for this validation" data-placement="top"><i class="fa fa-bar-chart-o chartIcon"></i></span>&nbsp;<span data-toggle="tooltip" title="<%=item['description']%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
   <% else %>
-     <span data-toggle="tooltip" title="<%=item.description%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
+     <span data-toggle="tooltip" title="<%=item['description']%>" data-placement="top"><i class="fa fa-question-circle"></i></span>
   <% end %>
 </th>
 <% end %>

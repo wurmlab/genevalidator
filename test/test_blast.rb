@@ -219,7 +219,7 @@ module GeneValidator
         assert_in_delta(90, hits[1].hsp_list[0].pidentity, 0.01)
 
         # Remove identical hits
-        b = GeneValidator::Validation.new
+        b = GeneValidator::Validate.new
         hits = b.remove_identical_hits(prediction, hits)
 
         # after removal of identical hits
@@ -253,7 +253,7 @@ module GeneValidator
 
         assert_equal(20, hits.length)
         # remove identical hits
-        b = GeneValidator::Validation.new
+        b = GeneValidator::Validate.new
         hits = b.remove_identical_hits(prediction, hits)
 
         assert_equal(13, hits.length)
@@ -283,7 +283,7 @@ module GeneValidator
 
         assert_equal(20, hits.length)
 
-        b = GeneValidator::Validation.new
+        b = GeneValidator::Validate.new
         hits = b.remove_identical_hits(prediction, hits)
 
         assert_equal(13, hits.length)

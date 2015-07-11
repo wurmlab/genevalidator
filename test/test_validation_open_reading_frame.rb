@@ -23,7 +23,7 @@ module GeneValidator
                                   'AAGCGAGGCATCGTTGAGCAATGCTGTGAAAACCCGTGCTCC' \
                                   'CTCTACCAACTGGAAAACTACTGCAACTAG'
 
-        validation = OpenReadingFrameValidation.new(prediction, nil, '')
+        validation = OpenReadingFrameValidation.new(prediction, nil)
         result = { 1 => { frame: 1, orf_start: 1, orf_end: 105, coverage: 100,
                           translated_length: 106 },
                    2 => { frame: 2, orf_start: 1, orf_end: 59, coverage: 58,
@@ -44,7 +44,7 @@ module GeneValidator
                           translated_length: 105 } }
         assert_equal(result, validation.get_orfs)
 
-        validation = OpenReadingFrameValidation.new(prediction, nil, '')
+        validation = OpenReadingFrameValidation.new(prediction, nil)
         result = { 1 => { frame: 1, orf_start: 1, orf_end: 105, coverage: 100,
                           translated_length: 106 },
                    2 => { frame: 2, orf_start: 1, orf_end: 59, coverage: 58,
@@ -83,7 +83,7 @@ module GeneValidator
                                   'GCGAGGCATCGTTGAGCAATGCTGTGAAAACCCGTGCTCCCT' \
                                   'CTACCAACTGGAAAACTACTGCAACTAG'
 
-        validation = OpenReadingFrameValidation.new(prediction, nil, '')
+        validation = OpenReadingFrameValidation.new(prediction, nil)
         result = { 1 => { frame: 1, orf_start: 1, orf_end: 88, coverage: 56,
                           translated_length: 160 },
                    2 => { frame: 2, orf_start: 1, orf_end: 58, coverage: 38,
@@ -112,7 +112,7 @@ module GeneValidator
                            coverage: 24, translated_length: 159 } }
         assert_equal(result, validation.get_orfs)
 
-        validation = OpenReadingFrameValidation.new(prediction, nil, '')
+        validation = OpenReadingFrameValidation.new(prediction, nil)
         result = { 1 => { frame: 1, orf_start: 1, orf_end: 88, coverage: 56,
                           translated_length: 160 },
                    2 => { frame: 2, orf_start: 1, orf_end: 58, coverage: 38,
@@ -221,7 +221,7 @@ module GeneValidator
                                   'TTTTAAAAACAGATTCATTAAAAAATTTAAACACCAAAAAAA' \
                                   'AAAAA'
 
-        validation = OpenReadingFrameValidation.new(prediction, nil, '')
+        validation = OpenReadingFrameValidation.new(prediction, nil)
         result =
         { 1 => { frame: 1, orf_start: 1, orf_end: 20, coverage: 4,
                  translated_length: 1003 },

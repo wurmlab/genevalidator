@@ -13,7 +13,7 @@ module GeneValidator
     end
 
     def print
-      puts "Cluster: #{x} #{y}"
+      $stderr.puts "Cluster: #{x} #{y}"
     end
 
     ##
@@ -66,7 +66,7 @@ module GeneValidator
 
     def print
       objects.each do |elem|
-        puts "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
+        $stderr.puts "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
       end
     end
 
@@ -270,11 +270,11 @@ module GeneValidator
     ##
     # Prints the current cluster
     def print
-      puts "Cluster: mean = #{mean}, density = #{density}"
+      $stderr.puts "Cluster: mean = #{mean}, density = #{density}"
       lengths.sort { |a, b| a <=> b }.each do |elem|
-        puts "#{elem[0]}, #{elem[1]}"
+        $stderr.puts "#{elem[0]}, #{elem[1]}"
       end
-      puts '--------------------------'
+      $stderr.puts '--------------------------'
     end
 
     ##
@@ -334,7 +334,7 @@ module GeneValidator
       # initially each length belongs to a different cluster
       histogram.each do |elem|
         if debug
-          puts "pair (#{elem[0].x} #{elem[0].y}) appears #{elem[1]} times"
+          $stderr.puts "pair (#{elem[0].x} #{elem[0].y}) appears #{elem[1]} times"
         end
         hash = { elem[0] => elem[1] }
         cluster = PairCluster.new(hash)
@@ -353,7 +353,7 @@ module GeneValidator
         break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration = iteration + 1
-        puts "\nIteration #{iteration}" if debug
+        $stderr.puts "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
         cluster1     = 0
@@ -363,7 +363,7 @@ module GeneValidator
         [*(0..(clusters.length - 2))].each do |i|
           [*((i + 1)..(clusters.length - 1))].each do |j|
             dist = clusters[i].distance(clusters[j], distance_method)
-            puts "distance between clusters #{i} and #{j} is #{dist}" if debug
+            $stderr.puts "distance between clusters #{i} and #{j} is #{dist}" if debug
             current_density = clusters[i].density + clusters[j].density
             if dist < min_distance
               min_distance = dist
@@ -379,14 +379,14 @@ module GeneValidator
         end
 
         # merge clusters 'cluster1' and 'cluster2'
-        puts "clusters to merge #{cluster1} and #{cluster2}" if debug
+        $stderr.puts "clusters to merge #{cluster1} and #{cluster2}" if debug
 
         clusters[cluster1].add(clusters[cluster2])
         clusters.delete_at(cluster2)
 
         if debug
           clusters.each_with_index do |elem, i|
-            puts "cluster #{i}"
+            $stderr.puts "cluster #{i}"
             elem.print
           end
         end
@@ -433,7 +433,7 @@ module GeneValidator
       # clusters = array of clusters
       # initially each length belongs to a different cluster
       histogram.sort { |a, b| a[0] <=> b[0] }.each do |elem|
-        puts "len #{elem[0]} appears #{elem[1]} times" if debug
+        $stderr.puts "len #{elem[0]} appears #{elem[1]} times" if debug
         hash = { elem[0] => elem[1] }
         cluster = Cluster.new(hash)
         clusters.push(cluster)
@@ -452,7 +452,7 @@ module GeneValidator
         break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration = iteration + 1
-        puts "\nIteration #{iteration}" if debug
+        $stderr.puts "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
         cluster      = 0
@@ -460,7 +460,7 @@ module GeneValidator
 
         clusters[0..clusters.length - 2].each_with_index do |_item, i|
           dist = clusters[i].distance(clusters[i + 1], distance_method)
-          puts "distance between clusters #{i} and #{i + 1} is #{dist}" if debug
+          $stderr.puts "distance between clusters #{i} and #{i + 1} is #{dist}" if debug
           current_density = clusters[i].density + clusters[i + 1].density
           if dist < min_distance
             min_distance = dist
@@ -479,14 +479,14 @@ module GeneValidator
         end
 
         # merge clusters 'cluster' and 'cluster'+1
-        puts "clusters to merge #{cluster} and #{cluster + 1}" if debug
+        $stderr.puts "clusters to merge #{cluster} and #{cluster + 1}" if debug
 
         clusters[cluster].add(clusters[cluster + 1])
         clusters.delete_at(cluster + 1)
 
         if debug
           clusters.each_with_index do |elem, i|
-            puts "cluster #{i}"
+            $stderr.puts "cluster #{i}"
             elem.print
           end
         end

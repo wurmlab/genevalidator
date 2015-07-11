@@ -29,7 +29,7 @@ module GeneValidator
         end
 
         @opt[:raw_sequences] = @blast_file + '.raw_seq'
-        index_file   = @blast_file + '.index'
+        index_file           = @blast_file + '.index'
 
         if opt[:db] =~ /remote/
           write_a_raw_seq_file(@opt[:raw_sequences], 'remote')
@@ -85,7 +85,7 @@ module GeneValidator
         n = Bio::BlastXMLParser::XmlIterator.new(@opt[:blast_xml_file]).to_enum
         n.each do |iter|
           iter.each do |hit|
-            if db_type == 'remote'
+            if db_type == 'remote' || hit.hit_id.nil?
               file.puts obtain_raw_seqs_from_remote_db(hit.accession)
             else
               file.puts hit.hit_id
@@ -93,10 +93,10 @@ module GeneValidator
           end
         end
       rescue
-        puts '*** Error: There was an error in analysing the BLAST XML file.'
-        puts '    Please ensure that BLAST XML file is in the correct format'
-        puts '    and then try again. If you are using a remote database,'
-        puts '    please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST XML file.'
+        $stderr.puts '    Please ensure that BLAST XML file is in the correct format'
+        $stderr.puts '    and then try again. If you are using a remote database,'
+        $stderr.puts '    please ensure that you have internet access.'
         exit 1
       end
 
@@ -109,23 +109,23 @@ module GeneValidator
         assert_table_has_correct_no_of_collumns(rows, table_headers)
 
         rows.each do |row|
-          if db_type == 'remote'
+          if db_type == 'remote' || row['sseqid'].nil?
             file.puts obtain_raw_seqs_from_remote_db(row['sacc'])
           else
             file.puts row['sseqid']
           end
         end
       rescue
-        puts '*** Error: There was an error in analysing the BLAST tabular'
-        puts '    file. Please ensure that BLAST tabular file is in the correct'
-        puts '    format and then try again. If you are using a remote'
-        puts '    database, please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST tabular'
+        $stderr.puts '    file. Please ensure that BLAST tabular file is in the correct'
+        $stderr.puts '    format and then try again. If you are using a remote'
+        $stderr.puts '    database, please ensure that you have internet access.'
         exit 1
       end
 
       def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
-        cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}' -outfmt" \
-              " '%f' -out '#{raw_seq_file}'"
+        cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}'" \
+              " -outfmt '%f' -out '#{raw_seq_file}'"
         `#{cmd}`
       end
 
@@ -142,8 +142,8 @@ module GeneValidator
         result   = Net::HTTP.get(URI.parse(uri))
         raw_seqs = result[0..result.length - 2]
         unless raw_seqs.downcase.index(/error/).nil?
-          puts '*** Error: There was an error in obtaining the raw sequence' \
-               ' of a BLAST hit. Please ensure that you have internet access.'
+          $stderr.puts '*** Error: There was an error in obtaining the raw sequence' \
+                       ' of a BLAST hit. Please ensure that you have internet access.'
           exit 1
         end
         raw_seqs
@@ -152,10 +152,10 @@ module GeneValidator
       def assert_table_has_correct_no_of_collumns(rows, table_headers)
         rows.each do |row|
           unless row.length == table_headers.length
-            puts '*** Error: The BLAST tabular file cannot be parsed. This is' \
-                 ' could possibly be due to an incorrect BLAST tabular' \
-                 ' options ("-o", "--blast_tabular_options") being supplied.' \
-                 ' Please correct this and try again.'
+            $stderr.puts '*** Error: The BLAST tabular file cannot be parsed. This is' \
+                         ' could possibly be due to an incorrect BLAST tabular' \
+                         ' options ("-o", "--blast_tabular_options") being supplied.' \
+                         ' Please correct this and try again.'
             exit 1
           end
           break # break after checking the first column

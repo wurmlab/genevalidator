@@ -1,0 +1,14 @@
+<tr data-target="toggle<%= @row['idx'] %>" data-jsonFile="files/json/<%= @config[:filename] %>_<%= @row['idx'] %>.json">
+  <td title="idx"><%= @row['idx'] %></td>
+  <td data-score="<%= @row['overall_score'] %>"><div class="ratings"><div class="empty-stars"></div><div class="full-stars" style="width:<%= @row['overall_score'] * 0.85 %>%;"></div></div></td>
+  <td title="Definition"><%= @row['definition'] %></td>
+  <td title="No. Hits"><%= @row['no_hits'] %></td>
+<% @row['validations'].each do |_short_header, item| %>
+  <td title="<%=item['header']%>" class="<%=item['status']%>"><%= item['print']%></td>
+<% end %>
+<% if @row['validations'].select{|_short_header, item| item['graphs'] != nil}.map{|_short_header, item| item['graphs'].length}.inject(0){|r, e| r+e } != 0 %>
+  <td><button title="Show plots" class="plot_btn btn btn-default"><i class="fa fa-bar-chart-o"></i></button></td>
+<% else %>
+  <td></td>
+<% end %>
+</tr>
