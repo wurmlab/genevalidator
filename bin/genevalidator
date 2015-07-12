@@ -97,14 +97,16 @@ BANNER
     opt[:raw_sequences] = raw_seq
   end
 
-  opts.on('-m', '--mafft_bin [MAFFT_PATH]',
-          'Path to MAFFT bin folder (is added to $PATH variable)') do |mafft|
-    opt[:mafft_bin] = mafft
-  end
-
-  opts.on('-b', '--blast_bin [BLAST_PATH]',
-          'Path to BLAST+ bin folder (is added to $PATH variable)') do |blast|
-    opt[:blast_bin] = blast
+  opts.on('-b', '--binaries [binaries]', Array,
+          'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
+          'To be provided as follows:',
+          '   $ genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+    if opt[:bin].nil?
+      opt[:bin] = bin
+    else
+      opt[:bin] << bin
+      opt[:bin].flatten!
+    end
   end
 
   opts.on('--version', 'The version of GeneValidator that you are running.') do
