@@ -1,16 +1,13 @@
 require 'rake/testtask'
 
-task default: [:build]
+task default: [:build, :doc]
 
-desc 'Installs the ruby gem'
-task :build do
-  lib = File.expand_path('../lib', __FILE__)
-  $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-  require 'genevalidator/version'
-  exec("gem build genevalidator.gemspec && gem install ./genevalidator-#{GeneValidator::VERSION}.gem")
+desc 'Builds gem'
+task :build => [:test] do
+  sh 'gem build genevalidator.gemspec'
 end
 
-desc 'Unit tests for the majority of class methods'
+desc 'Runs tests'
 task :test do
   Rake::TestTask.new do |t|
     t.libs.push 'lib'
@@ -21,5 +18,5 @@ end
 
 desc 'Generates documentation'
 task :doc do
-  exec("yardoc 'lib/**/*.rb'")
+  sh "yardoc 'lib/**/*.rb'"
 end
