@@ -1,11 +1,12 @@
-require 'genevalidator/sequences'
-require 'genevalidator/exceptions'
 require 'bio-blastxmlparser'
+require 'forwardable'
 require 'net/http'
-require 'open-uri'
 require 'uri'
-require 'io/console'
 require 'yaml'
+
+require 'genevalidator/exceptions'
+require 'genevalidator/sequences'
+
 module GeneValidator
   # Gets the raw sequences for each hit in a BLAST output file
   class RawSequences

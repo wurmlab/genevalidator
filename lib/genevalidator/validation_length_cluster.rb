@@ -1,8 +1,10 @@
-require 'json'
+require 'forwardable'
+
 require 'genevalidator/clusterization'
+require 'genevalidator/exceptions'
 require 'genevalidator/validation_report'
 require 'genevalidator/validation_test'
-require 'genevalidator/exceptions'
+
 module GeneValidator
   ##
   # Class that stores the validation output information

@@ -1,3 +1,10 @@
+require 'forwardable'
+
+require 'genevalidator/blast'
+require 'genevalidator/exceptions'
+require 'genevalidator/output'
+require 'genevalidator/pool'
+require 'genevalidator/sequences'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
 require 'genevalidator/validation_blast_reading_frame'
@@ -5,9 +12,6 @@ require 'genevalidator/validation_gene_merge'
 require 'genevalidator/validation_duplication'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_alignment'
-require 'genevalidator/pool'
-require 'genevalidator/output'
-require 'genevalidator/exceptions'
 
 # Top level module / namespace.
 module GeneValidator

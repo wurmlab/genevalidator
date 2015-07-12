@@ -1,5 +1,7 @@
 require 'forwardable'
 
+require 'genevalidator/blast'
+
 # A module to validate the command line Arguments
 ## CREDIT: some of these methods have been adapted from SequenceServer
 module GeneValidator

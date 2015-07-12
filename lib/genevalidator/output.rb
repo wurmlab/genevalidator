@@ -1,9 +1,9 @@
-require 'genevalidator/version'
-require 'fileutils'
 require 'erb'
-require 'yaml'
-require 'thread'
+require 'fileutils'
+require 'forwardable'
 require 'json'
+
+require 'genevalidator/version'
 
 module GeneValidator
   class Output
@@ -16,9 +16,6 @@ module GeneValidator
     # list of +ValidationReport+ objects
     attr_accessor :validations
 
-    attr_accessor :filename
-    attr_accessor :html_path
-    attr_accessor :yaml_path
     attr_accessor :idx
 
     attr_accessor :overall_score

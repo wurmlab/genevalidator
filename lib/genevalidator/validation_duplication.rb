@@ -1,6 +1,12 @@
-require 'genevalidator/validation_report'
+require 'bio'
+require 'forwardable'
+require 'statsample'
+
 require 'genevalidator/exceptions'
 require 'genevalidator/ext/array'
+require 'genevalidator/validation_report'
+require 'genevalidator/validation_test'
+
 module GeneValidator
   ##
   # Class that stores the validation output information
@@ -255,7 +261,6 @@ module GeneValidator
     # wilcox test implementation from statsample ruby gem
     # many thanks to Claudio for helping us with the implementation!
     def wilcox_test(averages)
-      require 'statsample'
       wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale,
                                                      Array.new(averages.length,
                                                                1).to_scale)

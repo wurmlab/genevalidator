@@ -1,4 +1,9 @@
+require 'forwardable'
+
+require 'genevalidator/exceptions'
 require 'genevalidator/validation_report'
+require 'genevalidator/validation_test'
+
 module GeneValidator
   ##
   # Class that stores the validation output information

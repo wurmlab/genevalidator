@@ -1,20 +1,16 @@
-require 'genevalidator/sequences'
-require 'genevalidator/hsp'
-require 'genevalidator/output'
-require 'genevalidator/exceptions'
-require 'bio-blastxmlparser'
-require 'net/http'
-require 'open-uri'
-require 'uri'
-require 'io/console'
-require 'yaml'
 require 'bio'
+require 'bio-blastxmlparser'
+require 'forwardable'
+
+require 'genevalidator/exceptions'
+require 'genevalidator/hsp'
+require 'genevalidator/sequences'
+require 'genevalidator/output'
 
 module GeneValidator
   # Contains methods that run BLAST and methods that analyse sequences
   class BlastUtils
     class << self
-
       extend Forwardable
       def_delegators GeneValidator, :opt, :config
 
@@ -120,12 +116,12 @@ module GeneValidator
             current_hsp.query_reading_frame = hsp.query_frame.to_i
 
             current_hsp.hit_alignment = hsp.hseq.to_s
-            if BlastUtils.guess_sequence_type(current_hsp.hit_alignment) != :protein
+            if guess_sequence_type(current_hsp.hit_alignment) != :protein
               fail SequenceTypeError
             end
 
             current_hsp.query_alignment = hsp.qseq.to_s
-            if BlastUtils.guess_sequence_type(current_hsp.query_alignment) != :protein
+            if guess_sequence_type(current_hsp.query_alignment) != :protein
               fail SequenceTypeError
             end
             current_hsp.align_len = hsp.align_len.to_i
@@ -162,7 +158,7 @@ module GeneValidator
         # the first sequence does not need to have a fasta definition line
         sequences = fasta_format_string.split(/^>.*$/).delete_if(&:empty?)
         # get all sequence types
-        sequence_types = sequences.collect { |seq| BlastUtils.guess_sequence_type(seq) }.uniq.compact
+        sequence_types = sequences.collect { |seq| guess_sequence_type(seq) }.uniq.compact
 
         return nil if sequence_types.empty?
         return sequence_types.first if sequence_types.length == 1

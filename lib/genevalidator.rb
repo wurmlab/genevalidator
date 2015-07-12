@@ -1,17 +1,14 @@
-require 'genevalidator/arg_validation'
-require 'genevalidator/get_raw_sequences'
-require 'genevalidator/tabular_parser'
-require 'genevalidator/blast'
-require 'genevalidator/output'
-require 'genevalidator/validation'
 require 'bio-blastxmlparser'
-require 'open-uri'
-require 'uri'
-require 'io/console'
-require 'yaml'
-require 'forwardable'
 require 'fileutils'
+
+require 'genevalidator/arg_validation'
+require 'genevalidator/blast'
 require 'genevalidator/exceptions'
+require 'genevalidator/get_raw_sequences'
+require 'genevalidator/output'
+require 'genevalidator/tabular_parser'
+require 'genevalidator/validation'
+
 
 # Top level module / namespace.
 module GeneValidator
