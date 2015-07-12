@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module GeneValidator
   # This is an abstract class extended
   # by all validation classes

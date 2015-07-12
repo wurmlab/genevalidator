@@ -1,5 +1,9 @@
-require 'genevalidator/exceptions'
 require 'csv'
+require 'forwardable'
+
+require 'genevalidator/sequences'
+require 'genevalidator/hsp'
+require 'genevalidator/exceptions'
 
 #
 module GeneValidator

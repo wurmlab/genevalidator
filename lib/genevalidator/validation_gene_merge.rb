@@ -1,6 +1,11 @@
-require 'json'
-require 'genevalidator/validation_report'
+require 'forwardable'
+require 'statsample'
+
+require 'genevalidator/exceptions'
 require 'genevalidator/ext/array'
+require 'genevalidator/validation_report'
+require 'genevalidator/validation_test'
+
 module GeneValidator
   ##
   # Class that stores the validation output information
@@ -275,7 +280,6 @@ module GeneValidator
     # Output:
     # The ecuation of the regression line: [y slope]
     def slope_statsample(xx, yy)
-      require 'statsample'
       sr = Statsample::Regression.simple(xx.to_scale, yy.to_scale)
       [sr.a, sr.b]
     end

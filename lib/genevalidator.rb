@@ -1,19 +1,14 @@
-require 'open-uri'
-require 'uri'
-require 'io/console'
-require 'yaml'
-require 'forwardable'
 require 'fileutils'
 
 require 'bio-blastxmlparser'
 
 require 'genevalidator/arg_validation'
-require 'genevalidator/get_raw_sequences'
-require 'genevalidator/tabular_parser'
 require 'genevalidator/blast'
-require 'genevalidator/output'
-require 'genevalidator/validation'
 require 'genevalidator/exceptions'
+require 'genevalidator/get_raw_sequences'
+require 'genevalidator/output'
+require 'genevalidator/tabular_parser'
+require 'genevalidator/validation'
 
 # Top level module / namespace.
 module GeneValidator
@@ -73,18 +68,16 @@ module GeneValidator
     # Parse the blast output and run validations
     def run
       # Run BLAST on all sequences (generates @opt[:blast_xml_file])
-      BlastUtils.run_blast_on_input_file if @opt[:fast]
-
+      #   if no BLAST OUTPUT file provided...
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
-        # run BLAST on each sequence individually & then run validations
-        analyse_each_sequence
-      else
-        # Obtain fasta file of all BLAST hits
-        RawSequences.run unless @opt[:raw_sequences]
-        # Run Validations
-        iterator = parse_blast_output_file
-        (Validations.new).run_validations(iterator)
+        BlastUtils.run_blast_on_input_file
       end
+      # Obtain fasta file of all BLAST hits
+      RawSequences.run unless @opt[:raw_sequences]
+      # Run Validations
+      iterator = parse_blast_output_file
+      (Validations.new).run_validations(iterator)
+    
       Output.write_json_file(@config[:json_output], @config[:json_file])
       Output.print_footer(@overview, @config)
     end
@@ -120,25 +113,6 @@ module GeneValidator
         TabularParser.new
       end
       ## TODO: Add a Rescue statement - e.g. if unable to create the Object...
-    end
-
-    ##
-    #
-    def analyse_each_sequence
-      # file seek for each query
-      @query_idx[0..@query_idx.length - 2].each_with_index do |_, i|
-        if (i + 1) < @config[:start_idx]
-          @config[:idx] += 1
-          next
-        end
-        start_offset = @query_idx[i + 1] - @query_idx[i]
-        end_offset   = @query_idx[i]
-        query = IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
-        xml_output = BlastUtils.run_blast(query)
-        iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml_output).to_enum
-        @opt[:blast_xml_file] = true # So that GV knows that it is in XML format
-        (Validations.new).run_validations(iterator)
-      end
     end
   end
 end

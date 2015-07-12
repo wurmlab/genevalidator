@@ -1,5 +1,7 @@
 require 'net/http'
 require 'io/console'
+require 'yaml'
+
 module GeneValidator
   # This is a class for the storing data on each sequence
   class Sequence

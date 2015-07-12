@@ -1,6 +1,11 @@
+require 'erb'
+require 'fileutils'
+require 'forwardable'
+require 'json'
+
 require 'genevalidator'
 require 'genevalidator/output'
-require 'fileutils'
+require 'genevalidator/version'
 
 module GeneValidator
   # produce GV results from a JSON previously produced from GV
@@ -62,8 +67,8 @@ module GeneValidator
       def generate_html_query(output_html, row)
         @row = row
         json_query_template = File.join(@config[:aux], 'json_query.erb')
-        template_contents    = File.open(json_query_template, 'r').read
-        erb                  = ERB.new(template_contents, 0, '>')
+        template_contents   = File.open(json_query_template, 'r').read
+        erb                 = ERB.new(template_contents, 0, '>')
         File.open(output_html, 'a') { |f| f.write(erb.result(binding)) }
       end
 
