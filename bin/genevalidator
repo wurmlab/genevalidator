@@ -91,12 +91,7 @@ BANNER
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',
           '   $ genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
-    if opt[:bin].nil?
-      opt[:bin] = bin
-    else
-      opt[:bin] << bin
-      opt[:bin].flatten!
-    end
+    (opt[:bin] ||= []).concat(bin)
   end
 
   opts.on('--version', 'The version of GeneValidator that you are running.') do
