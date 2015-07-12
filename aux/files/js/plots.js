@@ -1,6 +1,6 @@
 function show_all_plots(button){
   'use strict';
-  var plotBtns = $('.plot_row');
+  var plotBtns = $('.plot_btn');
   if (plotBtns.length > 30){
     $('#alert').modal();
   } else {
