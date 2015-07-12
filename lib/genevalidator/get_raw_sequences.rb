@@ -19,8 +19,8 @@ module GeneValidator
         @opt = opt
         @config = config
 
-        puts 'Extracting sequences within the BLAST output file from the' \
-             ' BLAST database'
+        $stderr.puts 'Extracting sequences within the BLAST output file from' \
+                     ' the BLAST database'
 
         if @opt[:blast_xml_file]
           @blast_file  = @opt[:blast_xml_file]
