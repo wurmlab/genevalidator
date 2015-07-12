@@ -1,3 +1,5 @@
+require 'forwardable'
+
 # A module to validate the command line Arguments
 ## CREDIT: some of these methods have been adapted from SequenceServer
 module GeneValidator
@@ -25,6 +27,11 @@ module GeneValidator
 
         Blast.validate(opt) unless @opt[:test]
         assert_mafft_installation
+      end
+
+      # Return `true` if the given command exists and is executable.
+      def command?(command)
+        system("which #{command} > /dev/null 2>&1")
       end
 
       private
@@ -115,13 +122,8 @@ module GeneValidator
         ENV['PATH'] = "#{bin_dir}:#{ENV['PATH']}"
       end
 
-      # Return `true` if the given command exists and is executable.
-      def command?(command)
-        system("which #{command} > /dev/null 2>&1")
-      end
-
       def assert_mafft_installation
-        return if GVArgValidation.command?('mafft')
+        return if command?('mafft')
         $stderr.puts '*** Could not find Mafft binaries.'
         $stderr.puts '    Ignoring error and continuing - Please note that' \
                      ' some validations may be skipped.'
