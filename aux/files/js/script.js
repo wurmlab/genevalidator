@@ -61,17 +61,13 @@ $(document).ready(function() {
 });
 
 $(function(){
-
-  function toggleRow(){
-    if ($(this).hasClass('success') || $(this).hasClass('danger')){
-      var title = $(this).attr('title');
-      var val = title.replace(/[ \/]/g, '');  
-      addData(this, val);
-    } else if ($(this).hasClass('plot_btn')){
-      addData(this, 'all');
-    }
-  }
-
-  $("td, .plot_btn").click(toggleRow);
-
+  $( "#sortable_table" ).on( "click", "td", function( event ) {
+      if ($(this).hasClass('success') || $(this).hasClass('danger')){
+        var title = $(this).attr('title');
+        var val = title.replace(/[ \/]/g, '');  
+        addData(this, val);
+      } else if ($(this).hasClass('plot_btn')){
+        addData(this, 'all');
+      }
+  });
 });
