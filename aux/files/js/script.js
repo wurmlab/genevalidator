@@ -61,7 +61,7 @@ $(document).ready(function() {
 });
 
 $(function(){
-  $( "#sortable_table" ).on( "click", "td", function( event ) {
+  $( "#sortable_table" ).on( "click", "td, .plot_btn", function( event ) {
       if ($(this).hasClass('success') || $(this).hasClass('danger')){
         var title = $(this).attr('title');
         var val = title.replace(/[ \/]/g, '');  
