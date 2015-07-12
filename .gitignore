@@ -5,3 +5,5 @@
 Gemfile.lock
 # Gemnasium gem configuration file
 config/gemnasium.yml
+doc
+.yardoc
