@@ -161,7 +161,7 @@ module GeneValidator
           $stderr.puts 'Warning: BLAST will be carried out on remote servers.'
           $stderr.puts 'This may take quite a bit of time.'
           $stderr.puts 'You may want to install a local BLAST database for' \
-                       'faster analyses.'
+                       ' faster analyses.'
           $stderr.puts # a blank line
         end
 
