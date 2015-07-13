@@ -145,7 +145,7 @@ module GeneValidator
 
         def validate(opt)
           assert_blast_installation
-          assert_blast_database_provided(opt[:db])
+          warn_if_remote_database(opt[:db])
           assert_local_blast_database_exists(opt[:db]) if opt[:db] !~ /remote/
         end
 
@@ -155,24 +155,21 @@ module GeneValidator
           assert_blast_compatible
         end
 
-        def assert_blast_database_provided(db)
-          return unless db.nil?
-          $stderr.puts '*** Error: A BLAST database is required. Please pass a local or'
-          $stderr.puts '    remote BLAST database to GeneValidator as follows:'
-          $stderr.puts # a blank line
-          $stderr.puts '      $ genevalidator -d "~/blastdb/SwissProt" Input_File"'
-          $stderr.puts # a blank line
-          $stderr.puts '    Or use a remote database:'
-          $stderr.puts # a blank line
-          $stderr.puts '      $ genevalidator -d "swissprot -remote" Input_File'
-          exit 1
+        def warn_if_remote_database(db)
+          return if db !~ /remote/
+          $stderr.puts # a blank line
+          $stderr.puts 'Warning: BLAST will be carried out on remote servers.'
+          $stderr.puts 'This may take quite a bit of time.'
+          $stderr.puts 'You may want to install a local BLAST database for' \
+                       'faster analyses.'
+          $stderr.puts # a blank line
         end
 
         def assert_local_blast_database_exists(db)
           return if system("blastdbcmd -db #{db} -info > /dev/null 2>&1")
           $stderr.puts '*** No BLAST database found at the provided path.'
-          $stderr.puts '    Please ensure that the provided path is correct and then' \
-                       ' try again.'
+          $stderr.puts '    Please ensure that the provided path is correct' \
+                       ' and then try again.'
           exit EXIT_NO_BLAST_DATABASE
         end
 
