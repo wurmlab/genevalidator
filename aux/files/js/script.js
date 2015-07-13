@@ -60,9 +60,7 @@ $(document).ready(function() {
   });
 });
 
-$(function(){
-
-  function toggleRow(){
+$( document ).on( "click", "td, .plot_btn", function( event ) {
     if ($(this).hasClass('success') || $(this).hasClass('danger')){
       var title = $(this).attr('title');
       var val = title.replace(/[ \/]/g, '');  
@@ -70,8 +68,4 @@ $(function(){
     } else if ($(this).hasClass('plot_btn')){
       addData(this, 'all');
     }
-  }
-
-  $("td, .plot_btn").click(toggleRow);
-
 });
