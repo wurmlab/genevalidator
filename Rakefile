@@ -1,6 +1,6 @@
 require 'rake/testtask'
 
-task default: [:build]
+task default: [:install, :test, :doc]
 
 desc 'Builds and installs'
 task install: [:build] do
@@ -9,7 +9,7 @@ task install: [:build] do
 end
 
 desc 'Runs tests, generates documentation, builds gem (default)'
-task :build => [:test, :doc] do
+task :build do
   sh 'gem build genevalidator.gemspec'
 end
 
