@@ -2,6 +2,12 @@ require 'rake/testtask'
 
 task default: [:build, :doc]
 
+desc 'Builds and installs'
+task install: [:build] do
+  require_relative 'lib/genevalidator/version'
+  sh "gem install ./genevalidator-#{GeneValidator::VERSION}.gem"
+end
+
 desc 'Builds gem'
 task :build => [:test] do
   sh 'gem build genevalidator.gemspec'
