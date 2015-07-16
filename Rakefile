@@ -4,7 +4,10 @@ task default: [:build, :doc]
 
 desc 'Builds gem'
 task :build do
-  exec("gem build genevalidator.gemspec && gem install ./genevalidator-1.6.1.gem ")
+  lib = File.expand_path('../lib', __FILE__)
+  $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+  require 'genevalidator/version'
+  sh "gem build genevalidator.gemspec && gem install ./genevalidator-#{GeneValidator::VERSION}.gem"
 end
 
 desc 'Runs tests'
