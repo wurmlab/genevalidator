@@ -138,9 +138,11 @@ module GeneValidator
         # get gene by accession number
         next unless hit.raw_sequence.nil?
 
-        hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
+        if @raw_seq_file && @index_file_name && @raw_seq_file_load
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
                                          hit.identifier, @raw_seq_file_load)
-
+        end
+    
         if hit.raw_sequence.nil? || hit.raw_sequence.empty?
           seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
           hit.get_sequence_by_accession_no(hit.accession_no, seq_type, @db)
@@ -166,11 +168,11 @@ module GeneValidator
       # multiple align sequences from less_hits with the prediction
       # the prediction is the last sequence in the vector
       multiple_align_mafft(prediction, less_hits)
-
+      
       out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length - 2])
       sm = out[0]
       freq = out[1]
-
+      
       # remove isolated residues from the predicted sequence
       index          = @multiple_alignment.length - 1
       prediction_raw = remove_isolated_residues(@multiple_alignment[index])
@@ -246,7 +248,7 @@ module GeneValidator
         @multiple_alignment.push(s.to_s)
       end
 
-      @multiple_alignment
+      return @multiple_alignment
     rescue Exception
       raise NoMafftInstallationError
     end

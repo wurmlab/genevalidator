@@ -42,12 +42,14 @@ BANNER
     opt[:db] = db
   end
 
+=begin
   opts.on('-e', '--extract_raw_seqs',
           'Produces a fasta file of the raw sequences of all BLAST hits in the',
           'supplied BLAST output file. This fasta file can then be provided to',
           'GeneValidator with the "-r", "--raw_sequences" argument') do
     opt[:extract_raw_seqs] = true
   end
+=end
 
   opts.on('-j', '--json_file [JSON_FILE]',
           'Generate GV results from a json file (or a subset of a json file)',
@@ -80,12 +82,14 @@ BANNER
           'BLAST and Mafft within GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
-  
+
+=begin
   opts.on('-r', '--raw_sequences [raw_seq]',
           'Supply a fasta file of the raw sequences of all BLAST hits present',
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
     opt[:raw_sequences] = raw_seq
   end
+=end
 
   opts.on('-b', '--binaries [binaries]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',

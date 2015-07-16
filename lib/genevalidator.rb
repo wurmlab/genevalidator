@@ -24,7 +24,6 @@ module GeneValidator
       $stderr.puts 'Analysing input arguments'
       @opt = opt
       GVArgValidation.validate_args # validates @opt
-
       @config = {
         idx: 0,
         start_idx: start_idx,
@@ -68,13 +67,15 @@ module GeneValidator
     # Parse the blast output and run validations
     def run
       # Run BLAST on all sequences (generates @opt[:blast_xml_file])
-      #   if no BLAST OUTPUT file provided...
+      # if no BLAST OUTPUT file provided...
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
         BlastUtils.run_blast_on_input_file
       end
+
       # Obtain fasta file of all BLAST hits
-      RawSequences.run unless @opt[:raw_sequences]
-      # Run Validations
+      RawSequences.run if @opt[:raw_sequences]
+
+      # Run Validations  
       iterator = parse_blast_output_file
       (Validations.new).run_validations(iterator)
     
