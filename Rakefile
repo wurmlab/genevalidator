@@ -8,7 +8,7 @@ task install: [:build] do
   sh "gem install ./genevalidator-#{GeneValidator::VERSION}.gem"
 end
 
-desc 'Builds gem'
+desc 'Runs tests, generates documentation, builds gem (default)'
 task :build => [:test, :doc] do
   sh 'gem build genevalidator.gemspec'
 end
