@@ -71,8 +71,11 @@ module GeneValidator
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
         BlastUtils.run_blast_on_input_file
       end
-      # Obtain fasta file of all BLAST hits
-      RawSequences.run unless @opt[:raw_sequences]
+      # Obtain fasta file of all BLAST hits if running align or dup validations
+      if @opt[:validations].include?('align') ||
+         @opt[:validations].include?('dup')
+        RawSequences.run unless @opt[:raw_sequences]
+      end
       # Run Validations
       iterator = parse_blast_output_file
       (Validations.new).run_validations(iterator)
