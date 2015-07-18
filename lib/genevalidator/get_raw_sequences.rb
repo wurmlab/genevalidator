@@ -89,7 +89,7 @@ module GeneValidator
             if db_type == 'remote' || hit.hit_id.nil?
               file.puts obtain_raw_seqs_from_remote_db(hit.accession)
             else
-              file.puts hit.hit_id
+              file.puts hit.accession
             end
           end
         end
@@ -129,7 +129,21 @@ module GeneValidator
       def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
         cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}'" \
               " -outfmt '%f' -out '#{raw_seq_file}'"
-        `#{cmd}`
+        output = `#{cmd} &>/dev/null`
+        failed_raw_sequences(output, raw_seq_file) if output =~ /Error/
+      end
+
+      def failed_raw_sequences(output, raw_seq_file)
+        output.each_line do |line|
+          acc = line.match(/Error: (\w+): OID not found/)[1]
+          $stderr.puts "\nCould not find sequence '#{acc.chomp}' within the" \
+                       ' BLAST database.'
+          $stderr.puts "Attempting to obtain sequence '#{acc.chomp}' from" \
+                       ' remote BLAST databases.'
+          File.open(raw_seq_file, 'a+') do |f|
+            f.puts obtain_raw_seqs_from_remote_db(acc)
+          end
+        end
       end
 
       def obtain_raw_seqs_from_remote_db(accession)
