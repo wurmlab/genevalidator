@@ -1,5 +1,5 @@
 require 'net/http'
-require 'io/console'
+require 'uri'
 require 'yaml'
 
 module GeneValidator
@@ -45,9 +45,7 @@ module GeneValidator
       query         = IO.binread(raw_seq_file, idx[1] - idx[0], idx[0])
       parse_query   = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
       @raw_sequence = parse_query[1].gsub("\n", '')
-    rescue Exception
-      #   $stderr.print "Unable to retrieve raw sequence for the following" \
-      #                 "id: #{identifier}\n"
+      @raw_sequence = '' if @raw_sequence =~ /Error/ || @raw_sequence.nil?
     end
 
     ##
@@ -59,34 +57,41 @@ module GeneValidator
     # String with the nucleotide sequence corresponding to the accno
     def get_sequence_by_accession_no(accno, dbtype, db)
       if db !~ /remote/
-        blast_cmd     = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
-        seq           = `#{blast_cmd}  2>&1`
-        if /Error/ =~ seq
-          fail IOError, 'GeneValidator was unable to obtain the raw sequences' \
-                        ' for the BLAST hits.'
-        end
-        @raw_sequence = seq
+        @raw_sequence = raw_seq_from_local_db(accno, dbtype, db)
       else
-        $stderr.puts "Getting sequence for '#{accno}' from NCBI - avoid this with '-r'."
-        uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?'\
-              "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
-        result = Net::HTTP.get(URI.parse(uri))
-
-        query   = result.scan(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[0][0]
-        web_env = result.scan(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[0][0]
-
-        uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?'\
-              "rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{dbtype}" \
-              "&query_key=#{query}&WebEnv=#{web_env}"
-        result = Net::HTTP.get(URI.parse(uri))
-
-        # parse FASTA output
-        nl            = result.index("\n")
-        seq           = result[nl + 1..-1]
-        @raw_sequence = seq.gsub!(/\n/, '')
-        @raw_sequence = '' unless @raw_sequence.index(/ERROR/).nil?
+        @raw_sequence = raw_seq_from_remote_db(accno, dbtype)
       end
+      @raw_sequence = '' if @raw_sequence =~ /Error/
       @raw_sequence
+    end
+
+    def raw_seq_from_local_db(accno, dbtype, db)
+      blast_cmd = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
+      seq       = `#{blast_cmd} 2>&1`
+      if seq =~ /Error/
+        seq = raw_seq_from_remote_db(accno, dbtype)
+      end
+      seq
+    end
+
+    def raw_seq_from_remote_db(accno, dbtype)
+      $stderr.puts "Getting sequence for '#{accno}' from NCBI."
+      uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?'\
+                "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
+      result  = Net::HTTP.get(URI.parse(uri))
+
+      query   = result.match(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[1]
+      web_env = result.match(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[1]
+
+      uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?'\
+                "rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{dbtype}" \
+                "&query_key=#{query}&WebEnv=#{web_env}"
+      fasta  = Net::HTTP.get(URI.parse(uri))
+
+      # parse FASTA output
+      idx = fasta.index("\n")
+      seq = fasta[ìdx + 1..-1]
+      seq.gsub!(/\n/, '')
     end
 
     ##
