@@ -90,7 +90,7 @@ module GeneValidator
 
       # parse FASTA output
       idx = fasta.index("\n")
-      seq = fasta[ìdx + 1..-1]
+      seq = fasta[idx + 1..-1]
       seq.gsub!(/\n/, '')
     end
 
