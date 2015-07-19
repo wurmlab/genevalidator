@@ -1,4 +1,5 @@
 require 'net/http'
+require 'tempfile'
 require 'uri'
 require 'yaml'
 
@@ -67,11 +68,13 @@ module GeneValidator
 
     def raw_seq_from_local_db(accno, dbtype, db)
       blast_cmd = "blastdbcmd -entry '#{accno}' -db '#{db}' -outfmt '%s'"
-      seq       = `#{blast_cmd} 2>&1`
-      if seq =~ /Error/
-        seq = raw_seq_from_remote_db(accno, dbtype)
-      end
-      seq
+      efile = Tempfile.new('blast_out')
+      `#{blast_cmd} &>#{efile.path}`
+      seq = efile.read
+      (seq !~ /Error/) ? seq : raw_seq_from_remote_db(accno, dbtype)
+    ensure
+       efile.close
+       efile.unlink
     end
 
     def raw_seq_from_remote_db(accno, dbtype)
