@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 require 'minitest/autorun'
 require 'fileutils'
+
 require 'genevalidator'
 require 'genevalidator/blast'
 require 'genevalidator/tabular_parser'

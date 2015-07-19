@@ -1,7 +1,8 @@
 require_relative 'test_helper'
 require 'minitest/autorun'
-require 'yaml'
 require 'fileutils'
+require 'yaml'
+
 require 'genevalidator'
 
 module GeneValidator

@@ -9,7 +9,7 @@ task install: [:build] do
 end
 
 desc 'Runs tests, generates documentation, builds gem (default)'
-task :build => [:test, :doc] do
+task build: [:test, :doc] do
   sh 'gem build genevalidator.gemspec'
 end
 

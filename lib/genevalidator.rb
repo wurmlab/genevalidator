@@ -1,5 +1,4 @@
 require 'fileutils'
-
 require 'bio-blastxmlparser'
 
 require 'genevalidator/arg_validation'
@@ -68,7 +67,7 @@ module GeneValidator
     # Parse the blast output and run validations
     def run
       # Run BLAST on all sequences (generates @opt[:blast_xml_file])
-      #   if no BLAST OUTPUT file provided...
+      # if no BLAST OUTPUT file provided...
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
         BlastUtils.run_blast_on_input_file
       end
@@ -77,7 +76,7 @@ module GeneValidator
       # Run Validations
       iterator = parse_blast_output_file
       (Validations.new).run_validations(iterator)
-    
+
       Output.write_json_file(@config[:json_output], @config[:json_file])
       Output.print_footer(@overview, @config)
     end
