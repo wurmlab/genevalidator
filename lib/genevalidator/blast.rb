@@ -36,7 +36,7 @@ module GeneValidator
                    " #{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
-        `#{cmd} 2>/dev/null`
+        `#{cmd} &>/dev/null`
       end
 
       ##
@@ -65,7 +65,7 @@ module GeneValidator
                    " -out '#{opt[:blast_xml_file]}' -db #{db} " \
                    " -evalue #{EVALUE} -outfmt 5 #{threads}"
 
-        `#{blastcmd}`
+        `#{blastcmd} &>/dev/null`
         return unless File.zero?(opt[:blast_xml_file])
         $stderr.puts 'Blast failed to run on the input file. Please ensure that the'
         $stderr.puts 'BLAST database exists and try again'
