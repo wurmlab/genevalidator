@@ -1,63 +1,106 @@
-# GeneValidator - Identify problems with predicted genes 
+# GeneValidator - Identify problems with predicted genes
 [![Build Status](https://travis-ci.org/wurmlab/genevalidator.svg?branch=master)](https://travis-ci.org/wurmlab/genevalidator)
 [![Gem Version](https://badge.fury.io/rb/genevalidator.svg)](http://badge.fury.io/rb/genevalidator)
 [![Dependency Status](https://gemnasium.com/wurmlab/GeneValidator.svg)](https://gemnasium.com/wurmlab/GeneValidator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wurmlab/GeneValidator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wurmlab/GeneValidator/?branch=master)
 [![Test Coverage](https://codeclimate.com/github/wurmlab/GeneValidator/badges/coverage.svg)](https://codeclimate.com/github/wurmlab/GeneValidator)
 
+
+
+
 ## Introduction
-The goal of GeneValidator is to identify problems with gene predictions and provide useful information based on the similarities to genes in public databases. The results produced will make provide evidence on how sequencing curation may be done and will be useful in improving or trying out new approaches for gene prediction tools. The main target of this tool are biologists who wish to validate the data produced in their labs.
+GeneValidator helps in identifing problems with gene predictions and provide useful information extracted from analysing orthologs in BLAST databases. The results produced can be used by biocurators and researchers who need accurate gene predictions.
+
+If you would like to use GeneValidator on a few sequences, see our online [GeneValidator Web App](http://genevalidator.sbcs.qmul.ac.uk) - [http://genevalidator.sbcs.qmul.ac.uk](http://genevalidator.sbcs.qmul.ac.uk).
+
 
 If you use GeneValidator in your work, please cite us as follows:
-
-"Dragan M, Moghul MI, Priyam A & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
-
-
-#### Related projects 
-[GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
-[GeneValidatorApp-API](https://github.com/wurmlab/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.
+> "Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
 
 
-### Validations
-Currently, it is possible to run the following validations with GeneValidator
 
-* Length validation by clusterization (a graph is dynamically produced)
-* Length validation by ranking
-* Check gene merge (a graph is dynamically produced)
-* Check duplications
-* Reading frame validation (for nucleotides)
-* Main ORF validation (for nucleotides) (a graph is dynamically produced)
-* Validation based on multiple alignment (a graph is dynamically produced)
 
-It is also possible to add your own custom validations to GeneValidator. 
 
-## Installation Requirements
+
+## Validations
+GeneValidator runs the following validation on all input sequences:
+
+- **Length:** GeneValidator compares the length of the query sequence to the lengths of the most significant BLAST hits using hierarchical clustering and a rank test. This can suggest that the query is too short or too long. Graphs are dynamically produced for this validation.
+- **Coverage:** GeneValidator determines whether hit regions match the query sequence more than once using a Wilcoxon test. Significance suggests that the query includes duplicated regions (e.g., resulting from merging of tandem gene duplication).
+- **Conserved Regions:** GeneValidator performs multiple alignment of the ten most significant BLAST hits, derive a Position Specific Scoring Matrix Profile, and align this profile to the query. Results of this identify potentially missing or extra regions. Graphs are dynamically produced for this validation.
+- **Different genes:** We expect the query sequence to encode a single protein-coding gene. GeneValidator first determines whether the BLAST HSPs map to multiple regions of the query by testing for deviation from unimodality of HSP start and stop coordinates. If this is the case, GeneValidator performs a linear regression between HSP start and stop coordinates (each datapoint is weighted proportionally to the significance of the corresponding HSP). We empirically determined that regression slopes of 0.4 to 1.2 indicate that the query prediction combines two different genes. Graphs are dynamically produced for this validation.
+
+GeneValidator also runs a further two validation on cDNA sequences:
+
+- **Ab initio Open Reading Frame (ORF):** Presence of more than one major ORF occurs in the presence of a frameshift, retained intron, or merged genes.
+- **Similarity-based ORFs:** We expect all BLAST hits to align within a single ORF. This test is more sensitive than the previous when a query has many BLAST hits.
+
+Each analysis of each query returns a binary result (good vs. potential problem) according to p-value or an empirically determined cutoff. The results for each query are combined into an overall quality score from 0 to 100. Each analysis of each query returns a binary result (good vs. potential problem) according to p-value or an empirically determined cutoff. The results for each query are combined into an overall quality score from 0 to 100.
+
+
+
+
+
+## Installation
+### Installation Requirements
 * Ruby (>= 2.0.0)
-* NCBI BLAST+ (>= 2.2.30+)
+* NCBI BLAST+ (>= 2.2.30+) (download [here](http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)).
 * MAFFT installation (download [here](http://mafft.cbrc.jp/alignment/software/)).
-* Mozilla FireFox - In order to dynamically produce graphs for some of the validation, GeneValidator relies on dependency called 'd3'. Unfortunately, at this moment of time, d3 only works in Firefox (download [here](https://www.mozilla.org/en-GB/firefox/new/)).
+* A web browser - [Mozilla FireFox](https://www.mozilla.org/en-GB/firefox/new/) & Safari are recommended. At the moment, it is not possible to use Chrome to view the results locally (as chrome does not allow ajax to local files). To avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.
 
 Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more help with installing the prerequisites.
-  
-## Installation
-1) Type the following command in the terminal
+
+### Installation
+1. Simply type the following command in the terminal
 
 ```bash
 $ gem install genevalidator
 ```
 
+##### Running from Source (Not Recommended)
+It is also possible to run from source. However this is not recommended.
 
-## Usage 
+```bash
+1. Clone the Repository.
+$ git clone https://github.com/wurmlab/genevalidator.git
+
+2. Move into GeneValidator source directory.
+$ cd GeneValidator
+
+3. Install bundle
+$ gem install bundle
+
+4. Use bundle to install dependencies
+$ bundle install
+
+5. Optional: Run Tests, Build Documentation and also build the latest
+$ bundle exec rake
+
+6. Run GeneValidator.
+$ bundle exec genevalidator -h
+# note that `bundle exec` executes GeneValidator in the context of the bundle
+
+7. Alternativaly, install GeneValidator as gem
+$ bundle exec install
+$ genevalidator -h
+```
+
+
+
+
+
+
+## Usage
 1) After installing, GeneValidator can be run by typing the following command in the terminal:
 
 
 ```bash
 USAGE:
     $ genevalidator [OPTIONS] Input_File
-    
+
 ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
-    
+
 OPTIONAL ARGUMENTS
     -v, --validations <String>       The Validations to be applied.
                                      Validation Options Available (separated by coma):
@@ -85,62 +128,82 @@ OPTIONAL ARGUMENTS
         --blast_tabular_options      See BLAST+ manual pages for more details
     -n, --num_threads num_of_threads Specify the number of processor threads to use when running
                                      BLAST and Mafft within GeneValidator.
-    -f, --fast                       Run BLAST on all sequences together (rather than separately)
-                                     to speed up the analysis.
-                                     However, this means that there will be a longer wait before the
-                                     results can be viewed (as GeneValidator will need to run BLAST
-                                     on all sequences before producing any results).
-                                     The speed difference will be more apparent on larger input files
     -r, --raw_sequences [raw_seq]    Supply a fasta file of the raw sequences of all BLAST hits present
                                      in the supplied BLAST XML or BLAST tabular file.
-    -m, --mafft_bin [MAFFT_PATH]     Path to MAFFT bin folder (is added to $PATH variable)
-    -b, --blast_bin [BLAST_PATH]     Path to BLAST+ bin folder (is added to $PATH variable)
+    -b, --binaries [binaries]        Path to BLAST and MAFFT bin folders (is added to $PATH variable)
+                                     To be provided as follows:
+                                        $ genevalidator -b /blast/bin/path/ -b /mafft/bin/path/
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
-```
+ ```
 
-Please type `genevalidator -h` into your terminal to see this information in your terminal. 
+Please type `genevalidator -h` into your terminal to see this information in your terminal.
+
+
+
+
+
 
 ## Example Usage Scenarios
 
-##### Local Database, with custom number of threads (in this case 8)
+#### Recommended Usage
+
+GeneValidator runs BLAST on each input file before running the validation analyses. As BLAST is resource-heavy and can take quite some time, it is possible to run BLAST on a separate (faster) machine and then pass the output file to GeneValidator 
+
+When running BLAST on a separate (more faster) machine.
 
 ```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 8 Input_FASTA_File
+# Run BLAST (update the arguments below as necesssary)
+$ blast(p/x) -outfmt 5 -db DATABASE_PATH -out BLAST_XML_FILE -num_threads NUM_THREADS -query INPUT_FASTA_FILE
+
+# Use GeneValidator to extract the Sequences of the BLAST hits
+$ genevalidator -d DATABASE_PATH -e -x BLAST_XML_FILE
+
+# Run GeneValidator
+$ genevalidator -n NUM_THREADS -x BLAST_XML_FILE -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
 ```
-##### Local Database, with the fast mode, with custom number of threads (in this case 8)
-Internally, GV will run BLAST on all input sequences before analysing any sequences (instead of running BLAST on each sequence and then analysing the sequence).
+
+Alternatively when running BLAST and GeneValidator on the same machine.
 
 ```bash
-$ genevalidator -d 'Path-to-local-BLAST-db' -n 8 -f Input_FASTA_File
+# Alternatively you can let GeneValidator do everything for you (using a local BLAST database)
+$ genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
 ```
 
-##### Local Database, with pre-computed BLAST XML file, with custom number of threads (in this case 8)
+#### Other Usage Examples
+
+Alternatively you can use GeneValidator as follows
 
 ```bash
-$  blast(p/x) -db SwissProt -out Path-to-XML-file -num_threads 8 -outfmt 5 -query Input_FASTA_File
-$  genevalidator -d 'local-or-remote-BLAST-db' -n 8 -x 'Path-to-XML-file' Input_FASTA_File
+# Alternatively you can use a remote BLAST database if you do not have a local BLAST database installed (Note: this can take a significant amount of time)
+$ genevalidator -d 'swissprot -remote' -n NUM_THREADS INPUT_FASTA_FILE
+
+# Or provide precomputed BLAST Output (XML or Tabular)
+$ genevalidator -d DATABASE_PATH -n NUM_THREADS -x BLAST_XML_OUTPUT INPUT_FASTA_FILE
+$ genevalidator -d DATABASE_PATH -n NUM_THREADS -t BLAST_TABULAR_OUTPUT -o BLAST_TABULAR_OUTFMT_ARG INPUT_FASTA_FILE
+
+NOTE: BLAST_TABULAR_OUTFMT_ARG is the value of the outfmt argument when running BLAST e.g.
+'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq'
 ```
 
-##### Local Database, with pre-computed BLAST XML file, with custom number of threads (in this case 8)
 
-```bash
-$ blast(p/x) -db SwissProt -out Path-to-tabular-file -num_threads 8 -outfmt "7 qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq" -query Input_FASTA_File
-$ genevalidator -d 'local-or-remote-BLAST-db' -n 8 -t 'Path-to-tabular-file' -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident evalue' Input_FASTA_File 
-```
+
 
 
 ## Output
 The output produced by GeneValidator is presented in three manners.
 
-#### HTML Output 
-Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use Mozilla Firefox). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (DNA input data).
+#### HTML Output
+Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser (please use a supported browser - See [Installation Requirements](#installation-requirements)). This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar html output [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/) (protein input data) and [here](http://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/) (DNA input data).
 
 #### JSON Output
 The output is also produced in JSON. GeneValidator is able to re-generate results for any JSON files (or derived JSON files) with that were previously generated by the program. This means that you are able to use the JSON file in your own analysis pipelines and then use GeneValidator to produce the HTML output for the analysed JSON file.
 
 #### Terminal Output
 Lastly, a summary of the results is also outputted in the terminal to provide quick feedback on the results.
+
+
+
 
 
 ## Analysing the JSON output
@@ -154,38 +217,29 @@ After installing node:
 $ npm install -g json
 ```
 
-### Filtering the results 
-
-- Extract sequences that have an overall score of 100
+### Filtering the results
 
 ```bash
+
+# Extract sequences that have an overall score of 100
 $ json -f INPUT_JSON_FILE -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
-```
 
-- Extract sequences that have an overall score of over 70
-
-```bash
+# Extract sequences that have an overall score of over 70
 $ json -f INPUT_JSON_FILE -c 'this.overall_score > 70' > OUTPUT_JSON_FILE
-```
 
-- Extract sequences that have more than 50 hits
-
-```bash
+# Extract sequences that have more than 50 hits
 $ json -f INPUT_JSON_FILE -c 'this.no_hits > 50' > OUTPUT_JSON_FILE
-```
 
-- Sort the JSON based on the overall score (ascending - 0 to 100)
-
-```bash
+# Sort the JSON based on the overall score (ascending - 0 to 100)
 $ json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
-```
 
-- Sort the JSON based on the overall score (decending - 100 to 0)
-
-```bash
+# Sort the JSON based on the overall score (decending - 100 to 0)
 json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
 ```
 
-## Other Resources
 
-* [Full Documentation](http://wurmlab.github.io/tools/genevalidator/documentation/v1/)
+
+
+## Related projects
+[GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
+[GeneValidatorApp-API](https://github.com/wurmlab/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.
