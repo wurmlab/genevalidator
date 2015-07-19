@@ -54,7 +54,7 @@ module GeneValidator
                                   num_threads = opt[:num_threads])
         return if opt[:blast_xml_file] || opt[:blast_tabular_file]
 
-        $stderr.puts 'Running BLAST'
+        $stderr.puts 'Running BLAST. This may take a while.'
         opt[:blast_xml_file] = input_file + '.blast_xml'
 
         blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
@@ -67,9 +67,13 @@ module GeneValidator
 
         `#{blastcmd} &>/dev/null`
         return unless File.zero?(opt[:blast_xml_file])
-        $stderr.puts 'Blast failed to run on the input file. Please ensure that the'
-        $stderr.puts 'BLAST database exists and try again'
-        exit 1
+        $stderr.puts 'Blast failed to run on the input file.'
+        if opt[:db] !~ /remote/
+          $stderr.puts 'Please ensure that the BLAST database exists and try again'
+        else
+          $stderr.puts 'You are using BLAST with a remote database. Please ensu re'
+          $stderr.puts 'that you have internet access and try again.'
+        end
       end
 
       ##
