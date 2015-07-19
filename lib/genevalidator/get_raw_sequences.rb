@@ -1,6 +1,7 @@
 require 'bio-blastxmlparser'
 require 'forwardable'
 require 'net/http'
+require 'tempfile'
 require 'uri'
 require 'yaml'
 
@@ -129,8 +130,13 @@ module GeneValidator
       def obtain_raw_seqs_from_local_db(index_file, raw_seq_file)
         cmd = "blastdbcmd -entry_batch '#{index_file}' -db '#{@opt[:db]}'" \
               " -outfmt '%f' -out '#{raw_seq_file}'"
-        output = `#{cmd} &>/dev/null`
+        efile = Tempfile.new('blast_out')
+        `#{cmd} &>#{efile.path}`
+        output = efile.read
         failed_raw_sequences(output, raw_seq_file) if output =~ /Error/
+      ensure
+         efile.close
+         efile.unlink
       end
 
       def failed_raw_sequences(output, raw_seq_file)
