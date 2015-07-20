@@ -2,14 +2,14 @@ require_relative 'test_helper'
 require 'minitest/autorun'
 
 require 'genevalidator/hsp'
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 
 module GeneValidator
   # Test the Sequence class
   class TestSequenceClass < Minitest::Test
     describe 'Test Sequence Class' do
       it 'should get sequence by accession for mrna' do
-        seq_mrna = Sequence.new
+        seq_mrna = Query.new
         seq_mrna.get_sequence_by_accession_no('EF100000', 'nucleotide',
                                               'swissprot -remote')
         assert_equal('AGAGTTTGAT', seq_mrna.raw_sequence[0..9])
@@ -19,7 +19,7 @@ module GeneValidator
       end
 
       it 'should get sequence by accession for protein' do
-        seq_prot = Sequence.new
+        seq_prot = Query.new
         seq_prot.get_sequence_by_accession_no('F8WCM5', 'protein',
                                               'swissprot -remote')
         assert_equal('MALWMRLLPL', seq_prot.raw_sequence[0..9])
@@ -32,7 +32,7 @@ module GeneValidator
         identifier   = 'sp|Q8N302|AGGF1_HUMAN'
         accession_no = 'Q8N302'
         slen         = 714
-        seq          = Sequence.new
+        seq          = Query.new
         hash = { 'qseqid' => 'GB10034-PA',
                  'sseqid' => identifier,
                  'sacc'   => accession_no,

@@ -1,7 +1,7 @@
 require 'csv'
 require 'forwardable'
 
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 require 'genevalidator/hsp'
 require 'genevalidator/exceptions'
 
@@ -78,7 +78,7 @@ module GeneValidator
       grouped_hits = hits.group_by { |row| row['sseqid'] }
 
       grouped_hits.each do |query_id, row|
-        hit_seq = Sequence.new
+        hit_seq = Query.new
         hit_seq.init_tabular_attribute(row[0])
 
         initialise_all_hsps(query_id, hits, hit_seq)

@@ -97,8 +97,7 @@ module GeneValidator
     # +LengthClusterValidationOutput+ object
     def run
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Sequence) &&
-                            hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
       # get [clusters, max_density_cluster_idx]
@@ -136,16 +135,15 @@ module GeneValidator
     # Clusterization by length from a list of sequences
     # Params:
     # +debug+ (optional):: true to display debug information, false by default
-    # +lst+:: array of +Sequence+ objects
-    # +predicted_seq+:: +Sequence+ objetc
+    # +lst+:: array of +Query+ objects
+    # +predicted_seq+:: +Query+ objetc
     # Output
     # output 1:: array of Cluster objects
     # output 2:: the index of the most dense cluster
     def clusterization_by_length(_debug = false,
                                  lst = @hits,
                                  predicted_seq = @prediction)
-      fail TypeError unless lst[0].is_a?(Sequence) &&
-                            predicted_seq.is_a?(Sequence)
+      fail TypeError unless lst[0].is_a?(Query) && predicted_seq.is_a?(Query)
 
       contents = lst.map { |x| x.length_protein.to_i }.sort { |a, b| a <=> b }
 

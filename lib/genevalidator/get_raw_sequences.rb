@@ -6,7 +6,7 @@ require 'uri'
 require 'yaml'
 
 require 'genevalidator/exceptions'
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 
 module GeneValidator
   # Gets the raw sequences for each hit in a BLAST output file

@@ -5,7 +5,7 @@ require 'yaml'
 
 module GeneValidator
   # This is a class for the storing data on each sequence
-  class Sequence
+  class Query
     attr_accessor :type # protein | mRNA
     attr_accessor :definition
     attr_accessor :identifier

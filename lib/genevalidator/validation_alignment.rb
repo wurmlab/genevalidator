@@ -126,8 +126,7 @@ module GeneValidator
       n = 50 if n > 50
 
       fail NotEnoughHitsError unless hits.length >= n
-      fail Exception unless prediction.is_a?(Sequence) &&
-                            hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
       start = Time.new
       # get the first n hits
       less_hits    = @hits[0..[n - 1, @hits.length].min]
@@ -230,7 +229,7 @@ module GeneValidator
     # Array of +String+s, corresponding to the multiple aligned sequences
     # the prediction is the last sequence in the vector
     def multiple_align_mafft(prediction = @prediction, hits = @hits)
-      fail Exception unless prediction.is_a?(Sequence) && hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       options = ['--maxiterate', '1000', '--localpair', '--anysymbol',
                  '--quiet', '--thread', "#{@num_threads}"]

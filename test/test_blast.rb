@@ -203,7 +203,7 @@ module GeneValidator
 
         GeneValidator.init(default_opt)
 
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.length_protein = 1808
         tabular_headers      = 'qseqid sseqid sacc slen qstart qend sstart' \
                                ' send pident length qframe evalue'
@@ -242,7 +242,7 @@ module GeneValidator
 
         GeneValidator.init(default_opt)
 
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.length_protein = 219 / 3
         tabular_headers      = 'qseqid sseqid pident length mismatch gapopen' \
                                ' qstart qend sstart send evalue bitscore'
@@ -276,7 +276,7 @@ module GeneValidator
 
         GeneValidator.init(default_opt)
 
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.length_protein = 219 / 3
         output = File.open(ncbi_mrna_xml20, 'rb').read
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum

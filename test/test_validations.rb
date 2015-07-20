@@ -52,7 +52,7 @@ module GeneValidator
 
     describe 'Detailed Validation of normal Insulin Query' do
       hits     = BlastUtils.parse_next(iterator, :nucleotide)
-      prediction              = Sequence.new
+      prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
       prediction.type         = :nucleotide
@@ -155,7 +155,7 @@ module GeneValidator
 
     describe 'Validate a trancated sequence' do
       hits = BlastUtils.parse_next(iterator, :nucleotide)
-      prediction              = Sequence.new
+      prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
       prediction.type         = :nucleotide
@@ -188,7 +188,7 @@ module GeneValidator
 
     describe 'Validate a duplicated sequence' do
       hits = BlastUtils.parse_next(iterator, :nucleotide)
-      prediction              = Sequence.new
+      prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
       prediction.type         = :nucleotide
@@ -232,7 +232,7 @@ module GeneValidator
     describe 'Validate a merged sequence' do
       hits = BlastUtils.parse_next(iterator, :nucleotide)
 
-      prediction              = Sequence.new
+      prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
       prediction.type         = :nucleotide
@@ -274,7 +274,7 @@ module GeneValidator
     describe 'Validate a sequence with a frameshift' do
       hits = BlastUtils.parse_next(iterator, :nucleotide)
 
-      prediction              = Sequence.new
+      prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
       prediction.type         = :nucleotide

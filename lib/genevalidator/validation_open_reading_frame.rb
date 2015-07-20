@@ -91,7 +91,7 @@ module GeneValidator
         return @validation_report
       end
 
-      fail Exception unless prediction.is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query)
 
       start = Time.new
       orfs = get_orfs
