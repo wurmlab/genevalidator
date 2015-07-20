@@ -26,7 +26,6 @@ module GeneValidator
         check_num_threads
 
         export_bin_dirs unless @opt[:bin].nil?
-
         Blast.validate(opt) unless @opt[:test]
         assert_mafft_installation
       end
@@ -53,7 +52,8 @@ module GeneValidator
           $stderr.puts 'Number of threads can not be lower than 0'
         end
         return unless @opt[:num_threads] > 256
-        $stderr.puts "Number of threads set at #{@opt[:num_threads]} is unusually high."
+        $stderr.puts "Number of threads set at #{@opt[:num_threads]} is" \
+                     ' unusually high.'
       end
 
       def assert_BLAST_output_files
@@ -69,8 +69,8 @@ module GeneValidator
       def assert_output_dir_does_not_exist
         output_dir = "#{@opt[:input_fasta_file]}.html"
         return unless File.exist?(output_dir)
-        $stderr.puts "The output directory already exists for this fasta file.\n"
-        $stderr.puts "Please remove the following directory: #{output_dir}\n"
+        $stderr.puts 'The output directory already exists for this fasta file.'
+        $stderr.puts "\nPlease remove the following directory: #{output_dir}\n"
         $stderr.puts "You can run the following command to remove the folder.\n"
         $stderr.puts "\n   $ rm -r #{output_dir} \n"
         exit 1
@@ -102,8 +102,9 @@ module GeneValidator
         fasta_content = IO.binread(@opt[:input_fasta_file])
         type = BlastUtils.type_of_sequences(fasta_content)
         return if type == :nucleotide || type == :protein
-        $stderr.puts '*** Error: The input files does not contain just protein or'
-        $stderr.puts '    nucleotide data. Please correct this and try again.'
+        $stderr.puts '*** Error: The input files does not contain just protein'
+        $stderr.puts '    or nucleotide data.'
+        $stderr.puts '    Please correct this and try again.'
         exit 1
       end
 
@@ -157,12 +158,12 @@ module GeneValidator
 
         def warn_if_remote_database(db)
           return if db !~ /remote/
-          $stderr.puts # a blank line
+          $stderr.puts # a blank line
           $stderr.puts 'Warning: BLAST will be carried out on remote servers.'
           $stderr.puts 'This may take quite a bit of time.'
           $stderr.puts 'You may want to install a local BLAST database for' \
                        ' faster analyses.'
-          $stderr.puts # a blank line
+          $stderr.puts # a blank line
         end
 
         def assert_local_blast_database_exists(db)

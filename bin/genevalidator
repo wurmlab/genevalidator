@@ -80,7 +80,7 @@ BANNER
           'BLAST and Mafft within GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
-  
+
   opts.on('-r', '--raw_sequences [raw_seq]',
           'Supply a fasta file of the raw sequences of all BLAST hits present',
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
@@ -127,9 +127,11 @@ start = Time.now
 if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
   GeneValidator.opt    = opt
   GeneValidator.config = {}
+  # GVArgValidation.run_raw_seqs
   GeneValidator::RawSequences.run
 elsif opt[:json_file]
   GeneValidator.opt = opt
+  # GVArgValidation.run_json_to_gv_results
   GeneValidator::JsonToGVResults.run
 else
   GeneValidator.init(opt)

@@ -1,7 +1,9 @@
 require_relative 'test_helper'
 require 'minitest/autorun'
-require 'genevalidator/sequences'
+
 require 'genevalidator/hsp'
+require 'genevalidator/sequences'
+
 module GeneValidator
   # Test the Sequence class
   class TestSequenceClass < Minitest::Test

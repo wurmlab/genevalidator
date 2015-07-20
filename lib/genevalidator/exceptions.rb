@@ -3,7 +3,6 @@ module GeneValidator
   class ClasspathError < Exception
   end
 
-
   # Exception raised when the command line type argument
   # does not corrsepond to the type of the sequences in the fasta file
   class SequenceTypeError < Exception

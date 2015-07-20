@@ -1,10 +1,10 @@
 require_relative 'test_helper'
 require 'minitest/autorun'
 
-require 'genevalidator/validation_test'
-require 'genevalidator/validation_open_reading_frame'
-require 'genevalidator/sequences'
 require 'genevalidator'
+require 'genevalidator/sequences'
+require 'genevalidator/validation_open_reading_frame'
+require 'genevalidator/validation_test'
 
 module GeneValidator
   # Classs to test the ORF validation
@@ -144,7 +144,7 @@ module GeneValidator
 
       it 'should find - test 3 ' do
         GeneValidator.config = {}
-        GeneValidator.config[:type] = :nucleotide 
+        GeneValidator.config[:type] = :nucleotide
         prediction = Sequence.new
         prediction.raw_sequence = 'GGCGGGGCGGGAGGGCGGCGCGGAGTGCGCCGGCGCGTCGTC' \
                                   'GGGGACGCCGGGTCCAGGATCTTGCTAGGGAACCAGTGTTGT' \

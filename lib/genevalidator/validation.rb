@@ -17,7 +17,7 @@ require 'genevalidator/validation_alignment'
 module GeneValidator
   Pair1 = Struct.new(:x, :y)
 
-  # Class that initalises separate Validate.new() instances for each query.
+  # Class that initalises a separate Validate.new() instance for each query.
   class Validations
     extend Forwardable
     def_delegators GeneValidator, :opt, :config, :query_idx
@@ -102,7 +102,6 @@ module GeneValidator
       @config      = config
       @mutex_array = mutex_array
       @run_output  = nil
-
       @overview    = overview
     end
 

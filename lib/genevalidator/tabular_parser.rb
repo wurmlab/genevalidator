@@ -52,7 +52,6 @@ module GeneValidator
         @rows.next
         break unless entry == current_entry
       end
-      # rescue StopIteration
     end
 
     alias move_to_next_query next

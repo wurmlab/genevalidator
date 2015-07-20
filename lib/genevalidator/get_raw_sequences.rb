@@ -14,29 +14,29 @@ module GeneValidator
       extend Forwardable
       def_delegators GeneValidator, :opt, :config
 
-      ##
-      # Obtains raw_sequences from BLAST output file...
-      def run
-        @opt = opt
+      def init
+        @opt    = opt
         @config = config
 
         $stderr.puts 'Extracting sequences within the BLAST output file from' \
                      ' the BLAST database'
 
-        if @opt[:blast_xml_file]
-          @blast_file  = @opt[:blast_xml_file]
-        else
-          @blast_file = @opt[:blast_tabular_file]
-        end
+        @blast_file = @opt[:blast_xml_file] if @opt[:blast_xml_file]
+        @blast_file = @opt[:blast_tabular_file] if @opt[:blast_tabular_file]
 
         @opt[:raw_sequences] = @blast_file + '.raw_seq'
-        index_file           = @blast_file + '.index'
+        @index_file          = @blast_file + '.index'
+      end
 
+      ##
+      # Obtains raw_sequences from BLAST output file...
+      def run
+        init
         if opt[:db] =~ /remote/
           write_a_raw_seq_file(@opt[:raw_sequences], 'remote')
         else
-          write_an_index_file(index_file, 'local')
-          obtain_raw_seqs_from_local_db(index_file, @opt[:raw_sequences])
+          write_an_index_file(@index_file, 'local')
+          obtain_raw_seqs_from_local_db(@index_file, @opt[:raw_sequences])
         end
         index_raw_seq_file(@opt[:raw_sequences])
       end
@@ -94,10 +94,11 @@ module GeneValidator
           end
         end
       rescue
-        $stderr.puts '*** Error: There was an error in analysing the BLAST XML file.'
-        $stderr.puts '    Please ensure that BLAST XML file is in the correct format'
-        $stderr.puts '    and then try again. If you are using a remote database,'
-        $stderr.puts '    please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST XML'
+        $stderr.puts '    file. Please ensure that BLAST XML file is in the'
+        $stderr.puts '    correct format and then try again. If you are using'
+        $stderr.puts '    a remote database, please ensure that you have'
+        $stderr.puts '    internet access.'
         exit 1
       end
 
@@ -117,10 +118,11 @@ module GeneValidator
           end
         end
       rescue
-        $stderr.puts '*** Error: There was an error in analysing the BLAST tabular'
-        $stderr.puts '    file. Please ensure that BLAST tabular file is in the correct'
-        $stderr.puts '    format and then try again. If you are using a remote'
-        $stderr.puts '    database, please ensure that you have internet access.'
+        $stderr.puts '*** Error: There was an error in analysing the BLAST'
+        $stderr.puts '    tabular file. Please ensure that BLAST tabular file'
+        $stderr.puts '    is in the correct format and then try again. If you'
+        $stderr.puts '    are using a remote database, please ensure that you'
+        $stderr.puts '    have internet access.'
         exit 1
       end
 
@@ -134,8 +136,8 @@ module GeneValidator
         uri      = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
                    "db=protein&retmax=1&usehistory=y&term=#{accession}/"
         result   = Net::HTTP.get(URI.parse(uri))
-        query    = result.scan(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[0][0]
-        web_env  = result.scan(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[0][0]
+        query    = result.match(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[1]
+        web_env  = result.match(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[1]
 
         uri      = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
                    'rettype=fasta&retmode=text&retstart=0&retmax=1&' \
@@ -143,8 +145,9 @@ module GeneValidator
         result   = Net::HTTP.get(URI.parse(uri))
         raw_seqs = result[0..result.length - 2]
         unless raw_seqs.downcase.index(/error/).nil?
-          $stderr.puts '*** Error: There was an error in obtaining the raw sequence' \
-                       ' of a BLAST hit. Please ensure that you have internet access.'
+          $stderr.puts '*** Error: There was an error in obtaining the raw' \
+                       ' sequence of a BLAST hit. Please ensure that you have' \
+                       ' internet access.'
           exit 1
         end
         raw_seqs
@@ -153,9 +156,10 @@ module GeneValidator
       def assert_table_has_correct_no_of_collumns(rows, table_headers)
         rows.each do |row|
           unless row.length == table_headers.length
-            $stderr.puts '*** Error: The BLAST tabular file cannot be parsed. This is' \
-                         ' could possibly be due to an incorrect BLAST tabular' \
-                         ' options ("-o", "--blast_tabular_options") being supplied.' \
+            $stderr.puts '*** Error: The BLAST tabular file cannot be parsed.'\
+                         ' This is could possibly be due to an incorrect' \
+                         ' BLAST tabular options ("-o",' \
+                         ' "--blast_tabular_options") being supplied.' \
                          ' Please correct this and try again.'
             exit 1
           end
