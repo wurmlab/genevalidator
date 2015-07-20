@@ -36,7 +36,7 @@ module GeneValidator
                    " #{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
-        `#{cmd} 2>/dev/null`
+        `#{cmd} 2>&1 /dev/null`
       end
 
       ##
@@ -54,8 +54,12 @@ module GeneValidator
                                   num_threads = opt[:num_threads])
         return if opt[:blast_xml_file] || opt[:blast_tabular_file]
 
-        $stderr.puts 'Running BLAST'
-        opt[:blast_xml_file] = input_file + '.blast_xml'
+        puts 'Running BLAST on input file. This might take a while.'
+        puts 'This will generate a BLAST xml file that can then be'
+        puts 'provided to GeneValidator with the "-x", "--blast_xml_file" argument'
+	puts ''
+
+        opt[:blast_xml_file] = opt[:input_fasta_file] + '.blast_xml'
 
         blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
@@ -65,10 +69,16 @@ module GeneValidator
                    " -out '#{opt[:blast_xml_file]}' -db #{db} " \
                    " -evalue #{EVALUE} -outfmt 5 #{threads}"
 
-        `#{blastcmd}`
+        `#{blastcmd} 2>&1 /dev/null`
+
         return unless File.zero?(opt[:blast_xml_file])
-        $stderr.puts 'Blast failed to run on the input file. Please ensure that the'
-        $stderr.puts 'BLAST database exists and try again'
+        $stderr.puts 'Blast failed to run on the input file.' 
+        if opt[:db] !~ /remote/
+          $stderr.puts 'Please ensure that the BLAST database exists and try again'
+        else
+          $stderr.puts 'You are using BLAST with a remote database. Please ensure' 
+          $stderr.puts 'that you have internet access and try again.'
+        end
         exit 1
       end
 

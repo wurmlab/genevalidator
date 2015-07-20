@@ -126,15 +126,17 @@ module GeneValidator
       less_hits.map do |hit|
         # get gene by accession number
         next unless hit.raw_sequence.nil?
-
-        hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
+  
+        if @raw_seq_file && @index_file_name && @raw_seq_file_load
+          hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
                                          hit.identifier, @raw_seq_file_load)
+        end
 
         if hit.raw_sequence.nil? || hit.raw_sequence.empty?
           seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
           hit.get_sequence_by_accession_no(hit.accession_no, seq_type, @db)
         end
-
+        
         useless_hits.push(hit) if hit.raw_sequence.nil?
         useless_hits.push(hit) if hit.raw_sequence.empty?
       end

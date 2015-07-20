@@ -67,19 +67,21 @@ module GeneValidator
         end
         @raw_sequence = seq
       else
-        $stderr.puts "Getting sequence for '#{accno}' from NCBI - avoid this with '-r'."
+        #puts "Getting sequence for '#{accno}' from NCBI - avoid this by
+        #puts "running GeneValidator  with '-r' argument."
         uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?'\
               "db=#{dbtype}&retmax=1&usehistory=y&term=#{accno}/"
         result = Net::HTTP.get(URI.parse(uri))
-
+ 
         query   = result.scan(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[0][0]
         web_env = result.scan(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[0][0]
-
+        
         uri = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?'\
               "rettype=fasta&retmode=text&retstart=0&retmax=1&db=#{dbtype}" \
               "&query_key=#{query}&WebEnv=#{web_env}"
+        
         result = Net::HTTP.get(URI.parse(uri))
-
+        
         # parse FASTA output
         nl            = result.index("\n")
         seq           = result[nl + 1..-1]

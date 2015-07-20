@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'mkmf'
 
 require 'genevalidator/blast'
 
@@ -26,14 +27,13 @@ module GeneValidator
         check_num_threads
 
         export_bin_dirs unless @opt[:bin].nil?
-
         Blast.validate(opt) unless @opt[:test]
         assert_mafft_installation
       end
 
       # Return `true` if the given command exists and is executable.
       def command?(command)
-        system("which #{command} > /dev/null 2>&1")
+        (find_executable command) !~ nil 
       end
 
       private
@@ -145,7 +145,7 @@ module GeneValidator
 
         def validate(opt)
           assert_blast_installation
-          warn_if_remote_database(opt[:db])
+          #warn_if_remote_database(opt[:db])
           assert_local_blast_database_exists(opt[:db]) if opt[:db] !~ /remote/
         end
 
