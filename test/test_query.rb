@@ -6,28 +6,8 @@ require 'genevalidator/query'
 
 module GeneValidator
   # Test the Sequence class
-  class TestSequenceClass < Minitest::Test
+  class TestQueryClass < Minitest::Test
     describe 'Test Sequence Class' do
-      it 'should get sequence by accession for mrna' do
-        seq_mrna = Query.new
-        seq_mrna.get_sequence_by_accession_no('EF100000', 'nucleotide',
-                                              'swissprot -remote')
-        assert_equal('AGAGTTTGAT', seq_mrna.raw_sequence[0..9])
-        start_idx = seq_mrna.raw_sequence.length - 10
-        end_idx   = seq_mrna.raw_sequence.length - 1
-        assert_equal('GCCCGTCAAG', seq_mrna.raw_sequence[start_idx..end_idx])
-      end
-
-      it 'should get sequence by accession for protein' do
-        seq_prot = Query.new
-        seq_prot.get_sequence_by_accession_no('F8WCM5', 'protein',
-                                              'swissprot -remote')
-        assert_equal('MALWMRLLPL', seq_prot.raw_sequence[0..9])
-        start_idx = seq_prot.raw_sequence.length - 10
-        end_idx   = seq_prot.raw_sequence.length - 1
-        assert_equal('WPRRPQRSQN', seq_prot.raw_sequence[start_idx..end_idx])
-      end
-
       it 'should initialize seq tabular attributes' do
         identifier   = 'sp|Q8N302|AGGF1_HUMAN'
         accession_no = 'Q8N302'
