@@ -4,7 +4,7 @@ require 'forwardable'
 
 require 'genevalidator/exceptions'
 require 'genevalidator/hsp'
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 require 'genevalidator/output'
 
 module GeneValidator
@@ -90,7 +90,7 @@ module GeneValidator
         # parse blast the xml output and get the hits
         # hits obtained are proteins! (we use only blastp and blastx)
         iter.each do |hit|
-          seq = Sequence.new
+          seq = Query.new
 
           seq.length_protein = hit.len.to_i
           seq.type           = :protein

@@ -101,7 +101,7 @@ module GeneValidator
       end
 
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Sequence) && hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 

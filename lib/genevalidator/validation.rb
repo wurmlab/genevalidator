@@ -4,7 +4,7 @@ require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 require 'genevalidator/output'
 require 'genevalidator/pool'
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
 require 'genevalidator/validation_blast_reading_frame'
@@ -64,7 +64,7 @@ module GeneValidator
       query        = IO.binread(input_file, start_offset, end_offset)
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
-      prediction                = Sequence.new
+      prediction                = Query.new
       prediction.definition     = parse_query[0].gsub("\n", '')
       prediction.identifier     = prediction.definition.gsub(/ .*/, '')
       prediction.type           = seq_type

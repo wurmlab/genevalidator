@@ -2,7 +2,7 @@ require_relative 'test_helper'
 require 'minitest/autorun'
 
 require 'genevalidator'
-require 'genevalidator/sequences'
+require 'genevalidator/query'
 require 'genevalidator/validation_open_reading_frame'
 require 'genevalidator/validation_test'
 
@@ -13,7 +13,7 @@ module GeneValidator
       it 'should find ORFs - test 1 ' do
         GeneValidator.config = {}
         GeneValidator.config[:type] = :nucleotide
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.raw_sequence = 'ATGGCTCTCTGGATCCGGTCGCTGCCTCTCCTGGCCCTTCTT' \
                                   'GCTCTTTCTGGCCCTGGGATCAGCCACGCAGCTGCCAACCAG' \
                                   'CACCTCTGTGGCTCCCACTTGGTTGAGGCTCTCTACCTGGTG' \
@@ -69,7 +69,7 @@ module GeneValidator
       it 'should find - test 2 ' do
         GeneValidator.config = {}
         GeneValidator.config[:type] = :nucleotide
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.raw_sequence = 'ATGGCTCTCTGGATCCGGTCGCTGCCTCTCCTGGCCCTTCTT' \
                                   'GCTCTTTCTGGCCCTGGGATCAGCCACGCAGCTGCCAACCAG' \
                                   'CACCTCTGTGGCTCCCACTTGGTTGAGGCTCTCTACCTGGTG' \
@@ -145,7 +145,7 @@ module GeneValidator
       it 'should find - test 3 ' do
         GeneValidator.config = {}
         GeneValidator.config[:type] = :nucleotide
-        prediction = Sequence.new
+        prediction = Query.new
         prediction.raw_sequence = 'GGCGGGGCGGGAGGGCGGCGCGGAGTGCGCCGGCGCGTCGTC' \
                                   'GGGGACGCCGGGTCCAGGATCTTGCTAGGGAACCAGTGTTGT' \
                                   'CGCGTCGTCCCGCCCCCTCGGGGCTTTTGCTCCCGTTAACTG' \

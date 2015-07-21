@@ -126,8 +126,7 @@ module GeneValidator
       n = 50 if n > 50
 
       fail NotEnoughHitsError unless hits.length >= n
-      fail Exception unless prediction.is_a?(Sequence) &&
-                            hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
       start = Time.new
       # get the first n hits
       less_hits    = @hits[0..[n - 1, @hits.length].min]
@@ -135,19 +134,10 @@ module GeneValidator
 
       # get raw sequences for less_hits
       less_hits.map do |hit|
-        # get gene by accession number
         next unless hit.raw_sequence.nil?
-
-        hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
-                                         hit.identifier, @raw_seq_file_load)
-
-        if hit.raw_sequence.nil? || hit.raw_sequence.empty?
-          seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
-          hit.get_sequence_by_accession_no(hit.accession_no, seq_type, @db)
-        end
-
+        hit.raw_sequence = FetchRawSequences.run(hit.identifier,
+                                                 hit.accession_no)
         useless_hits.push(hit) if hit.raw_sequence.nil?
-        useless_hits.push(hit) if hit.raw_sequence.empty?
       end
 
       useless_hits.each { |hit| less_hits.delete(hit) }
@@ -230,7 +220,7 @@ module GeneValidator
     # Array of +String+s, corresponding to the multiple aligned sequences
     # the prediction is the last sequence in the vector
     def multiple_align_mafft(prediction = @prediction, hits = @hits)
-      fail Exception unless prediction.is_a?(Sequence) && hits[0].is_a?(Sequence)
+      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       options = ['--maxiterate', '1000', '--localpair', '--anysymbol',
                  '--quiet', '--thread', "#{@num_threads}"]
