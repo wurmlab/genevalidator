@@ -168,8 +168,6 @@ module GeneValidator
         raw_seqs = efile.read
         failed_raw_sequences(raw_seqs) if batch && raw_seqs =~ /Error/
         raw_seqs # when obtaining a single raw_seq, this contains the sequence
-      rescue
-        'Error' # return error so it can then try alternative fetching method.
       ensure
         efile.close
         efile.unlink
