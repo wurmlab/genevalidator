@@ -87,7 +87,8 @@ module GeneValidator
   # Class that runs the validations (Instatiated for each query)
   class Validate
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex_array, :overview
+    def_delegators GeneValidator, :opt, :config, :mutex_array, :overview,
+                   :query_idx
 
     ##
     # Initilizes the object
@@ -103,6 +104,7 @@ module GeneValidator
       @mutex_array = mutex_array
       @run_output  = nil
       @overview    = overview
+      @query_idx   = query_idx
     end
 
     ##
@@ -199,14 +201,18 @@ module GeneValidator
     def compute_scores
       validations        = @run_output.validations
       scores             = {}
-      scores[:successes] = validations.map { |v| v.result == v.expected }.count(true)
-      scores[:fails] = validations.map { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }.count(true)
+      scores[:successes] = validations.count { |v| v.result == v.expected }
+      scores[:fails] = validations.count { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }
       scores         = length_validation_scores(validations, scores)
 
       @run_output.successes     = scores[:successes]
       @run_output.fails         = scores[:fails]
-      total_query              = scores[:successes].to_i + scores[:fails]
+      total_query               = scores[:successes].to_i + scores[:fails]
+      if total_query == 0
+        @run_output.overall_score = 0
+      else
         @run_output.overall_score = (scores[:successes] * 90 / total_query).round
+      end
     end
 
     # Since there are two length validations, it is necessary to adjust the
@@ -243,8 +249,8 @@ module GeneValidator
       errors      = []
       vals.each do |v|
         unless v.errors.nil?
-          no_mafft += v.errors.select { |e| e == NoMafftInstallationError }.length
-          no_internet += v.errors.select { |e| e == NoInternetError }.length
+          no_mafft += v.errors.count { |e| e == NoMafftInstallationError }
+          no_internet += v.errors.count { |e| e == NoInternetError }
         end
         errors.push(v.short_header) if v.validation == :error
       end

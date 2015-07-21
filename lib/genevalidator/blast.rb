@@ -4,8 +4,8 @@ require 'forwardable'
 
 require 'genevalidator/exceptions'
 require 'genevalidator/hsp'
-require 'genevalidator/query'
 require 'genevalidator/output'
+require 'genevalidator/query'
 
 module GeneValidator
   # Contains methods that run BLAST and methods that analyse sequences
@@ -69,10 +69,11 @@ module GeneValidator
         return unless File.zero?(opt[:blast_xml_file])
         $stderr.puts 'Blast failed to run on the input file.'
         if opt[:db] !~ /remote/
-          $stderr.puts 'Please ensure that the BLAST database exists and try again'
+          $stderr.puts 'Please ensure that the BLAST database exists and try'
+          $stderr.puts 'again.'
         else
-          $stderr.puts 'You are using BLAST with a remote database. Please ensu re'
-          $stderr.puts 'that you have internet access and try again.'
+          $stderr.puts 'You are using BLAST with a remote database. Please'
+          $stderr.puts 'ensure that you have internet access and try again.'
         end
       end
 
@@ -130,7 +131,8 @@ module GeneValidator
             end
             current_hsp.align_len = hsp.align_len.to_i
             current_hsp.identity  = hsp.identity.to_i
-            current_hsp.pidentity = (100 * hsp.identity / (hsp.align_len + 0.0)).round(2)
+            current_hsp.pidentity = (100 * hsp.identity / hsp.align_len.to_f)
+              .round(2)
 
             hsps.push(current_hsp)
           end
@@ -162,10 +164,11 @@ module GeneValidator
         # the first sequence does not need to have a fasta definition line
         sequences = fasta_format_string.split(/^>.*$/).delete_if(&:empty?)
         # get all sequence types
-        sequence_types = sequences.collect { |seq| guess_sequence_type(seq) }.uniq.compact
+        sequence_types = sequences.collect { |seq| guess_sequence_type(seq) }
+                         .uniq.compact
 
         return nil if sequence_types.empty?
-        return sequence_types.first if sequence_types.length == 1
+        sequence_types.first if sequence_types.length == 1
       end
 
       ##

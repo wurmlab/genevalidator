@@ -101,7 +101,7 @@ module GeneValidator
       end
 
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
@@ -110,7 +110,7 @@ module GeneValidator
 
       # get the main reading frame
       main_rf = frames.map { |_k, v| v }.max
-      @prediction.nucleotide_rf = frames.select { |_k, v| v == main_rf }.first.first
+      @prediction.nucleotide_rf = frames.select { |_k, v| v == main_rf }[0][0]
 
       @validation_report = BlastRFValidationOutput.new(@short_header, @header,
                                                        @description, frames)
@@ -121,7 +121,7 @@ module GeneValidator
       @validation_report =  ValidationReport.new('Not enough evidence',
                                                  :warning, @short_header,
                                                  @header, @description)
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)

@@ -97,7 +97,7 @@ module GeneValidator
     # +LengthClusterValidationOutput+ object
     def run
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
       # get [clusters, max_density_cluster_idx]
@@ -124,7 +124,7 @@ module GeneValidator
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -177,10 +177,9 @@ module GeneValidator
     # +prediction+: +Sequence+ object
     # Output:
     # +Plot+ object
-    def plot_histo_clusters(output = "#{@plot_path}_len_clusters.json",
-                          clusters = @clusters,
-                          max_density_cluster = @max_density_cluster,
-                          prediction = @prediction)
+    def plot_histo_clusters(clusters = @clusters,
+                            max_density_cluster = @max_density_cluster,
+                            prediction = @prediction)
 
       data = clusters.each_with_index.map { |cluster, i|
         cluster.lengths.collect { |k, v|

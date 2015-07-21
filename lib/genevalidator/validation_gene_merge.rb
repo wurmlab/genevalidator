@@ -114,7 +114,7 @@ module GeneValidator
     # +GeneMergeValidationOutput+ object
     def run
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
@@ -135,7 +135,7 @@ module GeneValidator
         end
       end
 
-      line_slope = slope(xx, yy, (1..hits.length).map{ |x| 1 / (x + 0.0) })
+      line_slope = slope(xx, yy, (1..hits.length).map { |x| 1 / (x + 0.0) })
       ## YW - what is this weighting?
 
       unimodality = false
@@ -167,7 +167,7 @@ module GeneValidator
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -190,18 +190,19 @@ module GeneValidator
         { 'y' => i,
           'start' => hit.hsp_list.map(&:match_query_from).min,
           'stop' => hit.hsp_list.map(&:match_query_to).max,
-          'color' =>'black',
-          'dotted' =>'true'}}.flatten +
+          'color' => 'black',
+          'dotted' => 'true' } }.flatten +
         hits_less.each_with_index.map { |hit, i|
           hit.hsp_list.map { |hsp|
             { 'y' => i,
               'start' => hsp.match_query_from,
               'stop' => hsp.match_query_to,
-              'color' => 'orange'} } }.flatten
+              'color' => 'orange' } } }.flatten
 
       Plot.new(data,
                :lines,
-               'Gene Merge Validation: Query coord covered by blast hit (1 line/hit)',
+               'Gene Merge Validation: Query coord covered by blast hit' \
+               ' (1 line/hit)',
                '',
                'Offset in Prediction',
                'Hit Number',
@@ -224,11 +225,12 @@ module GeneValidator
 
       data = hits.map { |hit| { 'x' => hit.hsp_list.map(&:match_query_from).min,
                                 'y' => hit.hsp_list.map(&:match_query_to).max,
-                                'color' => 'red'}}
+                                'color' => 'red' } }
 
       Plot.new(data,
                :scatter,
-               'Gene Merge Validation: Start/end of matching hit coord. on query (1 point/hit)',
+               'Gene Merge Validation: Start/end of matching hit coord. on' \
+               ' query (1 point/hit)',
                '',
                'Start Offset (most left hsp)',
                'End Offset (most right hsp)',

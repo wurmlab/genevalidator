@@ -91,7 +91,7 @@ module GeneValidator
         return @validation_report
       end
 
-      fail Exception unless prediction.is_a?(Query)
+      fail unless prediction.is_a?(Query)
 
       start = Time.new
       orfs = get_orfs
@@ -109,7 +109,7 @@ module GeneValidator
 
       @validation_report.plot_files.push(plot1)
       @validation_report
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -160,7 +160,7 @@ module GeneValidator
     # +orfs+: +Hash+ containing the open reading frame
     # +output+: location where the plot will be saved in jped file format
     # +prediction+: Sequence objects
-    def plot_orfs(orfs, translated_length, output = "#{@plot_path}_orfs.json")
+    def plot_orfs(orfs, translated_length)
       fail QueryError unless orfs.is_a? Hash
 
       data = []
@@ -169,13 +169,13 @@ module GeneValidator
       (-3..3).each do |frame|
         next if frame == 0
         data << { 'y' => frame, 'start' => 1, 'stop' => translated_length,
-                     'color' => 'gray' }
+                  'color' => 'gray' }
       end
 
       # Create the hashes for the ORFs...
       orfs.each do |_key, h|
         data << { 'y' => h[:frame], 'start' => h[:orf_start],
-                     'stop' => h[:orf_end], 'color' => 'red' }
+                  'stop' => h[:orf_end], 'color' => 'red' }
       end
 
       Plot.new(data,
