@@ -125,8 +125,8 @@ OPTIONAL ARGUMENTS
     -e, --extract_raw_seqs           Produces a fasta file of the raw sequences of all BLAST hits in the
                                      supplied BLAST output file. This fasta file can then be provided to
                                      GeneValidator with the "-r", "--raw_sequences" argument
-    -j, --json_file [JSON_FILE]      Generate GV results from a json file (or a subset of a json file)
-                                     produced from GeneValidator
+    -j, --json_file [JSON_FILE]      Generate HTML report from a JSON file (or a subset of a JSON file)
+                                     produced by GeneValidator
     -x [BLAST_XML_FILE],             Provide GeneValidator with a pre-computed BLAST XML output
         --blast_xml_file             file (BLAST -outfmt option 5).
     -t [BLAST_TABULAR_FILE],         Provide GeneValidator with a pre-computed BLAST tabular output

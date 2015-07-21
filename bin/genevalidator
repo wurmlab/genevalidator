@@ -50,8 +50,8 @@ BANNER
   end
 
   opts.on('-j', '--json_file [JSON_FILE]',
-          'Generate GV results from a json file (or a subset of a json file)',
-          'produced from GeneValidator') do |json|
+          'Generate HTML report from a JSON file (or a subset of a JSON file)',
+          'produced by GeneValidator') do |json|
     opt[:json_file] = json
   end
 
