@@ -110,7 +110,7 @@ module GeneValidator
 
       # get the main reading frame
       main_rf = frames.map { |_k, v| v }.max
-      @prediction.nucleotide_rf = frames.select { |_k, v| v == main_rf }[0][0]
+      @prediction.nucleotide_rf = frames.find { |_k, v| v == main_rf }.first
 
       @validation_report = BlastRFValidationOutput.new(@short_header, @header,
                                                        @description, frames)
