@@ -44,7 +44,7 @@ module GeneValidator
     end
 
     def explain
-      diff = (@query_length < @median) ? 'longer' : 'shorter'
+      diff = (@query_length > @median) ? 'longer' : 'shorter'
       exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" \
              " identified #{@no_of_hits} hit sequences with lengths from" \
              " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" \
