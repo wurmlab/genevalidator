@@ -51,38 +51,40 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more help with installing the prerequisites.
 
 ### Installation
-1. Simply type the following command in the terminal
+Simply run the following command in the terminal
 
 ```bash
-$ gem install genevalidator
+gem install genevalidator
 ```
 
+If that doesn't work, try `sudo gem install genevalidator` instead.
+
 ##### Running from Source (Not Recommended)
-It is also possible to run from source. However this is not recommended.
+It is also possible to run from source. However, this is not recommended.
 
 ```bash
-1. Clone the Repository.
-$ git clone https://github.com/wurmlab/genevalidator.git
+# Clone the Repository.
+git clone https://github.com/wurmlab/genevalidator.git
 
-2. Move into GeneValidator source directory.
-$ cd GeneValidator
+# Move into GeneValidator source directory.
+cd GeneValidator
 
-3. Install bundle
-$ gem install bundle
+# Install bundle
+gem install bundle
 
-4. Use bundle to install dependencies
-$ bundle install
+# Use bundle to install dependencies
+bundle install
 
-5. Optional: Run Tests, Build Documentation and also build the latest
-$ bundle exec rake
+# Optional: Run Tests, Build Documentation and also build the latest
+bundle exec rake
 
-6. Run GeneValidator.
-$ bundle exec genevalidator -h
+# Run GeneValidator.
+bundle exec genevalidator -h
 # note that `bundle exec` executes GeneValidator in the context of the bundle
 
-7. Alternativaly, install GeneValidator as gem
-$ bundle exec install
-$ genevalidator -h
+# Alternativaly, install GeneValidator as gem
+bundle exec rake install
+genevalidator -h
 ```
 
 
@@ -91,12 +93,17 @@ $ genevalidator -h
 
 
 ## Usage
-1) After installing, GeneValidator can be run by typing the following command in the terminal:
+Verify GeneValidator installed by running the following command in the terminal:
 
+```
+genevalidator 
+```
+
+You should see the following output.
 
 ```bash
 USAGE:
-    $ genevalidator [OPTIONS] Input_File
+    genevalidator [OPTIONS] Input_File
 
 ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
@@ -114,7 +121,7 @@ OPTIONAL ARGUMENTS
                                        align = Validating based on multiple alignment
     -d, --db [BLAST_DATABASE]        Path to the BLAST database
                                      GeneValidator also supports remote databases:
-                                     e.g.   $ genevalidator -d "swissprot -remote" Input_File
+                                     e.g.   genevalidator -d "swissprot -remote" Input_File
     -e, --extract_raw_seqs           Produces a fasta file of the raw sequences of all BLAST hits in the
                                      supplied BLAST output file. This fasta file can then be provided to
                                      GeneValidator with the "-r", "--raw_sequences" argument
@@ -132,13 +139,10 @@ OPTIONAL ARGUMENTS
                                      in the supplied BLAST XML or BLAST tabular file.
     -b, --binaries [binaries]        Path to BLAST and MAFFT bin folders (is added to $PATH variable)
                                      To be provided as follows:
-                                        $ genevalidator -b /blast/bin/path/ -b /mafft/bin/path/
+                                     e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/
         --version                    The version of GeneValidator that you are running.
     -h, --help                       Show this screen.
- ```
-
-Please type `genevalidator -h` into your terminal to see this information in your terminal.
-
+```
 
 
 
