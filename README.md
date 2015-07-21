@@ -69,10 +69,10 @@ git clone https://github.com/wurmlab/genevalidator.git
 # Move into GeneValidator source directory.
 cd GeneValidator
 
-# Install bundle
-gem install bundle
+# Install bundler
+gem install bundler
 
-# Use bundle to install dependencies
+# Use bundler to install dependencies
 bundle install
 
 # Optional: Run Tests, Build Documentation and also build the latest
