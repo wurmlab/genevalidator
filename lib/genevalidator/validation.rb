@@ -206,7 +206,7 @@ module GeneValidator
       @run_output.successes     = scores[:successes]
       @run_output.fails         = scores[:fails]
       total_query              = scores[:successes].to_i + scores[:fails]
-      @run_output.overall_score = (scores[:successes] * 100 / total_query).round
+        @run_output.overall_score = (scores[:successes] * 90 / total_query).round
     end
 
     # Since there are two length validations, it is necessary to adjust the
