@@ -121,27 +121,17 @@ module GeneValidator
       # get the first n hits
       less_hits = @hits[0..[n - 1, @hits.length].min]
       useless_hits = []
-
       # get raw sequences for less_hits
       less_hits.map do |hit|
-        # get gene by accession number
         next unless hit.raw_sequence.nil?
-
-        hit.get_sequence_from_index_file(@raw_seq_file, @index_file_name,
-                                         hit.identifier, @raw_seq_file_load)
-
-        if hit.raw_sequence.nil? || hit.raw_sequence.empty?
-          seq_type = (hit.type == :protein) ? 'protein' : 'nucleotide'
-          hit.get_sequence_by_accession_no(hit.accession_no, seq_type, @db)
-        end
-
+        hit.raw_sequence = FetchRawSequences.run(hit.identifier,
+                                                 hit.accession_no)
         useless_hits.push(hit) if hit.raw_sequence.nil?
-        useless_hits.push(hit) if hit.raw_sequence.empty?
       end
 
       useless_hits.each { |hit| less_hits.delete(hit) }
 
-      fail NoInternetError if less_hits.length.nil?
+      fail NoInternetError if less_hits.length == 0
 
       averages = []
 
