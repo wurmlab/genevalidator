@@ -150,46 +150,59 @@ OPTIONAL ARGUMENTS
 
 ## Example Usage Scenarios
 
-#### Recommended Usage
-
-GeneValidator runs BLAST on each input file before running the validation analyses. As BLAST is resource-heavy and can take quite some time, it is possible to run BLAST on a separate (faster) machine and then pass the output file to GeneValidator.
-
-When running BLAST on a separate (more faster) machine.
+#### Simplest Usage (using NCBI remote BLAST servers)
+This runs BLAST on NCBI remote Swiss-Prot BLAST database. As such this is suitable for analyses on less than 10 sequences.
 
 ```bash
-# Run BLAST (update the arguments below as necesssary)
-$ blast(p/x) -outfmt 5 -db DATABASE_PATH -out BLAST_XML_FILE -num_threads NUM_THREADS -query INPUT_FASTA_FILE
+genevalidator INPUT_FASTA_FILE
+```
 
-# Use GeneValidator to extract the Sequences of the BLAST hits
-$ genevalidator -d DATABASE_PATH -e -x BLAST_XML_FILE
+#### Using a local BLAST database.
+GeneValidator would run BLAST on each query against the provided BLAST database and then run the validation analyses.
+
+```bash
+genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
+```
+
+#### Running BLAST separately
+At times, it may be more suitable to run the resource-heavy BLAST separately and then pass the BLAST output file to GeneValidator. This may be the case if one is analysing a large number of input sequence and would like to run the time- and resource-consuming BLAST process on a faster machine (i.e a cluster).
+
+GeneValidator supports the XML and tabular BLAST output formats.
+
+```
+# Run BLAST (XML output)
+blast(p/x) -db DATABASE_PATH -num_threads NUM_THREADS -outfmt 5 -out BLAST_XML_FILE -query INPUT_FASTA_FILE
+
+# Optional: Generate a fasta file for the BLAST hits.
+# Note: this works best if you use the same database used to create the BLAST OUTPUT file.
+genevalidator -d DATABASE_PATH -e -x BLAST_XML_FILE
 
 # Run GeneValidator
-$ genevalidator -n NUM_THREADS -x BLAST_XML_FILE -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
+## If you ran the previous command (i.e. if you produced fasta file for the BLAST hits)
+genevalidator -n NUM_THREADS -x BLAST_XML_FILE -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
+
+## If you did not run the previous command (this will run the previous command for you)
+genevalidator -d DATABASE_PATH -n NUM_THREADS -x BLAST_XML_FILE INPUT_FASTA_FILE
 ```
 
-Alternatively when running BLAST and GeneValidator on the same machine.
+This is the same, but using the BLAST tabular output.
 
 ```bash
-# Alternatively you can let GeneValidator do everything for you (using a local BLAST database)
-$ genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
+# Run BLAST (tabular output)
+blast(p/x) -db DATABASE_PATH -num_threads NUM_THREADS -outfmt '7 qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' -out BLAST_TAB_FILE -query INPUT_FASTA_FILE
+
+# Optional: Generate a fasta file for the BLAST hits.
+# Note: this works best if you use the same database used to create the BLAST OUTPUT file.
+genevalidator -d DATABASE_PATH -e -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq'
+
+# Run GeneValidator
+## If you ran the previous command (i.e. if you produced fasta file for the BLAST hits)
+genevalidator -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
+
+## If you did generate the BLAST hits fasta file (this will run the previous command for you)
+genevalidator -d DATABASE_PATH -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' INPUT_FASTA_FILE
+
 ```
-
-#### Other Usage Examples
-
-Alternatively you can use GeneValidator as follows
-
-```bash
-# Alternatively you can use a remote BLAST database if you do not have a local BLAST database installed (Note: this can take a significant amount of time)
-$ genevalidator -d 'swissprot -remote' -n NUM_THREADS INPUT_FASTA_FILE
-
-# Or provide precomputed BLAST Output (XML or Tabular)
-$ genevalidator -d DATABASE_PATH -n NUM_THREADS -x BLAST_XML_OUTPUT INPUT_FASTA_FILE
-$ genevalidator -d DATABASE_PATH -n NUM_THREADS -t BLAST_TABULAR_OUTPUT -o BLAST_TABULAR_OUTFMT_ARG INPUT_FASTA_FILE
-
-NOTE: BLAST_TABULAR_OUTFMT_ARG is the value of the outfmt argument when running BLAST e.g.
-'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq'
-```
-
 
 
 
