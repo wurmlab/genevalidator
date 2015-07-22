@@ -11,7 +11,7 @@ opt_parser = OptionParser.new do |opts|
   opts.banner = <<BANNER
 
 USAGE:
-    $ genevalidator [OPTIONS] Input_File
+    genevalidator [OPTIONS] Input_File
 
 ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
@@ -38,7 +38,7 @@ BANNER
   opts.on('-d', '--db [BLAST_DATABASE]',
           'Path to the BLAST database',
           'GeneValidator also supports remote databases:',
-          'e.g.   $ genevalidator -d "swissprot -remote" Input_File') do |db|
+          'e.g.   genevalidator -d "swissprot -remote" Input_File') do |db|
     opt[:db] = db
   end
 
@@ -50,8 +50,8 @@ BANNER
   end
 
   opts.on('-j', '--json_file [JSON_FILE]',
-          'Generate GV results from a json file (or a subset of a json file)',
-          'produced from GeneValidator') do |json|
+          'Generate HTML report from a JSON file (or a subset of a JSON file)',
+          'produced by GeneValidator') do |json|
     opt[:json_file] = json
   end
 
@@ -90,7 +90,7 @@ BANNER
   opts.on('-b', '--binaries [binaries]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',
-          '   $ genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+          'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
     (opt[:bin] ||= []).concat(bin)
   end
 
