@@ -2,6 +2,7 @@ require 'bio'
 require 'forwardable'
 
 require 'genevalidator/exceptions'
+require 'genevalidator/get_raw_sequences'
 require 'genevalidator/validation_report'
 require 'genevalidator/validation_test'
 
@@ -126,7 +127,8 @@ module GeneValidator
       n = 50 if n > 50
 
       fail NotEnoughHitsError unless hits.length >= n
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+
       start = Time.new
       # get the first n hits
       less_hits    = @hits[0..[n - 1, @hits.length].min]
@@ -200,7 +202,7 @@ module GeneValidator
                                                 :error, @short_header,
                                                 @header, @description)
       @validation_report.errors.push 'Multiple reading frames Error'
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -220,7 +222,7 @@ module GeneValidator
     # Array of +String+s, corresponding to the multiple aligned sequences
     # the prediction is the last sequence in the vector
     def multiple_align_mafft(prediction = @prediction, hits = @hits)
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       options = ['--maxiterate', '1000', '--localpair', '--anysymbol',
                  '--quiet', '--thread', "#{@num_threads}"]
@@ -237,7 +239,7 @@ module GeneValidator
       end
 
       @multiple_alignment
-    rescue Exception
+    rescue
       raise NoMafftInstallationError
     end
 
@@ -309,7 +311,7 @@ module GeneValidator
       return 1 if no_conserved_residues == 0
 
       # no of conserved residues from the hita that appear in the prediction
-      no_conserved_pred = consensus.split(//).each_index.select { |j| consensus[j] != '-' && consensus[j] != '?' && consensus[j] == prediction_raw[j] }.length
+      no_conserved_pred = consensus.split(//).each_index.count { |j| consensus[j] != '-' && consensus[j] != '?' && consensus[j] == prediction_raw[j] }
 
       no_conserved_pred / (no_conserved_residues + 0.0)
     end
@@ -323,7 +325,8 @@ module GeneValidator
     # +threshold+: percentage of genes that are considered in statistical model
     # Output:
     # +String+ representing the statistical model
-    # +Array+ with the maximum frequeny of the majoritary residue for each position
+    # +Array+ with the maximum frequeny of the majoritary residue for each
+    # position
     def get_sm_pssm(ma = @multiple_alignment, threshold = 0.7)
       sm = ''
       freq = []
@@ -432,19 +435,20 @@ module GeneValidator
       # plot consensus
       consensus_all_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }.flatten
 
-      yAxisValues = 'Prediction'
-      (1..ma.length - 1).each { |i| yAxisValues << ", hit #{i}" }
+      y_axis_values = 'Prediction'
+      (1..ma.length - 1).each { |i| y_axis_values << ", hit #{i}" }
 
-      yAxisValues << ', Statistical Model'
+      y_axis_values << ', Statistical Model'
 
       Plot.new(data,
                :align,
-               'Missing/Extra sequences Validation: Multiple Align. & Statistical model of hits',
+               'Missing/Extra sequences Validation: Multiple Align. &' \
+               'Statistical model of hits',
                'Conserved Region, Yellow',
                'Offset in the Alignment',
                '',
                ma.length + 1,
-               yAxisValues)
+               y_axis_values)
     end
   end
 end

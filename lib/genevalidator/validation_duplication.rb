@@ -4,6 +4,7 @@ require 'statsample'
 
 require 'genevalidator/exceptions'
 require 'genevalidator/ext/array'
+require 'genevalidator/get_raw_sequences'
 require 'genevalidator/validation_report'
 require 'genevalidator/validation_test'
 
@@ -113,9 +114,8 @@ module GeneValidator
     # +DuplicationValidationOutput+ object
     def run(n = 10)
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Query) &&
-                            !prediction.raw_sequence.nil? &&
-                            hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && !prediction.raw_sequence.nil? &&
+                  hits[0].is_a?(Query)
 
       start = Time.new
       # get the first n hits
@@ -175,7 +175,7 @@ module GeneValidator
               raw_align.each { |seq| align.push(seq.to_s) }
               hit_alignment   = align[0]
               query_alignment = align[1]
-            rescue Exception
+            rescue
               raise NoMafftInstallationError
             end
           end
@@ -240,7 +240,7 @@ module GeneValidator
                                                 @short_header, @header,
                                                 @description)
       @validation_report.errors.push NoInternetError
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)

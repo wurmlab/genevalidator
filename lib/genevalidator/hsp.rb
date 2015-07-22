@@ -1,5 +1,6 @@
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
+
 module GeneValidator
   # A class that initialises the BLAST tabular attributes
   class Hsp
@@ -45,14 +46,13 @@ module GeneValidator
       @pidentity           = hash['pident'].to_f if hash['pident']
       @identity            = hash['nident'].to_f if hash['nident']
       @hsp_evalue          = hash['evalue'].to_f if hash['evalue']
-      if hash['qseq']
-        query_seq_type = BlastUtils.guess_sequence_type(@query_alignment)
-        fail SequenceTypeError if query_seq_type != :protein
-      end
-      if hash['sseq']
-        hit_seq_type = BlastUtils.guess_sequence_type(@hit_alignment)
-        fail SequenceTypeError if hit_seq_type != :protein
-      end
+      assert_seq_type(@query_alignment) if hash['sseq']
+      assert_seq_type(@hit_alignment) if hash['sseq']
+    end
+
+    def assert_seq_type(query)
+      seq_type = BlastUtils.guess_sequence_type(query)
+      fail SequenceTypeError if seq_type != :protein
     end
   end
 end

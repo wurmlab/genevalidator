@@ -44,7 +44,7 @@ module GeneValidator
     end
 
     def explain
-      diff = (@query_length < @median) ? 'longer' : 'shorter'
+      diff = (@query_length > @median) ? 'longer' : 'shorter'
       exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" \
              " identified #{@no_of_hits} hit sequences with lengths from" \
              " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" \
@@ -105,11 +105,12 @@ module GeneValidator
     # +LengthRankValidationOutput+ object
     def run(hits = @hits, prediction = @prediction)
       fail NotEnoughHitsError unless hits.length >= 5
-      fail Exception unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
-      hits_lengths = hits.map { |x| x.length_protein.to_i }.sort { |a, b| a <=> b }
+      hits_lengths = hits.map { |x| x.length_protein.to_i }
+                     .sort { |a, b| a <=> b }
 
       no_of_hits   = hits_lengths.length
       median       = hits_lengths.median.round
@@ -151,7 +152,7 @@ module GeneValidator
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue Exception
+    rescue
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)

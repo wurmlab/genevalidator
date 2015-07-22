@@ -50,13 +50,14 @@ module GeneValidator
 
     def print_console_header
       @config[:console_header_printed] = true
-      print format("%3s\t%5s\t%20s\t%7s\t", 'No', 'Score', 'Identifier', 'No_Hits')
+      print format("%3s\t%5s\t%20s\t%7s\t", 'No', 'Score', 'Identifier',
+                   'No_Hits')
       puts validations.map(&:short_header).join("\t")
     end
 
     def generate_html
       mutex_html.synchronize do
-        output_html = output_filename
+        output_html   = output_filename
         query_erb     = File.join(@config[:aux], 'template_query.erb')
         template_file = File.open(query_erb, 'r').read
         erb           = ERB.new(template_file, 0, '>')
@@ -66,8 +67,8 @@ module GeneValidator
     end
 
     def output_filename
-      i = (@config[:run_no].to_f / @config[:output_max]).ceil
-      output_html = File.join(@config[:html_path], "results#{i}.html")
+      idx         = (@config[:run_no].to_f / @config[:output_max]).ceil
+      output_html = File.join(@config[:html_path], "results#{idx}.html")
       write_html_header(output_html)
       output_html
     end
@@ -99,25 +100,31 @@ module GeneValidator
     def create_validation_hashes(row)
       row[:validations] = {}
       @validations.each do |item|
-        val = { header: item.header, description: item.description,
-                status: item.color, print: item.print.gsub('&nbsp;', ' ') }
-        if item.color != 'warning'
-          explain = { approach: item.approach, explanation: item.explanation,
-                      conclusion: item.conclusion }
-          val.merge!(explain)
-        end
+        val     = add_basic_validation_info(item)
+        explain = add_explanation_data(item) if item.color != 'warning'
+        val.merge!(explain) if explain
         val[:graphs] = create_graphs_hash(item) unless item.plot_files.nil?
         row[:validations][item.short_header] = val
       end
       row
     end
 
+    def add_basic_validation_info(item)
+      { header: item.header, description: item.description, status: item.color,
+        print: item.print.gsub('&nbsp;', ' ') }
+    end
+
+    def add_explanation_data(item)
+      { approach: item.approach, explanation: item.explanation,
+        conclusion: item.conclusion }
+    end
+
     def create_graphs_hash(item)
       graphs = []
       item.plot_files.each do |g|
         graphs << { data: g.data, type: g.type, title: g.title,
-                    footer: g.footer, xtitle: g.xtitle,
-                    ytitle: g.ytitle, aux1: g.aux1, aux2: g.aux2 }
+                    footer: g.footer, xtitle: g.xtitle, ytitle: g.ytitle,
+                    aux1: g.aux1, aux2: g.aux2 }
       end
       graphs
     end
@@ -175,11 +182,10 @@ module GeneValidator
 
     def self.turn_off_sorting(html_path)
       script_file = File.join(html_path, 'files/js/script.js')
-      temp_file   = File.join(html_path, 'files/js/script.temp.js')
-      File.open(temp_file, 'w') do |out_file|
-        out_file.puts File.readlines(script_file)[30..-1].join
+      File.open("#{script_file}.tmp", 'w') do |f|
+        f.puts File.readlines(script_file)[30..-1].join
       end
-      FileUtils.mv(temp_file, script_file)
+      FileUtils.mv("#{script_file}.tmp", script_file)
     end
 
     def self.print_summary_to_console(overall_evaluation, summary)
@@ -233,8 +239,8 @@ module GeneValidator
       eval
     end
 
+    # errors per validation
     def self.errors_overview(o)
-      # errors per validation
       error_eval = ''
       o[:map_errors].each do |k, v|
         error_eval << "\nWe couldn't run #{k} Validation for #{v} queries"

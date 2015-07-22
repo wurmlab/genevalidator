@@ -93,16 +93,16 @@ module GeneValidator
         end
       end
 
-      # Since the whole idea is that users would sort by
+      # Since the whole idea is that users would sort by JSON when there are
+      # too many rows in the HTML table.
       def turn_off_automated_sorting
         script_file = File.join(@config[:html_path], 'files/js/script.js')
-        temp_file   = File.join(@config[:html_path], 'files/js/script.temp.js')
-        File.open(temp_file, 'w') do |out_file|
+        File.open("#{script_file}.tmp", 'w') do |out_file|
           out_file.puts File.readlines(script_file)[0..23].join
           out_file.puts '}'
           out_file.puts File.readlines(script_file)[26..-1].join
         end
-        FileUtils.mv(temp_file, script_file)
+        FileUtils.mv("#{script_file}.tmp", script_file)
       end
     end
   end
