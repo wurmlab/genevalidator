@@ -183,7 +183,7 @@ module GeneValidator
     def self.print_summary_to_console(overall_evaluation, summary)
       # print to console
       eval = ''
-      overall_evaluation.each { |e| eval << "\n#{e}" }
+      overall_evaluation.each { |e| eval << "#{e}\n" }
       $stderr.puts eval if summary
       $stderr.puts ''
       eval
