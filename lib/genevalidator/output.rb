@@ -34,8 +34,6 @@ module GeneValidator
       @prediction_def = definition
       @nr_hits        = no_of_hits
       @idx            = current_idx
-
-      @app_html       = File.join(@config[:html_path], 'files/table.html')
     end
 
     def print_output_console
@@ -62,7 +60,6 @@ module GeneValidator
         template_file = File.open(query_erb, 'r').read
         erb           = ERB.new(template_file, 0, '>')
         File.open(output_html, 'a') { |f| f.write(erb.result(binding)) }
-        File.open(@app_html, 'a') { |f| f.write(erb.result(binding)) }
       end
     end
 
@@ -75,9 +72,7 @@ module GeneValidator
 
     def write_html_header(output_html)
       head_erb       = File.join(@config[:aux], 'template_header.erb')
-      head_table_erb = File.join(@config[:aux], 'app_template_header.erb')
       set_up_html(head_erb, output_html) unless File.exist?(output_html)
-      set_up_html(head_table_erb, @app_html) unless File.exist?(@app_html)
     end
 
     def set_up_html(erb_file, output_file)
@@ -147,16 +142,9 @@ module GeneValidator
     # +html_path+: path of the html folder
     # +filemane+: name of the fasta input file
     def self.print_footer(overview, config)
-      overall_evaluation = overview(overview)
+      set_overall_evaluation(overview, config)
 
-      create_plot_json(overview[:scores], config[:plot_dir])
-
-      less = overall_evaluation[0].gsub("\n", '<br>').gsub("'", %q(\\\'))
-
-      eval = print_summary_to_console(overall_evaluation, config[:summary])
-      evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
-
-      footer_erb     = File.join(config[:aux], 'template_footer.erb')
+      footer_erb          = File.join(config[:aux], 'template_footer.erb')
 
       no_of_results_files = (config[:run_no].to_f / config[:output_max]).ceil
       template_file       = File.open(footer_erb, 'r').read
@@ -171,13 +159,17 @@ module GeneValidator
       end
 
       turn_off_sorting(config[:html_path]) if no_of_results_files > 1
+    end
 
-      # write footer for the app
-      app_footer_erb = File.join(config[:aux], 'app_template_footer.erb')
-      table_html     = File.join(config[:html_path], 'files/table.html')
-      table_footer_template = File.open(app_footer_erb, 'r').read
-      table_erb             = ERB.new(table_footer_template, 0, '>')
-      File.open(table_html, 'a+') { |f| f.write(table_erb.result(binding)) }
+    def self.set_overall_evaluation(overview, config)
+      overall_evaluation = overview(overview)
+      less = overall_evaluation[0].gsub("\n", '<br>').gsub("'", %q(\\\'))
+
+      eval = print_summary_to_console(overall_evaluation, config[:summary])
+      evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
+
+      create_overview_json(overview[:scores], config[:plot_dir], less,
+                           evaluation)
     end
 
     def self.turn_off_sorting(html_path)
@@ -198,12 +190,13 @@ module GeneValidator
     end
 
     # make the historgram with the resulted scores
-    def self.create_plot_json(scores, plot_dir)
+    def self.create_overview_json(scores, plot_dir, less, evaluation)
       plot_file = File.join(plot_dir, 'overview.json')
       data = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }]
       hash = { data: data, type: :simplebars, title: 'Overall Evaluation',
                footer: '', xtitle: 'Validation Score',
-               ytitle: 'Number of Queries', aux1: 10, aux2: '' }
+               ytitle: 'Number of Queries', aux1: 10, aux2: '', less: less,
+               evaluation: evaluation }
       File.open(plot_file, 'w') { |f| f.write hash.to_json }
     end
 

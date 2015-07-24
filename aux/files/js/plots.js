@@ -70,7 +70,7 @@ function addData(source, val){
       $currentRow = $(source).closest('tr'),
       target      = $currentRow.attr("data-target"),
       $childRow   = $('#mainrow' + target);
-  
+
   if ($childRow.length && source.status !== 'pressed') {
     // if you click on another td...
     emptyChildRow($currentRow, target, source);
@@ -83,12 +83,22 @@ function addData(source, val){
   }
 
   $('table').trigger('update');
-
 }
 
-function addOverallPlot(file){
-  $.getJSON(file, function( json ) {
-    addPlot(json.data, 'report_1', json.type, json.title, json.footer, json.xtitle, json.ytitle);
+function toggle_overview_btn() {
+  var jsonFile = 'files/json/overview.json';
+  $.getJSON(jsonFile, function( json ) {
+    var overview = $('<br>' + json.less + '<br>');
+    var full_overview  = $('<br>' + json.evaluation + '<br><br>');
+    if ( $('#overview_btn').hasClass('active')){
+      $('#overview_text').html(full_overview);
+      addPlot(json.data, 'overview', json.type, json.title, json.footer, json.xtitle, json.ytitle);
+      $('#overview_btn').text('Show Less');
+    } else {
+      $('#overview_text').html(overview);
+      $('#overview').find('svg').remove();
+      $('#overview_btn').text('Show More');
+    }
   });
 }
 

@@ -1,15 +1,4 @@
 </tbody></table>
-<script>
-  var evaluation_div = document.getElementById('report_1');
-  var content_less = "<br><%= less %><div class=\"clearfix\"></div><br><button type=\"button\" onClick='add_content()' class=\"btn btn-primary btn-sm\"> Show More</button>";
-  var content = "<%= evaluation %> <div class=\"clearfix\"></div><br><button type=\"button\" onClick='evaluation_div.innerHTML=content_less' class=\"btn btn-primary btn-sm\"> Show Less</button>";
-  evaluation_div.innerHTML = content_less;
-  function add_content(){
-    evaluation_div = document.getElementById('report_1');
-    evaluation_div.innerHTML=content;
-    addOverallPlot('files/json/overview.json');
-  }
-</script>
 </div>
 <% if output_files.length > 1 %>
 <nav><ul class="pagination">

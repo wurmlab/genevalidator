@@ -41,7 +41,6 @@ $(document).ready(function() {
     $('#browseralert').modal();
   }
 
-
   $('#sortable_table tr th').each(function(i) {
     //select all tds in this column
     var tds = $(this).parents('table')
@@ -63,9 +62,15 @@ $(document).ready(function() {
 $( document ).on( "click", "td, .plot_btn", function( event ) {
     if ($(this).hasClass('success') || $(this).hasClass('danger')){
       var title = $(this).attr('title');
-      var val = title.replace(/[ \/]/g, '');  
+      var val = title.replace(/[ \/]/g, '');
       addData(this, val);
     } else if ($(this).hasClass('plot_btn')){
       addData(this, 'all');
     }
+});
+
+$(function () {
+  $(document).ready(function() {
+    toggle_overview_btn();
+  });
 });
