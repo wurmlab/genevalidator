@@ -110,7 +110,8 @@ module GeneValidator
 
       def export_bin_dirs
         @opt[:bin].each do |bin|
-          if File.directory?(bin)
+          bin = File.expand_path(bin)
+          if File.exist?(bin) && File.directory?(bin)
             add_to_path(bin)
           else
             $stderr.puts '*** The following bin directory does not exist:'
@@ -121,6 +122,7 @@ module GeneValidator
 
       ## Checks if dir is in $PATH and if not, it adds the dir to the $PATH.
       def add_to_path(bin_dir)
+        return unless bin_dir
         return if ENV['PATH'].split(':').include?(bin_dir)
         ENV['PATH'] = "#{bin_dir}:#{ENV['PATH']}"
       end
