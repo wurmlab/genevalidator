@@ -92,11 +92,11 @@ function toggle_overview_btn() {
     var full_overview  = $('<br>' + json.evaluation + '<br><br>');
     if ( $('#overview_btn').hasClass('active')){
       $('#overview_text').html(full_overview);
-      addPlot(json.data, 'overview', json.type, json.title, json.footer, json.xtitle, json.ytitle);
       $('#overview_btn').text('Show Less');
+      addPlot(json.data, 'overview', json.type, json.title, json.footer, json.xtitle, json.ytitle);
     } else {
-      $('#overview_text').html(overview);
       $('#overview').find('svg').remove();
+      $('#overview_text').html(overview);
       $('#overview_btn').text('Show More');
     }
   });
