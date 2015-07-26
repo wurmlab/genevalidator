@@ -2,10 +2,10 @@
 /*global window: false, document: false, $:false, d3:false, toggle_overview_btn, checkIfUsingChromeLocally, addData*/
 
 $(document).ready(function() {
+  checkIfUsingChromeLocally();
   toggle_overview_btn(); // write overview to overview section
   initTableSorter();
   $("[data-toggle='tooltip']").tooltip(); //ToolTip
-  checkIfUsingChromeLocally();
 });
 
 $( document ).on( "click", "td, .plot_btn", function( event ) {
