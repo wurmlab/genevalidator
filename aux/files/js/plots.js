@@ -55,9 +55,7 @@ function remove_all_plots() {
 function addData(source, val){
   checkIfUsingChromeLocally();
 
-  var graphs      = '',
-      graphData   = '',
-      $currentRow = $(source).closest('tr'),
+  var $currentRow = $(source).closest('tr'),
       target      = $currentRow.attr("data-target"),
       $childRow   = $('#mainrow' + target);
 
@@ -226,7 +224,6 @@ function plot_bars(alldata, target, title, footer, xTitle, yTitle, bar){
   var margin = {top: 70, right: 50, bottom: 75, left: 50},
     width = 600 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-  var legend_width = 15;
 
   var svg = d3.select("#".concat(target)).append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -240,9 +237,6 @@ function plot_bars(alldata, target, title, footer, xTitle, yTitle, bar){
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .text(title);
-
-  var colors = new Array("orange", "blue", "green", "yellow", "brown");
-  var no_colors = colors.length;
 
   var padding = 100;
 
@@ -300,8 +294,6 @@ function plot_bars(alldata, target, title, footer, xTitle, yTitle, bar){
       .text(yTitle);
 
     alldata.map( function(data, i) {
-
-      var color = colors[i % (no_colors - 1)];
       svg.selectAll(".bar")
         .data(data)
         .enter().append("rect")
@@ -358,7 +350,6 @@ function plot_simple_bars(alldata, target, title, footer, xTitle, yTitle){
   var margin = {top: 70, right: 50, bottom: 75, left: 50},
     width = 600 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-  var legend_width = 15;
 
   var svg = d3.select("#".concat(target)).append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -372,9 +363,6 @@ function plot_simple_bars(alldata, target, title, footer, xTitle, yTitle){
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .text(title);
-
-  var colors = new Array("orange", "blue", "green", "yellow", "brown");
-  var no_colors = colors.length;
 
   var padding = 0;
 
@@ -425,18 +413,15 @@ function plot_simple_bars(alldata, target, title, footer, xTitle, yTitle){
        .text(yTitle);
 
   alldata.map( function(data, i) {
-
-  var color = colors[i % (no_colors - 1)];
-
-  svg.selectAll(".bar")
-     .data(data)
-     .enter().append("rect")
-             .attr("x", function(d) { return x(d.key); })
-             .attr("width", 6)
-             .attr("y", function(d) { return y(d.value); })
-             .attr("height", function(d) { return height - y(d.value); })
-             .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
-    });
+    svg.selectAll(".bar")
+       .data(data)
+       .enter().append("rect")
+               .attr("x", function(d) { return x(d.key); })
+               .attr("width", 6)
+               .attr("y", function(d) { return y(d.value); })
+               .attr("height", function(d) { return height - y(d.value); })
+               .attr("fill", function(d) { if (d.main == true) return color_beautification("red"); return color_beautification("blue");});
+  });
 }
 
 
@@ -519,7 +504,7 @@ function plot_scatter(data, target, title, footer, xTitle, yTitle, yLine, slope)
        .attr("r", 2)
        .attr("cx", function(d) { return x(d.x); })
        .attr("cy", function(d) { return y(d.y); })
-       .style("fill", function(d) { return color_beautification("red"); })
+       .style("fill", function() { return color_beautification("red"); })
        .style("opacity",0.6);
 
   if ((slope!=undefined && slope != "") && (yLine!=undefined && yLine != "")){
@@ -564,7 +549,6 @@ function plot_lines(data, target, title, footer, xTitle, yTitle, no_lines, yValu
   var margin = {top: 70, right: 50, bottom: 75, left: 50},
   width = 600 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
-  var legend_width = 17;
 
   var x = d3.scale.linear()
             .range([0, width]);
@@ -623,10 +607,10 @@ function plot_lines(data, target, title, footer, xTitle, yTitle, no_lines, yValu
     svg.append("g")
          .attr("class", "y axis")
          .call(yAxis.ticks(yValues.length)
-         .tickFormat(function (d) {
-            idx = idx + 1;
-            return yValues[idx];
-          }))
+                    .tickFormat(function() {
+                       idx = idx + 1;
+                       return yValues[idx];
+                    }))
        .append("text")
          .attr("class", "label")
          .attr("transform", "rotate(-90)")
@@ -676,8 +660,6 @@ function plot_lines(data, target, title, footer, xTitle, yTitle, no_lines, yValu
                   .attr("width", 100)
                   .attr('transform', 'translate(-20,50)');
 
-  var h = 0;
-
   var offset = 40;
   var total_len = 0;
   for (var i = 0; i < footer.length; i++) {
@@ -708,7 +690,6 @@ function plot_align(data, target, title, footer, xTitle, yTitle, no_lines, yValu
   var margin = {top: 75, right: 50, bottom: 75, left: 150},
   width = 600 - margin.left - margin.right,
   height = 300 - margin.top - margin.bottom;
-  var legend_width = 17;
 
   var x = d3.scale.linear()
             .range([0, width]);
@@ -761,7 +742,7 @@ function plot_align(data, target, title, footer, xTitle, yTitle, no_lines, yValu
     svg.append("g")
          .attr("class", "y axis")
          .call(yAxis.ticks(yValues.length)
-                    .tickFormat(function (d) {
+                    .tickFormat(function() {
                       idx = idx + 1;
                       return yValues[idx];
                     }))
