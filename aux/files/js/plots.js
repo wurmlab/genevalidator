@@ -293,7 +293,7 @@ function plot_bars(alldata, target, title, footer, xTitle, yTitle, bar){
       .style("text-anchor", "start")
       .text(yTitle);
 
-    alldata.map( function(data, i) {
+    alldata.map( function(data) {
       svg.selectAll(".bar")
         .data(data)
         .enter().append("rect")
@@ -412,7 +412,7 @@ function plot_simple_bars(alldata, target, title, footer, xTitle, yTitle){
        .style("text-anchor", "start")
        .text(yTitle);
 
-  alldata.map( function(data, i) {
+  alldata.map( function(data) {
     svg.selectAll(".bar")
        .data(data)
        .enter().append("rect")
