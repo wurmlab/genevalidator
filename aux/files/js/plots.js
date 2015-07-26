@@ -35,10 +35,11 @@ function toggle_all_plots(btn){
 }
 
 function show_all_plots() {
-  remove_all_plots();       // remove all plots
   //iterate over the plot_btns and add data to each childRow
   $('.plot_btn').each (function(){
-    addData(this, 'all');
+    if (this.status !== 'pressed') {
+      addData(this, 'all');
+    }
   });
 }
 
