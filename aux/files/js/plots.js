@@ -5,8 +5,6 @@
 function checkIfUsingChromeLocally() {
   if (window.chrome && (window.location.protocol === 'file:')) {
     if (($('#browser-alert').length) === 0) {
-      var message = '<stong>Sorry, this feature is not supported in your browser.';
-      $('#browseralertText').html(message);
       $('#browseralert').modal();
     }
   }
