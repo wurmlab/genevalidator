@@ -76,8 +76,8 @@ function addData(source, val){
 function toggle_overview_btn() {
   var jsonFile = 'files/json/overview.json';
   $.getJSON(jsonFile, function( json ) {
-    var overview = $('<br>' + json.less + '<br>');
-    var full_overview  = $('<br>' + json.evaluation + '<br><br>');
+    var overview = $('<span>' + json.less + '</span><br>');
+    var full_overview  = $('<span>' + json.evaluation + '</span><br>');
     if ( $('#overview_btn').hasClass('active')){
       $('#overview_text').html(full_overview);
       $('#overview_btn').text('Show Less');
