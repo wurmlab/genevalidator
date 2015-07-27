@@ -7,7 +7,7 @@ $(document).ready(function() {
   $("[data-toggle='tooltip']").tooltip(); //ToolTip
 });
 
-$( document ).on( "click", "td, .plot_btn", function( event ) {
+$(document).on( "click", "td, .plot_btn", function( event ) {
     if ($(this).hasClass('success') || $(this).hasClass('danger')){
       var title = $(this).attr('title');
       var val = title.replace(/[ \/]/g, '');
