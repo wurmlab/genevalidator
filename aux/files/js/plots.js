@@ -14,6 +14,7 @@ if (!GV) {
 //GV module
 (function () {
   'use strict';
+  /*global window:false, $:false, d3:false*/
   //  SHOW ALL PLOTS button
   GV.toggleAllPlots = function (btn) {
     if (window.chrome && (window.location.protocol === 'file:')){
@@ -258,12 +259,12 @@ if (!GV) {
       .range([height, 0]);
 
     var xMin = d3.min(flattened_data, function(d) { return d.key; });
-    if (bar != undefined){
+    if (bar !== undefined){
       xMin = Math.min(xMin, bar);
     }
 
     var xMax = d3.max(flattened_data, function(d) { return d.key; });
-    if (bar != undefined){
+    if (bar !== undefined){
       xMax = Math.max(xMax, bar);
     }
 
@@ -315,7 +316,7 @@ if (!GV) {
             .attr("fill", function(d) { if (d.main === true) return GV.color_beautification("red"); return GV.color_beautification("blue");});
       });
 
-      if (bar != undefined){
+      if (bar !== undefined){
         svg.append("rect")
           .attr("x", x(bar))
           .attr("width", 4)
@@ -431,7 +432,7 @@ if (!GV) {
                  .attr("width", 6)
                  .attr("y", function(d) { return y(d.value); })
                  .attr("height", function(d) { return height - y(d.value); })
-                 .attr("fill", function(d) { if (d.main == true) return GV.color_beautification("red"); return GV.color_beautification("blue");});
+                 .attr("fill", function(d) { if (d.main === true) return GV.color_beautification("red"); return GV.color_beautification("blue");});
     });
   };
 
@@ -518,7 +519,7 @@ if (!GV) {
          .style("fill", function() { return GV.color_beautification("red"); })
          .style("opacity",0.6);
 
-    if ((slope!=undefined && slope != "") && (yLine!=undefined && yLine != "")){
+    if ((slope !== undefined && slope !== "") && (yLine !== undefined && yLine !== "")){
       yLine = parseFloat(yLine.replace(",", "."));
       var xMaxValue = xMax;
       var yMaxValue = yLine + slope * xMax;
@@ -651,7 +652,7 @@ if (!GV) {
               .attr("x2", function(d) { return x(d.stop); })
               .attr("y2", function(d) { return y(d.y); })
               .attr("stroke-width", function(d) {
-                if (d.dotted == undefined) {
+                if (d.dotted === undefined) {
                   if (d.color == "red" ) {
                     return height/no_lines/2.5;
                   } else {
@@ -661,7 +662,7 @@ if (!GV) {
                   return height/no_lines/5;
                 }
               })
-              .style("stroke-dasharray", function(d) { if (d.dotted == undefined) return ("0, 0"); return ("2, 6");})
+              .style("stroke-dasharray", function(d) { if (d.dotted === undefined) return ("0, 0"); return ("2, 6");})
               .attr("stroke", function(d) { return GV.color_beautification(d.color); });
 
     // add legend

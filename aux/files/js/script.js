@@ -17,7 +17,7 @@ $( document ).on( "click", "td, .plot_btn", function( event ) {
     }
 });
 
-initTableSorter = function () {
+function initTableSorter() {
   $.tablesorter.addParser({
     id: 'star_scores', // called later when init the tablesorter
     is: function() {
@@ -39,4 +39,4 @@ initTableSorter = function () {
     },
     sortList: [[0,0]],
   });
-};
+}
