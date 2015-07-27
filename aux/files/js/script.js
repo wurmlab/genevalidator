@@ -1,9 +1,8 @@
-'use strict';
-/*global window: false, document: false, $:false, d3:false, toggle_overview_btn, checkIfUsingChromeLocally, addData*/
-
 $(document).ready(function() {
-  checkIfUsingChromeLocally();
-  toggle_overview_btn(); // write overview to overview section
+  if (window.chrome && (window.location.protocol === 'file:')){
+    $('#browseralert').modal();
+  }
+  GV.toggleOverviewBtn(); // write overview to overview section
   initTableSorter();
   $("[data-toggle='tooltip']").tooltip(); //ToolTip
 });
@@ -12,13 +11,13 @@ $( document ).on( "click", "td, .plot_btn", function( event ) {
     if ($(this).hasClass('success') || $(this).hasClass('danger')){
       var title = $(this).attr('title');
       var val = title.replace(/[ \/]/g, '');
-      addData(this, val);
+      GV.addData(this, val);
     } else if ($(this).hasClass('plot_btn')){
-      addData(this, 'all');
+      GV.addData(this, 'all');
     }
 });
 
-function initTableSorter() {
+initTableSorter = function () {
   $.tablesorter.addParser({
     id: 'star_scores', // called later when init the tablesorter
     is: function() {
@@ -40,4 +39,4 @@ function initTableSorter() {
     },
     sortList: [[0,0]],
   });
-}
+};
