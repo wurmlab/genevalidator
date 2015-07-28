@@ -95,7 +95,7 @@ genevalidator -h
 ## Usage
 Verify GeneValidator installed by running the following command in the terminal:
 
-```
+```bash
 genevalidator
 ```
 
@@ -169,7 +169,7 @@ At times, it may be more suitable to run the resource-heavy BLAST separately and
 
 GeneValidator supports the XML and tabular BLAST output formats.
 
-```
+```bash
 # Run BLAST (XML output)
 blast(p/x) -db DATABASE_PATH -num_threads NUM_THREADS -outfmt 5 -out BLAST_XML_FILE -query INPUT_FASTA_FILE
 
