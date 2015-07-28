@@ -1,20 +1,20 @@
-'use strict';
-/*global window: false, document: false, $:false, d3:false, toggle_overview_btn, checkIfUsingChromeLocally, addData*/
-
 $(document).ready(function() {
-  checkIfUsingChromeLocally();
-  toggle_overview_btn(); // write overview to overview section
+  if (window.chrome && (window.location.protocol === 'file:')){
+    $('#mainbrowseralertText').text("Some features are not supported in this browser and have been disabled.");
+    $('#browseralert').modal();
+  }
+  GV.toggleOverviewBtn(); // write overview to overview section
   initTableSorter();
   $("[data-toggle='tooltip']").tooltip(); //ToolTip
 });
 
-$( document ).on( "click", "td, .plot_btn", function( event ) {
+$(document).on( "click", "td, .plot_btn", function( event ) {
     if ($(this).hasClass('success') || $(this).hasClass('danger')){
       var title = $(this).attr('title');
       var val = title.replace(/[ \/]/g, '');
-      addData(this, val);
+      GV.addData(this, val);
     } else if ($(this).hasClass('plot_btn')){
-      addData(this, 'all');
+      GV.addData(this, 'all');
     }
 });
 
