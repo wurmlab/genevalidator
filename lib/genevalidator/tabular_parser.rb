@@ -7,8 +7,6 @@ require 'genevalidator/query'
 
 #
 module GeneValidator
-  TabularEntry = Struct.new(:filename, :type, :title, :footer, :xtitle,
-                            :ytitle, :aux1, :aux2)
   ##
   # This class parses the tabular output of BLAST (outfmt 6 & 7)
   class TabularParser
