@@ -38,6 +38,7 @@ module GeneValidator
           generate_html_query(output_html, row)
         end
         html_footer
+        calculate_overall_score
       end
 
       def load_json_file
@@ -104,6 +105,45 @@ module GeneValidator
         updated_content = original_content.gsub(',sortList:[[0,0]]', '')
         File.open("#{script_file}.tmp", 'w') { |f| f.puts updated_content }
         FileUtils.mv("#{script_file}.tmp", script_file)
+      end
+
+      def calculate_overall_score
+        scores = []
+        @json_array.each { |row| scores << row['overall_score'] }
+        plot_dir = File.join(@config[:html_path], 'files/json')
+        less     =  generate_evaluation(scores)
+        Output.create_overview_json(scores, plot_dir, less, less)
+      end
+
+      def generate_evaluation(scores)
+        no_of_queries = scores.length
+        good_scores = scores.count { |s| s >= 75 }
+        bad_scores  = scores.count { |s| s < 75 }
+        nee         = calculate_no_quries_with_no_evidence # nee = no evidence
+
+        good_pred = (good_scores == 1) ? 'One' : "#{good_scores} are"
+        bad_pred  = (bad_scores == 1) ? 'One' : "#{bad_scores} are"
+        eval = 'Overall Query Score Evaluation:<br>' \
+               "#{no_of_queries} predictions were validated, from which there" \
+               ' were:<br>' \
+               "#{good_pred} good prediction(s),<br>" \
+               "#{bad_pred} possibly weak prediction(s).<br>"
+        return eval if nee == 0
+        eval << "#{nee} could not be evaluated due to the lack of" \
+                ' evidence.<br>'
+        eval
+      end
+
+      # calculate number of queries that had warnings for all validations.
+      def calculate_no_quries_with_no_evidence
+        all_warnings = 0
+        @json_array.each do |row|
+          status = row['validations'].map { |_, h| h['status'] }
+          if status.count { |r| r == 'warning' } == status.length
+            all_warnings += 1
+          end
+        end
+        all_warnings
       end
     end
   end
