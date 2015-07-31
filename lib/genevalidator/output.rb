@@ -173,10 +173,10 @@ module GeneValidator
     end
 
     def self.turn_off_sorting(html_path)
-      script_file = File.join(html_path, 'files/js/script.js')
-      File.open("#{script_file}.tmp", 'w') do |f|
-        f.puts File.readlines(script_file)[30..-1].join
-      end
+      script_file = File.join(html_path,
+                              'files/js/genevalidator.compiled.min.js')
+      content     = File.read(script_file).gsub(',initTableSorter(),', ',')
+      File.open("#{script_file}.tmp", 'w') { |f| f.puts content }
       FileUtils.mv("#{script_file}.tmp", script_file)
     end
 

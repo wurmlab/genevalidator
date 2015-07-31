@@ -93,15 +93,16 @@ module GeneValidator
         end
       end
 
-      # Since the whole idea is that users would sort by JSON when there are
-      # too many rows in the HTML table.
+      # By default, on page load, the results are automatically sorted by the
+      # index. However since the whole idea is that users would sort by JSON,
+      # this is not wanted here.
       def turn_off_automated_sorting
-        script_file = File.join(@config[:html_path], 'files/js/script.js')
-        File.open("#{script_file}.tmp", 'w') do |out_file|
-          out_file.puts File.readlines(script_file)[0..23].join
-          out_file.puts '}'
-          out_file.puts File.readlines(script_file)[26..-1].join
-        end
+        script_file = File.join(@config[:html_path],
+                                'files/js/genevalidator.compiled.min.js')
+        original_content = File.read(script_file)
+        # removes the automatic sort on page load
+        updated_content = original_content.gsub(',sortList:[[0,0]]', '')
+        File.open("#{script_file}.tmp", 'w') { |f| f.puts updated_content }
         FileUtils.mv("#{script_file}.tmp", script_file)
       end
     end
