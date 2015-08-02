@@ -23,9 +23,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~>10.3'
   s.add_development_dependency 'yard', '~> 0.8'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4', '>= 0.4.7'
+  s.add_development_dependency('minitest', '~> 5.4')
   s.add_dependency('bio', '~> 1.4')
   s.add_dependency('bio-blastxmlparser', '~>2.0')
-  s.add_dependency('minitest', '~> 5.4')
   s.add_dependency('statsample', '1.4') # Updating to 1.5 breaks GV
 
   s.files         = `git ls-files -z`.split("\x0")
