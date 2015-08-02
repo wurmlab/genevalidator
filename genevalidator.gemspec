@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Monica Dragan', 'Ismail Moghul', 'Anurag Priyam',
                    'Yannick Wurm']
   s.email       = 'y.wurm@qmul.ac.uk'
-  s.homepage    = 'https://github.com/wurmlab/GeneValidator'
+  s.homepage    = 'https://wurmlab.github.io/tools/genevalidator/'
   s.license     = 'AGPL'
   s.summary     = 'Identifying problems with gene predictions.'
   s.description = 'The tool validates the input predicted genes and provides' \
