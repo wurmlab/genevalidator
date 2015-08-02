@@ -19,12 +19,13 @@ def test_with(fa, db)
 
   # With BLAST XML and hit sequences.
   run "rm -r #{fa}.html",
-      "genevalidator -d #{db} #{fa} -x #{fa}.blast_xml -r #{fa}.blast_xml.raw_seq"
+      "genevalidator -d #{db} #{fa} -x #{fa}.blast_xml" \
+      " -r #{fa}.blast_xml.raw_seq"
 
   # With BLAST TSV and hit sequences.
   run "rm -r #{fa}.html",
-      "genevalidator -d #{db} #{fa} -x #{fa}.blast_tabular -r #{fa}.blast_tabular.raw_seq"
-
+      "genevalidator -d #{db} #{fa} -x #{fa}.blast_tabular" \
+      " -r #{fa}.blast_tabular.raw_seq"
 
   # Retrieving hit sequences given BLAST XML.
   run "genevalidator -d #{db} -e #{fa}.blast_xml"
@@ -34,17 +35,17 @@ def test_with(fa, db)
 end
 
 def run(*cmds)
-  puts "Will run:"
+  puts 'Will run:'
   puts cmds.join("\n")
-  print "Proceed? [Y/n/q]: "
+  print 'Proceed? [Y/n/q]: '
 
   input = gets.chomp.downcase
   input = 'y' if input.empty?
 
   case input
-  when 'y'; cmds.each { |cmd| system(cmd) or exit }
-  when 'n'; return
-  when 'q'; exit
+  when 'y' then cmds.each { |cmd| system(cmd) || exit }
+  when 'n' then return
+  when 'q' then exit
   else
     puts "\nInvalid input.\n"
     run(*cmds)
