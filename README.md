@@ -158,7 +158,7 @@ genevalidator INPUT_FASTA_FILE
 ```
 
 #### Using a local BLAST database.
-GeneValidator would run BLAST on each query against the provided BLAST database and then run the validation analyses.
+GeneValidator would run BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then run the validation analyses.
 
 ```bash
 genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
