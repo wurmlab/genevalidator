@@ -193,7 +193,8 @@ module GeneValidator
     def self.create_overview_json(scores, plot_dir, less, evaluation)
       plot_file = File.join(plot_dir, 'overview.json')
       data = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }]
-      hash = { data: data, type: :simplebars, title: 'Overall Evaluation',
+      hash = { data: data, type: :simplebars,
+               title: 'Overall GeneValidator Score Evaluation',
                footer: '', xtitle: 'Validation Score',
                ytitle: 'Number of Queries', aux1: 10, aux2: '', less: less,
                evaluation: evaluation }
