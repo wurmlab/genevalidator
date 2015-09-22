@@ -50,6 +50,8 @@ module GeneValidator
         @opt[:num_threads] = Integer(@opt[:num_threads])
         unless @opt[:num_threads] > 0
           $stderr.puts 'Number of threads can not be lower than 0'
+          $stderr.puts 'Setting number of threads to 1'
+          @opt[:num_threads] = 1
         end
         return unless @opt[:num_threads] > 256
         $stderr.puts "Number of threads set at #{@opt[:num_threads]} is" \
