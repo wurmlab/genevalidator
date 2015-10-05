@@ -163,12 +163,15 @@ module GeneValidator
       val.push LengthRankValidation.new(prediction, hits)
       val.push GeneMergeValidation.new(prediction, hits)
       val.push DuplicationValidation.new(prediction, hits)
-      if @config[:type] == :nucleotide
-        val.push BlastReadingFrameValidation.new(prediction, hits)
-        val.push OpenReadingFrameValidation.new(prediction, hits)
-      end
+      init_nucleotide_only_validations(val, prediction, hits)
       val.push AlignmentValidation.new(prediction, hits)
       val.select { |v| @opt[:validations].include? v.cli_name.downcase }
+    end
+
+    def init_nucleotide_only_validations(val, prediction, hits)
+      return unless @config[:type] == :nucleotide
+      val.push BlastReadingFrameValidation.new(prediction, hits)
+      val.push OpenReadingFrameValidation.new(prediction, hits)
     end
 
     def check_validations(vals)
