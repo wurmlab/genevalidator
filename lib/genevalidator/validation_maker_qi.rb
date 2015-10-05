@@ -43,8 +43,8 @@ module GeneValidator
     end
 
     def print
-      "Exons:&nbsp;#{@exons};" \
-      " Splice&nbsp;Sites:&nbsp;#{@splice_sites}"
+      "Exons:&nbsp;#{@exons}%;" \
+      " Splice&nbsp;Sites:&nbsp;#{@splice_sites}%"
     end
 
     def validation
