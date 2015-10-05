@@ -251,9 +251,9 @@ module GeneValidator
     # wilcox test implementation from statsample ruby gem
     # many thanks to Claudio for helping us with the implementation!
     def wilcox_test(averages)
-      wilcox = Statsample::Test.wilcoxon_signed_rank(averages.to_scale,
-                                                     Array.new(averages.length,
-                                                               1).to_scale)
+      wilcox = Statsample::Test.wilcoxon_signed_rank(Daru::Vector.new(averages),
+                                                     Daru::Vector.new(Array.new(averages.length,
+                                                               1)))
 
       (averages.length < 15) ? wilcox.probability_exact : wilcox.probability_z
     end
