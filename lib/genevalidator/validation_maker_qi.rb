@@ -25,8 +25,9 @@ module GeneValidator
     end
 
     def explain
-      "#{@splice_sites}% of splice sites are confirmed by EST/mRNA-seq" \
-      " alignment and #{@exons}% of exons match an EST/mRNA-seq alignment."
+      "#{@exons}% of exons match an EST/mRNA-seq alignment and" \
+      " #{@splice_sites}% of splice sites are confirmed by EST/mRNA-seq" \
+      " alignment."
     end
 
     def conclude
