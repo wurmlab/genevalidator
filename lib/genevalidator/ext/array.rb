@@ -34,4 +34,8 @@ end
 
 class Array
   include GeneValidator::ExtraArrayMethods
+
+  def mean
+    inject(:+).to_f / length
+  end
 end
