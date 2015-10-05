@@ -444,7 +444,7 @@ module GeneValidator
                :align,
                'Missing/Extra sequences Validation: Multiple Align. &' \
                'Statistical model of hits',
-               'Conserved Region, Yellow',
+               'Aligned Hit Sequence, red; Conserved Region, Yellow',
                'Offset in the Alignment',
                '',
                ma.length + 1,
