@@ -94,7 +94,7 @@ module GeneValidator
       @validation_report.run_time = Time.now - start
       @validation_report
 
-    rescue NotEnoughHitsError
+    rescue NotEnoughEvidence
       @validation_report =  ValidationReport.new('Not enough evidence',
                                                  :warning, @short_header,
                                                  @header, @description)
