@@ -21,7 +21,7 @@ module GeneValidator
     end
 
     def sample_variance
-      m   = mean
+      m   = inject(:+).to_f / size
       sum = inject(0) { |accum, i| accum + (i - m)**2 }
       sum / (length - 1).to_f
     end
