@@ -70,7 +70,7 @@ module GeneValidator
     # Output:
     # +QIValidationOutput+ object
     def run
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      fail unless prediction.is_a?(Query)
 
       start  = Time.now
 
