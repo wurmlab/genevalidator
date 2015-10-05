@@ -103,7 +103,7 @@ if (!GV) {
 
   GV.createChildRow = function ($currentRow, target, source) {
     var childRowHTML = '<tr class="tablesorter-childRow" id="mainrow' + target +
-                       '"><td colspan="12" id="row' + target + '"><div id="' +
+                       '"><td colspan="20" id="row' + target + '"><div id="' +
                        target + '" class="expanded-child"></div></td></tr>';
     $currentRow.addClass('tablesorter-hasChildRow');
     $currentRow.after(childRowHTML);
