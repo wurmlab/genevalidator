@@ -5,6 +5,7 @@ require 'genevalidator/exceptions'
 require 'genevalidator/output'
 require 'genevalidator/pool'
 require 'genevalidator/query'
+require 'genevalidator/validation_maker_qi'
 require 'genevalidator/validation_length_cluster'
 require 'genevalidator/validation_length_rank'
 require 'genevalidator/validation_blast_reading_frame'
@@ -31,6 +32,8 @@ module GeneValidator
     #
     def run_validations(iterator)
       p = Pool.new(@opt[:num_threads]) if @opt[:num_threads] > 1
+
+      check_if_maker_input?
 
       while @config[:idx] + 1 < @query_idx.length
         prediction = get_info_on_query_sequence
@@ -72,6 +75,20 @@ module GeneValidator
       prediction.length_protein = prediction.raw_sequence.length
       prediction.length_protein /= 3 if seq_type == :nucleotide
       prediction
+    end
+
+    # Adds 'maker' to @opt[:validations] if the first definiton in the input
+    # fasta file contains MAKER's QI (quality index) score
+    def check_if_maker_input?(input_file = @opt[:input_fasta_file])
+      query        = IO.binread(input_file, @query_idx[1], @query_idx[0])
+      parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+      definition   = parse_query[0].gsub("\n", '')
+      number       = '\d*\.?\d*'
+      qi_match     = definition.match(/QI:#{number}\|#{number}\|#{number}\|
+                                      #{number}\|#{number}\|#{number}\|
+                                      #{number}\|#{number}\|#{number}/x)
+      return if qi_match.nil?
+      @opt[:validations] << 'maker_qi'
     end
 
     def parse_next_iteration(iterator, prediction)
@@ -159,6 +176,7 @@ module GeneValidator
 
     def create_validation_tests(prediction, hits)
       val = []
+      val.push MakerQIValidation.new(prediction, hits)
       val.push LengthClusterValidation.new(prediction, hits)
       val.push LengthRankValidation.new(prediction, hits)
       val.push GeneMergeValidation.new(prediction, hits)
