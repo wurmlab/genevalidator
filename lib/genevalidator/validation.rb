@@ -1,7 +1,10 @@
 require 'forwardable'
+# Statsample: must loaded before /ext/array as they modify a built-in class
+require 'statsample'
 
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
+require 'genevalidator/ext/array'
 require 'genevalidator/output'
 require 'genevalidator/pool'
 require 'genevalidator/query'
