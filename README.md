@@ -14,7 +14,7 @@ If you would like to use GeneValidator on a few sequences, see our online [GeneV
 
 
 If you use GeneValidator in your work, please cite us as follows:
-> "Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y (<em>in prep.</em>) GeneValidator: identify problematic gene predictions"
+> [Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](http://bioinformatics.oxfordjournals.org/content/early/2016/01/18/bioinformatics.btw015).
 
 
 
