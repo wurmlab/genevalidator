@@ -121,14 +121,13 @@ module GeneValidator
             current_hsp.query_reading_frame = hsp.query_frame.to_i
 
             current_hsp.hit_alignment = hsp.hseq.to_s
-            if guess_sequence_type(current_hsp.hit_alignment) != :protein
-              fail SequenceTypeError
-            end
+            seq_type = guess_sequence_type(current_hsp.hit_alignment)
+            fail SequenceTypeError unless seq_type == :protein || seq_type.nil?
 
             current_hsp.query_alignment = hsp.qseq.to_s
-            if guess_sequence_type(current_hsp.query_alignment) != :protein
-              fail SequenceTypeError
-            end
+            seq_type = guess_sequence_type(current_hsp.query_alignment)
+            fail SequenceTypeError unless seq_type == :protein || seq_type.nil?
+
             current_hsp.align_len = hsp.align_len.to_i
             current_hsp.identity  = hsp.identity.to_i
             current_hsp.pidentity = (100 * hsp.identity / hsp.align_len.to_f)
