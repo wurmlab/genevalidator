@@ -224,7 +224,7 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 ## Analysing the JSON output
 
-There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/). The below examples use this tool.
+There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples use the JSON tool.
 
 ### Examplar JSON CLI Installation
 After installing node:
@@ -253,7 +253,11 @@ $ json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_scor
 json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
 ```
 
+The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
 
+```bash
+genevalidator -j SORTED_JSON_FILE
+```
 
 
 ## Related projects
