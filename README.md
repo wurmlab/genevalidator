@@ -49,6 +49,13 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 
 Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more help with installing the prerequisites.
 
+#### Setting up a BLAST database
+GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument as follows:
+
+```bash
+makeblastdb -in input_db -dbtype prot -parse_seqids
+```
+
 ### Installation
 Simply run the following command in the terminal.
 
