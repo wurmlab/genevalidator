@@ -25,9 +25,15 @@ module GeneValidator
     end
 
     def explain
-      "#{@exons}% of exons match an EST/mRNA-seq alignment and" \
-      " #{@splice_sites}% of splice sites are confirmed by EST/mRNA-seq" \
-      " alignment."
+      if @splice_sites == -100
+        "#{@exons}% of exons match an EST/mRNA-seq alignment." \
+        " No splice sites were identified and as such cannot be confirmed by" \
+        " an EST/mRNA-seq alignment."
+      else
+        "#{@exons}% of exons match an EST/mRNA-seq alignment and" \
+        " #{@splice_sites}% of splice sites are confirmed by EST/mRNA-seq" \
+        " alignment."
+      end
     end
 
     def conclude
@@ -98,11 +104,11 @@ module GeneValidator
       @validation_report =  ValidationReport.new('No MAKER Quality Index',
                                                  :warning, @short_header,
                                                  @header, @description)
-    rescue
-      @validation_report = ValidationReport.new('Unexpected error', :error,
-                                                @short_header, @header,
-                                                @description)
-      @validation_report.errors.push 'Unexpected Error'
+    # rescue
+    #   @validation_report = ValidationReport.new('Unexpected error', :error,
+    #                                             @short_header, @header,
+    #                                             @description)
+    #   @validation_report.errors.push 'Unexpected Error'
     end
   end
 end
