@@ -86,7 +86,7 @@ module GeneValidator
       query        = IO.binread(input_file, @query_idx[1], @query_idx[0])
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
       definition   = parse_query[0].gsub("\n", '')
-      number       = '\d*\.?\d*'
+      number       = '-?\d*\.?\d*'
       qi_match     = definition.match(/QI:#{number}\|#{number}\|#{number}\|
                                       #{number}\|#{number}\|#{number}\|
                                       #{number}\|#{number}\|#{number}/x)

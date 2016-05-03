@@ -75,7 +75,7 @@ module GeneValidator
 
       start  = Time.now
 
-      number = '\d*\.?\d*'
+      number = '-?\d*\.?\d*'
       match  = @prediction.definition.match(/QI:#{number}\|(#{number})\|
                                              (#{number})\|#{number}\|
                                              #{number}\|#{number}\|#{number}\|
@@ -95,7 +95,7 @@ module GeneValidator
       @validation_report
 
     rescue NotEnoughEvidence
-      @validation_report =  ValidationReport.new('Not enough evidence',
+      @validation_report =  ValidationReport.new('No MAKER Quality Index',
                                                  :warning, @short_header,
                                                  @header, @description)
     rescue
