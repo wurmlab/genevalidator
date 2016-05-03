@@ -104,11 +104,11 @@ module GeneValidator
       @validation_report =  ValidationReport.new('No MAKER Quality Index',
                                                  :warning, @short_header,
                                                  @header, @description)
-    # rescue
-    #   @validation_report = ValidationReport.new('Unexpected error', :error,
-    #                                             @short_header, @header,
-    #                                             @description)
-    #   @validation_report.errors.push 'Unexpected Error'
+    rescue
+      @validation_report = ValidationReport.new('Unexpected error', :error,
+                                                @short_header, @header,
+                                                @description)
+      @validation_report.errors.push 'Unexpected Error'
     end
   end
 end
