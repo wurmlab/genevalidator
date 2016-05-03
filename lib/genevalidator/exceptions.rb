@@ -68,6 +68,10 @@ module GeneValidator
     end
   end
 
+  # Error raised by QI Validation when the query does not have QI tag
+  class NotEnoughEvidence < Exception
+  end
+
   # Exception raised when the are alias duplications
   class NoPIdentError < Exception
   end
