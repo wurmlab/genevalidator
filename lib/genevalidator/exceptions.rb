@@ -68,6 +68,10 @@ module GeneValidator
     end
   end
 
+  # Exception raised when the BLAST is not set up with the '-parse-seqids' arg.
+  class BLASTDBError < Exception
+  end
+
   # Error raised by QI Validation when the query does not have QI tag
   class NotEnoughEvidence < Exception
   end

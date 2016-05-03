@@ -75,6 +75,12 @@ module GeneValidator
         file = File.open(output_file, 'w+')
         iterate_xml(file, db_type) if opt[:blast_xml_file]
         iterate_tabular(file, db_type) if opt[:blast_tabular_file]
+      rescue BLASTDBError
+        $stderr.puts "*** BLAST Database Error: Genevalidator requires BLAST" \
+        " databases to be created with the '-parse_seqids argument."
+        $stderr.puts "    See https://github.com/wurmlab/genevalidator" \
+        "#setting-up-a-blast-database for more information"
+        exit 1
       rescue
         $stderr.puts '*** Error: There was an error in analysing the BLAST'
         $stderr.puts '    output file. Please ensure that BLAST output file'
@@ -92,6 +98,7 @@ module GeneValidator
         n = Bio::BlastXMLParser::XmlIterator.new(opt[:blast_xml_file]).to_enum
         n.each do |iter|
           iter.each do |hit|
+            fail BLASTDBError if hit.hit_id =~ /\|BL_ORD_ID\|/
             if db_type == 'remote' || hit.hit_id.nil?
               file.puts FetchRawSequences.extract_from_remote_db(hit.accession)
             else
@@ -109,6 +116,7 @@ module GeneValidator
                                    headers: table_headers)
 
         rows.each do |row|
+          fail BLASTDBError if row['sseqid'] =~ /\|BL_ORD_ID\|/
           if db_type == 'remote' || row['sseqid'].nil?
             file.puts FetchRawSequences.extract_from_remote_db(row['sacc'])
           else
