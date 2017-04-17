@@ -24,7 +24,7 @@ module GeneValidator
       @threshold   = threshold
       @result      = validation
       @expected    = expected
-      @average     = averages.mean
+      @average     = averages.inject(:+).to_f / averages.length
       @approach    = 'We expect each BLAST hit to match each region of the' \
                      ' query at most once. Here, we calculate the' \
                      ' distribution of hit coverage against the query' \

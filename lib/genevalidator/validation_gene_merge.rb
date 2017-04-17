@@ -289,7 +289,7 @@ module GeneValidator
     ##
     # xx and yy are the projections of the 2-d data on the two axes
     def unimodality_test(xx, yy)
-      mean_x = xx.mean
+      mean_x = xx.inject(:+).to_f / xx.length
       median_x = xx.median
       mode_x = xx.mode
       sd_x = xx.standard_deviation
@@ -304,7 +304,7 @@ module GeneValidator
         cond3_x = ((median_x - mode_x).abs / (sd_x + 0.0)) < Math.sqrt(0.3)
       end
 
-      mean_y = yy.mean
+      mean_y = yy.inject(:+).to_f / yy.length
       median_y = yy.median
       mode_y = yy.mode
       sd_y = yy.standard_deviation

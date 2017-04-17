@@ -115,7 +115,7 @@ module GeneValidator
       no_of_hits   = hits_lengths.length
       median       = hits_lengths.median.round
       query_length = prediction.length_protein
-      mean         = hits_lengths.mean.round
+      mean         = (hits_lengths.inject(:+).to_f / hits_lengths.length).round
 
       smallest_hit = hits_lengths[0]
       largest_hit  = hits_lengths[-1]
