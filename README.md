@@ -42,7 +42,7 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 
 ## Installation
 ### Installation Requirements
-* Ruby (>= 2.0.0)
+* Ruby (>= 2.1.0)
 * NCBI BLAST+ (>= 2.2.30+) (download [here](http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)).
 * MAFFT installation (>=7.273) (download [here](http://mafft.cbrc.jp/alignment/software/)).
 * A web browser - [Mozilla FireFox](https://www.mozilla.org/en-GB/firefox/new/) & Safari are recommended. At the moment, it is not possible to use Chrome to view the results locally (as chrome does not allow ajax to local files). To avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.

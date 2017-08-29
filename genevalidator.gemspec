@@ -18,13 +18,13 @@ Gem::Specification.new do |s|
                   ' validation, sequence duplication checking, ORF finding)' \
                   ' based on the similarities to genes in public databases.'
 
-  s.required_ruby_version = '>= 2.0.0'
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~>10.3'
   s.add_development_dependency 'yard', '~> 0.9.11'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4', '>= 0.4.7'
   s.add_development_dependency('minitest', '~> 5.4')
   s.add_dependency('bio', '~> 1.4')
+  s.required_ruby_version = '>= 2.1.0'
   s.add_dependency('bio-blastxmlparser', '~>2.0')
   s.add_dependency('statsample', '2.0.1')
 
