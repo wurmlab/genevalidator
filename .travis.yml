@@ -13,6 +13,7 @@ before_install:
 cache: bundler
 sudo: false 
 script: bundle exec rake test
+after_script: bundle exec codeclimate-test-reporter
 addons:
   code_climate:
     repo_token: 2177997ae2dd26804c32e1ec34a2221f94b71a2170f6c1db2c020f8858cd87f2
