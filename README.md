@@ -205,7 +205,7 @@ genevalidator -d DATABASE_PATH -e -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen 
 ## If you ran the previous command (i.e. if you produced fasta file for the BLAST hits)
 genevalidator -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
 
-## If you did generate the BLAST hits fasta file (this will run the previous command for you)
+## If you did not generate the BLAST hits fasta file (this will automatically run the previous command for you)
 genevalidator -d DATABASE_PATH -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' INPUT_FASTA_FILE
 
 ```
