@@ -231,33 +231,45 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 ## Analysing the JSON output
 
-There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples use the JSON tool.
+There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples uses jq 1.5.
 
-### Examplar JSON CLI Installation
+### Examplar JQ CLI Installation
 After installing node:
 
 ```bash
-$ npm install -g json
+# ubuntu
+$ sudo apt-get install jq
+# brew / linuxbrew
+$ brew install jq
 ```
 
 ### Filtering the results
 
 ```bash
+# Requires jq 1.5
 
 # Extract sequences that have an overall score of 100
-$ json -f INPUT_JSON_FILE -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 100)' > OUTPUT_JSON_FILE
 
 # Extract sequences that have an overall score of over 70
-$ json -f INPUT_JSON_FILE -c 'this.overall_score > 70' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 70)' > OUTPUT_JSON_FILE
 
 # Extract sequences that have more than 50 hits
-$ json -f INPUT_JSON_FILE -c 'this.no_hits > 50' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.no_hits > 50)' > OUTPUT_JSON_FILE
 
 # Sort the JSON based on the overall score (ascending - 0 to 100)
-$ json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
-
+$ cat INPUT_JSON_FILE | jq 'sort_by(.overall_score)' > OUTPUT_JSON_FILE
 # Sort the JSON based on the overall score (decending - 100 to 0)
-json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq 'sort_by(- .overall_score)' > OUTPUT_JSON_FILE
+
+# Remove the large graphs objects (note these Graphs objects are required if you wish to pass the json back into GV using the `-j` option - see below)
+$ cat INPUT_JSON_FILE | jq -r  '[ .[] | del(.validations[].graphs) ]' > OUTPUT_JSON_FILE
+
+# Save JSON as CSV
+## Write header first
+cat data/protein_data.fasta.json | jq -r '.[0] | ["idx", "overall_score", "definition", "no_hits", .validations[].header ] | @csv' > OUTPUT_JSON_FILE
+## write content to the same file
+$ cat INPUT_JSON_FILE | jq -r '.[] | [.idx, .overall_score, .definition, .no_hits, .validations[].print ] | @csv ' >> OUTPUT_JSON_FILE
 ```
 
 The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
@@ -265,7 +277,6 @@ The subsetted/sorted JSON file can then be passed back into GeneValidator (using
 ```bash
 genevalidator -j SORTED_JSON_FILE
 ```
-
 
 ## Related projects
 [GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
