@@ -1,3 +1,3 @@
 module GeneValidator
-  VERSION = '1.6.12'
+  VERSION = '1.7.2'.freeze
 end
