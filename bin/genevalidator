@@ -88,6 +88,11 @@ BANNER
     opt[:raw_sequences] = raw_seq
   end
 
+  opts.on('-f', '--force_rewrite',
+          'Rewrites over existing output.') do
+    opt[:force_rewrite] = true
+  end
+
   opts.on('-b', '--binaries [binaries]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',

@@ -14,7 +14,7 @@ If you would like to use GeneValidator on a few sequences, see our online [GeneV
 
 
 If you use GeneValidator in your work, please cite us as follows:
-> [Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](http://bioinformatics.oxfordjournals.org/content/early/2016/02/26/bioinformatics.btw015).
+> [Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein).
 
 
 
@@ -42,7 +42,7 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 
 ## Installation
 ### Installation Requirements
-* Ruby (>= 2.0.0)
+* Ruby (>= 2.1.0)
 * NCBI BLAST+ (>= 2.2.30+) (download [here](http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)).
 * MAFFT installation (>=7.273) (download [here](http://mafft.cbrc.jp/alignment/software/)).
 * A web browser - [Mozilla FireFox](https://www.mozilla.org/en-GB/firefox/new/) & Safari are recommended. At the moment, it is not possible to use Chrome to view the results locally (as chrome does not allow ajax to local files). To avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.
@@ -205,7 +205,7 @@ genevalidator -d DATABASE_PATH -e -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen 
 ## If you ran the previous command (i.e. if you produced fasta file for the BLAST hits)
 genevalidator -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' -r RAW_SEQUENCES_FILE INPUT_FASTA_FILE
 
-## If you did generate the BLAST hits fasta file (this will run the previous command for you)
+## If you did not generate the BLAST hits fasta file (this will automatically run the previous command for you)
 genevalidator -d DATABASE_PATH -n NUM_THREADS -t BLAST_TAB_FILE -o 'qseqid sseqid sacc slen qstart qend sstart send length qframe pident nident evalue qseq sseq' INPUT_FASTA_FILE
 
 ```
@@ -231,33 +231,45 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 ## Analysing the JSON output
 
-There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples use the JSON tool.
+There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples uses jq 1.5.
 
-### Examplar JSON CLI Installation
+### Examplar JQ CLI Installation
 After installing node:
 
 ```bash
-$ npm install -g json
+# ubuntu
+$ sudo apt-get install jq
+# brew / linuxbrew
+$ brew install jq
 ```
 
 ### Filtering the results
 
 ```bash
+# Requires jq 1.5
 
 # Extract sequences that have an overall score of 100
-$ json -f INPUT_JSON_FILE -c 'this.overall_score == 100' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 100)' > OUTPUT_JSON_FILE
 
 # Extract sequences that have an overall score of over 70
-$ json -f INPUT_JSON_FILE -c 'this.overall_score > 70' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 70)' > OUTPUT_JSON_FILE
 
 # Extract sequences that have more than 50 hits
-$ json -f INPUT_JSON_FILE -c 'this.no_hits > 50' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq '.[] | select(.no_hits > 50)' > OUTPUT_JSON_FILE
 
 # Sort the JSON based on the overall score (ascending - 0 to 100)
-$ json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score > b.overall_score) ? 1 : ((b.overall_score > a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
-
+$ cat INPUT_JSON_FILE | jq 'sort_by(.overall_score)' > OUTPUT_JSON_FILE
 # Sort the JSON based on the overall score (decending - 100 to 0)
-json -f INPUT_JSON_FILE -A -e 'this.sort(function(a,b) {return (a.overall_score < b.overall_score) ? 1 : ((b.overall_score < a.overall_score) ? -1 : 0);} );' > OUTPUT_JSON_FILE
+$ cat INPUT_JSON_FILE | jq 'sort_by(- .overall_score)' > OUTPUT_JSON_FILE
+
+# Remove the large graphs objects (note these Graphs objects are required if you wish to pass the json back into GV using the `-j` option - see below)
+$ cat INPUT_JSON_FILE | jq -r  '[ .[] | del(.validations[].graphs) ]' > OUTPUT_JSON_FILE
+
+# Save JSON as CSV
+## Write header first
+cat data/protein_data.fasta.json | jq -r '.[0] | ["idx", "overall_score", "definition", "no_hits", .validations[].header ] | @csv' > OUTPUT_JSON_FILE
+## write content to the same file
+$ cat INPUT_JSON_FILE | jq -r '.[] | [.idx, .overall_score, .definition, .no_hits, .validations[].print ] | @csv ' >> OUTPUT_JSON_FILE
 ```
 
 The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
@@ -265,7 +277,6 @@ The subsetted/sorted JSON file can then be passed back into GeneValidator (using
 ```bash
 genevalidator -j SORTED_JSON_FILE
 ```
-
 
 ## Related projects
 [GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>

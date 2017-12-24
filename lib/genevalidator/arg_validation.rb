@@ -71,6 +71,8 @@ module GeneValidator
       def assert_output_dir_does_not_exist
         output_dir = "#{@opt[:input_fasta_file]}.html"
         return unless File.exist?(output_dir)
+        FileUtils.rm_r(output_dir) if @opt[:force_rewrite]
+        return if @opt[:force_rewrite]
         $stderr.puts 'The output directory already exists for this fasta file.'
         $stderr.puts "\nPlease remove the following directory: #{output_dir}\n"
         $stderr.puts "You can run the following command to remove the folder.\n"
