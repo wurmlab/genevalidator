@@ -34,16 +34,30 @@ end
 # For Bundler.with_clean_env
 require 'bundler/setup'
 
+TMP_DIR = "#{Rake.original_dir}/tmp"
 APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}"
 PLATFORMS = %w[linux-x86 linux-x86_64 osx]
 TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'
 TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'
 NOKOGIRI_VERSION = 'nokogiri-1.6.6.2'
-MAFFT_LINUX = 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz'
-MAFFT_MAC = 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-mac.zip'
-BLAST_LINUX = 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1//ncbi-blast-2.7.1+-x64-linux.tar.gz'
-BLAST_MAC = 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1//ncbi-blast-2.7.1+-x64-macosx.tar.gz'
-TMP_DIR = "#{Rake.original_dir}/tmp"
+MAFFT = {
+  'version': '7.397',
+  'linux-x86': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
+  'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
+  'osx': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-mac.zip'
+}
+BLAST = {
+  'version': '2.7.1+',
+  'linux-x86': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
+  'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
+  'osx': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-macosx.tar.gz',
+}
+JQ = {
+  'version': '1.5',
+  'linux-x86': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32',
+  'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64',
+  'osx': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-osx-amd64'
+}
 
 desc 'Create standalone GeneValidator packages'
 task :package do
@@ -53,6 +67,11 @@ task :package do
   rm_rf TMP_DIR
 end
 
+# Usage:
+# - Complete run
+#     rake package
+# - Just create directories and don't compress
+#     rake package DIR_ONLY=1
 namespace :package do
   PLATFORMS.each do |platform|
     task platform => [
@@ -62,7 +81,9 @@ namespace :package do
     ] do
       package_dir   = "#{Rake.original_dir}/#{APP_NAME}-#{platform}"
       lib_dir       = "#{package_dir}/lib/"
+      bin_dir       = "#{package_dir}/bin/"
       exemplar_dir  = "#{package_dir}/exemplar_data/"
+      blast_db_dir  = "#{package_dir}/blast_db"
       app_dir       = "#{lib_dir}/app/"
       vendor_dir    = "#{lib_dir}/vendor/"
       ruby_dir      = "#{lib_dir}/ruby/"
@@ -74,9 +95,10 @@ namespace :package do
       # set up dir structure
       rm_rf package_dir
       mkdir_p app_dir
+      mkdir bin_dir
       mkdir exemplar_dir
-      mkdir ruby_dir
       mkdir vendor_dir
+      mkdir ruby_dir
       mkdir pack_dir
 
       cp_r "#{Rake.original_dir}/bin", app_dir
@@ -97,14 +119,30 @@ namespace :package do
         sh "tar -xzf #{ruby_path} -C ruby"
       end
 
+      cd pack_dir do
+        process_package(MAFFT[platform.to_sym], 'mafft')
+        process_package(BLAST[platform.to_sym], 'blast')
+      end
+
       cd package_dir do
         File.write(GEMSPEC.name, SCRIPT_CONTENTS)
         sh "chmod +x #{GEMSPEC.name}"
+        File.write('Readme.txt', readme_contents(platform))
       end
 
-      cd pack_dir do
-        process_blast_mafft_packages(platform, lib_dir)
+      cd bin_dir do
+        Dir['../lib/packages/blast/bin/*'].each do |bin|
+          ln_s bin, File.basename(bin)
+        end
+
+        sh "curl -L #{JQ[platform.to_sym]} -o jq"
+        sh 'chmod +x jq'
+
+        sh "sed 's|SELFDIR/|SELFDIR/../|g' #{package_dir}/#{GEMSPEC.name} > #{GEMSPEC.name}"
+        sh "chmod +x #{GEMSPEC.name}"
       end
+
+      cp_r "#{TMP_DIR}/blast_db", blast_db_dir
 
       unless ENV['DIR_ONLY']
         cd Rake.original_dir do
@@ -118,25 +156,12 @@ namespace :package do
   desc 'Install gems to local directory'
   task :bundle_install do
     if RUBY_VERSION !~ /^2\.2\./
-      abort "You can only 'bundle install' using Ruby 2.2, because that's what Traveling Ruby uses."
+      abort "You can only 'bundle install' using Ruby 2.2, because that's " \
+            'what Traveling Ruby uses.'
     end
+
     cd Rake.original_dir do
-
       cp 'Gemfile', TMP_DIR
-
-      lib_files = Dir['lib/**/**']
-      aux_files = Dir['aux/**/**']
-      file_list = lib_files + aux_files
-      edited_gemspec = []
-      File.readlines('genevalidator.gemspec').each_with_index do |l, index|
-        next if index < 4 # skip first four lines
-        l.chomp!
-        l = "s.version = '#{GEMSPEC.version}'\n" if l =~ /^\s+s.version/
-        l = "s.files = ['#{file_list.join("','")}']" if l =~ /^\s+s.files/
-        l = ["s.add_dependency 'nokogiri', '1.6.6.2'", "end"] if l =~ /^end/
-        edited_gemspec << l
-      end
-      edited_gemspec_content = edited_gemspec.flatten.join("\n")
       File.write("#{TMP_DIR}/#{GEMSPEC.name}.gemspec", edited_gemspec_content)
     end
 
@@ -154,6 +179,16 @@ namespace :package do
 
         cd 'specifications' do
           cp "#{TMP_DIR}/#{GEMSPEC.name}.gemspec", "#{APP_NAME}.gemspec"
+        end
+      end
+
+      mkdir 'blast_db'
+      cd 'blast_db' do
+        sh 'update_blastdb.pl --decompress swissprot' do |_, e|
+          abort 'update_blastdb.pl failed to run.' if e.exitstatus == 2
+          # This script returns 0 on successful operations that result in no
+          # downloads, 1 on successful operations that downloaded files,
+          # and 2 on errors.
         end
       end
     end
@@ -206,21 +241,6 @@ namespace :package do
   end
 end
 
-def process_blast_mafft_packages(platform, lib_dir)
-  case platform
-  when 'osx'
-    download_package(MAFFT_MAC, 'mafft')
-    download_package(BLAST_MAC, 'blast')
-  when 'linux-x86'
-    download_package(MAFFT_LINUX, 'mafft')
-    download_package(BLAST_LINUX, 'blast')
-  when 'linux-x86_64'
-    download_package(MAFFT_LINUX, 'mafft')
-    download_package(BLAST_LINUX, 'blast')
-  end
-end
-
-
 PLATFORMS.each do |platform|
   file "#{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz" do
     download_runtime(platform)
@@ -240,7 +260,7 @@ def download_native_extension(platform, gem_name_and_version)
     "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBYGEMS_VERSION}-#{platform}/#{gem_name_and_version}.tar.gz"
 end
 
-def download_package(url, package_name)
+def process_package(url, package_name)
   if url.end_with?('.tar.gz', '.tgz')
     mkdir package_name
     cd package_name do
@@ -252,6 +272,19 @@ def download_package(url, package_name)
     mv 'mafft-mac', package_name
     rm "#{package_name}.zip"
   end
+end
+
+def edited_gemspec_content
+  file_list = Dir['lib/**/**'] + Dir['aux/**/**']
+  edited_gemspec = []
+  File.readlines('genevalidator.gemspec').each_with_index do |l, index|
+    next if index < 4 # skip first four lines
+    l = "s.version = '#{GEMSPEC.version}'\n" if l =~ /^\s+s.version/
+    l = "s.files = ['#{file_list.join("','")}']\n" if l =~ /^\s+s.files/
+    l = "s.add_dependency 'nokogiri', '1.6.6.2'\nend" if l =~ /^end/
+    edited_gemspec << l
+  end
+  edited_gemspec.join
 end
 
 GEMFILE_CONTENTS = <<-GEMFILE
@@ -291,3 +324,44 @@ BUNDLE_PATH: .
 BUNDLE_WITHOUT: "development:test"
 BUNDLE_DISABLE_SHARED_GEMS: '1'
 CONFIG
+
+def readme_contents(platform)
+<<-README
+
+--------------------------------------------------------------------------------
+GeneValidator (v#{GEMSPEC.version})
+Website: https://wurmlab.github.io/tools/genevalidator/
+Paper: https://doi.org/10.1093/bioinformatics/btw015
+
+Standalone Package for #{platform}.
+This package includes BLAST+ (v#{BLAST[:version]}), MAFFT (v#{MAFFT[:version]}), JQ (v#{JQ[:version]}) and the Swissprot BLAST database.
+
+Please cite as follows:
+Dragan M‡, Moghul MI‡, Priyam A, Bustos C & Wurm Y. 2015.
+GeneValidator: identify problems with protein-coding gene predictions".
+Bioinformatics, doi: 10.1093/bioinformatics/btw015.
+-------------------------------------------------------------------------------
+
+Running GeneValidator with Exemplar Data:
+
+    cd /path/to/genevalidator/package/
+    ./genevalidator -d blast_db/swissprot exemplar_data/protein_data.fa
+
+Run the following to see all options available.
+
+  ./genevalidator -h
+
+
+See https://github.com/wurmlab/genevalidator for more usage information.
+
+Please contact us if you require any further information.
+
+-------------------------------------------------------------------------------
+Genevalidator is licensed under the AGPL-3.0 License.
+
+Dependencies packaged with GeneValidator are licensed under their respective licenses:
+BLAST+ (Public Domain), Mafft (BSD), JQ (MIT)
+-------------------------------------------------------------------------------
+
+README
+end

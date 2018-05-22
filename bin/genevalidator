@@ -23,7 +23,7 @@ BANNER
   opt[:validations] = ['all']
   opts.on('-v', '--validations <String>', Array,
           'The Validations to be applied.',
-          'Validation Options Available (separated by coma):',
+          'Validation Options Available (separated by comma):',
           '  all   = All validations (default),',
           '  lenc  = Length validation by clusterization,',
           '  lenr  = Length validation by ranking,',
@@ -76,20 +76,19 @@ BANNER
   end
 
   opt[:num_threads] = 1
-  opts.on('-n', '--num_threads num_of_threads',
+  opts.on('-n', '--num_threads [THREADS]',
           'Specify the number of processor threads to use when running',
           'BLAST and Mafft within GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
 
-  opts.on('-r', '--raw_sequences [raw_seq]',
+  opts.on('-r', '--raw_sequences [RAW_SEQ]',
           'Supply a fasta file of the raw sequences of all BLAST hits present',
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
     opt[:raw_sequences] = raw_seq
   end
 
-  opts.on('-f', '--force_rewrite',
-          'Rewrites over existing output.') do
+  opts.on('-f', '--force_rewrite', 'Rewrites over existing output.') do
     opt[:force_rewrite] = true
   end
 
