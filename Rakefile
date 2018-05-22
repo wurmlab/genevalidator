@@ -360,7 +360,7 @@ Please contact us if you require any further information.
 Genevalidator is licensed under the AGPL-3.0 License.
 
 Dependencies packaged with GeneValidator are licensed under their respective licenses:
-BLAST+ (Public Domain), Mafft (BSD), JQ (MIT)
+BLAST+ (Public Domain), Mafft (BSD), JQ (MIT) and SwissProt BLAST DB (CC BY-ND 3.0).
 -------------------------------------------------------------------------------
 
 README
