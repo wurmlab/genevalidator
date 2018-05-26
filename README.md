@@ -221,12 +221,9 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 
 
-## Analysing the JSON output
+## Using the JSON output
 
-There are numerous methods to analyse the JSON output such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below use jq 1.5 which is bundled with GeneValidator.
-
-
-### Filtering the results
+JSON output can be filtered or processed in a variety of ways using standard tools, such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below makes use of jq 1.5 which is bundled with GeneValidator.
 
 ```bash
 # Requires jq 1.5
@@ -261,7 +258,7 @@ $ cat INPUT_JSON_FILE | jq -r '.[] | [.idx, .overall_score, .definition, .no_hit
 The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
 
 ```bash
-genevalidator -j SORTED_JSON_FILE
+genevalidator -j OUTPUT_JSON_FILE
 ```
 
 ## Related projects
