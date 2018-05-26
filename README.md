@@ -45,15 +45,37 @@ See the [Releases](https://github.com/wurmlab/genevalidator/releases) page in or
 
 This standalone package includes genevalidator, all of its dependencies (including blast+, mafft and JQ) and the SwissProt BLAST Database.
 
-Simply Download and uncompress the appropriate version of GV standalone Package, depending on your system (x86, x86_64, osx):
+Simply Download and uncompress the appropriate version of GV standalone Package, depending on your system:
+
+#### Mac
 
 ```bash
-# Download the GeneValidator Package
-curl -L  -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-OS_TYPE.tar.gz
-# Uncompress the GeneValidator Package
-tar -zxvf genevalidator-1.7.2-OS_TYPE.tar.gz
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-osx.tar.gz
+tar -zxvf genevalidator-1.7.2-osx.tar.gz
+cd genevalidator-1.7.2-osx/
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+open exemplar_data/protein_data.fasta.html/results1.html
 ```
 
+#### Linux
+
+```bash
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86_64.tar.gz
+tar -zxvf genevalidator-1.7.2-linux-x86_64.tar.gz
+cd genevalidator-1.7.2-linux-x86_64
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+cd exemplar_data/protein_data.fasta.html/results1.html
+```
+
+#### Linux (32-bit)
+
+```bash
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86.tar.gz
+tar -zxvf genevalidator-1.7.2-linux-x86.tar.gz
+cd genevalidator-1.7.2-linux-x86
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+cd exemplar_data/protein_data.fasta.html/results1.html
+```
 
 
 
