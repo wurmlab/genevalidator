@@ -54,10 +54,11 @@ curl -L  -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/gen
 tar -zxvf genevalidator-1.7.2-OS_TYPE.tar.gz
 ```
 
-### Setting up a BLAST database
-GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from in Genevalidator Package, in the bin directory).
 
-See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
+
+
+
+
 
 ## Usage
 
@@ -131,7 +132,9 @@ genevalidator INPUT_FASTA_FILE
 ```
 
 #### Using a local BLAST database.
-GeneValidator would run BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then run the validation analyses.
+This runs BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then runs the validation analyses.
+
+GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
 
 ```bash
 genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
