@@ -223,22 +223,16 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 ## Analysing the JSON output
 
-There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples uses jq 1.5.
+There are numerous methods to analyse the JSON output such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below use jq 1.5 which is bundled with GeneValidator.
 
-### Examplar JQ CLI Installation
-After installing node:
-
-```bash
-# ubuntu
-$ sudo apt-get install jq
-# brew / linuxbrew
-$ brew install jq
-```
 
 ### Filtering the results
 
 ```bash
 # Requires jq 1.5
+
+# Add bin dir to path
+export PATH="genvalidator-1.7.2-osx/bin:$PATH"
 
 # Extract sequences that have an overall score of 100
 $ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 100)' > OUTPUT_JSON_FILE
