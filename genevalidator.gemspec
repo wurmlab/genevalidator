@@ -1,4 +1,4 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'genevalidator/version'
 
@@ -18,12 +18,12 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.1.0'
 
   s.add_development_dependency 'minitest', '~> 5.10'
-  s.add_development_dependency 'rake', '~>10.3'
+  s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'yard', '~> 0.9.11'
 
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~>2.0'
-  s.add_dependency 'statsample', '2.0.1'
+  s.add_dependency 'statsample', '2.1.0'
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }

@@ -41,68 +41,33 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 
 
 ## Installation
-### Installation Requirements
-* Ruby (>= 2.1.0)
-* NCBI BLAST+ (>= 2.2.30+) (download [here](http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)).
-* MAFFT installation (>=7.273) (download [here](http://mafft.cbrc.jp/alignment/software/)).
-* A web browser - [Mozilla FireFox](https://www.mozilla.org/en-GB/firefox/new/) & Safari are recommended. At the moment, it is not possible to use Chrome to view the results locally (as chrome does not allow ajax to local files). To avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.
+See the [Releases](https://github.com/wurmlab/genevalidator/releases) page in order to download the latest version of GeneValidator.
 
-Please see [here](https://gist.github.com/IsmailM/b783e8a06565197084e6) for more help with installing the prerequisites.
+This standalone package includes genevalidator, all of its dependencies (including blast+, mafft and JQ) and the SwissProt BLAST Database.
 
-#### Setting up a BLAST database
-GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument as follows:
+Simply Download and uncompress the appropriate version of GV standalone Package, depending on your system (x86, x86_64, osx):
 
 ```bash
-makeblastdb -in input_db -dbtype prot -parse_seqids
+# Download the GeneValidator Package
+curl -L  -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-OS_TYPE.tar.gz
+# Uncompress the GeneValidator Package
+tar -zxvf genevalidator-1.7.2-OS_TYPE.tar.gz
 ```
 
-### Installation
-Simply run the following command in the terminal.
+### Setting up a BLAST database
+GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from in Genevalidator Package, in the bin directory).
 
-```bash
-gem install genevalidator
-```
-
-If that doesn't work, try `sudo gem install genevalidator` instead.
-
-##### Running From Source (Not Recommended)
-It is also possible to run from source. However, this is not recommended.
-
-```bash
-# Clone the repository.
-git clone https://github.com/wurmlab/genevalidator.git
-
-# Move into GeneValidator source directory.
-cd GeneValidator
-
-# Install bundler
-gem install bundler
-
-# Use bundler to install dependencies
-bundle install
-
-# Optional: run tests, build documentation and build the gem from source
-bundle exec rake
-
-# Run GeneValidator.
-bundle exec genevalidator -h
-# note that `bundle exec` executes GeneValidator in the context of the bundle
-
-# Alternativaly, install GeneValidator as a gem
-bundle exec rake install
-genevalidator -h
-```
-
-
-
-
-
+See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
 
 ## Usage
-Verify GeneValidator installed by running the following command in the terminal:
+
+GeneValidator can be run immediately after the GeneValidator package has been downloaded and uncompressed.
+
 
 ```bash
-genevalidator
+cd genevalidator-1.7.2-OS-TYPE
+
+./genevalidator -h
 ```
 
 You should see the following output.
@@ -115,8 +80,8 @@ ARGUMENTS:
     Input_File: Path to the input fasta file containing the predicted sequences.
 
 OPTIONAL ARGUMENTS
-    -v, --validations <String>       The Validations to be applied.
-                                     Validation Options Available (separated by coma):
+    -v, --validations <String>     The Validations to be applied.
+                                   Validation Options Available (separated by comma):
                                        all   = All validations (default),
                                        lenc  = Length validation by clusterization,
                                        lenr  = Length validation by ranking,
@@ -125,29 +90,31 @@ OPTIONAL ARGUMENTS
                                        frame = Open reading frame (ORF) validation,
                                        orf   = Main ORF validation,
                                        align = Validating based on multiple alignment
-    -d, --db [BLAST_DATABASE]        Path to the BLAST database
-                                     GeneValidator also supports remote databases:
-                                     e.g.   genevalidator -d "swissprot -remote" Input_File
-    -e, --extract_raw_seqs           Produces a fasta file of the raw sequences of all BLAST hits in the
-                                     supplied BLAST output file. This fasta file can then be provided to
-                                     GeneValidator with the "-r", "--raw_sequences" argument
-    -j, --json_file [JSON_FILE]      Generate HTML report from a JSON file (or a subset of a JSON file)
-                                     produced by GeneValidator
-    -x [BLAST_XML_FILE],             Provide GeneValidator with a pre-computed BLAST XML output
-        --blast_xml_file             file (BLAST -outfmt option 5).
-    -t [BLAST_TABULAR_FILE],         Provide GeneValidator with a pre-computed BLAST tabular output
-        --blast_tabular_file         file. (BLAST -outfmt option 6).
-    -o [BLAST_TABULAR_OPTIONS],      Custom format used in BLAST -outfmt argument
-        --blast_tabular_options      See BLAST+ manual pages for more details
-    -n, --num_threads num_of_threads Specify the number of processor threads to use when running
-                                     BLAST and Mafft within GeneValidator.
-    -r, --raw_sequences [raw_seq]    Supply a fasta file of the raw sequences of all BLAST hits present
-                                     in the supplied BLAST XML or BLAST tabular file.
-    -b, --binaries [binaries]        Path to BLAST and MAFFT bin folders (is added to $PATH variable)
-                                     To be provided as follows:
-                                     e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/
-        --version                    The version of GeneValidator that you are running.
-    -h, --help                       Show this screen.
+    -d, --db [BLAST_DATABASE]      Path to the BLAST database
+                                   GeneValidator also supports remote databases:
+                                   e.g.genevalidator -d "swissprot -remote" Input_File
+    -e, --extract_raw_seqs         Produces a fasta file of the raw sequences of all
+                                   BLAST hits in the supplied BLAST output file. This
+                                   fasta file can then be provided to
+                                   GeneValidator with the "-r", "--raw_sequences" arg.
+    -j, --json_file [JSON_FILE]    Generate HTML report from a JSON file (or a subset
+                                   of a JSON file) produced by GeneValidator
+    -x [BLAST_XML_FILE],           Provide GeneValidator with a pre-computed BLAST XML
+       --blast_xml_file            output file (BLAST -outfmt option 5).
+    -t [BLAST_TABULAR_FILE],       Provide GeneValidator with a pre-computed BLAST
+       --blast_tabular_file        tabular output file. (BLAST -outfmt option 6).
+    -o [BLAST_TABULAR_OPTIONS],    Custom format used in BLAST -outfmt argument
+        --blast_tabular_options    See BLAST+ manual pages for more details
+    -n, --num_threads [NUM]        Specify the number of processor threads to use when
+                                   running BLAST and Mafft within GeneValidator.
+    -r, --raw_sequences [raw_seq]  Supply a fasta file of the raw sequences of all BLAST
+                                   hits present in the supplied BLAST XML or BLAST
+                                   tabular file.
+    -f, --force_rewrite            Rewrites over existing output.
+    -b, --binaries [binaries]      Path to BLAST and MAFFT bin folders (is added to
+                                   $PATH variable). See docs for more information.
+        --version                  The version of GeneValidator that you are running.
+    -h, --help                     Show this screen.
 ```
 
 

@@ -1,8 +1,9 @@
 language: ruby
 rvm:
-  - "2.1.10"
-  - "2.2.7"
-  - "2.3.4"
+  - "2.2.10"
+  - "2.3.7"
+  - "2.4.4"
+  - "2.5.1"
 before_install:
   - wget -P ~ http://mafft.cbrc.jp/alignment/software/mafft-7.205-with-extensions-src.tgz
   - tar -zxvf ~/mafft-7.205-with-extensions-src.tgz -C ~

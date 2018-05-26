@@ -2,8 +2,14 @@
 *.~*~
 *.gem
 .DS_Store
-Gemfile.lock
 # Gemnasium gem configuration file
 config/gemnasium.yml
 doc
 .yardoc
+tmp
+*-linux-x86/
+*-linux-x86_64/
+*-osx/
+*-linux-x86.tar.gz
+*-linux-x86_64.tar.gz
+*-osx.tar.gz

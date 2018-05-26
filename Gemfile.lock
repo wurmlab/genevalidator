@@ -1,0 +1,88 @@
+PATH
+  remote: .
+  specs:
+    genevalidator (1.7.2)
+      bio (~> 1.4)
+      bio-blastxmlparser (~> 2.0)
+      statsample (= 2.1.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    awesome_print (1.8.0)
+    backports (3.11.3)
+    bio (1.5.1)
+    bio-blastxmlparser (2.0.4)
+      bio-logger
+      nokogiri
+    bio-logger (1.0.1)
+      log4r (>= 1.1.9)
+    clbustos-rtf (0.4.2)
+    codeclimate-test-reporter (1.0.8)
+      simplecov (<= 0.13)
+    daru (0.1.6)
+      backports
+    dirty-memoize (0.0.4)
+    distribution (0.7.3)
+    docile (1.1.5)
+    extendmatrix (0.4)
+    json (2.1.0)
+    log4r (1.1.10)
+    mini_portile2 (2.3.0)
+    minimization (0.2.3)
+      text-table (~> 1.2)
+    minitest (5.11.3)
+    nokogiri (1.8.2)
+      mini_portile2 (~> 2.3.0)
+    prawn (0.8.4)
+      prawn-core (>= 0.8.4, < 0.9)
+      prawn-layout (>= 0.8.4, < 0.9)
+      prawn-security (>= 0.8.4, < 0.9)
+    prawn-core (0.8.4)
+    prawn-layout (0.8.4)
+    prawn-security (0.8.4)
+    prawn-svg (0.9.1.11)
+      prawn (>= 0.8.4)
+    rake (12.3.1)
+    reportbuilder (1.4.2)
+      clbustos-rtf (~> 0.4.0)
+      prawn (~> 0.8.4)
+      prawn-svg (~> 0.9.1)
+      text-table (~> 1.2)
+    rserve-client (0.3.5)
+    ruby-ole (1.2.12.1)
+    rubyvis (0.6.1)
+    simplecov (0.13.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
+    spreadsheet (1.1.7)
+      ruby-ole (>= 1.0)
+    statsample (2.1.0)
+      awesome_print (~> 1.6)
+      daru (~> 0.1.6)
+      dirty-memoize (~> 0.0.4)
+      distribution (~> 0.7)
+      extendmatrix (~> 0.4)
+      minimization (~> 0.2)
+      reportbuilder (~> 1.4)
+      rserve-client (~> 0.3)
+      rubyvis (~> 0.6.1)
+      spreadsheet (~> 1.1)
+    text-table (1.2.4)
+    yard (0.9.12)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  codeclimate-test-reporter (~> 1.0.0)
+  genevalidator!
+  minitest (~> 5.10)
+  rake (~> 12.3)
+  simplecov
+  yard (~> 0.9.11)
+
+BUNDLED WITH
+   1.16.1
