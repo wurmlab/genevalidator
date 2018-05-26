@@ -88,7 +88,7 @@ GeneValidator can be run immediately after the GeneValidator package has been do
 
 
 ```bash
-cd genevalidator-1.7.2-OS-TYPE
+cd genevalidator-1.7.2-*
 
 ./genevalidator -h
 ```
@@ -153,7 +153,7 @@ This runs BLAST on NCBI remote Swiss-Prot BLAST database. As such this is suitab
 genevalidator INPUT_FASTA_FILE
 ```
 
-#### Using a local BLAST database.
+#### Using a local BLAST database
 This runs BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then runs the validation analyses.
 
 GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
