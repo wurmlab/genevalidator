@@ -52,7 +52,8 @@ Simply Download and uncompress the appropriate version of GV standalone Package,
 ```bash
 curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-osx.tar.gz
 tar -zxvf genevalidator-1.7.2-osx.tar.gz
-cd genevalidator-1.7.2-osx/
+cd genevalidator-1.7.2-osx
+
 ./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
 open exemplar_data/protein_data.fasta.html/results1.html
 ```
@@ -63,8 +64,9 @@ open exemplar_data/protein_data.fasta.html/results1.html
 curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86_64.tar.gz
 tar -zxvf genevalidator-1.7.2-linux-x86_64.tar.gz
 cd genevalidator-1.7.2-linux-x86_64
+
 ./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
-cd exemplar_data/protein_data.fasta.html/results1.html
+xdg-open exemplar_data/protein_data.fasta.html/results1.html
 ```
 
 #### Linux (32-bit)
@@ -73,8 +75,9 @@ cd exemplar_data/protein_data.fasta.html/results1.html
 curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86.tar.gz
 tar -zxvf genevalidator-1.7.2-linux-x86.tar.gz
 cd genevalidator-1.7.2-linux-x86
+
 ./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
-cd exemplar_data/protein_data.fasta.html/results1.html
+xdg-open exemplar_data/protein_data.fasta.html/results1.html
 ```
 
 
