@@ -45,19 +45,45 @@ See the [Releases](https://github.com/wurmlab/genevalidator/releases) page in or
 
 This standalone package includes genevalidator, all of its dependencies (including blast+, mafft and JQ) and the SwissProt BLAST Database.
 
-Simply Download and uncompress the appropriate version of GV standalone Package, depending on your system (x86, x86_64, osx):
+Simply Download and uncompress the appropriate version of GV standalone Package, depending on your system:
+
+#### Mac
 
 ```bash
-# Download the GeneValidator Package
-curl -L  -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-OS_TYPE.tar.gz
-# Uncompress the GeneValidator Package
-tar -zxvf genevalidator-1.7.2-OS_TYPE.tar.gz
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-osx.tar.gz
+tar -zxvf genevalidator-1.7.2-osx.tar.gz
+cd genevalidator-1.7.2-osx
+
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+open exemplar_data/protein_data.fasta.html/results1.html
 ```
 
-### Setting up a BLAST database
-GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from in Genevalidator Package, in the bin directory).
+#### Linux
 
-See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
+```bash
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86_64.tar.gz
+tar -zxvf genevalidator-1.7.2-linux-x86_64.tar.gz
+cd genevalidator-1.7.2-linux-x86_64
+
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+xdg-open exemplar_data/protein_data.fasta.html/results1.html
+```
+
+#### Linux (32-bit)
+
+```bash
+curl -L -O https://github.com/wurmlab/genevalidator/releases/download/1.7.2/genevalidator-1.7.2-linux-x86.tar.gz
+tar -zxvf genevalidator-1.7.2-linux-x86.tar.gz
+cd genevalidator-1.7.2-linux-x86
+
+./genevalidator -d blast_db/swissprot -n 4 exemplar_data/protein_data.fasta
+xdg-open exemplar_data/protein_data.fasta.html/results1.html
+```
+
+
+
+
+
 
 ## Usage
 
@@ -65,7 +91,7 @@ GeneValidator can be run immediately after the GeneValidator package has been do
 
 
 ```bash
-cd genevalidator-1.7.2-OS-TYPE
+cd genevalidator-1.7.2-*
 
 ./genevalidator -h
 ```
@@ -130,8 +156,10 @@ This runs BLAST on NCBI remote Swiss-Prot BLAST database. As such this is suitab
 genevalidator INPUT_FASTA_FILE
 ```
 
-#### Using a local BLAST database.
-GeneValidator would run BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then run the validation analyses.
+#### Using a local BLAST database
+This runs BLAST (using an E-Value 1e-5) on each query against the provided BLAST database and then runs the validation analyses.
+
+GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
 
 ```bash
 genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
@@ -196,24 +224,15 @@ Lastly, a tabular summary of the results is also outputted in the terminal to pr
 
 
 
-## Analysing the JSON output
+## Using the JSON output
 
-There are numerous methods to analyse the JSON output including the [streamable JSON command line program](http://trentm.com/json/) or [jq](https://stedolan.github.io/jq/). The below examples uses jq 1.5.
-
-### Examplar JQ CLI Installation
-After installing node:
-
-```bash
-# ubuntu
-$ sudo apt-get install jq
-# brew / linuxbrew
-$ brew install jq
-```
-
-### Filtering the results
+JSON output can be filtered or processed in a variety of ways using standard tools, such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below makes use of jq 1.5 which is bundled with GeneValidator.
 
 ```bash
 # Requires jq 1.5
+
+# Add bin dir to path
+export PATH="genvalidator-1.7.2-osx/bin:$PATH"
 
 # Extract sequences that have an overall score of 100
 $ cat INPUT_JSON_FILE | jq '.[] | select(.overall_score == 100)' > OUTPUT_JSON_FILE
@@ -242,7 +261,7 @@ $ cat INPUT_JSON_FILE | jq -r '.[] | [.idx, .overall_score, .definition, .no_hit
 The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
 
 ```bash
-genevalidator -j SORTED_JSON_FILE
+genevalidator -j OUTPUT_JSON_FILE
 ```
 
 ## Related projects
