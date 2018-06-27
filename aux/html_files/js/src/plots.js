@@ -84,7 +84,7 @@ if (!GV) {
     if (window.chrome && (window.location.protocol === 'file:')){
       $('#overview').remove();
     } else {
-      var jsonFile = 'files/json/overview.json';
+      var jsonFile = $("#overview_btn").data('overviewjson');
       $.getJSON(jsonFile, function( json ) {
         var overview = $('<span>' + json.less + '</span><br>');
         var full_overview  = $('<span>' + json.evaluation + '</span><br>');
