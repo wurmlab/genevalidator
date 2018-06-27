@@ -38,38 +38,41 @@ module GeneValidator
         original_stdout = $stdout.clone
         $stdout.reopen(prot_xml_out, 'w')
 
-        FileUtils.rm_rf(prot_output_dir) rescue Errno::ENOENT
         opts = {
           validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
-          fast: false,
           input_fasta_file: prot_input,
           blast_xml_file: prot_xml,
           raw_sequences: prot_raw,
-          test: true
+          output_dir: prot_output_dir,
+          output_formats: %w[html csv json stdout],
+          test: true,
+          hide_summary: true,
+          force_rewrite: true
         }
 
-        GeneValidator.init(opts, 1, false)
+        GeneValidator.init(opts, 1)
         GeneValidator.run
         $stdout.reopen original_stdout
         $stdout.reopen(prot_tab_out, 'w')
-
-        FileUtils.rm_rf(prot_output_dir) rescue Errno::ENOENT
 
         opts1 = {
           validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
-          fast: false,
           input_fasta_file: prot_input,
           blast_tabular_file: prot_tab,
           blast_tabular_options: tab_options,
           raw_sequences: prot_raw,
-          test: true
+          output_dir: prot_output_dir,
+          output_formats: %w[html csv json stdout],
+          test: true,
+          hide_summary: true,
+          force_rewrite: true
         }
 
-        GeneValidator.init(opts1, 1, false)
+        GeneValidator.init(opts1, 1)
         GeneValidator.run
         $stdout.reopen original_stdout
 
@@ -77,7 +80,6 @@ module GeneValidator
 
         File.delete(prot_xml_out)
         File.delete(prot_tab_out)
-        FileUtils.rm_rf(prot_output_dir)
 
         assert_equal(true, diff)
       end
@@ -88,39 +90,41 @@ module GeneValidator
         original_stdout = $stdout.clone
         $stdout.reopen(mrna_xml_out, 'w')
 
-        FileUtils.rm_rf(mrna_output_dir) rescue Errno::ENOENT
-
         opts = {
           validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
-          fast: false,
           input_fasta_file: mrna_input,
           blast_xml_file: mrna_xml,
           raw_sequences: mrna_raw,
-          test: true
+          output_dir: mrna_output_dir,
+          output_formats: %w[html csv json stdout],
+          test: true,
+          hide_summary: true,
+          force_rewrite: true
         }
 
-        GeneValidator.init(opts, 1, false)
+        GeneValidator.init(opts, 1)
         GeneValidator.run
         $stdout.reopen original_stdout
         $stdout.reopen(mrna_tab_out, 'w')
-
-        FileUtils.rm_rf(mrna_output_dir) rescue Errno::ENOENT
 
         opts1 = {
           validations: %w(lenc lenr frame merge dup orf align),
           db: database,
           num_threads: threads,
-          fast: false,
           input_fasta_file: mrna_input,
           blast_tabular_file: mrna_tab,
           blast_tabular_options: tab_options,
           raw_sequences: mrna_raw,
-          test: true
+          output_dir: mrna_output_dir,
+          output_formats: %w[html csv json stdout],
+          test: true,
+          hide_summary: true,
+          force_rewrite: true
         }
 
-        GeneValidator.init(opts1, 1, false)
+        GeneValidator.init(opts1, 1)
         GeneValidator.run
         $stdout.reopen original_stdout
 
