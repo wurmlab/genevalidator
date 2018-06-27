@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
                   ' useful information (length validation, gene merge' \
                   ' validation, sequence duplication checking, ORF finding)' \
                   ' based on the similarities to genes in public databases.'
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.2.0'
 
   s.add_development_dependency 'minitest', '~> 5.10'
   s.add_development_dependency 'rake', '~> 12.3'
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~>2.0'
+  s.add_dependency 'genevalidatorapp', '2.0'
   s.add_dependency 'statsample', '2.1.0'
 
   s.files         = `git ls-files -z`.split("\x0")
@@ -41,9 +42,6 @@ Gem::Specification.new do |s|
 
   Visit https://wurmlab.github.io/tools/genevalidator/ for more information.
 
-  Note there is an also online demo server at:
-
-     http://genevalidator.sbcs.qmul.ac.uk
 ----------------------------------------------------------------------------
 
 INFO
