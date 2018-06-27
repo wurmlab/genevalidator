@@ -2,26 +2,38 @@
 require 'optparse'
 require 'English'
 
-require 'genevalidator'
-require 'genevalidator/get_raw_sequences'
-require 'genevalidator/json_to_gv_results'
-require 'genevalidator/version'
-
 opt = {}
-opt_parser = OptionParser.new do |opts|
+
+global = OptionParser.new do |opts|
   opts.banner = <<BANNER
+SUMMARY:
+  GeneValidator - Identify problems with predicted genes
 
 USAGE:
-    genevalidator [OPTIONS] Input_File
+  genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
 
-ARGUMENTS:
-    Input_File: Path to the input fasta file containing the predicted sequences.
+  To run as a web application:
 
-OPTIONAL ARGUMENTS
+    genevalidator app [OPTIONAL ARGUMENTS]
+
+    See 'genevalidator app --help' for more information
+
 BANNER
 
+  opts.separator 'MANDATORY ARGUMENTS'
+  opts.separator ' '
+
+  opts.on('-i', '--input <file>',
+          'Path to the input fasta file') do |file|
+    opt[:input_fasta_file] = file
+  end
+
+  opts.separator ' '
+  opts.separator 'OPTIONAL ARGUMENTS'
+  opts.separator ' '
+
   opt[:validations] = ['all']
-  opts.on('-v', '--validations <String>', Array,
+  opts.on('-v', '--validations [VALIDATIONS]', Array,
           'The Validations to be applied.',
           'Validation Options Available (separated by comma):',
           '  all   = All validations (default),',
@@ -43,53 +55,93 @@ BANNER
     opt[:db] = db
   end
 
-  opts.on('-e', '--extract_raw_seqs',
-          'Produces a fasta file of the raw sequences of all BLAST hits in the',
-          'supplied BLAST output file. This fasta file can then be provided to',
-          'GeneValidator with the "-r", "--raw_sequences" argument') do
-    opt[:extract_raw_seqs] = true
+  opts.on('-s', '--select_single_best',
+          'Writes the fasta sequence of the best scoring gene to STDOUT.') do
+    opt[:select_single_best] = true
   end
 
-  opts.on('-j', '--json_file [JSON_FILE]',
-          'Generate HTML report from a JSON file (or a subset of a JSON file)',
-          'produced by GeneValidator') do |json|
-    opt[:json_file] = json
+  opts.separator ' '
+  opts.separator '# OUTPUT ARGUMENTS'
+  opts.separator ' '
+
+  opts.on('-o', '--output_dir [PATH]',
+          'Path to the output folder.',
+          'By default the output folder is in the same directory as the input',
+          'file and is named as "GV_" followed by the time of analysis') do |d|
+    opt[:output_dir] = d
   end
 
-  opts.on('-x', '--blast_xml_file [BLAST_XML_FILE]',
+  opts.on('-f', '--force_rewrite', 'Rewrites over existing output.') do
+    opt[:force_rewrite] = true
+  end
+
+  opt[:output_formats] = %w[html csv json stdout]
+  opts.on('--output_formats [FORMATS]',
+          'Output Formats to generate. This can be either: "all", "html",',
+          '"csv", "json" or "stdout". Multiple formats can be separated by',
+          'a semi-colon e.g. "csv:json".',
+          'By default, all output formats are generated.') do |f|
+    opt[:output_formats] = f.split(':') unless f == 'all'
+  end
+
+  opts.separator ' '
+  opts.separator '# BLAST ARGUMENTS'
+  opts.separator ' '
+
+  opts.on('-x', '--blast_xml_file [PATH]',
           'Provide GeneValidator with a pre-computed BLAST XML output',
           'file (BLAST -outfmt option 5).') do |blast_xml_file|
     opt[:blast_xml_file] = blast_xml_file
   end
 
-  opts.on('-t', '--blast_tabular_file [BLAST_TABULAR_FILE]',
+  opts.on('-t', '--blast_tabular_file [PATH]',
           'Provide GeneValidator with a pre-computed BLAST tabular output',
           'file. (BLAST -outfmt option 6).') do |blast_tabular_file|
     opt[:blast_tabular_file] = blast_tabular_file
   end
 
   # default blast tabular columns
-  opts.on('-o', '--blast_tabular_options [BLAST_TABULAR_OPTIONS]',
+  opts.on('--blast_tabular_options [BLAST_TABULAR_OPTIONS]',
           'Custom format used in BLAST -outfmt argument',
           'See BLAST+ manual pages for more details') do |blast_table_options|
     opt[:blast_tabular_options] = blast_table_options
   end
+
+  opts.on('-r', '--raw_sequences [PATH]',
+          'Supply a fasta file of the raw sequences of all BLAST hits present',
+          'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
+    opt[:raw_sequences] = raw_seq
+  end
+
+  opts.separator ' '
+  opts.separator '# EXTRACT RAW SEQUENCES ARGUMENTS'
+  opts.separator ' '
+
+  opts.on('-e', '--extract_raw_seqs',
+          'Extract a fasta fileof the raw sequences of all BLAST hits in the
+          supplied BLAST output file. This fasta file can then be provided to
+          GeneValidator with the "-r", "--raw_sequences" argument') do
+    opt[:extract_raw_seqs] = true
+  end
+  opts.separator ' '
+  opts.separator '# REPROCESS JSON ARGUMENTS'
+  opts.separator ' '
+
+  opts.on('-j', '--json_file [JSON_FILE]',
+          'Path to json file. Re-generate the HTML report from a (filtered)',
+          'JSON file that was previously produced by GeneValidator') do |json|
+    opt[:json_file] = json
+  end
+
+  opts.separator ' '
+  opts.separator '# GENERAL ARGUMENTS'
+  opts.separator ' '
 
   opt[:num_threads] = 1
   opts.on('-n', '--num_threads [THREADS]',
           'Specify the number of processor threads to use when running',
           'BLAST and Mafft within GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
-  end
-
-  opts.on('-r', '--raw_sequences [RAW_SEQ]',
-          'Supply a fasta file of the raw sequences of all BLAST hits present',
-          'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
-    opt[:raw_sequences] = raw_seq
-  end
-
-  opts.on('-f', '--force_rewrite', 'Rewrites over existing output.') do
-    opt[:force_rewrite] = true
   end
 
   opts.on('-b', '--binaries [binaries]', Array,
@@ -99,25 +151,118 @@ BANNER
     (opt[:bin] ||= []).concat(bin)
   end
 
-  opts.on('--version', 'The version of GeneValidator that you are running.') do
-    puts GeneValidator::VERSION
+  opts.on('-h', '--help', 'Show this screen.') do
+    warn global
     exit
   end
 
-  opts.on('-h', '--help', 'Show this screen.') do
-    $stderr.puts opt_parser
+  opts.on('-v', '--version',
+          'The version of GeneValidator that you are running.') do
+    require 'genevalidator/version'
+    puts GeneValidator::VERSION
     exit
   end
 end
 
+subcommands = {
+  'app' => OptionParser.new do |opts|
+    opts.banner = <<BANNER
+SUMMARY:
+  Launch GeneValidator as a web application
+
+USAGE:
+  $ genevalidator app [options]
+
+Examples:
+  # Launch GeneValidatorApp with the given config file
+  $ genevalidator app --config ~/.genevalidatorapp.conf
+
+  # Launch GeneValidatorApp with 8 threads at port 8888
+  $ genevalidator app --num_threads 8 --port 8888
+
+  # Create a config file with the other arguments
+  $ genevalidator app -s -d ~/database_dir
+
+BANNER
+
+    opts.separator 'MANDATORY ARGUMENTS'
+    opts.separator ' '
+
+    opts.on('-d', '--database_dir [PATH]',
+            'Path to the directory containing BLAST database') do |path|
+      opt[:database_dir] = path
+    end
+
+    opts.separator ' '
+    opts.separator 'OPTIONAL ARGUMENTS'
+    opts.separator ' '
+
+    opts.on('-c', '--config_file [PATH]',
+            'Path to the directory containing BLAST database') do |path|
+      opt[:config_file] = path
+    end
+
+    opts.on('-g', '--gv_public_dir [PATH]',
+            'The public directory that is served to the web application') do |path|
+      opt[:gv_public_dir] = path
+    end
+
+    opts.on('-b', '--bin [PATH]', Array,
+            'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
+            'To be provided as follows:',
+            'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+      (opt[:bin] ||= []).concat(bin)
+    end
+
+    opts.on('-f', '--default_database_path  [PATH]',
+            'Path to the default BLAST database') do |path|
+      opt[:default_database_path] = path
+    end
+
+    opts.on('-H', '--host [HOST]',
+            'Host to run GeneValidatorApp on') do |host|
+      opt[:host] = host
+    end
+
+    opts.on('-p', '--port [PORT]',
+            'Port to run GeneValidatorApp on') do |port|
+      opt[:port] = port
+    end
+
+    opts.on('-s', '--set',
+            'Set configuration value in default or given config file') do
+      opt[:set] = true
+    end
+
+    opts.on('-l', '--list_databases',
+            'List found BLAST databases') do
+      opt[:list_databases] = true
+    end
+
+    opt[:num_threads] = 1
+    opts.on('-n', '--num_threads [THREADS]',
+            'Number of threads to use to running the app') do |num_threads|
+      opt[:num_threads] = num_threads
+    end
+
+    opts.on('-D', '--devel',
+            'Start GeneValidatorApp in development mode') do
+      opt[:devel] = true
+    end
+
+    opts.on('-h', '--help', 'Show this screen.') do
+      warn subcommands['app']
+      exit
+    end
+  end
+}
+
 begin
-  opt_parser.parse!(ARGV)
-  if ARGV.length > 1
-    $stderr.puts 'Error: you must specify a single fasta input file instead' \
-                 ' of ' + ARGV.length.to_s + ".\n"
-    exit 1
-  elsif ARGV.length == 0 && opt[:extract_raw_seqs].nil? && opt[:json_file].nil?
-    $stderr.puts opt_parser
+  global.order!
+  command = ARGV.shift
+  subcommands[command].order! unless command.nil?
+  if opt[:input_fasta_file].nil? && command.nil?
+    warn global
     exit 1
   end
 rescue OptionParser::ParseError
@@ -125,23 +270,113 @@ rescue OptionParser::ParseError
   exit 1
 end
 
-opt[:input_fasta_file] = ARGV[0]
-
-start = Time.now
-
-if opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
-  GeneValidator.opt    = opt
-  GeneValidator.config = {}
-  # GVArgValidation.run_raw_seqs
-  GeneValidator::RawSequences.run
-elsif opt[:json_file]
-  GeneValidator.opt = opt
-  # GVArgValidation.run_json_to_gv_results
-  GeneValidator::JsonToGVResults.run
-else
+if command.nil? && opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
+    require 'genevalidator/get_raw_sequences'
+    GeneValidator.opt    = opt
+    GeneValidator.config = {}
+    # GVArgValidation.run_raw_seqs
+    GeneValidator::RawSequences.run
+elsif command.nil? && opt[:json_file]
+    require 'genevalidator/json_to_gv_results'
+    GeneValidator.opt = opt
+    # GVArgValidation.run_json_to_gv_results
+    GeneValidator::JsonToGVResults.run
+elsif command.nil?
+  start = Time.now
+  require 'genevalidator'
+  opt[:output_formats] = 'fasta' if opt[:select_single_best]
   GeneValidator.init(opt)
   GeneValidator.run
-end
+  warn "Total running time: #{(Time.now - start).round(3)}s"
+  warn # a blank line
+elsif command == 'app'
+  ENV['RACK_ENV'] = 'development' if opt[:devel]
 
-$stderr.puts "Total running time: #{(Time.now - start).round(3)}s"
-$stderr.puts # a blank line
+  # Exit gracefully on SIGINT.
+  stty = `stty -g`.chomp
+  trap('INT') do
+    puts ''
+    puts 'Aborted.'
+    system('stty', stty)
+    exit
+  end
+
+  require 'genevalidatorapp'
+
+  begin
+    GeneValidatorApp.init opt
+
+    # The aim of following error recovery scenarios is to guide user to a
+    # working GeneValidatorApp installation. We expect to land following
+    # error scenarios either when creating a new GeneValidatorApp (first
+    # time or later), or updating config values using -s CLI option.
+  rescue GeneValidatorApp::CONFIG_FILE_ERROR => e
+    puts e
+    exit!
+  rescue GeneValidatorApp::NUM_THREADS_INCORRECT => e
+    puts e
+
+    if opt[:num_threads].nil?
+      puts 'You can set the correct value by running:'
+      puts
+      puts '  genevalidatorapp -s -n <value>'
+      puts
+    end
+
+    exit!
+  rescue GeneValidatorApp::BIN_DIR_NOT_FOUND => e
+    puts e
+
+    if opt[:bin].nil?
+      puts 'You can set the correct value by running:'
+      puts
+      puts '  genevalidatorapp -s -b <value>'
+      puts
+    end
+
+    exit!
+  rescue GeneValidatorApp::DATABASE_DIR_NOT_FOUND => e
+    puts e
+
+    if opt[:database_dir].nil?
+      puts 'You can set the correct value by running:'
+      puts
+      puts '  genevalidatorapp -s -d <value>'
+      puts
+    end
+
+    exit!
+  rescue GeneValidatorApp::BLAST_DATABASE_ERROR => e
+    puts e
+    exit!
+  rescue => e
+    # This will catch any unhandled error and some very special errors.
+    # Ideally we will never hit this block. If we do, there's a bug in
+    # GeneValidatorApp or something really weird going on. If we hit this
+    # error block we show the stacktrace to the user requesting them to
+    # post the same to our Google Group.
+    puts <<MSG
+Something went wonky
+
+Looks like you have encountered a bug in GeneValidatorApp. Please could you
+report this incident here -
+https://github.com/wurmlab/genevalidator/issues
+
+Error:
+#{e.backtrace.unshift(e.message).join("\n")}
+MSG≥
+    exit!
+  end
+
+  if opt[:list_databases]
+    puts GeneValidatorApp::Database.all
+    exit
+  end
+
+  if opt[:set]
+    GeneValidatorApp.config.write_config_file
+    exit
+  end
+
+  GeneValidatorApp.run
+end
