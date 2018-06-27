@@ -1,3 +1,4 @@
+require 'csv'
 require 'erb'
 require 'fileutils'
 require 'forwardable'
@@ -8,7 +9,7 @@ require 'genevalidator/version'
 module GeneValidator
   class Output
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex, :mutex_html,
+    def_delegators GeneValidator, :opt, :config, :dirs, :mutex, :mutex_html,
                    :mutex_json
     attr_accessor :prediction_def
     attr_accessor :nr_hits
@@ -27,9 +28,13 @@ module GeneValidator
     # Params:
     # +current_idx+: index of the current query
     def initialize(current_idx, no_of_hits, definition)
-      @opt            = opt
-      @config         = config
+      @opt             = opt
+      @dirs            = dirs
+      @config          = config
       @config[:run_no] += 1
+      output_dir       = @dirs[:output_dir]
+      @output_filename = File.join(output_dir, "#{@dirs[:filename]}_results")
+      @js_plots_dir    = File.join(output_dir, 'html_files/json')
 
       @prediction_def = definition
       @nr_hits        = no_of_hits
@@ -37,62 +42,51 @@ module GeneValidator
     end
 
     def print_output_console
+      return unless @opt[:output_formats].include? 'stdout'
+      c_fmt = "%3s\t%5s\t%20s\t%7s\t"
       mutex.synchronize do
-        print_console_header unless @config[:console_header_printed]
+        print_console_header(c_fmt) unless @config[:console_header_printed]
         short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-        print format("%3s\t%5s\t%20s\t%7s\t", @idx, @overall_score, short_def,
-                     @nr_hits)
+        print format(c_fmt, @idx, @overall_score, short_def, @nr_hits)
         puts validations.map(&:print).join("\t").gsub('&nbsp;', ' ')
       end
     end
 
-    def print_console_header
-      @config[:console_header_printed] = true
-      print format("%3s\t%5s\t%20s\t%7s\t", 'No', 'Score', 'Identifier',
-                   'No_Hits')
-      puts validations.map(&:short_header).join("\t")
-    end
-
-    def generate_html
-      mutex_html.synchronize do
-        output_html   = output_filename
-        query_erb     = File.join(@config[:aux], 'template_query.erb')
-        template_file = File.open(query_erb, 'r').read
-        erb           = ERB.new(template_file, 0, '>')
-        File.open(output_html, 'a') { |f| f.write(erb.result(binding)) }
-      end
-    end
-
-    def output_filename
-      idx         = (@config[:run_no].to_f / @config[:output_max]).ceil
-      output_html = File.join(@config[:html_path], "results#{idx}.html")
-      write_html_header(output_html)
-      output_html
-    end
-
-    def write_html_header(output_html)
-      head_erb       = File.join(@config[:aux], 'template_header.erb')
-      set_up_html(head_erb, output_html) unless File.exist?(output_html)
-    end
-
-    def set_up_html(erb_file, output_file)
-      return if File.exist?(output_file)
-      template_contents = File.open(erb_file, 'r').read
-      erb               = ERB.new(template_contents, 0, '>')
-      File.open(output_file, 'w+') { |f| f.write(erb.result(binding)) }
-    end
-
     def generate_json
       mutex_json.synchronize do
-        row = { idx: @idx, overall_score: @overall_score,
-                definition: @prediction_def, no_hits: @nr_hits }
-        row = create_validation_hashes(row)
+        row_data = { idx: @idx, overall_score: @overall_score,
+                     definition: @prediction_def, no_hits: @nr_hits }
+        row = create_validation_hash(row_data)
         write_row_json(row)
         @config[:json_output] << row
       end
     end
 
-    def create_validation_hashes(row)
+    def generate_html
+      return unless @opt[:output_formats].include? 'html'
+      mutex_html.synchronize do
+        html_output_file = html_output_filename
+        query_erb     = File.join(@dirs[:aux_dir], 'template_query.erb')
+        template_file = File.open(query_erb, 'r').read
+        erb           = ERB.new(template_file, 0, '>')
+        File.open(html_output_file, 'a') { |f| f.write(erb.result(binding)) }
+      end
+    end
+
+    private
+
+    def print_console_header(c_fmt)
+      @config[:console_header_printed] = true
+      print format(c_fmt, 'No', 'Score', 'Identifier', 'No_Hits')
+      puts validations.map(&:short_header).join("\t")
+    end
+
+    def write_row_json(row)
+      row_json = File.join(@js_plots_dir, "#{@dirs[:filename]}_#{@idx}.json")
+      File.open(row_json, 'w') { |f| f.write(row.to_json) }
+    end
+
+    def create_validation_hash(row)
       row[:validations] = {}
       @validations.each do |item|
         val     = add_basic_validation_info(item)
@@ -124,138 +118,162 @@ module GeneValidator
       graphs
     end
 
-    def write_row_json(row)
-      row_json = File.join(@config[:plot_dir],
-                           "#{@config[:filename]}_#{@idx}.json")
-      File.open(row_json, 'w') { |f| f.write(row.to_json) }
+    ### HTML Output
+
+    def html_output_filename
+      return unless @opt[:output_formats].include? 'html'
+      result_part = (@config[:run_no].to_f / @config[:output_max]).ceil
+      result_part = result_part == 1 ? '' : "_#{result_part}"
+      html_output_file = @output_filename + result_part + '.html'
+      write_html_header(html_output_file) unless File.exist?(html_output_file)
+      html_output_file
     end
 
-    def self.write_json_file(array, json_file)
-      File.open(json_file, 'w') { |f| f.write(array.to_json) }
+    def write_html_header(html_output_file)
+      return unless @opt[:output_formats].include? 'html'
+      head_erb          = File.join(@dirs[:aux_dir], 'template_header.erb')
+      template_contents = File.open(head_erb, 'r').read
+      erb               = ERB.new(template_contents, 0, '>')
+      File.open(html_output_file, 'w+') { |f| f.write(erb.result(binding)) }
     end
 
-    ##
-    # Method that closes the gas in the html file and writes the overall
-    # evaluation
-    # Param:
-    # +all_query_outputs+: array with +ValidationTest+ objects
-    # +html_path+: path of the html folder
-    # +filemane+: name of the fasta input file
-    def self.print_footer(overview, config)
-      set_overall_evaluation(overview, config)
-
-      footer_erb          = File.join(config[:aux], 'template_footer.erb')
-
-      no_of_results_files = (config[:run_no].to_f / config[:output_max]).ceil
-      template_file       = File.open(footer_erb, 'r').read
-      erb                 = ERB.new(template_file, 0, '>')
-
-      output_files = []
-      (1..no_of_results_files).each { |i| output_files << "results#{i}.html" }
-
-      (1..no_of_results_files).each do |i|
-        results_html = File.join(config[:html_path], "results#{i}.html")
-        File.open(results_html, 'a+') { |f| f.write(erb.result(binding)) }
+    class <<self
+      def print_console_footer(overall_evaluation, opt)
+        return unless (opt[:output_formats].include? 'stdout') ||
+                      opt[:hide_summary]
+        warn overall_evaluation.join("\n")
+        warn ''
       end
 
-      turn_off_sorting(config[:html_path]) if no_of_results_files > 1
-    end
-
-    def self.set_overall_evaluation(overview, config)
-      overall_evaluation = overview(overview)
-      less = overall_evaluation[0].gsub("\n", '<br>').gsub("'", %q(\\\'))
-
-      eval = print_summary_to_console(overall_evaluation, config[:summary])
-      evaluation     = eval.gsub("\n", '<br>').gsub("'", %q(\\\'))
-
-      create_overview_json(overview[:scores], config[:plot_dir], less,
-                           evaluation)
-    end
-
-    def self.turn_off_sorting(html_path)
-      script_file = File.join(html_path,
-                              'files/js/genevalidator.compiled.min.js')
-      content     = File.read(script_file).gsub(',initTableSorter(),', ',')
-      File.open("#{script_file}.tmp", 'w') { |f| f.puts content }
-      FileUtils.mv("#{script_file}.tmp", script_file)
-    end
-
-    def self.print_summary_to_console(overall_evaluation, summary)
-      # print to console
-      eval = ''
-      overall_evaluation.each { |e| eval << "#{e}\n" }
-      $stderr.puts eval if summary
-      $stderr.puts ''
-      eval
-    end
-
-    # make the historgram with the resulted scores
-    def self.create_overview_json(scores, plot_dir, less, evaluation)
-      plot_file = File.join(plot_dir, 'overview.json')
-      data = [scores.group_by { |a| a }.map { |k, vs| { 'key' => k, 'value' => vs.length, 'main' => false } }]
-      hash = { data: data, type: :simplebars,
-               title: 'Overall GeneValidator Score Evaluation',
-               footer: '', xtitle: 'Validation Score',
-               ytitle: 'Number of Queries', aux1: 10, aux2: '', less: less,
-               evaluation: evaluation }
-      File.open(plot_file, 'w') { |f| f.write hash.to_json }
-    end
-
-    ##
-    # Calculates an overall evaluation of the output
-    # Params:
-    # +all_query_outputs+: Array of +ValidationTest+ objects
-    # Output
-    # Array of Strigs with the reports
-    def self.overview(o)
-      eval       = general_overview(o)
-      error_eval = errors_overview(o)
-      time_eval  = time_overview(o)
-
-      overall_evaluation = [eval, error_eval, time_eval]
-      overall_evaluation.select { |e| e != '' }
-    end
-
-    def self.general_overview(o)
-      good_pred = (o[:good_scores] == 1) ? 'One' : "#{o[:good_scores]} are"
-      bad_pred  = (o[:bad_scores] == 1) ? 'One' : "#{o[:bad_scores]} are"
-
-      eval = "Overall Query Score Evaluation:\n" \
-             "#{o[:no_queries]} predictions were validated, from which there" \
-             " were:\n" \
-             "#{good_pred} good prediction(s),\n" \
-             "#{bad_pred} possibly weak prediction(s).\n"
-
-      if o[:nee] != 0 # nee = no evidence
-        eval << "#{o[:nee]} could not be evaluated due to the lack of" \
-                ' evidence.'
+      def write_json_file(array, json_file, opt)
+        return unless opt[:output_formats].include? 'json'
+        File.open(json_file, 'w') { |f| f.write(array.to_json) }
       end
-      eval
-    end
 
-    # errors per validation
-    def self.errors_overview(o)
-      error_eval = ''
-      o[:map_errors].each do |k, v|
-        error_eval << "\nWe couldn't run #{k} Validation for #{v} queries"
+      def write_csv_file(array, csv_file, opt)
+        return unless opt[:output_formats].include? 'csv'
+        data = array
+        File.open(csv_file, 'w') { |f| f.write(data.to_csv) }
       end
-      if o[:no_mafft] >= (o[:no_queries] - o[:nee])
-        error_eval << "\nWe couldn't run MAFFT multiple alignment"
-      end
-      if o[:no_internet] >= (o[:no_queries] - o[:nee])
-        error_eval << "\nWe couldn't make use of your internet connection"
-      end
-      error_eval
-    end
 
-    def self.time_overview(o)
-      time_eval = ''
-      o[:run_time].each do |key, value|
-        average_time = value.x / (value.y).to_f
-        time_eval << "\nAverage running time for #{key} Validation:" \
-                     " #{average_time.round(3)}s per validation"
+      def write_best_fasta(data, fasta_file, input_file, query_idx, opt)
+        return unless opt[:select_single_best]
+        top_data = data[0]
+        start_offset = query_idx[top_data[:idx] + 1] - query_idx[top_data[:idx]]
+        end_offset   = query_idx[top_data[:idx]]
+        query        = IO.binread(input_file, start_offset, end_offset)
+        File.open(fasta_file, 'w') { |f| f.write(query) }
+        puts query
       end
-      time_eval
+
+      ##
+      # Method that closes the gas in the html file and writes the overall
+      # evaluation
+      # Param:
+      # +all_query_outputs+: array with +ValidationTest+ objects
+      # +html_path+: path of the html folder
+      # +filemane+: name of the fasta input file
+      def print_html_footer(opt, config, dirs)
+        return unless opt[:output_formats].include? 'html'
+
+        footer_erb    = File.join(dirs[:aux_dir], 'template_footer.erb')
+        template_file = File.open(footer_erb, 'r').read
+        erb           = ERB.new(template_file, 0, '>')
+
+        all_html_files = all_html_output_files(config, dirs)
+        all_html_files.each do |html_output_file|
+          File.open(html_output_file, 'a+') { |f| f.write(erb.result(binding)) }
+        end
+
+        turn_off_sorting(@dir[:output_dir]) if all_html_files.length > 1
+      end
+
+      def create_overview_json_for_html(overview, scores, opt, dirs)
+        return unless opt[:output_formats].include? 'html'
+        evaluation = overview.flatten.join('<br>').gsub("'", %q(\\\'))
+        less = overview[0].join('<br>')
+        json = File.join(dirs[:output_dir], 'html_files/json/overview.json')
+
+        hash = overview_html_hash(scores, less, evaluation)
+        File.open(json, 'w') { |f| f.write hash.to_json }
+      end
+
+      ##
+      # Calculates an overall evaluation of the output
+      # Params:
+      # +all_query_outputs+: Array of +ValidationTest+ objects
+      # Output
+      # Array of Strigs with the reports
+      def calculate_overview(overview)
+        eval       = general_overview(overview)
+        error_eval = errors_overview(overview)
+        time_eval  = time_overview(overview)
+
+        [eval, error_eval, time_eval].reject(&:empty?)
+      end
+
+      private
+
+      def all_html_output_files(config, dirs)
+        fname = File.join(dirs[:output_dir], "#{dirs[:filename]}_results")
+        total_files = (config[:run_no].to_f / config[:output_max]).ceil
+        return [fname + '.html'] if total_files == 1
+        (1..total_files).map { |i| fname + "_#{i}" + '.html' }
+      end
+
+      def turn_off_sorting(output_dir)
+        script_file = File.join(output_dir, 'html_files/js/gv.compiled.min.js')
+        content     = File.read(script_file).gsub(',initTableSorter(),', ',')
+        File.open("#{script_file}.tmp", 'w') { |f| f.puts content }
+        FileUtils.mv("#{script_file}.tmp", script_file)
+      end
+
+      # make the historgram with the resulted scores
+      def overview_html_hash(scores, less, evaluation)
+        data = [scores.group_by { |a| a }.map { |k, vs|
+          { 'key': k, 'value': vs.length, 'main': false }
+        }]
+        { data: data, type: :simplebars, aux1: 10, aux2: '',
+          title: 'Overall GeneValidator Score Evaluation', footer: '',
+          xtitle: 'Validation Score', ytitle: 'Number of Queries',
+          less: less, evaluation: evaluation }
+      end
+
+      def general_overview(o)
+        good_pred = o[:good_scores] == 1 ? 'One' : "#{o[:good_scores]} are"
+        bad_pred  = o[:bad_scores] == 1 ? 'One' : "#{o[:bad_scores]} are"
+
+        # nee = no evidence
+        n = "#{o[:nee]} could not be evaluated due to the lack of evidence."
+        no_evidence = o[:nee] != 0 ? n : ''
+
+        ['Overall Query Score Evaluation:',
+         "#{o[:no_queries]} predictions were validated, from which there were:",
+         "#{good_pred} good prediction(s),",
+         "#{bad_pred} possibly weak prediction(s).", no_evidence]
+      end
+
+      # errors per validation
+      def errors_overview(o)
+        error_eval = o[:map_errors].map do |k, v|
+          "We couldn't run #{k} Validation for #{v} queries"
+        end
+        if o[:no_mafft] >= (o[:no_queries] - o[:nee])
+          error_eval << "We couldn't run MAFFT multiple alignment"
+        end
+        if o[:no_internet] >= (o[:no_queries] - o[:nee])
+          error_eval << "\nWe couldn't make use of your internet connection"
+        end
+        error_eval
+      end
+
+      def time_overview(o)
+        o[:run_time].map do |key, value|
+          mean_time = value.x / value.y.to_f
+          "Average running time for #{key} Validation: #{mean_time.round(3)}s" \
+          ' per validation'
+        end
+      end
     end
   end
 end

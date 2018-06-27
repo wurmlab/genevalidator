@@ -36,7 +36,7 @@ module GeneValidator
     end
 
     def run
-      fail 'run method should be implemented by all classes that extend' \
+      raise 'run method should be implemented by all classes that extend' \
            ' ValidationTest'
     end
   end
