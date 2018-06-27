@@ -18,7 +18,8 @@ task :test do
   Rake::TestTask.new do |t|
     t.libs.push 'lib'
     t.test_files = FileList['test/test_*.rb']
-    t.verbose = true
+    t.verbose = false
+    t.warning = false
   end
 end
 
@@ -35,7 +36,7 @@ end
 require 'bundler/setup'
 
 TMP_DIR = "#{Rake.original_dir}/tmp"
-APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}"
+APP_NAME = GEMSPEC.name
 PLATFORMS = %w[linux-x86 linux-x86_64 osx]
 TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'
 TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'
@@ -104,8 +105,8 @@ namespace :package do
       cp_r "#{Rake.original_dir}/bin", app_dir
       cp_r "#{TMP_DIR}/vendor", lib_dir
 
-      cp "#{Rake.original_dir}/data/mrna_data.fasta", exemplar_dir
-      cp "#{Rake.original_dir}/data/protein_data.fasta", exemplar_dir
+      cp "#{Rake.original_dir}/exemplar_data/mrna_data.fa", exemplar_dir
+      cp "#{Rake.original_dir}/exemplar_data/protein_data.fa", exemplar_dir
 
       cd vendor_dir do
         File.write('Gemfile', GEMFILE_CONTENTS)
@@ -311,11 +312,12 @@ unset BUNDLE_IGNORE_CONFIG
 
 MAFFT_DIR=$SELFDIR/lib/packages/mafft/mafftdir
 BLAST_BIN=$SELFDIR/lib/packages/blast/bin
+BLAST_DB_DIR=$SELFDIR/blast_db
 
 MAFFT_BINARIES="$MAFFT_DIR/libexec"; export MAFFT_BINARIES;
 
 # Run the actual app using the bundled Ruby interpreter, with Bundler activated.
-PATH=$MAFFT_DIR/bin:$BLAST_BIN:$PATH  exec "$SELFDIR/lib/ruby/bin/ruby" -rbundler/setup "$SELFDIR/lib/app/bin/genevalidator" $@
+PATH=$MAFFT_DIR/bin:$BLAST_BIN:$PATH  exec "$SELFDIR/lib/ruby/bin/ruby" -rbundler/setup "$SELFDIR/lib/app/bin/genevalidator" --db $BLAST_DB_DIR $@
 
 SCRIPT
 
@@ -345,12 +347,11 @@ Bioinformatics, doi: 10.1093/bioinformatics/btw015.
 Running GeneValidator with Exemplar Data:
 
     cd /path/to/genevalidator/package/
-    ./genevalidator -d blast_db/swissprot exemplar_data/protein_data.fa
+    genevalidator -d blast_db/swissprot exemplar_data/protein_data.fa
 
 Run the following to see all options available.
 
-  ./genevalidator -h
-
+  genevalidator -h
 
 See https://github.com/wurmlab/genevalidator for more usage information.
 
