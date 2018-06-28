@@ -364,7 +364,7 @@ https://github.com/wurmlab/genevalidator/issues
 
 Error:
 #{e.backtrace.unshift(e.message).join("\n")}
-MSG≥
+MSG
     exit!
   end
 
