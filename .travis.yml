@@ -1,11 +1,17 @@
 language: ruby
 rvm:
   - "2.2.10"
+  - "2.3.7"
+  - "2.4.4"
+  - "2.5.1"
 before_script:
-  - rake package:linux:x86_64 DIR_ONLY=1
-
-  - echo $PATH
-  - export PATH=$PWD/genevalidator-linux-x86_64/bin
+  - wget -P ~ https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz
+  - tar -zxvf ~/mafft-7.397-linux.tgz -C ~
+  - mkdir ~/mafft_bin
+  - echo "#!/bin/bash" > ~/mafft_bin/mafft
+  - echo '$HOME/mafft-linux64/mafft.bat "$@"' >> ~/mafft_bin/mafft
+  - chmod 755 ~/mafft_bin/mafft
+  - export PATH=$PATH:~/mafft_bin
 script: bundle exec rake test
 after_script: bundle exec codeclimate-test-reporter
 addons:
