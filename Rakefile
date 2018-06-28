@@ -174,8 +174,9 @@ namespace :package do
 
       cd 'vendor/ruby/2.2.0' do
         cd 'gems' do
-          mkdir APP_NAME
-          %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", APP_NAME }
+          dir = "#{APP_NAME}-#{GEMSPEC.version}"
+          mkdir dir
+          %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", dir }
         end
 
         cd 'specifications' do
