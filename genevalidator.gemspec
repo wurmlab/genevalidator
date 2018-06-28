@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'yard', '~> 0.9.11'
 
   s.add_dependency 'bio', '~> 1.4'
-  s.add_dependency 'bio-blastxmlparser', '~>2.0'
-  s.add_dependency 'genevalidatorapp', '2.0'
+  s.add_dependency 'bio-blastxmlparser', '~> 2.0'
+  s.add_dependency 'genevalidatorapp', '~> 2.0'
   s.add_dependency 'statsample', '2.1.0'
 
   s.files         = `git ls-files -z`.split("\x0")
@@ -34,13 +34,21 @@ Gem::Specification.new do |s|
   s.post_install_message = <<INFO
 
 ----------------------------------------------------------------------------
-  Thank you for validating your gene predictions with GeneValidator!
+Thank you for validating your gene predictions with GeneValidator!
 
-  To launch GeneValidator execute 'genevalidator' from command line.
+==> To launch GeneValidator execute 'genevalidator' from command line.
 
-    $ genevalidator [options] FASTA_FILE
+        genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
 
-  Visit https://wurmlab.github.io/tools/genevalidator/ for more information.
+    See 'genevalidator --help' for more information
+
+==> To launch GeneValidator as a web application execute 'genevalidator' from command line.
+
+        genevalidator app [OPTIONAL ARGUMENTS]
+
+    See 'genevalidator app --help' for more information
+
+==> Visit https://wurmlab.github.io/tools/genevalidator/ for more information.
 
 ----------------------------------------------------------------------------
 
