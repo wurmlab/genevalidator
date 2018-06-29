@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## USAGE: bash install.sh $INSTALL_DIR
 ##     $ bash install.sh $INSTALL_DIR
@@ -8,11 +8,11 @@ set -eu
 # OS detection
 KERNEL="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-if [ "$KERNEL" == "darwin" ]; then
+if [ "$KERNEL" = "darwin" ]; then
   PLATFORM='osx'
-elif [ "$KERNEL" == "linux" ]; then
+elif [ "$KERNEL" = "linux" ]; then
   ARCH=$(uname -m)
-  if [ "$ARCH" == "x86_64" ]; then
+  if [ "$ARCH" = "x86_64" ]; then
     PLATFORM='linux-x86_64'
   else
     PLATFORM='linux-x86'
@@ -20,12 +20,11 @@ elif [ "$KERNEL" == "linux" ]; then
 fi
 
 # If there is an argument then there is where GV will installed
-if [ $# -eq 0 ]; then
+# If there is an argument then there is where GV will installed
+if [ "$0" = 'sh' ]; then
   INSTALL_DIR=$PWD/genevalidator
 else
   INSTALL_DIR="$0"
-  # TODO: check if Install_dir exists and if it does then create a folder
-  # inside the dir
 fi
 
 GV_URL=$(curl -s https://api.github.com/repos/wurmlab/genevalidator/releases/latest \
@@ -79,7 +78,7 @@ if [ -z ${DOT_FILE+x} ]; then
   echo >&2
   echo >&2 '    export PATH="'"${INSTALL_DIR}"'/bin:${PATH}"'
 else
-  echo >&2 'export PATH="'"${INSTALL_DIR}"'/bin:${PATH}"' >> $DOT_FILE
+  echo >&2 'export PATH="'"${INSTALL_DIR}"'/bin:${PATH}"' >> "${DOT_FILE}"
   echo >&2
   echo >&2 "==> Added GeneValidator to your PATH in ~/.zshrc"
   echo >&2
