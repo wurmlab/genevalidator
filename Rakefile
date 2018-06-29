@@ -317,7 +317,7 @@ GV_BLAST_DB_DIR="${SELFDIR}/blast_db"; export GV_BLAST_DB_DIR
 MAFFT_BINARIES="${MAFFT_DIR}/libexec"; export MAFFT_BINARIES;
 
 # Run the actual app using the bundled Ruby interpreter, with Bundler activated.
-PATH=${MAFFT_DIR}/bin:${BLAST_BIN}:$PATH  exec "${SELFDIR}/lib/ruby/bin/ruby" -rbundler/setup "${SELFDIR}/lib/app/bin/genevalidator" --db "${GV_BLAST_DB_DIR}" "$@"
+PATH=${MAFFT_DIR}/bin:${BLAST_BIN}:$PATH  exec "${SELFDIR}/lib/ruby/bin/ruby" -rbundler/setup "${SELFDIR}/lib/app/bin/genevalidator" --db "${GV_BLAST_DB_DIR}/swissprot" "$@"
 
 SCRIPT
 
