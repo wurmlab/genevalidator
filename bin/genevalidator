@@ -118,11 +118,12 @@ BANNER
   opts.separator ' '
 
   opts.on('-e', '--extract_raw_seqs',
-          'Extract a fasta fileof the raw sequences of all BLAST hits in the
-          supplied BLAST output file. This fasta file can then be provided to
-          GeneValidator with the "-r", "--raw_sequences" argument') do
+          'Extract a fasta file of the raw sequences of BLAST hits in the',
+          'supplied BLAST output file. This fasta file can then be provided to',
+          'GeneValidator with the "-r", "--raw_sequences" argument') do
     opt[:extract_raw_seqs] = true
   end
+
   opts.separator ' '
   opts.separator '# REPROCESS JSON ARGUMENTS'
   opts.separator ' '
