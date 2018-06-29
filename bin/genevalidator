@@ -260,9 +260,29 @@ BANNER
 begin
   global.order!
   command = ARGV.shift
-  subcommands[command].order! unless command.nil?
-  if opt[:input_fasta_file].nil? && command.nil?
+  if !command.nil? && !subcommands.keys.include?(command)
+    warn # a blank line
+    warn "==> Error: Subcommand used (#{command}) is not recognised."
+    warn # a blank line
+    warn # a blank line
     warn global
+    exit 1
+  end
+  subcommands[command].order! unless subcommands[command].nil?
+  if opt[:input_fasta_file].nil? && command.nil?
+    warn # a blank line
+    warn "==> Error: Input Fasta file required."
+    warn # a blank line
+    warn # a blank line
+    warn global
+    exit 1
+  end
+  if opt[:database_dir].nil? && command == 'app'
+    warn # a blank line
+    warn "==> Error: Database directory containing BLAST databases required."
+    warn # a blank line
+    warn # a blank line
+    warn subcommands['app']
     exit 1
   end
 rescue OptionParser::ParseError
