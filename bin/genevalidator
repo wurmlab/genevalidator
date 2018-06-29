@@ -152,7 +152,7 @@ BANNER
   end
 
   opts.on('-h', '--help', 'Show this screen.') do
-    warn global
+    puts global
     exit
   end
 
@@ -253,7 +253,7 @@ BANNER
     end
 
     opts.on('-h', '--help', 'Show this screen.') do
-      warn subcommands['app']
+      puts subcommands['app']
       exit
     end
   end
@@ -267,7 +267,7 @@ begin
     warn "==> Error: Subcommand used (#{command}) is not recognised."
     warn # a blank line
     warn # a blank line
-    warn global
+    puts global
     exit 1
   end
   subcommands[command].order! unless subcommands[command].nil?
@@ -276,7 +276,7 @@ begin
     warn "==> Error: Input Fasta file required."
     warn # a blank line
     warn # a blank line
-    warn global
+    puts global
     exit 1
   end
   if opt[:database_dir].nil? && command == 'app'
@@ -284,7 +284,7 @@ begin
     warn "==> Error: Database directory containing BLAST databases required."
     warn # a blank line
     warn # a blank line
-    warn subcommands['app']
+    puts subcommands['app']
     exit 1
   end
 rescue OptionParser::ParseError
@@ -317,8 +317,8 @@ elsif command == 'app'
   # Exit gracefully on SIGINT.
   stty = `stty -g`.chomp
   trap('INT') do
-    puts ''
-    puts 'Aborted.'
+    warn ''
+    warn 'Aborted.'
     system('stty', stty)
     exit
   end
@@ -333,43 +333,43 @@ elsif command == 'app'
     # error scenarios either when creating a new GeneValidatorApp (first
     # time or later), or updating config values using -s CLI option.
   rescue GeneValidatorApp::CONFIG_FILE_ERROR => e
-    puts e
+    warn e
     exit!
   rescue GeneValidatorApp::NUM_THREADS_INCORRECT => e
-    puts e
+    warn e
 
     if opt[:num_threads].nil?
-      puts 'You can set the correct value by running:'
-      puts
-      puts '  genevalidatorapp -s -n <value>'
-      puts
+      warn 'You can set the correct value by running:'
+      warn
+      warn '  genevalidatorapp -s -n <value>'
+      warn
     end
 
     exit!
   rescue GeneValidatorApp::BIN_DIR_NOT_FOUND => e
-    puts e
+    warn e
 
     if opt[:bin].nil?
-      puts 'You can set the correct value by running:'
-      puts
-      puts '  genevalidatorapp -s -b <value>'
-      puts
+      warn 'You can set the correct value by running:'
+      warn
+      warn '  genevalidatorapp -s -b <value>'
+      warn
     end
 
     exit!
   rescue GeneValidatorApp::DATABASE_DIR_NOT_FOUND => e
-    puts e
+    warn e
 
     if opt[:database_dir].nil?
-      puts 'You can set the correct value by running:'
-      puts
-      puts '  genevalidatorapp -s -d <value>'
-      puts
+      warn 'You can set the correct value by running:'
+      warn
+      warn '  genevalidatorapp -s -d <value>'
+      warn
     end
 
     exit!
   rescue GeneValidatorApp::BLAST_DATABASE_ERROR => e
-    puts e
+    warn e
     exit!
   rescue => e
     # This will catch any unhandled error and some very special errors.
@@ -377,7 +377,7 @@ elsif command == 'app'
     # GeneValidatorApp or something really weird going on. If we hit this
     # error block we show the stacktrace to the user requesting them to
     # post the same to our Google Group.
-    puts <<MSG
+    warn <<MSG
 Something went wonky
 
 Looks like you have encountered a bug in GeneValidatorApp. Please could you
