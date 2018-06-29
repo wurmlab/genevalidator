@@ -36,7 +36,7 @@ end
 require 'bundler/setup'
 
 TMP_DIR = "#{Rake.original_dir}/tmp"
-APP_NAME = GEMSPEC.name
+APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}"
 PLATFORMS = %w[linux-x86 linux-x86_64 osx]
 TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'
 TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'
@@ -139,7 +139,7 @@ namespace :package do
         sh "curl -L #{JQ[platform.to_sym]} -o jq"
         sh 'chmod +x jq'
 
-        sh "sed 's|SELFDIR/|SELFDIR/../|g' #{package_dir}/#{GEMSPEC.name} > #{GEMSPEC.name}"
+        sh "sed 's|SELFDIR}/|SELFDIR}/../|g' #{package_dir}/#{GEMSPEC.name} > #{GEMSPEC.name}"
         sh "chmod +x #{GEMSPEC.name}"
       end
 
@@ -174,9 +174,8 @@ namespace :package do
 
       cd 'vendor/ruby/2.2.0' do
         cd 'gems' do
-          dir = "#{APP_NAME}-#{GEMSPEC.version}"
-          mkdir dir
-          %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", dir }
+          mkdir APP_NAME
+          %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", APP_NAME }
         end
 
         cd 'specifications' do
@@ -304,21 +303,21 @@ SCRIPT_CONTENTS = <<-SCRIPT
 set -e
 
 # Figure out where this script is located.
-SELFDIR="`dirname \"$0\"`"
-SELFDIR="`cd \"$SELFDIR\" && pwd`"
+SELFDIR="$(dirname "$0")"
+SELFDIR="$(cd "$SELFDIR" && pwd)"
 
 # Tell Bundler where the Gemfile and gems are.
-export BUNDLE_GEMFILE="$SELFDIR/lib/vendor/Gemfile"
+export BUNDLE_GEMFILE="${SELFDIR}/lib/vendor/Gemfile"
 unset BUNDLE_IGNORE_CONFIG
 
-MAFFT_DIR=$SELFDIR/lib/packages/mafft/mafftdir
-BLAST_BIN=$SELFDIR/lib/packages/blast/bin
-BLAST_DB_DIR=$SELFDIR/blast_db
+MAFFT_DIR="${SELFDIR}/lib/packages/mafft/mafftdir"
+BLAST_BIN="${SELFDIR}/lib/packages/blast/bin"
+GV_BLAST_DB_DIR="${SELFDIR}/blast_db"; export GV_BLAST_DB_DIR
 
-MAFFT_BINARIES="$MAFFT_DIR/libexec"; export MAFFT_BINARIES;
+MAFFT_BINARIES="${MAFFT_DIR}/libexec"; export MAFFT_BINARIES;
 
 # Run the actual app using the bundled Ruby interpreter, with Bundler activated.
-PATH=$MAFFT_DIR/bin:$BLAST_BIN:$PATH  exec "$SELFDIR/lib/ruby/bin/ruby" -rbundler/setup "$SELFDIR/lib/app/bin/genevalidator" --db $BLAST_DB_DIR $@
+PATH=${MAFFT_DIR}/bin:${BLAST_BIN}:$PATH  exec "$SELFDIR/lib/ruby/bin/ruby" -rbundler/setup "$SELFDIR/lib/app/bin/genevalidator" --db "${GV_BLAST_DB_DIR}" "$@"
 
 SCRIPT
 
