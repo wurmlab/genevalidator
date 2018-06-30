@@ -206,13 +206,12 @@ module GeneValidator
       end
 
       def extract_from_remote_db(accession, db_seq_type = 'protein')
-        uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
+        uri     = 'https://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
                   "db=#{db_seq_type}&retmax=1&usehistory=y&term=#{accession}/"
         result  = Net::HTTP.get(URI.parse(uri))
         query   = result.match(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[1]
         web_env = result.match(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[1]
-
-        uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
+        uri     = 'https://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
                   'rettype=fasta&retmode=text&retstart=0&retmax=1&' \
                   "db=#{db_seq_type}&query_key=#{query}&WebEnv=#{web_env}"
         result  = Net::HTTP.get(URI.parse(uri))
