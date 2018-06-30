@@ -27,12 +27,11 @@ module GeneValidator
       # String with the blast xml output
       def run_blast(query, db = opt[:db], seq_type = config[:type],
                     num_threads = opt[:num_threads])
-
         blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = db.match?(/remote/) ? "-num_threads #{num_threads}" : ''
+        threads = db.match?(/remote/) ? '' : "-num_threads #{num_threads}"
 
-        blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" \
+        blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5" \
                    " #{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
@@ -60,7 +59,7 @@ module GeneValidator
 
         blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = opt[:db].match?(/remote/) ? "-num_threads #{num_threads}" : ''
+        threads = opt[:db].match?(/remote/) ? '' : "-num_threads #{num_threads}"
 
         blastcmd = "#{blast_type} -query '#{input_file}'" \
                    " -out '#{opt[:blast_xml_file]}' -db #{db} " \
@@ -70,10 +69,10 @@ module GeneValidator
         return unless File.zero?(opt[:blast_xml_file])
         warn 'Blast failed to run on the input file.'
         if opt[:db].match?(/remote/)
-          warn 'Please ensure that the BLAST database exists and try again.'
-        else
           warn 'You are using BLAST with a remote database. Please'
           warn 'ensure that you have internet access and try again.'
+        else
+          warn 'Please ensure that the BLAST database exists and try again.'
         end
       end
 
