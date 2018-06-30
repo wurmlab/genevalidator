@@ -34,9 +34,10 @@ GV_URL=$(curl -s https://api.github.com/repos/wurmlab/genevalidator/releases/lat
 
 echo >&2 "==> Installing GeneValidator to:"
 echo >&2 "    ${INSTALL_DIR}"
+echo >&2
 
 mkdir "${INSTALL_DIR}"
-curl -sSL "$GV_URL" | tar zxf - -C "${INSTALL_DIR}" --strip-components 1
+curl -SL "$GV_URL" | tar zxf - -C "${INSTALL_DIR}" --strip-components 1
 
 echo >&2
 echo >&2 "==> GeneValidator successfully installed."
@@ -82,10 +83,7 @@ else
   echo >&2
   echo >&2 "==> Added GeneValidator to your PATH in ~/.zshrc"
   echo >&2
-  echo >&2 "==> To start using GeneValidator you need to run \`source ~/.zshrc\`"
-  echo >&2 "    in all your open shell windows, in rare cases you need to reopen"
-  echo >&2 "    all shell windows."
-  echo >&2 "    GeneValidator can then be run: \`genevalidator -h \`"
+  echo >&2 "==> Run \`genevalidator -h\` in a new window to get started."
 fi
 
 echo >&2
