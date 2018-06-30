@@ -10,7 +10,7 @@ SUMMARY:
   GeneValidator - Identify problems with predicted genes
 
 USAGE:
-  genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
+  genevalidator [OPTIONAL ARGUMENTS] --input INPUT_FILE
 
   To run as a web application:
 
