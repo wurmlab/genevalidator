@@ -23,6 +23,27 @@ task :test do
   end
 end
 
+desc 'Build Assets'
+task :assets do
+  # Requires uglifycss and uglifyjs
+  # npm install uglifycss -g
+  # npm install uglify-js -g
+  assets_dir = File.expand_path('aux/html_files', __dir__)
+  `rm #{assets_dir}/css/gv.compiled.min.css`
+  `rm #{assets_dir}/js/gv.compiled.min.js`
+  sh "uglifycss --output '#{assets_dir}/css/gv.compiled.min.css'" \
+     " '#{assets_dir}/css/src/font-awesome.min.css'" \
+     " '#{assets_dir}/css/src/bootstrap.min.css'" \
+     " '#{assets_dir}/css/src/style.css'"
+
+  sh "uglifyjs '#{assets_dir}/js/src/jquery-2.1.1.min.js'" \
+     " '#{assets_dir}/js/src/bootstrap.min.js'" \
+     " '#{assets_dir}/js/src/jquery.tablesorter.min.js'" \
+     " '#{assets_dir}/js/src/d3.v3.min.js'" \
+     " '#{assets_dir}/js/src/plots.js' '#{assets_dir}/js/src/script.js'" \
+     " -m -c -o '#{assets_dir}/js/gv.compiled.min.js'"
+end
+
 desc 'Generates documentation'
 task :doc do
   sh "yardoc 'lib/**/*.rb'"
