@@ -265,6 +265,7 @@ module GeneValidator
     def generate_run_output
       @run_output.generate_html
       @run_output.generate_json
+      @run_output.generate_csv
       @run_output.print_output_console
       generate_run_overview
     end

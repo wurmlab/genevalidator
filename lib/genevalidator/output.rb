@@ -10,7 +10,7 @@ module GeneValidator
   class Output
     extend Forwardable
     def_delegators GeneValidator, :opt, :config, :dirs, :mutex, :mutex_html,
-                   :mutex_json
+                   :mutex_json, :mutex_csv
     attr_accessor :prediction_def
     attr_accessor :nr_hits
 
@@ -70,6 +70,18 @@ module GeneValidator
         template_file = File.open(query_erb, 'r').read
         erb           = ERB.new(template_file, 0, '>')
         File.open(html_output_file, 'a') { |f| f.write(erb.result(binding)) }
+      end
+    end
+
+    def generate_csv
+      return unless @opt[:output_formats].include? 'csv'
+      mutex_csv.synchronize do
+        short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
+        line = [@idx, @overall_score, short_def, @nr_hits ]
+        line += validations.map(&:print).each { |e| e.gsub!('&nbsp;', ' ') }
+        line.map { |e| e.gsub!(',', ' -') if e.is_a? String}
+        write_csv_header unless File.exist?(@dirs[:csv_file])
+        File.open(@dirs[:csv_file], 'a') { |f| f.puts line.join(',') }
       end
     end
 
@@ -137,6 +149,12 @@ module GeneValidator
       File.open(html_output_file, 'w+') { |f| f.write(erb.result(binding)) }
     end
 
+    def write_csv_header
+      header = ['Analysis Number', 'GV Score', 'Identifier', 'No_Hits']
+      header += validations.map(&:short_header)
+      File.open(@dirs[:csv_file], 'a') { |f| f.puts header.join(',') }
+    end
+
     class <<self
       def print_console_footer(overall_evaluation, opt)
         return unless (opt[:output_formats].include? 'stdout') ||
@@ -148,12 +166,6 @@ module GeneValidator
       def write_json_file(array, json_file, opt)
         return unless opt[:output_formats].include? 'json'
         File.open(json_file, 'w') { |f| f.write(array.to_json) }
-      end
-
-      def write_csv_file(array, csv_file, opt)
-        return unless opt[:output_formats].include? 'csv'
-        data = array
-        File.open(csv_file, 'w') { |f| f.write(data.to_csv) }
       end
 
       def write_best_fasta(data, fasta_file, input_file, query_idx, opt)

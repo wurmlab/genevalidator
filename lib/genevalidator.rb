@@ -17,7 +17,7 @@ module GeneValidator
     attr_reader :raw_seq_file_load
     # array of indexes for the start offsets of each query in the fasta file
     attr_reader :query_idx
-    attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array
+    attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array, :mutex_csv
 
     def init(opt, start_idx = 1)
       warn 'Analysing input arguments'
@@ -32,6 +32,7 @@ module GeneValidator
       @mutex_array = Mutex.new
       @mutex_html  = Mutex.new
       @mutex_json  = Mutex.new
+      @mutex_csv   = Mutex.new
 
       index_the_input
       RawSequences.index_raw_seq_file if @opt[:raw_sequences]
@@ -141,7 +142,6 @@ module GeneValidator
       Output.create_overview_json_for_html(overall_eval, @overview[:scores],
                                            @opt, @dirs)
       Output.write_json_file(@config[:json_output], @dirs[:json_file], @opt)
-      Output.write_csv_file(@config[:json_output], @dirs[:csv_file], @opt)
       Output.write_best_fasta(@config[:json_output], @dirs[:fasta_file],
                               @opt[:input_fasta_file], @query_idx, opt)
     end
