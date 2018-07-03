@@ -71,10 +71,10 @@ module GeneValidator
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
       prediction                = Query.new
-      prediction.definition     = parse_query[0].gsub("\n", '')
+      prediction.definition     = parse_query[0].delete("\n")
       prediction.identifier     = prediction.definition.gsub(/ .*/, '')
       prediction.type           = seq_type
-      prediction.raw_sequence   = parse_query[1].gsub("\n", '')
+      prediction.raw_sequence   = parse_query[1].delete("\n")
       prediction.length_protein = prediction.raw_sequence.length
       prediction.length_protein /= 3 if seq_type == :nucleotide
       prediction
@@ -85,7 +85,7 @@ module GeneValidator
     def check_if_maker_input?(input_file = @opt[:input_fasta_file])
       query        = IO.binread(input_file, @query_idx[1], @query_idx[0])
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-      definition   = parse_query[0].gsub("\n", '')
+      definition   = parse_query[0].delete("\n")
       number       = '-?\d*\.?\d*'
       qi_match     = definition.match(/QI:#{number}\|#{number}\|#{number}\|
                                       #{number}\|#{number}\|#{number}\|
@@ -197,28 +197,28 @@ module GeneValidator
 
     def check_validations(vals)
       # check the class type of the elements in the list
-      vals.each { |v| fail ValidationClassError unless v.is_a? ValidationTest }
+      vals.each { |v| raise ValidationClassError unless v.is_a? ValidationTest }
       # check alias duplication
       aliases = vals.map(&:cli_name)
-      fail AliasDuplicationError unless aliases.length == aliases.uniq.length
+      raise AliasDuplicationError unless aliases.length == aliases.uniq.length
     rescue ValidationClassError => e
-      $stderr.puts e
+      warn e
       exit 1
     rescue AliasDuplicationError => e
-      $stderr.puts e
+      warn e
       exit 1
     end
 
     def check_validations_output(vals)
-      fail NoValidationError if @run_output.validations.length == 0
+      raise NoValidationError if @run_output.validations.length == 0
       vals.each do |v|
-        fail ReportClassError unless v.validation_report.is_a? ValidationReport
+        raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
     rescue NoValidationError => e
-      $stderr.puts e
+      warn e
       exit 1
     rescue ReportClassError => e
-      $stderr.puts e
+      warn e
       exit 1
     end
 
@@ -226,8 +226,11 @@ module GeneValidator
       validations        = @run_output.validations
       scores             = {}
       scores[:successes] = validations.count { |v| v.result == v.expected }
-      scores[:fails] = validations.count { |v| v.validation != :unapplicable && v.validation != :error && v.result != v.expected }
-      scores         = length_validation_scores(validations, scores)
+      scores[:fails] = validations.count do |v|
+        v.validation != :unapplicable && v.validation != :error &&
+          v.result != v.expected
+      end
+      scores = length_validation_scores(validations, scores)
 
       @run_output.successes     = scores[:successes]
       @run_output.fails         = scores[:fails]
@@ -262,6 +265,7 @@ module GeneValidator
     def generate_run_output
       @run_output.generate_html
       @run_output.generate_json
+      @run_output.generate_csv
       @run_output.print_output_console
       generate_run_overview
     end

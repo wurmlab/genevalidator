@@ -13,24 +13,25 @@ module GeneValidator
   class RawSequences
     class <<self
       extend Forwardable
-      def_delegators GeneValidator, :opt, :config
+      def_delegators GeneValidator, :opt, :config, :dirs
 
       def init
-        $stderr.puts 'Extracting sequences within the BLAST output file from' \
-                     ' the BLAST database'
+        warn 'Extracting sequences within the BLAST output file from' \
+             ' the BLAST database'
 
         @blast_file = opt[:blast_xml_file] if opt[:blast_xml_file]
         @blast_file = opt[:blast_tabular_file] if opt[:blast_tabular_file]
 
-        opt[:raw_sequences] = @blast_file + '.raw_seq'
-        @index_file         = @blast_file + '.index'
+        fname = File.basename(@blast_file)
+        opt[:raw_sequences] = File.join(dirs[:tmp_dir], "#{fname}.raw_seq")
+        @index_file         = File.join(dirs[:tmp_dir], "#{fname}.index")
       end
 
       ##
       # Obtains raw_sequences from BLAST output file...
       def run
         init
-        if opt[:db] =~ /remote/
+        if opt[:db].match?(/remote/)
           write_a_raw_seq_file(opt[:raw_sequences], 'remote')
         else
           write_an_index_file(@index_file, 'local')
@@ -55,12 +56,13 @@ module GeneValidator
         index_hash = {}
         keys.each_with_index do |k, i|
           start = values[i]
-          endf  = (i == values.length - 1) ? content.length - 1 : values[i + 1]
+          endf  = i == values.length - 1 ? content.length - 1 : values[i + 1]
           index_hash[k] = [start, endf]
         end
 
         # create FASTA index
-        config[:raw_seq_file_index] = "#{raw_seq_file}.idx"
+        fname = File.basename(raw_seq_file)
+        config[:raw_seq_file_index] = File.join(dirs[:tmp_dir], "#{fname}.idx")
         config[:raw_seq_file_load]  = index_hash
 
         File.open(config[:raw_seq_file_index], 'w') do |f|
@@ -76,17 +78,17 @@ module GeneValidator
         iterate_xml(file, db_type) if opt[:blast_xml_file]
         iterate_tabular(file, db_type) if opt[:blast_tabular_file]
       rescue BLASTDBError
-        $stderr.puts "*** BLAST Database Error: Genevalidator requires BLAST" \
+        warn "*** BLAST Database Error: Genevalidator requires BLAST" \
         " databases to be created with the '-parse_seqids argument."
-        $stderr.puts "    See https://github.com/wurmlab/genevalidator" \
+        warn "    See https://github.com/wurmlab/genevalidator" \
         "#setting-up-a-blast-database for more information"
         exit 1
       rescue
-        $stderr.puts '*** Error: There was an error in analysing the BLAST'
-        $stderr.puts '    output file. Please ensure that BLAST output file'
-        $stderr.puts '    is in the correct format and then try again. If you'
-        $stderr.puts '    are using a remote database, please ensure that you'
-        $stderr.puts '    have internet access.'
+        warn '*** Error: There was an error in analysing the BLAST'
+        warn '    output file. Please ensure that BLAST output file'
+        warn '    is in the correct format and then try again. If you'
+        warn '    are using a remote database, please ensure that you'
+        warn '    have internet access.'
         exit 1
       ensure
         file.close unless file.nil?
@@ -193,9 +195,9 @@ module GeneValidator
       def failed_raw_sequences(blast_output)
         blast_output.each_line do |line|
           acc = line.match(/Error: (\w+): OID not found/)[1]
-          $stderr.puts "\nCould not find sequence '#{acc.chomp}' within the" \
+          warn "\nCould not find sequence '#{acc.chomp}' within the" \
                        ' BLAST database.'
-          $stderr.puts "Attempting to obtain sequence '#{acc.chomp}' from" \
+          warn "Attempting to obtain sequence '#{acc.chomp}' from" \
                        ' remote BLAST databases.'
           File.open(opt[:raw_sequences], 'a+') do |f|
             f.puts extract_from_remote_db(acc)
@@ -204,13 +206,12 @@ module GeneValidator
       end
 
       def extract_from_remote_db(accession, db_seq_type = 'protein')
-        uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
+        uri     = 'https://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
                   "db=#{db_seq_type}&retmax=1&usehistory=y&term=#{accession}/"
         result  = Net::HTTP.get(URI.parse(uri))
         query   = result.match(%r{<\bQueryKey\b>([\w\W\d]+)</\bQueryKey\b>})[1]
         web_env = result.match(%r{<\bWebEnv\b>([\w\W\d]+)</\bWebEnv\b>})[1]
-
-        uri     = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
+        uri     = 'https://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' \
                   'rettype=fasta&retmode=text&retstart=0&retmax=1&' \
                   "db=#{db_seq_type}&query_key=#{query}&WebEnv=#{web_env}"
         result  = Net::HTTP.get(URI.parse(uri))

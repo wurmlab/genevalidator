@@ -12,7 +12,7 @@ module GeneValidator
   class BlastUtils
     class << self
       extend Forwardable
-      def_delegators GeneValidator, :opt, :config
+      def_delegators GeneValidator, :opt, :config, :dirs
 
       EVALUE = 1e-5
 
@@ -27,12 +27,11 @@ module GeneValidator
       # String with the blast xml output
       def run_blast(query, db = opt[:db], seq_type = config[:type],
                     num_threads = opt[:num_threads])
-
-        blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
+        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = (db !~ /remote/) ? "-num_threads #{num_threads}" : ''
+        threads = db.match?(/remote/) ? '' : "-num_threads #{num_threads}"
 
-        blastcmd = "#{blast_type} -db '#{db}' -evalue #{EVALUE} -outfmt 5" \
+        blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5" \
                    " #{threads}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
@@ -54,12 +53,13 @@ module GeneValidator
                                   num_threads = opt[:num_threads])
         return if opt[:blast_xml_file] || opt[:blast_tabular_file]
 
-        $stderr.puts 'Running BLAST. This may take a while.'
-        opt[:blast_xml_file] = input_file + '.blast_xml'
+        warn 'Running BLAST. This may take a while.'
+        fname = File.basename(input_file) + '.blast_xml'
+        opt[:blast_xml_file] = File.join(dirs[:tmp_dir], fname)
 
-        blast_type = (seq_type == :protein) ? 'blastp' : 'blastx'
+        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = (opt[:db] !~ /remote/) ? "-num_threads #{num_threads}" : ''
+        threads = opt[:db].match?(/remote/) ? '' : "-num_threads #{num_threads}"
 
         blastcmd = "#{blast_type} -query '#{input_file}'" \
                    " -out '#{opt[:blast_xml_file]}' -db #{db} " \
@@ -67,13 +67,12 @@ module GeneValidator
 
         `#{blastcmd} >/dev/null 2>&1`
         return unless File.zero?(opt[:blast_xml_file])
-        $stderr.puts 'Blast failed to run on the input file.'
-        if opt[:db] !~ /remote/
-          $stderr.puts 'Please ensure that the BLAST database exists and try'
-          $stderr.puts 'again.'
+        warn 'Blast failed to run on the input file.'
+        if opt[:db].match?(/remote/)
+          warn 'You are using BLAST with a remote database. Please'
+          warn 'ensure that you have internet access and try again.'
         else
-          $stderr.puts 'You are using BLAST with a remote database. Please'
-          $stderr.puts 'ensure that you have internet access and try again.'
+          warn 'Please ensure that the BLAST database exists and try again.'
         end
       end
 
@@ -122,16 +121,16 @@ module GeneValidator
 
             current_hsp.hit_alignment = hsp.hseq.to_s
             seq_type = guess_sequence_type(current_hsp.hit_alignment)
-            fail SequenceTypeError unless seq_type == :protein || seq_type.nil?
+            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
 
             current_hsp.query_alignment = hsp.qseq.to_s
             seq_type = guess_sequence_type(current_hsp.query_alignment)
-            fail SequenceTypeError unless seq_type == :protein || seq_type.nil?
+            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
 
             current_hsp.align_len = hsp.align_len.to_i
             current_hsp.identity  = hsp.identity.to_i
             current_hsp.pidentity = (100 * hsp.identity / hsp.align_len.to_f)
-              .round(2)
+                                    .round(2)
 
             hsps.push(current_hsp)
           end
@@ -142,7 +141,7 @@ module GeneValidator
 
         hits
       rescue SequenceTypeError => e
-        $stderr.puts e
+        warn e
         exit 1
       rescue StopIteration
         nil
@@ -164,7 +163,7 @@ module GeneValidator
         sequences = fasta_format_string.split(/^>.*$/).delete_if(&:empty?)
         # get all sequence types
         sequence_types = sequences.collect { |seq| guess_sequence_type(seq) }
-                         .uniq.compact
+                                  .uniq.compact
 
         return nil if sequence_types.empty?
         sequence_types.first if sequence_types.length == 1
@@ -184,7 +183,7 @@ module GeneValidator
         return nil if cleaned_sequence.length < 10 # conservative
 
         type = Bio::Sequence.new(cleaned_sequence).guess(0.9)
-        (type == Bio::Sequence::NA) ? :nucleotide : :protein
+        type == Bio::Sequence::NA ? :nucleotide : :protein
       end
 
       ##
@@ -192,9 +191,7 @@ module GeneValidator
       def guess_sequence_type_from_input_file(file = opt[:input_fasta_file])
         lines = File.foreach(file).first(10)
         seqs = ''
-        lines.each do |l|
-          seqs += l.chomp unless l[0] == '>'
-        end
+        lines.each { |l| seqs += l.chomp unless l[0] == '>' }
         guess_sequence_type(seqs)
       end
     end

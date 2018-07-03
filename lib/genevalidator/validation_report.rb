@@ -63,7 +63,7 @@ module GeneValidator
       elsif validation == :error || validation == :unapplicable
         'warning'
       else
-        (validation == :warning) ? 'warning' : 'danger'
+        validation == :warning ? 'warning' : 'danger'
       end
     end
   end

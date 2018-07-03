@@ -15,14 +15,15 @@ Gem::Specification.new do |s|
                   ' useful information (length validation, gene merge' \
                   ' validation, sequence duplication checking, ORF finding)' \
                   ' based on the similarities to genes in public databases.'
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.2.0'
 
   s.add_development_dependency 'minitest', '~> 5.10'
   s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'yard', '~> 0.9.11'
 
   s.add_dependency 'bio', '~> 1.4'
-  s.add_dependency 'bio-blastxmlparser', '~>2.0'
+  s.add_dependency 'bio-blastxmlparser', '~> 2.0'
+  s.add_dependency 'genevalidatorapp', '~> 2.0'
   s.add_dependency 'statsample', '2.1.0'
 
   s.files         = `git ls-files -z`.split("\x0")
@@ -33,17 +34,22 @@ Gem::Specification.new do |s|
   s.post_install_message = <<INFO
 
 ----------------------------------------------------------------------------
-  Thank you for validating your gene predictions with GeneValidator!
+Thank you for validating your gene predictions with GeneValidator!
 
-  To launch GeneValidator execute 'genevalidator' from command line.
+==> To launch GeneValidator execute 'genevalidator' from command line.
 
-    $ genevalidator [options] FASTA_FILE
+        genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
 
-  Visit https://wurmlab.github.io/tools/genevalidator/ for more information.
+    See 'genevalidator --help' for more information
 
-  Note there is an also online demo server at:
+==> To launch GeneValidator as a web application execute 'genevalidator' from command line.
 
-     http://genevalidator.sbcs.qmul.ac.uk
+        genevalidator app [OPTIONAL ARGUMENTS]
+
+    See 'genevalidator app --help' for more information
+
+==> Visit https://wurmlab.github.io/tools/genevalidator/ for more information.
+
 ----------------------------------------------------------------------------
 
 INFO

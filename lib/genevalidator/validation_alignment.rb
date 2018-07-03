@@ -225,18 +225,21 @@ module GeneValidator
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       options = ['--maxiterate', '1000', '--localpair', '--anysymbol',
-                 '--quiet', '--thread', "#{@num_threads}"]
+                 '--quiet', '--thread', @num_threads.to_s]
       mafft = Bio::MAFFT.new('mafft', options)
-      sequences = hits.map(&:raw_sequence)
+      sequences = hits.map do |h|
+        # remove the seq id - as MAFFT sometimes has an issue with this
+        f = Bio::FastaFormat.new(h.raw_sequence)
+        # check if fasta sequence otherwise returne original entry
+        f.seq.empty? ? h.raw_sequence : f.seq
+      end
       sequences.push(prediction.protein_translation)
 
       report = mafft.query_align(sequences)
-      # Accesses the actual alignment.
-      align = report.alignment
 
-      align.each_with_index do |s, _i|
-        @multiple_alignment.push(s.to_s)
-      end
+      report.alignment.each { |s| @multiple_alignment.push(s.to_s) }
+
+      raise NoMafftInstallationError if @multiple_alignment.empty?
 
       @multiple_alignment
     rescue

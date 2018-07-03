@@ -18,8 +18,30 @@ task :test do
   Rake::TestTask.new do |t|
     t.libs.push 'lib'
     t.test_files = FileList['test/test_*.rb']
-    t.verbose = true
+    t.verbose = false
+    t.warning = false
   end
+end
+
+desc 'Build Assets'
+task :assets do
+  # Requires uglifycss and uglifyjs
+  # npm install uglifycss -g
+  # npm install uglify-js -g
+  assets_dir = File.expand_path('aux/html_files', __dir__)
+  `rm #{assets_dir}/css/gv.compiled.min.css`
+  `rm #{assets_dir}/js/gv.compiled.min.js`
+  sh "uglifycss --output '#{assets_dir}/css/gv.compiled.min.css'" \
+     " '#{assets_dir}/css/src/font-awesome.min.css'" \
+     " '#{assets_dir}/css/src/bootstrap.min.css'" \
+     " '#{assets_dir}/css/src/style.css'"
+
+  sh "uglifyjs '#{assets_dir}/js/src/jquery-2.1.1.min.js'" \
+     " '#{assets_dir}/js/src/bootstrap.min.js'" \
+     " '#{assets_dir}/js/src/jquery.tablesorter.min.js'" \
+     " '#{assets_dir}/js/src/d3.v3.min.js'" \
+     " '#{assets_dir}/js/src/plots.js' '#{assets_dir}/js/src/script.js'" \
+     " -m -c -o '#{assets_dir}/js/gv.compiled.min.js'"
 end
 
 desc 'Generates documentation'
@@ -104,8 +126,8 @@ namespace :package do
       cp_r "#{Rake.original_dir}/bin", app_dir
       cp_r "#{TMP_DIR}/vendor", lib_dir
 
-      cp "#{Rake.original_dir}/data/mrna_data.fasta", exemplar_dir
-      cp "#{Rake.original_dir}/data/protein_data.fasta", exemplar_dir
+      cp "#{Rake.original_dir}/exemplar_data/mrna_data.fa", exemplar_dir
+      cp "#{Rake.original_dir}/exemplar_data/protein_data.fa", exemplar_dir
 
       cd vendor_dir do
         File.write('Gemfile', GEMFILE_CONTENTS)
@@ -138,7 +160,7 @@ namespace :package do
         sh "curl -L #{JQ[platform.to_sym]} -o jq"
         sh 'chmod +x jq'
 
-        sh "sed 's|SELFDIR/|SELFDIR/../|g' #{package_dir}/#{GEMSPEC.name} > #{GEMSPEC.name}"
+        sh "sed 's|SELFDIR}/|SELFDIR}/../|g' #{package_dir}/#{GEMSPEC.name} > #{GEMSPEC.name}"
         sh "chmod +x #{GEMSPEC.name}"
       end
 
@@ -302,20 +324,21 @@ SCRIPT_CONTENTS = <<-SCRIPT
 set -e
 
 # Figure out where this script is located.
-SELFDIR="`dirname \"$0\"`"
-SELFDIR="`cd \"$SELFDIR\" && pwd`"
+SELFDIR="$(dirname "$0")"
+SELFDIR="$(cd "$SELFDIR" && pwd)"
 
 # Tell Bundler where the Gemfile and gems are.
-export BUNDLE_GEMFILE="$SELFDIR/lib/vendor/Gemfile"
+export BUNDLE_GEMFILE="${SELFDIR}/lib/vendor/Gemfile"
 unset BUNDLE_IGNORE_CONFIG
 
-MAFFT_DIR=$SELFDIR/lib/packages/mafft/mafftdir
-BLAST_BIN=$SELFDIR/lib/packages/blast/bin
+MAFFT_DIR="${SELFDIR}/lib/packages/mafft/mafftdir"
+BLAST_BIN="${SELFDIR}/lib/packages/blast/bin"
+GV_BLAST_DB_DIR="${SELFDIR}/blast_db"; export GV_BLAST_DB_DIR
 
-MAFFT_BINARIES="$MAFFT_DIR/libexec"; export MAFFT_BINARIES;
+MAFFT_BINARIES="${MAFFT_DIR}/libexec"; export MAFFT_BINARIES;
 
 # Run the actual app using the bundled Ruby interpreter, with Bundler activated.
-PATH=$MAFFT_DIR/bin:$BLAST_BIN:$PATH  exec "$SELFDIR/lib/ruby/bin/ruby" -rbundler/setup "$SELFDIR/lib/app/bin/genevalidator" $@
+PATH=${MAFFT_DIR}/bin:${BLAST_BIN}:$PATH  exec "${SELFDIR}/lib/ruby/bin/ruby" -rbundler/setup "${SELFDIR}/lib/app/bin/genevalidator" --db "${GV_BLAST_DB_DIR}/swissprot" "$@"
 
 SCRIPT
 
@@ -345,12 +368,11 @@ Bioinformatics, doi: 10.1093/bioinformatics/btw015.
 Running GeneValidator with Exemplar Data:
 
     cd /path/to/genevalidator/package/
-    ./genevalidator -d blast_db/swissprot exemplar_data/protein_data.fa
+    genevalidator -d blast_db/swissprot exemplar_data/protein_data.fa
 
 Run the following to see all options available.
 
-  ./genevalidator -h
-
+  genevalidator -h
 
 See https://github.com/wurmlab/genevalidator for more usage information.
 
