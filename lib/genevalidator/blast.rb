@@ -202,8 +202,8 @@ module GeneValidator
       def warn_if_remote_database(opt)
         return if opt[:db] !~ /remote/
         warn '' # a blank line
-        warn '==> BLAST Search and Subsequent analysis will be done on a remote'
-        warn '    database. Please use a local DB for larger analysis.'
+        warn '==> BLAST search and subsequent analysis will be done on a remote'
+        warn '    database. Please use a local database for larger analysis.'
         warn '' # a blank line
       end
     end
