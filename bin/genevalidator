@@ -253,6 +253,27 @@ BANNER
       puts subcommands['app']
       exit
     end
+  end,
+  'serve' => OptionParser.new do |opts|
+    opts.banner = <<BANNER
+SUMMARY:
+  Create a web server for viewing results
+
+USAGE:
+  $ genevalidator serve [options] OUTPUT_DIR
+
+ARGUMENTS:
+BANNER
+    opt[:port] = 8080
+    opts.on('-p', '--port [PORT]',
+            'Port to run the server on') do |port|
+      opt[:port] = port
+    end
+
+    opts.on('-h', '--help', 'Show this screen.') do
+      puts subcommands['serve']
+      exit
+    end
   end
 }
 
@@ -305,6 +326,36 @@ elsif command.nil?
   GeneValidator.run
   warn "Total running time: #{(Time.now - start).round(3)}s"
   warn # a blank line
+elsif command == 'serve'
+  require 'rack'
+
+  # Uses `open` on Mac or `xdg-open` on Linux to opens the search form in
+  # user's default browser. Errors, if any, are silenced.
+  def open_in_browser(server_url)
+    return if using_ssh?
+    if RUBY_PLATFORM =~ /linux/ && xdg?
+      system "xdg-open #{server_url}"
+    elsif RUBY_PLATFORM =~ /darwin/
+      system "open #{server_url}"
+    end
+  rescue
+    # fail silently
+  end
+
+  def using_ssh?
+    true if ENV['SSH_CLIENT'] || ENV['SSH_TTY'] || ENV['SSH_CONNECTION']
+  end
+
+  def xdg?
+    true if ENV['DISPLAY'] && command?('xdg-open')
+  end
+
+  dir = ARGV[0]
+  index_file = File.basename( Dir[ File.join(dir, '*.html') ].sort.first )
+  app = Rack::Static.new nil, urls: [""], root: dir, index: index_file
+  Rack::Server.start app: app, port: opt[:port], StartCallback: proc {
+    open_in_browser("http://localhost:#{opt[:port]}")
+  }
 elsif command == 'app'
   ENV['RACK_ENV'] = 'development' if opt[:devel]
 
