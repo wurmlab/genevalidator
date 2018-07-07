@@ -38,6 +38,6 @@ function initTableSorter() {
     headers: {
       1 : { sorter: 'star_scores' } // Telling it to use custom parser...
     },
-    sortList: [[0,0]],
+    sortList:[[1,1],[3,1]],
   });
 }

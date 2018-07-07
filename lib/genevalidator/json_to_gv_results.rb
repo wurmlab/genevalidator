@@ -70,7 +70,7 @@ module GeneValidator
         js_file = File.join(@dirs[:output_dir], 'files/js/gv.compiled.min.js')
         original_content = File.read(js_file)
         # removes the automatic sort on page load
-        updated_content = original_content.gsub(',sortList:[[0,0]]', '')
+        updated_content = original_content.gsub(',sortList:[[1,1],[3,1]]', '')
         File.open("#{script_file}.tmp", 'w') { |f| f.puts updated_content }
         FileUtils.mv("#{script_file}.tmp", script_file)
       end
