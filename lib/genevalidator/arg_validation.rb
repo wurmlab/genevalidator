@@ -152,7 +152,6 @@ module GeneValidator
 
         def validate(opt)
           assert_blast_installation
-          warn_if_remote_database(opt)
           assert_local_blast_database_exists(opt[:db]) if opt[:db] !~ /remote/
         end
 
@@ -160,23 +159,6 @@ module GeneValidator
           # Validate BLAST installation
           assert_blast_installed
           assert_blast_compatible
-        end
-
-        def warn_if_remote_database(opt)
-          return if opt[:db] !~ /remote/
-          $stderr.puts # a blank line
-          if !opt[:raw_sequences] &&
-              (opt[:validations].include?('align') ||
-               opt[:validations].include?('dup'))
-            $stderr.puts 'Warning: Hit sequences will be fetched from remote' \
-                         ' server.'
-          else
-            $stderr.puts 'Warning: BLAST will be carried out on remote server.'
-          end
-          $stderr.puts 'This may take quite a bit of time.'
-          $stderr.puts 'You may want to install a local BLAST database for' \
-                       ' faster analyses.'
-          $stderr.puts # a blank line
         end
 
         def assert_local_blast_database_exists(db)
