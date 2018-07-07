@@ -9,8 +9,8 @@ module GeneValidator
       sum / length.to_f
     end
 
-    def median
-      sorted = sort
+    def median(already_sorted = false)
+      sorted = already_sorted ? self : sort
       len    = sorted.length
       (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
     end
@@ -28,6 +28,23 @@ module GeneValidator
 
     def standard_deviation
       Math.sqrt(sample_variance)
+    end
+
+    def all_quartiles
+      sorted = sort
+      len    = sorted.length
+      split  = sorted.median_split
+      [
+        split[0].median(true),
+        sorted.median(true),
+        split[1].median(true)
+       ]
+    end
+
+    def median_split
+      len    = length
+      center = len%2
+      [self[0..len/2-1], self[len/2+center..-1]]
     end
   end
 end
