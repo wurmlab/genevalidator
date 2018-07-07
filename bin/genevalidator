@@ -10,7 +10,7 @@ SUMMARY:
   GeneValidator - Identify problems with predicted genes
 
 USAGE:
-  genevalidator [OPTIONAL ARGUMENTS] --input INPUT_FILE
+  genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
 
   To run as a web application:
 
@@ -20,15 +20,6 @@ USAGE:
 
 BANNER
 
-  opts.separator 'MANDATORY ARGUMENTS'
-  opts.separator ' '
-
-  opts.on('-i', '--input <file>',
-          'Path to the input fasta file') do |file|
-    opt[:input_fasta_file] = file
-  end
-
-  opts.separator ' '
   opts.separator 'OPTIONAL ARGUMENTS'
   opts.separator ' '
 
@@ -262,16 +253,13 @@ BANNER
 
 begin
   global.order!
-  command = ARGV.shift
-  if !command.nil? && !subcommands.keys.include?(command)
-    warn # a blank line
-    warn "==> Error: Subcommand used (#{command}) is not recognised."
-    warn # a blank line
-    warn # a blank line
-    puts global
-    exit 1
+  first_arg = ARGV.shift
+  if subcommands.keys.include?(first_arg)
+    command = first_arg
+    subcommands[command].order! unless subcommands[command].nil?
+  else
+    opt[:input_fasta_file] = first_arg
   end
-  subcommands[command].order! unless subcommands[command].nil?
   if opt[:input_fasta_file].nil? && command.nil?
     warn # a blank line
     warn "==> Error: Input Fasta file required."
@@ -294,16 +282,16 @@ rescue OptionParser::ParseError
 end
 
 if command.nil? && opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
-    require 'genevalidator/get_raw_sequences'
-    GeneValidator.opt    = opt
-    GeneValidator.config = {}
-    # GVArgValidation.run_raw_seqs
-    GeneValidator::RawSequences.run
+  require 'genevalidator/get_raw_sequences'
+  GeneValidator.opt    = opt
+  GeneValidator.config = {}
+  # GVArgValidation.run_raw_seqs
+  GeneValidator::RawSequences.run
 elsif command.nil? && opt[:json_file]
-    require 'genevalidator/json_to_gv_results'
-    GeneValidator.opt = opt
-    # GVArgValidation.run_json_to_gv_results
-    GeneValidator::JsonToGVResults.run
+  require 'genevalidator/json_to_gv_results'
+  GeneValidator.opt = opt
+  # GVArgValidation.run_json_to_gv_results
+  GeneValidator::JsonToGVResults.run
 elsif command.nil?
   start = Time.now
   require 'genevalidator'
