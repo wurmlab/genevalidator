@@ -79,6 +79,11 @@ BANNER
   opts.separator '# BLAST ARGUMENTS'
   opts.separator ' '
 
+  opts.on('-b', '--blast_options [STRING]',
+          'A string that is to passed to BLAST') do |blast_options|
+    opt[:blast_options] = blast_options
+  end
+
   opts.on('-x', '--blast_xml_file [PATH]',
           'Provide GeneValidator with a pre-computed BLAST XML output',
           'file (BLAST -outfmt option 5).') do |blast_xml_file|
@@ -136,10 +141,10 @@ BANNER
     opt[:num_threads] = num_threads
   end
 
-  opts.on('-b', '--binaries [binaries]', Array,
+  opts.on('--bin [dir]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',
-          'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+          'e.g.   genevalidator --bin /blast/bin/ --bin /mafft/bin/') do |bin|
     (opt[:bin] ||= []).concat(bin)
   end
 
