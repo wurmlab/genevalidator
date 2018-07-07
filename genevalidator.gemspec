@@ -38,7 +38,7 @@ Thank you for validating your gene predictions with GeneValidator!
 
 ==> To launch GeneValidator execute 'genevalidator' from command line.
 
-        genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
+        genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
 
     See 'genevalidator --help' for more information
 
