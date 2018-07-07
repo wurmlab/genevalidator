@@ -89,6 +89,8 @@ module GeneValidator
 
     def print_console_header(c_fmt)
       @config[:console_header_printed] = true
+      warn "==> Validating input sequences"
+      warn '' # blank line
       print format(c_fmt, 'No', 'Score', 'Identifier', 'No_Hits')
       puts validations.map(&:short_header).join("\t")
     end
@@ -159,7 +161,8 @@ module GeneValidator
       def print_console_footer(overall_evaluation, opt)
         return unless (opt[:output_formats].include? 'stdout') ||
                       opt[:hide_summary]
-        warn overall_evaluation.join("\n")
+        warn ''
+        warn "==> #{overall_evaluation.join("\n")}"
         warn ''
       end
 
@@ -224,6 +227,24 @@ module GeneValidator
         [eval, error_eval, time_eval].reject(&:empty?)
       end
 
+      def write_summary_file(overview, summary_file, opt)
+        return unless opt[:output_formats].include? 'summary'
+        data = generate_summary_data(overview)
+        File.open(summary_file, 'w') { |f| f.write data.map(&:to_csv).join }
+      end
+
+      def generate_summary_data(overview)
+        [
+          ['num_predictions', overview[:no_queries]],
+          ['num_good_predictions', overview[:good_scores]],
+          ['num_bad_predictions', overview[:bad_scores]],
+          ['num_predictions_with_insufficient_evidence', overview[:nee]],
+          ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
+          ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
+          ['third_quartile_of_scores', overview[:third_quartile_of_scores]],
+        ]
+      end
+
       private
 
       def all_html_output_files(config, dirs)
@@ -262,7 +283,10 @@ module GeneValidator
         ['Overall Query Score Evaluation:',
          "#{o[:no_queries]} predictions were validated, from which there were:",
          "#{good_pred} good prediction(s),",
-         "#{bad_pred} possibly weak prediction(s).", no_evidence]
+         "#{bad_pred} possibly weak prediction(s).", no_evidence,
+         "The median overall score was #{o[:second_quartile_of_scores]} with" \
+         " an upper quartile of #{o[:third_quartile_of_scores]}" \
+         " and a lower quartile of #{o[:first_quartile_of_scores]}."]
       end
 
       # errors per validation

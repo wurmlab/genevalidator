@@ -16,8 +16,8 @@ module GeneValidator
       def_delegators GeneValidator, :opt, :config, :dirs
 
       def init
-        warn 'Extracting sequences within the BLAST output file from' \
-             ' the BLAST database'
+        warn '==> Extracting fasta sequences for each BLAST HSP from the' \
+             ' BLAST database'
 
         @blast_file = opt[:blast_xml_file] if opt[:blast_xml_file]
         @blast_file = opt[:blast_tabular_file] if opt[:blast_tabular_file]

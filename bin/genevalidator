@@ -10,7 +10,7 @@ SUMMARY:
   GeneValidator - Identify problems with predicted genes
 
 USAGE:
-  genevalidator [OPTIONAL ARGUMENTS] --input INPUT_FILE
+  genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
 
   To run as a web application:
 
@@ -20,15 +20,6 @@ USAGE:
 
 BANNER
 
-  opts.separator 'MANDATORY ARGUMENTS'
-  opts.separator ' '
-
-  opts.on('-i', '--input <file>',
-          'Path to the input fasta file') do |file|
-    opt[:input_fasta_file] = file
-  end
-
-  opts.separator ' '
   opts.separator 'OPTIONAL ARGUMENTS'
   opts.separator ' '
 
@@ -75,11 +66,11 @@ BANNER
     opt[:force_rewrite] = true
   end
 
-  opt[:output_formats] = %w[html csv json stdout]
+  opt[:output_formats] = %w[html csv json stdout summary]
   opts.on('--output_formats [FORMATS]',
           'Output Formats to generate. This can be either: "all", "html",',
-          '"csv", "json" or "stdout". Multiple formats can be separated by',
-          'a semi-colon e.g. "csv:json".',
+          '"csv", "json", "summary" or "stdout". Multiple formats can be',
+          'separated by a semi-colon e.g. "csv:json".',
           'By default, all output formats are generated.') do |f|
     opt[:output_formats] = f.split(':') unless f == 'all'
   end
@@ -87,6 +78,11 @@ BANNER
   opts.separator ' '
   opts.separator '# BLAST ARGUMENTS'
   opts.separator ' '
+
+  opts.on('-b', '--blast_options [STRING]',
+          'A string that is to passed to BLAST') do |blast_options|
+    opt[:blast_options] = blast_options
+  end
 
   opts.on('-x', '--blast_xml_file [PATH]',
           'Provide GeneValidator with a pre-computed BLAST XML output',
@@ -145,10 +141,10 @@ BANNER
     opt[:num_threads] = num_threads
   end
 
-  opts.on('-b', '--binaries [binaries]', Array,
+  opts.on('--bin [dir]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',
-          'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+          'e.g.   genevalidator --bin /blast/bin/ --bin /mafft/bin/') do |bin|
     (opt[:bin] ||= []).concat(bin)
   end
 
@@ -257,21 +253,39 @@ BANNER
       puts subcommands['app']
       exit
     end
+  end,
+  'serve' => OptionParser.new do |opts|
+    opts.banner = <<BANNER
+SUMMARY:
+  Create a web server for viewing results
+
+USAGE:
+  $ genevalidator serve [options] OUTPUT_DIR
+
+ARGUMENTS:
+BANNER
+    opt[:port] = 8080
+    opts.on('-p', '--port [PORT]',
+            'Port to run the server on') do |port|
+      opt[:port] = port
+    end
+
+    opts.on('-h', '--help', 'Show this screen.') do
+      puts subcommands['serve']
+      exit
+    end
   end
 }
 
 begin
   global.order!
-  command = ARGV.shift
-  if !command.nil? && !subcommands.keys.include?(command)
-    warn # a blank line
-    warn "==> Error: Subcommand used (#{command}) is not recognised."
-    warn # a blank line
-    warn # a blank line
-    puts global
-    exit 1
+  first_arg = ARGV.shift
+  if subcommands.keys.include?(first_arg)
+    command = first_arg
+    subcommands[command].order! unless subcommands[command].nil?
+  else
+    opt[:input_fasta_file] = first_arg
   end
-  subcommands[command].order! unless subcommands[command].nil?
   if opt[:input_fasta_file].nil? && command.nil?
     warn # a blank line
     warn "==> Error: Input Fasta file required."
@@ -294,16 +308,16 @@ rescue OptionParser::ParseError
 end
 
 if command.nil? && opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
-    require 'genevalidator/get_raw_sequences'
-    GeneValidator.opt    = opt
-    GeneValidator.config = {}
-    # GVArgValidation.run_raw_seqs
-    GeneValidator::RawSequences.run
+  require 'genevalidator/get_raw_sequences'
+  GeneValidator.opt    = opt
+  GeneValidator.config = {}
+  # GVArgValidation.run_raw_seqs
+  GeneValidator::RawSequences.run
 elsif command.nil? && opt[:json_file]
-    require 'genevalidator/json_to_gv_results'
-    GeneValidator.opt = opt
-    # GVArgValidation.run_json_to_gv_results
-    GeneValidator::JsonToGVResults.run
+  require 'genevalidator/json_to_gv_results'
+  GeneValidator.opt = opt
+  # GVArgValidation.run_json_to_gv_results
+  GeneValidator::JsonToGVResults.run
 elsif command.nil?
   start = Time.now
   require 'genevalidator'
@@ -312,6 +326,36 @@ elsif command.nil?
   GeneValidator.run
   warn "Total running time: #{(Time.now - start).round(3)}s"
   warn # a blank line
+elsif command == 'serve'
+  require 'rack'
+
+  # Uses `open` on Mac or `xdg-open` on Linux to opens the search form in
+  # user's default browser. Errors, if any, are silenced.
+  def open_in_browser(server_url)
+    return if using_ssh?
+    if RUBY_PLATFORM =~ /linux/ && xdg?
+      system "xdg-open #{server_url}"
+    elsif RUBY_PLATFORM =~ /darwin/
+      system "open #{server_url}"
+    end
+  rescue
+    # fail silently
+  end
+
+  def using_ssh?
+    true if ENV['SSH_CLIENT'] || ENV['SSH_TTY'] || ENV['SSH_CONNECTION']
+  end
+
+  def xdg?
+    true if ENV['DISPLAY'] && command?('xdg-open')
+  end
+
+  dir = ARGV[0]
+  index_file = File.basename( Dir[ File.join(dir, '*.html') ].sort.first )
+  app = Rack::Static.new nil, urls: [""], root: dir, index: index_file
+  Rack::Server.start app: app, port: opt[:port], StartCallback: proc {
+    open_in_browser("http://localhost:#{opt[:port]}")
+  }
 elsif command == 'app'
   ENV['RACK_ENV'] = 'development' if opt[:devel]
 

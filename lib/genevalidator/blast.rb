@@ -26,13 +26,15 @@ module GeneValidator
       # Output:
       # String with the blast xml output
       def run_blast(query, db = opt[:db], seq_type = config[:type],
-                    num_threads = opt[:num_threads])
+                    num_threads = opt[:num_threads],
+                    blast_options = opt[:blast_options])
+        warn_if_remote_database(opt)
         blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
         threads = db.match?(/remote/) ? '' : "-num_threads #{num_threads}"
 
         blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5" \
-                   " #{threads}"
+                   " #{threads} #{blast_options}"
 
         cmd = "echo \"#{query}\" | #{blastcmd}"
         `#{cmd} >/dev/null 2>&1`
@@ -50,25 +52,27 @@ module GeneValidator
       # XML file
       def run_blast_on_input_file(input_file = opt[:input_fasta_file],
                                   db = opt[:db], seq_type = config[:type],
-                                  num_threads = opt[:num_threads])
+                                  num_threads = opt[:num_threads],
+                                  blast_options = opt[:blast_options])
         return if opt[:blast_xml_file] || opt[:blast_tabular_file]
-
-        warn 'Running BLAST. This may take a while.'
+        remote = opt[:db].match?(/remote/) ? true : false
+        warn '==> Running BLAST. This may take a while.' unless remote
+        warn_if_remote_database(opt)
         fname = File.basename(input_file) + '.blast_xml'
         opt[:blast_xml_file] = File.join(dirs[:tmp_dir], fname)
 
         blast_type = seq_type == :protein ? 'blastp' : 'blastx'
         # -num_threads is not supported on remote databases
-        threads = opt[:db].match?(/remote/) ? '' : "-num_threads #{num_threads}"
+        threads = remote ? '' : "-num_threads #{num_threads}"
 
         blastcmd = "#{blast_type} -query '#{input_file}'" \
                    " -out '#{opt[:blast_xml_file]}' -db #{db} " \
-                   " -evalue #{EVALUE} -outfmt 5 #{threads}"
+                   " -evalue #{EVALUE} -outfmt 5 #{threads} #{blast_options}"
 
         `#{blastcmd} >/dev/null 2>&1`
         return unless File.zero?(opt[:blast_xml_file])
         warn 'Blast failed to run on the input file.'
-        if opt[:db].match?(/remote/)
+        if remote
           warn 'You are using BLAST with a remote database. Please'
           warn 'ensure that you have internet access and try again.'
         else
@@ -193,6 +197,14 @@ module GeneValidator
         seqs = ''
         lines.each { |l| seqs += l.chomp unless l[0] == '>' }
         guess_sequence_type(seqs)
+      end
+
+      def warn_if_remote_database(opt)
+        return if opt[:db] !~ /remote/
+        warn '' # a blank line
+        warn '==> BLAST search and subsequent analysis will be done on a remote'
+        warn '    database. Please use a local database for larger analysis.'
+        warn '' # a blank line
       end
     end
   end

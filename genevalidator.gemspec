@@ -24,7 +24,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~> 2.0'
   s.add_dependency 'genevalidatorapp', '~> 2.0'
+  s.add_dependency 'rack', '~> 2.0'
   s.add_dependency 'statsample', '2.1.0'
+
+  # Adding mechanize gem just to silence a message on load.
+  # This is due the Statsample gem
+  # See https://github.com/SciRuby/daru/issues/404
+  # See https://github.com/SciRuby/statsample/pull/69
+  s.add_dependency 'mechanize', '2.7.5'
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -38,7 +45,7 @@ Thank you for validating your gene predictions with GeneValidator!
 
 ==> To launch GeneValidator execute 'genevalidator' from command line.
 
-        genevalidator [OPTIONAL ARGUMENTS] --input_file INPUT_FILE
+        genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
 
     See 'genevalidator --help' for more information
 
