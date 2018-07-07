@@ -49,12 +49,12 @@ module GeneValidator
       def check_num_threads
         @opt[:num_threads] = Integer(@opt[:num_threads])
         unless @opt[:num_threads] > 0
-          $stderr.puts 'Number of threads can not be lower than 0'
-          $stderr.puts 'Setting number of threads to 1'
+          warn 'Number of threads can not be lower than 0'
+          warn 'Setting number of threads to 1'
           @opt[:num_threads] = 1
         end
         return unless @opt[:num_threads] > 256
-        $stderr.puts "Number of threads set at #{@opt[:num_threads]} is" \
+        warn "Number of threads set at #{@opt[:num_threads]} is" \
                      ' unusually high.'
       end
 
@@ -73,18 +73,18 @@ module GeneValidator
         return unless File.exist?(output_dir)
         FileUtils.rm_r(output_dir) if @opt[:force_rewrite]
         return if @opt[:force_rewrite]
-        $stderr.puts 'The output directory already exists for this fasta file.'
-        $stderr.puts "\nPlease remove the following directory: #{output_dir}\n"
-        $stderr.puts "You can run the following command to remove the folder.\n"
-        $stderr.puts "\n   $ rm -r #{output_dir} \n"
+        warn 'The output directory already exists for this fasta file.'
+        warn "\nPlease remove the following directory: #{output_dir}\n"
+        warn "You can run the following command to remove the folder.\n"
+        warn "\n   $ rm -r #{output_dir} \n"
         exit 1
       end
 
       def assert_tabular_options_exists
         return if @opt[:blast_tabular_options]
-        $stderr.puts '*** Error: BLAST tabular options (-o) have not been set.'
-        $stderr.puts '    Please set the "-o" option with the custom format'
-        $stderr.puts '    used in the BLAST -outfmt argument'
+        warn '*** Error: BLAST tabular options (-o) have not been set.'
+        warn '    Please set the "-o" option with the custom format'
+        warn '    used in the BLAST -outfmt argument'
         exit 1
       end
 
@@ -96,7 +96,7 @@ module GeneValidator
 
       def assert_file_present(desc, file, exit_code = 1)
         return if file && File.exist?(File.expand_path(file))
-        $stderr.puts "*** Error: Couldn't find the #{desc}: #{file}."
+        warn "*** Error: Couldn't find the #{desc}: #{file}."
         exit exit_code
       end
 
@@ -106,9 +106,9 @@ module GeneValidator
         fasta_content = IO.binread(@opt[:input_fasta_file])
         type = BlastUtils.type_of_sequences(fasta_content)
         return if type == :nucleotide || type == :protein
-        $stderr.puts '*** Error: The input files does not contain just protein'
-        $stderr.puts '    or nucleotide data.'
-        $stderr.puts '    Please correct this and try again.'
+        warn '*** Error: The input files does not contain just protein'
+        warn '    or nucleotide data.'
+        warn '    Please correct this and try again.'
         exit 1
       end
 
@@ -118,8 +118,8 @@ module GeneValidator
           if File.exist?(bin) && File.directory?(bin)
             add_to_path(bin)
           else
-            $stderr.puts '*** The following bin directory does not exist:'
-            $stderr.puts "    #{bin}"
+            warn '*** The following bin directory does not exist:'
+            warn "    #{bin}"
           end
         end
       end
@@ -133,10 +133,10 @@ module GeneValidator
 
       def assert_mafft_installation
         return if command?('mafft')
-        $stderr.puts '*** Could not find Mafft binaries.'
-        $stderr.puts '    Ignoring error and continuing - Please note that' \
+        warn '*** Could not find Mafft binaries.'
+        warn '    Ignoring error and continuing - Please note that' \
                      ' some validations may be skipped.'
-        $stderr.puts # a blank line
+        warn # a blank line
       end
     end
 
@@ -163,8 +163,8 @@ module GeneValidator
 
         def assert_local_blast_database_exists(db)
           return if system("blastdbcmd -db #{db} -info > /dev/null 2>&1")
-          $stderr.puts '*** No BLAST database found at the provided path.'
-          $stderr.puts '    Please ensure that the provided path is correct' \
+          warn '*** No BLAST database found at the provided path.'
+          warn '    Please ensure that the provided path is correct' \
                        ' and then try again.'
           exit EXIT_NO_BLAST_DATABASE
         end
@@ -173,15 +173,15 @@ module GeneValidator
 
         def assert_blast_installed
           return if GVArgValidation.command?('blastdbcmd')
-          $stderr.puts '*** Could not find BLAST+ binaries.'
+          warn '*** Could not find BLAST+ binaries.'
           exit EXIT_BLAST_NOT_INSTALLED
         end
 
         def assert_blast_compatible
           version = `blastdbcmd -version`.split[1]
           return if version >= MINIMUM_BLAST_VERSION
-          $stderr.puts "*** Your BLAST+ version #{version} is outdated."
-          $stderr.puts '    GeneValidator needs NCBI BLAST+ version' \
+          warn "*** Your BLAST+ version #{version} is outdated."
+          warn '    GeneValidator needs NCBI BLAST+ version' \
                        " #{MINIMUM_BLAST_VERSION} or higher."
           exit EXIT_BLAST_NOT_COMPATIBLE
         end
