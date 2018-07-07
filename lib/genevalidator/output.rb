@@ -89,6 +89,8 @@ module GeneValidator
 
     def print_console_header(c_fmt)
       @config[:console_header_printed] = true
+      warn "==> Validating input sequences"
+      warn '' # blank line
       print format(c_fmt, 'No', 'Score', 'Identifier', 'No_Hits')
       puts validations.map(&:short_header).join("\t")
     end
@@ -159,7 +161,8 @@ module GeneValidator
       def print_console_footer(overall_evaluation, opt)
         return unless (opt[:output_formats].include? 'stdout') ||
                       opt[:hide_summary]
-        warn overall_evaluation.join("\n")
+        warn ''
+        warn "==> #{overall_evaluation.join("\n")}"
         warn ''
       end
 

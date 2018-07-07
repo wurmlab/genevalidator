@@ -20,7 +20,7 @@ module GeneValidator
     attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array, :mutex_csv
 
     def init(opt, start_idx = 1)
-      warn 'Analysing input arguments'
+      warn '==> Analysing input arguments'
       @opt = opt
       GVArgValidation.validate_args # validates @opt
 
