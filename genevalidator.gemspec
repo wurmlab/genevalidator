@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~> 2.0'
   s.add_dependency 'genevalidatorapp', '~> 2.0'
+  s.add_dependency 'rack', '~> 2.0'
   s.add_dependency 'statsample', '2.1.0'
 
   s.files         = `git ls-files -z`.split("\x0")
