@@ -227,6 +227,25 @@ module GeneValidator
         [eval, error_eval, time_eval].reject(&:empty?)
       end
 
+      def write_summary_file(overview, summary_file, opt)
+        return unless opt[:output_formats].include? 'summary'
+        data = generate_summary_data(overview)
+        File.open(summary_file, 'w') { |f| f.write data.map(&:to_csv).join }
+      end
+
+      def generate_summary_data(overview)
+        [
+          ['total.queries', overview[:no_queries]],
+          ['good.scores', overview[:good_scores]],
+          ['bad.scores', overview[:bad_scores]],
+          ['no.of.queries.with.more.than.20.BLAST.hits',
+            overview[:query_with_more_than_20_BLAST_hits]],
+          ['scores.quartiles.q1', overview[:scores_quartiles_q1]],
+          ['scores.quartiles.q2', overview[:scores_quartiles_q2]],
+          ['scores.quartiles.q3', overview[:scores_quartiles_q3]]
+        ]
+      end
+
       private
 
       def all_html_output_files(config, dirs)
@@ -265,7 +284,14 @@ module GeneValidator
         ['Overall Query Score Evaluation:',
          "#{o[:no_queries]} predictions were validated, from which there were:",
          "#{good_pred} good prediction(s),",
-         "#{bad_pred} possibly weak prediction(s).", no_evidence]
+         "#{bad_pred} possibly weak prediction(s).", no_evidence,
+         "#{o[:query_with_more_than_20_BLAST_hits]} " \
+         "(#{o[:query_with_more_than_20_BLAST_hits].to_f / o[:no_queries] * 100}%)" \
+         " predictions have more than 20 BLAST hits each.",
+         "The median overall score was #{o[:scores_quartiles_q2]} with" \
+         " an upper quartile of #{o[:scores_quartiles_q3]}" \
+         " and a lower quartile of #{o[:scores_quartiles_q1]}."
+        ]
       end
 
       # errors per validation

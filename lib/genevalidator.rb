@@ -80,8 +80,10 @@ module GeneValidator
       { filename: fname,
         output_dir: out_dir,
         tmp_dir: File.join(out_dir, 'tmp'),
+        html_file: File.join(out_dir, "#{fname}_results*.html"),
         json_file: File.join(out_dir, "#{fname}_results.json"),
         csv_file: File.join(out_dir, "#{fname}_results.csv"),
+        summary_file: File.join(out_dir, "#{fname}_summary.csv"),
         fasta_file: File.join(out_dir, "#{fname}_results.fa"),
         aux_dir: File.expand_path('../aux', __dir__) }
     end
@@ -137,6 +139,7 @@ module GeneValidator
     end
 
     def produce_output
+      add_summary_statistics
       overall_eval = Output.calculate_overview(@overview)
       Output.print_console_footer(overall_eval, @opt)
       Output.print_html_footer(@opt, @config, @dirs)
@@ -145,10 +148,21 @@ module GeneValidator
       Output.write_json_file(@config[:json_output], @dirs[:json_file], @opt)
       Output.write_best_fasta(@config[:json_output], @dirs[:fasta_file],
                               @opt[:input_fasta_file], @query_idx, opt)
+      Output.write_summary_file(@overview, @dirs[:summary_file], @opt)
+    end
+
     def print_directories_locations
       warn "==> GeneValidator output files have been saved to:"
       warn "    #{File.expand_path(@dirs[:output_dir])}"
     end
+
+    def add_summary_statistics(json_output = @config[:json_output])
+      no_queries_20_hits = json_output.count { |e| e[:no_hits] > 20 }
+      quartiles = json_output.collect { |e| e[:overall_score] }.all_quartiles
+      @overview[:scores_quartiles_q1] = quartiles[0]
+      @overview[:scores_quartiles_q2] = quartiles[1]
+      @overview[:scores_quartiles_q3] = quartiles[2]
+      @overview[:query_with_more_than_20_BLAST_hits] = no_queries_20_hits
     end
   end
 end

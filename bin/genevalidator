@@ -66,11 +66,11 @@ BANNER
     opt[:force_rewrite] = true
   end
 
-  opt[:output_formats] = %w[html csv json stdout]
+  opt[:output_formats] = %w[html csv json stdout summary]
   opts.on('--output_formats [FORMATS]',
           'Output Formats to generate. This can be either: "all", "html",',
-          '"csv", "json" or "stdout". Multiple formats can be separated by',
-          'a semi-colon e.g. "csv:json".',
+          '"csv", "json", "summary" or "stdout". Multiple formats can be',
+          'separated by a semi-colon e.g. "csv:json".',
           'By default, all output formats are generated.') do |f|
     opt[:output_formats] = f.split(':') unless f == 'all'
   end
