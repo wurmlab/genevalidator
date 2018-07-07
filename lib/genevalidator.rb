@@ -157,12 +157,10 @@ module GeneValidator
     end
 
     def add_summary_statistics(json_output = @config[:json_output])
-      no_queries_20_hits = json_output.count { |e| e[:no_hits] > 20 }
       quartiles = json_output.collect { |e| e[:overall_score] }.all_quartiles
-      @overview[:scores_quartiles_q1] = quartiles[0]
-      @overview[:scores_quartiles_q2] = quartiles[1]
-      @overview[:scores_quartiles_q3] = quartiles[2]
-      @overview[:query_with_more_than_20_BLAST_hits] = no_queries_20_hits
+      @overview[:first_quartile_of_scores] = quartiles[0]
+      @overview[:second_quartile_of_scores] = quartiles[1]
+      @overview[:third_quartile_of_scores] = quartiles[2]
     end
   end
 end

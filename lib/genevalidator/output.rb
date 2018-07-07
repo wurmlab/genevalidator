@@ -235,14 +235,13 @@ module GeneValidator
 
       def generate_summary_data(overview)
         [
-          ['total.queries', overview[:no_queries]],
-          ['good.scores', overview[:good_scores]],
-          ['bad.scores', overview[:bad_scores]],
-          ['no.of.queries.with.more.than.20.BLAST.hits',
-            overview[:query_with_more_than_20_BLAST_hits]],
-          ['scores.quartiles.q1', overview[:scores_quartiles_q1]],
-          ['scores.quartiles.q2', overview[:scores_quartiles_q2]],
-          ['scores.quartiles.q3', overview[:scores_quartiles_q3]]
+          ['num_predictions', overview[:no_queries]],
+          ['num_good_predictions', overview[:good_scores]],
+          ['num_bad_predictions', overview[:bad_scores]],
+          ['num_predictions_with_insufficient_evidence', overview[:nee]],
+          ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
+          ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
+          ['third_quartile_of_scores', overview[:third_quartile_of_scores]],
         ]
       end
 
@@ -285,13 +284,9 @@ module GeneValidator
          "#{o[:no_queries]} predictions were validated, from which there were:",
          "#{good_pred} good prediction(s),",
          "#{bad_pred} possibly weak prediction(s).", no_evidence,
-         "#{o[:query_with_more_than_20_BLAST_hits]} " \
-         "(#{o[:query_with_more_than_20_BLAST_hits].to_f / o[:no_queries] * 100}%)" \
-         " predictions have more than 20 BLAST hits each.",
-         "The median overall score was #{o[:scores_quartiles_q2]} with" \
-         " an upper quartile of #{o[:scores_quartiles_q3]}" \
-         " and a lower quartile of #{o[:scores_quartiles_q1]}."
-        ]
+         "The median overall score was #{o[:second_quartile_of_scores]} with" \
+         " an upper quartile of #{o[:third_quartile_of_scores]}" \
+         " and a lower quartile of #{o[:first_quartile_of_scores]}."]
       end
 
       # errors per validation
