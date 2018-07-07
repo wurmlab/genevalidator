@@ -56,6 +56,7 @@ module GeneValidator
       (Validations.new).run_validations(iterator)
 
       produce_output
+      print_directories_locations
     end
 
     ##
@@ -144,6 +145,10 @@ module GeneValidator
       Output.write_json_file(@config[:json_output], @dirs[:json_file], @opt)
       Output.write_best_fasta(@config[:json_output], @dirs[:fasta_file],
                               @opt[:input_fasta_file], @query_idx, opt)
+    def print_directories_locations
+      warn "==> GeneValidator output files have been saved to:"
+      warn "    #{File.expand_path(@dirs[:output_dir])}"
+    end
     end
   end
 end
