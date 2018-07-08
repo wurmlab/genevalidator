@@ -238,7 +238,7 @@ module GeneValidator
           ['num_predictions', overview[:no_queries]],
           ['num_good_predictions', overview[:good_scores]],
           ['num_bad_predictions', overview[:bad_scores]],
-          ['num_predictions_with_insufficient_evidence', overview[:insufficient_BLAST_hits]],
+          ['num_predictions_with_insufficient_blast_hits', overview[:insufficient_BLAST_hits]],
           ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
           ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
           ['third_quartile_of_scores', overview[:third_quartile_of_scores]],
