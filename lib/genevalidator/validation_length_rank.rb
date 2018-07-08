@@ -80,6 +80,9 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by ranking the hit lengths
   class LengthRankValidation < ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :opt
+
     THRESHOLD = 20
     ##
     # Initializes the object
@@ -104,7 +107,7 @@ module GeneValidator
     # Output:
     # +LengthRankValidationOutput+ object
     def run(hits = @hits, prediction = @prediction)
-      fail NotEnoughHitsError unless hits.length >= 5
+      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now

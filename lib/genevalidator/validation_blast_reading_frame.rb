@@ -78,6 +78,9 @@ module GeneValidator
   # This class contains the methods necessary for
   # reading frame validation based on BLAST output
   class BlastReadingFrameValidation < ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :opt
+
     def initialize(type, prediction, hits = nil)
       super
       @short_header = 'ReadingFrame'
@@ -100,7 +103,7 @@ module GeneValidator
         return @validation_report
       end
 
-      fail NotEnoughHitsError unless hits.length >= 5
+      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now

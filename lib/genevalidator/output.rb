@@ -238,7 +238,7 @@ module GeneValidator
           ['num_predictions', overview[:no_queries]],
           ['num_good_predictions', overview[:good_scores]],
           ['num_bad_predictions', overview[:bad_scores]],
-          ['num_predictions_with_insufficient_evidence', overview[:nee]],
+          ['num_predictions_with_insufficient_evidence', overview[:insufficient_BLAST_hits]],
           ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
           ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
           ['third_quartile_of_scores', overview[:third_quartile_of_scores]],
@@ -276,14 +276,16 @@ module GeneValidator
         good_pred = o[:good_scores] == 1 ? 'One' : "#{o[:good_scores]} are"
         bad_pred  = o[:bad_scores] == 1 ? 'One' : "#{o[:bad_scores]} are"
 
-        # nee = no evidence
-        n = "#{o[:nee]} could not be evaluated due to the lack of evidence."
-        no_evidence = o[:nee] != 0 ? n : ''
+        plural = 'prediction was' if o[:insufficient_BLAST_hits] == 1
+        plural = 'predictions were' if o[:insufficient_BLAST_hits] >= 2
+        b = "#{o[:insufficient_BLAST_hits]} #{plural} not evaluated due to an" \
+            " insufficient number of BLAST hits."
+        blast_hits = o[:insufficient_BLAST_hits].zero? ? '' : b
 
         ['Overall Query Score Evaluation:',
          "#{o[:no_queries]} predictions were validated, from which there were:",
          "#{good_pred} good prediction(s),",
-         "#{bad_pred} possibly weak prediction(s).", no_evidence,
+         "#{bad_pred} possibly weak prediction(s).", blast_hits,
          "The median overall score was #{o[:second_quartile_of_scores]} with" \
          " an upper quartile of #{o[:third_quartile_of_scores]}" \
          " and a lower quartile of #{o[:first_quartile_of_scores]}."]

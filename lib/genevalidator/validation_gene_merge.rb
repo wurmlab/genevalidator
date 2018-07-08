@@ -88,6 +88,9 @@ module GeneValidator
   # checking whether there is evidence that the
   # prediction is a merge of multiple genes
   class GeneMergeValidation < ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :opt
+
     attr_reader :prediction
     attr_reader :hits
 
@@ -113,7 +116,7 @@ module GeneValidator
     # Output:
     # +GeneMergeValidationOutput+ object
     def run
-      fail NotEnoughHitsError unless hits.length >= 5
+      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
