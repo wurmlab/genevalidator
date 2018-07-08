@@ -232,13 +232,13 @@ module GeneValidator
       end
       scores = length_validation_scores(validations, scores)
 
-      @run_output.successes     = scores[:successes]
-      @run_output.fails         = scores[:fails]
-      total_query               = scores[:successes].to_i + scores[:fails]
-      if total_query == 0
+      @run_output.successes = scores[:successes]
+      @run_output.fails     = scores[:fails]
+      num_total_validations = scores[:successes].to_i + scores[:fails]
+      if num_total_validations.zero?
         @run_output.overall_score = 0
       else
-        @run_output.overall_score = (scores[:successes] * 90 / total_query).round
+        @run_output.overall_score = (scores[:successes] * 90 / num_total_validations).round
       end
     end
 
