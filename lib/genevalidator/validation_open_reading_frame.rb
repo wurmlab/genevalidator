@@ -28,7 +28,8 @@ module GeneValidator
       @mainORFFrame = longest_orf_frame
       @approach     = 'We expect the query sequence to encode a single gene,' \
                       ' thus it should contain one main Open Reading Frame' \
-                      ' (ORF) that occupies most of the query sequence.'
+                      ' (ORF) that occupies most of the query sequence.' \
+                      ' This validation does not require any BLAST hits.'
       @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where" \
                       " it occupies #{(@coverage).round}% of the query" \
                       ' sequence.'
@@ -75,8 +76,8 @@ module GeneValidator
       @short_header = 'MainORF'
       @header       = 'Main ORF'
       @description  = 'Check whether there is a single main Open Reading' \
-                      ' Frame in the predicted gene. Applicable only for' \
-                      ' nucleotide queries.'
+                      ' Frame in the predicted gene. This validation does not' \
+                      ' require any BLAST hits.'
       @cli_name     = 'orf'
       @type         = config[:type]
     end
