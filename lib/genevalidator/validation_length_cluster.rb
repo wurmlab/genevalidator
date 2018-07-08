@@ -67,6 +67,9 @@ module GeneValidator
   # This class contains the methods necessary for
   # length validation by hit length clusterization
   class LengthClusterValidation < ValidationTest
+    extend Forwardable
+    def_delegators GeneValidator, :opt
+
     attr_reader :clusters
     attr_reader :max_density_cluster
 
@@ -96,7 +99,7 @@ module GeneValidator
     # Output:
     # +LengthClusterValidationOutput+ object
     def run
-      fail NotEnoughHitsError unless hits.length >= 5
+      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now

@@ -152,7 +152,7 @@ module GeneValidator
     end
 
     def print_directories_locations
-      warn "==> GeneValidator output files have been saved to:"
+      warn '==> GeneValidator output files have been saved to:'
       warn "    #{File.expand_path(@dirs[:output_dir])}"
     end
 
@@ -161,6 +161,8 @@ module GeneValidator
       @overview[:first_quartile_of_scores] = quartiles[0]
       @overview[:second_quartile_of_scores] = quartiles[1]
       @overview[:third_quartile_of_scores] = quartiles[2]
+      min_hits = json_output.count { |e| e[:no_hits] < @opt[:min_blast_hits] }
+      @overview[:insufficient_BLAST_hits] = min_hits
     end
   end
 end

@@ -79,6 +79,15 @@ BANNER
   opts.separator '# BLAST ARGUMENTS'
   opts.separator ' '
 
+  opt[:min_blast_hits] = 5
+  opts.on('-m', '--min_blast_hits_required',
+          'The minimum number of BLAST hits required by GeneValidator in order',
+          'to carry out validations. Note: certain validations have their own',
+          'set minimum (such as the multiple alignment validation, which',
+          ' requires a minimum of 10 BLAST hits)') do |min|
+    opt[:min_blast_hits] = min.to_i
+  end
+
   opts.on('-b', '--blast_options [STRING]',
           'A string that is to passed to BLAST') do |blast_options|
     opt[:blast_options] = blast_options

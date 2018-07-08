@@ -124,9 +124,10 @@ module GeneValidator
     # Output:
     # +AlignmentValidationOutput+ object
     def run(n = 10)
+      n = opt[:min_blast_hits] < 10 ? 10 : opt[:min_blast_hits]
       n = 50 if n > 50
 
-      fail NotEnoughHitsError unless hits.length >= n
+      fail NotEnoughHitsError if hits.length < n
       fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.new

@@ -113,7 +113,7 @@ module GeneValidator
     # Output:
     # +DuplicationValidationOutput+ object
     def run(n = 10)
-      fail NotEnoughHitsError unless hits.length >= 5
+      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
       fail unless prediction.is_a?(Query) && !prediction.raw_sequence.nil? &&
                   hits[0].is_a?(Query)
 

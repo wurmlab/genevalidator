@@ -45,6 +45,7 @@ module GeneValidator
           validations: ['all'],
           db: 'swissprot -remote',
           num_threads: 1,
+          min_blast_hits: 5,
           test: true,
           output_dir: "#{filename_mrna}.html"
         }
@@ -80,6 +81,7 @@ module GeneValidator
           validations: ['all'],
           db: 'swissprot -remote',
           num_threads: 1,
+          min_blast_hits: 5,
           test: true,
           output_dir: "#{filename_prot}.html"
         }
@@ -104,6 +106,7 @@ module GeneValidator
             validations: ['all'],
             db: 'swissprot -remote',
             num_threads: 1,
+            min_blast_hits: 5,
             test: true,
             output_dir: "#{mixed_fasta}.html"
           }
@@ -201,6 +204,7 @@ module GeneValidator
           validations: ['all'],
           db: 'swissprot -remote',
           num_threads: 1,
+          min_blast_hits: 5,
           test: true,
           output_dir: "#{filename_fasta}.html"
         }
@@ -241,6 +245,7 @@ module GeneValidator
           validations: ['all'],
           db: 'swissprot -remote',
           num_threads: 1,
+          min_blast_hits: 5,
           test: true,
           output_dir: "#{filename_fasta}.html"
         }
@@ -276,6 +281,7 @@ module GeneValidator
           validations: ['all'],
           db: 'swissprot -remote',
           num_threads: 1,
+          min_blast_hits: 5,
           test: true,
           output_dir: "#{filename_fasta}.html"
         }
@@ -306,6 +312,7 @@ module GeneValidator
             validations: ['all'],
             db: 'swissprot -remote',
             num_threads: 1,
+            min_blast_hits: 5,
             test: true,
           }
 
