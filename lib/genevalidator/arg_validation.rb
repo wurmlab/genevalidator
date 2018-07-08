@@ -38,7 +38,7 @@ module GeneValidator
       private
 
       def assert_validations_arg
-        validations = %w(lenc lenr frame merge dup orf align)
+        validations = %w[lenc lenr frame merge dup orf align]
         if @opt[:validations]
           val = @opt[:validations].collect { |v| v.strip.downcase }
           validations = val unless val.include? 'all'
@@ -48,7 +48,7 @@ module GeneValidator
 
       def check_num_threads
         @opt[:num_threads] = Integer(@opt[:num_threads])
-        unless @opt[:num_threads] > 0
+        unless @opt[:num_threads].positive?
           warn 'Number of threads can not be lower than 0'
           warn 'Setting number of threads to 1'
           @opt[:num_threads] = 1
@@ -90,7 +90,7 @@ module GeneValidator
 
       def assert_input_file_probably_fasta
         File.open(@opt[:input_fasta_file], 'r') do |file_stream|
-          (file_stream.readline[0] == '>') ? true : false
+          file_stream.readline[0] == '>'
         end
       end
 
@@ -105,7 +105,7 @@ module GeneValidator
       def assert_input_sequence
         fasta_content = IO.binread(@opt[:input_fasta_file])
         type = BlastUtils.type_of_sequences(fasta_content)
-        return if type == :nucleotide || type == :protein
+        return if %i[nucleotide protein].include? type
         warn '*** Error: The input files does not contain just protein'
         warn '    or nucleotide data.'
         warn '    Please correct this and try again.'
@@ -144,7 +144,7 @@ module GeneValidator
     class Blast
       class << self
         # Use a fixed minimum version of BLAST+
-        MINIMUM_BLAST_VERSION           = '2.2.30+'
+        MINIMUM_BLAST_VERSION           = '2.2.30+'.freeze
         # Use the following exit codes, or 1.
         EXIT_BLAST_NOT_INSTALLED        = 2
         EXIT_BLAST_NOT_COMPATIBLE       = 3

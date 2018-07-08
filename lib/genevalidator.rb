@@ -152,7 +152,7 @@ module GeneValidator
     end
 
     def print_directories_locations
-      warn "==> GeneValidator output files have been saved to:"
+      warn '==> GeneValidator output files have been saved to:'
       warn "    #{File.expand_path(@dirs[:output_dir])}"
     end
 
