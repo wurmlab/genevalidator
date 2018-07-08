@@ -43,6 +43,7 @@ module GeneValidator
       db: 'swissprot -remote',
       raw_sequences: filename_xml_raw,
       num_threads: 1,
+      min_blast_hits: 5,
       test: true
     }
     GeneValidator.init(opt)

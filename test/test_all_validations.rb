@@ -47,6 +47,7 @@ module GeneValidator
           raw_sequences: prot_raw,
           output_dir: prot_output_dir,
           output_formats: %w[html csv json stdout],
+          min_blast_hits: 5,
           test: true,
           hide_summary: true,
           force_rewrite: true
@@ -67,6 +68,7 @@ module GeneValidator
           raw_sequences: prot_raw,
           output_dir: prot_output_dir,
           output_formats: %w[html csv json stdout],
+          min_blast_hits: 5,
           test: true,
           hide_summary: true,
           force_rewrite: true
@@ -99,6 +101,7 @@ module GeneValidator
           raw_sequences: mrna_raw,
           output_dir: mrna_output_dir,
           output_formats: %w[html csv json stdout],
+          min_blast_hits: 5,
           test: true,
           hide_summary: true,
           force_rewrite: true
@@ -119,6 +122,7 @@ module GeneValidator
           raw_sequences: mrna_raw,
           output_dir: mrna_output_dir,
           output_formats: %w[html csv json stdout],
+          min_blast_hits: 5,
           test: true,
           hide_summary: true,
           force_rewrite: true
