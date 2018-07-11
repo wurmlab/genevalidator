@@ -173,7 +173,7 @@ module GeneValidator
 
       def write_best_fasta(data, fasta_file, input_file, query_idx, opt)
         return unless opt[:select_single_best]
-        top_data = data[0]
+        top_data = data.sort_by { |e| [e[:overall_score], e[:no_hits]] }.last
         start_offset = query_idx[top_data[:idx] + 1] - query_idx[top_data[:idx]]
         end_offset   = query_idx[top_data[:idx]]
         query        = IO.binread(input_file, start_offset, end_offset)
