@@ -295,7 +295,9 @@ begin
   else
     opt[:input_fasta_file] = first_arg
   end
-  if opt[:input_fasta_file].nil? && command.nil?
+  if opt[:input_fasta_file].nil? && command.nil? &&
+      ((opt[:extract_raw_seqs] && opt[:raw_sequences].nil?) ||
+        opt[:json_file].nil?)
     warn # a blank line
     warn "==> Error: Input Fasta file required."
     warn # a blank line
