@@ -136,7 +136,7 @@ module GeneValidator
 
     def html_output_filename
       return unless @opt[:output_formats].include? 'html'
-      result_part = (@config[:run_no].to_f / @config[:output_max]).ceil
+      result_part = (@idx.to_f / @config[:output_max]).ceil
       result_part = result_part == 1 ? '' : "_#{result_part}"
       html_output_file = @output_filename + result_part + '.html'
       write_html_header(html_output_file) unless File.exist?(html_output_file)
@@ -196,11 +196,12 @@ module GeneValidator
         erb           = ERB.new(template_file, 0, '>')
 
         all_html_files = all_html_output_files(config, dirs)
-        all_html_files.each do |html_output_file|
-          File.open(html_output_file, 'a+') { |f| f.write(erb.result(binding)) }
+        all_html_files.each do |fname|
+          output = File.join(dirs[:output_dir], fname)
+          File.open(output, 'a+') { |f| f.write(erb.result(binding)) }
         end
 
-        turn_off_sorting(@dir[:output_dir]) if all_html_files.length > 1
+        turn_off_sorting(dirs[:output_dir]) if all_html_files.length > 1
       end
 
       def create_overview_json_for_html(overview, scores, opt, dirs)
@@ -248,10 +249,10 @@ module GeneValidator
       private
 
       def all_html_output_files(config, dirs)
-        fname = File.join(dirs[:output_dir], "#{dirs[:filename]}_results")
+        fname = "#{dirs[:filename]}_results"
         total_files = (config[:run_no].to_f / config[:output_max]).ceil
         return [fname + '.html'] if total_files == 1
-        (1..total_files).map { |i| fname + "_#{i}" + '.html' }
+        (1..total_files).map { |i| "#{fname}#{i == 1 ? '' : "_#{i}"}.html" }
       end
 
       def turn_off_sorting(output_dir)
