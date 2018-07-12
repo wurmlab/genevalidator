@@ -77,13 +77,15 @@ module GeneValidator
 
       def calculate_overall_score
         scores_from_json = @json_array.map { |row| row['overall_score'] }
-        scores = set_up_scores(scores_from_json)
+        quartiles = scores_from_json.all_quartiles
+        min_hits = @json_array.count { |e| e["no_hits"] < @opt[:min_blast_hits] }
+        scores = set_up_scores(scores_from_json, quartiles, min_hits)
         overall_eval = Output.calculate_overview(scores)
         Output.create_overview_json_for_html(overall_eval, scores_from_json,
                                              @opt, @dirs)
       end
 
-      def set_up_scores(scores_from_json)
+      def set_up_scores(scores_from_json, quartiles, insufficient_BLAST_hits)
         {
           scores: scores_from_json,
           no_queries: scores_from_json.length,
@@ -93,7 +95,11 @@ module GeneValidator
           no_mafft: 0,
           no_internet: 0,
           map_errors: Hash.new(0),
-          run_time: Hash.new(Pair1.new(0, 0))
+          run_time: Hash.new(Pair1.new(0, 0)),
+          first_quartile_of_scores: quartiles[0],
+          second_quartile_of_scores: quartiles[1],
+          third_quartile_of_scores: quartiles[2],
+          insufficient_BLAST_hits: insufficient_BLAST_hits
         }
       end
 
