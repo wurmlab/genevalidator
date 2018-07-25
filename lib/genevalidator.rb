@@ -76,7 +76,7 @@ module GeneValidator
     # Also called by json_to_gv script
     def setup_dirnames(input_file)
       fname = File.basename(input_file, File.extname(input_file))
-      out_dir = setup_output_dir(input_file)
+      out_dir = setup_output_dir(fname)
       { filename: fname,
         output_dir: out_dir,
         tmp_dir: File.join(out_dir, 'tmp'),
@@ -113,9 +113,9 @@ module GeneValidator
 
     ##
     # Creates the output folder and copies the auxiliar folders to this folder
-    def setup_output_dir(input_file)
-      dir_name = 'GV_' + Time.now.strftime('%Y_%m_%d_%H_%M_%S')
-      default_outdir = File.join(File.dirname(input_file), dir_name)
+    def setup_output_dir(fname)
+      dir_name = "#{fname}_" + Time.now.strftime('%Y_%m_%d_%H_%M_%S')
+      default_outdir = File.join(Dir.pwd, dir_name)
       output_dir = @opt[:output_dir].nil? ? default_outdir : @opt[:output_dir]
       Dir.mkdir(output_dir)
       Dir.mkdir(File.join(output_dir, 'tmp'))
