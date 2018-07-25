@@ -36,7 +36,7 @@ module GeneValidator
 
     def explain
       "The Wilcoxon test produced a p-value of #{prettify_evalue(@pvalue)}" \
-      "#{(@result == :no) ? " (average = #{@average.round(2)})." : '.'}"
+      "#{@result == :no ? " (average = #{@average.round(2)})." : '.'}"
     end
 
     def conclude
@@ -50,15 +50,15 @@ module GeneValidator
     end
 
     def print
-      "#{@pvalue.round(2)}"
+      @pvalue.round(2).to_s
     end
 
     def validation
-      (@pvalue > @threshold) ? :yes : :no
+      @pvalue > @threshold ? :yes : :no
     end
 
     def color
-      (validation == :yes) ? 'success' : 'danger'
+      validation == :yes ? 'success' : 'danger'
     end
 
     private
@@ -101,37 +101,29 @@ module GeneValidator
       @type              = config[:type]
     end
 
-    def in_range?(ranges, idx)
-      ranges.each do |range|
-        return (range.member?(idx)) ? true : false
-      end
-      false
-    end
-
     ##
     # Check duplication in the first n hits
     # Output:
     # +DuplicationValidationOutput+ object
     def run(n = 10)
-      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
-      fail unless prediction.is_a?(Query) && !prediction.raw_sequence.nil? &&
-                  hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < opt[:min_blast_hits]
+      raise unless prediction.is_a?(Query) && !prediction.raw_sequence.nil? &&
+                   hits[0].is_a?(Query)
 
       start = Time.new
       # get the first n hits
-      less_hits = @hits[0..[n - 1, @hits.length].min]
-      useless_hits = []
+      n_hits = [n - 1, @hits.length].min
+      less_hits = @hits[0..n_hits]
       # get raw sequences for less_hits
-      less_hits.map do |hit|
-        next unless hit.raw_sequence.nil?
-        hit.raw_sequence = FetchRawSequences.run(hit.identifier,
-                                                 hit.accession_no)
-        useless_hits.push(hit) if hit.raw_sequence.nil?
+      less_hits.delete_if do |hit|
+        if hit.raw_sequence.nil?
+          hit.raw_sequence = FetchRawSequences.run(hit.identifier,
+                                                   hit.accession_no)
+        end
+        hit.raw_sequence.nil? ? true : false
       end
 
-      useless_hits.each { |hit| less_hits.delete(hit) }
-
-      fail NoInternetError if less_hits.length == 0
+      raise NoInternetError if less_hits.length.zero?
 
       averages = []
 
@@ -146,62 +138,17 @@ module GeneValidator
             hit_alignment   = hsp.hit_alignment
             query_alignment = hsp.query_alignment
           else
-            # indexing in blast starts from 1
-            hit_local   = hit.raw_sequence[hsp.hit_from - 1..hsp.hit_to - 1]
-            query_local = prediction.raw_sequence[hsp.match_query_from -
-                                                  1..hsp.match_query_to - 1]
-
-            # in case of nucleotide prediction sequence translate into protein
-            # use translate with reading frame 1 because
-            # to/from coordinates of the hsp already correspond to the
-            # reading frame in which the prediction was read to match this hsp
-            if @type == :nucleotide
-              s = Bio::Sequence::NA.new(query_local)
-              query_local = s.translate
-            end
-
-            # local alignment for hit and query
-            seqs = [hit_local, query_local]
-
-            begin
-              options   = ['--maxiterate', '1000', '--localpair', '--anysymbol',
-                           '--quiet', '--thread', "#{@num_threads}"]
-              mafft     = Bio::MAFFT.new('mafft', options)
-
-              report    = mafft.query_align(seqs)
-              raw_align = report.alignment
-              align     = []
-
-              raw_align.each { |seq| align.push(seq.to_s) }
-              hit_alignment   = align[0]
-              query_alignment = align[1]
-            rescue
-              raise NoMafftInstallationError
-            end
+            align = find_local_alignment(hit, prediction, hsp)
+            hit_alignment   = align[0]
+            query_alignment = align[1]
           end
 
-          # check multiple coverage
+          coverage = check_multiple_coverage(hit_alignment, query_alignment,
+                                             hsp, coverage, ranges_prediction)
 
-          # for each hsp of the curent hit
-          # iterate through the alignment and count the matching residues
-          [*(0..hit_alignment.length - 1)].each do |i|
-            residue_hit   = hit_alignment[i]
-            residue_query = query_alignment[i]
-            next if residue_hit == ' ' || residue_hit == '+' ||
-                    residue_hit == '-' || residue_hit != residue_query
-            # indexing in blast starts from 1
-            idx_hit   = i + (hsp.hit_from - 1) -
-                        hit_alignment[0..i].scan(/-/).length
-            idx_query = i + (hsp.match_query_from - 1) -
-                        query_alignment[0..i].scan(/-/).length
-            unless in_range?(ranges_prediction, idx_query)
-              coverage[idx_hit] += 1
-            end
-          end
-
-          ranges_prediction.push((hsp.match_query_from..hsp.match_query_to))
+          ranges_prediction << (hsp.match_query_from..hsp.match_query_to)
         end
-        overlap = coverage.reject { |x| x == 0 }
+        overlap = coverage.reject(&:zero?)
         if overlap != []
           averages.push((overlap.inject(:+) / (overlap.length + 0.0)).round(2))
         end
@@ -247,15 +194,67 @@ module GeneValidator
       @validation_report.errors.push 'Unexpected Error'
     end
 
+    # Only run if the BLAST output does not contain hit alignmment
+    def find_local_alignment(hit, prediction, hsp)
+      # indexing in blast starts from 1
+      hit_local   = hit.raw_sequence[hsp.hit_from - 1..hsp.hit_to - 1]
+      query_local = prediction.raw_sequence[hsp.match_query_from -
+                                            1..hsp.match_query_to - 1]
+
+      # in case of nucleotide prediction sequence translate into protein
+      # use translate with reading frame 1 because
+      # to/from coordinates of the hsp already correspond to the
+      # reading frame in which the prediction was read to match this hsp
+      if @type == :nucleotide
+        s = Bio::Sequence::NA.new(query_local)
+        query_local = s.translate
+      end
+
+      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+      mafft = Bio::MAFFT.new('mafft', opt)
+
+      # local alignment for hit and query
+      seqs = [hit_local, query_local]
+      report = mafft.query_align(seqs)
+      report.alignment.map(&:to_s)
+    rescue
+      raise NoMafftInstallationError
+    end
+
+    def check_multiple_coverage(hit_alignment, query_alignment, hsp, coverage,
+                                ranges_prediction)
+      # for each hsp of the curent hit
+      # iterate through the alignment and count the matching residues
+      [*(0..hit_alignment.length - 1)].each do |i|
+        residue_hit   = hit_alignment[i]
+        residue_query = query_alignment[i]
+        next if [' ', '+', '-'].include?(residue_hit)
+        next if residue_hit != residue_query
+        # indexing in blast starts from 1
+        idx_hit   = i + (hsp.hit_from - 1) -
+                    hit_alignment[0..i].scan(/-/).length
+        idx_query = i + (hsp.match_query_from - 1) -
+                    query_alignment[0..i].scan(/-/).length
+        coverage[idx_hit] += 1 unless in_range?(ranges_prediction, idx_query)
+      end
+      coverage
+    end
+
+    def in_range?(ranges, idx)
+      ranges.each { |range| return true if range.member?(idx) }
+      false
+    end
+
     ##
     # wilcox test implementation from statsample ruby gem
     # many thanks to Claudio for helping us with the implementation!
     def wilcox_test(averages)
-      wilcox = Statsample::Test.wilcoxon_signed_rank(Daru::Vector.new(averages),
-                                                     Daru::Vector.new(Array.new(averages.length,
-                                                               1)))
+      wilcox = Statsample::Test.wilcoxon_signed_rank(
+        Daru::Vector.new(averages),
+        Daru::Vector.new(Array.new(averages.length, 1))
+      )
 
-      (averages.length < 15) ? wilcox.probability_exact : wilcox.probability_z
+      averages.length < 15 ? wilcox.probability_exact : wilcox.probability_z
     end
   end
 end

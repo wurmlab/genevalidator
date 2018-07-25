@@ -124,32 +124,30 @@ module GeneValidator
     # Output:
     # +AlignmentValidationOutput+ object
     def run(n = 10)
-      n = opt[:min_blast_hits] < 10 ? 10 : opt[:min_blast_hits]
+      n = opt[:min_blast_hits] < 10 ? n : opt[:min_blast_hits]
       n = 50 if n > 50
 
-      fail NotEnoughHitsError if hits.length < n
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < n
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.new
       # get the first n hits
-      less_hits    = @hits[0..[n - 1, @hits.length].min]
-      useless_hits = []
-
+      n_hits = [n - 1, @hits.length].min
+      less_hits = @hits[0..n_hits]
       # get raw sequences for less_hits
-      less_hits.map do |hit|
-        next unless hit.raw_sequence.nil?
-        hit.raw_sequence = FetchRawSequences.run(hit.identifier,
-                                                 hit.accession_no)
-        useless_hits.push(hit) if hit.raw_sequence.nil?
+      less_hits.delete_if do |hit|
+        if hit.raw_sequence.nil?
+          hit.raw_sequence = FetchRawSequences.run(hit.identifier,
+                                                   hit.accession_no)
+        end
+        hit.raw_sequence.nil? ? true : false
       end
 
-      useless_hits.each { |hit| less_hits.delete(hit) }
-
-      fail NoInternetError if less_hits.length == 0
+      raise NoInternetError if less_hits.length.zero?
       # in case of nucleotide prediction sequence translate into protein
       # translate with the reading frame of all hits considered for alignment
       reading_frames = less_hits.map(&:reading_frame).uniq
-      fail ReadingFrameError if reading_frames.length != 1
+      raise ReadingFrameError if reading_frames.length != 1
 
       if @type == :nucleotide
         s = Bio::Sequence::NA.new(prediction.raw_sequence)
@@ -158,7 +156,7 @@ module GeneValidator
 
       # multiple align sequences from less_hits with the prediction
       # the prediction is the last sequence in the vector
-      multiple_align_mafft(prediction, less_hits)
+      @multiple_alignment = multiple_align_mafft(prediction, less_hits)
 
       out = get_sm_pssm(@multiple_alignment[0..@multiple_alignment.length - 2])
       sm = out[0]
@@ -183,7 +181,6 @@ module GeneValidator
       @validation_report.plot_files.push(plot1)
       @validation_report.run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence',
                                                 :warning, @short_header,
@@ -222,12 +219,11 @@ module GeneValidator
     # Output:
     # Array of +String+s, corresponding to the multiple aligned sequences
     # the prediction is the last sequence in the vector
-    def multiple_align_mafft(prediction = @prediction, hits = @hits)
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+    def multiple_align_mafft(prediction, hits)
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
-      options = ['--maxiterate', '1000', '--localpair', '--anysymbol',
-                 '--quiet', '--thread', @num_threads.to_s]
-      mafft = Bio::MAFFT.new('mafft', options)
+      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+      mafft = Bio::MAFFT.new('mafft', opt)
       sequences = hits.map do |h|
         # remove the seq id - as MAFFT sometimes has an issue with this
         f = Bio::FastaFormat.new(h.raw_sequence)
@@ -237,12 +233,9 @@ module GeneValidator
       sequences.push(prediction.protein_translation)
 
       report = mafft.query_align(sequences)
-
-      report.alignment.each { |s| @multiple_alignment.push(s.to_s) }
-
-      raise NoMafftInstallationError if @multiple_alignment.empty?
-
-      @multiple_alignment
+      alignment = report.alignment.map(&:to_s)
+      raise NoMafftInstallationError if alignment.empty?
+      alignment
     rescue
       raise NoMafftInstallationError
     end
@@ -256,7 +249,7 @@ module GeneValidator
     # +ma+: array of +String+s, corresponding to the multiple aligned sequences
     # Output:
     # +String+ with the consensus regions
-    def get_consensus(ma = @multiple_alignment)
+    def get_consensus(ma)
       align = Bio::Alignment.new(ma)
       align.consensus
     end
@@ -312,7 +305,7 @@ module GeneValidator
       # no of conserved residues among the hits
       no_conserved_residues = consensus.length - consensus.scan(/[\?-]/).length
 
-      return 1 if no_conserved_residues == 0
+      return 1 if no_conserved_residues.zero?
 
       # no of conserved residues from the hita that appear in the prediction
       no_conserved_pred = consensus.split(//).each_index.count { |j| consensus[j] != '-' && consensus[j] != '?' && consensus[j] == prediction_raw[j] }
@@ -331,7 +324,7 @@ module GeneValidator
     # +String+ representing the statistical model
     # +Array+ with the maximum frequeny of the majoritary residue for each
     # position
-    def get_sm_pssm(ma = @multiple_alignment, threshold = 0.7)
+    def get_sm_pssm(ma , threshold = 0.7)
       sm = ''
       freq = []
       (0..ma[0].length - 1).each do |i|
@@ -339,19 +332,10 @@ module GeneValidator
         ma.map { |seq| seq[i] }.each { |res| freqs[res] += 1 }
         # get the residue with the highest frequency
         max_freq = freqs.map { |_res, n| n }.max
-        residue = (freqs.map { |res, n| n == max_freq ? res : [] }.flatten)[0]
+        residue = freqs.map { |res, n| n == max_freq ? res : [] }.flatten[0]
 
-        if residue == '-'
-          freq.push(0)
-        else
-          freq.push(max_freq / (ma.length + 0.0))
-        end
-
-        if max_freq / (ma.length + 0.0) >= threshold
-          sm << residue
-        else
-          sm << '?'
-        end
+        freq << residue == '-' ? 0 : (max_freq / ma.length.to_f)
+        sm += (max_freq / ma.length.to_f) >= threshold ? residue : '?'
       end
       [sm, freq]
     end
@@ -368,16 +352,12 @@ module GeneValidator
       gap_starts = seq.to_enum(:scan, /(-\w{1,#{len}}-)/i).map { |_m| $`.size + 1 }
       # remove isolated residues
       gap_starts.each do |i|
-        (i..i + len - 1).each do |j|
-          seq[j] = '-' if isalpha(seq[j])
-        end
+        (i..i + len - 1).each { |j| seq[j] = '-' if isalpha(seq[j]) }
       end
       # remove isolated gaps
       res_starts = seq.to_enum(:scan, /([?\w]-{1,2}[?\w])/i).map { |_m| $`.size + 1 }
       res_starts.each do |i|
-        (i..i + len - 1).each do |j|
-          seq[j] = '?' if seq[j] == '-'
-        end
+        (i..i + len - 1).each { |j| seq[j] = '?' if seq[j] == '-' }
       end
       seq
     end
@@ -410,17 +390,16 @@ module GeneValidator
     # +ma+: +String+ array with the multiple alignmened hits and prediction
     def plot_alignment(freq, ma = @multiple_alignment)
       # get indeces of consensus in the multiple alignment
-      consensus = get_consensus(@multiple_alignment[0..@multiple_alignment.length - 2])
+      consensus = get_consensus(ma[0..ma.length - 2])
       consensus_idxs = consensus.split(//).each_index.select { |j| isalpha(consensus[j]) }
       consensus_ranges = array_to_ranges(consensus_idxs)
 
-      consensus_all = get_consensus(@multiple_alignment)
+      consensus_all = get_consensus(ma)
       consensus_all_idxs = consensus_all.split(//).each_index.select { |j| isalpha(consensus_all[j]) }
       consensus_all_ranges = array_to_ranges(consensus_all_idxs)
 
       match_alignment = ma[0..ma.length - 2].each_with_index.map { |seq, _j| seq.split(//).each_index.select { |j| isalpha(seq[j]) } }
-      match_alignment_ranges = []
-      match_alignment.each { |arr| match_alignment_ranges << array_to_ranges(arr) }
+      match_alignment_ranges = match_alignment.map { |e| array_to_ranges(e) }
 
       query_alignment = ma[ma.length - 1].split(//).each_index.select { |j| isalpha(ma[ma.length - 1][j]) }
       query_alignment_ranges = array_to_ranges(query_alignment)
