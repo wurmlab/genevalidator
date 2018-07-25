@@ -20,9 +20,12 @@ elif [ "$KERNEL" = "linux" ]; then
 fi
 
 # If there is an argument then there is where GV will installed
-# If there is an argument then there is where GV will installed
 if [ "$0" = 'sh' ]; then
+  # I.e. when piping from curl
   INSTALL_DIR=$PWD/genevalidator
+elif [ "$0" = 'install.sh' ]; then
+  # I.e. when running directly
+  INSTALL_DIR=${HOME}/.taxonkit
 else
   INSTALL_DIR="$0"
 fi
@@ -81,7 +84,7 @@ if [ -z ${DOT_FILE+x} ]; then
 else
   echo >&2 'export PATH="'"${INSTALL_DIR}"'/bin:${PATH}"' >> "${DOT_FILE}"
   echo >&2
-  echo >&2 "==> Added GeneValidator to your PATH in ~/.zshrc"
+  echo >&2 "==> Added GeneValidator to your PATH in ${DOT_FILE}"
   echo >&2
   echo >&2 "==> Run \`genevalidator -h\` in a new window to get started."
 fi
