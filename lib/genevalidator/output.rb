@@ -152,7 +152,7 @@ module GeneValidator
     end
 
     def write_csv_header
-      header = ['Analysis Number', 'GV Score', 'Identifier', 'No_Hits']
+      header = %w[AnalysisNumber GVScore Identifier NumberOfHits]
       header += validations.map(&:short_header)
       File.open(@dirs[:csv_file], 'a') { |f| f.puts header.join(',') }
     end
