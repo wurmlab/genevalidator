@@ -36,7 +36,7 @@ module GeneValidator
     filename_fasta   = 'test/test_files/test_sequences.fasta'
     filename_xml     = "#{filename_fasta}.blast_xml"
     filename_xml_raw = "#{filename_fasta}.blast_xml.raw_seq"
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
+
     opt = {
       input_fasta_file: filename_fasta,
       validations: ['all'],
@@ -44,6 +44,7 @@ module GeneValidator
       raw_sequences: filename_xml_raw,
       num_threads: 1,
       min_blast_hits: 5,
+      force_rewrite: true,
       test: true
     }
     GeneValidator.init(opt)
@@ -359,6 +360,5 @@ module GeneValidator
         assert_equal(:no, av.result)
       end
     end
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
   end
 end

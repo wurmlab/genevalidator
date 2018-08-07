@@ -38,8 +38,6 @@ module GeneValidator
         file_mrna.puts(query_mrna)
         file_mrna.close
 
-        FileUtils.rm_rf("#{filename_mrna}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_mrna,
           validations: ['all'],
@@ -47,6 +45,7 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
           output_dir: "#{filename_mrna}.html"
         }
 
@@ -74,8 +73,6 @@ module GeneValidator
         file_prot.puts(query_prot)
         file_prot.close
 
-        FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_prot,
           validations: ['all'],
@@ -83,6 +80,7 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
           output_dir: "#{filename_prot}.html"
         }
 
@@ -99,8 +97,6 @@ module GeneValidator
           original_stderr = $stderr
           $stderr.reopen('/dev/null', 'w')
 
-          FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
-
           default_opt = {
             input_fasta_file: mixed_fasta,
             validations: ['all'],
@@ -108,6 +104,7 @@ module GeneValidator
             num_threads: 1,
             min_blast_hits: 5,
             test: true,
+            force_rewrite: true,
             output_dir: "#{mixed_fasta}.html"
           }
 
@@ -197,8 +194,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (protein sequences)' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_fasta,
           validations: ['all'],
@@ -206,6 +201,7 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -238,8 +234,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - tabular input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_fasta,
           validations: ['all'],
@@ -247,6 +241,7 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -273,8 +268,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - xml input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         # just use a valid opts hash to create the object
         default_opt = {
           input_fasta_file: filename_fasta,
@@ -283,6 +276,7 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
           output_dir: "#{filename_fasta}.html"
         }
 
