@@ -25,7 +25,7 @@ if [ "$0" = 'sh' ]; then
   INSTALL_DIR=$PWD/genevalidator
 elif [ "$0" = 'install.sh' ]; then
   # I.e. when running directly
-  INSTALL_DIR=${HOME}/.taxonkit
+  INSTALL_DIR=$PWD/genevalidator
 else
   INSTALL_DIR="$0"
 fi
