@@ -19,7 +19,9 @@ module GeneValidator
 
     def initialize(short_header, header, description, pvalue, averages,
                    threshold = 0.05, expected = :yes)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @pvalue      = pvalue
       @threshold   = threshold
       @result      = validation
@@ -172,7 +174,6 @@ module GeneValidator
                                                            averages)
       @run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
@@ -187,7 +188,7 @@ module GeneValidator
                                                 @short_header, @header,
                                                 @description)
       @validation_report.errors.push NoInternetError
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -217,7 +218,7 @@ module GeneValidator
       seqs = [hit_local, query_local]
       report = mafft.query_align(seqs)
       report.alignment.map(&:to_s)
-    rescue
+    rescue StandardError
       raise NoMafftInstallationError
     end
 

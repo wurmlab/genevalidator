@@ -22,7 +22,7 @@ module GeneValidator
     end
 
     def protein_translation
-      (@type == :protein) ? raw_sequence : @protein_translation
+      @type == :protein ? raw_sequence : @protein_translation
     end
 
     ##

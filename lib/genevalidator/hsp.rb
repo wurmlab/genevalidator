@@ -52,7 +52,7 @@ module GeneValidator
 
     def assert_seq_type(query)
       seq_type = BlastUtils.guess_sequence_type(query)
-      fail SequenceTypeError if seq_type != :protein
+      raise SequenceTypeError if seq_type != :protein
     end
   end
 end

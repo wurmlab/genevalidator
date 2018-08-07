@@ -50,10 +50,10 @@ module GeneValidator
         end
 
         if @opt[:num_threads] == 1
-          (Validate.new).validate(prediction, blast_hits, @config[:idx])
+          Validate.new.validate(prediction, blast_hits, @config[:idx])
         else
           p.schedule(prediction, blast_hits, @config[:idx]) do |pred, hits, idx|
-            (Validate.new).validate(pred, hits, idx)
+            Validate.new.validate(pred, hits, idx)
           end
         end
       end
@@ -64,7 +64,7 @@ module GeneValidator
     ##
     # get info about the query
     def get_info_on_query_sequence(input_file = @opt[:input_fasta_file],
-                                        seq_type = @config[:type])
+                                   seq_type = @config[:type])
       start_offset = @query_idx[@config[:idx] + 1] - @query_idx[@config[:idx]]
       end_offset   = @query_idx[@config[:idx]]
       query        = IO.binread(input_file, start_offset, end_offset)
@@ -168,7 +168,7 @@ module GeneValidator
           coverage[match_from - 1..match_to - 1] = Array.new(len, 1)
         end
 
-        if low_identity.length == 0 && coverage.uniq.length == 1
+        if low_identity.empty? && coverage.uniq.length == 1
           identical_hits.push(hit)
         end
       end
@@ -210,7 +210,7 @@ module GeneValidator
     end
 
     def check_validations_output(vals)
-      raise NoValidationError if @run_output.validations.length == 0
+      raise NoValidationError if @run_output.validations.empty?
       vals.each do |v|
         raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
@@ -284,10 +284,10 @@ module GeneValidator
       end
 
       no_evidence = vals.count { |v| v.result == :unapplicable || v.result == :warning } == vals.length
-      nee = (no_evidence) ? 1 : 0
+      nee = no_evidence ? 1 : 0
 
-      good_scores = (@run_output.overall_score >= 75) ? 1 : 0
-      bad_scores  = (@run_output.overall_score >= 75) ? 0 : 1
+      good_scores = @run_output.overall_score >= 75 ? 1 : 0
+      bad_scores  = @run_output.overall_score >= 75 ? 0 : 1
 
       @mutex_array.synchronize do
         @overview[:no_queries] += 1

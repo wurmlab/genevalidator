@@ -53,4 +53,4 @@ def run(*cmds)
 end
 
 db = ENV['db'] || 'swissprot -remote'
-%w(data/protein_data.fasta data/mrna_data.fasta).each { |fa| test_with fa, db }
+%w[data/protein_data.fasta data/mrna_data.fasta].each { |fa| test_with fa, db }

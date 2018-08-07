@@ -77,9 +77,9 @@ module GeneValidator
       return unless @opt[:output_formats].include? 'csv'
       mutex_csv.synchronize do
         short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-        line = [@idx, @overall_score, short_def, @nr_hits ]
+        line = [@idx, @overall_score, short_def, @nr_hits]
         line += validations.map(&:print).each { |e| e.gsub!('&nbsp;', ' ') }
-        line.map { |e| e.gsub!(',', ' -') if e.is_a? String}
+        line.map { |e| e.gsub!(',', ' -') if e.is_a? String }
         write_csv_header unless File.exist?(@dirs[:csv_file])
         File.open(@dirs[:csv_file], 'a') { |f| f.puts line.join(',') }
       end
@@ -89,7 +89,7 @@ module GeneValidator
 
     def print_console_header(c_fmt)
       @config[:console_header_printed] = true
-      warn "==> Validating input sequences"
+      warn '==> Validating input sequences'
       warn '' # blank line
       print format(c_fmt, 'No', 'Score', 'Identifier', 'No_Hits')
       puts validations.map(&:short_header).join("\t")
@@ -242,7 +242,7 @@ module GeneValidator
           ['num_predictions_with_insufficient_blast_hits', overview[:insufficient_BLAST_hits]],
           ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
           ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
-          ['third_quartile_of_scores', overview[:third_quartile_of_scores]],
+          ['third_quartile_of_scores', overview[:third_quartile_of_scores]]
         ]
       end
 
@@ -264,9 +264,9 @@ module GeneValidator
 
       # make the historgram with the resulted scores
       def overview_html_hash(scores, less, evaluation)
-        data = [scores.group_by { |a| a }.map { |k, vs|
+        data = [scores.group_by { |a| a }.map do |k, vs|
           { 'key': k, 'value': vs.length, 'main': false }
-        }]
+        end]
         { data: data, type: :simplebars, aux1: 10, aux2: '',
           title: 'Overall GeneValidator Score Evaluation', footer: '',
           xtitle: 'Validation Score', ytitle: 'Number of Queries',
@@ -280,7 +280,7 @@ module GeneValidator
         plural = 'prediction was' if o[:insufficient_BLAST_hits] == 1
         plural = 'predictions were' if o[:insufficient_BLAST_hits] >= 2
         b = "#{o[:insufficient_BLAST_hits]} #{plural} not evaluated due to an" \
-            " insufficient number of BLAST hits."
+            ' insufficient number of BLAST hits.'
         blast_hits = o[:insufficient_BLAST_hits].zero? ? '' : b
 
         ['Overall Query Score Evaluation:',

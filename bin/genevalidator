@@ -289,17 +289,17 @@ BANNER
 begin
   global.order!
   first_arg = ARGV.shift
-  if subcommands.keys.include?(first_arg)
+  if subcommands.key?(first_arg)
     command = first_arg
     subcommands[command].order! unless subcommands[command].nil?
   else
     opt[:input_fasta_file] = first_arg
   end
   if opt[:input_fasta_file].nil? && command.nil? &&
-      ((opt[:extract_raw_seqs] && opt[:raw_sequences].nil?) ||
-        opt[:json_file].nil?)
+     ((opt[:extract_raw_seqs] && opt[:raw_sequences].nil?) ||
+       opt[:json_file].nil?)
     warn # a blank line
-    warn "==> Error: Input Fasta file required."
+    warn '==> Error: Input Fasta file required.'
     warn # a blank line
     warn # a blank line
     puts global
@@ -307,7 +307,7 @@ begin
   end
   if opt[:database_dir].nil? && command == 'app'
     warn # a blank line
-    warn "==> Error: Database directory containing BLAST databases required."
+    warn '==> Error: Database directory containing BLAST databases required.'
     warn # a blank line
     warn # a blank line
     puts subcommands['app']
@@ -349,7 +349,7 @@ elsif command == 'serve'
     elsif RUBY_PLATFORM =~ /darwin/
       system "open #{server_url}"
     end
-  rescue
+  rescue StandardError
     # fail silently
   end
 
@@ -362,8 +362,8 @@ elsif command == 'serve'
   end
 
   dir = ARGV[0]
-  index_file = File.basename( Dir[ File.join(dir, '*.html') ].sort.first )
-  app = Rack::Static.new nil, urls: [""], root: dir, index: index_file
+  index_file = File.basename(Dir[File.join(dir, '*.html')].min)
+  app = Rack::Static.new nil, urls: [''], root: dir, index: index_file
   Rack::Server.start app: app, port: opt[:port], StartCallback: proc {
     open_in_browser("http://localhost:#{opt[:port]}")
   }
@@ -427,7 +427,7 @@ elsif command == 'app'
   rescue GeneValidatorApp::BLAST_DATABASE_ERROR => e
     warn e
     exit!
-  rescue => e
+  rescue StandardError => e
     # This will catch any unhandled error and some very special errors.
     # Ideally we will never hit this block. If we do, there's a bug in
     # GeneValidatorApp or something really weird going on. If we hit this

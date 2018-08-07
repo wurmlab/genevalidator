@@ -100,7 +100,7 @@ module GeneValidator
         exit exit_code
       end
 
-      alias_method :assert_dir_present, :assert_file_present
+      alias assert_dir_present assert_file_present
 
       def assert_input_sequence
         fasta_content = IO.binread(@opt[:input_fasta_file])

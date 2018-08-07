@@ -139,13 +139,13 @@ module GeneValidator
         assert_equal(20, hits.length)
         assert_equal(1, hits[0].hsp_list.length)
         assert_equal(111, hits[0].hsp_list[0].hit_to)
-        assert(hits[0].hsp_list[0].hit_from.is_a? Fixnum)
+        assert(hits[0].hsp_list[0].hit_from.is_a?(Integer))
 
         assert_equal(100, hits[0].hsp_list[0].pidentity)
-        assert(hits[0].hsp_list[0].pidentity.is_a? Float)
+        assert(hits[0].hsp_list[0].pidentity.is_a?(Float))
 
         assert_equal(2.0e-44, hits[0].hsp_list[0].hsp_evalue)
-        assert(hits[0].hsp_list[0].hsp_evalue.is_a? Float)
+        assert(hits[0].hsp_list[0].hsp_evalue.is_a?(Float))
       end
 
       it 'should parse tabular -6 input with tabular format as argument' do
@@ -307,11 +307,10 @@ module GeneValidator
             db: 'swissprot -remote',
             num_threads: 1,
             min_blast_hits: 5,
-            test: true,
+            test: true
           }
 
           GeneValidator.init(default_opt)
-
         rescue SystemExit
           error = true
         end

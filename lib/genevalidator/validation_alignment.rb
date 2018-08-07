@@ -17,9 +17,11 @@ module GeneValidator
     attr_reader :result
 
     def initialize(short_header, header, description, gaps = 0, extra_seq = 0,
-                    consensus = 1, threshold = 20, expected = :yes)
+                   consensus = 1, threshold = 20, expected = :yes)
 
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @gaps         = (gaps * 100).round.to_s + '%'
       @extra_seq    = (extra_seq * 100).round.to_s + '%'
       @consensus    = (consensus * 100).round.to_s + '%'
@@ -47,7 +49,9 @@ module GeneValidator
       else
         t = 'These results suggest that there may be some problems with' \
             ' the query sequence.'
-        t1, t2, t3 = '', '', '' # Create empty string variables
+        t1 = ''
+        t2 = ''
+        t3 = '' # Create empty string variables
         if (1 - consensus.to_i) > @threshold
           t1 = ' There is low conservation of residues between the' \
                ' statistical profile and the query sequence (the cut-off' \
@@ -200,7 +204,7 @@ module GeneValidator
                                                 :error, @short_header,
                                                 @header, @description)
       @validation_report.errors.push 'Multiple reading frames Error'
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -236,7 +240,7 @@ module GeneValidator
       alignment = report.alignment.map(&:to_s)
       raise NoMafftInstallationError if alignment.empty?
       alignment
-    rescue
+    rescue StandardError
       raise NoMafftInstallationError
     end
 
@@ -324,7 +328,7 @@ module GeneValidator
     # +String+ representing the statistical model
     # +Array+ with the maximum frequeny of the majoritary residue for each
     # position
-    def get_sm_pssm(ma , threshold = 0.7)
+    def get_sm_pssm(ma, threshold = 0.7)
       sm = ''
       freq = []
       (0..ma[0].length - 1).each do |i|
@@ -374,10 +378,11 @@ module GeneValidator
     def array_to_ranges(ar)
       prev = ar[0]
 
-      ranges = ar.slice_before { |e|
-        prev, prev2 = e, prev
+      ranges = ar.slice_before do |e|
+        prev2 = prev
+        prev = e
         prev2 + 1 != e
-      }.map { |a| a[0]..a[-1] }
+      end.map { |a| a[0]..a[-1] }
 
       ranges
     end
@@ -408,15 +413,15 @@ module GeneValidator
 
       # plot statistical model
       data = freq.each_with_index.map { |h, j| { 'y' => ma.length, 'start' => j, 'stop' => j + 1, 'color' => 'orange', 'height' => h } } +
-      # hits
-      match_alignment_ranges.each_with_index.map { |ranges, j| ranges.map { |range| { 'y' => ma.length - j - 1, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } } }.flatten +
-      ma[0..ma.length - 2].each_with_index.map { |_seq, j| consensus_ranges.map { |range| { 'y' => j + 1, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } } }.flatten +
-      # plot prediction
-      [{ 'y' => 0, 'start' => 0, 'stop' => len, 'color' => 'gray', 'height' => -1 }] +
-      query_alignment_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } }.flatten +
+             # hits
+             match_alignment_ranges.each_with_index.map { |ranges, j| ranges.map { |range| { 'y' => ma.length - j - 1, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } } }.flatten +
+             ma[0..ma.length - 2].each_with_index.map { |_seq, j| consensus_ranges.map { |range| { 'y' => j + 1, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } } }.flatten +
+             # plot prediction
+             [{ 'y' => 0, 'start' => 0, 'stop' => len, 'color' => 'gray', 'height' => -1 }] +
+             query_alignment_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'red', 'height' => -1 } }.flatten +
 
-      # plot consensus
-      consensus_all_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }.flatten
+             # plot consensus
+             consensus_all_ranges.map { |range| { 'y' => 0, 'start' => range.first, 'stop' => range.last, 'color' => 'yellow', 'height' => -1 } }.flatten
 
       y_axis_values = 'Prediction'
       (1..ma.length - 1).each { |i| y_axis_values << ", hit #{i}" }

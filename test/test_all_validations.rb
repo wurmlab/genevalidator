@@ -39,7 +39,7 @@ module GeneValidator
         $stdout.reopen(prot_xml_out, 'w')
 
         opts = {
-          validations: %w(lenc lenr frame merge dup orf align),
+          validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
           input_fasta_file: prot_input,
@@ -59,7 +59,7 @@ module GeneValidator
         $stdout.reopen(prot_tab_out, 'w')
 
         opts1 = {
-          validations: %w(lenc lenr frame merge dup orf align),
+          validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
           input_fasta_file: prot_input,
@@ -93,7 +93,7 @@ module GeneValidator
         $stdout.reopen(mrna_xml_out, 'w')
 
         opts = {
-          validations: %w(lenc lenr frame merge dup orf align),
+          validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
           input_fasta_file: mrna_input,
@@ -113,7 +113,7 @@ module GeneValidator
         $stdout.reopen(mrna_tab_out, 'w')
 
         opts1 = {
-          validations: %w(lenc lenr frame merge dup orf align),
+          validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
           input_fasta_file: mrna_input,

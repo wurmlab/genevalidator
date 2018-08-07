@@ -1,4 +1,3 @@
-# coding: utf-8
 # From http://burgestrand.se/code/ruby-thread-pool/
 #
 # Copyright © 2012, Kim Burgestrand kim@burgestrand.se
@@ -20,8 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-require 'thread'
 
 # Class that creates a thread safe pool.
 class Pool
@@ -58,8 +55,8 @@ if $PROGRAM_NAME == __FILE__
 
   20.times do |i|
     p.schedule do
-      sleep rand(4) + 2
-      $stderr.puts "Job #{i} finished by thread #{Thread.current[:id]}\n"
+      sleep rand(2..5)
+      warn "Job #{i} finished by thread #{Thread.current[:id]}\n"
     end
   end
   at_exit { p.shutdown }

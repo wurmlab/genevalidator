@@ -1,5 +1,5 @@
 require 'rake/testtask'
-GEMSPEC = Gem::Specification::load('genevalidator.gemspec')
+GEMSPEC = Gem::Specification.load('genevalidator.gemspec')
 
 task default: [:build]
 
@@ -9,7 +9,7 @@ task install: [:build] do
 end
 
 desc 'Runs tests, generates documentation, builds gem (default)'
-task build: [:test, :doc] do
+task build: %i[test doc] do
   sh "gem build #{Rake.original_dir}/genevalidator.gemspec"
 end
 
@@ -56,36 +56,36 @@ end
 # For Bundler.with_clean_env
 require 'bundler/setup'
 
-TMP_DIR = "#{Rake.original_dir}/tmp"
-APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}"
-PLATFORMS = %w[linux-x86 linux-x86_64 osx]
-TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'
-TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'
-NOKOGIRI_VERSION = 'nokogiri-1.6.6.2'
+TMP_DIR = "#{Rake.original_dir}/tmp".freeze
+APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}".freeze
+PLATFORMS = %w[linux-x86 linux-x86_64 osx].freeze
+TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'.freeze
+TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'.freeze
+NOKOGIRI_VERSION = 'nokogiri-1.6.6.2'.freeze
 MAFFT = {
   version: '7.397',
   'linux-x86': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
   'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
   osx: 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-mac.zip'
-}
+}.freeze
 BLAST = {
   version: '2.7.1+',
   'linux-x86': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
   'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
-  osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-macosx.tar.gz',
-}
+  osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-macosx.tar.gz'
+}.freeze
 JQ = {
   version: '1.5',
   'linux-x86': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32',
   'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64',
   osx: 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-osx-amd64'
-}
+}.freeze
 CSVTK = {
   version: '0.14.0',
   'linux-x86': 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_linux_386.tar.gz',
   'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_linux_amd64.tar.gz',
   osx: 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_darwin_amd64.tar.gz'
-}
+}.freeze
 
 desc 'Create standalone GeneValidator packages'
 task :package do
@@ -284,13 +284,13 @@ PLATFORMS.each do |platform|
 end
 
 def download_runtime(platform)
-  sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz " +
-    "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz"
+  sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz " \
+     "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz"
 end
 
 def download_native_extension(platform, gem_name_and_version)
-  sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}-#{gem_name_and_version}.tar.gz " +
-    "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBYGEMS_VERSION}-#{platform}/#{gem_name_and_version}.tar.gz"
+  sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}-#{gem_name_and_version}.tar.gz " \
+     "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBYGEMS_VERSION}-#{platform}/#{gem_name_and_version}.tar.gz"
 end
 
 def process_package(url, package_name)
@@ -320,7 +320,7 @@ def edited_gemspec_content
   edited_gemspec.join
 end
 
-GEMFILE_CONTENTS = <<-GEMFILE
+GEMFILE_CONTENTS = <<-GEMFILE.freeze
 source 'http://rubygems.org'
 
 gem 'bio', '~> 1.4'
@@ -330,7 +330,7 @@ gem 'nokogiri', '1.6.6.2'
 gem 'statsample', '2.1.0'
 GEMFILE
 
-SCRIPT_CONTENTS = <<-SCRIPT
+SCRIPT_CONTENTS = <<-SCRIPT.freeze
 #!/bin/bash
 set -e
 
@@ -353,14 +353,14 @@ PATH=${MAFFT_DIR}/bin:${BLAST_BIN}:$PATH  exec "${SELFDIR}/lib/ruby/bin/ruby" -r
 
 SCRIPT
 
-BUNDLER_CONFIG = <<-CONFIG
+BUNDLER_CONFIG = <<-CONFIG.freeze
 BUNDLE_PATH: .
 BUNDLE_WITHOUT: "development:test"
 BUNDLE_DISABLE_SHARED_GEMS: '1'
 CONFIG
 
 def readme_contents(platform)
-<<-README
+  <<-README
 
 --------------------------------------------------------------------------------
 GeneValidator (v#{GEMSPEC.version})
@@ -396,5 +396,5 @@ Dependencies packaged with GeneValidator are licensed under their respective lic
 BLAST+ (Public Domain), Mafft (BSD), JQ (MIT), CSVTK (MIT) and SwissProt BLAST DB (CC BY-ND 3.0).
 -------------------------------------------------------------------------------
 
-README
+  README
 end

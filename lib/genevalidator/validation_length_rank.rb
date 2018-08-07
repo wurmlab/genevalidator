@@ -23,7 +23,9 @@ module GeneValidator
     def initialize(short_header, header, description, msg, query_length,
                    no_of_hits, median, mean, smallest_hit, largest_hit,
                    extreme_hits, percentage)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @msg          = msg
       @query_length = query_length
       @no_of_hits   = no_of_hits
@@ -44,17 +46,17 @@ module GeneValidator
     end
 
     def explain
-      diff = (@query_length > @median) ? 'longer' : 'shorter'
+      diff = @query_length > @median ? 'longer' : 'shorter'
       exp1 = "The query sequence is  #{@query_length} amino-acids long. BLAST" \
              " identified #{@no_of_hits} hit sequences with lengths from" \
              " #{@smallest_hit} to #{@largest_hit} amino-acids (median:" \
              " #{@median}; mean: #{@mean})."
-      if @extreme_hits != 0
-        exp2 = " #{@extreme_hits} of these hit sequences (i.e." \
-               " #{@percentage}%) are #{diff} than the query sequence."
-      else
-        exp2 = " All hit sequences are #{diff} than the query sequence."
-      end
+      exp2 = if @extreme_hits != 0
+               " #{@extreme_hits} of these hit sequences (i.e." \
+                      " #{@percentage}%) are #{diff} than the query sequence."
+             else
+               " All hit sequences are #{diff} than the query sequence."
+             end
       exp1 + exp2
     end
 
@@ -68,11 +70,11 @@ module GeneValidator
     end
 
     def print
-      (@msg.empty?) ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
+      @msg.empty? ? "#{@percentage}%" : "#{@percentage}%&nbsp;(#{@msg})"
     end
 
     def validation
-      (@msg.empty?) ? :yes : :no
+      @msg.empty? ? :yes : :no
     end
   end
 
@@ -107,13 +109,13 @@ module GeneValidator
     # Output:
     # +LengthRankValidationOutput+ object
     def run(hits = @hits, prediction = @prediction)
-      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < opt[:min_blast_hits]
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
       hits_lengths = hits.map { |x| x.length_protein.to_i }
-                     .sort { |a, b| a <=> b }
+                         .sort { |a, b| a <=> b }
 
       no_of_hits   = hits_lengths.length
       median       = hits_lengths.median.round
@@ -150,12 +152,11 @@ module GeneValidator
                                                           percentage)
       @validation_report.run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)

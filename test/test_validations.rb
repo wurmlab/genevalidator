@@ -53,7 +53,7 @@ module GeneValidator
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
 
     describe 'Detailed Validation of normal Insulin Query' do
-      hits     = BlastUtils.parse_next(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator, :nucleotide)
       prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -139,8 +139,7 @@ module GeneValidator
                          8 => { frame: -2, orf_start: 70, orf_end: 105,
                                 coverage: 36, translated_length: 105 },
                          9 => { frame: -3, orf_start: 25, orf_end: 84,
-                                coverage: 58, translated_length: 105 }
-                        }
+                                coverage: 58, translated_length: 105 } }
         assert_equal(expected_orf, ov.orfs)
         assert_equal(100.0, ov.coverage.round(4))
         assert_equal(1, ov.mainORFFrame)

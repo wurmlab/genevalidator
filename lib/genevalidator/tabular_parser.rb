@@ -5,7 +5,6 @@ require 'genevalidator/exceptions'
 require 'genevalidator/hsp'
 require 'genevalidator/query'
 
-#
 module GeneValidator
   ##
   # This class parses the tabular output of BLAST (outfmt 6 & 7)
@@ -63,7 +62,7 @@ module GeneValidator
       move_to_next_query
       hit_seq
     rescue StopIteration
-      return []
+      []
     end
 
     private

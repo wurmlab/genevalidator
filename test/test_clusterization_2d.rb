@@ -29,12 +29,12 @@ module GeneValidator
         hc       = HierarchicalClusterization.new(vec3)
         clusters = hc.hierarchical_clusterization_2d(2, 1)
         actual   = clusters[0].objects.map { |elem| elem[0] }
-                   .sort { |a, b| a.x <=> b.x }
-                   .sort { |a, b| a.y <=> b.y }
+                              .sort_by(&:x)
+                              .sort_by(&:y)
         ex_array = [Pair.new(1, 1), Pair.new(1.2, 1), Pair.new(1, 1.5),
                     Pair.new(1.1, 1.3), Pair.new(0.9, 0.9)]
-        expected = ex_array.sort { |a, b| a.x <=> b.x }
-                   .sort { |a, b| a.y <=> b.y }
+        expected = ex_array.sort_by(&:x)
+                           .sort_by(&:y)
         assert_equal(expected, actual)
       end
     end

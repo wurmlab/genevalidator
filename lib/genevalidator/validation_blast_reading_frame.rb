@@ -15,7 +15,9 @@ module GeneValidator
 
     def initialize(short_header, header, description, frames,
                    expected = :yes)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @frames = frames
       @expected     = expected
       @result       = validation
@@ -70,7 +72,7 @@ module GeneValidator
         count_p += 1 if x > 0
         count_n += 1 if x < 0
       end
-      (count_p > 1 || count_n > 1) ? :no : :yes
+      count_p > 1 || count_n > 1 ? :no : :yes
     end
   end
 
@@ -103,8 +105,8 @@ module GeneValidator
         return @validation_report
       end
 
-      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < opt[:min_blast_hits]
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
@@ -119,12 +121,11 @@ module GeneValidator
                                                        @description, frames)
       @validation_report.run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughHitsError
-      @validation_report =  ValidationReport.new('Not enough evidence',
-                                                 :warning, @short_header,
-                                                 @header, @description)
-    rescue
+      @validation_report = ValidationReport.new('Not enough evidence',
+                                                :warning, @short_header,
+                                                @header, @description)
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)

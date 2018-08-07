@@ -10,7 +10,9 @@ module GeneValidator
   class MakerQIValidationOutput < ValidationReport
     def initialize(short_header, header, description, splice_sites, exons,
                    expected = :yes)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @splice_sites = splice_sites
       @exons        = exons
       @expected     = expected
@@ -27,12 +29,12 @@ module GeneValidator
     def explain
       if @splice_sites == -100
         "#{@exons}% of exons match an EST/mRNA-seq alignment." \
-        " No splice sites were identified and as such cannot be confirmed by" \
-        " an EST/mRNA-seq alignment."
+        ' No splice sites were identified and as such cannot be confirmed by' \
+        ' an EST/mRNA-seq alignment.'
       else
         "#{@exons}% of exons match an EST/mRNA-seq alignment and" \
         " #{@splice_sites}% of splice sites are confirmed by EST/mRNA-seq" \
-        " alignment."
+        ' alignment.'
       end
     end
 
@@ -54,7 +56,7 @@ module GeneValidator
     end
 
     def validation
-      (@splice_sites > 80 && @exons > 80) ? :yes : :no
+      @splice_sites > 80 && @exons > 80 ? :yes : :no
     end
   end
 
@@ -77,7 +79,7 @@ module GeneValidator
     # Output:
     # +QIValidationOutput+ object
     def run
-      fail unless prediction.is_a?(Query)
+      raise unless prediction.is_a?(Query)
 
       start  = Time.now
 
@@ -87,7 +89,7 @@ module GeneValidator
                                              #{number}\|#{number}\|#{number}\|
                                              #{number}\|#{number}/x)
 
-      fail NotEnoughEvidence if match.nil?
+      raise NotEnoughEvidence if match.nil?
 
       # % of splice sites confirmed by EST/mRNA-seq alignment
       splice_sites = (match[1].to_f * 100).round
@@ -99,12 +101,11 @@ module GeneValidator
                                                        splice_sites, exons)
       @validation_report.run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughEvidence
-      @validation_report =  ValidationReport.new('No MAKER Quality Index',
-                                                 :warning, @short_header,
-                                                 @header, @description)
-    rescue
+      @validation_report = ValidationReport.new('No MAKER Quality Index',
+                                                :warning, @short_header,
+                                                @header, @description)
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
