@@ -34,7 +34,6 @@ module GeneValidator
       @config[:run_no] += 1
       output_dir       = @dirs[:output_dir]
       @output_filename = File.join(output_dir, "#{@dirs[:filename]}_results")
-      @js_plots_dir    = File.join(output_dir, 'html_files/json')
 
       @prediction_def = definition
       @nr_hits        = no_of_hits
@@ -54,10 +53,11 @@ module GeneValidator
 
     def generate_json
       mutex_json.synchronize do
+        fname = File.join(@dirs[:json_dir], "#{@dirs[:filename]}_#{@idx}.json")
         row_data = { idx: @idx, overall_score: @overall_score,
                      definition: @prediction_def, no_hits: @nr_hits }
         row = create_validation_hash(row_data)
-        write_row_json(row)
+        File.open(fname, 'w') { |f| f.write(row.to_json) }
         @config[:json_output] << row
       end
     end
@@ -93,11 +93,6 @@ module GeneValidator
       warn '' # blank line
       print format(c_fmt, 'No', 'Score', 'Identifier', 'No_Hits')
       puts validations.map(&:short_header).join("\t")
-    end
-
-    def write_row_json(row)
-      row_json = File.join(@js_plots_dir, "#{@dirs[:filename]}_#{@idx}.json")
-      File.open(row_json, 'w') { |f| f.write(row.to_json) }
     end
 
     def create_validation_hash(row)
@@ -208,7 +203,7 @@ module GeneValidator
         return unless opt[:output_formats].include? 'html'
         evaluation = overview.flatten.join('<br>').gsub("'", %q(\\\'))
         less = overview[0].join('<br>')
-        json = File.join(dirs[:output_dir], 'html_files/json/overview.json')
+        json = File.join(dirs[:json_dir], 'overview.json')
 
         hash = overview_html_hash(scores, less, evaluation)
         File.open(json, 'w') { |f| f.write hash.to_json }

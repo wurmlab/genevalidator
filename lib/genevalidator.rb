@@ -80,6 +80,7 @@ module GeneValidator
       { filename: fname,
         output_dir: out_dir,
         tmp_dir: File.join(out_dir, 'tmp'),
+        json_dir:  File.join(out_dir, 'tmp/json'),
         html_file: File.join(out_dir, "#{fname}_results*.html"),
         json_file: File.join(out_dir, "#{fname}_results.json"),
         csv_file: File.join(out_dir, "#{fname}_results.csv"),
@@ -124,8 +125,14 @@ module GeneValidator
     end
 
     def cp_html_files(output_dir)
-      aux_files = File.expand_path('../aux/html_files/', __dir__)
-      FileUtils.cp_r(aux_files, output_dir)
+      if @opt[:output_formats].include? 'html'
+        aux_files = File.expand_path('../aux/html_files/', __dir__)
+        FileUtils.cp_r(aux_files, output_dir)
+        FileUtils.ln_s(File.join(output_dir, 'html_files', 'json'),
+                       File.join(output_dir, 'tmp', 'json'))
+      else
+        Dir.mkdir(File.join(output_dir, 'tmp', 'json'))
+      end
     end
 
     ##
