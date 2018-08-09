@@ -138,8 +138,6 @@ genevalidator INPUT_FASTA_FILE
 
 #### Using an alternative BLAST database
 GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
-.
-The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
 
 ```bash
 genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
