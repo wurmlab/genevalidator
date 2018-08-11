@@ -30,15 +30,19 @@ html
             button.close data-dismiss="modal" type="button"
               span aria-hidden="true"  &times;
               span.sr-only Close
-            h4.modal-title Incompatible Browser - Please use Mozilla Firefox!
+            h4.modal-title Incompatible Browser!
           #browseralertbody.modal-body
             p#browseralertText
               strong#mainbrowseralertText Sorry, this feature is not supported in your browser.
-            p This is because Chrome does not allow access to local files. Thus, to avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.
+              br
+              strong Please run the following command in your terminal:
+              pre style="background-color: #f2dede"
+                | genevalidator serve #{@dirs[:output_dir]}
+            p This is because some browsers do not allow access to local files.
             p
-              | Please use
-              strong Mozilla FireFox
-              | to view this file.
+              | Alternatively, you can use 
+              strong Mozilla FireFox 
+              | to view this file without running the above web server.
     .container
       span.menu_icon.pull-right
         a href="#" onclick="GV.toggleAllPlots(this);"
@@ -69,9 +73,10 @@ html
       - if @all_html_fnames.length > 1
         nav
           ul.pagination
-            - @all_html_fnames.each_with_index do |fname, idx|
+            - @all_html_fnames.each_with_index do |file, idx|
               li
-                a href=fname = idx + 1
+                a href="#{File.basename(file)}"
+                  = idx + 1
       table#sortable_table.table.table-striped.table-collapsed.table-bordered.table-condensed.tablesorter style="margin-top:20px"
         thead
           tr#header
@@ -119,9 +124,10 @@ html
     - if @all_html_fnames.length > 1
       nav
         ul.pagination
-          - @all_html_fnames.each_with_index do |fname, idx|
+          - @all_html_fnames.each_with_index do |file, idx|
             li
-              a href=fname = idx + 1
+              a href="#{File.basename(file)}"
+                = idx + 1
     footer
       .container.center-block
         p.text-muted.text-center
