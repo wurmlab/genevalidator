@@ -30,14 +30,9 @@ module GeneValidator
     ##
     #
     def analayse_tabular_file(filename)
-      results = []
-      file    = File.read(filename)
-      lines   = CSV.parse(file, col_sep: "\t", skip_lines: /^#/,
-                                headers: @column_names)
-      lines.each do |line|
-        results << line.to_hash
-      end
-      results
+      lines = CSV.parse(File.read(filename), col_sep: "\t", skip_lines: /^#/,
+                                             headers: @column_names)
+      lines.map(&:to_hash)
     end
 
     ##
@@ -71,29 +66,14 @@ module GeneValidator
     #
     def initialise_classes(current_id, tab_results = @tab_results)
       hits = tab_results.partition { |h| h['qseqid'] == current_id }[0]
-      hit_list = []
       grouped_hits = hits.group_by { |row| row['sseqid'] }
 
-      grouped_hits.each do |query_id, row|
+      grouped_hits.map do |_query_id, rows|
         hit_seq = Query.new
-        hit_seq.init_tabular_attribute(row[0])
-
-        initialise_all_hsps(query_id, hits, hit_seq)
-
+        hit_seq.init_tabular_attribute(rows[0])
+        hit_seq.hsp_list = rows.map { |row| Hsp.new(tabular_input: row) }
         hit_seq.type = :protein
-        hit_list.push(hit_seq)
-      end
-      hit_list
-    end
-
-    ##
-    #
-    def initialise_all_hsps(current_query_id, hits, hit_seq)
-      hsps = hits.select { |row| row['sseqid'] == current_query_id }
-      hsps.each do |row|
-        hsp = Hsp.new
-        hsp.init_tabular_attribute(row)
-        hit_seq.hsp_list.push(hsp)
+        hit_seq
       end
     end
   end

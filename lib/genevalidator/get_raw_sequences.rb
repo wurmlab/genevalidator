@@ -118,7 +118,7 @@ module GeneValidator
                                    headers: table_headers)
 
         rows.each do |row|
-          raise BLASTDBError if row['sseqid'] =~ /\|BL_ORD_ID\|/
+          raise BLASTDBError if row['sseqid'] =~ /\|BL_ORD_ID\|/i
           if db_type == 'remote' || row['sseqid'].nil?
             file.puts FetchRawSequences.extract_from_remote_db(row['sacc'])
           else
@@ -138,15 +138,15 @@ module GeneValidator
         # first try to extract from previously created raw_sequences HASH
         raw_seq = extract_from_index(identifier) if opt[:raw_sequences]
         # then try to just extract that sequence based on accession.
-        if opt[:db] !~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/)
+        if opt[:db] !~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/i)
           raw_seq = extract_from_local_db(false, accession)
         end
         # then try to extract from remote database
-        if opt[:db] =~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/)
+        if opt[:db] =~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/i)
           raw_seq = extract_from_remote_db(accession)
         end
         # return nil if the raw_sequence still produces an error.
-        raw_seq =~ /Error/ ? nil : raw_seq
+        raw_seq =~ /Error/i ? nil : raw_seq
       end
 
       ##

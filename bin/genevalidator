@@ -39,8 +39,9 @@ BANNER
   end
 
   opt[:db] = 'swissprot -remote'
-  opts.on('-d', '--db [BLAST_DATABASE]',
+  opts.on('-d', '--db [PATH]',
           'Path to the BLAST database',
+          'e.g.   genevalidator -d /path/to/databasa.fa Input_File',
           'GeneValidator also supports remote databases:',
           'e.g.   genevalidator -d "swissprot -remote" Input_File') do |db|
     opt[:db] = db
@@ -58,7 +59,8 @@ BANNER
   opts.on('-o', '--output_dir [PATH]',
           'Path to the output folder.',
           'By default the output folder is in the same directory as the input',
-          'file and is named as "GV_" followed by the time of analysis') do |d|
+          'file and is named as input filename, followed by the time of',
+          'analysis') do |d|
     opt[:output_dir] = d
   end
 
@@ -67,7 +69,7 @@ BANNER
   end
 
   opt[:output_formats] = %w[html csv json stdout summary]
-  opts.on('--output_formats [FORMATS]',
+  opts.on('--output_formats [STRING]',
           'Output Formats to generate. This can be either: "all", "html",',
           '"csv", "json", "summary" or "stdout". Multiple formats can be',
           'separated by a semi-colon e.g. "csv:json".',
@@ -80,7 +82,7 @@ BANNER
   opts.separator ' '
 
   opt[:min_blast_hits] = 5
-  opts.on('-m', '--min_blast_hits_required',
+  opts.on('--min_blast_hits_required [NUM]',
           'The minimum number of BLAST hits required by GeneValidator in order',
           'to carry out validations. Note: certain validations have their own',
           'set minimum (such as the multiple alignment validation, which',
@@ -106,13 +108,13 @@ BANNER
   end
 
   # default blast tabular columns
-  opts.on('--blast_tabular_options [BLAST_TABULAR_OPTIONS]',
+  opts.on('--blast_tabular_options [STRING]',
           'Custom format used in BLAST -outfmt argument',
           'See BLAST+ manual pages for more details') do |blast_table_options|
     opt[:blast_tabular_options] = blast_table_options
   end
 
-  opts.on('-r', '--raw_sequences [PATH]',
+  opts.on('--raw_sequences [PATH]',
           'Supply a fasta file of the raw sequences of all BLAST hits present',
           'in the supplied BLAST XML or BLAST tabular file.') do |raw_seq|
     opt[:raw_sequences] = raw_seq
@@ -125,7 +127,7 @@ BANNER
   opts.on('-e', '--extract_raw_seqs',
           'Extract a fasta file of the raw sequences of BLAST hits in the',
           'supplied BLAST output file. This fasta file can then be provided to',
-          'GeneValidator with the "-r", "--raw_sequences" argument') do
+          'GeneValidator with the "--raw_sequences" argument') do
     opt[:extract_raw_seqs] = true
   end
 
@@ -146,11 +148,25 @@ BANNER
   opt[:num_threads] = 1
   opts.on('-n', '--num_threads [THREADS]',
           'Specify the number of processor threads to use when running',
-          'BLAST and Mafft within GeneValidator.') do |num_threads|
+          'BLAST and GeneValidator.') do |num_threads|
     opt[:num_threads] = num_threads
   end
 
-  opts.on('--bin [dir]', Array,
+  opt[:mafft_threads] = 1
+  opts.on('-m', '--mafft_threads [THREADS]',
+          'Specify the number of processor threads to use when running',
+          'Mafft. Note Mafft is run independently in each of the threads',
+          'specified in --num_threads.') do |mafft_threads|
+    opt[:mafft_threads] = mafft_threads
+  end
+
+  opts.on('-r', '--resume [DIR]',
+          'Resume a previous analysis (creates a new output directory but',
+          ' skips') do |dir|
+    opt[:resumable] = dir
+  end
+
+  opts.on('--bin [DIR]', Array,
           'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
           'To be provided as follows:',
           'e.g.   genevalidator --bin /blast/bin/ --bin /mafft/bin/') do |bin|
@@ -322,13 +338,14 @@ if command.nil? && opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
   require 'genevalidator/get_raw_sequences'
   GeneValidator.opt    = opt
   GeneValidator.config = {}
-  # GVArgValidation.run_raw_seqs
   GeneValidator::RawSequences.run
 elsif command.nil? && opt[:json_file]
+  start = Time.now
   require 'genevalidator/json_to_gv_results'
-  GeneValidator.opt = opt
-  # GVArgValidation.run_json_to_gv_results
+  GeneValidator::JsonToGVResults.init(opt)
   GeneValidator::JsonToGVResults.run
+  warn "Total running time: #{(Time.now - start).round(3)}s"
+  warn # a blank line
 elsif command.nil?
   start = Time.now
   require 'genevalidator'

@@ -5,7 +5,9 @@ require 'genevalidator/arg_validation'
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 require 'genevalidator/get_raw_sequences'
+require 'genevalidator/json_to_gv_results'
 require 'genevalidator/output'
+require 'genevalidator/output_files'
 require 'genevalidator/tabular_parser'
 require 'genevalidator/validation'
 
@@ -17,24 +19,22 @@ module GeneValidator
     attr_reader :raw_seq_file_load
     # array of indexes for the start offsets of each query in the fasta file
     attr_reader :query_idx
-    attr_accessor :mutex, :mutex_html, :mutex_json, :mutex_array, :mutex_csv
+    attr_accessor :mutex, :mutex_array
 
     def init(opt, start_idx = 1)
       warn '==> Analysing input arguments'
       @opt = opt
       GVArgValidation.validate_args # validates @opt
+      number_of_sequences = index_the_input
 
-      @config = setup_config(start_idx)
-      @overview = setup_overview_hash
+      @config = setup_config(start_idx, number_of_sequences)
       @dirs = setup_dirnames(@opt[:input_fasta_file])
 
       @mutex       = Mutex.new
       @mutex_array = Mutex.new
-      @mutex_html  = Mutex.new
-      @mutex_json  = Mutex.new
-      @mutex_csv   = Mutex.new
 
-      index_the_input
+      resume_from_previous_run(opt[:resumable]) unless opt[:resumable].nil?
+
       RawSequences.index_raw_seq_file if @opt[:raw_sequences]
     end
 
@@ -54,7 +54,6 @@ module GeneValidator
       # Run Validations
       iterator = parse_blast_output_file
       Validations.new.run_validations(iterator)
-
       produce_output
       print_directories_locations
     end
@@ -89,26 +88,38 @@ module GeneValidator
         aux_dir: File.expand_path('../aux', __dir__) }
     end
 
+    def extract_input_fasta_sequence(index)
+      start_offset = @query_idx[index + 1] - @query_idx[index]
+      end_offset = @query_idx[index]
+      IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
+    end
+
+    def produce_output
+      @overview = Output.generate_overview(@config[:json_output],
+                                           @opt[:min_blast_hits])
+      eval_text = Output.generate_evaluation_text(@overview)
+      Output.print_console_footer(eval_text, @opt)
+
+      output_files = OutputFiles.new
+      output_files.write_json
+      output_files.write_html(eval_text)
+      output_files.write_csv
+      output_files.write_summary
+      output_files.print_best_fasta
+    end
+
     private
 
-    def setup_config(start_idx)
+    def setup_config(start_idx, seq_length)
       {
         idx: 0,
         start_idx: start_idx,
 
         type: BlastUtils.guess_sequence_type_from_input_file,
 
-        json_output: [],
+        json_output: Array.new(seq_length),
         run_no: 0,
         output_max: 2500 # max no. of queries in the output html file
-      }
-    end
-
-    def setup_overview_hash
-      {
-        scores: [], no_queries: 0, good_scores: 0, bad_scores: 0, nee: 0,
-        no_mafft: 0, no_internet: 0, map_errors: Hash.new(0),
-        run_time: Hash.new(Pair1.new(0, 0))
       }
     end
 
@@ -118,17 +129,29 @@ module GeneValidator
       dir_name = "#{fname}_" + Time.now.strftime('%Y_%m_%d_%H_%M_%S')
       default_outdir = File.join(Dir.pwd, dir_name)
       output_dir = @opt[:output_dir].nil? ? default_outdir : @opt[:output_dir]
+      assert_output_dir_does_not_exist(output_dir)
       Dir.mkdir(output_dir)
       Dir.mkdir(File.join(output_dir, 'tmp'))
       cp_html_files(output_dir)
       output_dir
     end
 
+    def assert_output_dir_does_not_exist(output_dir)
+      return unless Dir.exist?(output_dir)
+      FileUtils.rm_r(output_dir) if @opt[:force_rewrite]
+      return if @opt[:force_rewrite]
+      warn 'The output directory already exists for this fasta file.'
+      warn "\nPlease remove the following directory: #{output_dir}\n"
+      warn "You can run the following command to remove the folder.\n"
+      warn "\n   $ rm -r #{output_dir} \n"
+      exit 1
+    end
+
     def cp_html_files(output_dir)
       if @opt[:output_formats].include? 'html'
         aux_files = File.expand_path('../aux/html_files/', __dir__)
         FileUtils.cp_r(aux_files, output_dir)
-        FileUtils.ln_s(File.join(output_dir, 'html_files', 'json'),
+        FileUtils.ln_s(File.join('..', 'html_files', 'json'),
                        File.join(output_dir, 'tmp', 'json'))
       else
         Dir.mkdir(File.join(output_dir, 'tmp', 'json'))
@@ -145,19 +168,7 @@ module GeneValidator
         Regexp.last_match.begin(0)
       end
       @query_idx.push(fasta_content.length)
-    end
-
-    def produce_output
-      add_summary_statistics
-      overall_eval = Output.calculate_overview(@overview)
-      Output.print_console_footer(overall_eval, @opt)
-      Output.print_html_footer(@opt, @config, @dirs)
-      Output.create_overview_json_for_html(overall_eval, @overview[:scores],
-                                           @opt, @dirs)
-      Output.write_json_file(@config[:json_output], @dirs[:json_file], @opt)
-      Output.write_best_fasta(@config[:json_output], @dirs[:fasta_file],
-                              @opt[:input_fasta_file], @query_idx, opt)
-      Output.write_summary_file(@overview, @dirs[:summary_file], @opt)
+      @query_idx.length - 1
     end
 
     def print_directories_locations
@@ -165,13 +176,57 @@ module GeneValidator
       warn "    #{File.expand_path(@dirs[:output_dir])}"
     end
 
-    def add_summary_statistics(json_output = @config[:json_output])
-      quartiles = json_output.collect { |e| e[:overall_score] }.all_quartiles
-      @overview[:first_quartile_of_scores] = quartiles[0]
-      @overview[:second_quartile_of_scores] = quartiles[1]
-      @overview[:third_quartile_of_scores] = quartiles[2]
-      min_hits = json_output.count { |e| e[:no_hits] < @opt[:min_blast_hits] }
-      @overview[:insufficient_BLAST_hits] = min_hits
+    def resume_from_previous_run(prev_dir)
+      prev_tmp_dir = File.join(prev_dir, 'tmp')
+      return unless Dir.exist? prev_tmp_dir
+      copy_blast_xml_files(prev_tmp_dir)
+      copy_raw_seq_files(prev_tmp_dir)
+      copy_prev_json_output(prev_tmp_dir)
+    end
+
+    def copy_blast_xml_files(prev_tmp_dir)
+      return if @opt[:blast_xml_file] || @opt[:blast_tabular_file]
+      prev_blast_xml = Dir[File.join(prev_tmp_dir, '*blast_xml')]
+      return if prev_blast_xml.empty?
+      blast_xml_fname = "#{@dirs[:filename]}.blast_xml"
+      @opt[:blast_xml_file] = File.join(@dirs[:tmp_dir], blast_xml_fname)
+      FileUtils.cp(prev_blast_xml[0], @opt[:blast_xml_file])
+    end
+
+    def copy_raw_seq_files(prev_tmp_dir)
+      return if @opt[:raw_sequences]
+      return unless @opt[:validations].include?('align') ||
+                    @opt[:validations].include?('dup')
+      prev_raw_seq = Dir[File.join(prev_tmp_dir, '*raw_seq')]
+      return if prev_raw_seq.empty?
+      raw_seq_fname = "#{@dirs[:filename]}.blast_xml.raw_seq"
+      @opt[:raw_sequences] = File.join(@dirs[:tmp_dir], raw_seq_fname)
+      FileUtils.cp(prev_raw_seq[0], @opt[:raw_sequences])
+    end
+
+    def copy_prev_json_output(prev_tmp_dir)
+      prev_json_dir = File.join(prev_tmp_dir, 'json')
+      return unless Dir.exist? prev_json_dir
+      all_jsons = Dir[File.join(prev_json_dir, '*.json')]
+      FileUtils.cp(all_jsons, @dirs[:json_dir])
+      overview_json = Dir[File.join(prev_json_dir, 'overview.json')]
+      data_jsons = all_jsons - overview_json
+      parse_prev_json(data_jsons)
+    end
+
+    def parse_prev_json(data_jsons)
+      data_jsons.each do |json|
+        json_contents = File.read(File.expand_path(json))
+        data = JSON.parse(json_contents, symbolize_names: true)
+        idx = json.match(/(\d+).json/)[1].to_i - 1
+        @config[:json_output][idx] = data
+        print_prev_json_to_console(data)
+      end
+    end
+
+    def print_prev_json_to_console(data)
+      JsonToGVResults.print_console_header(data)
+      JsonToGVResults.print_output_console(data)
     end
   end
 end

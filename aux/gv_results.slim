@@ -1,0 +1,149 @@
+doctype html
+html
+  head
+    title GeneValidator: identify problems with gene predictions
+    script src="html_files/js/gv.compiled.min.js" type="text/javascript"
+    link href="html_files/css/gv.compiled.min.css" rel="stylesheet" type="text/css" /
+  body
+    #spinner1.modal aria-hidden="true" role="dialog" tabindex="-1"
+      .modal-dialog
+        .modal-content
+          .modal-body.text-center
+            h2 Loading ...
+            i.fa.fa-spinner.fa-5x.fa-spin
+    #alert.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close data-dismiss="modal" type="button"
+              span aria-hidden="true"  &times;
+              span.sr-only Close
+            h4.modal-title Oops, Something went wrong!
+          .modal-body
+            p This operation is not posible. There seems to be too many queries...
+          .modal-footer
+            button.btn.btn-default data-dismiss="modal" type="button"  Close
+    #browseralert.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+      .modal-dialog
+        .modal-content.browser-alert
+          .modal-header
+            button.close data-dismiss="modal" type="button"
+              span aria-hidden="true"  &times;
+              span.sr-only Close
+            h4.modal-title Incompatible Browser - Please use Mozilla Firefox!
+          #browseralertbody.modal-body
+            p#browseralertText
+              strong#mainbrowseralertText Sorry, this feature is not supported in your browser.
+            p This is because Chrome does not allow access to local files. Thus, to avoid this, simply use a different browser (like Firefox or Safari) or start a local server in the results folder.
+            p
+              | Please use
+              strong Mozilla FireFox
+              | to view this file.
+    .container
+      span.menu_icon.pull-right
+        a href="#" onclick="GV.toggleAllPlots(this);"
+          i.fa.fa-2x.fa-bar-chart-o
+          br/
+          span#show_all_plots Show All Charts
+      span.menu_icon.pull-right
+        a href="https://github.com/wurmlab/genevalidator" target="_blank"
+          i.fa.fa-2x.fa-github
+          br/
+          | Source Code
+      span.menu_icon.pull-right
+        a href="http://wurmlab.github.io/tools/genevalidator/"
+          i.fa.fa-2x.fa-info-circle
+          br/
+          | About
+      .clearfix
+      img.logo alt="logo" src="html_files/img/gene.png" /
+      .page-title
+        h1
+          | Gene Validator
+          small
+            | v#{GeneValidator::VERSION}
+        h4.subheading Identify Problems with Gene Predictions
+      #overview.text-left style="margin-top:20px"
+        #overview_text
+        button#overview_btn.btn.btn-primary.btn-sm data-toggle="button" onclick="GV.toggleOverviewBtn();" data-overviewjson="html_files/json/overview.json"
+      - if @all_html_fnames.length > 1
+        nav
+          ul.pagination
+            - @all_html_fnames.each_with_index do |fname, idx|
+              li
+                a href=fname = idx + 1
+      table#sortable_table.table.table-striped.table-collapsed.table-bordered.table-condensed.tablesorter style="margin-top:20px"
+        thead
+          tr#header
+            th #
+            th Ranking
+            th
+              | Sequence Definition 
+              span data-placement="top" data-toggle="tooltip" title=("Query definition as it apears in the input fasta file.")
+                i.fa.fa-question-circle
+            th
+              | No. Hits 
+              span data-placement="top" data-toggle="tooltip" title=("Number of non-identical hits found by BLAST.")
+                i.fa.fa-question-circle
+            - @json_data_section[0][:validations].each do |_short_header, item|
+              th.sorter-false
+                strong
+                  = item[:header]
+                |  
+                - if item[:header] == "Length Cluster" || item[:header] == "Gene Merge" || item[:header] == "Main ORF" || item[:header] == "Missing/Extra Sequences"
+                  span data-placement="top" data-toggle="tooltip" title=("Charts available for this validation")
+                    i.fa.fa-bar-chart-o.chartIcon
+                |  
+                span data-placement="top" data-toggle="tooltip" title="#{item[:description]}"
+                  i.fa.fa-question-circle
+            th.sorter-false.chart-column
+        tbody
+          - @json_data_section.each do |row|
+            tr data-jsonfile="html_files/json/#{@dirs[:filename]}_#{row[:idx]}.json" data-target="toggle#{row[:idx]}"
+              td title="idx" = row[:idx]
+              td data-score="#{row[:overall_score]}"
+                .ratings
+                  .empty-stars
+                  .full-stars style=("width:#{row[:overall_score] * 0.85}%;")
+              td title="Definition" = row[:definition]
+              td title=("No. Hits") = row[:no_hits]
+              - row[:validations].each do |_short_header, item|
+                td class="#{item[:status]}" title="#{item[:header]}"
+                  == item[:print].gsub(' ', '&nbsp;').gsub(';&nbsp;', '; ')
+              - if row[:validations].select { |_short_header, item| item[:graphs] != nil }.map{ |_short_header, item| item[:graphs].length }.inject(0) { |r, e| r + e } != 0
+                td
+                  button.plot_btn.btn.btn-default title=("Show plots")
+                    i.fa.fa-bar-chart-o
+              - else
+                td
+    - if @all_html_fnames.length > 1
+      nav
+        ul.pagination
+          - @all_html_fnames.each_with_index do |fname, idx|
+            li
+              a href=fname = idx + 1
+    footer
+      .container.center-block
+        p.text-muted.text-center
+          | Please cite:
+          a href="https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein" 
+            | "Dragan M
+            sup> ‡
+            | , Moghul MI
+            sup> ‡
+            | , Priyam A, Bustos C &amp; Wurm Y
+            em (2016)
+            | GeneValidator: identify problematic gene predictions"
+          br/
+          | Developed at
+          a href="https://wurmlab.github.io" target="_blank"  Wurm Lab
+          | ,
+          a href="http://www.sbcs.qmul.ac.uk" target="_blank"  QMUL
+          | with funding by
+          a href="http://www.bbsrc.ac.uk/home/home.aspx" target="_blank"  BBSRC
+          | and
+          a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2013" target="_blank"  Google Summer of Code 2013
+          br/
+          | This page was created by 
+          a href="https://wurmlab.github.io/tools/genevalidator/" target="_blank"  GeneValidator
+          | v#{GeneValidator::VERSION}

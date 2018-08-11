@@ -99,7 +99,7 @@ module GeneValidator
       @index_file_name   = config[:raw_seq_file_index]
       @raw_seq_file_load = config[:raw_seq_file_load]
       @db                = opt[:db]
-      @num_threads       = opt[:num_threads]
+      @num_threads       = opt[:mafft_threads]
       @type              = config[:type]
     end
 
@@ -211,7 +211,8 @@ module GeneValidator
         query_local = s.translate
       end
 
-      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet',
+             '--thread', @num_threads.to_s]
       mafft = Bio::MAFFT.new('mafft', opt)
 
       # local alignment for hit and query

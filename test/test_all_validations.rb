@@ -42,6 +42,7 @@ module GeneValidator
           validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
+          mafft_threads: 1,
           input_fasta_file: prot_input,
           blast_xml_file: prot_xml,
           raw_sequences: prot_raw,
@@ -53,7 +54,7 @@ module GeneValidator
           force_rewrite: true
         }
 
-        GeneValidator.init(opts, 1)
+        GeneValidator.init(opts)
         GeneValidator.run
         $stdout.reopen original_stdout
         $stdout.reopen(prot_tab_out, 'w')
@@ -62,6 +63,7 @@ module GeneValidator
           validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
+          mafft_threads: 1,
           input_fasta_file: prot_input,
           blast_tabular_file: prot_tab,
           blast_tabular_options: tab_options,
@@ -96,6 +98,7 @@ module GeneValidator
           validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
+          mafft_threads: 1,
           input_fasta_file: mrna_input,
           blast_xml_file: mrna_xml,
           raw_sequences: mrna_raw,
@@ -116,6 +119,7 @@ module GeneValidator
           validations: %w[lenc lenr frame merge dup orf align],
           db: database,
           num_threads: threads,
+          mafft_threads: 1,
           input_fasta_file: mrna_input,
           blast_tabular_file: mrna_tab,
           blast_tabular_options: tab_options,

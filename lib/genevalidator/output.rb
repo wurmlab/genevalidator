@@ -1,16 +1,10 @@
-require 'csv'
-require 'erb'
-require 'fileutils'
 require 'forwardable'
 require 'json'
-
-require 'genevalidator/version'
 
 module GeneValidator
   class Output
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :dirs, :mutex, :mutex_html,
-                   :mutex_json, :mutex_csv
+    def_delegators GeneValidator, :opt, :config, :dirs, :mutex
     attr_accessor :prediction_def
     attr_accessor :nr_hits
 
@@ -44,50 +38,27 @@ module GeneValidator
       return unless @opt[:output_formats].include? 'stdout'
       c_fmt = "%3s\t%5s\t%20s\t%7s\t"
       mutex.synchronize do
-        print_console_header(c_fmt) unless @config[:console_header_printed]
-        short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
+        print_console_header(c_fmt)
+        short_def = @prediction_def.split(' ')[0]
         print format(c_fmt, @idx, @overall_score, short_def, @nr_hits)
         puts validations.map(&:print).join("\t").gsub('&nbsp;', ' ')
       end
     end
 
     def generate_json
-      mutex_json.synchronize do
-        fname = File.join(@dirs[:json_dir], "#{@dirs[:filename]}_#{@idx}.json")
-        row_data = { idx: @idx, overall_score: @overall_score,
-                     definition: @prediction_def, no_hits: @nr_hits }
-        row = create_validation_hash(row_data)
-        File.open(fname, 'w') { |f| f.write(row.to_json) }
-        @config[:json_output] << row
-      end
-    end
-
-    def generate_html
-      return unless @opt[:output_formats].include? 'html'
-      mutex_html.synchronize do
-        html_output_file = html_output_filename
-        query_erb     = File.join(@dirs[:aux_dir], 'template_query.erb')
-        template_file = File.open(query_erb, 'r').read
-        erb           = ERB.new(template_file, 0, '>')
-        File.open(html_output_file, 'a') { |f| f.write(erb.result(binding)) }
-      end
-    end
-
-    def generate_csv
-      return unless @opt[:output_formats].include? 'csv'
-      mutex_csv.synchronize do
-        short_def = @prediction_def.scan(/([^ ]+)/)[0][0]
-        line = [@idx, @overall_score, short_def, @nr_hits]
-        line += validations.map(&:print).each { |e| e.gsub!('&nbsp;', ' ') }
-        line.map { |e| e.gsub!(',', ' -') if e.is_a? String }
-        write_csv_header unless File.exist?(@dirs[:csv_file])
-        File.open(@dirs[:csv_file], 'a') { |f| f.puts line.join(',') }
-      end
+      fname = File.join(@dirs[:json_dir], "#{@dirs[:filename]}_#{@idx}.json")
+      row_data = { idx: @idx, overall_score: @overall_score,
+                   definition: @prediction_def, no_hits: @nr_hits }
+      row = create_validation_hash(row_data)
+      arr_idx = @idx - 1
+      @config[:json_output][arr_idx] = row
+      File.open(fname, 'w') { |f| f.write(row.to_json) }
     end
 
     private
 
     def print_console_header(c_fmt)
+      return if @config[:console_header_printed]
       @config[:console_header_printed] = true
       warn '==> Validating input sequences'
       warn '' # blank line
@@ -109,7 +80,8 @@ module GeneValidator
 
     def add_basic_validation_info(item)
       { header: item.header, description: item.description, status: item.color,
-        print: item.print.gsub('&nbsp;', ' ') }
+        print: item.print.gsub('&nbsp;', ' '), run_time: item.run_time,
+        validation: item.validation }
     end
 
     def add_explanation_data(item)
@@ -127,30 +99,6 @@ module GeneValidator
       graphs
     end
 
-    ### HTML Output
-
-    def html_output_filename
-      return unless @opt[:output_formats].include? 'html'
-      result_part = (@idx.to_f / @config[:output_max]).ceil
-      result_part = result_part == 1 ? '' : "_#{result_part}"
-      html_output_file = @output_filename + result_part + '.html'
-      write_html_header(html_output_file) unless File.exist?(html_output_file)
-      html_output_file
-    end
-
-    def write_html_header(html_output_file)
-      return unless @opt[:output_formats].include? 'html'
-      head_erb          = File.join(@dirs[:aux_dir], 'template_header.erb')
-      template_contents = File.open(head_erb, 'r').read
-      erb               = ERB.new(template_contents, 0, '>')
-      File.open(html_output_file, 'w+') { |f| f.write(erb.result(binding)) }
-    end
-
-    def write_csv_header
-      header = %w[AnalysisNumber GVScore Identifier NumberOfHits]
-      header += validations.map(&:short_header)
-      File.open(@dirs[:csv_file], 'a') { |f| f.puts header.join(',') }
-    end
 
     class <<self
       def print_console_footer(overall_evaluation, opt)
@@ -161,52 +109,82 @@ module GeneValidator
         warn ''
       end
 
-      def write_json_file(array, json_file, opt)
-        return unless opt[:output_formats].include? 'json'
-        File.open(json_file, 'w') { |f| f.write(array.to_json) }
+      def generate_overview(json_data, min_blast_hits)
+        scores_from_json = json_data.map { |e| e[:overall_score] }
+        quartiles = scores_from_json.all_quartiles
+        nee = calculate_no_quries_with_no_evidence(json_data)
+        no_mafft = count_mafft_errors(json_data)
+        no_internet = count_internet_errors(json_data)
+        map_errors = map_errors(json_data)
+        run_time = calculate_run_time(json_data)
+        min_hits = json_data.count { |e| e[:no_hits] < min_blast_hits }
+        overview_hash(scores_from_json, quartiles, nee, no_mafft, no_internet,
+                      map_errors, run_time, min_hits)
       end
 
-      def write_best_fasta(data, fasta_file, input_file, query_idx, opt)
-        return unless opt[:select_single_best]
-        top_data = data.max_by { |e| [e[:overall_score], e[:no_hits]] }
-        start_offset = query_idx[top_data[:idx] + 1] - query_idx[top_data[:idx]]
-        end_offset   = query_idx[top_data[:idx]]
-        query        = IO.binread(input_file, start_offset, end_offset)
-        File.open(fasta_file, 'w') { |f| f.write(query) }
-        puts query
+      def overview_hash(scores_from_json, quartiles, nee, no_mafft, no_internet,
+                        map_errors, run_time, insufficient_BLAST_hits)
+        {
+          scores: scores_from_json,
+          no_queries: scores_from_json.length,
+          good_scores: scores_from_json.count { |s| s >= 75 },
+          bad_scores: scores_from_json.count { |s| s < 75 },
+          nee: nee, no_mafft: no_mafft, no_internet: no_internet,
+          map_errors: map_errors, run_time: run_time,
+          first_quartile_of_scores: quartiles[0],
+          second_quartile_of_scores: quartiles[1],
+          third_quartile_of_scores: quartiles[2],
+          insufficient_BLAST_hits: insufficient_BLAST_hits
+        }
       end
 
-      ##
-      # Method that closes the gas in the html file and writes the overall
-      # evaluation
-      # Param:
-      # +all_query_outputs+: array with +ValidationTest+ objects
-      # +html_path+: path of the html folder
-      # +filemane+: name of the fasta input file
-      def print_html_footer(opt, config, dirs)
-        return unless opt[:output_formats].include? 'html'
-
-        footer_erb    = File.join(dirs[:aux_dir], 'template_footer.erb')
-        template_file = File.open(footer_erb, 'r').read
-        erb           = ERB.new(template_file, 0, '>')
-
-        all_html_files = all_html_output_files(config, dirs)
-        all_html_files.each do |fname|
-          output = File.join(dirs[:output_dir], fname)
-          File.open(output, 'a+') { |f| f.write(erb.result(binding)) }
+      # calculate number of queries that had warnings for all validations.
+      def calculate_no_quries_with_no_evidence(json_data)
+        all_warnings = 0
+        json_data.each do |row|
+          status = row[:validations].map { |_, h| h[:status] }
+          if status.count { |r| r == 'warning' } == status.length
+            all_warnings += 1
+          end
         end
-
-        turn_off_sorting(dirs[:output_dir]) if all_html_files.length > 1
+        all_warnings
       end
 
-      def create_overview_json_for_html(overview, scores, opt, dirs)
-        return unless opt[:output_formats].include? 'html'
-        evaluation = overview.flatten.join('<br>').gsub("'", %q(\\\'))
-        less = overview[0].join('<br>')
-        json = File.join(dirs[:json_dir], 'overview.json')
+      def count_mafft_errors(json_data)
+        json_data.count do |row|
+          num = row[:validations].count { |_, h| h[:print] == 'Mafft error' }
+          num.zero? ? false : true
+        end
+      end
 
-        hash = overview_html_hash(scores, less, evaluation)
-        File.open(json, 'w') { |f| f.write hash.to_json }
+      def count_internet_errors(json_data)
+        json_data.count do |row|
+          num = row[:validations].count { |_, h| h[:print] == 'Internet error' }
+          num.zero? ? false : true
+        end
+      end
+
+      def map_errors(json_data)
+        errors = {}
+        json_data.map do |row|
+          e = row[:validations].map { |s, h| s if h[:validation] == 'error' }
+          e.compact.each { |err| errors[err] += 1 }
+        end
+        errors
+      end
+
+      def calculate_run_time(json_data)
+        run_time = Hash.new(Pair1.new(0, 0))
+        json_data.map do |row|
+          row[:validations].each do |short_header, v|
+            next if v[:run_time].nil? || v[:run_time].zero?
+            next if v[:validation] == 'unapplicable' || v[:validation] == 'error'
+            p = Pair1.new(run_time[short_header.to_s].x + v[:run_time],
+                          run_time[short_header.to_s].y + 1)
+            run_time[short_header.to_s] = p
+          end
+        end
+        run_time
       end
 
       ##
@@ -215,7 +193,7 @@ module GeneValidator
       # +all_query_outputs+: Array of +ValidationTest+ objects
       # Output
       # Array of Strigs with the reports
-      def calculate_overview(overview)
+      def generate_evaluation_text(overview)
         eval       = general_overview(overview)
         error_eval = errors_overview(overview)
         time_eval  = time_overview(overview)
@@ -223,50 +201,7 @@ module GeneValidator
         [eval, error_eval, time_eval].reject(&:empty?)
       end
 
-      def write_summary_file(overview, summary_file, opt)
-        return unless opt[:output_formats].include? 'summary'
-        data = generate_summary_data(overview)
-        File.open(summary_file, 'w') { |f| f.write data.map(&:to_csv).join }
-      end
-
-      def generate_summary_data(overview)
-        [
-          ['num_predictions', overview[:no_queries]],
-          ['num_good_predictions', overview[:good_scores]],
-          ['num_bad_predictions', overview[:bad_scores]],
-          ['num_predictions_with_insufficient_blast_hits', overview[:insufficient_BLAST_hits]],
-          ['first_quartile_of_scores', overview[:first_quartile_of_scores]],
-          ['second_quartile_of_scores', overview[:second_quartile_of_scores]],
-          ['third_quartile_of_scores', overview[:third_quartile_of_scores]]
-        ]
-      end
-
       private
-
-      def all_html_output_files(config, dirs)
-        fname = "#{dirs[:filename]}_results"
-        total_files = (config[:run_no].to_f / config[:output_max]).ceil
-        return [fname + '.html'] if total_files == 1
-        (1..total_files).map { |i| "#{fname}#{i == 1 ? '' : "_#{i}"}.html" }
-      end
-
-      def turn_off_sorting(output_dir)
-        script_file = File.join(output_dir, 'html_files/js/gv.compiled.min.js')
-        content     = File.read(script_file).gsub(',initTableSorter(),', ',')
-        File.open("#{script_file}.tmp", 'w') { |f| f.puts content }
-        FileUtils.mv("#{script_file}.tmp", script_file)
-      end
-
-      # make the historgram with the resulted scores
-      def overview_html_hash(scores, less, evaluation)
-        data = [scores.group_by { |a| a }.map do |k, vs|
-          { 'key': k, 'value': vs.length, 'main': false }
-        end]
-        { data: data, type: :simplebars, aux1: 10, aux2: '',
-          title: 'Overall GeneValidator Score Evaluation', footer: '',
-          xtitle: 'Validation Score', ytitle: 'Number of Queries',
-          less: less, evaluation: evaluation }
-      end
 
       def general_overview(o)
         good_pred = o[:good_scores] == 1 ? 'One' : "#{o[:good_scores]} are"

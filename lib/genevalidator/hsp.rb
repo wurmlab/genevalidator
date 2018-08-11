@@ -1,9 +1,14 @@
+require 'forwardable'
+
 require 'genevalidator/blast'
 require 'genevalidator/exceptions'
 
 module GeneValidator
   # A class that initialises the BLAST tabular attributes
   class Hsp
+    extend Forwardable
+    def_delegators GeneValidator, :config
+
     attr_accessor :hit_from # ref. from the unaligned hit sequence
     attr_accessor :hit_to
     attr_accessor :match_query_from # ref. from the unaligned query sequence
@@ -23,9 +28,30 @@ module GeneValidator
     attr_accessor :gaps
     attr_accessor :align_len
 
-    def initialize
+    def initialize(input = {})
       @query_alignment = nil
       @hit_alignment   = nil
+      init_xml_attributes(input[:xml_input]) if input[:xml_input]
+      init_tabular_attribute(input[:tabular_input]) if input[:tabular_input]
+    end
+
+    def init_xml_attributes(hsp)
+      @match_query_from    = hsp.query_from.to_i
+      @match_query_to      = hsp.query_to.to_i
+      @query_reading_frame = hsp.query_frame.to_i
+      @hit_from            = hsp.hit_from.to_i
+      @hit_to              = hsp.hit_to.to_i
+      @query_alignment     = hsp.qseq.to_s
+      @hit_alignment       = hsp.hseq.to_s
+      @align_len           = hsp.align_len.to_i
+      @pidentity           = (100 * hsp.identity / hsp.align_len.to_f).round(2)
+      @identity            = hsp.identity.to_i
+      @hsp_evalue          = format('%.0e', hsp.evalue)
+      assert_seq_type(@hit_alignment) if @hit_alignment
+      assert_seq_type(@query_alignment) if @query_alignment
+      return unless config[:type] == :nucleotide
+      @match_query_from = (@match_query_from / 3) + 1
+      @match_query_to   = (@match_query_to / 3) + 1
     end
 
     ##
@@ -53,6 +79,9 @@ module GeneValidator
     def assert_seq_type(query)
       seq_type = BlastUtils.guess_sequence_type(query)
       raise SequenceTypeError if seq_type != :protein
+    rescue SequenceTypeError => e
+      warn e
+      exit 1
     end
   end
 end

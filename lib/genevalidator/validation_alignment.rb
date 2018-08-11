@@ -118,7 +118,7 @@ module GeneValidator
       @raw_seq_file_load  = config[:raw_seq_file_load]
       @db                 = opt[:db]
       @multiple_alignment = []
-      @num_threads        = opt[:num_threads]
+      @num_threads        = opt[:mafft_threads]
       @type               = config[:type]
     end
 
@@ -127,8 +127,8 @@ module GeneValidator
     # of the first n hits
     # Output:
     # +AlignmentValidationOutput+ object
-    def run(n = 10)
-      n = opt[:min_blast_hits] < 10 ? n : opt[:min_blast_hits]
+    def run
+      n = opt[:min_blast_hits] < 10 ? 10 : opt[:min_blast_hits]
       n = 50 if n > 50
 
       raise NotEnoughHitsError if hits.length < n
@@ -226,7 +226,8 @@ module GeneValidator
     def multiple_align_mafft(prediction, hits)
       raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
-      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet']
+      opt = ['--maxiterate', '1000', '--localpair', '--anysymbol', '--quiet',
+             '--thread', @num_threads.to_s]
       mafft = Bio::MAFFT.new('mafft', opt)
       sequences = hits.map do |h|
         # remove the seq id - as MAFFT sometimes has an issue with this

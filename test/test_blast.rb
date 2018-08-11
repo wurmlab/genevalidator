@@ -46,6 +46,7 @@ module GeneValidator
           min_blast_hits: 5,
           test: true,
           force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_mrna}.html"
         }
 
@@ -81,6 +82,7 @@ module GeneValidator
           min_blast_hits: 5,
           test: true,
           force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_prot}.html"
         }
 
@@ -105,6 +107,7 @@ module GeneValidator
             min_blast_hits: 5,
             test: true,
             force_rewrite: true,
+            output_formats: %w[html csv json stdout],
             output_dir: "#{mixed_fasta}.html"
           }
 
@@ -118,8 +121,9 @@ module GeneValidator
 
       it 'should parse xml input' do
         output = File.open(filename_prot_xml, 'rb').read
+        GeneValidator.config = { type: :protein }
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator)
         assert_equal(500, hits.length)
         assert_equal(870, hits[19].length_protein)
         assert_equal('XP_004524940', hits[19].accession_no)
@@ -202,6 +206,7 @@ module GeneValidator
           min_blast_hits: 5,
           test: true,
           force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -242,6 +247,7 @@ module GeneValidator
           min_blast_hits: 5,
           test: true,
           force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -277,16 +283,18 @@ module GeneValidator
           min_blast_hits: 5,
           test: true,
           force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
         GeneValidator.init(default_opt)
+        GeneValidator.config = { type: :protein }
 
         prediction = Query.new
         prediction.length_protein = 219 / 3
         output = File.open(ncbi_mrna_xml20, 'rb').read
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator)
 
         assert_equal(20, hits.length)
 
@@ -307,6 +315,7 @@ module GeneValidator
             db: 'swissprot -remote',
             num_threads: 1,
             min_blast_hits: 5,
+            output_formats: %w[html csv json stdout],
             test: true
           }
 

@@ -87,66 +87,24 @@ module GeneValidator
       # +type+: the type of the sequence: :nucleotide or :protein
       # Outputs:
       # Array of +Sequence+ objects corresponding to the list of hits
-      def parse_next(iterator, type = config[:type])
-        hits = []
+      def parse_next(iterator)
         iter = iterator.next
 
         # parse blast the xml output and get the hits
         # hits obtained are proteins! (we use only blastp and blastx)
+        hits = []
         iter.each do |hit|
-          seq = Query.new
-
+          seq                = Query.new
           seq.length_protein = hit.len.to_i
           seq.type           = :protein
           seq.identifier     = hit.hit_id
           seq.definition     = hit.hit_def
-          seq.accession_no = hit.accession
+          seq.accession_no   = hit.accession
+          seq.hsp_list       = hit.hsps.map { |hsp| Hsp.new(xml_input: hsp) }
 
-          # get all high-scoring segment pairs (hsp)
-          hsps = []
-
-          hit.hsps.each do |hsp|
-            current_hsp            = Hsp.new
-            current_hsp.hsp_evalue = format('%.0e', hsp.evalue)
-
-            current_hsp.hit_from         = hsp.hit_from.to_i
-            current_hsp.hit_to           = hsp.hit_to.to_i
-            current_hsp.match_query_from = hsp.query_from.to_i
-            current_hsp.match_query_to   = hsp.query_to.to_i
-
-            if type == :nucleotide
-              current_hsp.match_query_from /= 3
-              current_hsp.match_query_to /= 3
-              current_hsp.match_query_from += 1
-              current_hsp.match_query_to += 1
-            end
-
-            current_hsp.query_reading_frame = hsp.query_frame.to_i
-
-            current_hsp.hit_alignment = hsp.hseq.to_s
-            seq_type = guess_sequence_type(current_hsp.hit_alignment)
-            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
-
-            current_hsp.query_alignment = hsp.qseq.to_s
-            seq_type = guess_sequence_type(current_hsp.query_alignment)
-            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
-
-            current_hsp.align_len = hsp.align_len.to_i
-            current_hsp.identity  = hsp.identity.to_i
-            current_hsp.pidentity = (100 * hsp.identity / hsp.align_len.to_f)
-                                    .round(2)
-
-            hsps.push(current_hsp)
-          end
-
-          seq.hsp_list = hsps
-          hits.push(seq)
+          hits << seq
         end
-
         hits
-      rescue SequenceTypeError => e
-        warn e
-        exit 1
       rescue StopIteration
         nil
       end
