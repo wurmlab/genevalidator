@@ -172,7 +172,7 @@ namespace :package do
         sh 'chmod +x jq'
 
         # Install CSVTK
-        sh "curl -L #{JQ[platform.to_sym]} | tar zxf -"
+        sh "curl -L #{CSVTK[platform.to_sym]} | tar zxf -"
       end
 
       cp_r "#{TMP_DIR}/blast_db", blast_db_dir
@@ -368,7 +368,7 @@ Website: https://wurmlab.github.io/tools/genevalidator/
 Paper: https://doi.org/10.1093/bioinformatics/btw015
 
 Standalone Package for #{platform}.
-This package includes BLAST+ (v#{BLAST[:version]}), MAFFT (v#{MAFFT[:version]}), JQ (v#{JQ[:version]}) and the Swissprot BLAST database.
+This package includes BLAST+ (v#{BLAST[:version]}), MAFFT (v#{MAFFT[:version]}), JQ (v#{JQ[:version]}), CSVTK (v#{CSVTK[:version]}) and the Swissprot BLAST database.
 
 Please cite as follows:
 Dragan M‡, Moghul MI‡, Priyam A, Bustos C & Wurm Y. 2015.
@@ -396,5 +396,5 @@ Dependencies packaged with GeneValidator are licensed under their respective lic
 BLAST+ (Public Domain), Mafft (BSD), JQ (MIT), CSVTK (MIT) and SwissProt BLAST DB (CC BY-ND 3.0).
 -------------------------------------------------------------------------------
 
-  README
+README
 end
