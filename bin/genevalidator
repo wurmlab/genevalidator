@@ -289,7 +289,7 @@ USAGE:
 
 ARGUMENTS:
 BANNER
-    opt[:port] = 8080
+    opt[:port] = 6789
     opts.on('-p', '--port [PORT]',
             'Port to run the server on') do |port|
       opt[:port] = port
