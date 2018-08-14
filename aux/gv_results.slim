@@ -109,7 +109,7 @@ html
               td data-score="#{row[:overall_score]}"
                 .ratings
                   .empty-stars
-                  .full-stars style=("width:#{row[:overall_score] * 0.85}%;")
+                  .full-stars style=("width:#{row[:overall_score]}%;")
               td title="Definition" = row[:definition]
               td title=("No. Hits") = row[:no_hits]
               - row[:validations].each do |_short_header, item|
