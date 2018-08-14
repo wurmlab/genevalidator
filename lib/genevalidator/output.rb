@@ -99,7 +99,6 @@ module GeneValidator
       graphs
     end
 
-
     class <<self
       def print_console_footer(overall_evaluation, opt)
         return unless (opt[:output_formats].include? 'stdout') ||
