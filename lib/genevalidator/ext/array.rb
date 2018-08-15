@@ -16,8 +16,8 @@ module GeneValidator
     end
 
     def mode
-      freq = inject(Hash.new(0)) { |h, v| h[v] += 1; h }
-      sort_by { |v| freq[v] }.last
+      freq = each_with_object(Hash.new(0)) { |v, h| h[v] += 1; }
+      max_by { |v| freq[v] }
     end
 
     def sample_variance
@@ -38,13 +38,13 @@ module GeneValidator
         split[0].median(true),
         sorted.median(true),
         split[1].median(true)
-       ]
+      ]
     end
 
     def median_split
       len    = length
-      center = len%2
-      [self[0..len/2-1], self[len/2+center..-1]]
+      center = len % 2
+      [self[0..len / 2 - 1], self[len / 2 + center..-1]]
     end
   end
 end

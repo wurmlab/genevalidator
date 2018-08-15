@@ -15,7 +15,9 @@ module GeneValidator
 
     def initialize(short_header, header, description, query_length, limits,
                    expected = :yes)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @limits       = limits
       @query_length = query_length
       @expected     = expected
@@ -32,7 +34,7 @@ module GeneValidator
     end
 
     def explain
-      diff = (@result == :yes) ? 'inside' : 'outside'
+      diff = @result == :yes ? 'inside' : 'outside'
       'The most dense length-cluster of BLAST hits includes' \
       " sequences that are from #{@limits[0]} to #{@limits[1]} amino-acids" \
       " long. The query sequence is #{@query_length} amino-acids long and" \
@@ -44,7 +46,7 @@ module GeneValidator
         'There is no reason to believe there is any problem with the length' \
         ' of the query sequence.'
       else
-        size_diff  = (@query_length > @limits[1]) ? 'long' : 'short'
+        size_diff = @query_length > @limits[1] ? 'long' : 'short'
         "This suggests that the query sequence may be too #{size_diff}."
       end
     end
@@ -99,8 +101,8 @@ module GeneValidator
     # Output:
     # +LengthClusterValidationOutput+ object
     def run
-      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < opt[:min_blast_hits]
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
       # get [clusters, max_density_cluster_idx]
@@ -122,12 +124,11 @@ module GeneValidator
       @validation_report.run_time = Time.now - start
 
       @validation_report
-
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -146,7 +147,7 @@ module GeneValidator
     def clusterization_by_length(_debug = false,
                                  lst = @hits,
                                  predicted_seq = @prediction)
-      fail TypeError unless lst[0].is_a?(Query) && predicted_seq.is_a?(Query)
+      raise TypeError unless lst[0].is_a?(Query) && predicted_seq.is_a?(Query)
 
       contents = lst.map { |x| x.length_protein.to_i }.sort { |a, b| a <=> b }
 
@@ -162,11 +163,10 @@ module GeneValidator
       end
 
       [clusters, max_density_cluster_idx]
-
     rescue TypeError => error
       error_location = error.backtrace[0].scan(%r{([^/]+:\d+):.*})[0][0]
-      $stderr.puts "Type error at #{error_location}."
-      $stderr.puts ' Possible cause: one of the arguments of the' \
+      warn "Type error at #{error_location}."
+      warn ' Possible cause: one of the arguments of the' \
                    ' "clusterization_by_length" method has not the proper type.'
       exit 1
     end
@@ -184,11 +184,11 @@ module GeneValidator
                             max_density_cluster = @max_density_cluster,
                             prediction = @prediction)
 
-      data = clusters.each_with_index.map { |cluster, i|
-        cluster.lengths.collect { |k, v|
+      data = clusters.each_with_index.map do |cluster, i|
+        cluster.lengths.collect do |k, v|
           { 'key' => k, 'value' => v, 'main' => (i == max_density_cluster) }
-        }
-      }
+        end
+      end
 
       Plot.new(data,
                :bars,

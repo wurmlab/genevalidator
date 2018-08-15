@@ -23,14 +23,10 @@ module GeneValidator
         assert_equal(identifier, seq.identifier)
         assert_equal(accession_no, seq.accession_no)
         assert_equal(slen, seq.length_protein)
-        assert(seq.length_protein.is_a? Fixnum)
+        assert(seq.length_protein.is_a?(Integer))
       end
 
       it 'should initialize hsp tabular attributes' do
-        qseqid = 'sp|Q8GBW6|12S_PROFR'
-        sseqid = 'sp|A5GSN7|ACCD_SYNR3'
-        sacc   = 'A5GSN7'
-        slen   = '291'
         qstart = '49'
         qend   = '217'
         sstart = '65'
@@ -43,10 +39,10 @@ module GeneValidator
         qseq   = 'ERLNNLLDPHSFDEVG---------'
         sseq   = 'ERLRILLDPGSFIPVDGELSPTDPL'
 
-        hash = { 'qseqid' => qseqid,
-                 'sseqid' => sseqid,
-                 'sacc'   => sacc,
-                 'slen'   => slen,
+        hash = { 'qseqid' => 'sp|Q8GBW6|12S_PROFR',
+                 'sseqid' => 'sp|A5GSN7|ACCD_SYNR3',
+                 'sacc'   => 'A5GSN7',
+                 'slen'   => '291',
                  'qstart' => qstart,
                  'qend'   => qend,
                  'sstart' => sstart,
@@ -74,17 +70,17 @@ module GeneValidator
         assert_equal(nident, seq.identity.to_s)
         assert_equal(evalue, seq.hsp_evalue.to_s)
 
-        assert(seq.match_query_from.is_a? Fixnum)
-        assert(seq.match_query_to.is_a? Fixnum)
-        assert(seq.query_reading_frame.is_a? Fixnum)
-        assert(seq.hit_from.is_a? Fixnum)
-        assert(seq.hit_to.is_a? Fixnum)
-        assert(seq.query_alignment.is_a? String)
-        assert(seq.hit_alignment.is_a? String)
-        assert(seq.align_len.is_a? Fixnum)
-        assert(seq.pidentity.is_a? Float)
-        assert(seq.identity.is_a? Float)
-        assert(seq.hsp_evalue.is_a? Float)
+        assert(seq.match_query_from.is_a?(Integer))
+        assert(seq.match_query_to.is_a?(Integer))
+        assert(seq.query_reading_frame.is_a?(Integer))
+        assert(seq.hit_from.is_a?(Integer))
+        assert(seq.hit_to.is_a?(Integer))
+        assert(seq.query_alignment.is_a?(String))
+        assert(seq.hit_alignment.is_a?(String))
+        assert(seq.align_len.is_a?(Integer))
+        assert(seq.pidentity.is_a?(Float))
+        assert(seq.identity.is_a?(Float))
+        assert(seq.hsp_evalue.is_a?(Float))
       end
     end
   end

@@ -49,11 +49,14 @@ module GeneValidator
           break
         end
 
+        arr_idx = @config[:idx] - 1
+        next unless @config[:json_output][arr_idx].nil?
+
         if @opt[:num_threads] == 1
-          (Validate.new).validate(prediction, blast_hits, @config[:idx])
+          Validate.new.validate(prediction, blast_hits, @config[:idx])
         else
           p.schedule(prediction, blast_hits, @config[:idx]) do |pred, hits, idx|
-            (Validate.new).validate(pred, hits, idx)
+            Validate.new.validate(pred, hits, idx)
           end
         end
       end
@@ -63,11 +66,9 @@ module GeneValidator
 
     ##
     # get info about the query
-    def get_info_on_query_sequence(input_file = @opt[:input_fasta_file],
-                                        seq_type = @config[:type])
-      start_offset = @query_idx[@config[:idx] + 1] - @query_idx[@config[:idx]]
-      end_offset   = @query_idx[@config[:idx]]
-      query        = IO.binread(input_file, start_offset, end_offset)
+    def get_info_on_query_sequence(seq_type = @config[:type],
+                                   index = @config[:idx])
+      query        = GeneValidator.extract_input_fasta_sequence(index)
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
       prediction                = Query.new
@@ -82,8 +83,8 @@ module GeneValidator
 
     # Adds 'maker' to @opt[:validations] if the first definiton in the input
     # fasta file contains MAKER's QI (quality index) score
-    def check_if_maker_input?(input_file = @opt[:input_fasta_file])
-      query        = IO.binread(input_file, @query_idx[1], @query_idx[0])
+    def check_if_maker_input?
+      query        = GeneValidator.extract_input_fasta_sequence(0)
       parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
       definition   = parse_query[0].delete("\n")
       number       = '-?\d*\.?\d*'
@@ -107,8 +108,7 @@ module GeneValidator
   # Class that runs the validations (Instatiated for each query)
   class Validate
     extend Forwardable
-    def_delegators GeneValidator, :opt, :config, :mutex_array, :overview,
-                   :query_idx
+    def_delegators GeneValidator, :opt, :config, :overview, :query_idx
 
     ##
     # Initilizes the object
@@ -121,7 +121,6 @@ module GeneValidator
     def initialize
       @opt         = opt
       @config      = config
-      @mutex_array = mutex_array
       @run_output  = nil
       @overview    = overview
       @query_idx   = query_idx
@@ -142,7 +141,7 @@ module GeneValidator
       @run_output.validations = vals.map(&:validation_report)
       check_validations_output(vals)
 
-      compute_scores
+      compute_run_score
       generate_run_output
     end
 
@@ -154,27 +153,24 @@ module GeneValidator
     # Output:
     # new array of hit +Sequence+ objects
     def remove_identical_hits(prediction, hits)
-      identical_hits = []
-      hits.each do |hit|
+      hits.delete_if do |hit|
         low_identity = hit.hsp_list.select { |hsp| hsp.pidentity < 99 }
         no_data      = hit.hsp_list.select { |hsp| hsp.pidentity.nil? }
         low_identity += no_data
-        # check the coverage
-        coverage = Array.new(prediction.length_protein, 0)
-        hit.hsp_list.each do |hsp|
-          match_to   = hsp.match_query_to
-          match_from = hsp.match_query_from
-          len        = match_to - match_from + 1
-          coverage[match_from - 1..match_to - 1] = Array.new(len, 1)
-        end
-
-        if low_identity.length == 0 && coverage.uniq.length == 1
-          identical_hits.push(hit)
-        end
+        coverage      = check_hit_coverage(prediction, hit)
+        low_identity.empty? && coverage.uniq.length == 1
       end
+    end
 
-      identical_hits.each { |hit| hits.delete(hit) }
-      hits
+    def check_hit_coverage(prediction, hit)
+      coverage = Array.new(prediction.length_protein, 0)
+      hit.hsp_list.each do |hsp|
+        match_to   = hsp.match_query_to
+        match_from = hsp.match_query_from
+        len        = match_to - match_from + 1
+        coverage[match_from - 1..match_to - 1] = Array.new(len, 1)
+      end
+      coverage
     end
 
     def create_validation_tests(prediction, hits)
@@ -210,7 +206,7 @@ module GeneValidator
     end
 
     def check_validations_output(vals)
-      raise NoValidationError if @run_output.validations.length == 0
+      raise NoValidationError if @run_output.validations.empty?
       vals.each do |v|
         raise ReportClassError unless v.validation_report.is_a? ValidationReport
       end
@@ -222,7 +218,7 @@ module GeneValidator
       exit 1
     end
 
-    def compute_scores
+    def compute_run_score
       validations        = @run_output.validations
       scores             = {}
       scores[:successes] = validations.count { |v| v.result == v.expected }
@@ -263,50 +259,8 @@ module GeneValidator
     end
 
     def generate_run_output
-      @run_output.generate_html
-      @run_output.generate_json
-      @run_output.generate_csv
       @run_output.print_output_console
-      generate_run_overview
-    end
-
-    def generate_run_overview
-      vals        = @run_output.validations
-      no_mafft    = 0
-      no_internet = 0
-      errors      = []
-      vals.each do |v|
-        unless v.errors.nil?
-          no_mafft += v.errors.count { |e| e == NoMafftInstallationError }
-          no_internet += v.errors.count { |e| e == NoInternetError }
-        end
-        errors.push(v.short_header) if v.validation == :error
-      end
-
-      no_evidence = vals.count { |v| v.result == :unapplicable || v.result == :warning } == vals.length
-      nee = (no_evidence) ? 1 : 0
-
-      good_scores = (@run_output.overall_score >= 75) ? 1 : 0
-      bad_scores  = (@run_output.overall_score >= 75) ? 0 : 1
-
-      @mutex_array.synchronize do
-        @overview[:no_queries] += 1
-        @overview[:scores].push(@run_output.overall_score)
-        @overview[:good_scores] += good_scores
-        @overview[:bad_scores] += bad_scores
-        @overview[:nee] += nee
-        @overview[:no_mafft] += no_mafft
-        @overview[:no_internet] += no_internet
-        errors.each { |err| @overview[:map_errors][err] += 1 }
-
-        vals.each do |v|
-          next if v.run_time == 0 || v.run_time.nil?
-          next if v.validation == :unapplicable || v.validation == :error
-          p = Pair1.new(@overview[:run_time][v.short_header].x + v.run_time,
-                        @overview[:run_time][v.short_header].y + 1)
-          @overview[:run_time][v.short_header] = p
-        end
-      end
+      @run_output.generate_json
     end
   end
 end

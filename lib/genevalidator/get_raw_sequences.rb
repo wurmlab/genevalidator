@@ -78,12 +78,12 @@ module GeneValidator
         iterate_xml(file, db_type) if opt[:blast_xml_file]
         iterate_tabular(file, db_type) if opt[:blast_tabular_file]
       rescue BLASTDBError
-        warn "*** BLAST Database Error: Genevalidator requires BLAST" \
+        warn '*** BLAST Database Error: Genevalidator requires BLAST' \
         " databases to be created with the '-parse_seqids argument."
-        warn "    See https://github.com/wurmlab/genevalidator" \
-        "#setting-up-a-blast-database for more information"
+        warn '    See https://github.com/wurmlab/genevalidator' \
+        '#setting-up-a-blast-database for more information'
         exit 1
-      rescue
+      rescue StandardError
         warn '*** Error: There was an error in analysing the BLAST'
         warn '    output file. Please ensure that BLAST output file'
         warn '    is in the correct format and then try again. If you'
@@ -94,13 +94,13 @@ module GeneValidator
         file.close unless file.nil?
       end
 
-      alias_method :write_a_raw_seq_file, :write_an_index_file
+      alias write_a_raw_seq_file write_an_index_file
 
       def iterate_xml(file, db_type)
         n = Bio::BlastXMLParser::XmlIterator.new(opt[:blast_xml_file]).to_enum
         n.each do |iter|
           iter.each do |hit|
-            fail BLASTDBError if hit.hit_id =~ /\|BL_ORD_ID\|/
+            raise BLASTDBError if hit.hit_id =~ /\|BL_ORD_ID\|/
             if db_type == 'remote' || hit.hit_id.nil?
               file.puts FetchRawSequences.extract_from_remote_db(hit.accession)
             else
@@ -118,7 +118,7 @@ module GeneValidator
                                    headers: table_headers)
 
         rows.each do |row|
-          fail BLASTDBError if row['sseqid'] =~ /\|BL_ORD_ID\|/
+          raise BLASTDBError if row['sseqid'] =~ /\|BL_ORD_ID\|/i
           if db_type == 'remote' || row['sseqid'].nil?
             file.puts FetchRawSequences.extract_from_remote_db(row['sacc'])
           else
@@ -138,15 +138,15 @@ module GeneValidator
         # first try to extract from previously created raw_sequences HASH
         raw_seq = extract_from_index(identifier) if opt[:raw_sequences]
         # then try to just extract that sequence based on accession.
-        if opt[:db] !~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/)
+        if opt[:db] !~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/i)
           raw_seq = extract_from_local_db(false, accession)
         end
         # then try to extract from remote database
-        if opt[:db] =~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/)
+        if opt[:db] =~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/i)
           raw_seq = extract_from_remote_db(accession)
         end
         # return nil if the raw_sequence still produces an error.
-        (raw_seq =~ /Error/) ? nil : raw_seq
+        raw_seq =~ /Error/i ? nil : raw_seq
       end
 
       ##
@@ -159,8 +159,8 @@ module GeneValidator
         idx         = config[:raw_seq_file_load][identifier]
         query       = IO.binread(opt[:raw_sequences], idx[1] - idx[0], idx[0])
         parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
-        parse_query[1].gsub("\n", '')
-      rescue
+        parse_query[1].delete("\n")
+      rescue StandardError
         'Error' # return error so it can then try alternative fetching method.
       end
 
@@ -172,7 +172,7 @@ module GeneValidator
       # Output:
       # String with the nucleotide sequence corresponding to the accession
       def extract_from_local_db(batch, accno = nil, idx_file = nil)
-        cmd = (batch) ? batch_raw_seq_cmd(idx_file) : single_raw_seq_cmd(accno)
+        cmd = batch ? batch_raw_seq_cmd(idx_file) : single_raw_seq_cmd(accno)
         efile = Tempfile.new('blast_out')
         `#{cmd} &>#{efile.path}`
         raw_seqs = efile.read

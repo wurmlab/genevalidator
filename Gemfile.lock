@@ -1,12 +1,13 @@
 PATH
   remote: .
   specs:
-    genevalidator (2.0.1)
+    genevalidator (2.1.2)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
-      genevalidatorapp (~> 2.0)
+      genevalidatorapp (~> 2.1.2)
       mechanize (= 2.7.5)
       rack (~> 2.0)
+      slim (~> 3.0)
       statsample (= 2.1.0)
 
 GEM
@@ -31,7 +32,7 @@ GEM
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     extendmatrix (0.4)
-    genevalidatorapp (2.0.2)
+    genevalidatorapp (2.1.2)
       bio (~> 1.4)
       sinatra (~> 2.0)
       sinatra-cross_origin (~> 0.3)
@@ -49,9 +50,9 @@ GEM
       nokogiri (~> 1.6)
       ntlm-http (~> 0.1, >= 0.1.1)
       webrobots (>= 0.0.9, < 0.2)
-    mime-types (3.1)
+    mime-types (3.2.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types-data (3.2018.0812)
     mini_portile2 (2.3.0)
     minimization (0.2.3)
       text-table (~> 1.2)
@@ -59,7 +60,7 @@ GEM
     mustermann (1.0.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
-    nokogiri (1.8.3)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     ntlm-http (0.1.1)
     prawn (0.8.4)
@@ -117,7 +118,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     webrobots (0.1.2)
-    yard (0.9.14)
+    yard (0.9.16)
 
 PLATFORMS
   ruby

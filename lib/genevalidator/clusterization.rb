@@ -13,7 +13,7 @@ module GeneValidator
     end
 
     def print
-      $stderr.puts "Cluster: #{x} #{y}"
+      warn "Cluster: #{x} #{y}"
     end
 
     ##
@@ -44,7 +44,7 @@ module GeneValidator
     # Overload quality operator
     # Returns true if the pairs are equal, false otherwise
     def ==(other)
-      (other.x == x && other.y == y) ? true : false
+      other.x == x && other.y == y ? true : false
     end
 
     def eql?(other)
@@ -66,7 +66,7 @@ module GeneValidator
 
     def print
       objects.each do |elem|
-        $stderr.puts "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
+        warn "(#{elem[0].x},#{elem[0].y}): #{elem[1]}"
       end
     end
 
@@ -254,7 +254,7 @@ module GeneValidator
     # Real number
     def deviation(clusters, queryLength)
       hits = clusters.map { |c| c.lengths.map { |x| Array.new(x[1], x[0]) }.flatten }.flatten
-      raw_hits = clusters.map { |c| c.lengths.map { |x| Array.new(x[1], x[0]) }.flatten }.flatten.to_s.gsub('[', '').gsub(']', '')
+      raw_hits = clusters.map { |c| c.lengths.map { |x| Array.new(x[1], x[0]) }.flatten }.flatten.to_s.delete('[').delete(']')
       R.eval("sd = sd(c(#{raw_hits}))")
       sd = R.pull('sd')
       sd = standard_deviation(hits)
@@ -273,11 +273,11 @@ module GeneValidator
     ##
     # Prints the current cluster
     def print
-      $stderr.puts "Cluster: mean = #{mean}, density = #{density}"
+      warn "Cluster: mean = #{mean}, density = #{density}"
       lengths.sort { |a, b| a <=> b }.each do |elem|
-        $stderr.puts "#{elem[0]}, #{elem[1]}"
+        warn "#{elem[0]}, #{elem[1]}"
       end
-      $stderr.puts '--------------------------'
+      warn '--------------------------'
     end
 
     ##
@@ -337,7 +337,7 @@ module GeneValidator
       # clusters = array of clusters
       # initially each length belongs to a different cluster
       histogram.each do |e|
-        $stderr.puts "pair (#{e[0].x} #{e[0].y}) appears #{e[1]} times" if debug
+        warn "pair (#{e[0].x} #{e[0].y}) appears #{e[1]} times" if debug
         hash = { e[0] => e[1] }
         cluster = PairCluster.new(hash)
         clusters.push(cluster)
@@ -355,7 +355,7 @@ module GeneValidator
         break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration += iteration
-        $stderr.puts "\nIteration #{iteration}" if debug
+        warn "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
         cluster1     = 0
@@ -365,9 +365,7 @@ module GeneValidator
         [*(0..(clusters.length - 2))].each do |i|
           [*((i + 1)..(clusters.length - 1))].each do |j|
             dist = clusters[i].distance(clusters[j], distance_method)
-            if debug
-              $stderr.puts "distance between clusters #{i} and #{j} is #{dist}"
-            end
+            warn "distance between clusters #{i} and #{j} is #{dist}" if debug
             current_density = clusters[i].density + clusters[j].density
             if dist < min_distance
               min_distance = dist
@@ -383,14 +381,14 @@ module GeneValidator
         end
 
         # merge clusters 'cluster1' and 'cluster2'
-        $stderr.puts "clusters to merge #{cluster1} and #{cluster2}" if debug
+        warn "clusters to merge #{cluster1} and #{cluster2}" if debug
 
         clusters[cluster1].add(clusters[cluster2])
         clusters.delete_at(cluster2)
 
         if debug
           clusters.each_with_index do |elem, i|
-            $stderr.puts "cluster #{i}"
+            warn "cluster #{i}"
             elem.print
           end
         end
@@ -437,8 +435,8 @@ module GeneValidator
 
       # clusters = array of clusters
       # initially each length belongs to a different cluster
-      histogram.sort { |a, b| a[0] <=> b[0] }.each do |elem|
-        $stderr.puts "len #{elem[0]} appears #{elem[1]} times" if debug
+      histogram.sort_by { |a| a[0] }.each do |elem|
+        warn "len #{elem[0]} appears #{elem[1]} times" if debug
         hash = { elem[0] => elem[1] }
         cluster = Cluster.new(hash)
         clusters.push(cluster)
@@ -456,7 +454,7 @@ module GeneValidator
         break if no_clusters != 0 && clusters.length == no_clusters
 
         iteration += iteration
-        $stderr.puts "\nIteration #{iteration}" if debug
+        warn "\nIteration #{iteration}" if debug
 
         min_distance = 100_000_000
         cluster      = 0
@@ -464,9 +462,7 @@ module GeneValidator
 
         clusters[0..clusters.length - 2].each_with_index do |_item, i|
           dist = clusters[i].distance(clusters[i + 1], distance_method)
-          if debug
-            $stderr.puts "distance btwn clusters #{i} and #{i + 1} is #{dist}"
-          end
+          warn "distance btwn clusters #{i} and #{i + 1} is #{dist}" if debug
           current_density = clusters[i].density + clusters[i + 1].density
           if dist < min_distance
             min_distance = dist
@@ -485,14 +481,14 @@ module GeneValidator
         end
 
         # merge clusters 'cluster' and 'cluster'+1
-        $stderr.puts "clusters to merge #{cluster} and #{cluster + 1}" if debug
+        warn "clusters to merge #{cluster} and #{cluster + 1}" if debug
 
         clusters[cluster].add(clusters[cluster + 1])
         clusters.delete_at(cluster + 1)
 
         if debug
           clusters.each_with_index do |elem, i|
-            $stderr.puts "cluster #{i}"
+            warn "cluster #{i}"
             elem.print
           end
         end

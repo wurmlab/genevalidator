@@ -16,7 +16,6 @@ module GeneValidator
 
       def validate_args
         @opt = opt
-        assert_output_dir_does_not_exist
         assert_file_present('input file', opt[:input_fasta_file])
         assert_input_file_probably_fasta
         assert_input_sequence
@@ -68,18 +67,6 @@ module GeneValidator
         end
       end
 
-      def assert_output_dir_does_not_exist
-        output_dir = "#{@opt[:input_fasta_file]}.html"
-        return unless File.exist?(output_dir)
-        FileUtils.rm_r(output_dir) if @opt[:force_rewrite]
-        return if @opt[:force_rewrite]
-        warn 'The output directory already exists for this fasta file.'
-        warn "\nPlease remove the following directory: #{output_dir}\n"
-        warn "You can run the following command to remove the folder.\n"
-        warn "\n   $ rm -r #{output_dir} \n"
-        exit 1
-      end
-
       def assert_tabular_options_exists
         return if @opt[:blast_tabular_options]
         warn '*** Error: BLAST tabular options (-o) have not been set.'
@@ -100,7 +87,7 @@ module GeneValidator
         exit exit_code
       end
 
-      alias_method :assert_dir_present, :assert_file_present
+      alias assert_dir_present assert_file_present
 
       def assert_input_sequence
         fasta_content = IO.binread(@opt[:input_fasta_file])

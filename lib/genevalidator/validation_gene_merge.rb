@@ -22,7 +22,9 @@ module GeneValidator
 
     def initialize(short_header, header, description, slope, unimodality,
                    expected = :no)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
       @slope          = slope.round(1)
       @slope          = @slope.abs if @slope == -0.0
       @unimodality    = unimodality
@@ -56,30 +58,30 @@ module GeneValidator
       if @unimodality
         'This suggest that the query sequence represents a single gene.'
       else
-        diff = (@result == :yes) ? ' within' : ' outside'
+        diff = @result == :yes ? ' within' : ' outside'
         t = "This slope is #{diff} our empirically calculated thresholds" \
             ' (0.4 and 1.2).'
-        if @result == :yes
-          t << ' This suggests the query contains sequence from two or more' \
-               ' different genes.'
-        else
-          t << ' There is no evidence that the query contains sequence from' \
-               ' multiple genes.'
-        end
+        t << if @result == :yes
+               ' This suggests the query contains sequence from two or more' \
+                    ' different genes.'
+             else
+               ' There is no evidence that the query contains sequence from' \
+                    ' multiple genes.'
+             end
         t
       end
     end
 
     def print
-      (@slope.nan?) ? 'Inf' : "#{@slope}"
+      @slope.nan? ? 'Inf' : @slope.to_s
     end
 
     def validation
-      (@slope > threshold_down && @slope < threshold_up) ? :yes : :no
+      @slope > threshold_down && @slope < threshold_up ? :yes : :no
     end
 
     def color
-      (validation == :no) ? 'success' : 'danger'
+      validation == :no ? 'success' : 'danger'
     end
   end
 
@@ -116,18 +118,20 @@ module GeneValidator
     # Output:
     # +GeneMergeValidationOutput+ object
     def run
-      fail NotEnoughHitsError if hits.length < opt[:min_blast_hits]
-      fail unless prediction.is_a?(Query) && hits[0].is_a?(Query)
+      raise NotEnoughHitsError if hits.length < opt[:min_blast_hits]
+      raise unless prediction.is_a?(Query) && hits[0].is_a?(Query)
 
       start = Time.now
 
-      pairs = hits.map { |hit| Pair.new(hit.hsp_list.map{ |hsp| hsp.match_query_from }.min,
-                                        hit.hsp_list.map{ |hsp| hsp.match_query_to }.max) }
+      pairs = hits.map do |hit|
+        Pair.new(hit.hsp_list.map(&:match_query_from).min,
+                 hit.hsp_list.map(&:match_query_to).max)
+      end
       xx_0 = pairs.map(&:x)
       yy_0 = pairs.map(&:y)
 
       # minimum start shoud be at 'boundary' residues
-      xx = xx_0.map { |x| (x < @boundary) ? @boundary : x }
+      xx = xx_0.map { |x| x < @boundary ? @boundary : x }
 
       # maximum end should be at length - 'boundary' residues
       yy = yy_0.map do |y|
@@ -154,23 +158,22 @@ module GeneValidator
       @validation_report = GeneMergeValidationOutput.new(@short_header, @header,
                                                          @description, lm_slope,
                                                          unimodality)
-      if unimodality
-        plot1 = plot_2d_start_from
-      else
-        plot1 = plot_2d_start_from(lm_slope, y_intercept)
-      end
+      plot1 = if unimodality
+                plot_2d_start_from
+              else
+                plot_2d_start_from(lm_slope, y_intercept)
+              end
 
       @validation_report.plot_files.push(plot1)
       plot2 = plot_matched_regions
       @validation_report.plot_files.push(plot2)
       @validation_report.run_time = Time.now - start
       @validation_report
-
     rescue NotEnoughHitsError
       @validation_report = ValidationReport.new('Not enough evidence', :warning,
                                                 @short_header, @header,
                                                 @description)
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -189,18 +192,21 @@ module GeneValidator
 
       hits_less = hits[0..[no_lines, hits.length - 1].min]
 
-      data = hits_less.each_with_index.map { |hit, i|
+      data = hits_less.each_with_index.map do |hit, i|
         { 'y' => i,
           'start' => hit.hsp_list.map(&:match_query_from).min,
           'stop' => hit.hsp_list.map(&:match_query_to).max,
           'color' => 'black',
-          'dotted' => 'true' } }.flatten +
-        hits_less.each_with_index.map { |hit, i|
-          hit.hsp_list.map { |hsp|
-            { 'y' => i,
-              'start' => hsp.match_query_from,
-              'stop' => hsp.match_query_to,
-              'color' => 'orange' } } }.flatten
+          'dotted' => 'true' }
+      end .flatten +
+             hits_less.each_with_index.map do |hit, i|
+               hit.hsp_list.map do |hsp|
+                 { 'y' => i,
+                   'start' => hsp.match_query_from,
+                   'stop' => hsp.match_query_to,
+                   'color' => 'orange' }
+               end
+             end .flatten
 
       Plot.new(data,
                :lines,
@@ -226,9 +232,11 @@ module GeneValidator
                  hit.hsp_list.map(&:match_query_to).max)
       end
 
-      data = hits.map { |hit| { 'x' => hit.hsp_list.map(&:match_query_from).min,
-                                'y' => hit.hsp_list.map(&:match_query_to).max,
-                                'color' => 'red' } }
+      data = hits.map do |hit|
+        { 'x' => hit.hsp_list.map(&:match_query_from).min,
+          'y' => hit.hsp_list.map(&:match_query_to).max,
+          'color' => 'red' }
+      end
 
       Plot.new(data,
                :scatter,

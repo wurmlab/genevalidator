@@ -38,8 +38,6 @@ module GeneValidator
         file_mrna.puts(query_mrna)
         file_mrna.close
 
-        FileUtils.rm_rf("#{filename_mrna}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_mrna,
           validations: ['all'],
@@ -47,6 +45,8 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_mrna}.html"
         }
 
@@ -74,8 +74,6 @@ module GeneValidator
         file_prot.puts(query_prot)
         file_prot.close
 
-        FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_prot,
           validations: ['all'],
@@ -83,6 +81,8 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_prot}.html"
         }
 
@@ -99,8 +99,6 @@ module GeneValidator
           original_stderr = $stderr
           $stderr.reopen('/dev/null', 'w')
 
-          FileUtils.rm_rf("#{filename_prot}.html") rescue Errno::ENOENT
-
           default_opt = {
             input_fasta_file: mixed_fasta,
             validations: ['all'],
@@ -108,6 +106,8 @@ module GeneValidator
             num_threads: 1,
             min_blast_hits: 5,
             test: true,
+            force_rewrite: true,
+            output_formats: %w[html csv json stdout],
             output_dir: "#{mixed_fasta}.html"
           }
 
@@ -121,8 +121,9 @@ module GeneValidator
 
       it 'should parse xml input' do
         output = File.open(filename_prot_xml, 'rb').read
+        GeneValidator.config = { type: :protein }
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator)
         assert_equal(500, hits.length)
         assert_equal(870, hits[19].length_protein)
         assert_equal('XP_004524940', hits[19].accession_no)
@@ -142,13 +143,13 @@ module GeneValidator
         assert_equal(20, hits.length)
         assert_equal(1, hits[0].hsp_list.length)
         assert_equal(111, hits[0].hsp_list[0].hit_to)
-        assert(hits[0].hsp_list[0].hit_from.is_a? Fixnum)
+        assert(hits[0].hsp_list[0].hit_from.is_a?(Integer))
 
         assert_equal(100, hits[0].hsp_list[0].pidentity)
-        assert(hits[0].hsp_list[0].pidentity.is_a? Float)
+        assert(hits[0].hsp_list[0].pidentity.is_a?(Float))
 
         assert_equal(2.0e-44, hits[0].hsp_list[0].hsp_evalue)
-        assert(hits[0].hsp_list[0].hsp_evalue.is_a? Float)
+        assert(hits[0].hsp_list[0].hsp_evalue.is_a?(Float))
       end
 
       it 'should parse tabular -6 input with tabular format as argument' do
@@ -197,8 +198,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (protein sequences)' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_fasta,
           validations: ['all'],
@@ -206,6 +205,8 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -238,8 +239,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - tabular input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         default_opt = {
           input_fasta_file: filename_fasta,
           validations: ['all'],
@@ -247,6 +246,8 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
@@ -273,8 +274,6 @@ module GeneValidator
       end
 
       it 'should remove identical matches (nucleotide seqs) - xml input' do
-        FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
-
         # just use a valid opts hash to create the object
         default_opt = {
           input_fasta_file: filename_fasta,
@@ -283,16 +282,19 @@ module GeneValidator
           num_threads: 1,
           min_blast_hits: 5,
           test: true,
+          force_rewrite: true,
+          output_formats: %w[html csv json stdout],
           output_dir: "#{filename_fasta}.html"
         }
 
         GeneValidator.init(default_opt)
+        GeneValidator.config = { type: :protein }
 
         prediction = Query.new
         prediction.length_protein = 219 / 3
         output = File.open(ncbi_mrna_xml20, 'rb').read
         iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(output).to_enum
-        hits = BlastUtils.parse_next(iterator, :protein)
+        hits = BlastUtils.parse_next(iterator)
 
         assert_equal(20, hits.length)
 
@@ -313,11 +315,11 @@ module GeneValidator
             db: 'swissprot -remote',
             num_threads: 1,
             min_blast_hits: 5,
-            test: true,
+            output_formats: %w[html csv json stdout],
+            test: true
           }
 
           GeneValidator.init(default_opt)
-
         rescue SystemExit
           error = true
         end

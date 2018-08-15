@@ -36,23 +36,27 @@ module GeneValidator
     filename_fasta   = 'test/test_files/test_sequences.fasta'
     filename_xml     = "#{filename_fasta}.blast_xml"
     filename_xml_raw = "#{filename_fasta}.blast_xml.raw_seq"
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
+
     opt = {
       input_fasta_file: filename_fasta,
       validations: ['all'],
       db: 'swissprot -remote',
       raw_sequences: filename_xml_raw,
       num_threads: 1,
+      mafft_threads: 1,
       min_blast_hits: 5,
+      output_formats: %w[html csv json stdout],
+      force_rewrite: true,
       test: true
     }
     GeneValidator.init(opt)
+
     val      = GeneValidator::Validate.new
     xml      = File.open(filename_xml, 'rb').read
     iterator = Bio::BlastXMLParser::NokogiriBlastXml.new(xml).to_enum
 
     describe 'Detailed Validation of normal Insulin Query' do
-      hits     = BlastUtils.parse_next(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator)
       prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -138,8 +142,7 @@ module GeneValidator
                          8 => { frame: -2, orf_start: 70, orf_end: 105,
                                 coverage: 36, translated_length: 105 },
                          9 => { frame: -3, orf_start: 25, orf_end: 84,
-                                coverage: 58, translated_length: 105 }
-                        }
+                                coverage: 58, translated_length: 105 } }
         assert_equal(expected_orf, ov.orfs)
         assert_equal(100.0, ov.coverage.round(4))
         assert_equal(1, ov.mainORFFrame)
@@ -155,7 +158,7 @@ module GeneValidator
     end
 
     describe 'Validate a trancated sequence' do
-      hits = BlastUtils.parse_next(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator)
       prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -188,7 +191,7 @@ module GeneValidator
     end
 
     describe 'Validate a duplicated sequence' do
-      hits = BlastUtils.parse_next(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator)
       prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -231,7 +234,7 @@ module GeneValidator
     end
 
     describe 'Validate a merged sequence' do
-      hits = BlastUtils.parse_next(iterator, :nucleotide)
+      hits = BlastUtils.parse_next(iterator)
 
       prediction              = Query.new
       prediction.definition   = ''
@@ -273,8 +276,7 @@ module GeneValidator
     end
 
     describe 'Validate a sequence with a frameshift' do
-      hits = BlastUtils.parse_next(iterator, :nucleotide)
-
+      hits = BlastUtils.parse_next(iterator)
       prediction              = Query.new
       prediction.definition   = ''
       prediction.identifier   = ''
@@ -359,6 +361,5 @@ module GeneValidator
         assert_equal(:no, av.result)
       end
     end
-    FileUtils.rm_rf("#{filename_fasta}.html") rescue Errno::ENOENT
   end
 end

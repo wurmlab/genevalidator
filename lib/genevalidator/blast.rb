@@ -16,31 +16,6 @@ module GeneValidator
 
       EVALUE = 1e-5
 
-      ##
-      # Calls blast from standard input with specific parameters
-      # Params:
-      # +blast_type+: blast command in String format (e.g 'blast(x/p)')
-      # +query+: String containing the the query in fasta format
-      # +db+: database
-      # +num_threads+: The number of threads to run BLAST with.
-      # Output:
-      # String with the blast xml output
-      def run_blast(query, db = opt[:db], seq_type = config[:type],
-                    num_threads = opt[:num_threads],
-                    blast_options = opt[:blast_options])
-        warn_if_remote_database(opt)
-        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
-        # -num_threads is not supported on remote databases
-        threads = db.match?(/remote/) ? '' : "-num_threads #{num_threads}"
-
-        blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5" \
-                   " #{threads} #{blast_options}"
-
-        cmd = "echo \"#{query}\" | #{blastcmd}"
-        `#{cmd} >/dev/null 2>&1`
-      end
-
-      ##
       # Runs BLAST on an input file
       # Params:
       # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
@@ -50,26 +25,13 @@ module GeneValidator
       # +nr_hits+: max number of hits
       # Output:
       # XML file
-      def run_blast_on_input_file(input_file = opt[:input_fasta_file],
-                                  db = opt[:db], seq_type = config[:type],
-                                  num_threads = opt[:num_threads],
-                                  blast_options = opt[:blast_options])
-        return if opt[:blast_xml_file] || opt[:blast_tabular_file]
+      def run_blast_on_input_file
         remote = opt[:db].match?(/remote/) ? true : false
-        warn '==> Running BLAST. This may take a while.' unless remote
-        warn_if_remote_database(opt)
-        fname = File.basename(input_file) + '.blast_xml'
-        opt[:blast_xml_file] = File.join(dirs[:tmp_dir], fname)
+        print_blast_info_text(remote)
 
-        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
-        # -num_threads is not supported on remote databases
-        threads = remote ? '' : "-num_threads #{num_threads}"
+        log_file = File.join(dirs[:tmp_dir], 'blast_cmd_output.txt')
+        `#{blast_cmd(opt, config, remote)} > #{log_file} 2>&1`
 
-        blastcmd = "#{blast_type} -query '#{input_file}'" \
-                   " -out '#{opt[:blast_xml_file]}' -db #{db} " \
-                   " -evalue #{EVALUE} -outfmt 5 #{threads} #{blast_options}"
-
-        `#{blastcmd} >/dev/null 2>&1`
         return unless File.zero?(opt[:blast_xml_file])
         warn 'Blast failed to run on the input file.'
         if remote
@@ -78,6 +40,7 @@ module GeneValidator
         else
           warn 'Please ensure that the BLAST database exists and try again.'
         end
+        exit 1
       end
 
       ##
@@ -87,66 +50,24 @@ module GeneValidator
       # +type+: the type of the sequence: :nucleotide or :protein
       # Outputs:
       # Array of +Sequence+ objects corresponding to the list of hits
-      def parse_next(iterator, type = config[:type])
-        hits = []
+      def parse_next(iterator)
         iter = iterator.next
 
         # parse blast the xml output and get the hits
         # hits obtained are proteins! (we use only blastp and blastx)
+        hits = []
         iter.each do |hit|
-          seq = Query.new
-
+          seq                = Query.new
           seq.length_protein = hit.len.to_i
           seq.type           = :protein
           seq.identifier     = hit.hit_id
           seq.definition     = hit.hit_def
-          seq.accession_no = hit.accession
+          seq.accession_no   = hit.accession
+          seq.hsp_list       = hit.hsps.map { |hsp| Hsp.new(xml_input: hsp) }
 
-          # get all high-scoring segment pairs (hsp)
-          hsps = []
-
-          hit.hsps.each do |hsp|
-            current_hsp            = Hsp.new
-            current_hsp.hsp_evalue = format('%.0e', hsp.evalue)
-
-            current_hsp.hit_from         = hsp.hit_from.to_i
-            current_hsp.hit_to           = hsp.hit_to.to_i
-            current_hsp.match_query_from = hsp.query_from.to_i
-            current_hsp.match_query_to   = hsp.query_to.to_i
-
-            if type == :nucleotide
-              current_hsp.match_query_from /= 3
-              current_hsp.match_query_to /= 3
-              current_hsp.match_query_from += 1
-              current_hsp.match_query_to += 1
-            end
-
-            current_hsp.query_reading_frame = hsp.query_frame.to_i
-
-            current_hsp.hit_alignment = hsp.hseq.to_s
-            seq_type = guess_sequence_type(current_hsp.hit_alignment)
-            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
-
-            current_hsp.query_alignment = hsp.qseq.to_s
-            seq_type = guess_sequence_type(current_hsp.query_alignment)
-            raise SequenceTypeError unless seq_type == :protein || seq_type.nil?
-
-            current_hsp.align_len = hsp.align_len.to_i
-            current_hsp.identity  = hsp.identity.to_i
-            current_hsp.pidentity = (100 * hsp.identity / hsp.align_len.to_f)
-                                    .round(2)
-
-            hsps.push(current_hsp)
-          end
-
-          seq.hsp_list = hsps
-          hits.push(seq)
+          hits << seq
         end
-
         hits
-      rescue SequenceTypeError => e
-        warn e
-        exit 1
       rescue StopIteration
         nil
       end
@@ -199,11 +120,26 @@ module GeneValidator
         guess_sequence_type(seqs)
       end
 
-      def warn_if_remote_database(opt)
-        return if opt[:db] !~ /remote/
+      private
+
+      def blast_cmd(opt, config, remote)
+        blast_type = config[:type] == :protein ? 'blastp' : 'blastx'
+        # -num_threads is not supported on remote databases
+        threads = remote ? '' : "-num_threads #{opt[:num_threads]}"
+
+        "#{blast_type} -query '#{opt[:input_fasta_file]}'" \
+        " -db #{opt[:db]} -outfmt 5 -evalue #{EVALUE} #{threads}" \
+        " -out '#{opt[:blast_xml_file]}' #{opt[:blast_options]}"
+      end
+
+      def print_blast_info_text(remote)
         warn '' # a blank line
-        warn '==> BLAST search and subsequent analysis will be done on a remote'
-        warn '    database. Please use a local database for larger analysis.'
+        if remote
+          warn '==> BLAST search and subsequent analysis will be done on a remote'
+          warn '    database. Please use a local database for larger analysis.'
+        else 
+          warn '==> Running BLAST. This may take a while.'
+        end
         warn '' # a blank line
       end
     end

@@ -14,7 +14,7 @@ If you would like to use GeneValidator on a few sequences, see our online [GeneV
 
 
 If you use GeneValidator in your work, please cite us as follows:
-> [Dragan M<sup>&Dagger;</sup>, Moghul MI<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein).
+> [Dragan M<sup>&Dagger;</sup>, Moghul I<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein).
 
 
 
@@ -56,7 +56,7 @@ The produced folder contains the following:
 ```bash
 Readme.txt      # See Readme for version and basic usage information
 bin/            # bin folder for genevalidator, BLAST+ and JQ (can add to $PATH)
-blast_db/       # contains SWISSPROT BLAST database.
+blast_db/       # contains the SWISSPROT BLAST database.
 exemplar_data/  # contains exemplar mrna and protein fasta files
 lib/            # contains genevalidator dependencies
 ```
@@ -65,7 +65,6 @@ lib/            # contains genevalidator dependencies
 
 GeneValidator can be run immediately after the GeneValidator package has been downloaded and uncompressed.
 
-
 ```bash
 genevalidator -h
 ```
@@ -73,14 +72,21 @@ genevalidator -h
 You should see the following output.
 
 ```bash
-USAGE:
-    genevalidator [OPTIONS] Input_File
+SUMMARY:
+  GeneValidator - Identify problems with predicted genes
 
-ARGUMENTS:
-    Input_File: Path to the input fasta file containing the predicted sequences.
+USAGE:
+  genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
+
+  To run as a web application:
+
+    genevalidator app [OPTIONAL ARGUMENTS]
+
+    See 'genevalidator app --help' for more information
 
 OPTIONAL ARGUMENTS
-    -v, --validations <String>       The Validations to be applied.
+
+        --validations [VALIDATIONS]  The Validations to be applied.
                                      Validation Options Available (separated by comma):
                                        all   = All validations (default),
                                        lenc  = Length validation by clusterization,
@@ -90,42 +96,67 @@ OPTIONAL ARGUMENTS
                                        frame = Open reading frame (ORF) validation,
                                        orf   = Main ORF validation,
                                        align = Validating based on multiple alignment
-    -d, --db [BLAST_DATABASE]        Path to the BLAST database
+    -d, --db [PATH]                  Path to the BLAST database
+                                     e.g.   genevalidator -d /path/to/databasa.fa Input_File
                                      GeneValidator also supports remote databases:
                                      e.g.   genevalidator -d "swissprot -remote" Input_File
     -s, --select_single_best         Writes the fasta sequence of the best scoring gene to STDOUT.
-                                     The Terminal
-                                     file and is named as "GV_" followed by the time of analysis
-    -o, --output_dir [dir]           Path to the output folder.
+
+# OUTPUT ARGUMENTS
+
+    -o, --output_dir [PATH]          Path to the output folder.
                                      By default the output folder is in the same directory as the input
-                                     file and is named as "GV_" followed by the time of analysis
+                                     file and is named as input filename, followed by the time of
+                                     analysis
     -f, --force_rewrite              Rewrites over existing output.
-        --output_formats [formats]   Output Formats to produce. This can be either: "all", "html",
-                                     "csv", "json" or "stdout". Multiple formats can be separated by
-                                     a semi-colon e.g. "csv:json".
-                                     By default, all output formats are generated
-    -e, --extract_raw_seqs           Produces a fasta file of the raw sequences of all BLAST hits in the
-                                     supplied BLAST output file. This fasta file can then be provided to
-                                     GeneValidator with the "-r", "--raw_sequences" argument
-    -j, --json_file [JSON_FILE]      Generate HTML report from a JSON file (or a subset of a JSON file)
-                                     produced by GeneValidator
-    -x [BLAST_XML_FILE],             Provide GeneValidator with a pre-computed BLAST XML output
-        --blast_xml_file             file (BLAST -outfmt option 5).
-    -t [BLAST_TABULAR_FILE],         Provide GeneValidator with a pre-computed BLAST tabular output
-        --blast_tabular_file         file. (BLAST -outfmt option 6).
-        --blast_tabular_options [BLAST_TABULAR_OPTIONS]
+        --output_formats [STRING]    Output Formats to generate. This can be either: "all", "html",
+                                     "csv", "json", "summary" or "stdout". Multiple formats can be
+                                     separated by a semi-colon e.g. "csv:json".
+                                     By default, all output formats are generated.
+
+# BLAST ARGUMENTS
+
+        --min_blast_hits_required [NUM]
+                                     The minimum number of BLAST hits required by GeneValidator in order
+                                     to carry out validations. Note: certain validations have their own
+                                     set minimum (such as the multiple alignment validation, which
+                                      requires a minimum of 10 BLAST hits)
+    -b, --blast_options [STRING]     A string that is to passed to BLAST
+    -x, --blast_xml_file [PATH]      Provide GeneValidator with a pre-computed BLAST XML output
+                                     file (BLAST -outfmt option 5).
+    -t, --blast_tabular_file [PATH]  Provide GeneValidator with a pre-computed BLAST tabular output
+                                     file. (BLAST -outfmt option 6).
+        --blast_tabular_options [STRING]
                                      Custom format used in BLAST -outfmt argument
                                      See BLAST+ manual pages for more details
-    -r, --raw_sequences [RAW_SEQ]    Supply a fasta file of the raw sequences of all BLAST hits present
+        --raw_sequences [PATH]       Supply a fasta file of the raw sequences of all BLAST hits present
                                      in the supplied BLAST XML or BLAST tabular file.
+
+# EXTRACT RAW SEQUENCES ARGUMENTS
+
+    -e, --extract_raw_seqs           Extract a fasta file of the raw sequences of BLAST hits in the
+                                     supplied BLAST output file. This fasta file can then be provided to
+                                     GeneValidator with the "--raw_sequences" argument
+
+# REPROCESS JSON ARGUMENTS
+
+    -j, --json_file [JSON_FILE]      Path to json file. Re-generate the HTML report from a (filtered)
+                                     JSON file that was previously produced by GeneValidator
+
+# GENERAL ARGUMENTS
+
     -n, --num_threads [THREADS]      Specify the number of processor threads to use when running
-                                     BLAST and Mafft within GeneValidator.
-    -b, --binaries [binaries]        Path to BLAST and MAFFT bin folders (is added to $PATH variable)
+                                     BLAST and GeneValidator.
+    -m, --mafft_threads [THREADS]    Specify the number of processor threads to use when running
+                                     Mafft. Note Mafft is run independently in each of the threads
+                                     specified in --num_threads.
+    -r, --resume [DIR]               Resume a previous analysis (creates a new output directory but
+                                      skips
+        --bin [DIR]                  Path to BLAST and MAFFT bin folders (is added to $PATH variable)
                                      To be provided as follows:
-                                     e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/
-        --version                    The version of GeneValidator that you are running.
+                                     e.g.   genevalidator --bin /blast/bin/ --bin /mafft/bin/
     -h, --help                       Show this screen.
-```
+    -v, --version                    The version of GeneValidator that you are running.```
 
 ## Example Usage Scenarios
 
@@ -138,8 +169,6 @@ genevalidator INPUT_FASTA_FILE
 
 #### Using an alternative BLAST database
 GeneValidator requires a protein BLAST database in order to fully analyse all sequences. The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
-.
-The BLAST database needs to be set up with the `-parse_seqids` argument of the makeblastdb script from BLAST+ (from Genevalidator Package, in the bin directory). See [this page](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948) for more information on how to set up BLAST databases.
 
 ```bash
 genevalidator -d DATABASE_PATH -n NUM_THREADS INPUT_FASTA_FILE
@@ -214,13 +243,7 @@ $ jq 'sort_by(.overall_score)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
 $ jq 'sort_by(- .overall_score)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
 
 # Remove the large graphs objects (note these Graphs objects are required if you wish to pass the json back into GV using the `-j` option - see below)
-$ jq -r  '[ .[] | del(.validations[].graphs) ]' INPUT_JSON_FILE > OUTPUT_JSON_FILE
-
-# Save JSON as CSV
-## Write header first
-$ jq -r '.[0] | ["idx", "overall_score", "definition", "no_hits", .validations[].header ] | @csv' INPUT_JSON_FILE  > OUTPUT_JSON_FILE
-## write content to the same file
-$ jq -r '.[] | [.idx, .overall_score, .definition, .no_hits, .validations[].print ] | @csv ' INPUT_JSON_FILE >> OUTPUT_JSON_FILE
+$ jq --raw-output '[ .[] | del(.validations[].graphs) ]' INPUT_JSON_FILE > OUTPUT_JSON_FILE
 ```
 
 The subsetted/sorted JSON file can then be passed back into GeneValidator (using the `-j` command line argument) to generate the HTML report for the sequences in the JSON file.
@@ -229,6 +252,3 @@ The subsetted/sorted JSON file can then be passed back into GeneValidator (using
 genevalidator -j OUTPUT_JSON_FILE
 ```
 
-## Related projects
-[GeneValidatorApp](https://github.com/wurmlab/GeneValidatorApp) - A Web App wrapper for GeneValidator.<br>
-[GeneValidatorApp-API](https://github.com/wurmlab/GeneValidatorApp-API) - An easy to use API for GeneValidatorApp to allow you to use GeneValidator within your web applications.

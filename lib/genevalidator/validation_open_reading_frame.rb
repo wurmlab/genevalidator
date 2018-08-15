@@ -17,7 +17,9 @@ module GeneValidator
 
     def initialize(short_header, header, description, orfs, coverage,
                    longest_orf_frame, threshold = 80, expected = :yes)
-      @short_header, @header, @description = short_header, header, description
+      @short_header = short_header
+      @header = header
+      @description = description
 
       @orfs         = orfs
       @coverage     = coverage
@@ -31,7 +33,7 @@ module GeneValidator
                       ' (ORF) that occupies most of the query sequence.' \
                       ' This validation does not require any BLAST hits.'
       @explanation  = " The longest ORF is in frame #{@mainORFFrame}, where" \
-                      " it occupies #{(@coverage).round}% of the query" \
+                      " it occupies #{@coverage.round}% of the query" \
                       ' sequence.'
       @conclusion   = conclude
     end
@@ -51,11 +53,11 @@ module GeneValidator
       orf_list = ''
       @orfs.map { |elem| orf_list << "#{elem[0]}:#{elem[1]}," }
 
-      "#{(@coverage).round}%&nbsp;(frame&nbsp;#{@mainORFFrame})"
+      "#{@coverage.round}%&nbsp;(frame&nbsp;#{@mainORFFrame})"
     end
 
     def validation
-      (@coverage > @threshold) ? :yes : :no
+      @coverage > @threshold ? :yes : :no
     end
   end
 
@@ -92,12 +94,12 @@ module GeneValidator
         return @validation_report
       end
 
-      fail unless prediction.is_a?(Query)
+      raise unless prediction.is_a?(Query)
 
       start = Time.new
       orfs = get_orfs
 
-      longest_orf       = orfs.sort_by { |_key, hash| hash[:coverage] }.last
+      longest_orf       = orfs.max_by { |_key, hash| hash[:coverage] }
       longest_orf_frame = longest_orf[1][:frame]
       coverage          = longest_orf[1][:coverage]
       translated_length = longest_orf[1][:translated_length]
@@ -110,7 +112,7 @@ module GeneValidator
 
       @validation_report.plot_files.push(plot1)
       @validation_report
-    rescue
+    rescue StandardError
       @validation_report = ValidationReport.new('Unexpected error', :error,
                                                 @short_header, @header,
                                                 @description)
@@ -138,8 +140,8 @@ module GeneValidator
         f = -2 if f == 5
         f = -3 if f == 6
         s.scan(/(\w{30,})/) do |_orf|
-          orf_start = $~.offset(0)[0] + 1
-          orf_end   = $~.offset(0)[1] + 1
+          orf_start = $LAST_MATCH_INFO.offset(0)[0] + 1
+          orf_end   = $LAST_MATCH_INFO.offset(0)[1] + 1
           coverage = (((orf_end - orf_start) / s.length.to_f) * 100).ceil
           # reduce the orf_end and the translated length by 2% to increase the
           #   width between ORFs on the plot
@@ -162,7 +164,7 @@ module GeneValidator
     # +output+: location where the plot will be saved in jped file format
     # +prediction+: Sequence objects
     def plot_orfs(orfs, translated_length)
-      fail QueryError unless orfs.is_a? Hash
+      raise QueryError unless orfs.is_a? Hash
 
       data = []
 
