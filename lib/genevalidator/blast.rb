@@ -16,31 +16,6 @@ module GeneValidator
 
       EVALUE = 1e-5
 
-      ##
-      # Calls blast from standard input with specific parameters
-      # Params:
-      # +blast_type+: blast command in String format (e.g 'blast(x/p)')
-      # +query+: String containing the the query in fasta format
-      # +db+: database
-      # +num_threads+: The number of threads to run BLAST with.
-      # Output:
-      # String with the blast xml output
-      def run_blast(query, db = opt[:db], seq_type = config[:type],
-                    num_threads = opt[:num_threads],
-                    blast_options = opt[:blast_options])
-        warn_if_remote_database(opt)
-        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
-        # -num_threads is not supported on remote databases
-        threads = db.match?(/remote/) ? '' : "-num_threads #{num_threads}"
-
-        blastcmd = "#{blast_type} -db #{db} -evalue #{EVALUE} -outfmt 5" \
-                   " #{threads} #{blast_options}"
-
-        cmd = "echo \"#{query}\" | #{blastcmd}"
-        `#{cmd} >/dev/null 2>&1`
-      end
-
-      ##
       # Runs BLAST on an input file
       # Params:
       # +blast_type+: blast command in String format (e.g 'blastx' or 'blastp')
