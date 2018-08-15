@@ -25,26 +25,13 @@ module GeneValidator
       # +nr_hits+: max number of hits
       # Output:
       # XML file
-      def run_blast_on_input_file(input_file = opt[:input_fasta_file],
-                                  db = opt[:db], seq_type = config[:type],
-                                  num_threads = opt[:num_threads],
-                                  blast_options = opt[:blast_options])
-        return if opt[:blast_xml_file] || opt[:blast_tabular_file]
+      def run_blast_on_input_file
         remote = opt[:db].match?(/remote/) ? true : false
-        warn '==> Running BLAST. This may take a while.' unless remote
-        warn_if_remote_database(opt)
-        fname = File.basename(input_file) + '.blast_xml'
-        opt[:blast_xml_file] = File.join(dirs[:tmp_dir], fname)
+        print_blast_info_text(remote)
 
-        blast_type = seq_type == :protein ? 'blastp' : 'blastx'
-        # -num_threads is not supported on remote databases
-        threads = remote ? '' : "-num_threads #{num_threads}"
+        log_file = File.join(dirs[:tmp_dir], 'blast_cmd_output.txt')
+        `#{blast_cmd(opt, config, remote)} > #{log_file} 2>&1`
 
-        blastcmd = "#{blast_type} -query '#{input_file}'" \
-                   " -out '#{opt[:blast_xml_file]}' -db #{db} " \
-                   " -evalue #{EVALUE} -outfmt 5 #{threads} #{blast_options}"
-
-        `#{blastcmd} >/dev/null 2>&1`
         return unless File.zero?(opt[:blast_xml_file])
         warn 'Blast failed to run on the input file.'
         if remote
@@ -53,6 +40,7 @@ module GeneValidator
         else
           warn 'Please ensure that the BLAST database exists and try again.'
         end
+        exit 1
       end
 
       ##
@@ -132,11 +120,26 @@ module GeneValidator
         guess_sequence_type(seqs)
       end
 
-      def warn_if_remote_database(opt)
-        return if opt[:db] !~ /remote/
+      private
+
+      def blast_cmd(opt, config, remote)
+        blast_type = config[:type] == :protein ? 'blastp' : 'blastx'
+        # -num_threads is not supported on remote databases
+        threads = remote ? '' : "-num_threads #{opt[:num_threads]}"
+
+        "#{blast_type} -query '#{opt[:input_fasta_file]}'" \
+        " -db #{opt[:db]} -outfmt 5 -evalue #{EVALUE} #{threads}" \
+        " -out '#{opt[:blast_xml_file]}' #{opt[:blast_options]}"
+      end
+
+      def print_blast_info_text(remote)
         warn '' # a blank line
-        warn '==> BLAST search and subsequent analysis will be done on a remote'
-        warn '    database. Please use a local database for larger analysis.'
+        if remote
+          warn '==> BLAST search and subsequent analysis will be done on a remote'
+          warn '    database. Please use a local database for larger analysis.'
+        else 
+          warn '==> Running BLAST. This may take a while.'
+        end
         warn '' # a blank line
       end
     end

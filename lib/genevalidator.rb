@@ -44,6 +44,8 @@ module GeneValidator
       # Run BLAST on all sequences (generates @opt[:blast_xml_file])
       # if no BLAST OUTPUT file provided...
       unless @opt[:blast_xml_file] || @opt[:blast_tabular_file]
+        blast_xml_fname = "#{dirs[:filename]}.blast_xml"
+        opt[:blast_xml_file] = File.join(dirs[:tmp_dir], blast_xml_fname)
         BlastUtils.run_blast_on_input_file
       end
       # Obtain fasta file of all BLAST hits if running align or dup validations
