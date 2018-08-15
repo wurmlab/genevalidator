@@ -164,8 +164,8 @@ module GeneValidator
       end
 
       def map_errors(json_data)
-        errors = {}
-        json_data.map do |row|
+        errors = Hash.new(0)
+        json_data.each do |row|
           e = row[:validations].map { |s, h| s if h[:validation] == 'error' }
           e.compact.each { |err| errors[err] += 1 }
         end
