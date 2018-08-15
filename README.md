@@ -40,14 +40,16 @@ Each analysis of each query returns a binary result (good vs. potential problem)
 Run the following in your terminal:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh)"
+sh -c "$(curl -fsSL https://install-genevalidator.wurmlab.com)"
 ```
 
 By default this will install in a folder called `genevalidator` in your current folder. If you wish to have GeneValidator installed in a different location, add the path to the end of the above install line. For example to install GeneValidator in a hidden folder in your home path
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh)" ~/.genevalidator
+sh -c "$(curl -fsSL https://install-genevalidator.wurmlab.com)" ~/.genevalidator
 ```
+
+NOTE: [https://install-genevalidator.wurmlab.com](https://install-genevalidator.wurmlab.com) redirects to [https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh](https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh).
 
 Alternatively download and compress the standalone package from our [releases](https://github.com/wurmlab/genevalidator/releases/latest) page.
 
