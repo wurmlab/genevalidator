@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    genevalidator (2.1.1)
+    genevalidator (2.1.2)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
       genevalidatorapp (~> 2.1.1)
@@ -32,7 +32,7 @@ GEM
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     extendmatrix (0.4)
-    genevalidatorapp (2.1.1)
+    genevalidatorapp (2.1.2)
       bio (~> 1.4)
       sinatra (~> 2.0)
       sinatra-cross_origin (~> 0.3)
