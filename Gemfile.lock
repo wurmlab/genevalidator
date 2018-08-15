@@ -4,7 +4,7 @@ PATH
     genevalidator (2.1.2)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
-      genevalidatorapp (~> 2.1.1)
+      genevalidatorapp (~> 2.1.2)
       mechanize (= 2.7.5)
       rack (~> 2.0)
       slim (~> 3.0)
