@@ -140,10 +140,11 @@ module GeneValidator
       return unless Dir.exist?(output_dir)
       FileUtils.rm_r(output_dir) if @opt[:force_rewrite]
       return if @opt[:force_rewrite]
-      warn 'The output directory already exists for this fasta file.'
-      warn "\nPlease remove the following directory: #{output_dir}\n"
-      warn "You can run the following command to remove the folder.\n"
-      warn "\n   $ rm -r #{output_dir} \n"
+      warn "The output directory (#{output_dir}) already exists."
+      warn ''
+      warn 'Please remove this directory before continuing.'
+      warn 'Alternatively, you rerun GeneValidator with the `--force` argument,'
+      warn 'which rewrites over any previous output.'
       exit 1
     end
 
