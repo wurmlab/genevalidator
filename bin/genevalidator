@@ -161,8 +161,11 @@ BANNER
   end
 
   opts.on('-r', '--resume [DIR]',
-          'Resume a previous analysis (creates a new output directory but',
-          ' skips') do |dir|
+          'Resumes an analysis. This works by using previously generated',
+          'temporary files instead of recomputing the analysis where possible.',
+          'A new output directory is created where the output files are',
+          'generated. This assumes that the input file is the same as that',
+          'used in the analysis you are resuming from.') do |dir|
     opt[:resumable] = dir
   end
 
