@@ -28,20 +28,21 @@ task :assets do
   # Requires uglifycss and uglifyjs
   # npm install uglifycss -g
   # npm install uglify-js -g
-  assets_dir = File.expand_path('aux/html_files', __dir__)
-  `rm #{assets_dir}/css/gv.compiled.min.css`
-  `rm #{assets_dir}/js/gv.compiled.min.js`
-  sh "uglifycss --output '#{assets_dir}/css/gv.compiled.min.css'" \
-     " '#{assets_dir}/css/src/font-awesome.min.css'" \
-     " '#{assets_dir}/css/src/bootstrap.min.css'" \
-     " '#{assets_dir}/css/src/style.css'"
+  html_assets_dir = File.expand_path('aux/html_files', __dir__)
+  assets_dir = File.expand_path('aux/source_assets', __dir__)
+  `rm #{html_assets_dir}/css/gv.compiled.min.css`
+  `rm #{html_assets_dir}/js/gv.compiled.min.js`
+  sh "uglifycss --output '#{html_assets_dir}/css/gv.compiled.min.css'" \
+     " '#{assets_dir}/css/font-awesome.min.css'" \
+     " '#{assets_dir}/css/bootstrap.min.css'" \
+     " '#{assets_dir}/css/style.css'"
 
-  sh "uglifyjs '#{assets_dir}/js/src/jquery-2.1.1.min.js'" \
-     " '#{assets_dir}/js/src/bootstrap.min.js'" \
-     " '#{assets_dir}/js/src/jquery.tablesorter.min.js'" \
-     " '#{assets_dir}/js/src/d3.v3.min.js'" \
-     " '#{assets_dir}/js/src/plots.js' '#{assets_dir}/js/src/script.js'" \
-     " -m -c -o '#{assets_dir}/js/gv.compiled.min.js'"
+  sh "uglifyjs '#{assets_dir}/js/jquery-2.1.1.min.js'" \
+     " '#{assets_dir}/js/bootstrap.min.js'" \
+     " '#{assets_dir}/js/jquery.tablesorter.min.js'" \
+     " '#{assets_dir}/js/d3.v3.min.js'" \
+     " '#{assets_dir}/js/plots.js' '#{assets_dir}/js/script.js'" \
+     " -m -c -o '#{html_assets_dir}/js/gv.compiled.min.js'"
 end
 
 desc 'Generates documentation'
