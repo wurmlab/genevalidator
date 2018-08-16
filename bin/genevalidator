@@ -384,7 +384,7 @@ elsif command == 'serve'
   dir = ARGV[0]
   index_file = File.basename(Dir[File.join(dir, '*.html')].min)
   app = Rack::Static.new nil, urls: [''], root: dir, index: index_file
-  Rack::Server.start app: app, port: opt[:file_server_port], StartCallback: proc {
+  Rack::Server.start app: app, Port: opt[:file_server_port], StartCallback: proc {
     open_in_browser("http://localhost:#{opt[:file_server_port]}")
   }
 elsif command == 'app'
