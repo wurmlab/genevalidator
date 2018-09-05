@@ -213,8 +213,6 @@ BANNER
     opts.separator 'MANDATORY ARGUMENTS'
     opts.separator ' '
 
-    # attempt to set the database dir to GV_BLAST_DB_DIR if it exists
-    opt[:database_dir] = ENV.fetch('GV_BLAST_DB_DIR') { nil }
     opts.on('-d', '--database_dir [PATH]',
             'Path to the directory containing BLAST database') do |path|
       opt[:database_dir] = path
@@ -322,14 +320,6 @@ begin
     warn # a blank line
     warn # a blank line
     puts global
-    exit 1
-  end
-  if opt[:database_dir].nil? && command == 'app'
-    warn # a blank line
-    warn '==> Error: Database directory containing BLAST databases required.'
-    warn # a blank line
-    warn # a blank line
-    puts subcommands['app']
     exit 1
   end
 rescue OptionParser::ParseError
