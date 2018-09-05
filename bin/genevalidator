@@ -222,26 +222,11 @@ BANNER
     opts.separator 'OPTIONAL ARGUMENTS'
     opts.separator ' '
 
-    opts.on('-c', '--config_file [PATH]',
-            'Path to the directory containing BLAST database') do |path|
-      opt[:config_file] = path
-    end
-
-    opts.on('-g', '--gv_public_dir [PATH]',
-            'The public directory that is served to the web application') do |path|
-      opt[:gv_public_dir] = path
-    end
-
-    opts.on('-b', '--bin [PATH]', Array,
-            'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
-            'To be provided as follows:',
-            'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
-      (opt[:bin] ||= []).concat(bin)
-    end
-
-    opts.on('-f', '--default_database_path  [PATH]',
-            'Path to the default BLAST database') do |path|
-      opt[:default_database_path] = path
+    opts.on('-g', '--serve_public_dir [PATH]',
+            'Web Accessible Directory - this is where GV files will',
+            'be stored so that they are accessible to the app.',
+            'Default location: $HOME/.genevalidatorapp') do |path|
+      opt[:serve_public_dir] = path
     end
 
     opts.on('-H', '--host [HOST]',
@@ -254,9 +239,26 @@ BANNER
       opt[:port] = port
     end
 
-    opts.on('-s', '--set',
-            'Set configuration value in default or given config file') do
-      opt[:set] = true
+    opt[:ssl] = false
+    opts.on('--ssl',
+            'Use HTTPS:// instead of HTTP:// links ') do
+      opt[:ssl] = true
+    end
+
+    opt[:max_characters] = 'undefined'
+    opts.on('--max_char_input [NUM]',
+            'Limit the number of characters (i.e. input sequence) inputted',
+            'into the app') do |num|
+      opt[:max_characters] = num
+    end
+
+    opts.separator ' '
+    opts.separator '# BLAST DATABASES ARGUMENTS'
+    opts.separator ' '
+
+    opts.on('-f', '--default_database_path  [PATH]',
+            'Path to the default BLAST database') do |path|
+      opt[:default_database_path] = path
     end
 
     opts.on('-l', '--list_databases',
@@ -264,10 +266,46 @@ BANNER
       opt[:list_databases] = true
     end
 
+    opts.separator ' '
+    opts.separator '# CONFIG FILE ARGUMENTS'
+    opts.separator ' '
+
+    opts.on('-c', '--config_file [PATH]',
+            'Path to the directory containing BLAST database',
+            'Default location: $HOME/.genevalidatorapp.conf') do |path|
+      opt[:config_file] = path
+    end
+
+    opts.on('-s', '--set',
+            'Set configuration value in default or given config file',
+            '(i.e. current save current options to config file)') do
+      opt[:set] = true
+    end
+
+    opts.separator ' '
+    opts.separator '# GENERAL ARGUMENTS'
+    opts.separator ' '
+
     opt[:num_threads] = 1
     opts.on('-n', '--num_threads [THREADS]',
-            'Number of threads to use to running the app') do |num_threads|
+            'Specify the number of processor threads to use when running',
+            'BLAST and GeneValidator.') do |num_threads|
       opt[:num_threads] = num_threads
+    end
+
+    opt[:mafft_threads] = 1
+    opts.on('-m', '--mafft_threads [THREADS]',
+            'Specify the number of processor threads to use when running',
+            'Mafft. Note Mafft is run independently in each of the threads',
+            'specified in --num_threads.') do |mafft_threads|
+      opt[:mafft_threads] = mafft_threads
+    end
+
+    opts.on('-b', '--bin [PATH]', Array,
+            'Path to BLAST and MAFFT bin folders (is added to $PATH variable)',
+            'To be provided as follows:',
+            'e.g.   genevalidator -b /blast/bin/path/ -b /mafft/bin/path/') do |bin|
+      (opt[:bin] ||= []).concat(bin)
     end
 
     opts.on('-D', '--devel',
