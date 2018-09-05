@@ -445,7 +445,7 @@ elsif command == 'app'
     if opt[:num_threads].nil?
       warn 'You can set the correct value by running:'
       warn
-      warn '  genevalidatorapp -s -n <value>'
+      warn '  genevalidator app -s -n <value>'
       warn
     end
 
@@ -456,7 +456,7 @@ elsif command == 'app'
     if opt[:bin].nil?
       warn 'You can set the correct value by running:'
       warn
-      warn '  genevalidatorapp -s -b <value>'
+      warn '  genevalidator app -s -b <value>'
       warn
     end
 
@@ -467,7 +467,7 @@ elsif command == 'app'
     if opt[:database_dir].nil?
       warn 'You can set the correct value by running:'
       warn
-      warn '  genevalidatorapp -s -d <value>'
+      warn '  genevalidator app -s -d <value>'
       warn
     end
 
