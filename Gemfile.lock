@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    genevalidator (2.1.5)
+    genevalidator (2.1.6)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
-      genevalidatorapp (~> 2.1.4s)
+      genevalidatorapp (~> 2.1.5)
       mechanize (= 2.7.5)
       rack (~> 2.0)
       slim (~> 3.0)
@@ -14,7 +14,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     awesome_print (1.8.0)
-    backports (3.11.3)
+    backports (3.11.4)
     bio (1.5.1)
     bio-blastxmlparser (2.0.4)
       bio-logger
@@ -32,7 +32,7 @@ GEM
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     extendmatrix (0.4)
-    genevalidatorapp (2.1.4)
+    genevalidatorapp (2.1.5)
       bio (~> 1.4)
       sinatra (~> 2.0)
       sinatra-cross_origin (~> 0.3)
@@ -57,7 +57,7 @@ GEM
     minimization (0.2.3)
       text-table (~> 1.2)
     minitest (5.11.3)
-    mustermann (1.0.2)
+    mustermann (1.0.3)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
     nokogiri (1.8.4)
@@ -98,7 +98,7 @@ GEM
     slim (3.0.9)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
-    spreadsheet (1.1.7)
+    spreadsheet (1.1.8)
       ruby-ole (>= 1.0)
     statsample (2.1.0)
       awesome_print (~> 1.6)
