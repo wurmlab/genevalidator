@@ -139,6 +139,7 @@ if (!GV) {
 
     $.getJSON(file, function( json ) {
       if (val === 'all'){
+        GV.addAllExplanation(target, json.validations);
         for (var i in json.validations){
           if (json.validations[i].graphs !== undefined) {
             GV.generatePlotCommands(json.validations[i].graphs, target);
@@ -173,6 +174,18 @@ if (!GV) {
     $(row).prepend(explain);
   };
 
+  GV.addAllExplanation = function (target, jsonData) {
+    var explain = '';
+    for (var i in jsonData) {
+      explain += '<h3 style="font-size: 19px;">' + jsonData[i].header + '</h3>';
+      explain += '<p><b>Approach:</b> ' + jsonData[i].approach + '</p>';
+      explain += '<p><b>Explanation:</b> ' + jsonData[i].explanation + '</p>';
+      explain += '<p><b>Conclusion:</b> ' + jsonData[i].conclusion + '</p>';
+    }
+    var allExplain = $('<div id="' + target + 'allExplanation" class="alert alert-info explanation_alert" role="alert">' + explain + '</div>');
+    var row = '#row' + target;
+    $(row).prepend(allExplain);
+  };
 
 // Functions that produce the plots in D3
   GV.addPlot = function (jsonData, target, type, title, footer, xtitle, ytitle, aux1, aux2) {
