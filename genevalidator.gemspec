@@ -18,12 +18,13 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2.0'
 
   s.add_development_dependency 'minitest', '~> 5.10'
-  s.add_development_dependency 'rake', '~> 12.3'
+  s.add_development_dependency 'rake', '~> 10.3', '>= 10.3.2'
   s.add_development_dependency 'yard', '~> 0.9.11'
 
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~> 2.0'
-  s.add_dependency 'genevalidatorapp', '~> 2.1.6'
+  s.add_dependency 'genevalidatorapp', '~> 2.1.7'
+  s.add_dependency 'ncbi-blast-dbs', '0.0.6'
   s.add_dependency 'rack', '~> 2.0'
   s.add_dependency 'slim', '~>3.0'
   s.add_dependency 'statsample', '2.1.0'

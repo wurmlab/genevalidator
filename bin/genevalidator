@@ -338,6 +338,35 @@ BANNER
       puts subcommands['serve']
       exit
     end
+  end,
+  'ncbi-blast-dbs' => OptionParser.new do |opts|
+    opts.banner = <<BANNER
+SUMMARY:
+  Fast download BLAST databases from NCBI
+
+  - Database files (volumes) are downloaded in parallel.
+  - Number of threads to use is determined automatically.
+  - MD5 checksum is verified and the database volume extracted upon download.
+  - Database volumes are not downloaded in a particular order.
+  - Volumes are updated if a newer version is available on the server, or
+    re-downloaded if corrupt.
+  - Aborted downloads are safely resumed.
+
+USAGE:
+
+  # List available BLAST databases
+  $ genevalidator ncbi-blast-dbs
+
+  # Download all volumnes of a BLAST database (in the current directory)
+  $ genevalidator ncbi-blast-dbs nt nr
+
+OPTIONS:
+BANNER
+
+    opts.on('-h', '--help', 'Show this screen.') do
+      puts subcommands['ncbi-blast-dbs']
+      exit
+    end
   end
 }
 
@@ -415,6 +444,14 @@ elsif command == 'serve'
   Rack::Server.start app: app, Port: opt[:file_server_port], StartCallback: proc {
     open_in_browser("http://localhost:#{opt[:file_server_port]}")
   }
+elsif command == 'ncbi-blast-dbs'
+  require 'rake'
+  load 'ncbi-blast-dbs.rake'
+
+  Rake.application.init 'ncbi-blast-dbs'
+  Rake.application.load_imports
+  Rake.application.top_level
+
 elsif command == 'app'
   ENV['RACK_ENV'] = 'development' if opt[:devel]
 
