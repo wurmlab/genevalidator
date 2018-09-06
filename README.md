@@ -152,13 +152,17 @@ OPTIONAL ARGUMENTS
     -m, --mafft_threads [THREADS]    Specify the number of processor threads to use when running
                                      Mafft. Note Mafft is run independently in each of the threads
                                      specified in --num_threads.
-    -r, --resume [DIR]               Resume a previous analysis (creates a new output directory but
-                                      skips
+    -r, --resume [DIR]               Resumes an analysis. This works by using previously generated
+                                     temporary files instead of recomputing the analysis where possible.
+                                     A new output directory is created where the output files are
+                                     generated. This assumes that the input file is the same as that
+                                     used in the analysis you are resuming from.
         --bin [DIR]                  Path to BLAST and MAFFT bin folders (is added to $PATH variable)
                                      To be provided as follows:
                                      e.g.   genevalidator --bin /blast/bin/ --bin /mafft/bin/
     -h, --help                       Show this screen.
-    -v, --version                    The version of GeneValidator that you are running.```
+    -v, --version                    The version of GeneValidator that you are running.
+```
 
 ## Example Usage Scenarios
 
