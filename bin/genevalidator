@@ -12,12 +12,17 @@ SUMMARY:
 USAGE:
   genevalidator [OPTIONAL ARGUMENTS] INPUT_FILE
 
-  To run as a web application:
+- To run as a web application:
 
     genevalidator app [OPTIONAL ARGUMENTS]
 
     See 'genevalidator app --help' for more information
 
+- To download pre-formatted BLAST databases from NCBI
+
+    genevalidator ncbi-blast-dbs [OPTIONAL ARGUMENTS]
+
+    See 'genevalidator ncbi-blast-dbs --help' for more information
 BANNER
 
   opts.separator 'OPTIONAL ARGUMENTS'
