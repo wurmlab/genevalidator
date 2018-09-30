@@ -1,12 +1,4 @@
 module GeneValidator
-  # Exception raised when BLAST path is not added to the CLASSPATH
-  class ClasspathError < RuntimeError
-  end
-
-  # Exception raised when an unexisting file is accessed
-  class FileNotFoundException < RuntimeError
-  end
-
   # Exception raised when blast does not find any hit
   class QueryError < RuntimeError
   end
@@ -67,20 +59,8 @@ module GeneValidator
   class NotEnoughEvidence < RuntimeError
   end
 
-  # Exception raised when the are alias duplications
-  class NoPIdentError < RuntimeError
-  end
-
-  # Exception raised when the tabular format does not correspond to the tabular
-  #   argument
-  class InconsistentTabularFormat < RuntimeError
-  end
-
   # Exception raised when there are more than one reading frame among the hits
   #   of one prediction
   class ReadingFrameError < RuntimeError
-  end
-
-  class OtherError < RuntimeError
   end
 end
