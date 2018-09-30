@@ -79,9 +79,11 @@ module GeneValidator
     def assert_seq_type(query)
       seq_type = BlastUtils.guess_sequence_type(query)
       raise SequenceTypeError if seq_type != :protein
-    rescue SequenceTypeError => e
-      warn e
-      exit 1
+    rescue SequenceTypeError
+      warn '*** A BLAST Hit failed the sequence-type validation (i.e. the BLAST'
+      warn '    hit sequence seems to be a nucleotide sequence).'
+      warn '    Ensure that the BLAST database used is a protein database.'
+      warn '    Ignoring and continuing with analysis.'
     end
   end
 end
