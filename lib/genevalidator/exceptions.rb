@@ -3,15 +3,6 @@ module GeneValidator
   class ClasspathError < RuntimeError
   end
 
-  # Exception raised when the command line type argument
-  # does not corrsepond to the type of the sequences in the fasta file
-  class SequenceTypeError < RuntimeError
-    def to_s
-      "\nSequence Type error: Possible cause include that the blast output" \
-      " was not obtained against a protein database.\n"
-    end
-  end
-
   # Exception raised when an unexisting file is accessed
   class FileNotFoundException < RuntimeError
   end
