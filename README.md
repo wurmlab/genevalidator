@@ -76,7 +76,7 @@ This will open the default browser at [http://localhost:5678](http://localhost:5
 
 Other GeneValidator subcommands include:
 
-```
+```bash
 # This is for downloading pre-formatted BLAST database from NCBI
 genevalidator ncbi-blast-dbs -h
 
