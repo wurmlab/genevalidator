@@ -137,7 +137,7 @@ module GeneValidator
         if remote
           warn '==> BLAST search and subsequent analysis will be done on a remote'
           warn '    database. Please use a local database for larger analysis.'
-        else 
+        else
           warn '==> Running BLAST. This may take a while.'
         end
         warn '' # a blank line
