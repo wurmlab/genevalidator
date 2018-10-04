@@ -44,7 +44,7 @@ module GeneValidator
         file.puts csv_header.join(',')
         @json_data.each do |data|
           short_def = data[:definition].split(' ')[0]
-          line = [data[:idx], data[:overall_score], short_def, data[:nr_hits]]
+          line = [data[:idx], data[:overall_score], short_def, data[:no_hits]]
           line += data[:validations].values.map { |e| e[:print] }
                                     .each { |e| e.gsub!('&nbsp;', ' ') }
           line.map { |e| e.gsub!(',', ' -') if e.is_a? String }
