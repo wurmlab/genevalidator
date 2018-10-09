@@ -93,7 +93,8 @@ module GeneValidator
     def extract_input_fasta_sequence(index)
       start_offset = @query_idx[index + 1] - @query_idx[index]
       end_offset = @query_idx[index]
-      IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
+      seq = IO.binread(@opt[:input_fasta_file], start_offset, end_offset)
+      seq.gsub(/\r\n?/, "\n")
     end
 
     def produce_output
