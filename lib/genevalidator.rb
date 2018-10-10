@@ -126,17 +126,40 @@ module GeneValidator
       }
     end
 
-    ##
-    # Creates the output folder and copies the auxiliar folders to this folder
     def setup_output_dir(fname)
-      dir_name = "#{fname}_" + Time.now.strftime('%Y_%m_%d_%H_%M_%S')
-      default_outdir = File.join(Dir.pwd, dir_name)
-      output_dir = @opt[:output_dir].nil? ? default_outdir : @opt[:output_dir]
+      # If using force_rewrite when resuming and output_dir is not set...
+      # using #to_s in resumable so that Dir.exist? returns false if nil.
+      if Dir.exist?(@opt[:resumable].to_s) && @opt[:force_rewrite] &&
+         @opt[:output_dir].nil?
+        reset_prev_analysis_dir
+      else
+        make_output_dir_structure(fname)
+      end
+    end
+
+    def reset_prev_analysis_dir
+      output_dir = @opt[:resumable]
+      Dir.entries(output_dir).each do |f|
+        next if %w[. .. tmp html_files].include? f
+        FileUtils.rm_r(File.join(output_dir, f))
+      end
+      output_dir
+    end
+
+    # Creates the output folder and copies the auxiliar folders to this folder
+    def make_output_dir_structure(fname)
+      output_dir = output_directory_name(fname)
       assert_output_dir_does_not_exist(output_dir)
       Dir.mkdir(output_dir)
       Dir.mkdir(File.join(output_dir, 'tmp'))
       cp_html_files(output_dir)
       output_dir
+    end
+
+    def output_directory_name(fname)
+      dir_name = "#{fname}_" + Time.now.strftime('%Y_%m_%d_%H_%M_%S')
+      default_dirname = File.join(Dir.pwd, dir_name)
+      @opt[:output_dir].nil? ? default_dirname : @opt[:output_dir]
     end
 
     def assert_output_dir_does_not_exist(output_dir)
@@ -194,6 +217,7 @@ module GeneValidator
       return if prev_blast_xml.empty?
       blast_xml_fname = "#{@dirs[:filename]}.blast_xml"
       @opt[:blast_xml_file] = File.join(@dirs[:tmp_dir], blast_xml_fname)
+      return if @opt[:force_rewrite] && @opt[:output_dir].nil?
       FileUtils.cp(prev_blast_xml[0], @opt[:blast_xml_file])
     end
 
@@ -205,6 +229,7 @@ module GeneValidator
       return if prev_raw_seq.empty?
       raw_seq_fname = "#{@dirs[:filename]}.blast_xml.raw_seq"
       @opt[:raw_sequences] = File.join(@dirs[:tmp_dir], raw_seq_fname)
+      return if @opt[:force_rewrite] && @opt[:output_dir].nil?
       FileUtils.cp(prev_raw_seq[0], @opt[:raw_sequences])
     end
 
@@ -212,10 +237,11 @@ module GeneValidator
       prev_json_dir = File.join(prev_tmp_dir, 'json')
       return unless Dir.exist? prev_json_dir
       all_jsons = Dir[File.join(prev_json_dir, '*.json')]
-      FileUtils.cp(all_jsons, @dirs[:json_dir])
       overview_json = Dir[File.join(prev_json_dir, 'overview.json')]
       data_jsons = all_jsons - overview_json
       parse_prev_json(data_jsons)
+      return if @opt[:force_rewrite] && @opt[:output_dir].nil?
+      FileUtils.cp(all_jsons, @dirs[:json_dir])
     end
 
     def parse_prev_json(data_jsons)
