@@ -88,7 +88,7 @@ genevalidator serve -h
 
 
 ### BLAST databases
-GeneValidator's default database is the included Swiss-Prot database, which is used if a BLAST database is not specified. Alternative BLAST databases (such as Uniref50 or the NCBI non-redundant database) can also be used once they have been downloaded and installed. More information on how to download alternative BLAST databases and how to pass BLAST output files to GV can be found [here](https://gist.github.com/IsmailM/3e3519de18c5b8b36d8aa0f223fb7948).
+GeneValidator's default database is the included Swiss-Prot database, which is used if a BLAST database is not specified. Alternative BLAST databases (such as Uniref50 or the NCBI non-redundant database) can also be used once they have been downloaded and installed. More information on how to download alternative BLAST databases and how to pass BLAST output files to GV can be found [here](https://github.com/wurmlab/genevalidator/wiki/Setting-Up-BLAST-Databases).
 
 ## Output
 The output produced by GeneValidator is presented in four manners.
