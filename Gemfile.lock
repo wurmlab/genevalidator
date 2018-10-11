@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    genevalidator (2.1.7)
+    genevalidator (2.1.8)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
       genevalidatorapp (~> 2.1.7)
