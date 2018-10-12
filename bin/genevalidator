@@ -400,10 +400,18 @@ rescue OptionParser::ParseError
 end
 
 if command.nil? && opt[:extract_raw_seqs] && opt[:raw_sequences].nil?
+  require 'genevalidator'
   require 'genevalidator/get_raw_sequences'
+  blast_file = opt[:blast_xml_file] if opt[:blast_xml_file]
+  blast_file = opt[:blast_tabular_file] if opt[:blast_tabular_file]
+  fname = File.basename(blast_file, File.extname(blast_file))
   GeneValidator.opt    = opt
   GeneValidator.config = {}
+  output_dir = GeneValidator.make_output_dir(fname)
+  GeneValidator.dirs   = { tmp_dir: output_dir }
   GeneValidator::RawSequences.run
+  warn '==> The BLAST HSP raw sequence FASTA files have been saved to:'
+  warn "     #{output_dir}"
 elsif command.nil? && opt[:json_file]
   start = Time.now
   require 'genevalidator/json_to_gv_results'
