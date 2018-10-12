@@ -23,17 +23,25 @@ fi
 if [ "$0" = 'sh' ]; then
   # I.e. when piping from curl
   INSTALL_DIR=$PWD/genevalidator
-elif [ "$0" = 'install.sh' ]; then
+elif [[ "$0" = *install.sh ]]; then
   # I.e. when running directly
   INSTALL_DIR=$PWD/genevalidator
 else
   INSTALL_DIR="$0"
 fi
 
-GV_URL=$(curl -s https://api.github.com/repos/wurmlab/genevalidator/releases/latest \
+GV_URL=$(curl -sL https://api.github.com/repos/wurmlab/genevalidator/releases/latest \
   | grep browser_download_url \
   | grep -i $PLATFORM \
   | cut -d '"' -f 4)
+
+# Check if the GV_URL is set (e.g. when the GITHUB API does not return what we expect)
+if [ -z "$GV_URL" ]; then
+  echo >&2 '==> Unable find the link to the latest version of the standalone GeneValidator Package.'
+  echo >&2 '    Please download the latest version of GeneValidator from the following link:'
+  echo >&2 '        https://github.com/wurmlab/genevalidator/releases/latest'
+  exit 1
+fi
 
 echo >&2 "==> Installing GeneValidator to:"
 echo >&2 "    ${INSTALL_DIR}"
