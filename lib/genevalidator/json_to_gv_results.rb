@@ -43,24 +43,24 @@ module GeneValidator
         c_fmt = "%3s\t%5s\t%20s\t%7s\t"
         short_def = row[:definition].split(' ')[0]
         print format(c_fmt, row[:idx], row[:overall_score], short_def,
-          row[:no_hits])
-          puts row[:validations].values.map { |e| e[:print] }.join("\t")
-          .gsub('&nbsp;', ' ')
-        end
+                     row[:no_hits])
+        puts row[:validations].values.map { |e| e[:print] }.join("\t")
+                              .gsub('&nbsp;', ' ')
+      end
 
-        private
+      private
 
-        def load_json_file
-          json_contents = File.read(File.expand_path(opt[:json_file]))
-          JSON.parse(json_contents, symbolize_names: true)
-        end
+      def load_json_file
+        json_contents = File.read(File.expand_path(opt[:json_file]))
+        JSON.parse(json_contents, symbolize_names: true)
+      end
 
-        def create_row_json_plot_files(row)
-          config[:run_no] += 1
-          fname = "#{dirs[:filename]}_#{row[:idx]}.json"
-          json_file = File.join(dirs[:json_dir], fname)
-          File.open(json_file, 'w') { |f| f.write(row.to_json) }
-        end
+      def create_row_json_plot_files(row)
+        config[:run_no] += 1
+        fname = "#{dirs[:filename]}_#{row[:idx]}.json"
+        json_file = File.join(dirs[:json_dir], fname)
+        File.open(json_file, 'w') { |f| f.write(row.to_json) }
+      end
     end
   end
 end
