@@ -111,6 +111,14 @@ module GeneValidator
       output_files.print_best_fasta
     end
 
+    # Creates the output folder and copies the auxiliar folders to this folder
+    def make_output_dir(fname)
+      output_dir = output_directory_name(fname)
+      assert_output_dir_does_not_exist(output_dir)
+      Dir.mkdir(output_dir)
+      output_dir
+    end
+
     private
 
     def setup_config(start_idx, seq_length)
@@ -133,7 +141,10 @@ module GeneValidator
          @opt[:output_dir].nil?
         reset_prev_analysis_dir
       else
-        make_output_dir_structure(fname)
+        output_dir = make_output_dir(fname)
+        Dir.mkdir(File.join(output_dir, 'tmp'))
+        cp_html_files(output_dir)
+        output_dir
       end
     end
 
@@ -143,16 +154,6 @@ module GeneValidator
         next if %w[. .. tmp html_files].include? f
         FileUtils.rm_r(File.join(output_dir, f))
       end
-      output_dir
-    end
-
-    # Creates the output folder and copies the auxiliar folders to this folder
-    def make_output_dir_structure(fname)
-      output_dir = output_directory_name(fname)
-      assert_output_dir_does_not_exist(output_dir)
-      Dir.mkdir(output_dir)
-      Dir.mkdir(File.join(output_dir, 'tmp'))
-      cp_html_files(output_dir)
       output_dir
     end
 
