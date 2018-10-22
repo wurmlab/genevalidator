@@ -192,7 +192,7 @@ module GeneValidator
     # start and end positions of each query.
     def index_the_input
       fasta_content = IO.binread(@opt[:input_fasta_file])
-      @query_idx = fasta_content.enum_for(:scan, /(>[^>]+)/).map do
+      @query_idx = fasta_content.enum_for(:scan, /^>/).map do
         Regexp.last_match.begin(0)
       end
       @query_idx.push(fasta_content.length)

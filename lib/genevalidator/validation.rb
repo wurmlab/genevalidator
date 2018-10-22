@@ -69,7 +69,7 @@ module GeneValidator
     def get_info_on_query_sequence(seq_type = @config[:type],
                                    index = @config[:idx])
       query        = GeneValidator.extract_input_fasta_sequence(index)
-      parse_query  = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
+      parse_query  = query.scan(/^>([^\n]*)\n([A-Za-z\n]*)/)[0]
 
       prediction                = Query.new
       prediction.definition     = parse_query[0].delete("\n")
