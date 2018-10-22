@@ -406,15 +406,14 @@ elsif command.nil? && opt[:json_file]
   GeneValidator::JsonToGVResults.init(opt)
   GeneValidator::JsonToGVResults.run
   warn "Total running time: #{(Time.now - start).round(3)}s"
-  warn # a blank line
+  warn '' # a blank line
 elsif command.nil?
   start = Time.now
   opt[:input_fasta_file] = first_arg
   if opt[:input_fasta_file].nil?
-    warn # a blank line
+    warn '' # a blank line
     warn '==> Error: Input Fasta file required.'
-    warn # a blank line
-    warn # a blank line
+    warn '' # a blank line
     puts global
     exit 1
   end
@@ -423,7 +422,7 @@ elsif command.nil?
   GeneValidator.init(opt)
   GeneValidator.run
   warn "Total running time: #{(Time.now - start).round(3)}s"
-  warn # a blank line
+  warn '' # a blank line
 elsif command == 'serve'
   require 'rack'
 
@@ -449,7 +448,16 @@ elsif command == 'serve'
   end
 
   dir = ARGV[0]
-  index_file = File.basename(Dir[File.join(dir, '*.html')].min)
+  html_files = Dir[File.join(dir, '*.html')]
+  if html_files.empty?
+    warn '' # a blank line
+    warn '==> Error: GV HTML files not found at this location.'
+    warn '    Was the output folder moved after carrying out the analysis?'
+    warn '' # a blank line
+    puts subcommands['serve']
+    exit 1
+  end
+  index_file = File.basename(html_files.min)
   app = Rack::Static.new nil, urls: [''], root: dir, index: index_file
   Rack::Server.start app: app, Port: opt[:file_server_port], StartCallback: proc {
     open_in_browser("http://localhost:#{opt[:file_server_port]}")
