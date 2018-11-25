@@ -42,8 +42,9 @@ Run the following in your terminal:
 # Installs in a folder called `genevalidator` in your current folder
 sh -c "$(curl -fsSL https://install-genevalidator.wurmlab.com)"
 
-# This link redirects to https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh
-# In order to install in a different location, add this path to the end of the above command
+# The above link is redirection to https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh
+
+# In order to install in a different location, add the path to the end of the above command
 ```
 
 Alternatively, the standalone package can be manually downloaded and installed from our [releases](https://github.com/wurmlab/genevalidator/releases/latest) page.
