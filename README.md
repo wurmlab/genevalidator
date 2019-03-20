@@ -117,7 +117,7 @@ JSON output can be filtered or processed in a variety of ways using standard too
 $ jq '.[] | select(.overall_score == 100)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
 
 # Extract sequences that have an overall score of over 70
-$ jq '.[] | select(.overall_score == 70)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
+$ jq '.[] | select(.overall_score > 70)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
 
 # Extract sequences that have more than 50 hits
 $ jq '.[] | select(.no_hits > 50)' INPUT_JSON_FILE > OUTPUT_JSON_FILE
