@@ -73,7 +73,7 @@ GEM
     prawn-security (0.8.4)
     prawn-svg (0.9.1.11)
       prawn (>= 0.8.4)
-    rack (2.0.5)
+    rack (2.0.8)
     rack-protection (2.0.4)
       rack
     rake (10.5.0)
