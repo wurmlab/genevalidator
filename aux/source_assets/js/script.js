@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  if (window.chrome && (window.location.protocol === 'file:')){
+  if (window.location.protocol === 'file:') {
     $('#mainbrowseralertText').text("Some features are not supported in this browser and have been disabled.");
     $('#browseralert').modal();
   }
