@@ -33,16 +33,12 @@ html
             h4.modal-title Incompatible Browser!
           #browseralertbody.modal-body
             p#browseralertText
-              strong#mainbrowseralertText Sorry, this feature is not supported in your browser.
+              strong#mainbrowseralertText Sorry, this feature is not supported when opening the results directly in a browser.
               br
               strong Please run the following command in your terminal:
               pre style="background-color: #f2dede"
                 | genevalidator serve #{@dirs[:output_dir]}
-            p This is because some browsers do not allow access to local files.
-            p
-              | Alternatively, you can use 
-              strong Mozilla FireFox 
-              | to view this file without running the above web server.
+            p This is because browsers disable access to local files due to security reasons.
     .container
       span.menu_icon.pull-right
         a href="#" onclick="GV.toggleAllPlots(this);"
