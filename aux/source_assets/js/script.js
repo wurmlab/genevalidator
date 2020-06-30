@@ -1,8 +1,5 @@
 $(document).ready(function() {
   if (window.location.protocol === 'file:') {
-    $('#mainbrowseralertText').text(
-      'Some features are not supported when opening the results directly in a browser and as such, have been disabled.'
-    );
     $('#browseralert').modal();
   }
   GV.toggleOverviewBtn(); // write overview to overview section
