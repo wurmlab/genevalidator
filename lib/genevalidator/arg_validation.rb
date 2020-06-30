@@ -166,11 +166,25 @@ module GeneValidator
 
         def assert_blast_compatible
           version = `blastdbcmd -version`.split[1]
-          return if version >= MINIMUM_BLAST_VERSION
+          return if is_compatible(version, MINIMUM_BLAST_VERSION)
           warn "*** Your BLAST+ version #{version} is outdated."
           warn '    GeneValidator needs NCBI BLAST+ version' \
                        " #{MINIMUM_BLAST_VERSION} or higher."
           exit EXIT_BLAST_NOT_COMPATIBLE
+        end
+
+        # Returns true if the given version is higher than the minimum expected
+        # version string.
+        def is_compatible(given, expected)
+          # The speceship operator (<=>) below returns -1, 0, 1 depending on
+          # on whether the left operand is lower, same, or higher than the
+          # right operand. We want the left operand to be the same or higher.
+          (parse_version(given) <=> parse_version(expected)) >= 0
+        end
+
+        # Turn version string into an arrary of its component numbers.
+        def parse_version(version_string)
+          version_string.split('.').map(&:to_i)
         end
       end
     end
