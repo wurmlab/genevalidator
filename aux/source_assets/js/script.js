@@ -1,5 +1,6 @@
 $(document).ready(function() {
   if (window.location.protocol === 'file:') {
+    $('#sortable_table').css('margin-top', '110px');
     $('#browseralert').modal();
   }
   GV.toggleOverviewBtn(); // write overview to overview section
