@@ -17,7 +17,7 @@ if (!GV) {
   /*global window:false, $:false, d3:false*/
   //  SHOW ALL PLOTS button
   GV.toggleAllPlots = function (btn) {
-    if (window.chrome && (window.location.protocol === 'file:')){
+    if (window.location.protocol === 'file:') {
       $('#browseralert').modal();
     } else {
       var plotBtns = $('.plot_btn');
@@ -58,7 +58,7 @@ if (!GV) {
   };
 
   GV.addData = function (source, val){
-    if (window.chrome && (window.location.protocol === 'file:')){
+    if (window.location.protocol === 'file:') {
       $('#browseralert').modal();
     } else {
       var $currentRow = $(source).closest('tr'),
@@ -81,7 +81,7 @@ if (!GV) {
   };
 
   GV.toggleOverviewBtn = function () {
-    if (window.chrome && (window.location.protocol === 'file:')){
+    if (window.location.protocol === 'file:') {
       $('#overview').remove();
     } else {
       var jsonFile = $("#overview_btn").data('overviewjson');
