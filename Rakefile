@@ -101,6 +101,23 @@ end
 #     rake package
 # - Just create directories and don't compress
 #     rake package DIR_ONLY=1
+
+# ## TO RUN with DOCKER
+# Start docker, mounting an empty folder called `output`:
+#
+# `docker run --rm -it -v $PWD/output:/gv ruby:2.2.10 /bin/bash`
+#
+# Then inside the shell:
+#
+# ```
+# apt update && apt install unzip && gem install bundler -v 1.17.3
+# cd /gv
+# git clone https://github.com/wurmlab/genevalidator
+# cd genevalidator
+# bundle install
+# rake package
+# ```
+
 namespace :package do
   PLATFORMS.each do |platform|
     task platform => [
