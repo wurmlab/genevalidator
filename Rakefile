@@ -64,28 +64,28 @@ TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'.freeze
 TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'.freeze
 NOKOGIRI_VERSION = 'nokogiri-1.6.6.2'.freeze
 MAFFT = {
-  version: '7.397',
-  'linux-x86': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
-  'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz',
-  osx: 'https://mafft.cbrc.jp/alignment/software/mafft-7.397-mac.zip'
+  version: '7.475',
+  'linux-x86': 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-linux.tgz',
+  'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-linux.tgz',
+  osx: 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-mac.zip'
 }.freeze
 BLAST = {
-  version: '2.7.1+',
-  'linux-x86': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
-  'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz',
-  osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-macosx.tar.gz'
+  version: '2.11.0+',
+  'linux-x86': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-linux.tar.gz',
+  'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-linux.tar.gz',
+  osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-macosx.tar.gz'
 }.freeze
 JQ = {
-  version: '1.5',
-  'linux-x86': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32',
-  'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64',
-  osx: 'https://github.com/stedolan/jq/releases/download/jq-1.5/jq-osx-amd64'
+  version: '1.6',
+  'linux-x86': 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux32',
+  'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64',
+  osx: 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64'
 }.freeze
 CSVTK = {
-  version: '0.14.0',
-  'linux-x86': 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_linux_386.tar.gz',
-  'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_linux_amd64.tar.gz',
-  osx: 'https://github.com/shenwei356/csvtk/releases/download/v0.14.0/csvtk_darwin_amd64.tar.gz'
+  version: '0.21.0',
+  'linux-x86': 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_linux_386.tar.gz',
+  'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_linux_amd64.tar.gz',
+  osx: 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_darwin_amd64.tar.gz'
 }.freeze
 
 desc 'Create standalone GeneValidator packages'
