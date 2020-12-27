@@ -201,8 +201,8 @@ namespace :package do
 
     cd TMP_DIR do
       Bundler.with_clean_env do
-        sh 'env BUNDLE_IGNORE_CONFIG=1 bundle install --path vendor ' \
-          '--without development test'
+        sh "env BUNDLE_IGNORE_CONFIG=1 BUNDLE_GEMFILE=#{TMP_DIR}/Gemfile" \
+           ' bundle install --path vendor --without development test'
       end
 
       cd 'vendor/ruby/2.2.0' do
