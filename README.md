@@ -1,24 +1,20 @@
 # GeneValidator - Identify problems with predicted genes
+
 [![Build Status](https://travis-ci.org/wurmlab/genevalidator.svg?branch=master)](https://travis-ci.org/wurmlab/genevalidator)
 [![GitHub release](https://img.shields.io/github/release/wurmlab/genevalidator.svg)](https://github.com/wurmlab/genevalidator/releases/latest)
-[![Test Coverage](https://codeclimate.com/github/wurmlab/GeneValidator/badges/coverage.svg)](https://codeclimate.com/github/wurmlab/GeneValidator)
-
-
-
 
 ## Introduction
-GeneValidator helps in identifing problems with gene predictions and provide useful information extracted from analysing orthologs in BLAST databases. The results produced can be used by biocurators and researchers who need accurate gene predictions.
+
+GeneValidator helps in identifying problems with gene predictions and provide useful information extracted from analysing orthologs in BLAST databases. The results produced can be used by biocurators and researchers who need accurate gene predictions.
 
 If you would like to use GeneValidator on a few sequences, see our online [GeneValidator Web App](http://genevalidator.sbcs.qmul.ac.uk) - [http://genevalidator.sbcs.qmul.ac.uk](http://genevalidator.sbcs.qmul.ac.uk).
 
-
 If you use GeneValidator in your work, please cite us as follows:
+
 > [Dragan M<sup>&Dagger;</sup>, Moghul I<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein).
 
-
-
-
 ## Validations
+
 GeneValidator runs the following validation on all input sequences:
 
 - **Length:** GeneValidator compares the length of the query sequence to the lengths of the most significant BLAST hits using hierarchical clustering and a rank test. This can suggest that the query is too short or too long. Graphs are dynamically produced for this validation.
@@ -32,7 +28,6 @@ GeneValidator also runs a further two validation on cDNA sequences:
 - **Similarity-based ORFs:** We expect all BLAST hits to align within a single ORF. This test is more sensitive than the previous when a query has many BLAST hits.
 
 Each analysis of each query returns a binary result (good vs. potential problem) according to p-value or an empirically determined cutoff. The results for each query are combined into an overall quality score from 0 to 100. Each analysis of each query returns a binary result (good vs. potential problem) according to p-value or an empirically determined cutoff. The results for each query are combined into an overall quality score from 0 to 100.
-
 
 ## Installation
 
@@ -49,7 +44,6 @@ sh -c "$(curl -fsSL https://install-genevalidator.wurmlab.com)"
 
 Alternatively, the standalone package can be manually downloaded and installed from our [releases](https://github.com/wurmlab/genevalidator/releases/latest) page.
 
-
 ## Usage
 
 GeneValidator can be run immediately after it has been installed. The below example shows how to run GV on the included exemplar data.
@@ -60,6 +54,7 @@ genevalidator --db genevalidator/blast_db/swissprot --num_threads 4 genevalidato
 ```
 
 Other command line arguments can be viewed by running the following command.
+
 ```bash
 # This should show the GeneValidator CLI help text
 genevalidator -h
@@ -87,30 +82,37 @@ genevalidator ncbi-blast-dbs -h
 genevalidator serve -h
 ```
 
-
 ### BLAST databases
+
 GeneValidator's default database is the included Swiss-Prot database, which is used if a BLAST database is not specified. Alternative BLAST databases (such as Uniref50 or the NCBI non-redundant database) can also be used once they have been downloaded and installed. More information on how to download alternative BLAST databases and how to pass BLAST output files to GV can be found [here](https://github.com/wurmlab/genevalidator/wiki/Setting-Up-BLAST-Databases).
 
 ## Output
+
 The output produced by GeneValidator is presented in four manners.
 
 #### HTML Output
+
 Firstly, the output is produced as a colourful, HTML file. This file is titled 'results.html' (found in the 'html' folder) and can be opened in a web browser. This file contains all the results in an easy-to-view manner with graphical visualisations. See exemplar HTML output [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/protein_query_results) (Amino acid sequences input) and [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/genetic_query_results) (Nucleotide sequences input).
 
 #### CSV Output
+
 The output table is also presented in the CSV format for programmatic or spreadsheet (i.e. Microsoft Excel) access. See exemplar CSV output [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/protein_query_results.csv) (Amino acid sequences input) and [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/genetic_query_results.csv) (Nucleotide sequences input)
 
 #### Summary CSV
+
 A summary CSV file is a 2 column CSV file providing summary statistics on the GV analysis. See exemplar summary CSV output [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/protein_query_summary.csv) (Amino acid sequences input) and [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/genetic_query_summary.csv) (Nucleotide sequences input)
 
 #### Terminal Output
+
 A tabular summary of the results is also outputted in the terminal to provide quick feedback on the results. The terminal output can be piped to tools like `awk` and `sed` or redirected to a file for further processing.
 
 #### JSON Output
+
 The output is also produced in JSON. GeneValidator is able to re-generate results for any JSON files (or derived JSON files) with that were previously generated by the program. This means that you are able to use the JSON file in your own analysis pipelines and then use GeneValidator to produce the HTML output for the analysed JSON file. See exemplar JSON output [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/protein_input/protein_query_results.json) (Amino acid sequences input) and [here](https://wurmlab.github.io/tools/genevalidator/exemplar_data/genetic_input/genetic_query_results.json) (Nucleotide sequences input)
 
 ###### Exemplar JSON output usage
-JSON output can be filtered or processed in a variety of ways using standard tools, such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below makes use of jq 1.5 which is bundled with GeneValidator.
+
+JSON output can be filtered or processed in a variety of ways using standard tools, such as the [streamable JSON command line program](http://trentm.com/json/), or [jq](https://stedolan.github.io/jq/). The examples below makes use of jq 1.6 which is bundled with GeneValidator.
 
 ```bash
 # Extract sequences that have an overall score of 100
@@ -136,4 +138,3 @@ The subsetted/sorted JSON file can then be passed back into GeneValidator (using
 ```bash
 genevalidator -j OUTPUT_JSON_FILE
 ```
-
