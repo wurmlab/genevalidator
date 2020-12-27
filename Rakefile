@@ -218,12 +218,8 @@ namespace :package do
 
       mkdir 'blast_db'
       cd 'blast_db' do
-        sh 'update_blastdb.pl --decompress swissprot' do |_, e|
-          abort 'update_blastdb.pl failed to run.' if e.exitstatus == 2
-          # This script returns 0 on successful operations that result in no
-          # downloads, 1 on successful operations that downloaded files,
-          # and 2 on errors.
-        end
+        sh 'bundle exec genevalidator ncbi-blast-dbs swissprot'
+        sh 'rm swissprot.tar.*'
       end
     end
   end
