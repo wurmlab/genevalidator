@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~> 2.0'
-  s.add_dependency 'genevalidatorapp', '~> 2.1.7'
+  s.add_dependency 'genevalidatorapp', '~> 2.1.8'
   s.add_dependency 'ncbi-blast-dbs', '0.0.6'
   s.add_dependency 'rack', '~> 2.0'
   s.add_dependency 'slim', '~>3.0'
