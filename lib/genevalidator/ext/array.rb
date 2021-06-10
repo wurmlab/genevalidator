@@ -31,6 +31,8 @@ module GeneValidator
     end
 
     def all_quartiles
+      return [self[0], self[0], self[0]] if length == 1
+
       sorted = sort
       len    = sorted.length
       split  = sorted.median_split
