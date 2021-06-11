@@ -222,6 +222,17 @@ namespace :package do
         cd 'gems' do
           mkdir APP_NAME
           %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", APP_NAME }
+
+          # patch daru lib to hide unneccessary messages
+          cd 'daru-0.1.6/lib' do
+            orig = "'spreadsheet' => '~>1.1.1', 'mechanize' => '~>2.7.5'"
+            sh "sed \"s/#{orig}//\" daru.rb > daru.rb-1"
+            sh "rm daru.rb"
+
+            orig = "require 'backports'"
+            sh "sed \"s/#{orig}/# #{orig}/\" daru.rb-1 > daru.rb"
+            sh "rm daru.rb-1"
+          end
         end
 
         cd 'specifications' do

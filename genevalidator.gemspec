@@ -29,12 +29,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'slim', '~>3.0'
   s.add_dependency 'statsample', '2.1.0'
 
-  # Adding mechanize gem just to silence a message on load.
-  # This is due the Statsample gem
-  # See https://github.com/SciRuby/daru/issues/404
-  # See https://github.com/SciRuby/statsample/pull/69
-  s.add_dependency 'mechanize', '2.7.5'
-
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
