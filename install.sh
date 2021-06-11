@@ -14,8 +14,6 @@ elif [ "$KERNEL" = "linux" ]; then
   ARCH=$(uname -m)
   if [ "$ARCH" = "x86_64" ]; then
     PLATFORM='linux-x86_64'
-  else
-    PLATFORM='linux-x86'
   fi
 fi
 

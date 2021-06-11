@@ -59,31 +59,27 @@ require 'bundler/setup'
 
 TMP_DIR = "#{Rake.original_dir}/tmp".freeze
 APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}".freeze
-PLATFORMS = %w[linux-x86 linux-x86_64 osx].freeze
-TRAVELING_RUBY_VERSION = 'traveling-ruby-20150715-2.2.2'.freeze
-TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20150715-2.2.2'.freeze
-NOKOGIRI_VERSION = 'nokogiri-1.6.6.2'.freeze
+PLATFORMS = %w[linux-x86_64 osx].freeze
+TRAVELING_RUBY_VERSION = 'traveling-ruby-20210206-2.4.10'.freeze
+TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20210206-2.4.10'.freeze
+NOKOGIRI_VERSION = 'nokogiri-1.10.10'.freeze
 MAFFT = {
   version: '7.475',
-  'linux-x86': 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-linux.tgz',
   'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-linux.tgz',
   osx: 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-mac.zip'
 }.freeze
 BLAST = {
   version: '2.11.0+',
-  'linux-x86': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-linux.tar.gz',
   'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-linux.tar.gz',
   osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-macosx.tar.gz'
 }.freeze
 JQ = {
   version: '1.6',
-  'linux-x86': 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux32',
   'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64',
   osx: 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64'
 }.freeze
 CSVTK = {
   version: '0.21.0',
-  'linux-x86': 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_linux_386.tar.gz',
   'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_linux_amd64.tar.gz',
   osx: 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_darwin_amd64.tar.gz'
 }.freeze
@@ -92,7 +88,7 @@ desc 'Create standalone GeneValidator packages'
 task :package do
   rm_rf TMP_DIR
   mkdir TMP_DIR
-  task('package:build' => ['package:linux-x86', 'package:linux-x86_64', 'package:osx']).invoke
+  task('package:build' => ['package:linux-x86_64', 'package:osx']).invoke
   rm_rf TMP_DIR
 end
 
@@ -105,7 +101,7 @@ end
 # ## TO RUN with DOCKER
 # Start docker, mounting an empty folder called `output`:
 #
-# `docker run --rm -it -v $PWD/output:/gv ruby:2.2.10 /bin/bash`
+# `docker run --rm -it -v $PWD/output:/gv ruby:2.4.10 /bin/bash`
 #
 # Then inside the shell:
 #
@@ -206,8 +202,8 @@ namespace :package do
 
   desc 'Install gems to local directory'
   task :bundle_install do
-    if RUBY_VERSION !~ /^2\.2\./
-      abort "You can only 'bundle install' using Ruby 2.2, because that's " \
+    if RUBY_VERSION !~ /^2\.4\./
+      abort "You can only 'bundle install' using Ruby 2.4, because that's " \
             'what Traveling Ruby uses.'
     end
 
@@ -222,7 +218,7 @@ namespace :package do
            ' bundle install --path vendor --without development test'
       end
 
-      cd 'vendor/ruby/2.2.0' do
+      cd 'vendor/ruby/2.4.0' do
         cd 'gems' do
           mkdir APP_NAME
           %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", APP_NAME }
@@ -246,9 +242,9 @@ namespace :package do
     cd "#{TMP_DIR}/vendor" do
       sh 'rm -f */*/cache/*'
       sh 'rm -rf ruby/*/extensions'
-      sh "find ruby/2.2.0/gems -name '*.so' | xargs rm -f"
-      sh "find ruby/2.2.0/gems -name '*.bundle' | xargs rm -f"
-      sh "find ruby/2.2.0/gems -name '*.o' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.so' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.bundle' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.o' | xargs rm -f"
 
       # Remove tests
       %w[test tests spec features benchmark].each do |dir|
@@ -271,15 +267,15 @@ namespace :package do
       # Remove leftover native extension sources and compilation objects
       sh 'rm -f ruby/*/gems/*/ext/Makefile'
       sh 'rm -f ruby/*/gems/*/ext/*/Makefile'
-      sh 'rm -f ruby/*/gems/*/ext/*/tmp'
+      sh 'rm -rf ruby/*/gems/*/ext/*/tmp'
       sh "find ruby -name '*.c' | xargs rm -f"
       sh "find ruby -name '*.cpp' | xargs rm -f"
       sh "find ruby -name '*.h' | xargs rm -f"
       sh "find ruby -name '*.rl' | xargs rm -f"
       sh "find ruby -name 'extconf.rb' | xargs rm -f"
-      sh "find ruby/2.2.0/gems -name '*.o' | xargs rm -f"
-      sh "find ruby/2.2.0/gems -name '*.so' | xargs rm -f"
-      sh "find ruby/2.2.0/gems -name '*.bundle' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.o' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.so' | xargs rm -f"
+      sh "find ruby/2.4.0/gems -name '*.bundle' | xargs rm -f"
 
       # Remove Java files. They're only used for JRuby support
       sh "find ruby -name '*.java' | xargs rm -f"
@@ -328,7 +324,7 @@ def edited_gemspec_content
     next if index < 4 # skip first four lines
     l = "s.version = '#{GEMSPEC.version}'\n" if l =~ /^\s+s.version/
     l = "s.files = ['#{file_list.join("','")}']\n" if l =~ /^\s+s.files/
-    l = "s.add_dependency 'nokogiri', '1.6.6.2'\nend" if l =~ /^end/
+    l = "s.add_dependency 'nokogiri', '1.10.10'\nend" if l =~ /^end/
     edited_gemspec << l
   end
   edited_gemspec.join
@@ -340,7 +336,7 @@ source 'http://rubygems.org'
 gem 'bio', '~> 1.4'
 gem 'bio-blastxmlparser', '~> 2.0'
 gem '#{GEMSPEC.name}', '#{GEMSPEC.version}'
-gem 'nokogiri', '1.6.6.2'
+gem 'nokogiri', '1.10.10'
 gem 'statsample', '2.1.0'
 GEMFILE
 
