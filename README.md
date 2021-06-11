@@ -64,10 +64,10 @@ genevalidator -h
 
 It is possible run GeneValidator as a web application. This graphical interface can launched by running the following command.
 
-The path to a directory containing one or more blast databases is required - by default this points the blastdb directory in GeneValidator installation containing the SwissProt BLAST database.
+The path to a directory containing one or more blast databases is required - by default this points the blast_db directory in GeneValidator installation containing the SwissProt BLAST database.
 
 ```bash
-genevalidator app --database_dir genevalidator/blastdb --num_threads 4
+genevalidator app --database_dir genevalidator/blast_db --num_threads 4
 ```
 
 This will open the default browser at [http://localhost:5678](http://localhost:5678)
