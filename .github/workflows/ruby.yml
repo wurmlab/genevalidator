@@ -37,13 +37,16 @@ jobs:
         sudo apt-get update
         sudo apt-get install mafft
 
+    - name: Setup Code Climate test-reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
     - name: Run tests
       run: bundle exec rake test
 
-    - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v2.7.5
-      env:
-        CC_TEST_REPORTER_ID: 2177997ae2dd26804c32e1ec34a2221f94b71a2170f6c1db2c020f8858cd87f2
-      with:
-        coverageCommand: bundle exec codeclimate-test-reporter
-        debug: true
+    - name: Publish code coverage
+      run: |
+        export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+        ./cc-test-reporter after-build -r 2177997ae2dd26804c32e1ec34a2221f94b71a2170f6c1db2c020f8858cd87f2
