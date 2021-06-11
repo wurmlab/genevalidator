@@ -79,8 +79,6 @@ case $SHELL in
   fi
 esac
 
-export PATH=${INSTALL_DIR}/bin:${PATH}
-
 if [ -z ${DOT_FILE+x} ]; then
   # DOT File hasn't been set.
   echo >&2
@@ -93,7 +91,7 @@ else
   echo >&2
   echo >&2 "==> Added GeneValidator to your PATH in ${DOT_FILE}"
   echo >&2
-  echo >&2 "==> Run \`genevalidator -h\` to get started."
+  echo >&2 "==> Run \`genevalidator -h\` in a new terminal window to get started."
 fi
 
 echo >&2
