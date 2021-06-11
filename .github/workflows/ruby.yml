@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['2.2.2', '2.6']
+        ruby-version: ['2.4.10', '2.6', '2.7', '3.0']
 
     steps:
     - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-    - name: Install jq tool
+    - name: Install Mafft
       run: |
         sudo apt-get update
         sudo apt-get install mafft
@@ -47,4 +47,3 @@ jobs:
       with:
         coverageCommand: bundle exec codeclimate-test-reporter
         debug: true
-
