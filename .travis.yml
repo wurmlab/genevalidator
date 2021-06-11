@@ -1,21 +1,14 @@
 language: ruby
 rvm:
-  - "2.2.2"
-  - "2.2.10"
-  - "2.3.8"
   - "2.4.10"
-  - "2.5.8"
-  - "2.6.6"
-before_script:
-  - wget -P ~ https://mafft.cbrc.jp/alignment/software/mafft-7.397-linux.tgz
-  - tar -zxvf ~/mafft-7.397-linux.tgz -C ~
-  - mkdir ~/mafft_bin
-  - echo "#!/bin/bash" > ~/mafft_bin/mafft
-  - echo '$HOME/mafft-linux64/mafft.bat "$@"' >> ~/mafft_bin/mafft
-  - chmod 755 ~/mafft_bin/mafft
-  - export PATH=$PATH:~/mafft_bin
+  - "2.5"
+  - "2.6"
+  - "2.7"
 script: bundle exec rake test
 after_script: bundle exec codeclimate-test-reporter
 addons:
   code_climate:
     repo_token: 2177997ae2dd26804c32e1ec34a2221f94b71a2170f6c1db2c020f8858cd87f2
+  apt:
+    packages:
+    - mafft
