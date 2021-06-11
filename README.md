@@ -1,17 +1,19 @@
 # GeneValidator - Identify problems with predicted genes
-
-[![Build Status](https://travis-ci.org/wurmlab/genevalidator.svg?branch=master)](https://travis-ci.org/wurmlab/genevalidator)
+[![GV Build Status](https://github.com/wurmlab/genevalidator/actions/workflows/GeneValidator.yml/badge.svg)](https://github.com/wurmlab/genevalidator/actions/workflows/GeneValidator.yml)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4ce7a69c119e3113826d/test_coverage)](https://codeclimate.com/github/wurmlab/GeneValidator/test_coverage)
 [![GitHub release](https://img.shields.io/github/release/wurmlab/genevalidator.svg)](https://github.com/wurmlab/genevalidator/releases/latest)
 
 ## Introduction
 
 GeneValidator helps in identifying problems with gene predictions and provide useful information extracted from analysing orthologs in BLAST databases. The results produced can be used by biocurators and researchers who need accurate gene predictions.
 
-If you would like to use GeneValidator on a few sequences, see our online [GeneValidator Web App](http://genevalidator.sbcs.qmul.ac.uk) - [http://genevalidator.sbcs.qmul.ac.uk](http://genevalidator.sbcs.qmul.ac.uk).
+If you would like to use GeneValidator on a few sequences, see our online [GeneValidator Web App](https://genevalidator.wurmlab.com) - [https://genevalidator.wurmlab.com](https://genevalidator.wurmlab.com).
 
 If you use GeneValidator in your work, please cite us as follows:
 
 > [Dragan M<sup>&Dagger;</sup>, Moghul I<sup>&Dagger;</sup>, Priyam A, Bustos C & Wurm Y. 2016. GeneValidator: identify problems with protein-coding gene predictions. <em>Bioinformatics</em>, doi: 10.1093/bioinformatics/btw015](https://academic.oup.com/bioinformatics/article/32/10/1559/1742817/GeneValidator-identify-problems-with-protein).
+
+> [Moghul I<sup>&Dagger;</sup>, Priyam A<sup>&Dagger;</sup>,& Wurm Y. 2019.  Choosing the Best Gene Predictions with GeneValidator, <em>Methods in Molecular Biology</em>, doi: 10.1007/978-1-4939-9173-0_16](https://link.springer.com/protocol/10.1007/978-1-4939-9173-0_16) - Download PDF [here](https://wurmlab.github.io/publications/2019_choosing_the_best_gene_predictions.pdf).
 
 ## Validations
 
