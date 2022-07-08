@@ -37,9 +37,7 @@ Run the following in your terminal:
 
 ```bash
 # Installs in a folder called `genevalidator` in your current folder
-sh -c "$(curl -fsSL https://install-genevalidator.wurmlab.com)"
-
-# The above link is redirection to https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/wurmlab/genevalidator/master/install.sh)"
 
 # In order to install in a different location, add the path to the end of the above command
 ```
