@@ -4,6 +4,7 @@ require 'net/http'
 require 'tempfile'
 require 'uri'
 require 'yaml'
+require 'pry'
 
 require 'genevalidator/exceptions'
 require 'genevalidator/query'
@@ -51,6 +52,9 @@ module GeneValidator
         # index the fasta file
         keys   = content.scan(/>(.*)\n/).flatten
         values = content.enum_for(:scan, /(>[^>]+)/).map { Regexp.last_match.begin(0) }
+
+        # remove trailing version numberr from the accession field
+        keys.map! { |key| key.sub(/\.\d+$/, '') }
 
         # make an index hash
         index_hash = {}
@@ -136,7 +140,7 @@ module GeneValidator
 
       def run(identifier, accession)
         # first try to extract from previously created raw_sequences HASH
-        raw_seq = extract_from_index(identifier) if opt[:raw_sequences]
+        raw_seq = extract_from_index(accession) if opt[:raw_sequences]
         # then try to just extract that sequence based on accession.
         if opt[:db] !~ /remote/ && (raw_seq.nil? || raw_seq =~ /Error/i)
           raw_seq = extract_from_local_db(false, accession)
@@ -146,7 +150,7 @@ module GeneValidator
           raw_seq = extract_from_remote_db(accession)
         end
         # return nil if the raw_sequence still produces an error.
-        raw_seq =~ /Error/i ? nil : raw_seq
+        raw_seq.nil? || raw_seq.empty? || raw_seq =~ /Error/i ? nil : raw_seq
       end
 
       ##
@@ -155,8 +159,10 @@ module GeneValidator
       # +identifier+: String
       # Output:
       # String with the nucleotide sequence corresponding to the identifier
-      def extract_from_index(identifier)
-        idx         = config[:raw_seq_file_load][identifier]
+      def extract_from_index(accession)
+        # remove trailing version numberr
+        accession.sub!(/\.\d+$/, '')
+        idx         = config[:raw_seq_file_load][accession]
         query       = IO.binread(opt[:raw_sequences], idx[1] - idx[0], idx[0])
         parse_query = query.scan(/>([^\n]*)\n([A-Za-z\n]*)/)[0]
         parse_query[1].delete("\n")
