@@ -4,7 +4,6 @@ require 'net/http'
 require 'tempfile'
 require 'uri'
 require 'yaml'
-require 'pry'
 
 require 'genevalidator/exceptions'
 require 'genevalidator/query'
@@ -178,10 +177,10 @@ module GeneValidator
       # Output:
       # String with the nucleotide sequence corresponding to the accession
       def extract_from_local_db(batch, accno = nil, idx_file = nil)
-        cmd = batch ? batch_raw_seq_cmd(idx_file) : single_raw_seq_cmd(accno)
         efile = Tempfile.new('blast_out')
-        `#{cmd} &>#{efile.path}`
-        raw_seqs = efile.read
+        cmd = batch ? batch_raw_seq_cmd(idx_file) : single_raw_seq_cmd(accno, efile.path)
+        `#{cmd}`
+        raw_seqs = batch ? File.read(opt[:raw_sequences]) : efile.read
         failed_raw_sequences(raw_seqs) if batch && raw_seqs =~ /Error/
         raw_seqs # when obtaining a single raw_seq, this contains the sequence
       ensure
@@ -194,8 +193,8 @@ module GeneValidator
         " -outfmt '%f' -out '#{opt[:raw_sequences]}'"
       end
 
-      def single_raw_seq_cmd(accession)
-        "blastdbcmd -entry '#{accession}' -db '#{opt[:db]}' -outfmt '%s'"
+      def single_raw_seq_cmd(accession, file)
+        "blastdbcmd -entry '#{accession}' -db '#{opt[:db]}' -outfmt '%s' -out '#{file}'"
       end
 
       def failed_raw_sequences(blast_output)
