@@ -36,3 +36,5 @@ test/test_files/GV_*
 exemplar_data/GV*
 .vscode
 passenger*
+protein_data*
+genetic_data*
