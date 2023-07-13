@@ -68,7 +68,7 @@ The path to a directory containing one or more blast databases is required - by 
 genevalidator app --database_dir genevalidator/blast_db --num_threads 4
 ```
 
-This will open the default browser at [http://localhost:5678](http://localhost:5678)
+This will open the default browser at [http://localhost:5678](http://localhost:5678) This is suitable only for testing purposes and local use. If you want more production grade deployment, read [app deployment documentation](deployment/).
 
 Other GeneValidator subcommands include:
 
