@@ -1,0 +1,3 @@
+[submodule "deployment"]
+	path = deployment
+	url = https://github.com/Pigrenok/GeneValidator_deploy.git
