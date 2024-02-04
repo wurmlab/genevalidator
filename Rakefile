@@ -61,10 +61,9 @@ TMP_DIR = "#{Rake.original_dir}/tmp".freeze
 APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}".freeze
 PLATFORMS = %w[linux-x86_64 osx-x86_64 osx-arm64].freeze
 TR_RUBY_VERSION = '3.2'.freeze
-TRAVELING_RUBY_VERSION_NUMBER = "20230803"
-TRAVELING_RUBY_BASE_URL = "https://github.com/YOU54F/traveling-ruby/releases/download/rel-#{TRAVELING_RUBY_VERSION_NUMBER}"
-TRAVELING_RUBY_VERSION = "traveling-ruby-#{TRAVELING_RUBY_VERSION_NUMBER}-3.2.2".freeze
-TRAVELING_RUBYGEMS_VERSION = "traveling-ruby-gems-#{TRAVELING_RUBY_VERSION_NUMBER}-3.2.2".freeze
+TRAVELING_RUBY_BASE_URL = "https://github.com/YOU54F/traveling-ruby/releases/download/rel-20230803"
+TRAVELING_RUBY_VERSION = "traveling-ruby-20230803-3.2.2".freeze
+TRAVELING_RUBYGEMS_VERSION = "traveling-ruby-gems-20230803-3.2.2".freeze
 NOKOGIRI_VERSION = 'nokogiri-1.15.3'.freeze
 MAFFT = {
   version: '7.490',
