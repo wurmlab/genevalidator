@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    genevalidator (2.1.11)
+    genevalidator (2.1.12)
       bio (~> 1.4)
       bio-blastxmlparser (~> 2.0)
       genevalidatorapp (~> 2.1.8)
-      ncbi-blast-dbs (= 0.0.6)
+      net-ftp (~> 0.1.3)
       rack (~> 2.0)
       slim (~> 3.0)
       statsample (= 2.1.0)
@@ -14,7 +14,8 @@ GEM
   remote: http://rubygems.org/
   specs:
     awesome_print (1.9.2)
-    backports (3.21.0)
+    backports (3.24.1)
+    bigdecimal (3.1.6)
     bio (1.5.2)
     bio-blastxmlparser (2.0.4)
       bio-logger
@@ -24,27 +25,39 @@ GEM
     clbustos-rtf (0.4.2)
     daru (0.1.6)
       backports
+    date (3.3.4)
     dirty-memoize (0.0.4)
     distribution (0.8.0)
-    docile (1.3.1)
+    docile (1.4.0)
     extendmatrix (0.4)
     genevalidatorapp (2.1.8)
       bio (~> 1.4)
       sinatra (~> 2.0)
       sinatra-cross_origin (~> 0.3)
       slim (~> 3.0)
-    json (2.1.0)
     log4r (1.1.10)
-    mini_portile2 (2.4.0)
     minimization (0.2.5)
       text-table (~> 1.2)
-    minitest (5.11.3)
-    mustermann (1.1.1)
+    minitest (5.21.2)
+    mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    ncbi-blast-dbs (0.0.6)
-      rake (~> 10.3, >= 10.3.2)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    net-ftp (0.1.4)
+      net-protocol
+      time
+    net-protocol (0.2.2)
+      timeout
+    nokogiri (1.16.2-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.2-arm-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.2-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.2-x86-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.2-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.2-x86_64-linux)
+      racc (~> 1.4)
     prawn (0.8.4)
       prawn-core (>= 0.8.4, < 0.9)
       prawn-layout (>= 0.8.4, < 0.9)
@@ -54,10 +67,11 @@ GEM
     prawn-security (0.8.4)
     prawn-svg (0.9.1.11)
       prawn (>= 0.8.4)
-    rack (2.2.3)
-    rack-protection (2.1.0)
+    racc (1.7.3)
+    rack (2.2.8)
+    rack-protection (2.2.4)
       rack
-    rake (10.5.0)
+    rake (13.1.0)
     reportbuilder (1.4.2)
       clbustos-rtf (~> 0.4.0)
       prawn (~> 0.8.4)
@@ -65,23 +79,25 @@ GEM
       text-table (~> 1.2)
     rserve-client (0.3.5)
     ruby-ole (1.2.12.2)
-    ruby2_keywords (0.0.4)
+    ruby2_keywords (0.0.5)
     rubyvis (0.6.1)
-    simplecov (0.16.1)
+    simplecov (0.22.0)
       docile (~> 1.1)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.2)
-    sinatra (2.1.0)
-      mustermann (~> 1.0)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
+    sinatra (2.2.4)
+      mustermann (~> 2.0)
       rack (~> 2.2)
-      rack-protection (= 2.1.0)
+      rack-protection (= 2.2.4)
       tilt (~> 2.0)
     sinatra-cross_origin (0.4.0)
     slim (3.0.9)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
-    spreadsheet (1.2.9)
+    spreadsheet (1.3.1)
+      bigdecimal
       ruby-ole
     statsample (2.1.0)
       awesome_print (~> 1.6)
@@ -96,18 +112,26 @@ GEM
       spreadsheet (~> 1.1)
     temple (0.8.2)
     text-table (1.2.4)
-    tilt (2.0.10)
-    yard (0.9.16)
+    tilt (2.0.11)
+    time (0.3.0)
+      date
+    timeout (0.4.1)
+    yard (0.9.34)
 
 PLATFORMS
-  ruby
+  aarch64-linux
+  arm-linux
+  arm64-darwin
+  x86-linux
+  x86_64-darwin
+  x86_64-linux
 
 DEPENDENCIES
   genevalidator!
   minitest (~> 5.10)
-  rake (~> 10.3, >= 10.3.2)
+  rake (~> 13.0)
   simplecov
   yard (~> 0.9.11)
 
 BUNDLED WITH
-   1.17.3
+   2.5.5
