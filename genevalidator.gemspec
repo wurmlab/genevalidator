@@ -24,7 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'bio', '~> 1.4'
   s.add_dependency 'bio-blastxmlparser', '~> 2.0'
   s.add_dependency 'genevalidatorapp', '~> 2.1.8'
-  s.add_dependency 'net-ftp', '~> 0.1.3'
+  s.add_dependency 'matrix', '~> 0.4.2' # required by statsample
+  s.add_dependency 'net-ftp', '~> 0.1.3' # required by ncbi-blast-dbs
   s.add_dependency 'rack', '~> 2.0'
   s.add_dependency 'slim', '~>3.0'
   s.add_dependency 'statsample', '2.1.0'
