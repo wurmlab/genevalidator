@@ -464,9 +464,15 @@ elsif command == 'serve'
   }
 elsif command == 'ncbi-blast-dbs'
   require 'rake'
-  load 'ncbi-blast-dbs.rake'
 
-  Rake.application.init 'ncbi-blast-dbs'
+  if ARGV.include? "http"
+    load "genevalidator/ncbi-blast-dbs/http-ncbi-blast-dbs.rake"
+    Rake.application.init 'http-ncbi-blast-dbs'
+  else
+    load "genevalidator/ncbi-blast-dbs/ncbi-blast-dbs.rake"
+    Rake.application.init 'ncbi-blast-dbs'
+  end
+
   Rake.application.load_imports
   Rake.application.top_level
 

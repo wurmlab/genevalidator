@@ -1,5 +1,7 @@
 require 'forwardable'
-# Statsample: must loaded before /ext/array as they modify a built-in class
+# Statsample: must loaded after ext/file as they use a deprecated method - File.exists?
+# And before /ext/array as they modify a built-in class
+require 'genevalidator/ext/file'
 require 'statsample'
 
 require 'genevalidator/blast'

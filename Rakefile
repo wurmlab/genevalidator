@@ -59,36 +59,42 @@ require 'bundler/setup'
 
 TMP_DIR = "#{Rake.original_dir}/tmp".freeze
 APP_NAME = "#{GEMSPEC.name}-#{GEMSPEC.version}".freeze
-PLATFORMS = %w[linux-x86_64 osx].freeze
-TRAVELING_RUBY_VERSION = 'traveling-ruby-20210206-2.4.10'.freeze
-TRAVELING_RUBYGEMS_VERSION = 'traveling-ruby-gems-20210206-2.4.10'.freeze
-NOKOGIRI_VERSION = 'nokogiri-1.10.10'.freeze
+PLATFORMS = %w[linux-x86_64 osx-x86_64 osx-arm64].freeze
+TR_RUBY_VERSION = '3.2'.freeze
+TRAVELING_RUBY_BASE_URL = "https://github.com/YOU54F/traveling-ruby/releases/download/rel-20230803"
+TRAVELING_RUBY_VERSION = "traveling-ruby-20230803-3.2.2".freeze
+TRAVELING_RUBYGEMS_VERSION = "traveling-ruby-gems-20230803-3.2.2".freeze
+NOKOGIRI_VERSION = 'nokogiri-1.15.3'.freeze
 MAFFT = {
-  version: '7.475',
-  'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-linux.tgz',
-  osx: 'https://mafft.cbrc.jp/alignment/software/mafft-7.475-mac.zip'
+  version: '7.490',
+  'linux-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.520-linux.tgz',
+  'osx-x86_64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.490-mac.zip',
+  'osx-arm64': 'https://mafft.cbrc.jp/alignment/software/mafft-7.490-mac.zip'
 }.freeze
 BLAST = {
-  version: '2.11.0+',
-  'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-linux.tar.gz',
-  osx: 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.11.0/ncbi-blast-2.11.0+-x64-macosx.tar.gz'
+  version: '2.15.0+',
+  'linux-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.15.0/ncbi-blast-2.15.0+-x64-linux.tar.gz',
+  'osx-x86_64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.15.0/ncbi-blast-2.15.0+-x64-macosx.tar.gz',
+  'osx-arm64': 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.15.0/ncbi-blast-2.15.0+-x64-macosx.tar.gz'
 }.freeze
 JQ = {
-  version: '1.6',
-  'linux-x86_64': 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64',
-  osx: 'https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64'
+  version: '1.7.1',
+  'linux-x86_64': 'https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64',
+  'osx-x86_64': 'https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-macos-amd64',
+  'osx-arm64': 'https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-macos-arm64'
 }.freeze
 CSVTK = {
-  version: '0.21.0',
-  'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_linux_amd64.tar.gz',
-  osx: 'https://github.com/shenwei356/csvtk/releases/download/v0.21.0/csvtk_darwin_amd64.tar.gz'
+  version: '0.29.0',
+  'linux-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.29.0/csvtk_linux_amd64.tar.gz',
+  'osx-x86_64': 'https://github.com/shenwei356/csvtk/releases/download/v0.29.0/csvtk_darwin_amd64.tar.gz',
+  'osx-arm64': 'https://github.com/shenwei356/csvtk/releases/download/v0.29.0/csvtk_darwin_arm64.tar.gz'
 }.freeze
 
 desc 'Create standalone GeneValidator packages'
 task :package do
   rm_rf TMP_DIR
   mkdir TMP_DIR
-  task('package:build' => ['package:linux-x86_64', 'package:osx']).invoke
+  task('package:build' => ['package:linux-x86_64', 'package:osx-x86_64', 'package:osx-arm64']).invoke
   rm_rf TMP_DIR
 end
 
@@ -101,12 +107,12 @@ end
 # ## TO RUN with DOCKER
 # Start docker, mounting an empty folder called `output`:
 #
-# `docker run --rm -it -v $PWD/output:/gv ruby:2.4.10 /bin/bash`
+# `docker run --rm -it -v $PWD/output:/gv ruby:3.2.2 /bin/bash`
 #
 # Then inside the shell:
 #
 # ```
-# apt update && apt install unzip && gem install bundler -v 1.17.3
+# apt update && apt install unzip && gem install bundler
 # cd /gv
 # git clone https://github.com/wurmlab/genevalidator
 # cd genevalidator
@@ -202,8 +208,9 @@ namespace :package do
 
   desc 'Install gems to local directory'
   task :bundle_install do
-    if RUBY_VERSION !~ /^2\.4\./
-      abort "You can only 'bundle install' using Ruby 2.4, because that's " \
+    puts "Using Ruby #{TR_RUBY_VERSION}"
+    if RUBY_VERSION !~ /^3\.2\./
+      abort "You can only 'bundle install' using Ruby #{TR_RUBY_VERSION}, because that's " \
             'what Traveling Ruby uses.'
     end
 
@@ -213,12 +220,12 @@ namespace :package do
     end
 
     cd TMP_DIR do
-      Bundler.with_clean_env do
-        sh "env BUNDLE_IGNORE_CONFIG=1 BUNDLE_GEMFILE=#{TMP_DIR}/Gemfile" \
+      Bundler.with_unbundled_env do
+        sh "env BUNDLE_IGNORE_CONFIG=1 BUNDLE_GEMFILE=#{TMP_DIR}/Gemfile BUNDLE_FORCE_RUBY_PLATFORM=1" \
            ' bundle install --path vendor --without development test'
       end
 
-      cd 'vendor/ruby/2.4.0' do
+      cd "vendor/ruby/#{TR_RUBY_VERSION}.0" do
         cd 'gems' do
           mkdir APP_NAME
           %w[aux lib].each { |d| cp_r "#{Rake.original_dir}/#{d}", APP_NAME }
@@ -253,9 +260,9 @@ namespace :package do
     cd "#{TMP_DIR}/vendor" do
       sh 'rm -f */*/cache/*'
       sh 'rm -rf ruby/*/extensions'
-      sh "find ruby/2.4.0/gems -name '*.so' | xargs rm -f"
-      sh "find ruby/2.4.0/gems -name '*.bundle' | xargs rm -f"
-      sh "find ruby/2.4.0/gems -name '*.o' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.bundle' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.so' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.o' | xargs rm -f"
 
       # Remove tests
       %w[test tests spec features benchmark].each do |dir|
@@ -284,9 +291,9 @@ namespace :package do
       sh "find ruby -name '*.h' | xargs rm -f"
       sh "find ruby -name '*.rl' | xargs rm -f"
       sh "find ruby -name 'extconf.rb' | xargs rm -f"
-      sh "find ruby/2.4.0/gems -name '*.o' | xargs rm -f"
-      sh "find ruby/2.4.0/gems -name '*.so' | xargs rm -f"
-      sh "find ruby/2.4.0/gems -name '*.bundle' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.o' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.so' | xargs rm -f"
+      sh "find ruby/#{TR_RUBY_VERSION}.0/gems -name '*.bundle' | xargs rm -f"
 
       # Remove Java files. They're only used for JRuby support
       sh "find ruby -name '*.java' | xargs rm -f"
@@ -306,12 +313,12 @@ end
 
 def download_runtime(platform)
   sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz " \
-     "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz"
+     "#{TRAVELING_RUBY_BASE_URL}/#{TRAVELING_RUBY_VERSION}-#{platform}.tar.gz"
 end
 
 def download_native_extension(platform, gem_name_and_version)
   sh "curl -L --fail -o #{TMP_DIR}/#{TRAVELING_RUBY_VERSION}-#{platform}-#{gem_name_and_version}.tar.gz " \
-     "https://d6r77u77i8pq3.cloudfront.net/releases/#{TRAVELING_RUBYGEMS_VERSION}-#{platform}/#{gem_name_and_version}.tar.gz"
+     "#{TRAVELING_RUBY_BASE_URL}/#{TRAVELING_RUBYGEMS_VERSION}-#{platform}-#{gem_name_and_version}.tar.gz"
 end
 
 def process_package(url, package_name)
@@ -335,7 +342,7 @@ def edited_gemspec_content
     next if index < 4 # skip first four lines
     l = "s.version = '#{GEMSPEC.version}'\n" if l =~ /^\s+s.version/
     l = "s.files = ['#{file_list.join("','")}']\n" if l =~ /^\s+s.files/
-    l = "s.add_dependency 'nokogiri', '1.10.10'\nend" if l =~ /^end/
+    l = "s.add_dependency 'nokogiri', '#{NOKOGIRI_VERSION.split('-').last}'\nend" if l =~ /^end/
     edited_gemspec << l
   end
   edited_gemspec.join
@@ -347,7 +354,7 @@ source 'http://rubygems.org'
 gem 'bio', '~> 1.4'
 gem 'bio-blastxmlparser', '~> 2.0'
 gem '#{GEMSPEC.name}', '#{GEMSPEC.version}'
-gem 'nokogiri', '1.10.10'
+gem 'nokogiri', '#{NOKOGIRI_VERSION.split('-').last}'
 gem 'statsample', '2.1.0'
 GEMFILE
 
