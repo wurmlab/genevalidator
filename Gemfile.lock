@@ -7,9 +7,12 @@ PATH
       genevalidatorapp (~> 2.1.8)
       matrix (~> 0.4.2)
       net-ftp (~> 0.1.3)
+      prime (~> 0.1.2)
       rack (~> 2.0)
+      rexml (~> 3.2, >= 3.2.6)
       slim (~> 3.0)
       statsample (= 2.1.0)
+      webrick (~> 1.8)
 
 GEM
   remote: http://rubygems.org/
@@ -31,6 +34,7 @@ GEM
     distribution (0.8.0)
     docile (1.4.0)
     extendmatrix (0.4)
+    forwardable (1.3.3)
     genevalidatorapp (2.1.8)
       bio (~> 1.4)
       sinatra (~> 2.0)
@@ -61,6 +65,9 @@ GEM
     prawn-security (0.8.4)
     prawn-svg (0.9.1.11)
       prawn (>= 0.8.4)
+    prime (0.1.2)
+      forwardable
+      singleton
     racc (1.7.3)
     rack (2.2.8)
     rack-protection (2.2.4)
@@ -71,6 +78,7 @@ GEM
       prawn (~> 0.8.4)
       prawn-svg (~> 0.9.1)
       text-table (~> 1.2)
+    rexml (3.2.6)
     rserve-client (0.3.5)
     ruby-ole (1.2.12.2)
     ruby2_keywords (0.0.5)
@@ -87,6 +95,7 @@ GEM
       rack-protection (= 2.2.4)
       tilt (~> 2.0)
     sinatra-cross_origin (0.4.0)
+    singleton (0.1.1)
     slim (3.0.9)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
@@ -110,6 +119,7 @@ GEM
     time (0.3.0)
       date
     timeout (0.4.1)
+    webrick (1.8.1)
     yard (0.9.34)
 
 PLATFORMS
