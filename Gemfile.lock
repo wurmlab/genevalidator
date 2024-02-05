@@ -36,6 +36,7 @@ GEM
       sinatra-cross_origin (~> 0.3)
       slim (~> 3.0)
     log4r (1.1.10)
+    mini_portile2 (2.8.5)
     minimization (0.2.5)
       text-table (~> 1.2)
     minitest (5.21.2)
@@ -46,17 +47,8 @@ GEM
       time
     net-protocol (0.2.2)
       timeout
-    nokogiri (1.16.2-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-arm-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86_64-linux)
+    nokogiri (1.16.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     prawn (0.8.4)
       prawn-core (>= 0.8.4, < 0.9)
@@ -119,12 +111,7 @@ GEM
     yard (0.9.34)
 
 PLATFORMS
-  aarch64-linux
-  arm-linux
-  arm64-darwin
-  x86-linux
-  x86_64-darwin
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   genevalidator!
