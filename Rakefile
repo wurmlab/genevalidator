@@ -220,8 +220,8 @@ namespace :package do
     end
 
     cd TMP_DIR do
-      Bundler.with_clean_env do
-        sh "env BUNDLE_IGNORE_CONFIG=1 BUNDLE_GEMFILE=#{TMP_DIR}/Gemfile" \
+      Bundler.with_unbundled_env do
+        sh "env BUNDLE_IGNORE_CONFIG=1 BUNDLE_GEMFILE=#{TMP_DIR}/Gemfile BUNDLE_FORCE_RUBY_PLATFORM=1" \
            ' bundle install --path vendor --without development test'
       end
 
