@@ -97,7 +97,7 @@ GEM
     temple (0.8.2)
     text-table (1.2.4)
     tilt (2.0.10)
-    yard (0.9.16)
+    yard (0.9.36)
 
 PLATFORMS
   ruby
